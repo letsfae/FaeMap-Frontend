@@ -1,0 +1,8 @@
+platform :ios, '8.0'
+use_frameworks!
+
+target 'faeBeta' do
+  pod 'AFNetworking', '~> 2.6'
+  pod 'SwiftyJSON', '~> 2.3'
+  pod 'SDWebImage', '~>3.7'
+end
