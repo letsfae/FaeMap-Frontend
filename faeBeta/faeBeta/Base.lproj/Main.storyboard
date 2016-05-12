@@ -61,6 +61,91 @@
             </objects>
             <point key="canvasLocation" x="-1282.5" y="-1129"/>
         </scene>
+        <!--Sign In Support View Controller-->
+        <scene sceneID="aT1-lb-1Lz">
+            <objects>
+                <viewController storyboardIdentifier="SignInSupportViewController" id="IrA-XV-Y5X" customClass="SignInSupportViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tH1-p3-Ogk"/>
+                        <viewControllerLayoutGuide type="bottom" id="5Rx-t9-7qv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="vMq-y3-X7e">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JZK-9B-9fP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-283.5" y="-2036"/>
+        </scene>
+        <!--Retrive By Email View Controller-->
+        <scene sceneID="VeW-NF-aEi">
+            <objects>
+                <viewController storyboardIdentifier="RetriveByEmailViewController" id="nfi-VT-feG" customClass="RetriveByEmailViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GUL-AW-tMK"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ree-Ar-8jz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eMB-j2-qzB">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EfK-6W-HDR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="496.5" y="-2031"/>
+        </scene>
+        <!--Account Found View Controller-->
+        <scene sceneID="92t-hL-kiP">
+            <objects>
+                <viewController storyboardIdentifier="AccountFoundViewController" id="RXq-qh-Ca5" customClass="AccountFoundViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QfF-rP-VxD"/>
+                        <viewControllerLayoutGuide type="bottom" id="bft-zj-eKh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3zY-HR-Yin">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3UU-L0-Jqe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1258.5" y="-2025"/>
+        </scene>
+        <!--Verification Code View Controller-->
+        <scene sceneID="NGt-So-W97">
+            <objects>
+                <viewController storyboardIdentifier="VerificationCodeViewController" id="iIi-xa-WT4" customClass="VerificationCodeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zMF-OH-oLe"/>
+                        <viewControllerLayoutGuide type="bottom" id="B2h-py-zyx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="c9X-NU-9Zb">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="igX-A5-6nT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1957.5" y="-2023"/>
+        </scene>
+        <!--Create New Password View Controller-->
+        <scene sceneID="0tS-Ea-QqG">
+            <objects>
+                <viewController storyboardIdentifier="CreateNewPasswordViewController" id="w2s-GV-e32" customClass="CreateNewPasswordViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TId-WY-rKW"/>
+                        <viewControllerLayoutGuide type="bottom" id="jaA-Xe-0ge"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Bxm-f7-vcM">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="92v-iw-HEy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2662.5" y="-2023"/>
+        </scene>
         <!--Sign In View Controller-->
         <scene sceneID="rPZ-Fy-L0N">
             <objects>

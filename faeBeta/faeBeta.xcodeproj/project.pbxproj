@@ -16,10 +16,15 @@
 		B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
 		B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACB01CE3A3C7002E0C9D /* faeBetaTests.swift */; };
 		B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */; };
-		B0A2ACCB1CE3AA05002E0C9D /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCA1CE3AA05002E0C9D /* WelcomeViewController.swift */; };
 		B0A2ACCD1CE3B0E1002E0C9D /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCC1CE3B0E1002E0C9D /* SignInViewController.swift */; };
 		B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */; };
 		B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */; };
+		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */; };
+		B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */; };
+		B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */; };
+		B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */; };
+		B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,10 +61,15 @@
 		B0A2ACB71CE3A3C7002E0C9D /* faeBetaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = faeBetaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = faeBetaUITests.swift; sourceTree = "<group>"; };
 		B0A2ACBD1CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B0A2ACCA1CE3AA05002E0C9D /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B0A2ACCC1CE3B0E1002E0C9D /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterProfileViewController.swift; sourceTree = "<group>"; };
+		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportViewController.swift; sourceTree = "<group>"; };
+		B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetriveByEmailViewController.swift; sourceTree = "<group>"; };
+		B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountFoundViewController.swift; sourceTree = "<group>"; };
+		B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
+		B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,10 +174,15 @@
 		B0A2ACC91CE3A9C8002E0C9D /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				B0A2ACCA1CE3AA05002E0C9D /* WelcomeViewController.swift */,
+				B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */,
 				B0A2ACCC1CE3B0E1002E0C9D /* SignInViewController.swift */,
 				B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */,
 				B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */,
+				B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */,
+				B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */,
+				B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */,
+				B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */,
+				B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */,
 			);
 			name = SignIn;
 			sourceTree = "<group>";
@@ -354,13 +369,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
+				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
-				B0A2ACCB1CE3AA05002E0C9D /* WelcomeViewController.swift in Sources */,
+				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
+				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACCD1CE3B0E1002E0C9D /* SignInViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
+				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
