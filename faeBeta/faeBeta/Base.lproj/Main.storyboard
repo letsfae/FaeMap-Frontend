@@ -52,6 +52,7 @@
                         <viewControllerLayoutGuide type="bottom" id="qrN-z7-oDl"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="HEB-ID-VjZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -69,6 +70,7 @@
                         <viewControllerLayoutGuide type="bottom" id="qxT-vj-QvW"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="uFc-07-PKY">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -86,6 +88,7 @@
                         <viewControllerLayoutGuide type="bottom" id="vSo-Xk-3Gz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Pxp-9B-FqO">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -103,6 +106,7 @@
                         <viewControllerLayoutGuide type="bottom" id="n17-Qt-quM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hr1-Gb-Yg3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

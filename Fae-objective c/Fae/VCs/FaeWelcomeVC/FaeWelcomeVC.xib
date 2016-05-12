@@ -86,6 +86,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="QKF-Fz-38F"/>
                                     </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <state key="normal" title="Sign In!">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
