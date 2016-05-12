@@ -15,13 +15,15 @@ class WelcomeViewController: UIViewController {
     //6 plus 414 736
     //6      375 667
     //5      320 568
-    var imageWelcome : UIImageView!
+    
     var imageCat : UIImageView!
     var buttonSign : UIButton!
     var buttonJoin : UIButton!
     var buttonAround : UIButton!
-    var labelWelcome : UILabel!
-    var labelFoot : UILabel!
+    var labelFae : UILabel!
+    var labelDescr : UILabel!
+    var labelFoot  : UILabel!
+    var buttonGuessTour : UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         loadImageView()
@@ -29,72 +31,88 @@ class WelcomeViewController: UIViewController {
         loadLabel()
         print(screenWidth)
         print(screenHeigh)
-        self.view.backgroundColor = UIColor.redColor()
+//        self.view.backgroundColor = UIColor.redColor()
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
     func loadImageView(){
-        //        let welcomeWidth = screenWidth*0.48309179
-        let welcomeWidth: CGFloat = 200
-        let welcomeHeight = screenHeigh*0.19701087
-        imageWelcome = UIImageView(frame: CGRectMake(screenWidth/2-welcomeWidth/2, screenHeigh*0.11820652, welcomeWidth, welcomeHeight))
-        imageWelcome.image = UIImage(named: "welcome_ballon")
-        self.view.addSubview(imageWelcome)
-        let catLength = screenHeigh*0.23369565
-        imageCat = UIImageView(frame:CGRectMake(screenWidth/2-catLength/2, 0.34239130*screenHeigh, catLength,catLength))
-        imageCat.image = UIImage(named: "smile_cat")
+        let catLength = screenHeigh*0.16304348
+        imageCat = UIImageView(frame:CGRectMake(screenWidth/2-catLength/2, 0.24184783*screenHeigh, catLength,catLength))
+        imageCat.image = UIImage(named: "welcome_cat")
         self.view.addSubview(imageCat)
     }
     func loadLabel(){
-        let bounds = imageWelcome.frame
-        labelWelcome = UILabel(frame: CGRectMake(0,0,bounds.width,bounds.height*0.82))
-        labelWelcome.text = "Welcome!"
-        labelWelcome.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 36)
-        labelWelcome.textColor = UIColor.redColor()
-        labelWelcome.textAlignment = .Center
-        self.imageWelcome.addSubview(labelWelcome)
+        
+        labelFae = UILabel(frame: CGRectMake(screenWidth/2-40,screenHeigh*0.44429348,80,35))
+        labelFae.text = "Fae"
+        labelFae.textColor = UIColor.blackColor()
+        labelFae.textAlignment = .Center
+        labelFae.font = UIFont.systemFontOfSize(26.0, weight: UIFontWeightRegular)
+        self.view.addSubview(labelFae)
+        
+        labelDescr = UILabel(frame:CGRectMake(screenWidth/2-122,screenHeigh*0.49320652,244,27))
+        labelDescr.text = "fun, anytime, everywhere..."
+        labelDescr.textColor = UIColor.grayColor()
+        labelDescr.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
+        self.view.addSubview(labelDescr)
         
         let ratioFoot : CGFloat = 0.0679347826
-        labelFoot = UILabel(frame: CGRectMake(0,screenHeigh-ratioFoot*screenHeigh,screenWidth,ratioFoot*screenHeigh))
-        labelFoot.text = "© 2016 The Fae App ::: Aorinix Technologies, Inc. All Rights Reserved."
-        labelFoot.textColor = UIColor.whiteColor()
+        labelFoot = UILabel(frame: CGRectMake(screenWidth/2-140/2,screenHeigh-ratioFoot*screenHeigh,140,ratioFoot*screenHeigh))
+        labelFoot.text = "© 2016 Fae ::: Faevorite, Inc. All Rights Reserved."
+        labelFoot.textColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
         labelFoot.textAlignment = .Center
         labelFoot.numberOfLines = 0
-        labelFoot.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 11)
+        labelFoot.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 10)
         self.view.addSubview(labelFoot)
     }
     func loadButton(){
+        
+        buttonGuessTour = UIButton(frame: CGRectMake(screenWidth/2-118/2,screenHeigh-screenHeigh*0.29619565,118,22))
+//        buttonGuessTour.currentBackgroundImage = UIImage(named: "guess_tours")
+        buttonGuessTour.setBackgroundImage(UIImage(named: "guess_tours"), forState: .Normal)
+        self.view.addSubview(buttonGuessTour)
+        
         let buttonHeigh = screenHeigh*0.0679347826
         let buttonWidth = screenWidth*0.75362319
-        buttonSign = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.38315217,buttonWidth,buttonHeigh))
-        buttonSign.setTitle("Sign In!", forState: .Normal)
-        buttonSign.titleLabel?.textColor = UIColor.whiteColor()
-        buttonSign.titleLabel?.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 18)
-        buttonSign.layer.cornerRadius = 10
-        buttonSign.layer.masksToBounds = true
-        buttonSign.layer.borderWidth = 3
-        buttonSign.layer.borderColor = UIColor.whiteColor().CGColor
-        self.view.addSubview(buttonSign)
-        
-        buttonJoin = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.28260870,buttonWidth,buttonHeigh))
-        buttonJoin.setTitle("Join Fae!", forState: .Normal)
-        buttonJoin.titleLabel?.textColor = UIColor.whiteColor()
-        buttonJoin.titleLabel?.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 18)
-        buttonJoin.layer.cornerRadius = 10
+        buttonJoin = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.23913043,buttonWidth,buttonHeigh))
+        buttonJoin.setTitle("Log In!", forState: .Normal)
+        buttonJoin.backgroundColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
+        buttonJoin.titleLabel?.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
+        buttonJoin.layer.cornerRadius = 7
         buttonJoin.layer.masksToBounds = true
-        buttonJoin.layer.borderWidth = 3
+        
         buttonJoin.layer.borderColor = UIColor.whiteColor().CGColor
+        buttonJoin.addTarget(self, action: #selector(WelcomeViewController.jumpToLogIn), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonJoin)
         
-        let ratioAround : CGFloat = 0.18206522
-        buttonAround = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*ratioAround,buttonWidth,buttonHeigh))
-        buttonAround.setTitle("Let me look around!", forState: .Normal)
-        buttonAround.titleLabel?.textColor = UIColor.whiteColor()
-        buttonAround.titleLabel?.font = UIFont(name: (buttonSign.titleLabel?.font?.fontName)!, size: 18)
-        buttonAround.layer.cornerRadius = 10
-        buttonAround.layer.masksToBounds = true
-        buttonAround.layer.borderWidth = 3
-        buttonAround.layer.borderColor = UIColor.whiteColor().CGColor
-        self.view.addSubview(buttonAround)
+        buttonSign = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.14402174,buttonWidth,buttonHeigh))
+        buttonSign.setTitle("Sign up!", forState: .Normal)
+        buttonSign.setTitleColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0), forState: .Normal)
+        buttonSign.titleLabel?.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
+        buttonSign.layer.cornerRadius = 7
+        buttonSign.layer.masksToBounds = true
+        buttonSign.layer.borderWidth = 2
+        buttonSign.layer.borderColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0).CGColor
+        buttonSign.addTarget(self, action: #selector(WelcomeViewController.jumpToRegister), forControlEvents: .TouchUpInside)
+        self.view.addSubview(buttonSign)
+        
+        
+        
+    }
+    func jumpToRegister(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterViewController")as! RegisterViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func jumpToLogIn(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
