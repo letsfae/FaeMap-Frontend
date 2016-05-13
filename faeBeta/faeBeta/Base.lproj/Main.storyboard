@@ -75,10 +75,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Ar2-nL-dbs"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JZK-9B-9fP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-283.5" y="-2036"/>
+            <point key="canvasLocation" x="-85.5" y="-2040"/>
         </scene>
         <!--Retrive By Email View Controller-->
         <scene sceneID="VeW-NF-aEi">
@@ -96,7 +97,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EfK-6W-HDR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="496.5" y="-2031"/>
+            <point key="canvasLocation" x="856.5" y="-2027"/>
         </scene>
         <!--Account Found View Controller-->
         <scene sceneID="92t-hL-kiP">
@@ -114,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3UU-L0-Jqe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1258.5" y="-2025"/>
+            <point key="canvasLocation" x="1618.5" y="-2021"/>
         </scene>
         <!--Verification Code View Controller-->
         <scene sceneID="NGt-So-W97">
@@ -132,7 +133,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="igX-A5-6nT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1957.5" y="-2023"/>
+            <point key="canvasLocation" x="2317.5" y="-2019"/>
         </scene>
         <!--Create New Password View Controller-->
         <scene sceneID="0tS-Ea-QqG">
@@ -150,7 +151,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="92v-iw-HEy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2662.5" y="-2023"/>
+            <point key="canvasLocation" x="3580.5" y="-2023"/>
         </scene>
         <!--Log In View Controller-->
         <scene sceneID="rPZ-Fy-L0N">
@@ -241,6 +242,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u9n-PO-7Vi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1987.5" y="-1129"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="OJf-d9-atY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cCw-HC-Xey" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Iny-bf-daI">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="IrA-XV-Y5X" kind="relationship" relationship="rootViewController" id="9Tz-5h-CiV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MXE-Ua-zbk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1003.5" y="-2040"/>
         </scene>
     </scenes>
 </document>
