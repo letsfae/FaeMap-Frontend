@@ -27,6 +27,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     var labelUsernameUnserLine : UILabel!
     var labelUserPasswordLine : UILabel!
     var labelWelcome : UILabel!
+    var labelUsernameUnderline : UILabel!
+    var labelSignInSupport : UILabel!
+    var labelPasswordUnderline : UILabel!
     var buttonSubmit : UIButton!
     
     override func viewDidLoad() {
@@ -35,6 +38,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         print(screenHeight)
         // Do any additional setup after loading the view.
         
+        self.view.frame.origin.y -= 44
         loadImageView()
         loadTextView()
         loadButton()
@@ -111,7 +115,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let textUserNameYCor = screenHeight * 0.49184783
         textUserName = UITextField(frame: CGRectMake(textUserNameXCor, textUserNameYCor, textUserNameWidth, textUserNameHeight))
         //textUserName = UITextField(frame: CGRectMake(screenWidth/2-142, 362, 284, 30))
-        textUserName.placeholder = "Username/Image"
+        textUserName.placeholder = "Username/Email"
         textUserName.restorationIdentifier = "userName"
         self.view.addSubview(textUserName)
         textUserName.delegate = self
@@ -164,7 +168,36 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         labelWelcome.numberOfLines = 2
         self.view.addSubview(labelWelcome)
         
-        //labelUsernameUnserLine.layer.bordr
+        let labelUsernameUnderlineWidth = screenWidth * 0.82125604
+        let labelUsernameUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
+        let labelUsernameUnderlineYCor = screenHeight * 0.5326087
+        labelUsernameUnderline = UILabel(frame: CGRect(x: labelUsernameUnderlineXCor, y: labelUsernameUnderlineYCor, width: labelUsernameUnderlineWidth, height: 1))
+        labelUsernameUnderline.backgroundColor = UIColor.grayColor()
+        self.view.addSubview(labelUsernameUnderline)
+        
+        let labelPasswordUnderlineWidth = screenWidth * 0.82125604
+        let labelPasswordUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
+        let labelPasswordUnderlineYCor = screenHeight * 0.6235087
+        labelPasswordUnderline = UILabel(frame: CGRect(x: labelPasswordUnderlineXCor, y: labelPasswordUnderlineYCor, width: labelPasswordUnderlineWidth, height: 1))
+        labelPasswordUnderline.backgroundColor = UIColor.grayColor()
+        self.view.addSubview(labelPasswordUnderline)
+        
+        let labelSignInSupportYCor = screenHeight * 0.7230
+        labelSignInSupport = UILabel(frame: CGRect(x: 0, y: labelSignInSupportYCor, width: screenWidth, height: labelWelcomeHeight))
+        labelSignInSupport.textAlignment = NSTextAlignment.Center
+        labelSignInSupport.text = "Sign In Support"
+        labelSignInSupport.textColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
+        labelSignInSupport.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("supportTapped:"))
+        labelSignInSupport.userInteractionEnabled = true
+        labelSignInSupport.addGestureRecognizer(tapGestureRecognizer)
+        self.view.addSubview(labelSignInSupport)
+        
+        
+    }
+    
+    func supportTapped(lab: AnyObject){
+        jumpToSignInSupport()
     }
     
     //func pickerView(
@@ -176,13 +209,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         if(self.labelWelcome.text == ""){
             self.labelWelcome.text = "Welcome!"
             labelWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
+            
         }
         //        self.imageWelcome.image = UIImage(named: "signin_alert_type1")
         if(textField.restorationIdentifier=="userName"){
             imageIconUsername.image = UIImage(named: "signin_email_red")
+            labelUsernameUnderline.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
         }
         else if(textField.restorationIdentifier=="userPassword"){
             imageIconUserPassword.image = UIImage(named: "password_red")
+            labelPasswordUnderline.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
             if(textUserPassword.text==""){
                 imagePasswordCheckIcon.image = UIImage(named: "check_eye_open_red")
             }
@@ -195,6 +231,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             if(textField.text==""){
                 //print("1")
                 imageIconUsername.image = UIImage(named: "signin_email_gray")
+                labelUsernameUnderline.backgroundColor = UIColor.grayColor()
                 if(textUserPassword.text==""){
                     labelWelcome.text = "Welcome!"
                     labelWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
@@ -225,6 +262,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 imagePasswordCheckIcon.image = UIImage(named:  "")
                 textUserPassword.secureTextEntry = true
                 imageIconUserPassword.image = UIImage(named: "password_gray")
+                labelUsernameUnderline.backgroundColor = UIColor.grayColor()
                 if(textUserPassword.text==""){
                     labelWelcome.text = "Welcome!"
                     labelWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
@@ -257,6 +295,11 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             
             //image
         }
+    }
+    func jumpToSignInSupport(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("SignInSupportViewController")as! SignInSupportViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

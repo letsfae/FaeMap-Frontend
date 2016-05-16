@@ -24,6 +24,12 @@ class SignInSupportViewController: UIViewController {
         super.viewDidLoad()
         loadLabelImage()
         loadButton()
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        self.navigationController?.navigationBar.topItem?.title = ""
         // Do any additional setup after loading the view.
     }
     func loadLabelImage(){

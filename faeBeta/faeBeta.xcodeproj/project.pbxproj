@@ -25,6 +25,9 @@
 		B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */; };
 		B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */; };
 		B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */; };
+		B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
+		B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
+		B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,7 @@
 		B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
 		B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		B0F688F31CEA44F500D91CF9 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +145,7 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
+				B0F688F21CEA403D00D91CF9 /* Map */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */,
@@ -185,6 +190,14 @@
 				B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */,
 			);
 			name = SignIn;
+			sourceTree = "<group>";
+		};
+		B0F688F21CEA403D00D91CF9 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				B0F688F31CEA44F500D91CF9 /* MapViewController.swift */,
+			);
+			name = Map;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -375,6 +388,7 @@
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
+				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
@@ -389,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
+				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +412,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
+				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

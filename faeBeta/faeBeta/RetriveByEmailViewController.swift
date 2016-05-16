@@ -49,19 +49,19 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         buttonBackground.backgroundColor = UIColor.clearColor()
         buttonBackground.addTarget(self, action: #selector(RetriveByEmailViewController.anctionCancel), forControlEvents: .TouchDown)
         self.view.addSubview(buttonBackground)
+        
         viewText = UIView(frame: CGRectMake(space,screenHeight*0.481,screenWidth-2*space,31))
         self.view.addSubview(viewText)
         imageEmail = UIImageView(frame: CGRectMake(0, 7, 21, 16))
         imageEmail.image = UIImage(named: "emaiRed")
         self.viewText.addSubview(imageEmail)
-        viewLine = UIView(frame: CGRectMake(0,30,screenWidth-2*space,1))
+        viewLine = UIView(frame: CGRectMake(0,29,screenWidth-2*space,2))
         viewLine.backgroundColor = UIColor(colorLiteralRed: 249.0/250.0, green: 90.0/250.0, blue: 90.0/250.0, alpha: 1.0)
         viewText.addSubview(viewLine)
         textEmail = UITextField(frame: CGRectMake(21+5, 0, screenWidth-2*space-21-5, 30))
         
         textEmail.placeholder = "Email"
         textEmail.restorationIdentifier = "Email"
-//        self.view.addSubview(textEmail)
         self.viewText.addSubview(textEmail)
         textEmail.delegate = self
         textEmail.becomeFirstResponder()

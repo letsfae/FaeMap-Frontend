@@ -29,9 +29,17 @@ class WelcomeViewController: UIViewController {
         loadImageView()
         loadButton()
         loadLabel()
-        print(screenWidth)
-        print(screenHeigh)
-//        self.view.backgroundColor = UIColor.redColor()
+        self.view.frame.origin.y -= 44
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        self.navigationController?.navigationBar.topItem?.title = ""
+//        let backItem = UIBarButtonItem(image: UIImage(named:"navigationBack" ), style: UIBarButtonItemStyle.Bordered, target: nil, action: nil)
+//        let backItem1 = UIBarButtonItem(title: "<", style: .Plain, target: nil, action: nil)
+//        self.navigationController?.navigationItem.backBarButtonItem = backItem1
+        
+        
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(animated: Bool) {
@@ -43,8 +51,9 @@ class WelcomeViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     func loadImageView(){
-        let catLength = screenHeigh*0.16304348
-        imageCat = UIImageView(frame:CGRectMake(screenWidth/2-catLength/2, 0.24184783*screenHeigh, catLength,catLength))
+        let catLength = screenHeigh*0.163043
+        print(catLength)
+        imageCat = UIImageView(frame:CGRectMake(screenWidth/2-catLength/2, 0.24184*screenHeigh, catLength,catLength))
         imageCat.image = UIImage(named: "welcome_cat")
         self.view.addSubview(imageCat)
     }
@@ -63,7 +72,7 @@ class WelcomeViewController: UIViewController {
         labelDescr.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
         self.view.addSubview(labelDescr)
         
-        let ratioFoot : CGFloat = 0.0679347826
+        let ratioFoot : CGFloat = 0.06793478
         labelFoot = UILabel(frame: CGRectMake(screenWidth/2-140/2,screenHeigh-ratioFoot*screenHeigh,140,ratioFoot*screenHeigh))
         labelFoot.text = "© 2016 Fae ::: Faevorite, Inc. All Rights Reserved."
         labelFoot.textColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)

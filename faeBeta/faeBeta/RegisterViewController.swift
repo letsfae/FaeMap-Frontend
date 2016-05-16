@@ -179,6 +179,7 @@ class RegisterViewController: UIViewController {
         buttonJoin.setTitle("Join!", forState: .Normal)
         buttonJoin.backgroundColor = ColorFae
         buttonJoin.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+        buttonJoin.addTarget(self, action: #selector(RegisterViewController.jumpToRegisterProfile), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonJoin)
     }
     
@@ -232,6 +233,10 @@ class RegisterViewController: UIViewController {
     
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+    func jumpToRegisterProfile(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterProfileViewController")as! RegisterProfileViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     /*
      // MARK: - Navigation
