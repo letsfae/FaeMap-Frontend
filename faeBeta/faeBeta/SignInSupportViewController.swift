@@ -20,6 +20,8 @@ class SignInSupportViewController: UIViewController {
     var imageTitle : UIImageView!
     var buttonCreate : UIButton!
     var buttonContact : UIButton!
+    let upSpace :CGFloat = 64.0
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadLabelImage()
@@ -33,7 +35,7 @@ class SignInSupportViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     func loadLabelImage(){
-        labelSupport = UILabel(frame: CGRectMake(screenWidth/2-186/2,screenHeigh*0.0842391,186,68))
+        labelSupport = UILabel(frame: CGRectMake(screenWidth/2-186/2,5,186,68))
         labelSupport.text = "Welcome to Sign In Support!"
         labelSupport.numberOfLines = 0
         labelSupport.textAlignment = .Center
@@ -42,7 +44,7 @@ class SignInSupportViewController: UIViewController {
         self.view.addSubview(labelSupport)
         let imageWidth : CGFloat = screenWidth*0.7971
         let imageHeight : CGFloat = screenHeigh*0.33559
-        imageTitle = UIImageView(frame: CGRectMake(screenWidth/2-imageWidth/2, screenHeigh*0.247282, imageWidth, imageHeight))
+        imageTitle = UIImageView(frame: CGRectMake(screenWidth/2-imageWidth/2, screenHeigh*0.24728-upSpace, imageWidth, imageHeight))
         imageTitle.image = UIImage(named: "welcomSignInSupport")
         self.view.addSubview(imageTitle)
     }

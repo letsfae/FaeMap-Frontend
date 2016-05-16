@@ -65,6 +65,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         ButtonProceed.layer.cornerRadius = 7
         ButtonProceed.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
         //        ButtonResend.enabled = false
+        ButtonProceed.addTarget(self, action: "jumpToCreateNewPassword", forControlEvents: .TouchUpInside)
         self.view.addSubview(ButtonProceed)
     }
     
@@ -150,7 +151,11 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
             ButtonResend.setTitle(title, forState: .Normal)
         }
     }
-    
+    func jumpToCreateNewPassword(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("CreateNewPasswordViewController")as! CreateNewPasswordViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+
+    }
     /*
      // MARK: - Navigation
      

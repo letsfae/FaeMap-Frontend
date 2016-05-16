@@ -32,6 +32,8 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
     var labelValidationUnderline : UILabel!
     var buttonSubmit : UIButton!
     
+    let navigationBarHeight : CGFloat = 64.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print(screenWidth)
@@ -54,7 +56,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         
         let imageCatWidth = screenWidth * 0.277778
         let imageCatHeight = screenHeight * 0.15625
-        let imageCatYcor = screenHeight * 0.27173923
+        let imageCatYcor = screenHeight * 0.27173923 - navigationBarHeight
         imageCat = UIImageView(frame: CGRectMake(screenWidth/2-imageCatWidth/2, imageCatYcor, imageCatWidth, imageCatHeight))
         imageCat.image = UIImage(named: "normal_cat")
         self.view.addSubview(imageCat)
@@ -62,7 +64,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let imageIconUserPasswordWidth = screenWidth * 0.03864734
         let imageIconUserPasswordHeight = screenHeight * 0.03668478
         let imageIconUserPasswordXCor = screenWidth/2 - screenWidth * 0.41062802
-        let imageIconUserPasswordYCor = screenHeight * 0.49320652
+        let imageIconUserPasswordYCor = screenHeight * 0.49320652 - navigationBarHeight
         imageIconUserPassword = UIImageView(frame: CGRectMake(imageIconUserPasswordXCor, imageIconUserPasswordYCor, imageIconUserPasswordWidth, imageIconUserPasswordHeight))
         imageIconUserPassword.image = UIImage(named: "password_gray")
         self.view.addSubview(imageIconUserPassword)
@@ -70,7 +72,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let imageIconPasswordWidth = screenWidth * 0.03864734
         let imageIconPasswordHeight = screenHeight * 0.03668478
         let imageIconPasswordXCor = screenWidth/2 - screenWidth * 0.41062802
-        let imageIconPasswordYCor = screenHeight * 0.58423913
+        let imageIconPasswordYCor = screenHeight * 0.58423913 - navigationBarHeight
         imageIconUserValidation = UIImageView(frame: CGRectMake(imageIconPasswordXCor, imageIconPasswordYCor, imageIconPasswordWidth, imageIconPasswordHeight))
         imageIconUserValidation.image = UIImage(named: "conf_password_gray")
         self.view.addSubview(imageIconUserValidation)
@@ -78,7 +80,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let imagePasswordCheckIconWidth = screenWidth * 0.04589372
         let imagePasswordCheckIconHeight = screenHeight * 0.02581522
         let imagePasswordCheckIconXCor = screenWidth/2 + screenWidth * 0.35024155
-        let imagePasswordCheckIconYCor = screenHeight * 0.49592391
+        let imagePasswordCheckIconYCor = screenHeight * 0.49592391 - navigationBarHeight
         imagePasswordCheckIcon = UIImageView(frame: CGRectMake(imagePasswordCheckIconXCor, imagePasswordCheckIconYCor, imagePasswordCheckIconWidth, imagePasswordCheckIconHeight))
         imagePasswordCheckIcon = UIImageView(frame: CGRectMake(imagePasswordCheckIconXCor, imagePasswordCheckIconYCor, imagePasswordCheckIconWidth, imagePasswordCheckIconHeight))
         let tapGestureRecognizer2 = UITapGestureRecognizer(target:self, action:Selector("imageTapped2:"))
@@ -90,7 +92,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let imageValidationCheckIconWidth = screenWidth * 0.04589372
         let imageValidationCheckIconHeight = screenHeight * 0.02581522
         let imageValidationCheckIconXCor = screenWidth/2 + screenWidth * 0.35024155
-        let imageValidationCheckIconYCor = screenHeight * 0.58695652
+        let imageValidationCheckIconYCor = screenHeight * 0.58695652 - navigationBarHeight
         imageValidationCheckIcon = UIImageView(frame: CGRectMake(imageValidationCheckIconXCor, imageValidationCheckIconYCor, imageValidationCheckIconWidth, imageValidationCheckIconHeight))
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         imageValidationCheckIcon.userInteractionEnabled = true
@@ -99,7 +101,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(imageValidationCheckIcon)
         
         let imageBackHeight = screenHeight
-        imageBack = UIImageView(frame: CGRect(x: 0, y: screenHeight - imageBackHeight, width: screenWidth, height: imageBackHeight))
+        imageBack = UIImageView(frame: CGRect(x: 0, y: screenHeight - imageBackHeight - navigationBarHeight, width: screenWidth, height: imageBackHeight))
         imageBack.image = UIImage(named: "signup_back")
         
         self.view.addSubview(imageBack)
@@ -134,7 +136,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let textUserPasswordWidth = screenWidth * 0.68599034
         let textUserPasswordHeight = screenHeight * 0.04076087
         let textUserPasswordXCor = screenWidth/2 - screenWidth * 0.34299517
-        let textUserPasswordYCor = screenHeight * 0.49184783
+        let textUserPasswordYCor = screenHeight * 0.49184783 - navigationBarHeight
         textUserPassword = UITextField(frame: CGRectMake(textUserPasswordXCor, textUserPasswordYCor, textUserPasswordWidth, textUserPasswordHeight))
         //textUserPassword = UITextField(frame: CGRectMake(screenWidth/2-142, 362, 284, 30))
         textUserPassword.placeholder = "Username/Image"
@@ -147,7 +149,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let textUserValidationWidth = screenWidth * 0.68599034
         let textUserValidationHeight = screenHeight * 0.04076087
         let textUserValidationXCor = screenWidth/2 - screenWidth * 0.34299517
-        let textUserValidationYCor = screenHeight * 0.58288043
+        let textUserValidationYCor = screenHeight * 0.58288043 - navigationBarHeight
         textUserValidation = UITextField(frame: CGRectMake(textUserValidationXCor, textUserValidationYCor, textUserValidationWidth, textUserValidationHeight))
         //textUserValidation = UITextField(frame: CGRectMake(screenWidth/2-142, 429, 284, 30))
         textUserValidation.placeholder = "Password"
@@ -162,7 +164,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let buttonSubmitWidth = screenWidth * 0.83091787
         let buttonSubmitHeight = screenHeight * 0.05842391
         let buttonSubmitXCor = screenWidth/2 - screenWidth * 0.41545894
-        let buttonSubmitYCor = screenHeight * 0.67663043
+        let buttonSubmitYCor = screenHeight * 0.67663043 - navigationBarHeight
         buttonSubmit = UIButton(frame: CGRectMake(buttonSubmitXCor, buttonSubmitYCor, buttonSubmitWidth, buttonSubmitHeight))
         //buttonSubmit = UIButton(frame: CGRectMake(screenWidth/2-172, 498, 344, 43))
         buttonSubmit.setTitle("Finish!", forState: .Normal)
@@ -175,7 +177,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
     
     func loadLabel(){
         let labelCopyRightHeight = screenHeight * 0.06793478
-        labelCopyRight = UILabel(frame: CGRectMake(0, screenHeight-labelCopyRightHeight, screenWidth, labelCopyRightHeight))
+        labelCopyRight = UILabel(frame: CGRectMake(0, screenHeight-labelCopyRightHeight-navigationBarHeight, screenWidth, labelCopyRightHeight))
         labelCopyRight.textAlignment = NSTextAlignment.Center
         labelCopyRight.text = "© 2016 Fae ::: Faevorite, Inc.\nAll Rights Reserved."
         labelCopyRight.numberOfLines = 0
@@ -185,8 +187,8 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         
         //let labelWelcomeWidth = screenWidth * 0.2512314
         let labelWelcomeHeight = screenHeight * 0.06793478
-        let labelWelcomeYCor = screenHeight * 0.08403361
-        labelWelcome = UILabel(frame: CGRectMake(0, labelWelcomeYCor, screenWidth, labelWelcomeHeight))
+        //let labelWelcomeYCor = screenHeight * 0.08403361 - navigationBarHeight
+        labelWelcome = UILabel(frame: CGRectMake(0, 5, screenWidth, labelWelcomeHeight))
         //labelWelcome = UILabel(frame: CGRectMake(screenWidth/2-labelWelcomeWidth/2, screenHeight-labelCopyRightHeight, screenWidth, labelCopyRightHeight))
         labelWelcome.textAlignment = NSTextAlignment.Center
         labelWelcome.text = "Create your new Password!"
@@ -199,15 +201,15 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         
         let labelPasswordUnderlineWidth = screenWidth * 0.82125604
         let labelPasswordUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
-        let labelPasswordUnderlineYCor = screenHeight * 0.5326087
-        labelPasswordUnderline = UILabel(frame: CGRect(x: labelPasswordUnderlineXCor, y: labelPasswordUnderlineYCor, width: labelPasswordUnderlineWidth, height: 2))
+        let labelPasswordUnderlineYCor = screenHeight * 0.5326087 - navigationBarHeight
+        labelPasswordUnderline = UILabel(frame: CGRect(x: labelPasswordUnderlineXCor, y: labelPasswordUnderlineYCor, width: labelPasswordUnderlineWidth, height: 1))
         labelPasswordUnderline.backgroundColor = UIColor.grayColor()
         self.view.addSubview(labelPasswordUnderline)
         
         let labelValidationUnderlineWidth = screenWidth * 0.82125604
         let labelValidationUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
-        let labelValidationUnderlineYCor = screenHeight * 0.6235087
-        labelValidationUnderline = UILabel(frame: CGRect(x: labelValidationUnderlineXCor, y: labelValidationUnderlineYCor, width: labelValidationUnderlineWidth, height: 2))
+        let labelValidationUnderlineYCor = screenHeight * 0.6235087 - navigationBarHeight
+        labelValidationUnderline = UILabel(frame: CGRect(x: labelValidationUnderlineXCor, y: labelValidationUnderlineYCor, width: labelValidationUnderlineWidth, height: 1))
         labelValidationUnderline.backgroundColor = UIColor.grayColor()
         self.view.addSubview(labelValidationUnderline)
     }

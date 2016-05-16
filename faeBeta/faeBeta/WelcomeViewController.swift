@@ -24,12 +24,14 @@ class WelcomeViewController: UIViewController {
     var labelDescr : UILabel!
     var labelFoot  : UILabel!
     var buttonGuessTour : UIButton!
+    let upSpace :CGFloat = 64.0
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadImageView()
         loadButton()
         loadLabel()
-        self.view.frame.origin.y -= 44
+        
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
         self.navigationController?.navigationBar.translucent = false
