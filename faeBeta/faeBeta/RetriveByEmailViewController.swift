@@ -33,7 +33,7 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
     func loadLabelImage(){
-        labelTitle = UILabel(frame: CGRectMake(screenWidth/2-267/2,screenHeight*0.08423-upSpace,267,68))
+        labelTitle = UILabel(frame: CGRectMake(screenWidth/2-267/2,upSpace+2,267,68))
         labelTitle.text = "Enter you Email to find your Account!"
         labelTitle.textColor = UIColor(colorLiteralRed: 249.0/250.0, green: 90.0/250.0, blue: 90.0/250.0, alpha: 1.0)
         labelTitle.numberOfLines = 0
@@ -41,7 +41,7 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         labelTitle.font = UIFont.systemFontOfSize(25.0, weight: UIFontWeightRegular)
         self.view.addSubview(labelTitle)
         
-        imageTitle = UIImageView(frame: CGRectMake(space, screenHeight*0.24184-upSpace, screenWidth - space*2, screenHeight*0.1576))
+        imageTitle = UIImageView(frame: CGRectMake(space, screenHeight*0.24184, screenWidth - space*2, screenHeight*0.1576))
         imageTitle.image = UIImage(named: "threePeopleEmail")
         self.view.addSubview(imageTitle)
     }

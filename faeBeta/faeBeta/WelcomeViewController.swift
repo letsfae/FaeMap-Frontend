@@ -24,7 +24,7 @@ class WelcomeViewController: UIViewController {
     var labelDescr : UILabel!
     var labelFoot  : UILabel!
     var buttonGuessTour : UIButton!
-    let upSpace :CGFloat = 64.0
+    let upSpace :CGFloat = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class WelcomeViewController: UIViewController {
         
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController?.navigationBar.translucent = false
+//        self.navigationController?.navigationBar.translucent = true
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         self.navigationController?.navigationBar.topItem?.title = ""
 //        let backItem = UIBarButtonItem(image: UIImage(named:"navigationBack" ), style: UIBarButtonItemStyle.Bordered, target: nil, action: nil)
@@ -85,14 +85,23 @@ class WelcomeViewController: UIViewController {
     }
     func loadButton(){
         
-        buttonGuessTour = UIButton(frame: CGRectMake(screenWidth/2-118/2,screenHeigh-screenHeigh*0.29619565,118,22))
-//        buttonGuessTour.currentBackgroundImage = UIImage(named: "guess_tours")
-        buttonGuessTour.setBackgroundImage(UIImage(named: "guess_tours"), forState: .Normal)
-        self.view.addSubview(buttonGuessTour)
         
-        let buttonHeigh = screenHeigh*0.0679347826
+        let buttonHeigh :CGFloat = 50.0
         let buttonWidth = screenWidth*0.75362319
-        buttonJoin = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.23913043,buttonWidth,buttonHeigh))
+        var heightNow = screenHeigh-screenHeigh*0.14402174
+        //button space =20
+        buttonSign = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,heightNow,buttonWidth,buttonHeigh))
+        buttonSign.setTitle("Sign up!", forState: .Normal)
+        buttonSign.setTitleColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0), forState: .Normal)
+        buttonSign.titleLabel?.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
+        buttonSign.layer.cornerRadius = 7
+        buttonSign.layer.masksToBounds = true
+        buttonSign.layer.borderWidth = 2
+        buttonSign.layer.borderColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0).CGColor
+        buttonSign.addTarget(self, action: #selector(WelcomeViewController.jumpToRegister), forControlEvents: .TouchUpInside)
+        self.view.addSubview(buttonSign)
+        heightNow = heightNow-70
+        buttonJoin = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,heightNow,buttonWidth,buttonHeigh))
         buttonJoin.setTitle("Log In!", forState: .Normal)
         buttonJoin.backgroundColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
         buttonJoin.titleLabel?.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
@@ -103,16 +112,11 @@ class WelcomeViewController: UIViewController {
         buttonJoin.addTarget(self, action: #selector(WelcomeViewController.jumpToLogIn), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonJoin)
         
-        buttonSign = UIButton(frame:CGRectMake(screenWidth/2-buttonWidth/2,screenHeigh-screenHeigh*0.14402174,buttonWidth,buttonHeigh))
-        buttonSign.setTitle("Sign up!", forState: .Normal)
-        buttonSign.setTitleColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0), forState: .Normal)
-        buttonSign.titleLabel?.font = UIFont.systemFontOfSize(20.0, weight: UIFontWeightRegular)
-        buttonSign.layer.cornerRadius = 7
-        buttonSign.layer.masksToBounds = true
-        buttonSign.layer.borderWidth = 2
-        buttonSign.layer.borderColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0).CGColor
-        buttonSign.addTarget(self, action: #selector(WelcomeViewController.jumpToRegister), forControlEvents: .TouchUpInside)
-        self.view.addSubview(buttonSign)
+        heightNow = heightNow-42
+        buttonGuessTour = UIButton(frame: CGRectMake(screenWidth/2-118/2,heightNow,118,22))
+        //        buttonGuessTour.currentBackgroundImage = UIImage(named: "guess_tours")
+        buttonGuessTour.setBackgroundImage(UIImage(named: "guess_tours"), forState: .Normal)
+        self.view.addSubview(buttonGuessTour)
         
         
         

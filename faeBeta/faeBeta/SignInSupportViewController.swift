@@ -29,13 +29,13 @@ class SignInSupportViewController: UIViewController {
         
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController?.navigationBar.translucent = false
+//        self.navigationController?.navigationBar.translucent = false
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         self.navigationController?.navigationBar.topItem?.title = ""
         // Do any additional setup after loading the view.
     }
     func loadLabelImage(){
-        labelSupport = UILabel(frame: CGRectMake(screenWidth/2-186/2,5,186,68))
+        labelSupport = UILabel(frame: CGRectMake(screenWidth/2-186/2,60,186,68))
         labelSupport.text = "Welcome to Sign In Support!"
         labelSupport.numberOfLines = 0
         labelSupport.textAlignment = .Center
@@ -44,7 +44,7 @@ class SignInSupportViewController: UIViewController {
         self.view.addSubview(labelSupport)
         let imageWidth : CGFloat = screenWidth*0.7971
         let imageHeight : CGFloat = screenHeigh*0.33559
-        imageTitle = UIImageView(frame: CGRectMake(screenWidth/2-imageWidth/2, screenHeigh*0.24728-upSpace, imageWidth, imageHeight))
+        imageTitle = UIImageView(frame: CGRectMake(screenWidth/2-imageWidth/2, upSpace+68, imageWidth, imageHeight))
         imageTitle.image = UIImage(named: "welcomSignInSupport")
         self.view.addSubview(imageTitle)
     }
