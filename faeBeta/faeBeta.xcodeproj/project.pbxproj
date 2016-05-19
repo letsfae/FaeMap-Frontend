@@ -18,6 +18,24 @@
 		B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */; };
 		B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */; };
 		B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */; };
+		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
+		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
+		B0CFC9A01CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
+		B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
+		B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
+		B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
+		B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
+		B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
+		B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
+		B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9AD1CED35D900EC356A /* Transaction.swift */; };
+		B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9AD1CED35D900EC356A /* Transaction.swift */; };
+		B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9AD1CED35D900EC356A /* Transaction.swift */; };
+		B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */; };
+		B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */; };
+		B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */; };
+		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
+		B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
+		B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */; };
 		B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */; };
@@ -66,6 +84,13 @@
 		B0A2ACBD1CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterProfileViewController.swift; sourceTree = "<group>"; };
+		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
+		B0CFC9AD1CED35D900EC356A /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "faeBeta-Bridging-Header.h"; sourceTree = "<group>"; };
+		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportViewController.swift; sourceTree = "<group>"; };
 		B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetriveByEmailViewController.swift; sourceTree = "<group>"; };
@@ -145,11 +170,13 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
-				B0F688F21CEA403D00D91CF9 /* Map */,
-				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */,
+				B0CFC9B51CED39CF00EC356A /* ViewController */,
+				B0F688F21CEA403D00D91CF9 /* Map */,
+				B0CFC9981CED2CE700EC356A /* Model */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
+				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
 				B0A2ACA71CE3A3C7002E0C9D /* Info.plist */,
@@ -190,6 +217,27 @@
 				B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */,
 			);
 			name = SignIn;
+			sourceTree = "<group>";
+		};
+		B0CFC9981CED2CE700EC356A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B0CFC99D1CED342000EC356A /* Keys.swift */,
+				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
+				B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */,
+				B0CFC9AD1CED35D900EC356A /* Transaction.swift */,
+				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		B0CFC9B51CED39CF00EC356A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */,
+				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
+			);
+			name = ViewController;
 			sourceTree = "<group>";
 		};
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
@@ -386,11 +434,17 @@
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
+				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
+				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
+				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
+				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
@@ -402,7 +456,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
+				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
+				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
+				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
+				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,7 +471,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
+				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
+				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
+				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,12 +605,15 @@
 			baseConfigurationReference = B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -554,12 +623,14 @@
 			baseConfigurationReference = 161518B09455887A546D2080 /* Pods-faeBeta.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
