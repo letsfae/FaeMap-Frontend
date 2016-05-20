@@ -5,10 +5,14 @@
 //  Created by blesssecret on 5/11/16.
 //  Copyright © 2016 fae. All rights reserved.
 //
-
+import Alamofire
 import UIKit
-
+//import CoreData
 class LogInViewController: UIViewController, UITextFieldDelegate {
+    
+    //var numberOfTry : Int
+    //let moc = DataController().managedObjectContext
+    //let moc = DataController().managedObjectContext
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     //let imageCatWidth : CGFloat = 0.277778 * UIScreen.mainScreen().bounds.width
@@ -31,15 +35,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     var labelSignInSupport : UILabel!
     var labelPasswordUnderline : UILabel!
     var buttonSubmit : UIButton!
+    var numberOfTry : Int = 3
     
-    let navigationBarHeight : CGFloat = 64.0
+    let navigationBarHeight : CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print(screenWidth)
         print(screenHeight)
         // Do any additional setup after loading the view.
-        
+        numberOfTry = 3
         loadImageView()
         loadTextView()
         loadButton()
@@ -54,9 +59,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         //imageWelcome.image = UIImage(named: "signin_alert_type1")
         //self.view.addSubview(imageWelcome)
         
-        let imageCatWidth = screenWidth * 0.277778
-        let imageCatHeight = screenHeight * 0.15625
-        let imageCatYcor = (screenHeight * 0.27173923) - navigationBarHeight
+        let imageCatWidth = screenWidth * 0.2444
+        let imageCatHeight = screenHeight * 0.1376
+        let imageCatYcor = (screenHeight * 0.1861) - navigationBarHeight
         imageCat = UIImageView(frame: CGRectMake(screenWidth/2-imageCatWidth/2, imageCatYcor, imageCatWidth, imageCatHeight))
         imageCat.image = UIImage(named: "normal_cat")
         self.view.addSubview(imageCat)
@@ -64,7 +69,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let imageIconUsernameWidth = screenWidth * 0.05072464
         let imageIconUsernameHeight = screenHeight * 0.03668478
         let imageIconUsernameXCor = screenWidth/2 - screenWidth * 0.41545894
-        let imageIconUsernameYCor = screenHeight * 0.49320652 - navigationBarHeight
+        let imageIconUsernameYCor = screenHeight * 0.3668 - navigationBarHeight
         imageIconUsername = UIImageView(frame: CGRectMake(imageIconUsernameXCor, imageIconUsernameYCor, imageIconUsernameWidth, imageIconUsernameHeight))
         imageIconUsername.image = UIImage(named: "signin_email_gray")
         self.view.addSubview(imageIconUsername)
@@ -72,7 +77,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let imageIconPasswordWidth = screenWidth * 0.03864734
         let imageIconPasswordHeight = screenHeight * 0.03668478
         let imageIconPasswordXCor = screenWidth/2 - screenWidth * 0.41062802
-        let imageIconPasswordYCor = screenHeight * 0.58423913 - navigationBarHeight
+        let imageIconPasswordYCor = screenHeight * 0.4626 - navigationBarHeight
         imageIconUserPassword = UIImageView(frame: CGRectMake(imageIconPasswordXCor, imageIconPasswordYCor, imageIconPasswordWidth, imageIconPasswordHeight))
         imageIconUserPassword.image = UIImage(named: "password_gray")
         self.view.addSubview(imageIconUserPassword)
@@ -80,7 +85,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let imageEmailCheckIconWidth = screenWidth * 0.01449275
         let imageEmailCheckIconHeight = screenHeight * 0.02581522
         let imageEmailCheckIconXCor = screenWidth/2 + screenWidth * 0.36473430
-        let imageEmailCheckIconYCor = screenHeight * 0.49592391 - navigationBarHeight
+        let imageEmailCheckIconYCor = screenHeight * 0.3668 - navigationBarHeight
         imageEmailCheckIcon = UIImageView(frame: CGRectMake(imageEmailCheckIconXCor, imageEmailCheckIconYCor, imageEmailCheckIconWidth, imageEmailCheckIconHeight))
         //imageEmailCheckIcon.image = UIImage(named: "check_exclamation_red")
         self.view.addSubview(imageEmailCheckIcon)
@@ -88,7 +93,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let imagePasswordCheckIconWidth = screenWidth * 0.04589372
         let imagePasswordCheckIconHeight = screenHeight * 0.02581522
         let imagePasswordCheckIconXCor = screenWidth/2 + screenWidth * 0.35024155
-        let imagePasswordCheckIconYCor = screenHeight * 0.58695652 - navigationBarHeight
+        let imagePasswordCheckIconYCor = screenHeight * 0.4626 - navigationBarHeight
         imagePasswordCheckIcon = UIImageView(frame: CGRectMake(imagePasswordCheckIconXCor, imagePasswordCheckIconYCor, imagePasswordCheckIconWidth, imagePasswordCheckIconHeight))
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         imagePasswordCheckIcon.userInteractionEnabled = true
@@ -113,7 +118,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let textUserNameWidth = screenWidth * 0.68599034
         let textUserNameHeight = screenHeight * 0.04076087
         let textUserNameXCor = screenWidth/2 - screenWidth * 0.34299517
-        let textUserNameYCor = screenHeight * 0.49184783 - navigationBarHeight
+        let textUserNameYCor = screenHeight * 0.3709 - navigationBarHeight
         textUserName = UITextField(frame: CGRectMake(textUserNameXCor, textUserNameYCor, textUserNameWidth, textUserNameHeight))
         //textUserName = UITextField(frame: CGRectMake(screenWidth/2-142, 362, 284, 30))
         textUserName.placeholder = "Username/Email"
@@ -124,7 +129,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let textUserPasswordWidth = screenWidth * 0.68599034
         let textUserPasswordHeight = screenHeight * 0.04076087
         let textUserPasswordXCor = screenWidth/2 - screenWidth * 0.34299517
-        let textUserPasswordYCor = screenHeight * 0.58288043 - navigationBarHeight
+        let textUserPasswordYCor = screenHeight * 0.4565 - navigationBarHeight
         textUserPassword = UITextField(frame: CGRectMake(textUserPasswordXCor, textUserPasswordYCor, textUserPasswordWidth, textUserPasswordHeight))
         //textUserPassword = UITextField(frame: CGRectMake(screenWidth/2-142, 429, 284, 30))
         textUserPassword.placeholder = "Password"
@@ -136,17 +141,52 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     func loadButton(){
         let buttonSubmitWidth = screenWidth * 0.83091787
-        let buttonSubmitHeight = screenHeight * 0.05842391
+        let buttonSubmitHeight : CGFloat = 50.0
+        //let buttonSubmitHeight = screenHeight * 0.05842391
         let buttonSubmitXCor = screenWidth/2 - screenWidth * 0.41545894
-        let buttonSubmitYCor = screenHeight * 0.67663043 - navigationBarHeight
+        let buttonSubmitYCor = screenHeight * 0.5516 - navigationBarHeight
         buttonSubmit = UIButton(frame: CGRectMake(buttonSubmitXCor, buttonSubmitYCor, buttonSubmitWidth, buttonSubmitHeight))
         //buttonSubmit = UIButton(frame: CGRectMake(screenWidth/2-172, 498, 344, 43))
         buttonSubmit.setTitle("Go!", forState: .Normal)
         buttonSubmit.titleLabel?.textColor = UIColor.whiteColor()
         buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonSubmit.layer.cornerRadius = 7
+        buttonSubmit.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonSubmit)
     }
+    
+    func buttonAction(sender: UIButton){
+        //labelWelcome.text = "sdasdjak"
+        if(textUserName.text==""&&textUserPassword.text==""){
+            labelWelcome.text = "You need to fill username and password"
+        }
+        else if(textUserName.text==""){
+            labelWelcome.text = "You need to fill username"
+        }
+        else if(textUserPassword.text==""){
+            labelWelcome.text = "You need to fill password"
+        }
+        else if(!validateAccount()){
+            imageCat.image = UIImage(named: "sad_cat-1")
+            if(numberOfTry<1){
+                labelWelcome.text = "Sorry! Your Fae is locked for your \n security. Please see Support!"
+                labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+            }
+            else{
+                labelWelcome.text = "Oh No! Please check your Password \n carefully! You have \(numberOfTry) last try "
+                labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+                numberOfTry -= 1
+            }
+        }
+        else{
+            labelWelcome.text = "Right Account"
+        }
+    }
+    
+    func validateAccount()->Bool {
+        return false
+    }
+    
     
     func loadLabel(){
         let labelCopyRightHeight = screenHeight * 0.06793478
@@ -159,7 +199,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(labelCopyRight)
         
         //let labelWelcomeWidth = screenWidth * 0.2512314
-        let labelWelcomeHeight = screenHeight * 0.06793478
+        let labelWelcomeHeight : CGFloat = 80.0
+        //let labelWelcomeHeight = screenHeight * 0.06793478
         let labelWelcomeYCor = screenHeight * 0.08403361 - navigationBarHeight
         labelWelcome = UILabel(frame: CGRectMake(0, labelWelcomeYCor, screenWidth, labelWelcomeHeight))
         //labelWelcome = UILabel(frame: CGRectMake(screenWidth/2-labelWelcomeWidth/2, screenHeight-labelCopyRightHeight, screenWidth, labelCopyRightHeight))
@@ -171,30 +212,28 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         
         let labelUsernameUnderlineWidth = screenWidth * 0.82125604
         let labelUsernameUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
-        let labelUsernameUnderlineYCor = screenHeight * 0.5326087 - navigationBarHeight
+        let labelUsernameUnderlineYCor = screenHeight * 0.4117 - navigationBarHeight
         labelUsernameUnderline = UILabel(frame: CGRect(x: labelUsernameUnderlineXCor, y: labelUsernameUnderlineYCor, width: labelUsernameUnderlineWidth, height: 1))
         labelUsernameUnderline.backgroundColor = UIColor.grayColor()
         self.view.addSubview(labelUsernameUnderline)
         
         let labelPasswordUnderlineWidth = screenWidth * 0.82125604
         let labelPasswordUnderlineXCor = screenWidth/2 - screenWidth * 0.41062802
-        let labelPasswordUnderlineYCor = screenHeight * 0.6235087 - navigationBarHeight
+        let labelPasswordUnderlineYCor = screenHeight * 0.4986 - navigationBarHeight
         labelPasswordUnderline = UILabel(frame: CGRect(x: labelPasswordUnderlineXCor, y: labelPasswordUnderlineYCor, width: labelPasswordUnderlineWidth, height: 1))
         labelPasswordUnderline.backgroundColor = UIColor.grayColor()
         self.view.addSubview(labelPasswordUnderline)
         
-        let labelSignInSupportYCor = screenHeight * 0.7230 - navigationBarHeight
+        let labelSignInSupportYCor = screenHeight * 0.644 - navigationBarHeight
         labelSignInSupport = UILabel(frame: CGRect(x: 0, y: labelSignInSupportYCor, width: screenWidth, height: labelWelcomeHeight))
         labelSignInSupport.textAlignment = NSTextAlignment.Center
         labelSignInSupport.text = "Sign In Support"
         labelSignInSupport.textColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-        labelSignInSupport.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
+        labelSignInSupport.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("supportTapped:"))
         labelSignInSupport.userInteractionEnabled = true
         labelSignInSupport.addGestureRecognizer(tapGestureRecognizer)
         self.view.addSubview(labelSignInSupport)
-        
-        
     }
     
     func supportTapped(lab: AnyObject){

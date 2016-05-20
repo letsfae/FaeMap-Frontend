@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		8C3CF0CD4A75A8F151817B0C /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */; };
+		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
+		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
+		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
+		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
+		B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
+		B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
+		B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */; };
+		B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */; };
+		B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */; };
+		B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
+		B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
+		B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */; };
 		B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */; };
 		B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
@@ -68,6 +80,12 @@
 /* Begin PBXFileReference section */
 		161518B09455887A546D2080 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
+		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
+		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
+		B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
+		B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
+		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +163,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		B04BB9E81CEE2D02009B9531 /* support */ = {
+			isa = PBXGroup;
+			children = (
+				B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */,
+				B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */,
+				B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */,
+			);
+			name = support;
+			sourceTree = "<group>";
+		};
 		B0A2AC8C1CE3A3C6002E0C9D = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +234,7 @@
 		B0A2ACC91CE3A9C8002E0C9D /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
+				B04BB9E81CEE2D02009B9531 /* support */,
 				B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */,
 				B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */,
 				B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */,
@@ -227,6 +256,9 @@
 				B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */,
 				B0CFC9AD1CED35D900EC356A /* Transaction.swift */,
 				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
+				B04BB9DC1CEDB3DB009B9531 /* Query.swift */,
+				B04BB9E41CEDB796009B9531 /* FaeUser.swift */,
+				B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -430,10 +462,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
+				B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
+				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
@@ -446,9 +482,11 @@
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
+				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
+				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,12 +495,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
+				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,12 +513,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
+				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

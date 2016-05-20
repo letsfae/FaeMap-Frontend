@@ -65,6 +65,11 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+        //        self.navigationController?.navigationBar.translucent = true
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        self.navigationController?.navigationBar.topItem?.title = ""
         
         fontSize_11 = screenWidth*0.02657
         fontSize_18 = screenWidth*0.04348

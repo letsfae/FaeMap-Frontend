@@ -6,4 +6,5 @@ target 'faeBeta' do
   pod 'Alamofire', '~> 3.4'
   pod 'SwiftyJSON', '~> 2.3'
   pod 'SDWebImage', '~>3.7'
+  pod 'Mapbox-iOS-SDK', '~> 3.2.2'
 end

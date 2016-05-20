@@ -14,10 +14,12 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
-    var TextHintView : UILabel!
+    let navigationBarOffset : CGFloat = 0
     
-    var ButtonResend : UIButton!
-    var ButtonProceed : UIButton!
+    var textHintView : UILabel!
+    
+    var buttonResend : UIButton!
+    var buttonProceed : UIButton!
     
     var TextFieldDummy = UITextField(frame: CGRectZero)
     
@@ -31,6 +33,11 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     
+    let colorDisableButton = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
+    
+    let isIPhone5 = UIScreen.mainScreen().bounds.size.height == 568
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadButton()
@@ -38,7 +45,14 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         loadDot()
         loadTextField()
         loadVerificaitonCode()
-        let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("update"), userInfo: nil, repeats: true)
+        print(isIPhone5)
+        let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(VerificationCodeViewController.update), userInfo: nil, repeats: true)
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+        //        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        self.navigationController?.navigationBar.topItem?.title = ""
+        
         // Do any additional setup after loading the view.
     }
     
@@ -49,39 +63,53 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     
     func loadButton() {
         let spaceLeft = 0.138*screenWidth
-        let height = 0.068*screenHeight
+        //let height = 0.068*screenHeight
+        let height : CGFloat = 50
         let length = screenWidth - 2 * spaceLeft
-        ButtonResend = UIButton(frame: CGRectMake(spaceLeft, 0.49*screenHeight, length, height))
-        ButtonResend.backgroundColor = colorFae
-        ButtonResend.setTitle("Resend Code 60", forState: .Normal)
-        ButtonResend.layer.cornerRadius = 7
-        ButtonResend.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-        self.view.addSubview(ButtonResend)
-        //        ButtonResend.enabled = false
+        var yPosition = 0.49*screenHeight - navigationBarOffset
+        if isIPhone5 {
+            yPosition = 0.45*screenHeight - navigationBarOffset
+        }
+        buttonResend = UIButton(frame: CGRectMake(spaceLeft, yPosition, length, height))
+        buttonResend.backgroundColor = colorFae
+        buttonResend.setTitle("Resend Code 60", forState: .Normal)
+        buttonResend.layer.cornerRadius = 7
+        buttonResend.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+        disableButton(buttonResend)
+        buttonResend.addTarget(self, action: #selector(VerificationCodeViewController.resendButtonDidPressed), forControlEvents: .TouchUpInside)
         
-        ButtonProceed = UIButton(frame: CGRectMake(spaceLeft, 0.58*screenHeight, length, height))
-        ButtonProceed.backgroundColor = colorFae
-        ButtonProceed.setTitle("Proceed", forState: .Normal)
-        ButtonProceed.layer.cornerRadius = 7
-        ButtonProceed.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-        //        ButtonResend.enabled = false
-        ButtonProceed.addTarget(self, action: "jumpToCreateNewPassword", forControlEvents: .TouchUpInside)
-        self.view.addSubview(ButtonProceed)
+        self.view.addSubview(buttonResend)
+        
+        buttonProceed = UIButton(frame: CGRectMake(spaceLeft, yPosition + 0.09 * screenHeight, length, height))
+        buttonProceed.backgroundColor = colorFae
+        buttonProceed.setTitle("Proceed", forState: .Normal)
+        buttonProceed.layer.cornerRadius = 7
+        buttonProceed.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+        disableButton(buttonProceed)
+        self.view.addSubview(buttonProceed)
+        
+        
     }
     
     func loadLabel() {
-        TextHintView = UILabel(frame: CGRectMake(0, 0.114*screenHeight, screenWidth, 0.0625*screenHeight))
-        TextHintView.text = "Enter the Code we just sent to your \n email to continue…"
-        TextHintView.numberOfLines = 2
-        TextHintView.textColor = UIColor(white: 155.0 / 255.0, alpha: 1.0)
-        TextHintView.textAlignment = .Center
-        TextHintView.font = UIFont(name: "SourceSansPro-Regular", size: 18.0)
-        self.view.addSubview(TextHintView)
+        var yPosition = 0.114*screenHeight - navigationBarOffset
+        var height = 0.0625*screenHeight
+        if isIPhone5 {
+            yPosition = 0.1*screenHeight - navigationBarOffset
+            height = 0.0765 * screenHeight
+        }
+        textHintView = UILabel(frame: CGRectMake(0, yPosition, screenWidth, height))
+        textHintView.text = "Enter the Code we just sent to your \n email to continue…"
+        textHintView.numberOfLines = 0
+        textHintView.textColor = UIColor(white: 155.0 / 255.0, alpha: 1.0)
+        textHintView.font = UIFont(name: "SourceSansPro-Regular", size: 20.0)
+        textHintView.textAlignment = .Center
+        self.view.addSubview(textHintView)
     }
     
     func loadDot() {
         var xDistance = 0.23 * screenWidth
-        let paddingTop = 0.234 * screenHeight
+        let paddingTop = 0.234 * screenHeight - navigationBarOffset
         let length = 0.03*screenWidth
         let height = 0.017*screenHeight
         let interval = 0.1014 * screenWidth
@@ -99,7 +127,11 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
             index--;
             imageCodeDotArray[index].hidden = false
             textVerificationCode[index].hidden = true
+            disableButton(buttonProceed)
         } else if (buffer.characters.count > index) {
+            if(buffer.characters.count >= 6 && !buttonProceed.enabled) {
+                enableButton(buttonProceed)
+            }
             if(buffer.characters.count > 6) {
                 let endIndex = buffer.startIndex.advancedBy(6)
                 textField.text = buffer.substringToIndex(endIndex)
@@ -117,11 +149,15 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         var xDistance = 0.201 * screenWidth
         let length = 0.085 * screenWidth
         let height = 0.1114 * screenHeight
-        let paddingTop = 0.18*screenHeight
+        let paddingTop = 0.18*screenHeight - navigationBarOffset
         let interval = 0.102*screenWidth
         for (var i = 0 ; i < 6 ; i++) {
             textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
-            textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 60)
+            if(isIPhone5) {
+                textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)
+            } else {
+                textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 60)
+            }
             textVerificationCode[i].textColor = colorFae
             textVerificationCode[i].textAlignment = .Center
             let attributedString = NSMutableAttributedString(string: "\(i)")
@@ -138,24 +174,39 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     func loadTextField() {
         self.view.addSubview(TextFieldDummy)
         TextFieldDummy.keyboardType = UIKeyboardType.NumberPad
-        TextFieldDummy.addTarget(self, action: "textFieldValueDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
+        TextFieldDummy.addTarget(self, action: #selector(VerificationCodeViewController.textFieldValueDidChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
         TextFieldDummy.becomeFirstResponder()
     }
     
     func update() {
         if(countDown > 0) {
             let title = "Resend Code \(countDown--)"
-            ButtonResend.setTitle(title, forState: .Normal)
+            buttonResend.setTitle(title, forState: .Normal)
         } else {
             let title = "Resend Code"
-            ButtonResend.setTitle(title, forState: .Normal)
+            buttonResend.setTitle(title, forState: .Normal)
+            enableButton(buttonResend)
         }
     }
-    func jumpToCreateNewPassword(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("CreateNewPasswordViewController")as! CreateNewPasswordViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-
+    
+    func disableButton(button : UIButton) {
+        button.backgroundColor = colorDisableButton
+        button.enabled = false
     }
+    
+    func enableButton(button : UIButton) {
+        button.backgroundColor = colorFae
+        button.enabled = true
+    }
+    
+    func resendButtonDidPressed() {
+        disableButton(buttonResend)
+        countDown = 60
+        // other resent email behavior
+    }
+    
+    
+    
     /*
      // MARK: - Navigation
      

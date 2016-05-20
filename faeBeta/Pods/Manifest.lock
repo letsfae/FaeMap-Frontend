@@ -1,20 +1,23 @@
 PODS:
   - Alamofire (3.4.0)
+  - Mapbox-iOS-SDK (3.2.2)
   - SDWebImage (3.7.6):
     - SDWebImage/Core (= 3.7.6)
   - SDWebImage/Core (3.7.6)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.3)
+  - Alamofire (~> 3.4)
+  - Mapbox-iOS-SDK (~> 3.2.2)
   - SDWebImage (~> 3.7)
   - SwiftyJSON (~> 2.3)
 
 SPEC CHECKSUMS:
   Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Mapbox-iOS-SDK: 117ba1b0ed31107d3fe5826878a0f1531775aedc
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: d93475d145e91156d8073c61a9804f0b469693d3
+PODFILE CHECKSUM: cdff755aa1ddadbdcc6f517769935d056f0959fc
 
 COCOAPODS: 1.0.0

@@ -31,7 +31,6 @@ class WelcomeViewController: UIViewController {
         loadImageView()
         loadButton()
         loadLabel()
-        
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
 //        self.navigationController?.navigationBar.translucent = true
