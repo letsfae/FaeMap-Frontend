@@ -30,6 +30,7 @@
 		B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */; };
 		B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */; };
 		B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */; };
+		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
 		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A01CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
@@ -102,6 +103,7 @@
 		B0A2ACBD1CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterProfileViewController.swift; sourceTree = "<group>"; };
+		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
 		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			children = (
 				B0A2ACB01CE3A3C7002E0C9D /* faeBetaTests.swift */,
 				B0A2ACB21CE3A3C7002E0C9D /* Info.plist */,
+				B0ABDF941CF77B30004890B0 /* VerificationTest.swift */,
 			);
 			path = faeBetaTests;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
+				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,

@@ -13,9 +13,9 @@ class MapViewController: UIViewController {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    //6 plus 414 736
-    //6      375 667
-    //5      320 568
+    //6 plus 414 736 56.25
+    //6      375 667 56.221
+    //5      320 568 56.333
     
     let navigationBarHeight : CGFloat = 64.0
     var mapView: MGLMapView!

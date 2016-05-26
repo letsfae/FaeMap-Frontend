@@ -10,6 +10,7 @@ import UIKit
 
 class FaeObject: NSObject {
     var keyForSearch : String!
+    var keyValue = [String:AnyObject]()
     
     func initWithClassName(className:String){
         
@@ -23,10 +24,9 @@ class FaeObject: NSObject {
     func deleteInBackground(){
         
     }
-    func whereKey(key:String, equalTo:String){
-        
-    }
-//    func findObject(status: Int , message:String)->()->Void{
+
+
+//    func findObject(status: Int , message:String)->(objects:AnyObject)->Void{
 //        
 //    }
 }
