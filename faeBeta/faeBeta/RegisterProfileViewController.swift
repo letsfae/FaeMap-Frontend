@@ -523,7 +523,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         user.whereKey("last_name", value: self.textFieldLastName.text!)
         user.whereKey("birthday", value: strBirthday)
         user.whereKey("gender", value: genders)
-        user.signUpInBackground { (status:Int?, message:String?) in
+        user.signUpInBackground { (status:Int?, message:AnyObject?) in
 //            print(status)//if status is 201
             if(status!/100 == 2){//success
                 let alert = UIAlertController(title: String(status), message: "success", preferredStyle: UIAlertControllerStyle.Alert)
