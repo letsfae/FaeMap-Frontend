@@ -13,7 +13,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    
+    var codeForVerfication : String!
     let navigationBarOffset : CGFloat = 0
     
     var textHintView : UILabel!

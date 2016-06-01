@@ -79,6 +79,7 @@ class FaeUser : NSObject {
         var str = message["token"] as! String
         var session = message["session_id"] as! NSNumber
         var user = message["user_id"] as! NSNumber
+        userToken = str
         session_id = session
         user_id = user
         print(user_id)
@@ -92,7 +93,7 @@ class FaeUser : NSObject {
         print("Encoded:  \(base64Encoded)")
         print("FAE "+base64Encoded)
         let encode = "FAE "+base64Encoded
-        userToken = str
+        
         userTokenEncode = encode
         is_Login = 1
         let shareAPI = LocalStorageManager()

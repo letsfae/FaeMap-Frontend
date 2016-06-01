@@ -13,3 +13,4 @@ var userTokenEncode : String!
 var session_id : NSNumber!
 var user_id : NSNumber!
 var is_Login : Int = 0
+

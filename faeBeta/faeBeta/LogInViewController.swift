@@ -189,7 +189,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         print(textUserName.text)//MARK: bug here
         user.whereKey("email", value: textUserName.text!)
         user.whereKey("password", value: textUserPassword.text!)
+        
         user.logInBackground { (status:Int?, message:AnyObject?) in
+            
             if ( status! / 100 == 2 ){
                 //success
                 self.jumpToMainView()

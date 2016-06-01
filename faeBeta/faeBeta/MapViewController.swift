@@ -55,6 +55,7 @@ class MapViewController: UIViewController {
 //        let vc = ViewController(nibName: "WelcomeViewController", bundle: nil)
         self.presentViewController(vc, animated: true, completion: nil)
     }
+    
     func initializeMap() {
         let mapFrame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height)
         let mapStyleUrl = NSURL(string: "mapbox://styles/mapbox/emerald-v8")
