@@ -86,6 +86,7 @@ class RegisterViewController: UIViewController {
         loadInlineView()
         tap = UITapGestureRecognizer(target: self, action: #selector(RegisterViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
         // Do any additional setup after loading the view.
     }
     
@@ -304,14 +305,14 @@ class RegisterViewController: UIViewController {
         print("email is focused")
         imageEmail.image = UIImage(named: "emaiRed")
         inLineViewEmail.layer.borderColor = ColorFae.CGColor
-        if (!isValidEmail(textEmail.text!)) {
+        if (!emailVerification(textEmail.text!)) {
             textEmail.rightViewMode = .WhileEditing
         }
     }
     
     func emailIsChanged() {
         print("email is changed")
-        if(isValidEmail(textEmail.text!)) {
+        if(emailVerification(textEmail.text!)) {
             //TODO: add duplicate email validation
             textEmail.rightViewMode = .Never
             labelEmailHint.hidden = true
@@ -359,7 +360,7 @@ class RegisterViewController: UIViewController {
             labelPasswordHint.text = "Must be at least 8 characters"
             
             labelPasswordHint.hidden = false
-        } else if (isValidPassword(textPassword.text!)){
+        } else if (passwordVerification(textPassword.text!)){
             imagePassword.image = UIImage(named: "password_red")
             inLineViewPassword.layer.borderColor = ColorFae.CGColor
             textPassword.textColor = ColorFae
@@ -395,7 +396,7 @@ class RegisterViewController: UIViewController {
         } else if(textPassword.text?.characters.count < 8) {
             imageCheckPassword.image = UIImage(named: "check_cross_red")
             imageCheckPassword.hidden = false
-        } else if (!isValidPassword(textPassword.text!)){
+        } else if (!passwordVerification(textPassword.text!)){
             imageAlertView.hidden = false
         } else {
             imageCheckPassword.image = UIImage(named: "check_yes")
@@ -442,13 +443,13 @@ class RegisterViewController: UIViewController {
         }
         checkAllValidation()
     }
-    
+    /*
     func isValidEmail(testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluateWithObject(testStr)
-    }
-    
+    }*/
+    /*
     func isValidPassword(testStr:String) -> Bool {
         var uppercase = 0
         var symbol = 0
@@ -469,6 +470,7 @@ class RegisterViewController: UIViewController {
         }
         return false
     }
+     */
     
     func isValidPasswordAgain() -> Bool {
         if(textPasswordAgain.text != "" && textPassword != "") {
@@ -499,7 +501,10 @@ class RegisterViewController: UIViewController {
     }
     
     func jumpToRegisterProfile(){
+        
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterProfileViewController")as! RegisterProfileViewController
+        vc.emailFromPrevious = textEmail.text
+        vc.passwordFromPrevious = textPassword.text
         self.navigationController?.pushViewController(vc, animated: true)
     }
     /*

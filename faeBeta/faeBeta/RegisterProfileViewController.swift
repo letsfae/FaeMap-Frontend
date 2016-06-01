@@ -12,6 +12,8 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    var emailFromPrevious : String!
+    var passwordFromPrevious : String!
     
     var fontSize_11: CGFloat!
     var fontSize_18: CGFloat!
@@ -70,7 +72,8 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         //        self.navigationController?.navigationBar.translucent = true
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         self.navigationController?.navigationBar.topItem?.title = ""
-        
+//        print(self.emailFromPrevious)
+//        print(self.passwordFromPrevious)
         fontSize_11 = screenWidth*0.02657
         fontSize_18 = screenWidth*0.04348
         fontSize_20 = screenWidth*0.04831
@@ -253,6 +256,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         buttonFinish.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
         buttonFinish.backgroundColor = colorFae
         buttonFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: fontSize_20)
+        buttonFinish.addTarget(self, action: #selector(RegisterProfileViewController.actionFinish), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonFinish)
         
         let buttonBirthdayMaskBounds = textFieldBirthday.frame
@@ -501,6 +505,37 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         datePickerHideAnimation()
         handleDatePicker(datePicker)
         birthdayValidation()
+    }
+    func actionFinish(){
+        ///verify here...
+        var genders = "male"
+        if maleSelected {
+            genders = "male"
+        }
+        else{
+            genders = "female"
+        }
+        let strBirthday = timeToString(datePicker.date)
+        let user = FaeUser()
+        user.whereKey("email", value: self.emailFromPrevious)
+        user.whereKey("password", value: self.passwordFromPrevious)
+        user.whereKey("first_name", value: self.textFieldFirstName.text!)
+        user.whereKey("last_name", value: self.textFieldLastName.text!)
+        user.whereKey("birthday", value: strBirthday)
+        user.whereKey("gender", value: genders)
+        user.signUpInBackground { (status:Int?, message:String?) in
+//            print(status)//if status is 201
+            if(status!/100 == 2){//success
+                let alert = UIAlertController(title: String(status), message: "success", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            else{
+                let alert = UIAlertController(title: String(status), message: "fail", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     // Mark: -- tableview functions

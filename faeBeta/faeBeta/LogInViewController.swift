@@ -184,9 +184,27 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     }
     
     func validateAccount()->Bool {
-        return false
+//        return false
+        let user=FaeUser()
+        print(textUserName.text)//MARK: bug here
+        user.whereKey("email", value: textUserName.text!)
+        user.whereKey("password", value: textUserPassword.text!)
+        user.logInBackground { (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                self.jumpToMainView()
+            }
+            else{
+                //failure
+            }
+        }
+        return false;// 需要修改
     }
-    
+    func jumpToMainView(){
+//        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("TabBarViewController")as! TabBarViewController
+//        self.navigationController?.pushViewController(vc, animated: true)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     
     func loadLabel(){
         let labelCopyRightHeight = screenHeight * 0.06793478

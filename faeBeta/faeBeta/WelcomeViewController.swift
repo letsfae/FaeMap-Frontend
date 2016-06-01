@@ -36,17 +36,7 @@ class WelcomeViewController: UIViewController {
 //        self.navigationController?.navigationBar.translucent = true
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         self.navigationController?.navigationBar.topItem?.title = ""
-        var user = FaeUser()
-        user.whereKey("email", value: "fa3asd@usc.edu")
-        user.whereKey("password", value: "fasfasdfdf")
-        user.whereKey("first_name", value: "fasdf")
-        user.whereKey("last_name", value: "fasdf")
-        user.whereKey("birthday", value: "1991-01-01")
-        user.whereKey("gender", value: "male")
-        user.signUpInBackground { (status:Int?, message:String?) in
-            print(status)//if status is 201
-            print(message)
-        }
+        
 //        let backItem = UIBarButtonItem(image: UIImage(named:"navigationBack" ), style: UIBarButtonItemStyle.Bordered, target: nil, action: nil)
 //        let backItem1 = UIBarButtonItem(title: "<", style: .Plain, target: nil, action: nil)
 //        self.navigationController?.navigationItem.backBarButtonItem = backItem1
@@ -136,6 +126,7 @@ class WelcomeViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToLogIn(){
+        print("login")
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }

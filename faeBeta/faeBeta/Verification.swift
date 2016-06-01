@@ -49,5 +49,11 @@ func checkLogIn(email:String , password:String)->Bool{
 
 
 func timeToString(time : NSDate)->String {
-    return "null"
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.timeZone = NSTimeZone(name: "UTC")
+    let dateString = dateFormatter.stringFromDate(time)
+    //    print(dateString)
+    return dateString
 }
+

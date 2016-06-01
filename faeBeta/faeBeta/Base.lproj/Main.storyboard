@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rAJ-5e-EZa">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="qi0-kD-PRv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -208,10 +208,10 @@
             </objects>
             <point key="canvasLocation" x="520.5" y="-630"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tab Bar View Controller-->
         <scene sceneID="Cth-zx-THG">
             <objects>
-                <tabBarController id="qi0-kD-PRv" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="qi0-kD-PRv" customClass="TabBarViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="M5L-Ma-FnW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -226,10 +226,10 @@
             </objects>
             <point key="canvasLocation" x="158" y="533"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Welcome View Controller-->
         <scene sceneID="fcw-0r-2rp">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rAJ-5e-EZa" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavigationWelcomeViewController" automaticallyAdjustsScrollViewInsets="NO" id="rAJ-5e-EZa" customClass="NavigationWelcomeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Owe-ie-wR5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

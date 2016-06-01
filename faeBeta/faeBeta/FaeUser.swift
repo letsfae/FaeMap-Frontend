@@ -7,33 +7,99 @@
 //
 
 import Foundation
+/*
 // after login all the information will be store in here.
+// UTF 8 str from original
+// NSData! type returned (optional)
+let utf8str = str.dataUsingEncoding(NSUTF8StringEncoding)
+
+// Base64 encode UTF 8 string
+// fromRaw(0) is equivalent to objc 'base64EncodedStringWithOptions:0'
+// Notice the unwrapping given the NSData! optional
+// NSString! returned (optional)
+let base64Encoded = utf8str!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+print("Encoded:  \(base64Encoded)")
+print("FAE "+base64Encoded)
+*/
 class FaeUser : NSObject {
-    var isLogin : Bool!
-    var userToken : String!
-    var userEmail : String!//require
-    var userPassword : String!//require
-    var firstName : String!
-    var lastName  : String!
-    var gender : String!
+//    var isLogin : Bool!
+//    var userToken : String!
     
     var keyValue = [String:AnyObject]()
-    
+    override init (){
+        //local storage
+//        self.isLogin = false
+//        self.userToken = ""
+    }
     func whereKey(key:String, value:String)->Void{
         keyValue[key]=value
     }
     func clearKeyValue()->Void{
         self.keyValue = [String:AnyObject]()
     }
-    func signUpInBackground(completion:(Int?,String?)->Void){
+    func signUpInBackground(completion:(Int?,AnyObject?)->Void){
         //verfy keyValue[String:AnyObject]
+        /*
         postToURL("users", keyValue: keyValue) { (status:Int?, message:String) in
-            print("signUp")
-            print(status)
-            print(message)
             completion(status,message)
             self.clearKeyValue()
+        }*/
+        postToURL("users", parameter: keyValue, authentication: nil) { (status:Int?, message:AnyObject) in
+            if(status! / 100 == 2 ) {
+                //success
+            }
+            else{
+                //fail
+            }
+            self.clearKeyValue()
+            completion(status,message);
         }
+    }
+    func logInBackground(completion:(Int?,AnyObject?)->Void){
+        postToURL("authentication", parameter: keyValue, authentication: nil) { (status:Int?, message:AnyObject) in
+            
+            print(message)
+            if(status! / 100 == 2 ){//success
+                self.processToken(message)
+            }
+            else{//failure
+                
+            }
+            completion(status,message)
+        }
+    }
+    /*{
+    "session_id" = 5;
+    token = YlCxL08K2ClsD7AeOpfV6SsF05yK2N;
+    "user_id" = 10;
+    }*/
+    func processToken(message:AnyObject)->Void{
+        // UTF 8 str from original
+        // NSData! type returned (optional)
+        var str = message["token"] as! String
+        var session = message["session_id"] as! NSNumber
+        var user = message["user_id"] as! NSNumber
+        session_id = session
+        user_id = user
+        print(user_id)
+        let utf8str = str.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        // Base64 encode UTF 8 string
+        // fromRaw(0) is equivalent to objc 'base64EncodedStringWithOptions:0'
+        // Notice the unwrapping given the NSData! optional
+        // NSString! returned (optional)
+        let base64Encoded = utf8str!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        print("Encoded:  \(base64Encoded)")
+        print("FAE "+base64Encoded)
+        let encode = "FAE "+base64Encoded
+        userToken = str
+        userTokenEncode = encode
+        is_Login = 1
+        let shareAPI = LocalStorageManager()
+        shareAPI.logInStorage()
+//        logOut()
+//        shareAPI.readLogInfo()
+//        logOut()
     }
 //    func signUpInBackground(status: Int , message:String)->()->Void{
 //        
@@ -45,7 +111,16 @@ class FaeUser : NSObject {
 //    }
 //    func resetPassword()
     func logOut(){//clear the login token is enough
+//        print(userToken)
+//        print(userTokenEncode)
+//        print(session_id)
+//        print(user_id)
+//        print(is_Login)
+        
         userToken = ""
-        isLogin = false
+        userTokenEncode = ""
+        session_id = -1
+        user_id = -1
+        is_Login = 0
     }
 }

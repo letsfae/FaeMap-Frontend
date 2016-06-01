@@ -49,6 +49,12 @@
 		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
+		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
+		B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
+		B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
+		B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
+		B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
+		B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */; };
 		B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */; };
@@ -111,6 +117,8 @@
 		B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "faeBeta-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
+		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportViewController.swift; sourceTree = "<group>"; };
 		B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetriveByEmailViewController.swift; sourceTree = "<group>"; };
@@ -247,6 +255,7 @@
 				B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */,
 				B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */,
 				B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */,
+				B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */,
 			);
 			name = SignIn;
 			sourceTree = "<group>";
@@ -269,6 +278,7 @@
 		B0CFC9B51CED39CF00EC356A /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */,
 				B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 			);
@@ -475,6 +485,7 @@
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
+				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
@@ -490,6 +501,7 @@
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +518,9 @@
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
+				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
@@ -520,11 +534,13 @@
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
+				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);

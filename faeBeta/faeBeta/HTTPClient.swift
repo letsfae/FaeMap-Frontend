@@ -31,38 +31,146 @@ do {
 } catch let error as NSError {
     print(error)
 }*/
-func postToURL(className:String,keyValue:[String:AnyObject] ,completion:(Int?,String)->Void){
+// not use anymore
+
+func postToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int?,AnyObject)->Void){
     let URL = baseURL + "/" + className
-    let headers = [
+    var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
         "Device-ID" : headerDeviceID,
         "Accept": "application/x.faeapp.v1+json",
         "Content-Type" : "application/x-www-form-urlencoded"
     ]
+    if authentication != nil {
+        for(key,value) in authentication!{
+            headers[key] = value as? String
+        }
+    }
     do{
-//        let parameters = try! NSJSONSerialization.dataWithJSONObject(keyValue, options: NSJSONWritingOptions.PrettyPrinted)
-//        let parameters2 = ["password":"asdfsa","email":"asdfsa", "first_name":"asdfsa","last_name":"asdfsa","birthday":"asdfsa","gender":"asdfsa"]
-        Alamofire.request(.POST, URL, parameters: keyValue,headers:headers)
+        Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
             .responseJSON{response in
-            print(response.response!.statusCode)
-            
-            if(response.response!.statusCode != 0){
-                print("finished")
-            }
-            if let JSON = response.response?.allHeaderFields{
-                print(JSON)
+                //print(response.response!.statusCode)
+                print(response)
                 
-            }
-            completion(response.response!.statusCode,"nothing here")
+                if(response.response!.statusCode != 0){
+                    print("finished")
+                }
+                if let JSON = response.response?.allHeaderFields{
+                    print(JSON)
+                    
+                }
+                if let resMess = response.result.value {
+                    completion(response.response!.statusCode,resMess)
+                }
+                else{
+                    //MARK: bug here
+                    completion(response.response!.statusCode,"this filed need to modify")
+                }
         }
     }
     catch let error as NSError{
         print(error)
     }
-    
-
 }
+
+
+func getFromURL(className:String, authentication:[String : AnyObject], completion:(Int?,String)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Device-ID" : headerDeviceID,
+        "Accept": "application/x.faeapp.v1+json",
+        "Content-Type" : "application/x-www-form-urlencoded"
+    ]
+    for(key,value) in authentication{
+        headers[key] = value as? String
+    }
+    do{
+        Alamofire.request(.GET, URL,headers:headers)
+            .responseJSON{response in
+                print(response.response!.statusCode)
+                
+                if(response.response!.statusCode != 0){
+                    print("finished")
+                }
+                if let JSON = response.response?.allHeaderFields{
+                    print(JSON)
+                    
+                }
+                completion(response.response!.statusCode,response.description)
+        }
+    }
+    catch let error as NSError{
+        print(error)
+    }
+}
+
+func deleteFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject], completion:(Int?,String)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "Accept": "application/x.faeapp.v1+json",
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Device-ID" : headerDeviceID,
+        ]
+    for(key,value) in authentication{
+        headers[key] = value as? String
+    }
+    print(headers)
+    do{
+        Alamofire.request(.DELETE, URL,headers:headers)
+            .responseJSON{response in
+                print(response.response!.statusCode)
+                
+                if(response.response!.statusCode != 0){
+                    print("finished")
+                }
+                if let JSON = response.response?.allHeaderFields{
+                    print(JSON)
+                    
+                }
+                completion(response.response!.statusCode,"nothing here")
+        }
+    }
+    catch let error as NSError{
+        print(error)
+    }
+}
+
+func putFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject], completion:(Int?,String)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Device-ID" : headerDeviceID,
+        "Accept": "application/x.faeapp.v1+json",
+        "Content-Type" : "application/x-www-form-urlencoded"
+    ]
+    for(key,value) in authentication{
+        headers[key] = value as? String
+    }
+    
+    do{
+        Alamofire.request(.PUT, URL, parameters: parameter,headers:headers)
+            .responseJSON{response in
+                print(response.response!.statusCode)
+                
+                if(response.response!.statusCode != 0){
+                    print("finished")
+                }
+                if let JSON = response.response?.allHeaderFields{
+                    print(JSON)
+                }
+                completion(response.response!.statusCode,"nothing here")
+        }
+    }
+    catch let error as NSError{
+        print(error)
+    }
+}
+
 
     //utf-5 encode
     func utf8Encode(inputString:String)->String{
