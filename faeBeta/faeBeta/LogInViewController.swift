@@ -20,6 +20,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     
     //var imageWelcome : UIImageView!
+    var indicator : UIActivityIndicatorView!
     var imageCat : UIImageView!
     var imageIconUsername : UIImageView!
     var imageIconUserPassword : UIImageView!
@@ -41,14 +42,15 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(screenWidth)
-        print(screenHeight)
+        //print(screenWidth)
+        //print(screenHeight)
         // Do any additional setup after loading the view.
         numberOfTry = 3
         loadImageView()
         loadTextView()
         loadButton()
         loadLabel()
+        loadActivityIndicator()
     }
     
     func loadImageView(){
@@ -139,6 +141,12 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         textUserPassword.delegate = self
     }
     
+    func loadActivityIndicator(){
+        self.indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        self.indicator.center = view.center
+        view.addSubview(self.indicator)
+    }
+    
     func loadButton(){
         let buttonSubmitWidth = screenWidth * 0.83091787
         let buttonSubmitHeight : CGFloat = 50.0
@@ -157,6 +165,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     func buttonAction(sender: UIButton){
         //labelWelcome.text = "sdasdjak"
+        
         if(textUserName.text==""&&textUserPassword.text==""){
             labelWelcome.text = "You need to fill username and password"
         }
@@ -166,45 +175,41 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         else if(textUserPassword.text==""){
             labelWelcome.text = "You need to fill password"
         }
-        else if(!validateAccount()){
-            imageCat.image = UIImage(named: "sad_cat-1")
-            if(numberOfTry<1){
-                labelWelcome.text = "Sorry! Your Fae is locked for your \n security. Please see Support!"
-                labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-            }
-            else{
-                labelWelcome.text = "Oh No! Please check your Password \n carefully! You have \(numberOfTry) last try "
-                labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-                numberOfTry -= 1
-            }
-        }
         else{
-            labelWelcome.text = "Right Account"
+            validateAccount()
+            
         }
+        
     }
     
-    func validateAccount()->Bool {
-//        return false
+    func validateAccount(){
+        if(self.numberOfTry<1){
+            self.labelWelcome.text = "Sorry! Your Fae is locked for your \n security. Please see Support!"
+            self.labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+        }
         let user=FaeUser()
         print(textUserName.text)//MARK: bug here
         user.whereKey("email", value: textUserName.text!)
         user.whereKey("password", value: textUserPassword.text!)
-        
+        self.indicator.startAnimating()
         user.logInBackground { (status:Int?, message:AnyObject?) in
-            
             if ( status! / 100 == 2 ){
                 //success
                 self.jumpToMainView()
             }
             else{
                 //failure
+                self.imageCat.image = UIImage(named: "sad_cat-1")
+                self.labelWelcome.text = "Oh No! Please check your Password \n carefully! You have \(self.numberOfTry) last try "
+                self.labelWelcome.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+                self.numberOfTry -= 1
             }
+            self.indicator.stopAnimating()
         }
-        return false;// 需要修改
     }
     func jumpToMainView(){
-//        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("TabBarViewController")as! TabBarViewController
-//        self.navigationController?.pushViewController(vc, animated: true)
+        //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("TabBarViewController")as! TabBarViewController
+        //        self.navigationController?.pushViewController(vc, animated: true)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

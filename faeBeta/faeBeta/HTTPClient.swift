@@ -9,38 +9,38 @@
 import UIKit
 import Alamofire
 
-    var baseURL = "https://api.letsfae.com/"
-    var version = "x.faeapp.v1"
-    var headerAuth : String = "null"
-    let headerClientVersion : String = "fae-ios-1.0.0"
-    var headerDeviceID : String = "0000000"
-    var headerUserAgent : String = "iphone5"
-//    var headerClientVersion : String = "null"
-    var headerAuthorization : String = "null"
-/*
-do {
-    let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
-    // here "jsonData" is the dictionary encoded in JSON data
-} catch let error as NSError {
-    print(error)
-}
+var baseURL = "https://api.letsfae.com/"
+var version = "x.faeapp.v1"
+var headerAccept = "application/x.faeapp.v1+json"
+var headerContentType = "application/x-www-form-urlencoded"
+let headerClientVersion : String = "fae-ios-1.0.0"
+var headerDeviceID : String = "0000000"
+var headerUserAgent : String = "iphone5"
 
-do {
-    let decoded = try NSJSONSerialization.JSONObjectWithData(jsonData, options: []) as? [String:String]
-    // here "decoded" is the dictionary decoded from JSON data
-} catch let error as NSError {
-    print(error)
-}*/
+/*
+ do {
+ let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
+ // here "jsonData" is the dictionary encoded in JSON data
+ } catch let error as NSError {
+ print(error)
+ }
+ 
+ do {
+ let decoded = try NSJSONSerialization.JSONObjectWithData(jsonData, options: []) as? [String:String]
+ // here "decoded" is the dictionary decoded from JSON data
+ } catch let error as NSError {
+ print(error)
+ }*/
 // not use anymore
 
-func postToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int?,AnyObject)->Void){
+func postToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
         "Device-ID" : headerDeviceID,
-        "Accept": "application/x.faeapp.v1+json",
-        "Content-Type" : "application/x-www-form-urlencoded"
+        "Accept": headerAccept,
+        "Content-Type" : headerContentType
     ]
     if authentication != nil {
         for(key,value) in authentication!{
@@ -50,7 +50,7 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
     do{
         Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
             .responseJSON{response in
-                //print(response.response!.statusCode)
+                print(response.response!.statusCode)
                 print(response)
                 
                 if(response.response!.statusCode != 0){
@@ -65,7 +65,7 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
                 }
                 else{
                     //MARK: bug here
-                    completion(response.response!.statusCode,"this filed need to modify")
+                    completion(response.response!.statusCode,"no Json body")
                 }
         }
     }
@@ -75,14 +75,14 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
 }
 
 
-func getFromURL(className:String, authentication:[String : AnyObject], completion:(Int?,String)->Void){
+func getFromURL(className:String, authentication:[String : AnyObject], completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
         "Device-ID" : headerDeviceID,
-        "Accept": "application/x.faeapp.v1+json",
-        "Content-Type" : "application/x-www-form-urlencoded"
+        "Accept": headerAccept,
+        "Content-Type" : headerContentType
     ]
     for(key,value) in authentication{
         headers[key] = value as? String
@@ -107,16 +107,21 @@ func getFromURL(className:String, authentication:[String : AnyObject], completio
     }
 }
 
-func deleteFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject], completion:(Int?,String)->Void){
+func deleteFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
-        "Accept": "application/x.faeapp.v1+json",
+        "Accept": headerAccept,
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
         "Device-ID" : headerDeviceID,
         ]
-    for(key,value) in authentication{
-        headers[key] = value as? String
+    if authentication == nil {
+        completion(500,"we must get the authentication number")
+    }
+    if authentication != nil {
+        for(key,value) in authentication! {
+            headers[key] = value as? String
+        }
     }
     print(headers)
     do{
@@ -139,17 +144,19 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
     }
 }
 
-func putFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject], completion:(Int?,String)->Void){
+func putToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
         "Device-ID" : headerDeviceID,
-        "Accept": "application/x.faeapp.v1+json",
-        "Content-Type" : "application/x-www-form-urlencoded"
+        "Accept": headerAccept,
+        "Content-Type" : headerContentType
     ]
-    for(key,value) in authentication{
-        headers[key] = value as? String
+    if authentication != nil {
+        for(key,value) in authentication!{
+            headers[key] = value as? String
+        }
     }
     
     do{
@@ -163,7 +170,13 @@ func putFromURL(className:String,parameter:[String:AnyObject] , authentication:[
                 if let JSON = response.response?.allHeaderFields{
                     print(JSON)
                 }
-                completion(response.response!.statusCode,"nothing here")
+                if let resMess = response.result.value {
+                    completion(response.response!.statusCode,resMess)
+                }
+                else{
+                    //MARK: bug here
+                    completion(response.response!.statusCode,"this filed need to modify")
+                }
         }
     }
     catch let error as NSError{
@@ -172,15 +185,15 @@ func putFromURL(className:String,parameter:[String:AnyObject] , authentication:[
 }
 
 
-    //utf-5 encode
-    func utf8Encode(inputString:String)->String{
-        var encodedString = inputString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
-        return encodedString!
-    }
-    
-    //utf-8 decode
-    func utf8Decode(inputString:String)->String{
-        var decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        return decodeString
-    }
+//utf-5 encode
+func utf8Encode(inputString:String)->String{
+    var encodedString = inputString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+    return encodedString!
+}
+
+//utf-8 decode
+func utf8Decode(inputString:String)->String{
+    var decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+    return decodeString
+}
 
