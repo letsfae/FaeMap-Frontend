@@ -76,30 +76,37 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         buttonNext.backgroundColor = UIColor(colorLiteralRed: 255.0/250.0, green: 160.0/250.0, blue: 160.0/250.0, alpha: 1.0)
         buttonNext.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         buttonNext.layer.cornerRadius = 7
-        buttonNext.addTarget(self, action: #selector(RetriveByEmailViewController.jumpToAccount), forControlEvents: .TouchUpInside)
+        buttonNext.addTarget(self, action: #selector(RetriveByEmailViewController.buttonNextIsClicked), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonNext)
         buttonContact = UIButton(frame: CGRectMake(screenWidth/2-184/2,screenHeight*0.724,184,22))
         buttonContact.setImage(UIImage(named: "contactFaeSupport"), forState: .Normal)
         self.view.addSubview(buttonContact)
     }
+    func buttonNextIsClicked() {
+        jumpToAccount()
+        
+    }
     func jumpToAccount(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("AccountFoundViewController")as! AccountFoundViewController
-        self.navigationController?.pushViewController(vc, animated: true)
+        if let email = textEmail.text {
+            let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("AccountFoundViewController")as! AccountFoundViewController
+            vc.emailNeedToBeVerifed = email
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

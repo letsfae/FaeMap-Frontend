@@ -13,7 +13,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    var codeForVerfication : String!
+    
     let navigationBarOffset : CGFloat = 0
     
     var textHintView : UILabel!
@@ -37,6 +37,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     
     let isIPhone5 = UIScreen.mainScreen().bounds.size.height == 568
     
+    var emailNeedToBeVerified = "000000"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,10 +86,9 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         buttonProceed.setTitle("Proceed", forState: .Normal)
         buttonProceed.layer.cornerRadius = 7
         buttonProceed.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
+        buttonProceed.addTarget(self, action: #selector(VerificationCodeViewController.compareVerificationCode), forControlEvents: .TouchUpInside)
         disableButton(buttonProceed)
         self.view.addSubview(buttonProceed)
-        
-        
     }
     
     func loadLabel() {
@@ -113,7 +113,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         let length = 0.03*screenWidth
         let height = 0.017*screenHeight
         let interval = 0.1014 * screenWidth
-        for (var i = 0 ; i < 6 ; i++) {
+        for (var i = 0 ; i < 6 ; i += 1) {
             imageCodeDotArray.append(UIImageView(frame : CGRectMake(xDistance, paddingTop, length, height)))
             xDistance += interval
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
@@ -124,7 +124,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
     func textFieldValueDidChanged(textField: UITextField) {
         let buffer = textField.text!
         if(buffer.characters.count<index) {
-            index--;
+            index -= 1;
             imageCodeDotArray[index].hidden = false
             textVerificationCode[index].hidden = true
             disableButton(buttonProceed)
@@ -139,7 +139,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
                 textVerificationCode[index].text = (String)(buffer[buffer.endIndex.predecessor()])
                 imageCodeDotArray[index].hidden = true
                 textVerificationCode[index].hidden = false;
-                index++
+                index += 1
             }
         }
         print(index)
@@ -151,7 +151,7 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         let height = 0.1114 * screenHeight
         let paddingTop = 0.18*screenHeight - navigationBarOffset
         let interval = 0.102*screenWidth
-        for (var i = 0 ; i < 6 ; i++) {
+        for (var i = 0 ; i < 6 ; i += 1) {
             textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
             if(isIPhone5) {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)
@@ -169,7 +169,6 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
             self.view.addSubview(textVerificationCode[i])
         }
     }
-    
     
     func loadTextField() {
         self.view.addSubview(TextFieldDummy)
@@ -203,8 +202,50 @@ class VerificationCodeViewController: UIViewController, UITextFieldDelegate {
         disableButton(buttonResend)
         countDown = 60
         // other resent email behavior
+        sendCodeToEmailAgain(emailNeedToBeVerified)
+        disableButton(buttonProceed)
     }
     
+    func compareVerificationCode() {
+        if let input = TextFieldDummy.text {
+            verifyCode(input, email: emailNeedToBeVerified)
+        }
+    }
+    
+    func verifyCode(input : String, email : String){
+        let user = FaeUser()
+        user.whereKey("email", value: email)
+        user.whereKey("code", value: input)
+        user.validateCode{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("CreateNewPasswordViewController")as! CreateNewPasswordViewController
+                vc.emailNeedToBeVerified = self.emailNeedToBeVerified
+                vc.codeForVerification = input
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            else{
+                //failure
+                self.textHintView.text = "That’s an incorrect Code!\nPlease try again!"
+            }
+        }
+    }
+    
+    func sendCodeToEmailAgain(email : String){
+        let user = FaeUser()
+        user.whereKey("email", value: email)
+        user.sendCodeToEmail{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                print("Email sent")
+                self.TextFieldDummy.text = ""
+            }
+            else{
+                
+                //failure
+            }
+        }
+    }
     
     
     /*

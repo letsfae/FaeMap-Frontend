@@ -11,10 +11,9 @@ import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.sharedApplication().registerForRemoteNotifications()
@@ -32,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
 //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
         var token = NSString(format: "%@", deviceToken)
-        print(token)
+//        print(token)
 //        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
 //        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
 //        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")

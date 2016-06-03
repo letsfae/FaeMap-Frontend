@@ -30,6 +30,8 @@ class AccountFoundViewController: UIViewController {
     
     let questionLabelYposition = 0.724 * UIScreen.mainScreen().bounds.height
     
+    var emailNeedToBeVerifed = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print(screenWidth)
@@ -91,7 +93,7 @@ class AccountFoundViewController: UIViewController {
         buttonEmail.setTitle("Email Code", forState: .Normal)
         buttonEmail.layer.cornerRadius = 7
         buttonEmail.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-        buttonEmail.addTarget(self, action: #selector(AccountFoundViewController.jumpToVerification), forControlEvents: .TouchUpInside)
+        buttonEmail.addTarget(self, action: #selector(AccountFoundViewController.sendCodeToEmail), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonEmail)
         
         buttonContact = UIButton(frame: CGRectMake(0, questionLabelYposition + 25 - navigationBarOffset, screenWidth, 0.03*screenHeight))
@@ -103,8 +105,25 @@ class AccountFoundViewController: UIViewController {
     
     func jumpToVerification(){
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("VerificationCodeViewController")as! VerificationCodeViewController
+        vc.emailNeedToBeVerified = self.emailNeedToBeVerifed
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func sendCodeToEmail() {
+        let user = FaeUser()
+        user.whereKey("email", value: emailNeedToBeVerifed)
+        user.sendCodeToEmail{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                print("Email sent")
+                self.jumpToVerification()
+            }
+            else{
+                //failure
+            }
+        }
+    }
+    
     
     /*
      // MARK: - Navigation

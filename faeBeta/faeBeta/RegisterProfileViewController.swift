@@ -72,8 +72,8 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         //        self.navigationController?.navigationBar.translucent = true
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         self.navigationController?.navigationBar.topItem?.title = ""
-//        print(self.emailFromPrevious)
-//        print(self.passwordFromPrevious)
+        //        print(self.emailFromPrevious)
+        //        print(self.passwordFromPrevious)
         fontSize_11 = screenWidth*0.02657
         fontSize_18 = screenWidth*0.04348
         fontSize_20 = screenWidth*0.04831
@@ -524,18 +524,38 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
         user.whereKey("birthday", value: strBirthday)
         user.whereKey("gender", value: genders)
         user.signUpInBackground { (status:Int?, message:AnyObject?) in
-//            print(status)//if status is 201
+            //            print(status)//if status is 201
             if(status!/100 == 2){//success
-                let alert = UIAlertController(title: String(status), message: "success", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                print(status)
+                print("Sign Up Success!")
+                self.loginAfterFinishRegister()
             }
             else{
-                let alert = UIAlertController(title: String(status), message: "fail", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                print(status)
+                print("Sign Up Fail!")
             }
         }
+    }
+    
+    func loginAfterFinishRegister() {
+        let user = FaeUser()
+        user.whereKey("email", value: self.emailFromPrevious)
+        user.whereKey("password", value: self.passwordFromPrevious)
+        user.logInBackground { (status:Int?, message:AnyObject?) in
+            if(status!/100 == 2){//success
+                print(status)
+                print("Login Success!")
+                self.jumpToMainView()
+            }
+            else{
+                print(status)
+                print("Login Fail!")
+            }
+        }
+    }
+    
+    func jumpToMainView(){
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Mark: -- tableview functions

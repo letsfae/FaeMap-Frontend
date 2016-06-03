@@ -167,11 +167,12 @@ class RegisterViewController: UIViewController {
     }
     
     func loadCheckMark() {
-        let length = 0.05*screenWidth
+        //        let length = 0.05*screenWidth
+        let length : CGFloat = 15
         let xOffset = 0.9*screenWidth
         let yOffset = 0.343 * screenHeigh - navigationBarOffset
         
-        imageCheckEmail = UIImageView(frame: CGRectMake(xOffset, yOffset, length, length))
+        imageCheckEmail = UIImageView(frame: CGRectMake(xOffset + 3, yOffset, length, length))
         imageCheckEmail.image = UIImage(named: "check_yes")
         imageCheckEmail.layer.zPosition = uiLayer
         imageCheckEmail.layer.hidden = true
@@ -183,13 +184,13 @@ class RegisterViewController: UIViewController {
         imageAlertView.hidden = true
         self.view.addSubview(imageAlertView)
         
-        imageCheckPassword = UIImageView(frame: CGRectMake(xOffset, yOffset + interval, length, length))
+        imageCheckPassword = UIImageView(frame: CGRectMake(xOffset + 3, yOffset + interval, length, length))
         imageCheckPassword.image = UIImage(named: "check_yes")
         imageCheckPassword.layer.zPosition = uiLayer
         imageCheckPassword.layer.hidden = true
         self.view.addSubview(imageCheckPassword)
         
-        imageCheckPasswordAgain = UIImageView(frame: CGRectMake(xOffset, yOffset + interval * 2, length, length))
+        imageCheckPasswordAgain = UIImageView(frame: CGRectMake(xOffset + 3, yOffset + interval * 2, length, length))
         imageCheckPasswordAgain.image = UIImage(named: "check_yes")
         imageCheckPasswordAgain.layer.zPosition = uiLayer
         imageCheckPasswordAgain.layer.hidden = true
@@ -337,6 +338,13 @@ class RegisterViewController: UIViewController {
             inLineViewEmail.layer.borderColor = UIColor.grayColor().CGColor
             
         }
+        if let emailString = textEmail.text {
+            if !emailCheckForDuplicate(emailString) {
+                labelEmailHint.text = ""
+            } else {
+                
+            }
+        }
         checkAllValidation()
     }
     
@@ -444,32 +452,32 @@ class RegisterViewController: UIViewController {
         checkAllValidation()
     }
     /*
-    func isValidEmail(testStr:String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
-    }*/
+     func isValidEmail(testStr:String) -> Bool {
+     let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+     let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+     return emailTest.evaluateWithObject(testStr)
+     }*/
     /*
-    func isValidPassword(testStr:String) -> Bool {
-        var uppercase = 0
-        var symbol = 0
-        var digit = 0
-        for i in testStr.characters {
-            if(i <= "9" && i >= "0") {
-                digit = 1
-            } else if (i <= "z" && i >= "a") {
-                
-            } else if (i <= "Z" && i >= "A") {
-                uppercase = 1
-            } else {
-                symbol = 1
-            }
-            if(uppercase + digit + symbol >= 2)  {
-                return true
-            }
-        }
-        return false
-    }
+     func isValidPassword(testStr:String) -> Bool {
+     var uppercase = 0
+     var symbol = 0
+     var digit = 0
+     for i in testStr.characters {
+     if(i <= "9" && i >= "0") {
+     digit = 1
+     } else if (i <= "z" && i >= "a") {
+     
+     } else if (i <= "Z" && i >= "A") {
+     uppercase = 1
+     } else {
+     symbol = 1
+     }
+     if(uppercase + digit + symbol >= 2)  {
+     return true
+     }
+     }
+     return false
+     }
      */
     
     func isValidPasswordAgain() -> Bool {
@@ -517,4 +525,9 @@ class RegisterViewController: UIViewController {
      }
      */
     
+    
+    // this function check if the email is already used
+    func emailCheckForDuplicate (email: String) -> Bool {
+        return false
+    }
 }

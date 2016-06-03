@@ -33,6 +33,8 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
     var buttonSubmit : UIButton!
     
     let navigationBarHeight : CGFloat = 0
+    var emailNeedToBeVerified : String = ""
+    var codeForVerification : String  = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,7 +118,12 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
             textUserValidation.secureTextEntry = false
         }
         else{
-            imageValidationCheckIcon.image = UIImage(named: "check_eye_open_red")
+            if(textUserPassword.text==textUserValidation.text){
+                imageValidationCheckIcon.image = UIImage(named: "check_eye_open_red")
+            }
+            else{
+                imageValidationCheckIcon.image = UIImage(named:  "check_exclamation_red-1")
+            }
             textUserValidation.secureTextEntry = true
         }
     }
@@ -127,7 +134,12 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
             textUserPassword.secureTextEntry = false
         }
         else{
-            imagePasswordCheckIcon.image = UIImage(named: "check_eye_open_red")
+            if(isValidPassword(textUserPassword.text!)){
+                imagePasswordCheckIcon.image = UIImage(named: "check_eye_open_red")
+            }
+            else{
+                imagePasswordCheckIcon.image = UIImage(named:  "check_exclamation_red-1")
+            }
             textUserPassword.secureTextEntry = true
         }
     }
@@ -139,7 +151,7 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let textUserPasswordYCor = screenHeight * 0.3709 - navigationBarHeight
         textUserPassword = UITextField(frame: CGRectMake(textUserPasswordXCor, textUserPasswordYCor, textUserPasswordWidth, textUserPasswordHeight))
         //textUserPassword = UITextField(frame: CGRectMake(screenWidth/2-142, 362, 284, 30))
-        textUserPassword.placeholder = "Username/Image"
+        textUserPassword.placeholder = "newPassword"
         textUserPassword.restorationIdentifier = "userName"
         textUserPassword.font = UIFont(name: "AvenirNext-Medium", size: 18.0)
         textUserPassword.secureTextEntry = true
@@ -177,8 +189,8 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     func buttonAction(sender: UIButton){
-        if(!(textUserPassword.text=="")&&textUserPassword.text==textUserValidation.text){
-            print("yes")
+        if(isValidPassword(textUserPassword.text!)&&textUserPassword.text==textUserValidation.text){
+            createPassword()
         }
     }
     
@@ -197,7 +209,6 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
         let labelWelcomeHeight = screenHeight * 0.06793478
         let labelWelcomeYCor = screenHeight * 0.08403361 - navigationBarHeight
         labelWelcome = UILabel(frame: CGRectMake(0, labelWelcomeYCor, screenWidth, labelWelcomeHeight))
-        //labelWelcome = UILabel(frame: CGRectMake(screenWidth/2-labelWelcomeWidth/2, screenHeight-labelCopyRightHeight, screenWidth, labelCopyRightHeight))
         labelWelcome.textAlignment = NSTextAlignment.Center
         labelWelcome.text = "Create your new Password!"
         labelWelcome.textColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
@@ -248,40 +259,62 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        if(textField.restorationIdentifier=="userName"){
-            if(textField.text==""){
-                imagePasswordCheckIcon.image = UIImage(named:  "")
-                textUserValidation.secureTextEntry = true
-                imageIconUserPassword.image = UIImage(named: "password_gray")
-                labelPasswordUnderline.backgroundColor = UIColor.grayColor()
+        validateAll()
+    }
+    
+    func validateAll(){
+        if(textUserPassword.text==""){
+            imagePasswordCheckIcon.image = UIImage(named:  "")
+            textUserValidation.secureTextEntry = true
+            imageIconUserPassword.image = UIImage(named: "password_gray")
+            labelPasswordUnderline.backgroundColor = UIColor.grayColor()
+        }
+        else{
+            if(isValidPassword(textUserPassword.text!)){
+                imagePasswordCheckIcon.image = UIImage(named:  "check_eye_open_red")
             }
             else{
-                if(!(textUserValidation.text=="")){
-                    buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-                }
+                imagePasswordCheckIcon.image = UIImage(named:  "check_exclamation_red-1")
             }
         }
-        else if(textField.restorationIdentifier=="userPassword"){
-            if(textField.text==""){
-                imageValidationCheckIcon.image = UIImage(named:  "")
-                textUserValidation.secureTextEntry = true
-                imageIconUserValidation.image = UIImage(named: "conf_password_gray")
-                labelValidationUnderline.backgroundColor = UIColor.grayColor()
+        if(textUserValidation.text==""){
+            imageValidationCheckIcon.image = UIImage(named:  "")
+            textUserValidation.secureTextEntry = true
+            imageIconUserValidation.image = UIImage(named: "conf_password_gray")
+            labelValidationUnderline.backgroundColor = UIColor.grayColor()
+            
+        }
+        else{
+            if(textUserPassword.text==textUserValidation.text){
+                imageValidationCheckIcon.image = UIImage(named:  "check_eye_open_red")
+                buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
             }
             else{
-                //                if(textUserPassword.text==""){
-                //                    imageCat.image = UIImage(named: "normal_cat")
-                //                }
-                //                else{
-                //                    imageCat.image = UIImage(named: "smile_cat")
-                //                    buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-                //                }
-                if(!(textUserPassword.text=="")){
-                    buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-                }
+                imageValidationCheckIcon.image = UIImage(named:  "check_exclamation_red-1")
+            }
+        }
+        
+    }
+    
+    func isValidPassword(testStr:String) -> Bool {
+        var uppercase = 0
+        var symbol = 0
+        var digit = 0
+        for i in testStr.characters {
+            if(i <= "9" && i >= "0") {
+                digit = 1
+            } else if (i <= "z" && i >= "a") {
                 
+            } else if (i <= "Z" && i >= "A") {
+                uppercase = 1
+            } else {
+                symbol = 1
+            }
+            if(uppercase + digit + symbol >= 2 && testStr.characters.count>=8)  {
+                return true
             }
         }
+        return false
     }
     
     func validation(){
@@ -311,5 +344,25 @@ class CreateNewPasswordViewController: UIViewController, UITextFieldDelegate {
      // Pass the selected object to the new view controller.
      }
      */
+    
+    func createPassword(){
+        if let input = self.textUserPassword.text {
+            let user = FaeUser()
+            user.whereKey("email", value: emailNeedToBeVerified)
+            user.whereKey("code", value: codeForVerification)
+            user.whereKey("password", value: input)
+            user.changePassword{ (status:Int?, message:AnyObject?) in
+                if ( status! / 100 == 2 ){
+                    //success
+                    print("Changed successfully")
+                    //login?
+                }
+                else{
+                    //failure
+                    print("Password update failure")
+                }
+            }
+        }
+    }
     
 }
