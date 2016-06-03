@@ -17,8 +17,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+//        UIApplication.sharedApplication().registerForRemoteNotifications()
+        let notificationType: UIUserNotificationType = [.Alert , .Badge , .Sound]
+        
+        let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         return true
+    }
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+    }
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+//        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
+        var token = NSString(format: "%@", deviceToken)
+        print(token)
+//        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
+//        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
+//        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
+//        print(token)
+        headerDeviceID = String(token)
+        print(headerDeviceID)
+    }
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        print(userInfo)
+    }
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print(error)
     }
 
     func applicationWillResignActive(application: UIApplication) {

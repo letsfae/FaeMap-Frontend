@@ -74,13 +74,12 @@ class FaeUser : NSObject {
     func processToken(message:AnyObject)->Void{
         // UTF 8 str from original
         // NSData! type returned (optional)
-        var str = message["token"] as! String
-        var session = message["session_id"] as! NSNumber
-        var user = message["user_id"] as! NSNumber
-        var authentication = String(format:"%d", user)+":"+str+":"+String(format:"%d", session)
+        let str = message["token"] as! String
+        let session = message["session_id"] as! NSNumber
+        let user = message["user_id"] as! NSNumber
+        let authentication = user.stringValue+":"+str+":"+session.stringValue
         session_id = session
         user_id = user
-        print(user_id)
         
         let utf8str = authentication.dataUsingEncoding(NSUTF8StringEncoding)
         print(authentication)
@@ -147,7 +146,7 @@ class FaeUser : NSObject {
     }
     
     func changePassword(completion:(Int,AnyObject?)->Void){
-        putToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
+        postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
             completion(status,message)

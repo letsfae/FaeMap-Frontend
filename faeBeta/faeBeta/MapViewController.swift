@@ -32,6 +32,8 @@ class MapViewController: UIViewController {
         if is_Login == 0 {
             self.jumpToWelcomeView()
         }
+        let user = FaeUser()
+        user.logOut()
         
         loadNavbarOnMap()
         
