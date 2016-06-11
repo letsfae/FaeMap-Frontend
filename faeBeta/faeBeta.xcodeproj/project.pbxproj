@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6964F94D27A25AA8441D0E6A /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD899401C471560BD2553C1 /* Pods_faeBetaTests.framework */; };
 		8C3CF0CD4A75A8F151817B0C /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -86,6 +87,8 @@
 
 /* Begin PBXFileReference section */
 		161518B09455887A546D2080 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
+		1832BA50107C91C8F24C263E /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2CD899401C471560BD2553C1 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
@@ -128,6 +131,7 @@
 		B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		B0F688F31CEA44F500D91CF9 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
+		CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6964F94D27A25AA8441D0E6A /* Pods_faeBetaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */,
+				2CD899401C471560BD2553C1 /* Pods_faeBetaTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,6 +175,8 @@
 			children = (
 				B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */,
 				161518B09455887A546D2080 /* Pods-faeBeta.release.xcconfig */,
+				1832BA50107C91C8F24C263E /* Pods-faeBetaTests.debug.xcconfig */,
+				CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -320,9 +328,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC31CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaTests" */;
 			buildPhases = (
+				2CD03B559B8BC7A13FDE6A53 /* 📦 Check Pods Manifest.lock */,
 				B0A2ACA81CE3A3C7002E0C9D /* Sources */,
 				B0A2ACA91CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACAA1CE3A3C7002E0C9D /* Resources */,
+				C20E0F726A2166E4AD362163 /* 📦 Embed Pods Frameworks */,
+				6F443ED18B66CBE9365CBD77 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -438,6 +449,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		2CD03B559B8BC7A13FDE6A53 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6F443ED18B66CBE9365CBD77 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		97F79091AD2457AF7493AC94 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -451,6 +492,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C20E0F726A2166E4AD362163 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DB96DCAAA53F7C4886C28585 /* 📦 Check Pods Manifest.lock */ = {
@@ -701,6 +757,7 @@
 		};
 		B0A2ACC41CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1832BA50107C91C8F24C263E /* Pods-faeBetaTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = faeBetaTests/Info.plist;
@@ -713,6 +770,7 @@
 		};
 		B0A2ACC51CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = faeBetaTests/Info.plist;

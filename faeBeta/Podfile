@@ -14,3 +14,16 @@ target 'faeBeta' do
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
 end
+
+target 'faeBetaTests' do
+	pod 'Alamofire', '~> 3.4'
+	pod 'SwiftyJSON', '~> 2.3'
+	pod 'SDWebImage', '~>3.7'
+	pod 'Mapbox-iOS-SDK', '~> 3.2.2'
+	pod 'Firebase/Storage'
+	pod 'Firebase/AdMob'
+	pod 'Firebase/Auth'
+	pod 'Firebase/Crash'
+	pod 'Firebase/Database'
+	pod 'Firebase/RemoteConfig'
+end
