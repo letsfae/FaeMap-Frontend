@@ -33,6 +33,8 @@ var headerUserAgent : String = "iphone5"
  }*/
 // not use anymore
 
+
+
 func postToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
@@ -50,22 +52,26 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
     do{
         Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
             .responseJSON{response in
-                print(response.response!.statusCode)
+                //print(response.response!.statusCode)
                 print(response)
-                
-                if(response.response!.statusCode != 0){
-                    print("finished")
-                }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                    
-                }
-                if let resMess = response.result.value {
-                    completion(response.response!.statusCode,resMess)
+                if let respon = response.response{
+                    if(response.response!.statusCode != 0){
+                        print("finished")
+                    }
+                    if let JSON = response.response?.allHeaderFields{
+                        print(JSON)
+                        
+                    }
+                    if let resMess = response.result.value {
+                        completion(response.response!.statusCode,resMess)
+                    }
+                    else{
+                        //MARK: bug here
+                        completion(response.response!.statusCode,"no Json body")
+                    }
                 }
                 else{
-                    //MARK: bug here
-                    completion(response.response!.statusCode,"no Json body")
+                    completion(-500,"Internet error")
                 }
         }
     }
@@ -90,16 +96,21 @@ func getFromURL(className:String, authentication:[String : AnyObject], completio
     do{
         Alamofire.request(.GET, URL,headers:headers)
             .responseJSON{response in
-                print(response.response!.statusCode)
+                //print(response.response!.statusCode)
                 
-                if(response.response!.statusCode != 0){
-                    print("finished")
+                if let respon = response.response{
+                    if(response.response!.statusCode != 0){
+                        print("finished")
+                    }
+                    if let JSON = response.response?.allHeaderFields{
+                        print(JSON)
+                        
+                    }
+                    completion(response.response!.statusCode,response.description)
                 }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                    
+                else{
+                    completion(-500,"Internet error")
                 }
-                completion(response.response!.statusCode,response.description)
         }
     }
     catch let error as NSError{
@@ -127,16 +138,20 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
     do{
         Alamofire.request(.DELETE, URL,headers:headers)
             .responseJSON{response in
-                print(response.response!.statusCode)
-                
-                if(response.response!.statusCode != 0){
-                    print("finished")
+                //print(response.response!.statusCode)
+                if let respon = response.response{
+                    if(response.response!.statusCode != 0){
+                        print("finished")
+                    }
+                    if let JSON = response.response?.allHeaderFields{
+                        print(JSON)
+                        
+                    }
+                    completion(response.response!.statusCode,"nothing here")
                 }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                    
+                else{
+                    completion(-500,"Internet error")
                 }
-                completion(response.response!.statusCode,"nothing here")
         }
     }
     catch let error as NSError{
@@ -162,20 +177,24 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
     do{
         Alamofire.request(.PUT, URL, parameters: parameter,headers:headers)
             .responseJSON{response in
-                print(response.response!.statusCode)
-                
-                if(response.response!.statusCode != 0){
-                    print("finished")
-                }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                }
-                if let resMess = response.result.value {
-                    completion(response.response!.statusCode,resMess)
+                //print(response.response!.statusCode)
+                if let respon = response.response{
+                    if(response.response!.statusCode != 0){
+                        print("finished")
+                    }
+                    if let JSON = response.response?.allHeaderFields{
+                        print(JSON)
+                    }
+                    if let resMess = response.result.value {
+                        completion(response.response!.statusCode,resMess)
+                    }
+                    else{
+                        //MARK: bug here
+                        completion(response.response!.statusCode,"this filed need to modify")
+                    }
                 }
                 else{
-                    //MARK: bug here
-                    completion(response.response!.statusCode,"this filed need to modify")
+                    completion(-500,"Internet error")
                 }
         }
     }
