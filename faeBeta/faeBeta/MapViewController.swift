@@ -8,8 +8,9 @@
 
 import UIKit
 import Mapbox
+import CoreLocation
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -24,7 +25,7 @@ class MapViewController: UIViewController {
     //    var buttonChatOnMap: UIButton!
     //    var buttonSetPinOnMap: UIButton!
     //    var buttonReturnToUserPlace: UIButton!
-    
+    var locationManager = CLLocationManager()
     override func viewDidLoad() {
         super.viewDidLoad()
         let shareAPI = LocalStorageManager()
@@ -34,7 +35,7 @@ class MapViewController: UIViewController {
         }
 //        let user = FaeUser()
 //        user.logOut()
-        
+        self.locationManager.delegate = self
         loadNavbarOnMap()
         
         initializeMap()
@@ -46,7 +47,39 @@ class MapViewController: UIViewController {
         loadButtonSetPinOnMap()
         
     }
-    
+    override func viewWillAppear(animated: Bool) {
+        let authstate = CLLocationManager.authorizationStatus()
+        if(authstate == CLAuthorizationStatus.NotDetermined){
+            print("Not Authorised")
+            self.locationManager.requestAlwaysAuthorization()
+        }
+        else if(authstate == CLAuthorizationStatus.Denied){
+            jumpToLocationEnable()
+        }
+    }
+    func jumpToLocationEnable(){
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
+        self.presentViewController(vc, animated: true, completion: nil)
+    }/*
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        print("didChangeAuthorizationStatus ++++")
+        switch status {
+        case .NotDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            break
+        case .Authorized:
+            print(".Authorized")
+            break
+        case .Denied:
+            print(".Denied")
+            jumpToLocationEnable()
+            break
+        default:
+            print("Unhandled authorization status")
+            break
+                
+        }
+    }*/
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

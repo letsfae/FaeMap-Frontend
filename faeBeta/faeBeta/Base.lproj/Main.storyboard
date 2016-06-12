@@ -27,7 +27,7 @@
         <!--Social-->
         <scene sceneID="ZwS-hj-TzK">
             <objects>
-                <viewController id="3oD-82-ztX" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="3oD-82-ztX" customClass="ViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="596-N8-9RP"/>
                         <viewControllerLayoutGuide type="bottom" id="I3f-sl-GeC"/>
@@ -243,6 +243,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u9n-PO-7Vi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1987.5" y="-1129"/>
+        </scene>
+        <!--Notification Enable View Controller-->
+        <scene sceneID="dWW-jl-0Ml">
+            <objects>
+                <viewController storyboardIdentifier="NotificationEnableViewController" id="UVB-F3-5Pq" customClass="NotificationEnableViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nfd-CK-G8k"/>
+                        <viewControllerLayoutGuide type="bottom" id="eUr-tF-eHw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="za8-FI-we2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Whz-g5-UjZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2001" y="163"/>
+        </scene>
+        <!--Location Enable View Controller-->
+        <scene sceneID="wz1-RP-l5N">
+            <objects>
+                <viewController storyboardIdentifier="LocationEnableViewController" id="spc-cB-UyW" customClass="LocationEnableViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6CA-5u-4oP"/>
+                        <viewControllerLayoutGuide type="bottom" id="aO5-nP-hLy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="t7o-sC-jgW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P25-jM-gD9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1086" y="161"/>
         </scene>
         <!--Map-->
         <scene sceneID="web-Y7-Ezq">

@@ -71,4 +71,14 @@ class LocalStorageManager: NSObject {
         }
         return false
     }
+    func isFirstPushLaunch() -> Bool {
+        let firstLaunchFlag = "FirstPushLaunchFlag"
+        let isFirstLaunch = NSUserDefaults.standardUserDefaults().stringForKey(firstLaunchFlag) == nil
+        if (isFirstLaunch) {
+            NSUserDefaults.standardUserDefaults().setObject("false", forKey: firstLaunchFlag)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        return isFirstLaunch
+    }
 }
+

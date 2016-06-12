@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import Alamofire
+//import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,11 +23,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         UIApplication.sharedApplication().registerForRemoteNotifications()
-
+        
         return true
+    }
+    func openSettings() {
+        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+    }
+    func jumpToNotificationEnable() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NotificationEnableViewController")as! NotificationEnableViewController
+        
+        self.window?.makeKeyAndVisible()
+        //        self.window?.
+        self.window?.rootViewController!.presentViewController(vc, animated: true, completion:nil)
+        
     }
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         UIApplication.sharedApplication().registerForRemoteNotifications()
+        /*
+        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+        print(notificationType?.types)
+        if notificationType?.types == UIUserNotificationType.None {
+            jumpToNotificationEnable()
+        }
+        else{
+            print("Notification enabled")
+        }*/
     }
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
 //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
@@ -45,6 +65,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         print(error)
+        if error.code == 3010 {//work at simulate do nothing here
+            print("simulator doesn't have token id")
+        }
+//        self.openSettings()
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -63,6 +87,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        let shareAPI = LocalStorageManager()
+        let isFirstLaunch = shareAPI.isFirstPushLaunch()
+        print(isFirstLaunch)
+//        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+//        print(notificationType?.types)
+        if isFirstLaunch == true {
+            //waiting
+        }
+        else {
+            /*while (true) {
+                let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+                print(notificationType?.types)
+            }*/
+            let seconds = 1.0
+            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            
+            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+                print(notificationType?.types)
+                if notificationType?.types == UIUserNotificationType.None {
+                    self.jumpToNotificationEnable()
+                }
+                else{
+                    print("Notification enabled")
+                }
+                
+            })
+            /*
+            let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+            print(notificationType?.types)
+            if notificationType?.types == UIUserNotificationType.None {
+                jumpToNotificationEnable()
+            }
+            else{
+                print("Notification enabled")
+            }*/
+        }
+        
     }
 
     func applicationWillTerminate(application: UIApplication) {
