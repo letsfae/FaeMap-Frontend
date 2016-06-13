@@ -35,6 +35,15 @@ class FaeUser : NSObject {
     func clearKeyValue()->Void{
         self.keyValue = [String:AnyObject]()
     }
+    func checkEmailExistence(completion:(Int,AnyObject?)->Void){
+        
+    }
+    func checkUserExistence(completion:(Int,AnyObject?)->Void){
+        
+    }
+    func saveAvatarInBackGround(completion:(Int,AnyObject?)->Void){
+        
+    }
     func signUpInBackground(completion:(Int,AnyObject?)->Void){
         //verfy keyValue[String:AnyObject]
         /*

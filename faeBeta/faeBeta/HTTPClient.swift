@@ -81,7 +81,7 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
 }
 
 
-func getFromURL(className:String, authentication:[String : AnyObject], completion:(Int,AnyObject?)->Void){
+func getFromURL(className:String, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -90,8 +90,10 @@ func getFromURL(className:String, authentication:[String : AnyObject], completio
         "Accept": headerAccept,
         "Content-Type" : headerContentType
     ]
-    for(key,value) in authentication{
-        headers[key] = value as? String
+    if authentication != nil {
+        for(key,value) in authentication!{
+            headers[key] = value as? String
+        }
     }
     do{
         Alamofire.request(.GET, URL,headers:headers)
