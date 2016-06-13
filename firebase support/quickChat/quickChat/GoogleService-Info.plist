@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>404709167864-ljl5d80h580ib5s1mqgth84khsi4h0rc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.404709167864-ljl5d80h580ib5s1mqgth84khsi4h0rc</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBtEpedUWMuMpskWEUshBSvXaXHGiUvu6k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>404709167864</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>usc.quickchat</string>
+	<key>PROJECT_ID</key>
+	<string>project-8037542235202848941</string>
+	<key>STORAGE_BUCKET</key>
+	<string>project-8037542235202848941.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:404709167864:ios:2a8b3455bbc24469</string>
+	<key>DATABASE_URL</key>
+	<string>https://quickchatting.firebaseio.com</string>
+</dict>
+</plist>
