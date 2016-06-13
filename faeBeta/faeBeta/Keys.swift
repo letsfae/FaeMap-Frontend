@@ -13,6 +13,7 @@ var userTokenEncode : String!
 var session_id : NSNumber!
 var user_id : NSNumber!
 var is_Login : Int = 0
+let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
 
 func headerAuthentication()->[String : AnyObject] {
     if userTokenEncode != nil && userTokenEncode != "" {

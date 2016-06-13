@@ -18,6 +18,21 @@
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
+		B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
+		B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
+		B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
+		B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
+		B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
+		B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
+		B00182711D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
+		B00182721D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
+		B00182731D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
+		B00182751D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
+		B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
+		B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
+		B00182791D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
+		B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
+		B001827B1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -102,6 +117,11 @@
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
+		B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
+		B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
+		B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
+		B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
@@ -311,6 +331,11 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */,
+				B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */,
+				B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */,
+				B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */,
+				B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */,
 				B0F688F31CEA44F500D91CF9 /* MapViewController.swift */,
 			);
 			name = Map;
@@ -546,6 +571,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B00182711D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
@@ -553,6 +579,7 @@
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
 				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B00182751D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
@@ -562,17 +589,20 @@
 				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
+				B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B00182791D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
@@ -583,22 +613,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B00182721D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
+				B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -615,11 +650,16 @@
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
+				B00182731D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B001827B1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
+				B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
+				B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
+				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,

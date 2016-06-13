@@ -13,6 +13,7 @@ target 'faeBeta' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
+
 end
 
 target 'faeBetaTests' do
@@ -26,4 +27,5 @@ target 'faeBetaTests' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
+
 end

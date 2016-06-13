@@ -45,7 +45,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         loadButtonChatOnMap()
         loadButtonReturnToUserPlace()
         loadButtonSetPinOnMap()
-        
+         
     }
     override func viewWillAppear(animated: Bool) {
         let authstate = CLLocationManager.authorizationStatus()

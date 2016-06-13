@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.sharedApplication().registerForRemoteNotifications()
+        GMSServices.provideAPIKey(GoogleMapKey)
+        
         let notificationType: UIUserNotificationType = [.Alert , .Badge , .Sound]
         
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
