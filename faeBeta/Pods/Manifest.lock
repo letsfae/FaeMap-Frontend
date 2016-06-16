@@ -59,7 +59,6 @@ PODS:
   - GoogleSymbolUtilities (1.1.1)
   - GoogleUtilities (1.3.1):
     - GoogleSymbolUtilities (~> 1.0)
-  - Mapbox-iOS-SDK (3.2.3)
   - SDWebImage (3.8.1):
     - SDWebImage/Core (= 3.8.1)
   - SDWebImage/Core (3.8.1)
@@ -73,7 +72,6 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/RemoteConfig
   - Firebase/Storage
-  - Mapbox-iOS-SDK (~> 3.2.2)
   - SDWebImage (~> 3.7)
   - SwiftyJSON (~> 2.3)
 
@@ -93,10 +91,9 @@ SPEC CHECKSUMS:
   GoogleNetworkingUtilities: 3e83269048cfb498dc7ec83ab36813360965c74f
   GoogleSymbolUtilities: 33117db1b5f290c6fbf259585e4885b4c84b98d7
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
-  Mapbox-iOS-SDK: 120e8a140e9cd4adae8227340dd89f5cc3850259
   SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 1a45b8d22988e64b7cda2c2c793fbaf0f7e49fc8
+PODFILE CHECKSUM: 51afd7b068756ca2192a4395d0c1e3551c89b00e
 
 COCOAPODS: 1.0.0

@@ -99,9 +99,6 @@
 		B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */; };
 		B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */; };
 		B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */; };
-		B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
-		B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
-		B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
 		C59D639862A281330410E513 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC60336BA15119880B7DC52 /* Pods_faeBetaUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -179,7 +176,6 @@
 		B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
 		B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
-		B0F688F31CEA44F500D91CF9 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
 		D6EAB9F481CE4136302F3994 /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -371,7 +367,6 @@
 				B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */,
 				B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */,
 				B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */,
-				B0F688F31CEA44F500D91CF9 /* MapViewController.swift */,
 				B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */,
 			);
 			name = Map;
@@ -658,7 +653,6 @@
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
-				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFF81D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
@@ -711,7 +705,6 @@
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
-				B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,7 +734,6 @@
 				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
-				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B05DAFFA1D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
