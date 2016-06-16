@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate{
+class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeigh = UIScreen.mainScreen().bounds.height
     //6 plus 414 736

@@ -71,8 +71,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var isInPinLocationSelect = false
     
     // MARK: -- My Position Marker
-    var myPositionInsideMarker: UIImageView!
-    var myPositionOutsideMarker: UIImageView!
+    var myPositionIcon: UIImageView!
+    var myPositionOutsideMarker_1: UIImageView!
+    var myPositionOutsideMarker_2: UIImageView!
+    var myPositionOutsideMarker_3: UIImageView!
     
     // MARK: -- Search Bar
     var uiviewTableSubview: UIView!
@@ -100,6 +102,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let shareAPI = LocalStorageManager()
+        shareAPI.readLogInfo()
+        if is_Login == 0 {
+            self.jumpToWelcomeView()
+        }
+        
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
@@ -108,6 +116,33 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         loadTableView()
         configureCustomSearchController()
+        let map6 = FaeMap()
+        
+        map6.getUserAllComments("5"){(status:Int,message:AnyObject?) in
+            print(message)
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        locManager.requestWhenInUseAuthorization()
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined){
+            print("Not Authorised")
+            self.locManager.requestWhenInUseAuthorization()
+        }
+        else if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied){
+            jumpToLocationEnable()
+        }
+    }
+    func jumpToLocationEnable(){
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    func jumpToWelcomeView(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        //        self.navigationController?.pushViewController(vc, animated: true)
+        //        let vc = ViewController(nibName: "WelcomeViewController", bundle: nil)
+        self.presentViewController(vc, animated: true, completion: nil)
     }
     
     // MARK: -- Load Navigation Items
@@ -152,13 +187,15 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let longitude = location.coordinate.longitude
             let position = CLLocationCoordinate2DMake(latitude, longitude)
             let selfPositionToPoint = faeMapView.projection.pointForCoordinate(position)
-            myPositionInsideMarker.center = selfPositionToPoint
-            myPositionOutsideMarker.center = selfPositionToPoint
+            myPositionOutsideMarker_3.center = selfPositionToPoint
+            myPositionOutsideMarker_2.center = selfPositionToPoint
+            myPositionOutsideMarker_1.center = selfPositionToPoint
+            myPositionIcon.center = selfPositionToPoint
         }
     }
     
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-//        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
+        //        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
     }
     
@@ -175,8 +212,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let currentLongitude = currentLocation.coordinate.longitude
             let position = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
             let selfPositionToPoint = faeMapView.projection.pointForCoordinate(position)
-            myPositionInsideMarker.center = selfPositionToPoint
-            myPositionOutsideMarker.center = selfPositionToPoint
+            myPositionOutsideMarker_3.center = selfPositionToPoint
+            myPositionOutsideMarker_2.center = selfPositionToPoint
+            myPositionOutsideMarker_1.center = selfPositionToPoint
+            myPositionIcon.center = selfPositionToPoint
         }
         if isInPinLocationSelect {
             let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
@@ -199,14 +238,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
     }
     
-//    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
-//        var mapCenter = mapView.projection.pointForCoordinate(marker.position)
-//        mapCenter.y = mapCenter.y - 150.0
-//        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
-//        let camera = GMSCameraPosition.cameraWithTarget(mapCenterCoordinate, zoom: mapView.camera.zoom)
-//        mapView.animateToCameraPosition(camera)
-//        return true
-//    }
+    //    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+    //        var mapCenter = mapView.projection.pointForCoordinate(marker.position)
+    //        mapCenter.y = mapCenter.y - 150.0
+    //        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
+    //        let camera = GMSCameraPosition.cameraWithTarget(mapCenterCoordinate, zoom: mapView.camera.zoom)
+    //        mapView.animateToCameraPosition(camera)
+    //        return true
+    //    }
     
     // MARK: -- Actions
     
@@ -295,40 +334,77 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func actionSubmitLocationForComment(sender: UIButton) {
-        submitPinsHideAnimation()
-        let commentMarker = GMSMarker()
-        var mapCenter = faeMapView.center
-        // Attention: the actual location of this marker is 6 points different from the displayed one
-        mapCenter.y = mapCenter.y + 6.0
-        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
-        commentMarker.icon = UIImage(named: "comment_pin_marker")
-        commentMarker.position = mapCenterCoordinate
-        commentMarker.appearAnimation = kGMSMarkerAnimationPop
-        commentMarker.map = faeMapView
-        buttonToNorth.hidden = false
-        buttonSelfPosition.hidden = false
-        buttonChatOnMap.hidden = false
-        buttonPinOnMap.hidden = false
-        buttonSetLocationOnMap.hidden = true
-        imagePinOnMap.hidden = true
-        self.tabBarController?.tabBar.hidden = false
+        let map5 = FaeMap()
+        map5.whereKey("geo_latitude", value: "34.027315")
+        map5.whereKey("geo_longitude", value: "-118.28855")
+        map5.whereKey("content", value: "第一条状态！")
+        map5.postComment{(status:Int,message:AnyObject?) in
+            print(status)
+            if let getMessage = message {
+                print(getMessage)
+                if let getMessageID = getMessage["comment_id"] {
+                    print(getMessageID!)
+                    self.submitPinsHideAnimation()
+                    let commentMarker = GMSMarker()
+                    var mapCenter = self.faeMapView.center
+                    // Attention: the actual location of this marker is 6 points different from the displayed one
+                    mapCenter.y = mapCenter.y + 6.0
+                    let mapCenterCoordinate = self.faeMapView.projection.coordinateForPoint(mapCenter)
+                    commentMarker.icon = UIImage(named: "comment_pin_marker")
+                    commentMarker.position = mapCenterCoordinate
+                    commentMarker.appearAnimation = kGMSMarkerAnimationPop
+                    commentMarker.map = self.faeMapView
+                    self.buttonToNorth.hidden = false
+                    self.buttonSelfPosition.hidden = false
+                    self.buttonChatOnMap.hidden = false
+                    self.buttonPinOnMap.hidden = false
+                    self.buttonSetLocationOnMap.hidden = true
+                    self.imagePinOnMap.hidden = true
+                    self.tabBarController?.tabBar.hidden = false
+                }
+                else {
+                    print("Cannot get comment_id of this posted comment")
+                }
+            }
+            else {
+                print("Post Comment Fail")
+            }
+        }
     }
     
     // MARK: -- Animations
     
     func loadPositionAnimateImage() {
-        myPositionOutsideMarker = UIImageView(frame: CGRectMake(screenWidth/2-29, screenHeight/2-29, 58, 58))
-        myPositionOutsideMarker.image = UIImage(named: "myPosition_outside")
-        self.view.addSubview(myPositionOutsideMarker)
-        myPositionInsideMarker = UIImageView(frame: CGRectMake(screenWidth/2-28, screenHeight/2-28, 56, 56))
-        myPositionInsideMarker.image = UIImage(named: "myPosition_inside")
-        self.view.addSubview(myPositionInsideMarker)
+        myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
+        myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
+        self.myPositionOutsideMarker_1.alpha = 1.0
+        self.view.addSubview(myPositionOutsideMarker_1)
+        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
+        myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
+        self.myPositionOutsideMarker_2.alpha = 1.0
+        self.view.addSubview(myPositionOutsideMarker_2)
+        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
+        myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
+        self.myPositionOutsideMarker_3.alpha = 1.0
+        self.view.addSubview(myPositionOutsideMarker_3)
+        myPositionIcon = UIImageView(frame: CGRectMake(screenWidth/2-14, screenHeight/2-20, 31.65, 40.84))
+        myPositionIcon.image = UIImage(named: "myPosition_icon")
+        self.view.addSubview(myPositionIcon)
         myPostionAnimation()
     }
     
     func myPostionAnimation() {
-        UIView.animateWithDuration(3, delay: 0, options: [.Repeat, .Autoreverse], animations: ({
-            self.myPositionOutsideMarker.frame = CGRectMake(self.screenWidth/2-40, self.screenHeight/2-40, 80, 80)
+        UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
+            self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+            self.myPositionOutsideMarker_1.alpha = 0.0
+        }), completion: nil)
+        UIView.animateWithDuration(3, delay: 0.8, options: .Repeat, animations: ({
+            self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+            self.myPositionOutsideMarker_2.alpha = 0.0
+        }), completion: nil)
+        UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
+            self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+            self.myPositionOutsideMarker_3.alpha = 0.0
         }), completion: nil)
     }
     

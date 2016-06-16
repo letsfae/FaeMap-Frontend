@@ -45,6 +45,18 @@
 		B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
+		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
+		B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
+		B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
+		B05DAFEA1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
+		B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
+		B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
+		B05DAFF81D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFF61D13265200082A71 /* CommentExtentTableViewCell.swift */; };
+		B05DAFF91D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFF61D13265200082A71 /* CommentExtentTableViewCell.swift */; };
+		B05DAFFA1D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFF61D13265200082A71 /* CommentExtentTableViewCell.swift */; };
+		B05DAFFB1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05DAFF71D13265200082A71 /* CommentExtentTableViewCell.xib */; };
+		B05DAFFC1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05DAFF71D13265200082A71 /* CommentExtentTableViewCell.xib */; };
+		B05DAFFD1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05DAFF71D13265200082A71 /* CommentExtentTableViewCell.xib */; };
 		B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */; };
 		B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */; };
 		B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
@@ -90,6 +102,7 @@
 		B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
 		B0F688F51CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
 		B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F31CEA44F500D91CF9 /* MapViewController.swift */; };
+		C59D639862A281330410E513 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC60336BA15119880B7DC52 /* Pods_faeBetaUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +127,7 @@
 		1832BA50107C91C8F24C263E /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2CD899401C471560BD2553C1 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54830B4C727C1AD8FBF41254 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
@@ -128,6 +142,10 @@
 		B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
 		B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
+		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
+		B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
+		B05DAFF61D13265200082A71 /* CommentExtentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentExtentTableViewCell.swift; sourceTree = "<group>"; };
+		B05DAFF71D13265200082A71 /* CommentExtentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentExtentTableViewCell.xib; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +182,8 @@
 		B0F688F31CEA44F500D91CF9 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
+		D6EAB9F481CE4136302F3994 /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		FFC60336BA15119880B7DC52 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C59D639862A281330410E513 /* Pods_faeBetaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +219,7 @@
 			children = (
 				3EA09856915F65D7E44F5F43 /* Pods_faeBeta.framework */,
 				2CD899401C471560BD2553C1 /* Pods_faeBetaTests.framework */,
+				FFC60336BA15119880B7DC52 /* Pods_faeBetaUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -209,6 +231,8 @@
 				161518B09455887A546D2080 /* Pods-faeBeta.release.xcconfig */,
 				1832BA50107C91C8F24C263E /* Pods-faeBetaTests.debug.xcconfig */,
 				CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */,
+				D6EAB9F481CE4136302F3994 /* Pods-faeBetaUITests.debug.xcconfig */,
+				54830B4C727C1AD8FBF41254 /* Pods-faeBetaUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -221,6 +245,15 @@
 				B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */,
 			);
 			name = support;
+			sourceTree = "<group>";
+		};
+		B05DAFED1D1324B400082A71 /* CommentTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				B05DAFF61D13265200082A71 /* CommentExtentTableViewCell.swift */,
+				B05DAFF71D13265200082A71 /* CommentExtentTableViewCell.xib */,
+			);
+			name = CommentTableCell;
 			sourceTree = "<group>";
 		};
 		B0A2AC8C1CE3A3C6002E0C9D = {
@@ -312,6 +345,7 @@
 				B04BB9E41CEDB796009B9531 /* FaeUser.swift */,
 				B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */,
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
+				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -331,12 +365,14 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				B05DAFED1D1324B400082A71 /* CommentTableCell */,
 				B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */,
 				B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */,
 				B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */,
 				B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */,
 				B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */,
 				B0F688F31CEA44F500D91CF9 /* MapViewController.swift */,
+				B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -389,9 +425,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC61CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaUITests" */;
 			buildPhases = (
+				F426472CB7FF05D2B7BE86B8 /* 📦 Check Pods Manifest.lock */,
 				B0A2ACB31CE3A3C7002E0C9D /* Sources */,
 				B0A2ACB41CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACB51CE3A3C7002E0C9D /* Resources */,
+				5B36D5F20765C209CA4275C9 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -454,6 +492,7 @@
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
+				B05DAFFB1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +500,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B05DAFFC1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +508,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B05DAFFD1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +543,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5B36D5F20765C209CA4275C9 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F443ED18B66CBE9365CBD77 /* 📦 Copy Pods Resources */ = {
@@ -564,6 +620,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		F426472CB7FF05D2B7BE86B8 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -573,6 +644,7 @@
 			files = (
 				B00182711D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
+				B05DAFEA1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
 				B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */,
@@ -588,6 +660,8 @@
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B0F688F41CEA44F500D91CF9 /* MapViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
+				B05DAFF81D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
+				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -623,13 +697,16 @@
 				B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
+				B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
+				B05DAFF91D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
@@ -645,6 +722,7 @@
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
+				B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
@@ -659,10 +737,12 @@
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
+				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
 				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0F688F61CEA44F500D91CF9 /* MapViewController.swift in Sources */,
+				B05DAFFA1D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -847,6 +927,7 @@
 		};
 		B0A2ACC71CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D6EAB9F481CE4136302F3994 /* Pods-faeBetaUITests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -858,6 +939,7 @@
 		};
 		B0A2ACC81CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54830B4C727C1AD8FBF41254 /* Pods-faeBetaUITests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

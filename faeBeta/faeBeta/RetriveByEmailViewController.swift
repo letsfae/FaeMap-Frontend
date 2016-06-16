@@ -68,6 +68,13 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         textEmail.becomeFirstResponder()
     }
     func anctionCancel(){
+        if let emailString = textEmail.text {
+            emailCheckForDuplicate(emailString){ (validation:Bool) in
+                if(!validation){
+                    self.labelTitle.text = "This email doesn't exist"
+                }
+            }
+        }
         self.view.endEditing(true)
     }
     func loadButton(){
@@ -83,7 +90,17 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         self.view.addSubview(buttonContact)
     }
     func buttonNextIsClicked() {
-        jumpToAccount()
+        if let emailString = textEmail.text {
+            emailCheckForDuplicate(emailString){ (validation:Bool) in
+                if(!validation){
+                    self.labelTitle.text = "This email doesn't exist"
+                }
+                else{
+                    self.jumpToAccount()
+                }
+            }
+        }
+        
         
     }
     func jumpToAccount(){
@@ -97,6 +114,39 @@ class RetriveByEmailViewController: UIViewController,UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func emailCheckForDuplicate (email: String,completion: (Bool)->Void) {
+        let user = FaeUser()
+        user.whereKey("email", value: textEmail.text!)
+        user.checkEmailExistence{(status:Int?, message:AnyObject?) in
+            //print(message)
+            if ( status! / 100 == 2 ){
+                if let mess = message{
+                    if let validation = mess["existence"]{
+                        if(validation as! Bool == true){
+                            print("true")
+                            completion(true)
+                        }
+                        else{
+                            completion(false)
+                        }
+                    }
+                    else{
+                        completion(false)
+                    }
+                }
+                else{
+                    completion(false)
+                }
+                //success
+            }
+            else{
+                completion(false)
+                //failure
+            }
+        }
+    }
+    
     
     
     /*

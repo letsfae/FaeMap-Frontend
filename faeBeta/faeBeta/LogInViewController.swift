@@ -195,6 +195,47 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         user.logInBackground { (status:Int?, message:AnyObject?) in
             if ( status! / 100 == 2 ){
                 //success
+                //TEST: test get self profile function
+                //FaeUser().getSelfProfile {(status:Int,message:AnyObject?) in}
+                //TEST: test get profile
+                //FaeUser().getOthersProfile("1") {(status:Int,message:AnyObject?) in
+                //}
+                //TEST: test update self profile
+                //                let user2 = FaeUser()
+                //                user2.whereKey("gender", value: "female")
+                //                user2.whereKey("address", value: "trod")
+                //                user2.updateProfile{(status:Int,message:AnyObject?) in}
+                //TEST: test renewCoordinate
+                //                let user3 = FaeUser()
+                //                user3.whereKey("geo_latitude", value: "21")
+                //                user3.whereKey("geo_longitude", value: "21")
+                //                user3.renewCoordinate{(status:Int,message:AnyObject?) in}
+                //TEST: test get map information
+                //                let user4 = FaeUser()
+                //                user4.whereKey("geo_latitude", value: "21")
+                //                user4.whereKey("geo_longitude", value: "21")
+                //                user4.whereKey("radius", value: "20000000000")
+                //                user4.getMapInformation{(status:Int,message:AnyObject?) in}
+                
+                //TEST: test post comment
+                //                let user5 = FaeUser()
+                //                user5.whereKey("geo_latitude", value: "21")
+                //                user5.whereKey("geo_longitude", value: "21")
+                //                user5.whereKey("content", value: "First Comment")
+                //                user5.postComment{(status:Int,message:AnyObject?) in}
+                
+                //TEST: test get comment by id
+                //                let user6 = FaeUser()
+                //                user6.getComment("23"){(status:Int,message:AnyObject?) in}
+                
+                //TEST: test user all comments
+                //                let user7 = FaeUser()
+                //                user7.getUserAllComments("2"){(status:Int,message:AnyObject?) in}
+                
+                //TEST: test get comment by id
+                //                let user8 = FaeUser()
+                //                user8.deleteCommentById("23"){(status:Int,message:AnyObject?) in}
+                
                 self.jumpToMainView()
             }
             else{

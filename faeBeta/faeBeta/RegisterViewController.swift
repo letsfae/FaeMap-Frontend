@@ -339,15 +339,19 @@ class RegisterViewController: UIViewController {
             
         }
         if let emailString = textEmail.text {
-            if !emailCheckForDuplicate(emailString) {
-                labelEmailHint.text = ""
-            } else {
-                
+            emailCheckForDuplicate(emailString) {(validate:Bool) in
+                if(validate){
+                    self.labelEmailHint.text = "This email is already registered! Log In!"
+                    self.labelEmailHint.hidden = false
+                    self.imageCheckEmail.hidden = true
+                    self.emailValidated = false
+                }
+                else {
+                }
             }
+            checkAllValidation()
         }
-        checkAllValidation()
     }
-    
     func passwordIsFocus() {
         print("password is focused")
         imagePassword.image = UIImage(named: "password_red")
@@ -527,7 +531,36 @@ class RegisterViewController: UIViewController {
     
     
     // this function check if the email is already used
-    func emailCheckForDuplicate (email: String) -> Bool {
-        return false
+    func emailCheckForDuplicate (email: String,completion: (Bool)->Void) {
+        let user = FaeUser()
+        user.whereKey("email", value: textEmail.text!)
+        user.checkEmailExistence{(status:Int?, message:AnyObject?) in
+            //print(message)
+            if ( status! / 100 == 2 ){
+                if let mess = message{
+                    if let validation = mess["existence"]{
+                        if(validation as! Bool == true){
+                            print("true")
+                            completion(true)
+                        }
+                        else{
+                            completion(false)
+                        }
+                    }
+                    else{
+                        completion(false)
+                    }
+                }
+                else{
+                    completion(false)
+                }
+                //success
+            }
+            else{
+                completion(false)
+                //failure
+            }
+        }
     }
 }
+

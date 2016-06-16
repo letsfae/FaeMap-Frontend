@@ -36,10 +36,28 @@ class FaeUser : NSObject {
         self.keyValue = [String:AnyObject]()
     }
     func checkEmailExistence(completion:(Int,AnyObject?)->Void){
-        
+        if let email = keyValue["email"] as? String{
+            getFromURL("existence/email/"+email, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
+                //print(self.keyValue)
+                //                print("message")
+                //                print(message)
+                self.clearKeyValue()
+                completion(status,message);
+            }
+        }
     }
+    
+    //MARK: This hasn't been tested
     func checkUserExistence(completion:(Int,AnyObject?)->Void){
-        
+        if let username = keyValue["username"] as? String{
+            getFromURL("existence/email/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
+                //print(self.keyValue)
+                //                print("message")
+                //                print(message)
+                self.clearKeyValue()
+                completion(status,message);
+            }
+        }
     }
     func saveAvatarInBackGround(completion:(Int,AnyObject?)->Void){
         
@@ -72,6 +90,7 @@ class FaeUser : NSObject {
             else{//failure
                 
             }
+            self.clearKeyValue()
             completion(status,message)
         }
     }
@@ -135,13 +154,42 @@ class FaeUser : NSObject {
             else {
                 
             }
+            self.clearKeyValue()
         }
     }
     
+    //Profile
+    func getSelfProfile(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            //print(self.keyValue)
+            self.clearKeyValue()
+            completion(status,message);
+        }
+    }
+    
+    func getOthersProfile(otherUser:String, completion:(Int,AnyObject?)->Void){
+        getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            self.clearKeyValue()
+            completion(status,message);
+        }
+    }
+    
+    func updateProfile(completion:(Int,AnyObject?)->Void){
+        postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            self.clearKeyValue()
+            completion(status,message)
+        }
+    }
+    
+    
+    
+    
+    // Change password
     func sendCodeToEmail(completion:(Int,AnyObject?)->Void){
         postToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
+            self.clearKeyValue()
             completion(status,message)
         }
     }
@@ -150,6 +198,7 @@ class FaeUser : NSObject {
         putToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
+            self.clearKeyValue()
             completion(status,message)
         }
     }
@@ -158,9 +207,17 @@ class FaeUser : NSObject {
         postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
+            self.clearKeyValue()
             completion(status,message)
         }
     }
+    
+    
+    
+    
+        
+    
+    
     
     
 }

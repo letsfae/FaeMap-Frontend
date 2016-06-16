@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-var baseURL = "https://api.letsfae.com/"
+var baseURL = "https://api.letsfae.com"
 var version = "x.faeapp.v1"
 var headerAccept = "application/x.faeapp.v1+json"
 var headerContentType = "application/x-www-form-urlencoded"
@@ -35,7 +35,7 @@ var headerUserAgent : String = "iphone5"
 
 
 
-func postToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -50,29 +50,31 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
         }
     }
     do{
-        Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
-            .responseJSON{response in
-                //print(response.response!.statusCode)
-                print(response)
-                if let respon = response.response{
-                    if(response.response!.statusCode != 0){
-                        print("finished")
-                    }
-                    if let JSON = response.response?.allHeaderFields{
-                        print(JSON)
-                        
-                    }
-                    if let resMess = response.result.value {
-                        completion(response.response!.statusCode,resMess)
+        if parameter != nil{
+            Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
+                .responseJSON{response in
+                    //print(response.response!.statusCode)
+                    print(response)
+                    if let respon = response.response{
+                        if(response.response!.statusCode != 0){
+                            print("finished")
+                        }
+                        if let JSON = response.response?.allHeaderFields{
+                            print(JSON)
+                            
+                        }
+                        if let resMess = response.result.value {
+                            completion(response.response!.statusCode,resMess)
+                        }
+                        else{
+                            //MARK: bug here
+                            completion(response.response!.statusCode,"no Json body")
+                        }
                     }
                     else{
-                        //MARK: bug here
-                        completion(response.response!.statusCode,"no Json body")
+                        completion(-500,"Internet error")
                     }
-                }
-                else{
-                    completion(-500,"Internet error")
-                }
+            }
         }
     }
     catch let error as NSError{
@@ -81,7 +83,8 @@ func postToURL(className:String,parameter:[String:AnyObject] , authentication:[S
 }
 
 
-func getFromURL(className:String, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+    print(parameter)
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -96,23 +99,43 @@ func getFromURL(className:String, authentication:[String : AnyObject]?, completi
         }
     }
     do{
-        Alamofire.request(.GET, URL,headers:headers)
-            .responseJSON{response in
-                //print(response.response!.statusCode)
-                
-                if let respon = response.response{
-                    if(response.response!.statusCode != 0){
-                        print("finished")
+        if parameter==nil{
+            Alamofire.request(.GET, URL,headers:headers)
+                .responseJSON{response in
+                    //print(response.response!.statusCode)
+                    if let respon = response.response{
+                        if(response.response!.statusCode != 0){
+                            print("finished")
+                        }
+                        if let JSON = response.response?.allHeaderFields{
+                            print(JSON)
+                            
+                        }
+                        completion(response.response!.statusCode,response.result.value)
                     }
-                    if let JSON = response.response?.allHeaderFields{
-                        print(JSON)
-                        
+                    else{
+                        completion(-500,"Internet error")
                     }
-                    completion(response.response!.statusCode,response.description)
-                }
-                else{
-                    completion(-500,"Internet error")
-                }
+            }
+        }
+        else{
+            Alamofire.request(.GET, URL,parameters:parameter,headers:headers)
+                .responseJSON{response in
+                    //print(response.response!.statusCode)
+                    if let respon = response.response{
+                        if(response.response!.statusCode != 0){
+                            print("finished")
+                        }
+                        if let JSON = response.response?.allHeaderFields{
+                            print(JSON)
+                            
+                        }
+                        completion(response.response!.statusCode,response.result.value)
+                    }
+                    else{
+                        completion(-500,"Internet error")
+                    }
+            }
         }
     }
     catch let error as NSError{
