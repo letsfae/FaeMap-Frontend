@@ -29,7 +29,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
     
     var uiviewDatePicker: UIView!
     var uiviewIneligibleTerms: UIView!
-    
+    var imageAvatar = UIImageView(frame: CGRectMake(0, 0, 0, 0))
     var imageFirstName: UIImageView!
     var imageLastName: UIImageView!
     var imageBirthday: UIImageView!
@@ -363,6 +363,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         buttonProfileIcon.setImage(image, forState: .Normal)
+        self.imageAvatar.image = image
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -528,6 +529,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
             if(status!/100 == 2){//success
                 print(status)
                 print("Sign Up Success!")
+                
                 self.loginAfterFinishRegister()
             }
             else{
@@ -535,8 +537,17 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
                 print("Sign Up Fail!")
             }
         }
+        
     }
-    
+    func uploadAvatar(){
+        //MARK: image upload
+        let avatar = FaeImage()
+        avatar.image = self.imageAvatar.image
+        avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
+            print(code)
+            print(message)
+        }
+    }
     func loginAfterFinishRegister() {
         let user = FaeUser()
         user.whereKey("email", value: self.emailFromPrevious)
@@ -545,6 +556,7 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
             if(status!/100 == 2){//success
                 print(status)
                 print("Login Success!")
+                self.uploadAvatar()
                 self.jumpToMainView()
             }
             else{

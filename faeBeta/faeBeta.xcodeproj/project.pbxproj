@@ -67,6 +67,15 @@
 		B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */; };
 		B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */; };
 		B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */; };
+		B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
+		B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
+		B0AA088C1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
+		B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
+		B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
+		B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
+		B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
+		B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
+		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
 		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
@@ -86,6 +95,15 @@
 		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
+		B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */; };
+		B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */; };
+		B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */; };
+		B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */; };
+		B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */; };
+		B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */; };
+		B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
+		B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
+		B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
@@ -159,6 +177,9 @@
 		B0A2ACBD1CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterProfileViewController.swift; sourceTree = "<group>"; };
+		B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountViewController.swift; sourceTree = "<group>"; };
+		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
+		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
 		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -167,6 +188,9 @@
 		B0CFC9B11CED39BF00EC356A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "faeBeta-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
+		B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeViewController.swift; sourceTree = "<group>"; };
+		B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeGeneralTableViewCell.swift; sourceTree = "<group>"; };
+		B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFaeGeneralTableViewCell.xib; sourceTree = "<group>"; };
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +303,7 @@
 			children = (
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */,
+				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0CFC9B51CED39CF00EC356A /* ViewController */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
 				B0CFC9981CED2CE700EC356A /* Model */,
@@ -356,6 +381,19 @@
 				B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		B0D36BE71D1C0CB1002FC047 /* MyFae */ = {
+			isa = PBXGroup;
+			children = (
+				B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */,
+				B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */,
+				B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */,
+				B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */,
+				B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */,
+				B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */,
+			);
+			name = MyFae;
 			sourceTree = "<group>";
 		};
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
@@ -484,8 +522,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
+				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
 				B05DAFFB1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
 			);
@@ -495,7 +535,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B05DAFFC1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
+				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,7 +545,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B05DAFFD1D13265200082A71 /* CommentExtentTableViewCell.xib in Resources */,
+				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,14 +704,18 @@
 				B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
+				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
+				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
+				B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B00182791D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
@@ -689,7 +737,9 @@
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
+				B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
+				B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
@@ -698,7 +748,9 @@
 				B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
+				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B05DAFF91D13265200082A71 /* CommentExtentTableViewCell.swift in Sources */,
+				B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -713,6 +765,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
+				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
@@ -723,14 +776,17 @@
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00182731D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B0AA088C1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B001827B1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
+				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,

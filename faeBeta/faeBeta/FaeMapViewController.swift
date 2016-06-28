@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import SwiftyJSON
 
 class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate {
     
@@ -33,20 +34,22 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var latitudeForPin: CLLocationDegrees = 0
+    var longitudeForPin: CLLocationDegrees = 0
     
     // MARK: -- Blur View Pin Buttons and Labels
     var uiviewPinSelections: UIView!
     
     var blurViewMap: UIVisualEffectView!
-    var buttonSubmitMedia: UIButton!
-    var buttonSubmitLive: UIButton!
-    var buttonSubmitComment: UIButton!
-    var buttonSubmitEvent: UIButton!
-    var buttonSubmitFaevor: UIButton!
-    var buttonSubmitNow: UIButton!
-    var buttonSubmitJoinMe: UIButton!
-    var buttonSubmitSell: UIButton!
-    var buttonSubmitIcons: UIButton!
+    var buttonMedia: UIButton!
+    var buttonLive: UIButton!
+    var buttonComment: UIButton!
+    var buttonEvent: UIButton!
+    var buttonFaevor: UIButton!
+    var buttonNow: UIButton!
+    var buttonJoinMe: UIButton!
+    var buttonSell: UIButton!
+    var buttonIcons: UIButton!
     
     var labelSubmitTitle: UILabel!
     var labelSubmitMedia: UILabel!
@@ -59,7 +62,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var labelSubmitSell: UILabel!
     var labelSubmitIcons: UILabel!
     
-    var buttonSubmitClose: UIButton!
+    var buttonClosePinBlurView: UIButton!
+    var buttonCommentSubmit: UIButton!
     
     // MARK: -- Create Comment Pin
     var uiviewCreateCommentPin: UIView!
@@ -99,6 +103,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     var token = true
     
+    var myPositionIconFirstLoaded = true
+    
+    // MARK: -- Drag map and refresh pins
+    var originPointForRefresh: CLLocationCoordinate2D!
+    var originPointForRefreshFirstLoad = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -108,6 +118,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.jumpToWelcomeView()
         }
         
+        myPositionIconFirstLoaded = true
+        
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
@@ -116,23 +128,101 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         loadTableView()
         configureCustomSearchController()
-        let map6 = FaeMap()
-        
-        map6.getUserAllComments("5"){(status:Int,message:AnyObject?) in
-            print(message)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
-        locManager.requestWhenInUseAuthorization()
+        locManager.requestAlwaysAuthorization()
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined){
             print("Not Authorised")
-            self.locManager.requestWhenInUseAuthorization()
+            self.locManager.requestAlwaysAuthorization()
         }
-        else if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied){
+        
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied){
             jumpToLocationEnable()
         }
+        
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
+            currentLocation = locManager.location
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.camera = camera
+        }
+        loadPositionAnimateImage()
     }
+    
+    
+    // MARK: -- 如何存到缓存中以备后面继续使用
+    func loadCurrentRegionPins() {
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+        print("Loading时的坐标")
+        print(mapCenterCoordinate)
+        let loadPinsByZoomLevel = FaeMap()
+        loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+        loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+        loadPinsByZoomLevel.whereKey("radius", value: "5000")
+        loadPinsByZoomLevel.getMapInformation{(status:Int,message:AnyObject?) in
+            print("获取地图数据：")
+            let mapInfoJSON = JSON(message!)
+            print(mapInfoJSON)
+            for i in 0...mapInfoJSON.count {
+                let pinShowOnMap = GMSMarker()
+                var pinData = [[String: AnyObject]]()
+                if let typeInfo = mapInfoJSON[i]["type"].string {
+                    print(typeInfo)
+                    let typeDic = ["type": typeInfo]
+                    pinData.append(typeDic)
+                    if typeInfo == "comment" {
+                        pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                    }
+                    if typeInfo == "user" {
+                        pinShowOnMap.icon = UIImage(named: "myPosition_icon")
+                    }
+                }
+                if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
+                    print(commentIDInfo)
+                    let commentIDDic = ["comment_id": commentIDInfo]
+                    pinData.append(commentIDDic)
+                }
+                if let userIDInfo = mapInfoJSON[i]["user_id"].int {
+                    print(userIDInfo)
+                    let userIDDic = ["user_id": userIDInfo]
+                    pinData.append(userIDDic)
+                }
+                if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
+                    print(createdTimeInfo)
+                    let createdTimeDic = ["created_at": createdTimeInfo]
+                    pinData.append(createdTimeDic)
+                }
+                if let contentInfo = mapInfoJSON[i]["content"].string {
+                    print(contentInfo)
+                    let contentDic = ["content": contentInfo]
+                    pinData.append(contentDic)
+                }
+                if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
+                    print(latitudeInfo)
+                    let latitudeDic = ["latitude": latitudeInfo]
+                    pinData.append(latitudeDic)
+                    pinShowOnMap.position.latitude = latitudeInfo
+                }
+                if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
+                    print(longitudeInfo)
+                    let longitudeDic = ["longitude": longitudeInfo]
+                    pinData.append(longitudeDic)
+                    pinShowOnMap.position.longitude = longitudeInfo
+                }
+                pinShowOnMap.userData = pinData
+                pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
+                pinShowOnMap.map = self.faeMapView
+            }
+        }
+    }
+    
+    func nothinghere() {
+        
+    }
+    
     func jumpToLocationEnable(){
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
         self.presentViewController(vc, animated: true, completion: nil)
@@ -161,19 +251,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         faeMapView.myLocationEnabled = false
         faeMapView.delegate = self
         self.view = faeMapView
-        loadPositionAnimateImage()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.requestWhenInUseAuthorization()
         locManager.startUpdatingLocation()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse) {
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            self.actionSelfPosition(self.buttonSelfPosition)
-            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.camera = camera
-        }
+        
         imagePinOnMap = UIImageView(frame: CGRectMake(screenWidth/2-19, screenHeight/2-41, 38, 41))
         imagePinOnMap.image = UIImage(named: "comment_pin_image")
         imagePinOnMap.hidden = true
@@ -195,7 +276,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-        //        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
+        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
     }
     
@@ -205,18 +286,30 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransformMakeRotation(angle)
         
-        locManager.requestWhenInUseAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse){
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
-            let currentLatitude = currentLocation.coordinate.latitude
-            let currentLongitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
+            self.currentLatitude = currentLocation.coordinate.latitude
+            self.currentLongitude = currentLocation.coordinate.longitude
+            let position = CLLocationCoordinate2DMake(self.currentLatitude, self.currentLongitude)
             let selfPositionToPoint = faeMapView.projection.pointForCoordinate(position)
             myPositionOutsideMarker_3.center = selfPositionToPoint
             myPositionOutsideMarker_2.center = selfPositionToPoint
             myPositionOutsideMarker_1.center = selfPositionToPoint
             myPositionIcon.center = selfPositionToPoint
         }
+    }
+    
+    func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
+        print(mapCenterCoordinate)
+        print("Map Zoom Level: \(faeMapView.camera.zoom)")
+        if originPointForRefreshFirstLoad {
+            originPointForRefresh = mapCenterCoordinate
+            originPointForRefreshFirstLoad = false
+            loadCurrentRegionPins()
+        }
+        
         if isInPinLocationSelect {
             let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
             let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
@@ -234,30 +327,43 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     self.customSearchController.customSearchBar.text = addressToSearchBar
                 }
+                self.latitudeForPin = mapCenterCoordinate.latitude
+                self.longitudeForPin = mapCenterCoordinate.longitude
             })
+        }
+        
+        if mapView.camera.zoom >= 13 {
+            let radius = sqrt(pow(mapCenterCoordinate.latitude-originPointForRefresh.latitude, 2.0)+pow(mapCenterCoordinate.longitude-originPointForRefresh.longitude, 2.0))
+            if radius > 0.04 {
+                mapView.clear()
+                originPointForRefresh = mapCenterCoordinate
+                loadCurrentRegionPins()
+            }
+        }
+        else {
+            originPointForRefreshFirstLoad = true
+            mapView.clear()
         }
     }
     
-    //    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
-    //        var mapCenter = mapView.projection.pointForCoordinate(marker.position)
-    //        mapCenter.y = mapCenter.y - 150.0
-    //        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
-    //        let camera = GMSCameraPosition.cameraWithTarget(mapCenterCoordinate, zoom: mapView.camera.zoom)
-    //        mapView.animateToCameraPosition(camera)
-    //        return true
-    //    }
+    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+        if let pinData = marker.userData {
+            print(pinData)
+        }
+        return true
+    }
     
     // MARK: -- Actions
     
     func actionSelfPosition(sender: UIButton!) {
-        locManager.requestWhenInUseAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse){
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
         }
-        let currentLatitude = currentLocation.coordinate.latitude
-        let currentLongitude = currentLocation.coordinate.longitude
+        self.currentLatitude = currentLocation.coordinate.latitude
+        self.currentLongitude = currentLocation.coordinate.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         faeMapView.animateToCameraPosition(camera)
+        
     }
     
     func actionTrueNorth(sender: UIButton!) {
@@ -268,6 +374,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         submitPinsShowAnimation()
         uiviewCreateCommentPin.alpha = 0.0
         uiviewPinSelections.alpha = 1.0
+        self.tabBarController?.tabBar.hidden = true
+        self.navigationController?.navigationBar.hidden = true
     }
     
     func actionCloseSubmitPins(sender: UIButton!) {
@@ -279,6 +387,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         buttonSetLocationOnMap.hidden = true
         imagePinOnMap.hidden = true
         self.tabBarController?.tabBar.hidden = false
+        self.navigationController?.navigationBar.hidden = false
         searchBarSubview.hidden = true
         tblSearchResults.hidden = true
         uiviewTableSubview.hidden = true
@@ -297,6 +406,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         buttonSetLocationOnMap.hidden = false
         imagePinOnMap.hidden = false
         self.tabBarController?.tabBar.hidden = true
+        self.navigationController?.navigationBar.hidden = true
         searchBarSubview.hidden = false
         tblSearchResults.hidden = false
         uiviewTableSubview.hidden = false
@@ -326,21 +436,72 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func actionSetLocationForComment(sender: UIButton!) {
         // May have bug here
         submitPinsShowAnimation()
-        self.labelSelectLocationContent.text = self.customSearchController.customSearchBar.text
+        let valueInSearchBar = self.customSearchController.customSearchBar.text
+        if valueInSearchBar == "" {
+            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+            let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+            GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
+                (response, error) -> Void in
+                if let fullAddress = response?.firstResult()?.lines {
+                    var addressToSearchBar = ""
+                    for line in fullAddress {
+                        if fullAddress.indexOf(line) == fullAddress.count-1 {
+                            addressToSearchBar += line + ""
+                        }
+                        else {
+                            addressToSearchBar += line + ", "
+                        }
+                    }
+                    self.labelSelectLocationContent.text = addressToSearchBar
+                }
+            })
+        }
+        else {
+            self.labelSelectLocationContent.text = valueInSearchBar
+        }
         isInPinLocationSelect = false
         searchBarSubview.hidden = true
         tblSearchResults.hidden = true
         uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
     }
     
-    func actionSubmitLocationForComment(sender: UIButton) {
-        let map5 = FaeMap()
-        map5.whereKey("geo_latitude", value: "34.027315")
-        map5.whereKey("geo_longitude", value: "-118.28855")
-        map5.whereKey("content", value: "第一条状态！")
-        map5.postComment{(status:Int,message:AnyObject?) in
-            print(status)
+    func actionSubmitComment(sender: UIButton) {
+        
+        let postSingleComment = FaeMap()
+        var submitLatitude = ""
+        var submitLongitude = ""
+        
+        if self.labelSelectLocationContent.text == "Current Location" {
+            submitLatitude = "\(self.currentLatitude)"
+            submitLongitude = "\(self.currentLongitude)"
+        }
+        else {
+            submitLatitude = "\(self.latitudeForPin)"
+            submitLongitude = "\(self.longitudeForPin)"
+        }
+        
+        var commentContent = ""
+        for everyTextField in textFieldArray {
+            if let textContent = everyTextField.text {
+                commentContent += textContent
+            }
+        }
+        print("Comment Content: \(commentContent)")
+        
+        if commentContent == "" {
+            let alertUIView = UIAlertView(title: "Content Field is Empty!", message: nil, delegate: self, cancelButtonTitle: "OK, I got it")
+            alertUIView.show()
+            return
+        }
+        
+        postSingleComment.whereKey("geo_latitude", value: submitLatitude)
+        postSingleComment.whereKey("geo_longitude", value: submitLongitude)
+        postSingleComment.whereKey("content", value: commentContent)
+        postSingleComment.postComment{(status:Int,message:AnyObject?) in
             if let getMessage = message {
+                print("发布了评论")
                 print(getMessage)
                 if let getMessageID = getMessage["comment_id"] {
                     print(getMessageID!)
@@ -361,6 +522,19 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     self.buttonSetLocationOnMap.hidden = true
                     self.imagePinOnMap.hidden = true
                     self.tabBarController?.tabBar.hidden = false
+                    self.navigationController?.navigationBar.hidden = false
+                    
+                    let getJustPostedComment = FaeMap()
+                    getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
+                        print(message)
+                    }
+                    self.textFieldArray.removeAll()
+                    self.borderArray.removeAll()
+                    for every in self.uiviewArray {
+                        every.removeFromSuperview()
+                    }
+                    self.uiviewArray.removeAll()
+                    self.loadBasicTextField()
                 }
                 else {
                     print("Cannot get comment_id of this posted comment")
@@ -375,6 +549,15 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // MARK: -- Animations
     
     func loadPositionAnimateImage() {
+        if myPositionIconFirstLoaded {
+            myPositionIconFirstLoaded = false
+        }
+        else {
+            myPositionOutsideMarker_1.removeFromSuperview()
+            myPositionOutsideMarker_2.removeFromSuperview()
+            myPositionOutsideMarker_3.removeFromSuperview()
+            myPositionIcon.removeFromSuperview()
+        }
         myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
         myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_1.alpha = 1.0
@@ -387,13 +570,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_3.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_3)
-        myPositionIcon = UIImageView(frame: CGRectMake(screenWidth/2-14, screenHeight/2-20, 31.65, 40.84))
+        myPositionIcon = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 31.65, 40.84))
         myPositionIcon.image = UIImage(named: "myPosition_icon")
         self.view.addSubview(myPositionIcon)
-        myPostionAnimation()
+        myPositionAnimation()
+        
     }
     
-    func myPostionAnimation() {
+    func myPositionAnimation() {
         UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
             self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_1.alpha = 0.0
@@ -406,6 +590,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_3.alpha = 0.0
         }), completion: nil)
+        print("DEBUG: Animation Works!")
     }
     
     func submitPinsHideAnimation() {
@@ -441,7 +626,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         blurViewMap = UIVisualEffectView(effect: blurEffect)
         blurViewMap.frame = CGRectMake(0, 0, screenWidth, screenHeight)
         UIApplication.sharedApplication().keyWindow?.addSubview(blurViewMap)
-        
         loadPinSelections()
         loadCreateCommentPinView()
         uiviewCreateCommentPin.hidden = false
@@ -461,7 +645,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let imageCreateCommentPin = UIImageView(frame: CGRectMake(166, 41, 83, 90))
         imageCreateCommentPin.image = UIImage(named: "comment_pin_main_create")
         uiviewCreateCommentPin.addSubview(imageCreateCommentPin)
-        self.blurViewMap.contentView.addSubview(uiviewCreateCommentPin)
+        self.blurViewMap.addSubview(uiviewCreateCommentPin)
         
         let labelCreateCommentPinTitle = UILabel(frame: CGRectMake(109, 139, 196, 27))
         labelCreateCommentPinTitle.text = "Create Comment Pin"
@@ -504,7 +688,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         uiviewSelectLocation.addSubview(buttonSelectLocation)
         buttonSelectLocation.addTarget(self, action: #selector(FaeMapViewController.actionSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        let buttonCommentSubmit = UIButton(frame: CGRectMake(0, 671, screenWidth, 65))
+        buttonCommentSubmit = UIButton(frame: CGRectMake(0, 671, screenWidth, 65))
         buttonCommentSubmit.setTitle("Submit!", forState: .Normal)
         buttonCommentSubmit.setTitle("Submit!", forState: .Highlighted)
         buttonCommentSubmit.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -512,10 +696,41 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         buttonCommentSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonCommentSubmit.backgroundColor = UIColor(red: 194/255, green: 229/255, blue: 159/255, alpha: 1.0)
         self.uiviewCreateCommentPin.addSubview(buttonCommentSubmit)
-        buttonCommentSubmit.addTarget(self, action: #selector(FaeMapViewController.actionSubmitLocationForComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentSubmit.addTarget(self, action: #selector(FaeMapViewController.actionSubmitComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.blurViewMap.contentView.addSubview(uiviewCreateCommentPin)
+        self.blurViewMap.addSubview(uiviewCreateCommentPin)
         
+    }
+    
+    // MARK: -- Temporary Methods!!!
+    func actionLogOut(sender: UIButton!) {
+        let logOut = FaeUser()
+        logOut.logOut()
+        submitPinsHideAnimation()
+        jumpToWelcomeView()
+    }
+    
+    func actionGetMapInfo(sender: UIButton!) {
+        loadCurrentRegionPins()
+    }
+    
+    func actionClearAllUserPins(sender: UIButton!) {
+        clearAllMyPins()
+    }
+    
+    func clearAllMyPins() {
+        let clearUserPins = FaeMap()
+        clearUserPins.getUserAllComments("\(user_id)"){(status:Int,message:AnyObject?) in
+            let clearUserPinsJSON = JSON(message!)
+            print(clearUserPinsJSON)
+            for i in 0...clearUserPinsJSON.count {
+                if let commentID = clearUserPinsJSON[i]["comments"]["comment_id"].int {
+                    clearUserPins.deleteCommentById("\(commentID)"){(status:Int,message:AnyObject?) in
+                        print("Successfully Delete Comment by ID: \(commentID)")
+                    }
+                }
+            }
+        }
     }
     
     // MARK: -- Pins Creating Selections View
@@ -530,18 +745,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         labelSubmitTitle.textColor = UIColor.whiteColor()
         self.uiviewPinSelections.addSubview(labelSubmitTitle)
         
-        buttonSubmitMedia = createSubmitButton(35, y: 146, width: 90, height: 90, picName: "submit_media")
-        buttonSubmitLive = createSubmitButton(163, y: 146, width: 90, height: 90, picName: "submit_live")
-        buttonSubmitComment = createSubmitButton(291, y: 146, width: 90, height: 90, picName: "submit_comment")
-        buttonSubmitComment.addTarget(self, action: #selector(FaeMapViewController.actionCreateCommentPin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonMedia = createSubmitButton(35, y: 146, width: 90, height: 90, picName: "submit_media")
+        buttonLive = createSubmitButton(163, y: 146, width: 90, height: 90, picName: "submit_live")
+        buttonComment = createSubmitButton(291, y: 146, width: 90, height: 90, picName: "submit_comment")
+        buttonComment.addTarget(self, action: #selector(FaeMapViewController.actionCreateCommentPin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        buttonSubmitEvent = createSubmitButton(35, y: 302, width: 90, height: 90, picName: "submit_event")
-        buttonSubmitFaevor = createSubmitButton(163, y: 302, width: 90, height: 90, picName: "submit_faevor")
-        buttonSubmitNow = createSubmitButton(291, y: 302, width: 90, height: 90, picName: "submit_now")
+        buttonEvent = createSubmitButton(35, y: 302, width: 90, height: 90, picName: "submit_event")
+        buttonFaevor = createSubmitButton(163, y: 302, width: 90, height: 90, picName: "submit_faevor")
+        buttonNow = createSubmitButton(291, y: 302, width: 90, height: 90, picName: "submit_now")
         
-        buttonSubmitJoinMe = createSubmitButton(35, y: 458, width: 90, height: 90, picName: "submit_joinme")
-        buttonSubmitSell = createSubmitButton(163, y: 458, width: 90, height: 90, picName: "submit_sell")
-        buttonSubmitIcons = createSubmitButton(291, y: 458, width: 90, height: 90, picName: "submit_icons")
+        buttonJoinMe = createSubmitButton(35, y: 458, width: 90, height: 90, picName: "submit_joinme")
+        buttonJoinMe.addTarget(self, action: #selector(FaeMapViewController.actionLogOut(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSell = createSubmitButton(163, y: 458, width: 90, height: 90, picName: "submit_sell")
+        buttonSell.addTarget(self, action: #selector(FaeMapViewController.actionClearAllUserPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonIcons = createSubmitButton(291, y: 458, width: 90, height: 90, picName: "submit_icons")
+        buttonIcons.addTarget(self, action: #selector(FaeMapViewController.actionGetMapInfo(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         labelSubmitMedia = createSubmitLabel(32, y: 243, width: 95, height: 27, title: "Media")
         labelSubmitLive = createSubmitLabel(160, y: 243, width: 95, height: 27, title: "Live")
@@ -551,21 +769,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         labelSubmitFaevor = createSubmitLabel(160, y: 399, width: 95, height: 27, title: "Faevor")
         labelSubmitNow = createSubmitLabel(288, y: 399, width: 95, height: 27, title: "Now")
         
-        labelSubmitJoinMe = createSubmitLabel(32, y: 555, width: 95, height: 27, title: "Join Me!")
+        labelSubmitJoinMe = createSubmitLabel(32, y: 555, width: 95, height: 27, title: "LogOut")
         labelSubmitSell = createSubmitLabel(160, y: 555, width: 95, height: 27, title: "Sell")
-        labelSubmitIcons = createSubmitLabel(288, y: 555, width: 95, height: 27, title: "Icons")
+        labelSubmitIcons = createSubmitLabel(288, y: 555, width: 95, height: 27, title: "GetMap")
         
-        buttonSubmitClose = UIButton(frame: CGRectMake(0, 671, screenWidth, 65))
-        buttonSubmitClose.setTitle("Close", forState: .Normal)
-        buttonSubmitClose.setTitle("Close", forState: .Highlighted)
-        buttonSubmitClose.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        buttonSubmitClose.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        buttonSubmitClose.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        buttonSubmitClose.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
-        self.uiviewPinSelections.addSubview(buttonSubmitClose)
-        buttonSubmitClose.addTarget(self, action: #selector(FaeMapViewController.actionCloseSubmitPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonClosePinBlurView = UIButton(frame: CGRectMake(0, 671, screenWidth, 65))
+        buttonClosePinBlurView.setTitle("Close", forState: .Normal)
+        buttonClosePinBlurView.setTitle("Close", forState: .Highlighted)
+        buttonClosePinBlurView.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        buttonClosePinBlurView.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        buttonClosePinBlurView.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
+        buttonClosePinBlurView.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
+        self.uiviewPinSelections.addSubview(buttonClosePinBlurView)
+        buttonClosePinBlurView.addTarget(self, action: #selector(FaeMapViewController.actionCloseSubmitPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.blurViewMap.contentView.addSubview(uiviewPinSelections)
+        self.blurViewMap.addSubview(uiviewPinSelections)
     }
     
     func createSubmitButton(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, picName: String) -> UIButton {
@@ -616,7 +834,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let buttonToNorthY: CGFloat = 528
         let buttonToNorthWidth: CGFloat = 59
         buttonToNorth = UIButton(frame: CGRectMake(buttonToNorthX, buttonToNorthY, buttonToNorthWidth, buttonToNorthWidth))
-        buttonToNorth.setImage(UIImage(named: "compass"), forState: .Normal)
+        buttonToNorth.setImage(UIImage(named: "compass_new"), forState: .Normal)
         self.view.addSubview(buttonToNorth)
         buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -807,7 +1025,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 } else {
                     for result in results! {
                         self.placeholder.append(result)
-                        print("Result \(result.attributedFullText) with placeID \(result.placeID)")
+                        //                        print("Result \(result.attributedFullText) with placeID \(result.placeID)")
                     }
                     self.tblSearchResults.reloadData()
                 }
@@ -1048,7 +1266,6 @@ extension FaeMapViewController: UITextFieldDelegate {
     func moveAllTextFieldUpFromIndex(index: Int!) {
         let gesture_4 = UIPanGestureRecognizer(target: self, action: #selector(FaeMapViewController.userDragged_4(_:)))
         var nums = self.uiviewArray.count-1
-        print(index)
         while nums >= index {
             let lineNumber = self.uiviewArray[nums].lineNumber
             
@@ -1073,6 +1290,11 @@ extension FaeMapViewController: UITextFieldDelegate {
             self.uiviewArray[nums].lineNumber = lineNumber - 1
             nums -= 1
         }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -1134,9 +1356,9 @@ extension FaeMapViewController: UITextFieldDelegate {
         let isBackSpace = strcmp(backSpace, "\\b")
         if isBackSpace == -92 {
             if newLength == 0 {
-                textFieldArray[arrNum].resignFirstResponder()
                 textFieldArray[arrNum].text = ""
                 if arrNum != 0 {
+                    textFieldArray[arrNum].resignFirstResponder()
                     textFieldArray[arrNum-1].becomeFirstResponder()
                 }
                 if textFieldArray.count > 2 {
