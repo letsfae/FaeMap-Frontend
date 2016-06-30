@@ -27,7 +27,7 @@ class LocalStorageManager: NSObject {
         return nil
     }
     func logInStorage()->Bool{
-        if(userToken==nil || userTokenEncode==nil || session_id == nil || user_id==nil || is_Login == 0){
+        if(userToken==nil || userTokenEncode==nil || session_id == nil || user_id==nil || userEmail==nil || userPassword==nil || is_Login == 0){
             return false
         }
         saveString("userToken", value: userToken)
@@ -35,6 +35,8 @@ class LocalStorageManager: NSObject {
         saveNumber("session_id", value: session_id)
         saveNumber("user_id", value: user_id)
         saveInt("is_Login", value: is_Login)
+        saveString("userEmail", value: userEmail)
+        saveString("userPassword", value: userPassword)
         return true
     }
     func readLogInfo()->Bool{
@@ -67,6 +69,10 @@ class LocalStorageManager: NSObject {
                 session_id = readByKey("session_id")as! NSNumber
                 user_id = readByKey("user_id")as! NSNumber
                 is_Login = readByKey("is_Login")as! Int
+                userEmail = readByKey("userEmail")as! String
+                userPassword = readByKey("userPassword")as! String
+//                print(userEmail)
+//                print(userPassword)
             }
         }
         return false

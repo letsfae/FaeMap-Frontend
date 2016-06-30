@@ -122,6 +122,9 @@ class FaeUser : NSObject {
         userToken = str
         userTokenEncode = encode
         is_Login = 1
+        userEmail = keyValue["email"] as! String
+        userPassword = keyValue["password"] as! String
+        
         let shareAPI = LocalStorageManager()
         shareAPI.logInStorage()
         //        logOut()

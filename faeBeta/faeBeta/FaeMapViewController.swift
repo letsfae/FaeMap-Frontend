@@ -143,7 +143,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
             currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
+            currentLatitude = currentLocation.coordinate.latitude//MARK : ERROR
             currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
