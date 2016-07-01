@@ -2,17 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>comgooglemaps</string>
-		<string>googlechromes</string>
-	</array>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>we always need location</string>
-	<key>NSLocationUsageDescription</key>
-	<string>we need location</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -31,10 +20,21 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>googlechromes</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MGLMapboxAccessToken</key>
 	<string>pk.eyJ1IjoieWFuY3l3YW5nIiwiYSI6ImNpb2J0ajc4djA0OWZ2NmtxczV5Z2R6MDUifQ.yTa-GcWK8rQcb6PMyH64MA</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>we always need location</string>
+	<key>NSLocationUsageDescription</key>
+	<string>we need location</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -31,16 +31,43 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5E-ya-oaz">
+                        <rect key="frame" x="236" y="17" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="76d-pf-tRO">
+                        <rect key="frame" x="210" y="19" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="eoq-QZ-eOi"/>
+                            <constraint firstAttribute="width" constant="16" id="zzd-KW-xTe"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="z5E-ya-oaz" secondAttribute="trailing" constant="34" id="3vd-2F-8nR"/>
+                    <constraint firstItem="z5E-ya-oaz" firstAttribute="leading" secondItem="76d-pf-tRO" secondAttribute="trailing" constant="10" id="AFX-XW-8JL"/>
                     <constraint firstItem="s3c-cj-EQb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="Acu-dQ-Y0t"/>
+                    <constraint firstItem="J0E-jG-W04" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="NoJ-eD-H1k"/>
                     <constraint firstItem="s3c-cj-EQb" firstAttribute="leading" secondItem="J0E-jG-W04" secondAttribute="trailing" constant="18" id="PBm-Kz-WqD"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="J0E-jG-W04" secondAttribute="bottom" constant="4" id="SAs-zR-gda"/>
                     <constraint firstItem="J0E-jG-W04" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="35" id="UIl-pK-FBi"/>
+                    <constraint firstItem="z5E-ya-oaz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="9" id="W9K-Gn-PSX"/>
+                    <constraint firstItem="76d-pf-tRO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="11" id="WpH-o6-SIJ"/>
+                    <constraint firstItem="s3c-cj-EQb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="bhc-eE-H1G"/>
                     <constraint firstItem="J0E-jG-W04" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="nCD-Xl-Ffw"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="nCD-Xl-Ffw"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="imageViewStatus" destination="76d-pf-tRO" id="SJq-9S-WJc"/>
                 <outlet property="imageViewTitle" destination="J0E-jG-W04" id="qZ7-BQ-IvT"/>
+                <outlet property="labelStatus" destination="z5E-ya-oaz" id="S6q-zk-Nfx"/>
                 <outlet property="labelTitle" destination="s3c-cj-EQb" id="8Bf-OT-JpO"/>
             </connections>
             <point key="canvasLocation" x="433" y="250"/>

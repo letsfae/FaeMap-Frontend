@@ -15,10 +15,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZhU-Nw-CIR">
-                        <rect key="frame" x="16" y="0.0" width="50" height="50"/>
+                        <rect key="frame" x="16" y="12" width="26" height="26"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="MUd-w0-f4h"/>
-                            <constraint firstAttribute="height" constant="50" id="Rfd-oe-ar6"/>
+                            <constraint firstAttribute="width" constant="26" id="MUd-w0-f4h"/>
+                            <constraint firstAttribute="height" constant="26" id="Rfd-oe-ar6"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4x-DF-VKF">
@@ -31,8 +31,15 @@
                 <constraints>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Ujy-5U-v0F"/>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="ZQf-g5-n32"/>
+                    <constraint firstItem="ZhU-Nw-CIR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="nbO-Ip-XOD"/>
                     <constraint firstAttribute="bottomMargin" secondItem="ZhU-Nw-CIR" secondAttribute="bottom" constant="-15" id="sVa-ea-rxK"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="Ujy-5U-v0F"/>
+                        <exclude reference="sVa-ea-rxK"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="imageViewTitle" destination="ZhU-Nw-CIR" id="cmI-lb-dyP"/>

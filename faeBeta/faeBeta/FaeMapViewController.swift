@@ -17,6 +17,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    let navigationBarHeight : CGFloat = 20
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     // MARK: -- Map main screen Objects
@@ -39,7 +40,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Blur View Pin Buttons and Labels
     var uiviewPinSelections: UIView!
-    
     var blurViewMap: UIVisualEffectView!
     var buttonMedia: UIButton!
     var buttonLive: UIButton!
@@ -109,6 +109,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var originPointForRefresh: CLLocationCoordinate2D!
     var originPointForRefreshFirstLoad = true
     
+    // MARK: -- TableData of comment pin info
+    var tableCommentBlurView: UIVisualEffectView!
+    var commentPinTableData = [[String: AnyObject]]()
+    var tableComment: UITableView!
+    var tableCommentData = [[String : AnyObject]]()
+    var selectedCellIndexPath: NSIndexPath?
+    var blurViewNavigationBar: UIView!
+    let selectedCellHeight: CGFloat = 250.0
+    let unselectedCellHeight: CGFloat = 70.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -143,7 +153,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
             currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude//MARK : ERROR
+            currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
@@ -166,13 +176,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             print("获取地图数据：")
             let mapInfoJSON = JSON(message!)
             print(mapInfoJSON)
-            for i in 0...mapInfoJSON.count {
+            self.commentPinTableData.removeAll()
+            for i in 0...(mapInfoJSON.count-1) {
                 let pinShowOnMap = GMSMarker()
-                var pinData = [[String: AnyObject]]()
+                var pinData = [String: AnyObject]()
+                var name = ""
+                var time = ""
+                var comment = ""
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     print(typeInfo)
-                    let typeDic = ["type": typeInfo]
-                    pinData.append(typeDic)
+                    pinData["type"] = typeInfo
                     if typeInfo == "comment" {
                         pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
                     }
@@ -182,39 +195,39 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 }
                 if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
                     print(commentIDInfo)
-                    let commentIDDic = ["comment_id": commentIDInfo]
-                    pinData.append(commentIDDic)
+                    pinData["comment_id"] = commentIDInfo
                 }
                 if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                     print(userIDInfo)
-                    let userIDDic = ["user_id": userIDInfo]
-                    pinData.append(userIDDic)
+                    pinData["user_id"] = userIDInfo
+                    name = "\(userIDInfo)"
                 }
                 if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
                     print(createdTimeInfo)
-                    let createdTimeDic = ["created_at": createdTimeInfo]
-                    pinData.append(createdTimeDic)
+                    pinData["created_at"] = createdTimeInfo
+                    time = "\(createdTimeInfo)"
                 }
                 if let contentInfo = mapInfoJSON[i]["content"].string {
                     print(contentInfo)
                     let contentDic = ["content": contentInfo]
-                    pinData.append(contentDic)
+                    pinData["content"] = contentInfo
+                    comment = "\(contentInfo)"
                 }
                 if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
                     print(latitudeInfo)
-                    let latitudeDic = ["latitude": latitudeInfo]
-                    pinData.append(latitudeDic)
+                    pinData["latitude"] = latitudeInfo
                     pinShowOnMap.position.latitude = latitudeInfo
                 }
                 if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
                     print(longitudeInfo)
-                    let longitudeDic = ["longitude": longitudeInfo]
-                    pinData.append(longitudeDic)
+                    pinData["longitude"] = longitudeInfo
                     pinShowOnMap.position.longitude = longitudeInfo
                 }
                 pinShowOnMap.userData = pinData
                 pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
                 pinShowOnMap.map = self.faeMapView
+                let singleTableData = ["name": name, "time": time, "comment": comment]
+                self.commentPinTableData.append(singleTableData)
             }
         }
     }
@@ -278,6 +291,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
+        if tableComment != nil{
+            hideCommentTable()
+        }
+        self.navigationController?.navigationBar.hidden = false
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -350,6 +367,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if let pinData = marker.userData {
             print(pinData)
         }
+        selectedCellIndexPath = nil
+        loadCommentTable()
         return true
     }
     
@@ -376,6 +395,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         uiviewPinSelections.alpha = 1.0
         self.tabBarController?.tabBar.hidden = true
         self.navigationController?.navigationBar.hidden = true
+        hideCommentTable()
     }
     
     func actionCloseSubmitPins(sender: UIButton!) {
@@ -394,6 +414,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         for textFiled in textFieldArray {
             textFiled.endEditing(true)
         }
+        self.textFieldArray.removeAll()
+        self.borderArray.removeAll()
+        for every in self.uiviewArray {
+            every.removeFromSuperview()
+        }
+        self.uiviewArray.removeAll()
+        self.loadBasicTextField()
     }
     
     func actionSelectLocation(sender: UIButton!) {
@@ -904,6 +931,39 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         UIApplication.sharedApplication().keyWindow?.addSubview(uiviewTableSubview)
     }
     
+    //MARK: load comment table
+    
+    func loadCommentTable(){
+        tableCommentData = commentPinTableData
+        //        print(commentPinTableData)
+        //        print(tableCommentData)
+        if self.tableComment != nil {
+            self.tableComment.removeFromSuperview()
+        }
+        if self.tableCommentBlurView != nil {
+            self.tableCommentBlurView.removeFromSuperview()
+        }
+        self.tableComment = UITableView(frame:CGRect(x: 0, y: navigationBarHeight, width: screenWidth, height: 0)
+        )
+        self.tableComment.delegate = self
+        self.tableComment.dataSource = self
+        tableComment.backgroundColor = UIColor.clearColor()
+        let nib = UINib(nibName: "CommentExtentTableViewCell",bundle: nil)
+        self.tableComment.registerNib(nib, forCellReuseIdentifier: "commentCell")
+        tableComment.tableFooterView = UIView(frame: CGRectZero)
+        
+        self.navigationController?.navigationBar.hidden = true
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+        tableCommentBlurView = UIVisualEffectView(effect:blurEffect)
+        tableCommentBlurView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0)
+        tableCommentBlurView.addSubview(tableComment)
+        UIApplication.sharedApplication().keyWindow?.addSubview(tableCommentBlurView)
+        UIView.animateWithDuration(0.2, animations:({
+            self.resizeCommentTableView()
+        }), completion: nil)
+    }
+    
+    
     // MARK: UITableView Delegate and Datasource functions
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -911,38 +971,109 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return placeholder.count
+        if(tableView == self.tblSearchResults){
+            return placeholder.count
+        }
+        else if(tableView == self.tableComment){
+            return tableCommentData.count
+        }
+        else{
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
-        cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-        cell.separatorInset = UIEdgeInsetsZero
-        cell.layoutMargins = UIEdgeInsetsZero
-        return cell
+        if(tableView == self.tblSearchResults){
+            let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
+            cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
+            cell.separatorInset = UIEdgeInsetsZero
+            cell.layoutMargins = UIEdgeInsetsZero
+            return cell
+        }
+        else if(tableView == self.tableComment){
+            let cell:CommentExtentTableViewCell = self.tableComment.dequeueReusableCellWithIdentifier("commentCell") as! CommentExtentTableViewCell
+            cell.labelTitle.text = self.tableCommentData[indexPath.row]["name"] as? String
+            cell.labelDes.text = self.tableCommentData[indexPath.row]["time"] as? String
+            cell.textViewComment.text = self.tableCommentData[indexPath.row]["comment"] as? String
+            
+            cell.hideComment()
+            cell.frame.size.width = screenWidth
+            cell.index = indexPath
+            cell.buttonExtend.tag = indexPath.row
+            cell.buttonExtend.addTarget(self,action: #selector(FaeMapViewController.buttonDeleteAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.selectionStyle = .None
+            cell.separatorInset = UIEdgeInsetsZero
+            cell.layoutMargins = UIEdgeInsetsZero
+            return cell
+        }
+        else{
+            return UITableViewCell()
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let placesClient = GMSPlacesClient()
-        placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-            (place, error) -> Void in
-            // Get place.coordinate
-            GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                (response, error) -> Void in
-                if let selectedAddress = place?.coordinate {
-                    let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                    self.faeMapView.animateToCameraPosition(camera)
-                }
+        if(tableView == self.tblSearchResults){
+            let placesClient = GMSPlacesClient()
+            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
+                (place, error) -> Void in
+                // Get place.coordinate
+                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
+                    (response, error) -> Void in
+                    if let selectedAddress = place?.coordinate {
+                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
+                        self.faeMapView.animateToCameraPosition(camera)
+                    }
+                })
             })
-        })
-        self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-        self.customSearchController.customSearchBar.resignFirstResponder()
-        self.searchBarTableHideAnimation()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.searchBarTableHideAnimation()
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        }
+        else if(tableView == self.tableComment){
+            let cell = self.tableComment.cellForRowAtIndexPath(indexPath) as! CommentExtentTableViewCell
+            print(indexPath.row)
+            
+            if selectedCellIndexPath != nil && selectedCellIndexPath == indexPath {
+                selectedCellIndexPath = nil
+                cell.hideComment()
+                
+            } else {
+                selectedCellIndexPath = indexPath
+                cell.showComment()
+            }
+            
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            
+            if selectedCellIndexPath != nil {
+                // This ensures, that the cell is fully visible once expanded
+                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: false)
+            }
+            resizeCommentTableView()
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 48.0
+        if(tableView == self.tblSearchResults){
+            return 48.0
+        }
+        else if(tableView == self.tableComment){
+            if selectedCellIndexPath == indexPath {
+                return selectedCellHeight
+            }
+            return unselectedCellHeight
+        }
+        else{
+            return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        if(tableView == self.tableComment){
+            let cell = self.tableComment.cellForRowAtIndexPath(indexPath) as! CommentExtentTableViewCell
+            cell.hideComment()
+        }
     }
     
     func configureCustomSearchController() {
@@ -1004,6 +1135,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             self.customSearchController.customSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
+        
     }
     
     func didTapOnCancelButton() {
@@ -1040,6 +1172,66 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             self.tblSearchResults.reloadData()
         }
     }
+    
+    //MARK: Comment table functions
+    func buttonDeleteAction(sender: UIButton){
+        print(sender.tag)
+        let cell = sender.superview as! CommentExtentTableViewCell
+        self.tableCommentData.removeAtIndex(sender.tag)
+        let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
+        self.tableComment.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        selectedCellIndexPath = nil
+        self.tableComment.reloadData()
+        resizeCommentTableView()
+        print(cell.index.row)
+        if(tableCommentData.count == 0){
+            hideCommentTable()
+        }
+    }
+    
+    func resizeCommentTableView(){
+        var height = CGFloat(tableCommentData.count) * unselectedCellHeight
+        if selectedCellIndexPath != nil{
+            height = height + selectedCellHeight - unselectedCellHeight
+        }
+        if tableCommentData.count >= 6{
+            height = 6 * unselectedCellHeight
+        }
+        self.tableComment.frame.size.height = height
+        self.tableCommentBlurView.frame.size.height = height+20
+        print(height)
+    }
+    
+    func showCommentTable(){
+        if tableComment != nil{
+            tableComment.hidden = false
+            
+            UIView.animateWithDuration(0.25, animations:({
+                self.resizeCommentTableView()
+            }), completion: nil)
+        }
+        if blurViewNavigationBar != nil{
+            blurViewNavigationBar.hidden = false
+        }
+    }
+    
+    func hideCommentTable(){
+        if tableComment != nil{
+            UIView.animateWithDuration(0.2, animations:({
+                self.tableComment.frame.size.height = 0
+                self.tableCommentBlurView.frame.size.height = 0
+            }), completion: { (temp: Bool) in
+                if temp {
+                    self.tableCommentBlurView.hidden = true
+                    self.tableComment.hidden = true
+                }
+            })
+        }
+        if blurViewNavigationBar != nil{
+            blurViewNavigationBar.hidden = true
+        }
+    }
+    
     
 }
 

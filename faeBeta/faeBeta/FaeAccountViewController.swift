@@ -18,6 +18,11 @@ class FaeAccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addTableView()
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+
+//        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        
         // Do any additional setup after loading the view.
     }
     func addTableView(){
@@ -26,7 +31,7 @@ class FaeAccountViewController: UIViewController {
         myTableView.dataSource = self
         self.view.addSubview(myTableView)
         myTableView.rowHeight = 54
-        myTableView.registerNib( UINib(nibName: "MyFaeGeneralTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneralIdentifier)
+        myTableView.registerNib( UINib(nibName: "FaeAccountTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneralIdentifier)
         myTableView.backgroundColor = UIColor.clearColor()
         myTableView.separatorColor = UIColor.clearColor()
     }
@@ -63,43 +68,54 @@ extension FaeAccountViewController: UITableViewDelegate , UITableViewDataSource 
         return 3
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneralIdentifier)as! MyFaeGeneralTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneralIdentifier)as! FaeAccountTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
 //        cell.labelTitle.text = String(indexPath.row)
         //section 0
         if indexPath.section == 0 && indexPath.row  == 0 {
+            cell.imageViewTitle.image = UIImage(named: "accountFirstLast")
             cell.labelTitle.text = "First name"
         }
         if indexPath.section == 0 && indexPath.row  == 1 {
+            cell.imageViewTitle.image = UIImage(named: "accountFirstLast")
             cell.labelTitle.text = "Last Name"
         }
         if indexPath.section == 0 && indexPath.row  == 2 {
+            cell.imageViewTitle.image = UIImage(named: "accountBirthday")
             cell.labelTitle.text = "Birthday"
         }
         if indexPath.section == 0 && indexPath.row  == 3 {
+            cell.imageViewTitle.image = UIImage(named: "accountGender")
             cell.labelTitle.text = "Gender"
         }
         //section 1
         if indexPath.section == 1 && indexPath.row  == 0 {
+            cell.imageViewTitle.image = UIImage(named: "accountEmail")
             cell.labelTitle.text = "Email"
         }
         if indexPath.section == 1 && indexPath.row  == 1 {
+            cell.imageViewTitle.image = UIImage(named: "accountUsername")
             cell.labelTitle.text = "Username"
         }
         if indexPath.section == 1 && indexPath.row  == 2 {
+            cell.imageViewTitle.image = UIImage(named: "accountPhone")
             cell.labelTitle.text = "Phone"
         }
         if indexPath.section == 1 && indexPath.row  == 3 {
+            cell.imageViewTitle.image = UIImage(named: "accountChangePassword")
             cell.labelTitle.text = "Change Password"
         }
         //section 2
         if indexPath.section == 2 && indexPath.row  == 0 {
+            cell.imageViewTitle.image = UIImage(named: "accountMyAccount")
             cell.labelTitle.text = "My Account"
         }
         if indexPath.section == 2 && indexPath.row  == 1 {
+            cell.imageViewTitle.image = UIImage(named: "accountLogOut")
             cell.labelTitle.text = "Log Out"
         }
         if indexPath.section == 2 && indexPath.row  == 2 {
+            cell.imageViewTitle.image = UIImage(named: "accountRequestCloseAccount")
             cell.labelTitle.text = "Request Close Account"
         }
         
