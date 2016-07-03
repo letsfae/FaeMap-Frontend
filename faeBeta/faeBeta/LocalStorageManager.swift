@@ -28,7 +28,7 @@ class LocalStorageManager: NSObject {
     }
     func saveUsername()->Bool{
         if username != nil {
-            saveString("username", value: username)
+            saveString("username", value: username!)
             return true
         }
         return false
