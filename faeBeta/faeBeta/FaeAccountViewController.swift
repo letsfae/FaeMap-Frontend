@@ -14,6 +14,7 @@ class FaeAccountViewController: UIViewController {
     
     var myTableView : UITableView!
     let cellGeneralIdentifier = "cellGeneral"
+    let cellTitleIdentifier = "cellGeneral2"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class FaeAccountViewController: UIViewController {
         self.view.addSubview(myTableView)
         myTableView.rowHeight = 54
         myTableView.registerNib( UINib(nibName: "FaeAccountTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneralIdentifier)
+        myTableView.registerNib(UINib(nibName: "FaeAccountWithoutTableViewCell",bundle: nil), forCellReuseIdentifier: cellTitleIdentifier)
         myTableView.backgroundColor = UIColor.clearColor()
         myTableView.separatorColor = UIColor.clearColor()
     }
@@ -70,53 +72,69 @@ extension FaeAccountViewController: UITableViewDelegate , UITableViewDataSource 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneralIdentifier)as! FaeAccountTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.accessoryType = .DisclosureIndicator
+        let cell2 = tableView.dequeueReusableCellWithIdentifier(cellTitleIdentifier)as! FaeAccountWithoutTableViewCell
 //        cell.labelTitle.text = String(indexPath.row)
         //section 0
         if indexPath.section == 0 && indexPath.row  == 0 {
             cell.imageViewTitle.image = UIImage(named: "accountFirstLast")
             cell.labelTitle.text = "First name"
+            return cell
         }
         if indexPath.section == 0 && indexPath.row  == 1 {
             cell.imageViewTitle.image = UIImage(named: "accountFirstLast")
             cell.labelTitle.text = "Last Name"
+            return cell
         }
         if indexPath.section == 0 && indexPath.row  == 2 {
             cell.imageViewTitle.image = UIImage(named: "accountBirthday")
             cell.labelTitle.text = "Birthday"
+            return cell
         }
         if indexPath.section == 0 && indexPath.row  == 3 {
             cell.imageViewTitle.image = UIImage(named: "accountGender")
             cell.labelTitle.text = "Gender"
+            return cell
         }
         //section 1
         if indexPath.section == 1 && indexPath.row  == 0 {
             cell.imageViewTitle.image = UIImage(named: "accountEmail")
             cell.labelTitle.text = "Email"
+            return cell
         }
         if indexPath.section == 1 && indexPath.row  == 1 {
             cell.imageViewTitle.image = UIImage(named: "accountUsername")
             cell.labelTitle.text = "Username"
+            return cell
         }
         if indexPath.section == 1 && indexPath.row  == 2 {
             cell.imageViewTitle.image = UIImage(named: "accountPhone")
             cell.labelTitle.text = "Phone"
+            return cell
         }
         if indexPath.section == 1 && indexPath.row  == 3 {
-            cell.imageViewTitle.image = UIImage(named: "accountChangePassword")
-            cell.labelTitle.text = "Change Password"
+            cell2.imageViewTitle.image = UIImage(named: "accountChangePassword")
+            cell2.labelTitle.text = "Change Password"
+            return cell2
         }
         //section 2
         if indexPath.section == 2 && indexPath.row  == 0 {
-            cell.imageViewTitle.image = UIImage(named: "accountMyAccount")
-            cell.labelTitle.text = "My Account"
+            cell2.imageViewTitle.image = UIImage(named: "accountMyAccount")
+            cell2.labelTitle.text = "My Account"
+            return cell2
+
         }
         if indexPath.section == 2 && indexPath.row  == 1 {
-            cell.imageViewTitle.image = UIImage(named: "accountLogOut")
-            cell.labelTitle.text = "Log Out"
+            cell2.imageViewTitle.image = UIImage(named: "accountLogOut")
+            cell2.labelTitle.text = "Log Out"
+            return cell2
+
         }
         if indexPath.section == 2 && indexPath.row  == 2 {
-            cell.imageViewTitle.image = UIImage(named: "accountRequestCloseAccount")
-            cell.labelTitle.text = "Request Close Account"
+            cell2.imageViewTitle.image = UIImage(named: "accountRequestCloseAccount")
+            cell2.labelTitle.text = "Request Close Account"
+            return cell2
+
         }
         
         return cell

@@ -214,11 +214,14 @@ class FaeUser : NSObject {
             completion(status,message)
         }
     }
-    /*
-    func getSelfStatus(completion:(Int,AnyObject?)->Void){
-        getFromURL("users/status", parameter: <#T##[String : AnyObject]?#>, authentication: <#T##[String : AnyObject]?#>, completion: <#T##(Int, AnyObject?) -> Void#>)
-    }*/
     
+    func getSelfStatus(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            print(status)
+            print(message)
+            completion(status,message)
+        }
+    }
     
         
     

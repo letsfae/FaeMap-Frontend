@@ -26,6 +26,23 @@ class LocalStorageManager: NSObject {
         }
         return nil
     }
+    func saveUsername()->Bool{
+        if username != nil {
+            saveString("username", value: username)
+            return true
+        }
+        return false
+    }
+    func readUsername()->Bool{
+        if(username == nil){
+            if let username = readByKey("username"){
+                return true
+            }
+            //should we need to read from internet
+            return false
+        }
+        return true
+    }
     func logInStorage()->Bool{
         if(userToken==nil || userTokenEncode==nil || session_id == nil || user_id==nil || userEmail==nil || userPassword==nil || is_Login == 0){
             return false

@@ -49,9 +49,15 @@ class MyFaeViewController: UIViewController  {
         
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()//read user id
+        let user = FaeUser()
+        user.getSelfStatus { (status:Int, message:AnyObject?) in
+            print(status)
+            print(message)
+        }
+        
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+        self.navigationController?.navigationBar.shadowImage = nil
 //        self.navigationController?.navigationBar.topItem?.title = ""
         // Do any additional setup after loading the view.
         addNavigationBarButton()
@@ -96,7 +102,7 @@ class MyFaeViewController: UIViewController  {
         headerImageView.layer.cornerRadius = imageWidth/2
         headerImageView.layer.masksToBounds = true
         headerImageView.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
-        let stringHeaderURL = "https://api.letsfae.com/files/avatar/" + user_id.stringValue
+//        let stringHeaderURL = "https://api.letsfae.com/files/avatar/" + user_id.stringValue
         print(user_id)
 //        headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))//MARK: BUG here
         

@@ -39,6 +39,12 @@
 		B00EC3CD1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
 		B00EC3CE1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
 		B00EC3CF1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
+		B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
+		B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
+		B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
+		B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
+		B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
+		B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -153,6 +159,8 @@
 		B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
 		B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentExtentTableViewCell.xib; sourceTree = "<group>"; };
 		B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentExtentTableViewCell.swift; sourceTree = "<group>"; };
+		B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountWithoutTableViewCell.swift; sourceTree = "<group>"; };
+		B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountWithoutTableViewCell.xib; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
@@ -390,6 +398,8 @@
 				B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */,
 				B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */,
 				B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */,
+				B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */,
+				B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */,
 				B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */,
 				B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */,
 			);
@@ -523,6 +533,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
@@ -539,6 +550,7 @@
 				B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B00EC3CA1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */,
+				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +561,7 @@
 				B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B00EC3CB1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */,
+				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +726,7 @@
 				B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
+				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
@@ -757,6 +771,7 @@
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B00EC3CE1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */,
+				B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -768,6 +783,7 @@
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
+				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
@@ -924,7 +940,7 @@
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = fae.YU.faeBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = fae.Yu.faeBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
@@ -944,7 +960,7 @@
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = fae.YU.faeBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = fae.Yu.faeBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";

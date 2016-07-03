@@ -285,7 +285,7 @@
         <scene sceneID="web-Y7-Ezq">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BTo-0x-BeF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" id="KaP-GL-FEn"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map_gray" selectedImage="map_red" id="KaP-GL-FEn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="q0C-nr-PUU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -328,6 +328,7 @@
                         <viewControllerLayoutGuide type="bottom" id="ijS-QY-CZ4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3KC-Rm-1OF">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -340,7 +341,7 @@
         <scene sceneID="DYc-mm-d9e">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cEB-6s-U0j" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Fae" id="gHG-Wq-U62"/>
+                    <tabBarItem key="tabBarItem" title="My Fae" image="myfae_gray" selectedImage="myfae_red" id="gHG-Wq-U62"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6XU-Bu-z6k">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -356,4 +357,10 @@
             <point key="canvasLocation" x="978" y="1591"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="map_gray" width="34" height="29"/>
+        <image name="map_red" width="32" height="27"/>
+        <image name="myfae_gray" width="30" height="31"/>
+        <image name="myfae_red" width="30" height="29"/>
+    </resources>
 </document>
