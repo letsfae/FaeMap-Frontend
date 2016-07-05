@@ -28,7 +28,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rg6-1o-jt8">
-                        <rect key="frame" x="149" y="16" width="128" height="22"/>
+                        <rect key="frame" x="149" y="16" width="136" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="h9l-i3-oIs"/>
                         </constraints>
@@ -41,7 +41,7 @@
                     <constraint firstItem="rg6-1o-jt8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="4d0-w2-Ug5"/>
                     <constraint firstItem="g4x-DF-VKF" firstAttribute="leading" secondItem="ZhU-Nw-CIR" secondAttribute="trailing" constant="26" id="BhQ-RI-Omn"/>
                     <constraint firstItem="rg6-1o-jt8" firstAttribute="leading" secondItem="g4x-DF-VKF" secondAttribute="trailing" constant="5" id="DSI-01-b6i"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="rg6-1o-jt8" secondAttribute="trailing" constant="35" id="QjP-fg-fiz"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="rg6-1o-jt8" secondAttribute="trailing" constant="27" id="QjP-fg-fiz"/>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Ujy-5U-v0F"/>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="ZQf-g5-n32"/>
                     <constraint firstItem="g4x-DF-VKF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="dfX-JV-j4C"/>
@@ -57,6 +57,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="imageViewTitle" destination="ZhU-Nw-CIR" id="cmI-lb-dyP"/>
+                <outlet property="labelDetail" destination="rg6-1o-jt8" id="RAa-lj-Xvf"/>
                 <outlet property="labelTitle" destination="g4x-DF-VKF" id="JTy-TS-tFD"/>
             </connections>
         </tableViewCell>

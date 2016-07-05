@@ -16,7 +16,17 @@ var is_Login : Int = 0
 var userEmail : String!
 var userPassword : String!
 let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
+
 var username : String?
+
+var userStatus : Int?
+var userStatusMessage : String?
+
+var userFirstname : String?
+var userLastname : String?
+var userBirthday : String? // yyyy-MM-dd
+var userGender : Int? // 0 means male 1 means female
+var userPhoneNumber : String?
 
 func headerAuthentication()->[String : AnyObject] {
     if userTokenEncode != nil && userTokenEncode != "" {

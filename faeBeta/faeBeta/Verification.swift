@@ -56,4 +56,10 @@ func timeToString(time : NSDate)->String {
     //    print(dateString)
     return dateString
 }
-
+func stringToTime(str : String)->NSDate {
+    var dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.timeZone = NSTimeZone(name: "UTC")
+    var date = dateFormatter.dateFromString(str)
+    return date!
+}

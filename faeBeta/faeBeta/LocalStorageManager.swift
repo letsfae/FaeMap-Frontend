@@ -19,6 +19,7 @@ class LocalStorageManager: NSObject {
     func saveNumber(key:String,value:NSNumber){
         self.defaults.setObject(value, forKey: key)
     }
+
     func readByKey(key:String)->AnyObject? {
 //        return self.defaults.objectForKey(key)?
         if let obj = self.defaults.objectForKey(key) {
@@ -73,6 +74,7 @@ class LocalStorageManager: NSObject {
 //            }
 //            return false
 //        }
+        readUsername()
         if is_Login == 1 {
             return true
         }
@@ -88,6 +90,10 @@ class LocalStorageManager: NSObject {
                 is_Login = readByKey("is_Login")as! Int
                 userEmail = readByKey("userEmail")as! String
                 userPassword = readByKey("userPassword")as! String
+                userFirstname = readByKey("userFirstname")as! String
+                userLastname = readByKey("userLastname")as! String
+                userBirthday = readByKey("userBirthday")as! String
+                userGender = readByKey("userGender")as! Int
 //                print(userEmail)
 //                print(userPassword)
             }

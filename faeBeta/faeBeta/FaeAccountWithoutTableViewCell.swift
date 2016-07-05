@@ -12,6 +12,7 @@ class FaeAccountWithoutTableViewCell: UITableViewCell {
     @IBOutlet weak var imageViewTitle: UIImageView!
     @IBOutlet weak var labelTitle: UILabel!
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

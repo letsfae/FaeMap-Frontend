@@ -45,6 +45,21 @@
 		B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
 		B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
 		B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */; };
+		B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */; };
+		B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */; };
+		B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */; };
+		B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */; };
+		B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */; };
+		B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */; };
+		B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */; };
+		B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */; };
+		B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */; };
+		B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
+		B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
+		B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
+		B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
+		B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
+		B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -161,6 +176,11 @@
 		B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentExtentTableViewCell.swift; sourceTree = "<group>"; };
 		B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountWithoutTableViewCell.swift; sourceTree = "<group>"; };
 		B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountWithoutTableViewCell.xib; sourceTree = "<group>"; };
+		B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountEmailViewController.swift; sourceTree = "<group>"; };
+		B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneConnectViewController.swift; sourceTree = "<group>"; };
+		B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodePickerViewController.swift; sourceTree = "<group>"; };
+		B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationPhoneViewController.swift; sourceTree = "<group>"; };
+		B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountUsernameViewController.swift; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
@@ -402,6 +422,11 @@
 				B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */,
 				B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */,
 				B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */,
+				B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */,
+				B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */,
+				B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */,
+				B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */,
+				B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */,
 			);
 			name = MyFae;
 			sourceTree = "<group>";
@@ -700,18 +725,23 @@
 				B05DAFEA1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
+				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
 				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
+				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B00182751D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B00EC3CD1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */,
+				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
+				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
@@ -746,6 +776,7 @@
 			files = (
 				B00182721D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
@@ -755,15 +786,19 @@
 				B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
+				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
+				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
+				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
@@ -783,7 +818,9 @@
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
+				B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
+				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
@@ -805,9 +842,12 @@
 				B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
+				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

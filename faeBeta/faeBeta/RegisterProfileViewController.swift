@@ -517,6 +517,9 @@ class RegisterProfileViewController: UIViewController, UITextFieldDelegate, UIIm
             genders = "female"
         }
         let strBirthday = timeToString(datePicker.date)
+        //test
+//        let date = stringToTime(strBirthday)
+//        print(date)
         let user = FaeUser()
         user.whereKey("email", value: self.emailFromPrevious)
         user.whereKey("password", value: self.passwordFromPrevious)

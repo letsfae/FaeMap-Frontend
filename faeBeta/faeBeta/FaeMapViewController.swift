@@ -177,7 +177,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let mapInfoJSON = JSON(message!)
             print(mapInfoJSON)
             self.commentPinTableData.removeAll()
-            for i in 0...(mapInfoJSON.count-1) {
+            for i in 0...(mapInfoJSON.count-1) {//MARK : Error here
                 let pinShowOnMap = GMSMarker()
                 var pinData = [String: AnyObject]()
                 var name = ""

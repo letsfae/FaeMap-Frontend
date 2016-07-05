@@ -46,7 +46,8 @@ class MyFaeViewController: UIViewController  {
     var statusNow : statusForUser!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.title = "Account"
+        /*
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()//read user id
         let user = FaeUser()
@@ -54,16 +55,33 @@ class MyFaeViewController: UIViewController  {
             print(status)
             print(message)
         }
+        user.whereKeyInt("status", value: 0)
+        user.whereKey("message", value: "online___")
+        user.setSelfStatus { (status:Int, message:AnyObject?) in
+            print(status)
+            print(message)
+        }*/
+//        print(user_id)
         
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController?.navigationBar.shadowImage = nil
+        
 //        self.navigationController?.navigationBar.topItem?.title = ""
         // Do any additional setup after loading the view.
         addNavigationBarButton()
         addTableView()
         addHeaderView()
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.tabBarController?.tabBar.hidden = false
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
+    }
+    override func viewWillDisappear(animated: Bool) {
+        self.tabBarController?.tabBar.hidden = true
+        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.shadowImage = nil
     }
     func addNavigationBarButton(){
         navigationItemLeft = UIBarButtonItem(image: UIImage(named: "MyFaeLeftQR"), style: .Plain, target: self, action: nil)
@@ -101,10 +119,10 @@ class MyFaeViewController: UIViewController  {
         
         headerImageView.layer.cornerRadius = imageWidth/2
         headerImageView.layer.masksToBounds = true
-        headerImageView.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
-//        let stringHeaderURL = "https://api.letsfae.com/files/avatar/" + user_id.stringValue
+//        headerImageView.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
+        let stringHeaderURL = "https://api.letsfae.com/files/avatar/" + user_id.stringValue
         print(user_id)
-//        headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))//MARK: BUG here
+        headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))//MARK: BUG here
         
         heightNow += imageWidth
         
@@ -352,6 +370,16 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
             }
             statusNow = statusForUser.offline
         }
+        let fae = FaeUser()
+        fae.whereKeyInt("status", value: sender.tag)
+        fae.whereKey("message", value: stringInput)
+        fae.setSelfStatus({ (status:Int, message:AnyObject?) in
+            if status / 100 == 2 {
+                //success
+            }else {
+                
+            }
+            })
         statusViewCancel()
         self.myTableView.reloadData()
     }

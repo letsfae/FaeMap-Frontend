@@ -337,6 +337,92 @@
             </objects>
             <point key="canvasLocation" x="3645" y="1623"/>
         </scene>
+        <!--Phone Connect View Controller-->
+        <scene sceneID="fac-JL-bMz">
+            <objects>
+                <viewController storyboardIdentifier="PhoneConnectViewController" id="p1B-Di-Ll0" customClass="PhoneConnectViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VcU-zM-Rff"/>
+                        <viewControllerLayoutGuide type="bottom" id="7bM-Xy-E6M"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="EYA-bk-dKH">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OOw-ws-aEb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3657" y="2607"/>
+        </scene>
+        <!--Account Email View Controller-->
+        <scene sceneID="FAF-ZO-aI6">
+            <objects>
+                <viewController storyboardIdentifier="AccountEmailViewController" id="LyJ-E6-3gd" customClass="AccountEmailViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dy0-Ue-V2s"/>
+                        <viewControllerLayoutGuide type="bottom" id="Bli-X2-8S2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Z2b-Q5-wGT">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jcb-if-DeU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5310" y="1619"/>
+        </scene>
+        <!--Fae Account Username View Controller-->
+        <scene sceneID="Rfa-Wb-my7">
+            <objects>
+                <viewController storyboardIdentifier="FaeAccountUsernameViewController" id="brK-wr-REP" customClass="FaeAccountUsernameViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tXL-xL-hD3"/>
+                        <viewControllerLayoutGuide type="bottom" id="AGq-Pe-7cp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4Pi-eM-BJ1">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FPu-fV-jeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6681" y="1615"/>
+        </scene>
+        <!--Country Code Picker View Controller-->
+        <scene sceneID="bt2-Dz-EmU">
+            <objects>
+                <viewController storyboardIdentifier="CountryCodePickerViewController" id="f7c-HQ-e9G" customClass="CountryCodePickerViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="k08-WW-4jD"/>
+                        <viewControllerLayoutGuide type="bottom" id="Bax-jk-tgo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eke-JE-lup">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lLg-6N-VhL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5289" y="2619"/>
+        </scene>
+        <!--Verification Phone View Controller-->
+        <scene sceneID="pyt-Wr-reG">
+            <objects>
+                <viewController storyboardIdentifier="VerificationPhoneViewController" id="YXV-aJ-006" customClass="VerificationPhoneViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HTY-Tc-ACl"/>
+                        <viewControllerLayoutGuide type="bottom" id="wHU-BQ-Iwn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KiZ-tF-7G7">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e8p-za-rrB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6675" y="2619"/>
+        </scene>
         <!--My Fae-->
         <scene sceneID="DYc-mm-d9e">
             <objects>
