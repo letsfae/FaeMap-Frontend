@@ -18,27 +18,6 @@
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
-		B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
-		B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
-		B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */; };
-		B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
-		B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
-		B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */; };
-		B00182711D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
-		B00182721D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
-		B00182731D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */; };
-		B00182751D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
-		B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
-		B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */; };
-		B00182791D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
-		B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
-		B001827B1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */; };
-		B00EC3C91D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */; };
-		B00EC3CA1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */; };
-		B00EC3CB1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */; };
-		B00EC3CD1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
-		B00EC3CE1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
-		B00EC3CF1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */; };
 		B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
 		B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
 		B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */; };
@@ -60,6 +39,24 @@
 		B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
 		B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
 		B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
+		B00EC45A1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */; };
+		B00EC45B1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */; };
+		B00EC45C1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */; };
+		B00EC45D1D36D36100AD9673 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */; };
+		B00EC45E1D36D36100AD9673 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */; };
+		B00EC45F1D36D36100AD9673 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */; };
+		B00EC4601D36D36100AD9673 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4561D36D36100AD9673 /* CustomSearchController.swift */; };
+		B00EC4611D36D36100AD9673 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4561D36D36100AD9673 /* CustomSearchController.swift */; };
+		B00EC4621D36D36100AD9673 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4561D36D36100AD9673 /* CustomSearchController.swift */; };
+		B00EC4631D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */; };
+		B00EC4641D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */; };
+		B00EC4651D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */; };
+		B00EC4661D36D36100AD9673 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */; };
+		B00EC4671D36D36100AD9673 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */; };
+		B00EC4681D36D36100AD9673 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */; };
+		B00EC4691D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
+		B00EC46A1D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
+		B00EC46B1D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -75,9 +72,6 @@
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
 		B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
 		B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
-		B05DAFEA1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
-		B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
-		B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */; };
 		B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */; };
 		B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */; };
 		B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
@@ -167,13 +161,6 @@
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
-		B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
-		B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
-		B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
-		B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
-		B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
-		B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentExtentTableViewCell.xib; sourceTree = "<group>"; };
-		B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentExtentTableViewCell.swift; sourceTree = "<group>"; };
 		B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountWithoutTableViewCell.swift; sourceTree = "<group>"; };
 		B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountWithoutTableViewCell.xib; sourceTree = "<group>"; };
 		B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountEmailViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +168,12 @@
 		B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodePickerViewController.swift; sourceTree = "<group>"; };
 		B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationPhoneViewController.swift; sourceTree = "<group>"; };
 		B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountUsernameViewController.swift; sourceTree = "<group>"; };
+		B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
+		B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		B00EC4561D36D36100AD9673 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
+		B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
+		B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinUIView.swift; sourceTree = "<group>"; };
+		B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
@@ -188,7 +181,6 @@
 		B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
-		B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -285,6 +277,19 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		B00EC3EC1D2F539000AD9673 /* FAE cell */ = {
+			isa = PBXGroup;
+			children = (
+				B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */,
+				B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */,
+				B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */,
+				B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */,
+				B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */,
+				B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */,
+			);
+			name = "FAE cell";
+			sourceTree = "<group>";
+		};
 		B04BB9E81CEE2D02009B9531 /* support */ = {
 			isa = PBXGroup;
 			children = (
@@ -293,15 +298,6 @@
 				B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */,
 			);
 			name = support;
-			sourceTree = "<group>";
-		};
-		B05DAFED1D1324B400082A71 /* CommentTableCell */ = {
-			isa = PBXGroup;
-			children = (
-				B00EC3CC1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift */,
-				B00EC3C81D26EEE700AD9673 /* CommentExtentTableViewCell.xib */,
-			);
-			name = CommentTableCell;
 			sourceTree = "<group>";
 		};
 		B0A2AC8C1CE3A3C6002E0C9D = {
@@ -414,14 +410,9 @@
 		B0D36BE71D1C0CB1002FC047 /* MyFae */ = {
 			isa = PBXGroup;
 			children = (
+				B00EC3EC1D2F539000AD9673 /* FAE cell */,
 				B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */,
-				B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */,
-				B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */,
 				B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */,
-				B00EC3D01D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift */,
-				B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */,
-				B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */,
-				B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */,
 				B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */,
 				B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */,
 				B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */,
@@ -434,13 +425,12 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				B05DAFED1D1324B400082A71 /* CommentTableCell */,
-				B00182781D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift */,
-				B00182741D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift */,
-				B00182701D0F2EE6002D05C5 /* CustomSearchController.swift */,
-				B001826C1D0F2EE0002D05C5 /* CustomSearchBar.swift */,
-				B00182681D0F2ED8002D05C5 /* FaeMapViewController.swift */,
-				B05DAFE91D1324AD00082A71 /* CommentTableViewController.swift */,
+				B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */,
+				B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */,
+				B00EC4561D36D36100AD9673 /* CustomSearchController.swift */,
+				B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */,
+				B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */,
+				B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -564,7 +554,6 @@
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
-				B00EC3C91D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,7 +563,6 @@
 			files = (
 				B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
-				B00EC3CA1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */,
 				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,7 +573,6 @@
 			files = (
 				B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
-				B00EC3CB1D26EEE700AD9673 /* CommentExtentTableViewCell.xib in Resources */,
 				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,9 +707,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B00182711D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
-				B05DAFEA1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
@@ -731,41 +716,42 @@
 				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
-				B00182751D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
+				B00EC45A1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B00EC45D1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
-				B00EC3CD1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
-				B00182691D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
+				B00EC4661D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B00EC4691D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
-				B001826D1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
+				B00EC4601D36D36100AD9673 /* CustomSearchController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
-				B00182791D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B00EC4631D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -774,15 +760,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B00182721D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
+				B00EC46A1D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
+				B00EC4611D36D36100AD9673 /* CustomSearchController.swift in Sources */,
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
+				B00EC4671D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
-				B00182761D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
 				B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
@@ -790,24 +777,22 @@
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
+				B00EC45B1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
+				B00EC4641D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
-				B001826E1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
-				B001826A1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
-				B05DAFEB1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
+				B00EC45E1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
-				B00EC3CE1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */,
 				B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
-				B001827A1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,31 +807,30 @@
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
-				B05DAFEC1D1324AD00082A71 /* CommentTableViewController.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B00EC45C1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
-				B00182731D0F2EE6002D05C5 /* CustomSearchController.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				B00EC45F1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
 				B0AA088C1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
-				B001827B1D0F2EF1002D05C5 /* CustomUIViewForScrollableTextField.swift in Sources */,
+				B00EC4651D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				B00EC4681D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
+				B00EC4621D36D36100AD9673 /* CustomSearchController.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
-				B00EC3CF1D26EEEE00AD9673 /* CommentExtentTableViewCell.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
-				B00182771D0F2EEB002D05C5 /* CustomCellForAddressSearch.swift in Sources */,
-				B001826B1D0F2ED8002D05C5 /* FaeMapViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
-				B001826F1D0F2EE0002D05C5 /* CustomSearchBar.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B00EC46B1D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

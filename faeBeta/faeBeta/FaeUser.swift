@@ -50,7 +50,7 @@ class FaeUser : NSObject {
         }
     }
     
-    //MARK: This hasn't been tested
+    
     func checkUserExistence(completion:(Int,AnyObject?)->Void){
         if let username = keyValue["username"] as? String{
             getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
@@ -102,6 +102,32 @@ class FaeUser : NSObject {
             print(message)
             if(status / 100 == 2 ){//success
                 self.processToken(message!)
+                self.getSelfProfile{(status:Int, message:AnyObject?) in
+                    print("status")
+                    print(status)
+                    if let mess = message{
+                        if let email = message!["email"]{
+                            //userEmail
+                            userEmail = message!["email"] as? String
+                            username = message!["user_name"] as? String
+                            userFirstname = message!["first_name"] as? String
+                            userLastname = message!["last_name"] as? String
+                            userGender = message!["gender"] as? Int
+                            userBirthday = message!["birthday"] as? String
+                            userPhoneNumber = message!["phone"] as? String
+                            
+                            //                            print(message!["email"])
+                            //                            print(message!["user_name"])
+                            //                            print(message!["first_name"])
+                            //                            print(message!["last_name"])
+                            //                            print(message!["gender"])
+                            //                            print(message!["birthday"])
+                            //                            print(message!["phone"])
+                            let shareAPI = LocalStorageManager()
+                            shareAPI.getAccountStorage()
+                        }
+                    }
+                }
                 //get account info
             }
             else{//failure
@@ -227,6 +253,11 @@ class FaeUser : NSObject {
         postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
+            if let password = self.keyValue["password"]{
+                userPassword = password as? String
+                let shareAPI = LocalStorageManager()
+                shareAPI.savePassword()
+            }
             self.clearKeyValue()
             completion(status,message)
         }
@@ -257,18 +288,114 @@ class FaeUser : NSObject {
             print(message)
             completion(status,message)
         }
-
+        
     }
     func updateAccountBasicInfo(completion:(Int,AnyObject?)->Void){// update local storage
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
             print(status)
             print(message)
+            if(status/100==2){
+                if let firstname = self.keyValue["first_name"]{
+                    userFirstname = firstname as? String
+                    print("firstName")
+                    print(userFirstname)
+                }
+                if let lastname = self.keyValue["last_name"]{
+                    userLastname = lastname as? String
+                    print("lastName")
+                    print(userLastname)
+                }
+                if let usernamess = self.keyValue["user_name"]{
+                    username = usernamess as? String
+                    print("username")
+                    print(username)
+                }
+                if let birthday = self.keyValue["birthday"]{
+                    userBirthday = birthday as? String
+                    print("birthday")
+                    print(userBirthday)
+                }
+                if let usergender = self.keyValue["gender"]{
+                    userGender = usergender as? Int
+                    print("gender")
+                    print(userGender)
+                }
+                let shareAPI = LocalStorageManager()
+                shareAPI.getAccountStorage()
+                
+            }
             completion(status,message)
+            self.clearKeyValue()
         })
     }
     
     
-//    func getAccountBasicInfo // store in local storage
+    
+    //    func getAccountBasicInfo // store in local storage
+    
+    func verifyPassword(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/password/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            completion(status,message)
+        }
+    }
+    
+    func updatePassword(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/password", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            if(status/100==2){
+                //changed successfully
+                if let newPassword = self.keyValue["new_password"]{
+                    userPassword = newPassword as! String
+                    let shareAPI = LocalStorageManager()
+                    shareAPI.savePassword()
+                }
+            }
+            completion(status,message)
+        }
+    }
+    
+    func updateEmail(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/email", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            completion(status,message)
+        }
+    }
+    
+    func verifyEmail(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/email/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            if(status/100==2){
+                if let newEmail = self.keyValue["email"]{
+                    userEmail = newEmail as! String
+                    let shareAPI = LocalStorageManager()
+                    shareAPI.saveEmail()
+                    print("new email")
+                    print(userEmail)
+                }
+            }
+            completion(status,message)
+        }
+    }
+    
+    func updatePhoneNumber(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/phone", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            completion(status,message)
+        }
+    }
+    
+    func verifyPhoneNumber(completion:(Int,AnyObject?)->Void){
+        postToURL("users/account/phone/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            if(status/100==2){
+                if let newPhoneNumber = self.keyValue["phone"]{
+                    userPhoneNumber = newPhoneNumber as? String
+                    let shareAPI = LocalStorageManager()
+                    shareAPI.savePhoneNumber()
+                    print("new phone number")
+                    print(userPhoneNumber)
+                }
+            }
+            completion(status,message)
+        }
+    }
+    
+    
     
     
 }

@@ -37,6 +37,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var currentLongitude: CLLocationDegrees = -118.2854081
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
+    var willAppearFirstLoad = false
+    var startUpdatingLocation = false
     
     // MARK: -- Blur View Pin Buttons and Labels
     var uiviewPinSelections: UIView!
@@ -109,15 +111,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var originPointForRefresh: CLLocationCoordinate2D!
     var originPointForRefreshFirstLoad = true
     
-    // MARK: -- TableData of comment pin info
-    var tableCommentBlurView: UIVisualEffectView!
-    var commentPinTableData = [[String: AnyObject]]()
-    var tableComment: UITableView!
-    var tableCommentData = [[String : AnyObject]]()
-    var selectedCellIndexPath: NSIndexPath?
-    var blurViewNavigationBar: UIView!
-    let selectedCellHeight: CGFloat = 250.0
-    let unselectedCellHeight: CGFloat = 70.0
+    // MARK: -- Comment Pin Cell
+    var commentPinBlurView: UIVisualEffectView!
+    var commentPinCellNumCount = 0
+    var commentPinUIViewArray = [CommentPinUIView]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,13 +148,15 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             jumpToLocationEnable()
         }
         
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.camera = camera
-        }
+//        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
+//            currentLocation = locManager.location
+//            currentLatitude = currentLocation.coordinate.latitude
+//            currentLongitude = currentLocation.coordinate.longitude
+//            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+//            faeMapView.camera = camera
+//        }
+        willAppearFirstLoad = true
+        
         loadPositionAnimateImage()
     }
     
@@ -166,8 +165,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func loadCurrentRegionPins() {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
-        print("Loading时的坐标")
-        print(mapCenterCoordinate)
         let loadPinsByZoomLevel = FaeMap()
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
@@ -176,15 +173,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             print("获取地图数据：")
             let mapInfoJSON = JSON(message!)
             print(mapInfoJSON)
-            self.commentPinTableData.removeAll()
-            for i in 0...(mapInfoJSON.count-1) {//MARK : Error here
+            for i in 0...(mapInfoJSON.count-1) {
                 let pinShowOnMap = GMSMarker()
                 var pinData = [String: AnyObject]()
-                var name = ""
-                var time = ""
-                var comment = ""
                 if let typeInfo = mapInfoJSON[i]["type"].string {
-                    print(typeInfo)
                     pinData["type"] = typeInfo
                     if typeInfo == "comment" {
                         pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
@@ -194,40 +186,28 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                 }
                 if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
-                    print(commentIDInfo)
                     pinData["comment_id"] = commentIDInfo
                 }
                 if let userIDInfo = mapInfoJSON[i]["user_id"].int {
-                    print(userIDInfo)
                     pinData["user_id"] = userIDInfo
-                    name = "\(userIDInfo)"
                 }
                 if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                    print(createdTimeInfo)
                     pinData["created_at"] = createdTimeInfo
-                    time = "\(createdTimeInfo)"
                 }
                 if let contentInfo = mapInfoJSON[i]["content"].string {
-                    print(contentInfo)
-                    let contentDic = ["content": contentInfo]
                     pinData["content"] = contentInfo
-                    comment = "\(contentInfo)"
                 }
                 if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
-                    print(latitudeInfo)
                     pinData["latitude"] = latitudeInfo
                     pinShowOnMap.position.latitude = latitudeInfo
                 }
                 if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
-                    print(longitudeInfo)
                     pinData["longitude"] = longitudeInfo
                     pinShowOnMap.position.longitude = longitudeInfo
                 }
                 pinShowOnMap.userData = pinData
                 pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
                 pinShowOnMap.map = self.faeMapView
-                let singleTableData = ["name": name, "time": time, "comment": comment]
-                self.commentPinTableData.append(singleTableData)
             }
         }
     }
@@ -276,6 +256,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // MARK: -- Map Methods
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if willAppearFirstLoad {
+            currentLocation = locManager.location
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.camera = camera
+            willAppearFirstLoad = false
+            startUpdatingLocation = true
+        }
+        
         if let location = locations.last {
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
@@ -291,10 +281,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
-        if tableComment != nil{
-            hideCommentTable()
-        }
-        self.navigationController?.navigationBar.hidden = false
+        hideCommentPinCells()
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -303,7 +290,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransformMakeRotation(angle)
         
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
+        if startUpdatingLocation {
             currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
@@ -319,7 +306,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
-        print(mapCenterCoordinate)
         print("Map Zoom Level: \(faeMapView.camera.zoom)")
         if originPointForRefreshFirstLoad {
             originPointForRefresh = mapCenterCoordinate
@@ -364,15 +350,157 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
-        if let pinData = marker.userData {
-            print(pinData)
+        
+        let uiviewCommentPin = CommentPinUIView()
+        commentPinUIViewArray.append(uiviewCommentPin)
+        uiviewCommentPin.buttonCommentPinLargerCover.addTarget(self, action: #selector(FaeMapViewController.actionExpandCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        let pinData = JSON(marker.userData!)
+        if let name = pinData["user_id"].int {
+            uiviewCommentPin.labelTitle.text = "\(name)"
         }
-        selectedCellIndexPath = nil
-        loadCommentTable()
+        if let time = pinData["created_at"].string {
+            uiviewCommentPin.labelDes.text = "\(time)"
+        }
+        if let content = pinData["content"].string {
+            uiviewCommentPin.textViewComment.text = "\(content)"
+        }
+        if let latitude = pinData["latitude"].double {
+            if let longitude = pinData["longitude"].double {
+                let camera = GMSCameraPosition.cameraWithLatitude(latitude+0.001, longitude: longitude, zoom: 17)
+                faeMapView.animateToCameraPosition(camera)
+            }
+        }
+        
+        print(commentPinCellNumCount)
+        
+        if commentPinCellNumCount == 3 {
+            commentPinBlurView.addSubview(uiviewCommentPin)
+            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
+            uiviewCommentPin.frame.size.height = 228
+            uiviewCommentPin.alpha = 0.0
+            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            self.commentPinUIViewArray[1].lineNumber = 0
+            commentPinUIViewArray[1].buttonCommentPinLargerCover.tag = 0
+            self.commentPinUIViewArray[2].lineNumber = 1
+            commentPinUIViewArray[2].buttonCommentPinLargerCover.tag = 1
+            self.commentPinUIViewArray[3].lineNumber = 2
+            commentPinUIViewArray[3].buttonCommentPinLargerCover.tag = 2
+            hideOtherCommentPinCell(commentPinUIViewArray)
+            UIView.animateWithDuration(0.2, animations:({
+                self.commentPinBlurView.frame.size.height += 150
+                self.commentPinUIViewArray[0].center.y -= 78
+                self.commentPinUIViewArray[0].alpha = 0.0
+                self.commentPinUIViewArray[1].center.y -= 78
+                self.commentPinUIViewArray[2].center.y -= 78
+                self.commentPinUIViewArray[3].center.y -= 228
+                self.commentPinUIViewArray[3].alpha = 1.0
+            }), completion: { (done: Bool) in
+                if done {
+                    self.commentPinUIViewArray[0].removeFromSuperview()
+                    self.commentPinUIViewArray.removeFirst()
+                    self.showCommentPinCellItems(uiviewCommentPin)
+                }
+            })
+        }
+        
+        if commentPinCellNumCount == 2 {
+            commentPinBlurView.addSubview(uiviewCommentPin)
+            hideOtherCommentPinCell(commentPinUIViewArray)
+            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
+            print("两个cell以后：")
+            print(uiviewCommentPin.center.y)
+            if uiviewCommentPin.center.y == 52.0 {
+                uiviewCommentPin.center.y = 78
+            }
+            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            UIView.animateWithDuration(0.2, animations:({
+                self.commentPinBlurView.frame.size.height += 228
+                uiviewCommentPin.frame.size.height = 228
+            }), completion: { (done: Bool) in
+                if done {
+                    self.showCommentPinCellItems(uiviewCommentPin)
+                }
+            })
+            commentPinCellNumCount += 1
+            uiviewCommentPin.lineNumber = 2
+            uiviewCommentPin.buttonCommentPinLargerCover.tag = 2
+        }
+        
+        if commentPinCellNumCount == 1 {
+            hideOtherCommentPinCell(commentPinUIViewArray)
+            commentPinBlurView.addSubview(uiviewCommentPin)
+            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
+            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            UIView.animateWithDuration(0.2, animations:({
+                self.commentPinBlurView.frame.size.height += 228
+                uiviewCommentPin.frame.size.height = 228
+            }), completion: { (done: Bool) in
+                if done {
+                    self.showCommentPinCellItems(uiviewCommentPin)
+                }
+            })
+            commentPinCellNumCount += 1
+            uiviewCommentPin.lineNumber = 1
+            uiviewCommentPin.buttonCommentPinLargerCover.tag = 1
+        }
+        
+        if commentPinCellNumCount == 0 {
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+            commentPinBlurView = UIVisualEffectView(effect:blurEffect)
+            commentPinBlurView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0)
+            commentPinBlurView.addSubview(uiviewCommentPin)
+            self.view.addSubview(commentPinBlurView)
+            commentPinBlurView.layer.zPosition = 1
+            self.navigationController?.navigationBar.hidden = true
+            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            UIView.animateWithDuration(0.2, animations:({
+                self.commentPinBlurView.frame.size.height = 248
+                uiviewCommentPin.frame.size.height = 228
+            }), completion: { (done: Bool) in
+                if done {
+                    self.showCommentPinCellItems(uiviewCommentPin)
+                }
+            })
+            commentPinCellNumCount += 1
+            uiviewCommentPin.lineNumber = 0
+            uiviewCommentPin.buttonCommentPinLargerCover.tag = 0
+        }
         return true
     }
     
-    // MARK: -- Actions
+    func hideOtherCommentPinCell(cells: [CommentPinUIView]) {
+        for cell in cells {
+            if cell.hasExpanded {
+                cell.hasExpanded = false
+                cell.buttonLike.hidden = true
+                cell.buttonAddComment.hidden = true
+                cell.textViewComment.hidden = true
+                UIView.animateWithDuration(0.2, animations: ({
+                    self.commentPinBlurView.frame.size.height -= 150
+                    cell.frame.size.height -= 150
+                    cell.frame.size.height = 78
+                    cell.uiviewUnderLine.center.y -= 150
+                }), completion: nil)
+                break
+            }
+        }
+    }
+    
+    func showCommentPinCellItems(cell: CommentPinUIView) {
+        cell.imageViewAvatar.hidden = false
+        cell.labelTitle.hidden = false
+        cell.labelDes.hidden = false
+        cell.buttonDelete.hidden = false
+        cell.uiviewUnderLine.hidden = false
+        cell.textViewComment.hidden = false
+        cell.buttonLike.hidden = false
+        cell.buttonAddComment.hidden = false
+    }
+    
+    // MARK: -- Actions of Buttons
+    func actionExpandCommentPinCell(sender: UIButton!) {
+        hideOtherCommentPinCell(commentPinUIViewArray)
+    }
     
     func actionSelfPosition(sender: UIButton!) {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
@@ -395,7 +523,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         uiviewPinSelections.alpha = 1.0
         self.tabBarController?.tabBar.hidden = true
         self.navigationController?.navigationBar.hidden = true
-        hideCommentTable()
+        hideCommentPinCells()
     }
     
     func actionCloseSubmitPins(sender: UIButton!) {
@@ -515,7 +643,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 commentContent += textContent
             }
         }
-        print("Comment Content: \(commentContent)")
         
         if commentContent == "" {
             let alertUIView = UIAlertView(title: "Content Field is Empty!", message: nil, delegate: self, cancelButtonTitle: "OK, I got it")
@@ -528,10 +655,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         postSingleComment.whereKey("content", value: commentContent)
         postSingleComment.postComment{(status:Int,message:AnyObject?) in
             if let getMessage = message {
-                print("发布了评论")
-                print(getMessage)
                 if let getMessageID = getMessage["comment_id"] {
-                    print(getMessageID!)
                     self.submitPinsHideAnimation()
                     let commentMarker = GMSMarker()
                     var mapCenter = self.faeMapView.center
@@ -553,7 +677,27 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     
                     let getJustPostedComment = FaeMap()
                     getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
-                        print(message)
+                        let mapInfoJSON = JSON(message!)
+                        var pinData = [String: AnyObject]()
+                        
+                        pinData["comment_id"] = getMessageID!
+                        
+                        if let userIDInfo = mapInfoJSON["user_id"].int {
+                            pinData["user_id"] = userIDInfo
+                        }
+                        if let createdTimeInfo = mapInfoJSON["created_at"].string {
+                            pinData["created_at"] = createdTimeInfo
+                        }
+                        if let contentInfo = mapInfoJSON["content"].string {
+                            pinData["content"] = contentInfo
+                        }
+                        if let latitudeInfo = mapInfoJSON["geolocation"]["latitude"].double {
+                            pinData["latitude"] = latitudeInfo
+                        }
+                        if let longitudeInfo = mapInfoJSON["geolocation"]["longitude"].double {
+                            pinData["longitude"] = longitudeInfo
+                        }
+                        commentMarker.userData = pinData
                     }
                     self.textFieldArray.removeAll()
                     self.borderArray.removeAll()
@@ -589,17 +733,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_1.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_1)
+        myPositionOutsideMarker_1.layer.zPosition = 0
         myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
         myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_2.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_2)
+        myPositionOutsideMarker_2.layer.zPosition = 0
         myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
         myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_3.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_3)
+        myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 31.65, 40.84))
         myPositionIcon.image = UIImage(named: "myPosition_icon")
         self.view.addSubview(myPositionIcon)
+        myPositionIcon.layer.zPosition = 0
         myPositionAnimation()
         
     }
@@ -617,7 +765,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_3.alpha = 0.0
         }), completion: nil)
-        print("DEBUG: Animation Works!")
     }
     
     func submitPinsHideAnimation() {
@@ -644,6 +791,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
             self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
         }), completion: nil)
+    }
+    
+    func hideCommentPinCells() {
+        if self.commentPinBlurView != nil {
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinBlurView.center.y -= self.commentPinBlurView.frame.size.height
+            }), completion: { (done: Bool) in
+                if done {
+                    self.commentPinBlurView.removeFromSuperview()
+                    self.navigationController?.navigationBar.hidden = false
+                }
+            })
+        }
+        commentPinUIViewArray.removeAll()
+        commentPinCellNumCount = 0
     }
     
     // MARK: -- Blur View and Pins Creating Selections
@@ -931,38 +1093,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         UIApplication.sharedApplication().keyWindow?.addSubview(uiviewTableSubview)
     }
     
-    //MARK: load comment table
-    
-    func loadCommentTable(){
-        tableCommentData = commentPinTableData
-        //        print(commentPinTableData)
-        //        print(tableCommentData)
-        if self.tableComment != nil {
-            self.tableComment.removeFromSuperview()
-        }
-        if self.tableCommentBlurView != nil {
-            self.tableCommentBlurView.removeFromSuperview()
-        }
-        self.tableComment = UITableView(frame:CGRect(x: 0, y: navigationBarHeight, width: screenWidth, height: 0)
-        )
-        self.tableComment.delegate = self
-        self.tableComment.dataSource = self
-        tableComment.backgroundColor = UIColor.clearColor()
-        let nib = UINib(nibName: "CommentExtentTableViewCell",bundle: nil)
-        self.tableComment.registerNib(nib, forCellReuseIdentifier: "commentCell")
-        tableComment.tableFooterView = UIView(frame: CGRectZero)
-        
-        self.navigationController?.navigationBar.hidden = true
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
-        tableCommentBlurView = UIVisualEffectView(effect:blurEffect)
-        tableCommentBlurView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0)
-        tableCommentBlurView.addSubview(tableComment)
-        UIApplication.sharedApplication().keyWindow?.addSubview(tableCommentBlurView)
-        UIView.animateWithDuration(0.2, animations:({
-            self.resizeCommentTableView()
-        }), completion: nil)
-    }
-    
     
     // MARK: UITableView Delegate and Datasource functions
     
@@ -974,9 +1104,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         if(tableView == self.tblSearchResults){
             return placeholder.count
         }
-        else if(tableView == self.tableComment){
-            return tableCommentData.count
-        }
         else{
             return 0
         }
@@ -986,22 +1113,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         if(tableView == self.tblSearchResults){
             let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
-            return cell
-        }
-        else if(tableView == self.tableComment){
-            let cell:CommentExtentTableViewCell = self.tableComment.dequeueReusableCellWithIdentifier("commentCell") as! CommentExtentTableViewCell
-            cell.labelTitle.text = self.tableCommentData[indexPath.row]["name"] as? String
-            cell.labelDes.text = self.tableCommentData[indexPath.row]["time"] as? String
-            cell.textViewComment.text = self.tableCommentData[indexPath.row]["comment"] as? String
-            
-            cell.hideComment()
-            cell.frame.size.width = screenWidth
-            cell.index = indexPath
-            cell.buttonExtend.tag = indexPath.row
-            cell.buttonExtend.addTarget(self,action: #selector(FaeMapViewController.buttonDeleteAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            cell.selectionStyle = .None
             cell.separatorInset = UIEdgeInsetsZero
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
@@ -1030,39 +1141,11 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             self.searchBarTableHideAnimation()
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
-        else if(tableView == self.tableComment){
-            let cell = self.tableComment.cellForRowAtIndexPath(indexPath) as! CommentExtentTableViewCell
-            print(indexPath.row)
-            
-            if selectedCellIndexPath != nil && selectedCellIndexPath == indexPath {
-                selectedCellIndexPath = nil
-                cell.hideComment()
-                
-            } else {
-                selectedCellIndexPath = indexPath
-                cell.showComment()
-            }
-            
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            
-            if selectedCellIndexPath != nil {
-                // This ensures, that the cell is fully visible once expanded
-                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: false)
-            }
-            resizeCommentTableView()
-        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if(tableView == self.tblSearchResults){
             return 48.0
-        }
-        else if(tableView == self.tableComment){
-            if selectedCellIndexPath == indexPath {
-                return selectedCellHeight
-            }
-            return unselectedCellHeight
         }
         else{
             return 0
@@ -1070,10 +1153,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if(tableView == self.tableComment){
-            let cell = self.tableComment.cellForRowAtIndexPath(indexPath) as! CommentExtentTableViewCell
-            cell.hideComment()
-        }
+        
     }
     
     func configureCustomSearchController() {
@@ -1157,7 +1237,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 } else {
                     for result in results! {
                         self.placeholder.append(result)
-                        //                        print("Result \(result.attributedFullText) with placeID \(result.placeID)")
                     }
                     self.tblSearchResults.reloadData()
                 }
@@ -1174,63 +1253,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     //MARK: Comment table functions
-    func buttonDeleteAction(sender: UIButton){
-        print(sender.tag)
-        let cell = sender.superview as! CommentExtentTableViewCell
-        self.tableCommentData.removeAtIndex(sender.tag)
-        let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
-        self.tableComment.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-        selectedCellIndexPath = nil
-        self.tableComment.reloadData()
-        resizeCommentTableView()
-        print(cell.index.row)
-        if(tableCommentData.count == 0){
-            hideCommentTable()
-        }
-    }
-    
-    func resizeCommentTableView(){
-        var height = CGFloat(tableCommentData.count) * unselectedCellHeight
-        if selectedCellIndexPath != nil{
-            height = height + selectedCellHeight - unselectedCellHeight
-        }
-        if tableCommentData.count >= 6{
-            height = 6 * unselectedCellHeight
-        }
-        self.tableComment.frame.size.height = height
-        self.tableCommentBlurView.frame.size.height = height+20
-        print(height)
-    }
-    
-    func showCommentTable(){
-        if tableComment != nil{
-            tableComment.hidden = false
-            
-            UIView.animateWithDuration(0.25, animations:({
-                self.resizeCommentTableView()
-            }), completion: nil)
-        }
-        if blurViewNavigationBar != nil{
-            blurViewNavigationBar.hidden = false
-        }
-    }
-    
-    func hideCommentTable(){
-        if tableComment != nil{
-            UIView.animateWithDuration(0.2, animations:({
-                self.tableComment.frame.size.height = 0
-                self.tableCommentBlurView.frame.size.height = 0
-            }), completion: { (temp: Bool) in
-                if temp {
-                    self.tableCommentBlurView.hidden = true
-                    self.tableComment.hidden = true
-                }
-            })
-        }
-        if blurViewNavigationBar != nil{
-            blurViewNavigationBar.hidden = true
-        }
-    }
     
     
 }
@@ -1262,13 +1284,11 @@ extension FaeMapViewController: UITextFieldDelegate {
     func userDragged_1(gesture: UIPanGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if loc.y < 246 && token {
-            print("1 UP")
             someActionUp()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
         }
         if loc.y > 296 && token {
-            print("1 DOWN")
             someActionDown()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
@@ -1278,13 +1298,11 @@ extension FaeMapViewController: UITextFieldDelegate {
     func userDragged_2(gesture: UIPanGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if loc.y < 296 && token {
-            print("2 UP")
             someActionUp()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
         }
         if loc.y > 346 && token {
-            print("2 DOWN")
             someActionDown()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
@@ -1294,13 +1312,11 @@ extension FaeMapViewController: UITextFieldDelegate {
     func userDragged_3(gesture: UIPanGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if loc.y < 346 && token {
-            print("3 UP")
             someActionUp()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
         }
         if loc.y > 396 && token {
-            print("3 DOWN")
             someActionDown()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
@@ -1310,13 +1326,11 @@ extension FaeMapViewController: UITextFieldDelegate {
     func userDragged_4(gesture: UIPanGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if loc.y < 396 && token {
-            print("4 UP")
             someActionUp()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
         }
         if loc.y > 446 && token {
-            print("4 DOWN")
             someActionDown()
             token = false
             NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.revertBool), userInfo: nil, repeats: false)
