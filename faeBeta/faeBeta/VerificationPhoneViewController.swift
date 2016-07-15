@@ -21,7 +21,7 @@ class VerificationPhoneViewController: UIViewController {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeigh = UIScreen.mainScreen().bounds.height
-
+    
     var labelVerificationTitle : UILabel!
     var labelVerificationHint : UILabel!
     var labelPhoneNumber : UILabel!
@@ -36,7 +36,7 @@ class VerificationPhoneViewController: UIViewController {
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     
     let colorDisableButton = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
-
+    
     let warmGray = UIColor(red: 155.0 / 255.0, green: 155.0 / 255.0, blue: 155.0 / 255.0, alpha: 1.0)
     
     var imageCodeDotArray = [UIImageView!]()
@@ -59,7 +59,7 @@ class VerificationPhoneViewController: UIViewController {
         navigationBarSetting()
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -68,7 +68,7 @@ class VerificationPhoneViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
-
+    
     
     func navigationBarSetting() {
         self.navigationController?.navigationBar.hidden = false
@@ -109,7 +109,7 @@ class VerificationPhoneViewController: UIViewController {
         TextFieldDummy.addTarget(self, action: #selector(VerificationPhoneViewController.textFieldValueDidChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
         TextFieldDummy.becomeFirstResponder()
     }
-
+    
     func loadDot() {
         var xDistance = 0.23 * screenWidth
         let paddingTop = 0.325 * screenHeigh
@@ -123,16 +123,16 @@ class VerificationPhoneViewController: UIViewController {
             self.view.addSubview(imageCodeDotArray[i]);
         }
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     func textFieldValueDidChanged(textField: UITextField) {
         let buffer = textField.text!
         if(buffer.characters.count<index) {
@@ -156,7 +156,7 @@ class VerificationPhoneViewController: UIViewController {
         }
         print(index)
     }
-
+    
     func loadVerificaitonCode() {
         var xDistance = 0.201 * screenWidth
         let length = 0.085 * screenWidth
@@ -181,7 +181,7 @@ class VerificationPhoneViewController: UIViewController {
             self.view.addSubview(textVerificationCode[i])
         }
     }
-
+    
     func disableButton(button : UIButton) {
         button.backgroundColor = colorDisableButton
         button.enabled = false
@@ -209,11 +209,28 @@ class VerificationPhoneViewController: UIViewController {
     
     func resendCode() {
         
+        let user = FaeUser()
+        user.whereKey("phone", value: phoneNumber)
+        user.verifyPhoneNumber { (status, message) in
+            if status / 100 != 2 {
+                print("sent code successfully")
+            }
+        }
+        
     }
     
     func verfication() {
         
-        let checkFromBackEnd = true
+        var checkFromBackEnd = true
+        
+        let user = FaeUser()
+        user.whereKey("phone", value: phoneNumber)
+        user.whereKey("code", value: TextFieldDummy.text!)
+        user.verifyPhoneNumber { (status, message) in
+            if status / 100 != 2 {
+                checkFromBackEnd = false
+            }
+        }
         
         if(!checkFromBackEnd) {
             labelVerificationTitle.text = "Oops...That's not right/ncode. Please try again!"

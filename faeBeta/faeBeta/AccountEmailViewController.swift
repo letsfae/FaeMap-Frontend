@@ -45,6 +45,8 @@ class AccountEmailViewController: UIViewController {
     var TextFieldDummy = UITextField(frame: CGRectZero)
     var imageCodeDotArray = [UIImageView!]()
     var labelVerificationCode = [UILabel!]()
+    var index : Int = 0
+    var countDown : Int = 60
     //enter password 
     var viewBackgroundEnterPassword : UIView!
     var buttonBackgroundEnterPassword : UIButton!
@@ -56,6 +58,7 @@ class AccountEmailViewController: UIViewController {
     var viewUnderlineEnterPassword : UIView!
     var buttonContinuePassword : UIButton!
     var buttonForgotPassword : UIButton!
+    var passwordTryLeft : Int = 6
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +77,7 @@ class AccountEmailViewController: UIViewController {
         initialEmaiVerify()
         intialEnterPassword()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "update", userInfo: nil, repeats: true)
     }
     func initialView(){
         labelTitle = UILabel(frame: CGRectMake(0,89,screenWidth,25))
@@ -145,10 +149,14 @@ extension AccountEmailViewController {
         
         labelTitleEnterPassword = UILabel(frame: CGRectMake(0,190-y,350,21))
         labelTitleEnterPassword.text = "Enter your Password"
+        labelTitleEnterPassword.textAlignment = .Center
+        labelTitleEnterPassword.font = UIFont(name: "AvenirNext-Medium", size: 20)
         viewEnterPassword.addSubview(labelTitleEnterPassword)
         
         labelSubtitleEnterPassword = UILabel(frame: CGRectMake(160-x,211-y,97,18))
-        labelSubtitleEnterPassword.hidden = true
+//        labelSubtitleEnterPassword.hidden = true
+        labelSubtitleEnterPassword.textAlignment = .Center
+        labelSubtitleEnterPassword.font = UIFont(name: "AvenirNext-Medium", size: 13)
         viewEnterPassword.addSubview(labelSubtitleEnterPassword)
         
         textFieldEnterPassword = UITextField(frame: CGRectMake(74-x,255-y,266,21))
@@ -166,19 +174,33 @@ extension AccountEmailViewController {
         buttonContinuePassword.addTarget(self, action: "continuePassword", forControlEvents: .TouchUpInside)
         viewEnterPassword.addSubview(buttonContinuePassword)
         
-        buttonForgotPassword = UIButton(frame: CGRectMake(258-x,357-y,100,18))
+        buttonForgotPassword = UIButton(frame: CGRectMake(158-x,357-y,100,18))
         buttonForgotPassword.setTitle("Forgot Password", forState: .Normal)
+        buttonForgotPassword.tintColor = UIColor(colorLiteralRed: 138/255, green: 138/255, blue: 138/255, alpha: 1)
+        buttonForgotPassword.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 13)
         buttonForgotPassword.addTarget(self, action: "forgotPassword", forControlEvents: .TouchUpInside)
         viewEnterPassword.addSubview(buttonForgotPassword)
     }
     func forgotPassword(){
-        
+        //MARK: error how to connect?
     }
     func continuePassword(){
-        
+        //if is right
+        if textFieldEnterPassword.text == userPassword {
+            removeEnterPassword()
+            self.view.addSubview(viewBackgroundChangeEmail)
+        } else {
+            textFieldEnterPassword.text = ""
+            labelTitleEnterPassword.text = "Oops...Wrong Password!"
+            if passwordTryLeft > 0 {
+                passwordTryLeft--
+            }
+            labelSubtitleEnterPassword.text = "\(passwordTryLeft) more tries left"
+        }
     }
     func removeEnterPassword(){
         viewBackgroundEnterPassword.removeFromSuperview()
+        
     }
     func showEnterPassword(){
         self.view.addSubview(viewBackgroundEnterPassword)
@@ -189,6 +211,7 @@ extension AccountEmailViewController {
     func initialEmaiVerify(){
         let x : CGFloat = 32
         let y : CGFloat = 139
+        countDown = 60
         viewBackgroundEmailVerify = UIView(frame: CGRectMake(0,0,screenWidth,screenHeight))
         viewBackgroundEmailVerify.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
@@ -208,6 +231,8 @@ extension AccountEmailViewController {
         
         labelTitleEmailVerify = UILabel(frame: CGRectMake(85-x,163-y,244,54))
         labelTitleEmailVerify.text = "Please verify your email using the code we sent you"
+        labelTitleEmailVerify.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelTitleEmailVerify.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1)
         labelTitleEmailVerify.numberOfLines = 0
         labelTitleEmailVerify.textAlignment = .Center
         viewEmailVerify.addSubview(labelTitleEmailVerify)
@@ -240,13 +265,15 @@ extension AccountEmailViewController {
         buttonResend.setTitle("Resend Code", forState: .Normal)
         buttonResend.layer.cornerRadius = 7
         buttonResend.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        buttonResend.addTarget(self, action: "resendEmail", forControlEvents: .TouchUpInside)
+        buttonResend.addTarget(self, action: "resendButtonDidPressed", forControlEvents: .TouchUpInside)
+        disableButton(buttonResend)
         viewEmailVerify.addSubview(buttonResend)
         
         buttonProceed = UIButton (frame: CGRectMake(0,441,screenWidth,56))
         buttonProceed.setTitle("Proceed", forState: .Normal)
         buttonProceed.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonProceed.addTarget(self, action: "proceedCode", forControlEvents: .TouchUpInside)
+        disableButton(buttonProceed)
         viewBackgroundEmailVerify.addSubview(buttonProceed)
         
         viewEmailVerify.addSubview(TextFieldDummy)
@@ -257,15 +284,15 @@ extension AccountEmailViewController {
         
     }
     func proceedCode(){
-        
+        verifyCode(TextFieldDummy.text!, email: userEmail)
     }
     func textFieldValueDidChanged(textField: UITextField) {
-        /*
+        
         let buffer = textField.text!
         if(buffer.characters.count<index) {
             index -= 1;
             imageCodeDotArray[index].hidden = false
-            textVerificationCode[index].hidden = true
+            labelVerificationCode[index].hidden = true
             disableButton(buttonProceed)
         } else if (buffer.characters.count > index) {
             if(buffer.characters.count >= 6 && !buttonProceed.enabled) {
@@ -275,17 +302,89 @@ extension AccountEmailViewController {
                 let endIndex = buffer.startIndex.advancedBy(6)
                 textField.text = buffer.substringToIndex(endIndex)
             } else {
-                textVerificationCode[index].text = (String)(buffer[buffer.endIndex.predecessor()])
+                labelVerificationCode[index].text = (String)(buffer[buffer.endIndex.predecessor()])
                 imageCodeDotArray[index].hidden = true
-                textVerificationCode[index].hidden = false;
+                labelVerificationCode[index].hidden = false;
                 index += 1
             }
         }
-        print(index)*/
+        print(index)
+        if index == 6 {
+            enableButton(buttonProceed)
+        }
     }
-    func resendEmail(){
+    func sendCodeToEmailAgain(email : String){
+        let user = FaeUser()
+//        user.whereKey("email", value: email)
+        user.sendCodeToEmail{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                print("Email sent")
+                self.TextFieldDummy.text = ""
+            }
+            else{
+                
+                //failure
+            }
+        }
+    }
+    func verifyCode(input : String, email : String){
+        let user = FaeUser()
+        user.whereKey("email", value: email)
+        user.whereKey("code", value: input)
+        user.verifyEmail{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                self.removeEmailVerify()
+            }
+            else{
+                //failure
+                self.labelTitleEmailVerify.text = "That’s an incorrect Code!\nPlease try again!"
+            }
+        }
+    }
+    func resendButtonDidPressed() {
+        disableButton(buttonResend)
+        countDown = 60
+        // other resent email behavior
+        sendCodeToEmailAgain(userEmail)
+        disableButton(buttonProceed)
+    }
+    func update() {
+        if(countDown > 0) {
+            let title = "Resend Code \(countDown--)"
+            buttonResend.setTitle(title, forState: .Normal)
+            disableButton(buttonResend)
+        } else {
+            let title = "Resend Code"
+            buttonResend.setTitle(title, forState: .Normal)
+            enableButton(buttonResend)
+        }
+    }
+    func disableButton(button : UIButton) {
+        button.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
+        button.enabled = false
+    }
+    func enableButton(button : UIButton) {
+        button.backgroundColor = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
+        button.enabled = true
+    }
+    func sendEmailCode(){
+        let user = FaeUser()
+        user.whereKey("email", value: userEmail)
+        user.sendCodeToEmail{ (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+                print("Email sent")
+            }
+            else{
+                
+                //failure
+            }
+        }
     }
     func showEmailVerify(){
+        sendEmailCode()
         removeSendCodeInfo()
         self.view.addSubview(viewBackgroundEmailVerify)
     }
@@ -310,10 +409,12 @@ extension AccountEmailViewController {
         viewSendCodeInfo.layer.cornerRadius = 21
         viewBackgroundSendCodeInfo.addSubview(viewSendCodeInfo)
         
-        labelTitleSendCodeInfo = UILabel(frame: CGRectMake(100-x,197-y,215,81))
+        labelTitleSendCodeInfo = UILabel(frame: CGRectMake(90-x,197-y,230,90))
         labelTitleSendCodeInfo.textAlignment = .Center
         labelTitleSendCodeInfo.text = "We sent a code to your email. Please verify your email with that code."
         labelTitleSendCodeInfo.numberOfLines = 0
+        labelTitleSendCodeInfo.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelTitleSendCodeInfo.textColor = UIColor(colorLiteralRed: 107/255, green: 107/255, blue: 107/255, alpha: 1)
         viewSendCodeInfo.addSubview(labelTitleSendCodeInfo)
         
         buttonGot = UIButton(frame: CGRectMake(142-x,308-y,130,39))
@@ -356,6 +457,8 @@ extension AccountEmailViewController {
         labelTitleChangeEmail = UILabel(frame: CGRectMake(0,190-y,350,21))
         labelTitleChangeEmail.text = "Edit Email"
         labelTitleChangeEmail.textAlignment = .Center
+        labelTitleChangeEmail.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelTitleChangeEmail.textColor = UIColor(colorLiteralRed: 107/255, green: 107/255, blue: 107/255, alpha: 1)
         viewChangeEmail.addSubview(labelTitleChangeEmail)
         
         textFieldChangeEmail = UITextField(frame:CGRectMake(74-x,250-y,266,21))
@@ -373,7 +476,11 @@ extension AccountEmailViewController {
         viewChangeEmail.addSubview(buttonSaveChangeEmail)
     }
     func showChangeEmailView(){
-        self.view.addSubview(viewBackgroundChangeEmail)
+        if userEmailVerified == false {
+            self.view.addSubview(viewBackgroundChangeEmail)
+        } else {
+            self.showEnterPassword()
+        }
     }
     func removeChangeEmailView(){
         viewBackgroundChangeEmail.removeFromSuperview()

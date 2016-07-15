@@ -160,22 +160,6 @@ class LocalStorageManager: NSObject {
     }
     
     func readLogInfo()->Bool{
-        //        if is_Login == nil {
-        //            if let login = readByKey("is_Login") as? Int{
-        //                if login == 0 {
-        //                    return false
-        //                }
-        //                else{
-        //                    userToken = readByKey("userToken") as? String
-        //                    userTokenEncode = readByKey("userTokenEncode")as? String
-        //                    session_id = readByKey("session_id")as? NSNumber
-        //                    user_id = readByKey("user_id")as? NSNumber
-        //                    is_Login = readByKey("is_Login")as? Int
-        //                    return true
-        //                }
-        //            }
-        //            return false
-        //        }
         readUsername()
         if is_Login == 1 {
             return true
@@ -196,8 +180,6 @@ class LocalStorageManager: NSObject {
                 userLastname = readByKey("userLastname")as? String
                 userBirthday = readByKey("userBirthday")as? String
                 userGender = readByKey("userGender")as? Int
-                //                print(userEmail)
-                //                print(userPassword)
             }
         }
         return false

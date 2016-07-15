@@ -9,9 +9,9 @@
 import UIKit
 
 protocol SetCountryCodeDelegate {
-
+    
     func setCountryCode(code : CountryCode)
-
+    
 }
 
 struct CountryCode {
@@ -23,7 +23,7 @@ struct CountryCode {
 
 
 class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-
+    
     var SearchBar : UISearchBar!
     var tableView : UITableView!
     
@@ -31,7 +31,7 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
     
     var countries = [CountryCode]()
     var filteredCountries = [CountryCode]()
-
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeigh = UIScreen.mainScreen().bounds.height
     
@@ -48,7 +48,7 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         self.tableView.reloadData()
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -98,7 +98,7 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
     
     func filterContentForSearchText(searchText : String, scope: String = "Title") {
         self.filteredCountries = self.countries.filter({ (country) -> Bool in
-//            let categoryMatch = (scope == "Title")
+            //            let categoryMatch = (scope == "Title")
             let stringMatch = country.ct.rangeOfString(searchText)
             return stringMatch != nil
         })
@@ -137,8 +137,8 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         tableView = UITableView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: screenHeigh - 64), style: .Plain)
         self.view.addSubview(tableView)
     }
-
-
+    
+    
     func createPhontBook() -> [CountryCode] {
         var country = [CountryCode]()
         country += [CountryCode(ct: "Afghanistan", cd: "93")]
@@ -383,6 +383,6 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         country += [CountryCode(ct: "Zimbabwe", cd: "263")]
         return country
     }
-
+    
 }
 

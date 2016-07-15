@@ -9,7 +9,7 @@
 import UIKit
 
 class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCountryCodeDelegate, SetupPhoneNumberDelegate {
-
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeigh = UIScreen.mainScreen().bounds.height
     //6 plus 414 736
@@ -64,7 +64,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     override func viewWillDisappear(animated: Bool) {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -127,6 +127,13 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     
     func buttonLinkDidClick() {
         print("clicked Button for link")
+        let user = FaeUser()
+        user.whereKey("phone", value: textPhoneNumber.text!)
+        user.updatePhoneNumber { (status, message) in
+            if status / 100 == 2 {
+                print("sent code")
+            }
+        }
         jumpToVerification()
     }
     
@@ -167,7 +174,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         labelCountryCode.textColor = faeGray
         labelCountryCode.font = UIFont(name: "Avenir Next", size: 22)
         labelCountryCode.textAlignment = .Center
-
+        
         
         
         buttonLink = UIButton(frame: CGRect(x: 127, y: 437, width: 160, height: 39))
@@ -219,7 +226,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         labelConnectedPhone.textAlignment = .Center
         labelConnectedPhone.textColor = faeGray
     }
-
+    
     func loadItemWhenPhoneNotConnected() {
         self.view.addSubview(linkTextLabel)
         self.view.addSubview(textViewHint)
@@ -263,14 +270,14 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
 

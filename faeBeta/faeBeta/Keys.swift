@@ -28,6 +28,9 @@ var userBirthday : String? // yyyy-MM-dd
 var userGender : Int? // 0 means male 1 means female
 var userPhoneNumber : String?
 
+var userEmailVerified : Bool = false
+var userPhoneVerified : Bool = false
+
 func headerAuthentication()->[String : AnyObject] {
     if userTokenEncode != nil && userTokenEncode != "" {
         return ["Authorization":userTokenEncode]

@@ -241,7 +241,7 @@ class FaeUser : NSObject {
     }
     
     func validateCode(completion:(Int,AnyObject?)->Void){
-        putToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
+        putToURL("reset_login/code/verify", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
             
             print(message)
             self.clearKeyValue()
@@ -288,8 +288,47 @@ class FaeUser : NSObject {
             print(message)
             completion(status,message)
         }
-        
     }
+    func getAccountBasicInfo(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/account", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            self.clearKeyValue()
+            if(status/100==2){
+                //get successfully
+                print(message!)
+                let mess = message!
+                if (mess["email"]) != nil{
+                    if let useremail = mess["email"] as? String{
+                        userEmail = useremail
+                    }
+                    if let emailV = mess["email_verified"] as? Bool{
+                        userEmailVerified = emailV
+                    }
+                    else{
+                        userEmailVerified = false
+                    }
+                    if let userna = mess["user_name"] as? String{
+                        username = userna
+                    }
+                    userFirstname = mess["first_name"] as? String
+                    userLastname = mess["last_name"] as? String
+                    userGender = mess["gender"] as? Int
+                    userBirthday = mess["birthday"] as? String
+                    userPhoneNumber = mess["phone"] as? String
+                    if let phoneV = mess["phone_verified"] as? Bool {
+                        userPhoneVerified = phoneV
+                    }
+                    else{
+                        userPhoneVerified = false
+                    }
+                    let shareAPI = LocalStorageManager()
+                    shareAPI.getAccountStorage()
+                }
+                
+            }
+            completion(status,message);
+        }
+    }
+
     func updateAccountBasicInfo(completion:(Int,AnyObject?)->Void){// update local storage
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
             print(status)
