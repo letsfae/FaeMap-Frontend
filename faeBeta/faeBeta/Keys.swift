@@ -31,6 +31,8 @@ var userPhoneNumber : String?
 var userEmailVerified : Bool = false
 var userPhoneVerified : Bool = false
 
+var arrayNameCard = [Int:UIImage]()
+
 func headerAuthentication()->[String : AnyObject] {
     if userTokenEncode != nil && userTokenEncode != "" {
         return ["Authorization":userTokenEncode]

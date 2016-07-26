@@ -47,6 +47,7 @@ class MyFaeViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Account"
+        
         /*
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()//read user id
@@ -120,7 +121,8 @@ class MyFaeViewController: UIViewController  {
         headerImageView.layer.cornerRadius = imageWidth/2
         headerImageView.layer.masksToBounds = true
 //        headerImageView.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
-        let stringHeaderURL = "https://api.letsfae.com/files/avatar/" + user_id.stringValue
+        //MARK: image download
+        let stringHeaderURL = "https://api.letsfae.com/files/users/avatar/" + user_id.stringValue
         print(user_id)
         headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))//MARK: BUG here
         

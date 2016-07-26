@@ -29,6 +29,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonSelfPosition: UIButton!
     var buttonChatOnMap: UIButton!
     var buttonPinOnMap: UIButton!
+    var buttonCancelSelectLocation: UIButton!
     
     // MARK: -- Location
     var currentLocation: CLLocation!
@@ -84,7 +85,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Search Bar
     var uiviewTableSubview: UIView!
-    var tblSearchResults: UITableView!
+    var tblSearchResults = UITableView()
     var dataArray = [String]()
     var filteredArray = [String]()
     var shouldShowSearchResults = false
@@ -129,6 +130,24 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var blurViewMainScreenSearch: UIVisualEffectView!
     var mainScreenSearchActive = false
     var mainScreenSearchSubview: UIButton!
+    var middleTopActive = false
+    
+    // MARK: -- Map Chat
+    var mapChatSubview: UIView!
+    var mapChatWindow: UIView!
+    var mapChatClose: UIButton!
+    var labelMapChat: UILabel!
+    var mapChatTable = UITableView()
+    
+    // More table view
+    var tableviewMore = UITableView()
+    let cellTableViewMore = "celltableviewmore1"
+    var viewHeaderForMore : UIView!
+    var imageViewBackgroundMore : UIImageView!
+    var buttonMoreLeft : UIButton!
+    var buttonMoreRight : UIButton!
+    var imageViewAvatarMore : UIImageView!
+    var labelMoreName : UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,6 +157,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if is_Login == 0 {
             self.jumpToWelcomeView()
         }
+        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
         
         myPositionIconFirstLoaded = true
         
@@ -145,13 +165,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadTransparentNavBarItems()
         loadButton()
         loadBlurAndPinSelection()
-        blurViewMap.center.y = screenHeight*1.5
         loadMore()
         loadWindBell()
         loadMainScreenSearch()
         loadTableView()
         configureCustomSearchController()
-        
+        loadMapChat()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -165,18 +184,18 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             jumpToLocationEnable()
         }
         
-        //        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
-        //            currentLocation = locManager.location
-        //            currentLatitude = currentLocation.coordinate.latitude
-        //            currentLongitude = currentLocation.coordinate.longitude
-        //            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        //            faeMapView.camera = camera
-        //        }
         willAppearFirstLoad = true
         
         loadPositionAnimateImage()
+        self.buttonLeftTop.hidden = false
+        self.buttonMiddleTop.hidden = false
+        self.buttonRightTop.hidden = false
     }
-    
+    override func viewWillDisappear(animated: Bool) {
+        self.buttonLeftTop.hidden = true
+        self.buttonMiddleTop.hidden = true
+        self.buttonRightTop.hidden = true
+    }
     
     // MARK: -- 如何存到缓存中以备后面继续使用
     func loadCurrentRegionPins() {
@@ -528,7 +547,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.currentLongitude = currentLocation.coordinate.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         faeMapView.animateToCameraPosition(camera)
-        
     }
     
     func actionTrueNorth(sender: UIButton!) {
@@ -571,20 +589,35 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         submitPinsHideAnimation()
         faeMapView.addSubview(imagePinOnMap)
         buttonToNorth.hidden = true
-        buttonSelfPosition.hidden = true
         buttonChatOnMap.hidden = true
         buttonPinOnMap.hidden = true
         buttonSetLocationOnMap.hidden = false
         imagePinOnMap.hidden = false
         self.navigationController?.navigationBar.hidden = true
+        searchBarSubview.alpha = 1.0
         searchBarSubview.hidden = false
         tblSearchResults.hidden = false
         uiviewTableSubview.hidden = false
         self.customSearchController.customSearchBar.text = ""
-        buttonSelfPosition.center.x = 45.5
+        buttonSelfPosition.center.x = 368.5
         buttonSelfPosition.center.y = 625.5
         buttonSelfPosition.hidden = false
+        buttonCancelSelectLocation.hidden = false
         isInPinLocationSelect = true
+    }
+    
+    func actionCancelSelectLocation(sender: UIButton!) {
+        submitPinsShowAnimation()
+        isInPinLocationSelect = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
+        buttonSelfPosition.center.x = 362.5
+        buttonSelfPosition.center.y = 611.5
+        buttonCancelSelectLocation.hidden = true
     }
     
     func actionCreateCommentPin(sender: UIButton!) {
@@ -637,9 +670,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         uiviewTableSubview.hidden = true
         imagePinOnMap.hidden = true
         buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
         buttonSelfPosition.center.x = 362.5
         buttonSelfPosition.center.y = 611.5
-        buttonSelfPosition.hidden = true
+        buttonCancelSelectLocation.hidden = true
     }
     
     func actionSubmitComment(sender: UIButton) {
@@ -838,6 +872,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadCreateCommentPinView()
         uiviewCreateCommentPin.hidden = false
         uiviewCreateCommentPin.alpha = 0
+        blurViewMap.center.y = screenHeight*1.5
     }
     
     // MARK: -- Create Comment Pin Blur View
@@ -1010,7 +1045,19 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Map Main Screen Buttons
     
+    func testing(sender: UIButton!) {
+        let vc = ChatSendLocation()
+        vc.currentLatitude = self.currentLatitude
+        vc.currentLongitude = self.currentLongitude
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
+    
     func loadButton() {
+        let testButton = UIButton(frame: CGRectMake(300, 170, 100, 100))
+        testButton.backgroundColor = UIColor.redColor()
+        self.view.addSubview(testButton)
+        testButton.addTarget(self, action: #selector(FaeMapViewController.testing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
         let buttonLeftTopX: CGFloat = 15
         let buttonLeftTopY: CGFloat = 5
         let buttonLeftTopWidth: CGFloat = 32
@@ -1054,11 +1101,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.view.addSubview(buttonSelfPosition)
         buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
+        let buttonCancelSelectLocationWidth: CGFloat = buttonToNorthWidth
+        buttonCancelSelectLocation = UIButton(frame: CGRectMake(0, 0, buttonCancelSelectLocationWidth, buttonCancelSelectLocationWidth))
+        buttonCancelSelectLocation.center.x = 45.5
+        buttonCancelSelectLocation.center.y = 625.5
+        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
+        self.view.addSubview(buttonCancelSelectLocation)
+        buttonCancelSelectLocation.addTarget(self, action: #selector(FaeMapViewController.actionCancelSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCancelSelectLocation.hidden = true
+        
         let chatOnMapX: CGFloat = 12
         let chatOnMapY: CGFloat = 646
         let chatOnMapWidth: CGFloat = 79
         buttonChatOnMap = UIButton(frame: CGRectMake(chatOnMapX, chatOnMapY, chatOnMapWidth, chatOnMapWidth))
         buttonChatOnMap.setImage(UIImage(named: "chat_map"), forState: .Normal)
+        buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonChatOnMap)
         
         let pinOnMapX: CGFloat = 323
@@ -1116,12 +1173,21 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     // MARK: UITableView Delegate and Datasource functions
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if tableView == tableviewMore {
+            return 1
+        }
         return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView == self.tblSearchResults){
             return placeholder.count
+        }
+        else if(tableView == self.mapChatTable) {
+            return 10
+        }
+        else if tableView == tableviewMore {
+            return 7
         }
         else{
             return 0
@@ -1136,7 +1202,43 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
         }
-        else{
+        else if tableView == self.mapChatTable {
+            let cell = tableView.dequeueReusableCellWithIdentifier("mapChatTableCell", forIndexPath: indexPath) as! MapChatTableCell
+            cell.layoutMargins = UIEdgeInsetsMake(0, 84, 0, 0)
+            return cell
+        }
+        else if tableView == tableviewMore {
+            let cell = tableView.dequeueReusableCellWithIdentifier(cellTableViewMore, forIndexPath: indexPath)as! MoreVisibleTableViewCell
+            cell.selectionStyle = .None
+            if indexPath.row == 0 {
+                cell.switchInvisible.hidden = false
+                cell.labelTitle.text = "Go Invisible"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell0")
+                
+            } else if indexPath.row == 1 {
+                cell.labelTitle.text = "Mood Avatar"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell1")
+                
+            } else if indexPath.row == 2 {
+                cell.labelTitle.text = "My Pins"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell2")
+            } else if indexPath.row == 3 {
+                cell.labelTitle.text = "Saved"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell3")
+            } else if indexPath.row == 4 {
+                cell.labelTitle.text = "Name Cards"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell4")
+            } else if indexPath.row == 5 {
+                cell.labelTitle.text = "Map Board"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell5")
+            } else if indexPath.row == 6 {
+                cell.labelTitle.text = "Account Settings"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell6")
+            }
+            return cell
+            
+        }
+        else {
             return UITableViewCell()
         }
     }
@@ -1163,11 +1265,31 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 animationMainScreenSearchHide(self.mainScreenSearchSubview)
             }
         }
+        else if tableView == tableviewMore {
+            if indexPath.row == 1 {
+                animationMoreHide(nil)
+                jumpToMoodAvatar()
+            }
+            if indexPath.row == 4 {
+                animationMoreHide(nil)
+                jumpToNameCard()
+            }
+            if indexPath.row == 6 {
+                animationMoreHide(nil)
+                jumpToAccount()
+            }
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if(tableView == self.tblSearchResults){
             return 48.0
+        }
+        else if tableView == self.mapChatTable {
+            return 75.0
+        }
+        else if tableView == tableviewMore {
+            return 60
         }
         else{
             return 0
@@ -1213,6 +1335,13 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     func didStartSearching() {
         shouldShowSearchResults = true
         tblSearchResults.reloadData()
+        customSearchController.customSearchBar.becomeFirstResponder()
+        if middleTopActive {
+            UIView.animateWithDuration(0.25, animations: ({
+                self.blurViewMainScreenSearch.alpha = 1.0
+            }))
+            middleTopActive = false
+        }
     }
     
     func didTapOnSearchButton() {
@@ -1772,7 +1901,7 @@ extension FaeMapViewController: UITextFieldDelegate {
         }
     }
 }
-
+//MARK: show left slide window
 extension FaeMapViewController {
     
     func loadMore() {
@@ -1785,6 +1914,65 @@ extension FaeMapViewController {
         uiviewMoreButton = UIView(frame: CGRectMake(-335, 0, 335, screenHeight))
         uiviewMoreButton.backgroundColor = UIColor.whiteColor()
         UIApplication.sharedApplication().keyWindow?.addSubview(uiviewMoreButton)
+        
+        //initial tableview
+        tableviewMore = UITableView(frame: CGRectMake(0, 0, 335, screenHeight), style: .Grouped)
+        tableviewMore.delegate = self
+        tableviewMore.dataSource = self
+        tableviewMore.registerNib(UINib(nibName: "MoreVisibleTableViewCell",bundle: nil), forCellReuseIdentifier: cellTableViewMore)
+        tableviewMore.backgroundColor = UIColor.clearColor()
+        tableviewMore.separatorColor = UIColor.clearColor()
+        tableviewMore.rowHeight = 60
+        
+        uiviewMoreButton.addSubview(tableviewMore)
+        addHeaderViewForMore()
+    }
+    func jumpToMoodAvatar() {
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MoodAvatarViewController")as! MoodAvatarViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func jumpToNameCard() {
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardViewController")as! NameCardViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    func jumpToAccount(){
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("FaeAccountViewController")as! FaeAccountViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    func addHeaderViewForMore(){
+        viewHeaderForMore = UIView(frame: CGRectMake(0,0,311,268))
+        viewHeaderForMore.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
+        tableviewMore.tableHeaderView = viewHeaderForMore
+        tableviewMore.tableHeaderView?.frame = CGRectMake(0, 0, 311, 268)
+        
+        imageViewBackgroundMore = UIImageView(frame: CGRectMake(0, 148, 335, 120))
+        imageViewBackgroundMore.image = UIImage(named: "tableViewMoreBackground")
+        viewHeaderForMore.addSubview(imageViewBackgroundMore)
+        
+        buttonMoreLeft = UIButton(frame: CGRectMake(15,27,33,25))
+        buttonMoreLeft.setImage(UIImage(named: "tableViewMoreLeftButton"), forState: .Normal)
+        viewHeaderForMore.addSubview(buttonMoreLeft)
+        
+        buttonMoreRight = UIButton(frame: CGRectMake(293,26,27,27))
+        buttonMoreRight.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
+        viewHeaderForMore.addSubview(buttonMoreRight)
+        
+        imageViewAvatarMore = UIImageView(frame: CGRectMake(127,41,81,81))
+        imageViewAvatarMore.layer.cornerRadius = 81 / 2
+        imageViewAvatarMore.image = UIImage(named: "myPosition_icon")
+        viewHeaderForMore.addSubview(imageViewAvatarMore)
+        
+        labelMoreName = UILabel(frame: CGRectMake(78,134,180,27))
+        labelMoreName.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        labelMoreName.textAlignment = .Center
+        labelMoreName.textColor = UIColor.whiteColor()
+        if let name = userFirstname {
+            labelMoreName.text = userFirstname! + " " + userLastname!
+        }
+        labelMoreName.text = "Anynomous"
+        viewHeaderForMore.addSubview(labelMoreName)
     }
     
     func animationMoreShow(sender: UIButton!) {
@@ -1803,7 +1991,7 @@ extension FaeMapViewController {
     }
     
 }
-
+//MARK: show right slide window
 extension FaeMapViewController {
     
     func loadWindBell() {
@@ -1834,7 +2022,7 @@ extension FaeMapViewController {
     }
     
 }
-
+//MARK: main screen search
 extension FaeMapViewController {
     
     func loadMainScreenSearch() {
@@ -1844,8 +2032,10 @@ extension FaeMapViewController {
         blurViewMainScreenSearch.alpha = 0.0
         UIApplication.sharedApplication().keyWindow?.addSubview(blurViewMainScreenSearch)
         mainScreenSearchSubview = UIButton(frame: blurViewMainScreenSearch.frame)
-        blurViewMainScreenSearch.addSubview(mainScreenSearchSubview)
+        UIApplication.sharedApplication().keyWindow?.addSubview(mainScreenSearchSubview)
+        mainScreenSearchSubview.hidden = true
         mainScreenSearchSubview.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.blurViewMainScreenSearch.alpha = 0.0
     }
     
     func animationMainScreenSearchShow(sender: UIButton!) {
@@ -1856,17 +2046,19 @@ extension FaeMapViewController {
         self.searchBarSubview.alpha = 0.0
         self.tblSearchResults.alpha = 0.0
         self.uiviewTableSubview.alpha = 0.0
+        self.middleTopActive = true
+        self.mainScreenSearchSubview.hidden = false
         UIView.animateWithDuration(0.25, animations: ({
-            self.blurViewMainScreenSearch.alpha = 1.0
             self.searchBarSubview.alpha = 1.0
             self.tblSearchResults.alpha = 1.0
             self.uiviewTableSubview.alpha = 1.0
-            self.customSearchController.customSearchBar.becomeFirstResponder()
         }))
     }
     
     func animationMainScreenSearchHide(sender: UIButton!) {
         self.customSearchController.customSearchBar.endEditing(true)
+        self.mainScreenSearchSubview.hidden = true
+        self.middleTopActive = false
         UIView.animateWithDuration(0.25, animations: ({
             self.blurViewMainScreenSearch.alpha = 0.0
             self.searchBarSubview.alpha = 0.0
@@ -1884,4 +2076,57 @@ extension FaeMapViewController {
         
     }
     
+}
+//MARK: show unread chat tableView
+extension FaeMapViewController {
+    func loadMapChat() {
+        mapChatSubview = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        mapChatSubview.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
+        mapChatSubview.alpha = 0.0
+        UIApplication.sharedApplication().keyWindow?.addSubview(mapChatSubview)
+        
+        mapChatWindow = UIView(frame: CGRectMake(31, 115, 350, 439))
+        mapChatWindow.layer.cornerRadius = 20
+        mapChatWindow.backgroundColor = UIColor.whiteColor()
+        mapChatWindow.alpha = 0.0
+        UIApplication.sharedApplication().keyWindow?.addSubview(mapChatWindow)
+        
+        mapChatClose = UIButton(frame: CGRectMake(15, 27, 17, 17))
+        mapChatClose.setImage(UIImage(named: "mapChatClose"), forState: .Normal)
+        mapChatClose.addTarget(self, action: #selector(FaeMapViewController.animationMapChatHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        mapChatClose.clipsToBounds = true
+        mapChatWindow.addSubview(mapChatClose)
+        
+        labelMapChat = UILabel(frame: CGRectMake(128, 27, 97, 20))
+        labelMapChat.text = "Map Chats"
+        labelMapChat.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelMapChat.textAlignment = .Center
+        labelMapChat.clipsToBounds = true
+        mapChatWindow.addSubview(labelMapChat)
+        
+        let mapChatUnderLine = UIView(frame: CGRectMake(0, 59, 350, 1))
+        mapChatUnderLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        mapChatWindow.addSubview(mapChatUnderLine)
+        
+        mapChatTable = UITableView(frame: CGRectMake(0, 60, 350, 370))
+        mapChatWindow.addSubview(mapChatTable)
+        mapChatTable.delegate = self
+        mapChatTable.dataSource = self
+        mapChatTable.registerClass(MapChatTableCell.self, forCellReuseIdentifier: "mapChatTableCell")
+        mapChatTable.layer.cornerRadius = 20
+    }
+    
+    func animationMapChatShow(sender: UIButton!) {
+        UIView.animateWithDuration(0.25, animations: ({
+            self.mapChatSubview.alpha = 0.9
+            self.mapChatWindow.alpha = 1.0
+        }))
+    }
+    
+    func animationMapChatHide(sender: UIButton!) {
+        UIView.animateWithDuration(0.25, animations: ({
+            self.mapChatSubview.alpha = 0.0
+            self.mapChatWindow.alpha = 0.0
+        }))
+    }
 }

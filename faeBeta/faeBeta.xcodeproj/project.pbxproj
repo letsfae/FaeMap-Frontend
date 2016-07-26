@@ -92,6 +92,30 @@
 		B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
+		B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
+		B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
+		B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
+		B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */; };
+		B0C0CAA21D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */; };
+		B0C0CAA31D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */; };
+		B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */; };
+		B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */; };
+		B0C0CAA81D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */; };
+		B0C0CAA91D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAA51D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib */; };
+		B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAA51D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib */; };
+		B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAA51D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib */; };
+		B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAAC1D422E1400E2E251 /* NameCardAddTableViewCell.swift */; };
+		B0C0CAAF1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAAC1D422E1400E2E251 /* NameCardAddTableViewCell.swift */; };
+		B0C0CAB01D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAAC1D422E1400E2E251 /* NameCardAddTableViewCell.swift */; };
+		B0C0CAB11D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */; };
+		B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */; };
+		B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */; };
+		B0C0CAB91D46D56800E2E251 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */; };
+		B0C0CABA1D46D56800E2E251 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */; };
+		B0C0CABB1D46D56800E2E251 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */; };
+		B0C0CABD1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
+		B0C0CABE1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
+		B0C0CABF1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
 		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A01CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
@@ -119,6 +143,33 @@
 		B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
 		B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
 		B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
+		B0D77FF01D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */; };
+		B0D77FF11D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */; };
+		B0D77FF21D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */; };
+		B0D77FF31D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */; };
+		B0D77FF41D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */; };
+		B0D77FF51D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */; };
+		B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
+		B0D8CC711D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
+		B0D8CC721D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
+		B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
+		B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
+		B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
+		B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
+		B0D8CF131D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
+		B0D8CF141D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
+		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
+		B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
+		B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
+		B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
+		B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
+		B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
+		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
+		B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
+		B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
+		B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
+		B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
+		B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
@@ -201,6 +252,14 @@
 		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
 		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
+		B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardGeneralTableViewCell.swift; sourceTree = "<group>"; };
+		B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardGeneralTableViewCell.xib; sourceTree = "<group>"; };
+		B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardAddCollectionViewCell.swift; sourceTree = "<group>"; };
+		B0C0CAA51D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardAddCollectionViewCell.xib; sourceTree = "<group>"; };
+		B0C0CAAC1D422E1400E2E251 /* NameCardAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardAddTableViewCell.swift; sourceTree = "<group>"; };
+		B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardAddTableViewCell.xib; sourceTree = "<group>"; };
+		B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
+		B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocation.swift; sourceTree = "<group>"; };
 		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
@@ -211,6 +270,15 @@
 		B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeViewController.swift; sourceTree = "<group>"; };
 		B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeGeneralTableViewCell.swift; sourceTree = "<group>"; };
 		B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFaeGeneralTableViewCell.xib; sourceTree = "<group>"; };
+		B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
+		B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
+		B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMessage.swift; sourceTree = "<group>"; };
+		B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoodAvatarHeaderTableViewCell.xib; sourceTree = "<group>"; };
+		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
+		B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoodAvatarTableViewCell.xib; sourceTree = "<group>"; };
+		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
+		B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardViewController.swift; sourceTree = "<group>"; };
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -286,6 +354,12 @@
 				B00EC3D11D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib */,
 				B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */,
 				B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */,
+				B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */,
+				B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */,
+				B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */,
+				B0C0CAA51D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib */,
+				B0C0CAAC1D422E1400E2E251 /* NameCardAddTableViewCell.swift */,
+				B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */,
 			);
 			name = "FAE cell";
 			sourceTree = "<group>";
@@ -391,6 +465,7 @@
 				B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */,
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
+				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -410,6 +485,7 @@
 		B0D36BE71D1C0CB1002FC047 /* MyFae */ = {
 			isa = PBXGroup;
 			children = (
+				B0D8CC731D3D525C0030939E /* Mood Avatar */,
 				B00EC3EC1D2F539000AD9673 /* FAE cell */,
 				B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */,
 				B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */,
@@ -418,19 +494,44 @@
 				B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */,
 				B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */,
 				B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */,
+				B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */,
 			);
 			name = MyFae;
+			sourceTree = "<group>";
+		};
+		B0D77FED1D419AD300D53114 /* Map cell */ = {
+			isa = PBXGroup;
+			children = (
+				B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */,
+				B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */,
+				B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */,
+			);
+			name = "Map cell";
+			sourceTree = "<group>";
+		};
+		B0D8CC731D3D525C0030939E /* Mood Avatar */ = {
+			isa = PBXGroup;
+			children = (
+				B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */,
+				B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */,
+				B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */,
+				B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */,
+				B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */,
+			);
+			path = "Mood Avatar";
 			sourceTree = "<group>";
 		};
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */,
+				B0D77FED1D419AD300D53114 /* Map cell */,
 				B00EC4551D36D36100AD9673 /* CustomSearchBar.swift */,
 				B00EC4561D36D36100AD9673 /* CustomSearchController.swift */,
 				B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */,
 				B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */,
 				B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */,
+				B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */,
+				B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -511,7 +612,7 @@
 				TargetAttributes = {
 					B0A2AC941CE3A3C6002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = J9H8DRZ5QS;
+						DevelopmentTeam = 8VEL98QL9Q;
 					};
 					B0A2ACAB1CE3A3C7002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
@@ -548,12 +649,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
+				B0C0CAB11D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
+				B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
+				B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
+				B0D77FF31D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */,
+				B0C0CAA91D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,8 +669,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
+				B0C0CAA21D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
+				B0D8CF131D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
+				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
+				B0D77FF41D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */,
+				B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,8 +685,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
+				B0C0CAA31D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
+				B0D8CF141D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
+				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
+				B0D77FF51D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */,
+				B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +832,7 @@
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
+				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
@@ -720,6 +840,7 @@
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
+				B0D77FF01D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B00EC45D1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
@@ -728,14 +849,20 @@
 				B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
+				B0C0CAB91D46D56800E2E251 /* MapChatTableCell.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B00EC4661D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
+				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
+				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
+				B0C0CABD1D46D57000E2E251 /* ChatSendLocation.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
+				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
+				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B00EC4691D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
@@ -745,7 +872,9 @@
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B00EC4601D36D36100AD9673 /* CustomSearchController.swift in Sources */,
+				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
+				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
@@ -753,6 +882,7 @@
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B00EC4631D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
+				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,10 +890,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C0CABA1D46D56800E2E251 /* MapChatTableCell.swift in Sources */,
+				B0D77FF11D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */,
 				B00EC46A1D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
+				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B00EC4611D36D36100AD9673 /* CustomSearchController.swift in Sources */,
+				B0C0CAAF1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
+				B0D8CC711D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
+				B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
 				B00EC4671D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
@@ -785,12 +922,16 @@
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B0C0CABE1D46D57000E2E251 /* ChatSendLocation.swift in Sources */,
 				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
+				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B00EC45E1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
+				B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 			);
@@ -802,16 +943,21 @@
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
+				B0C0CAB01D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
+				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
+				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B00EC45C1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
+				B0D8CC721D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B00EC45F1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
@@ -819,9 +965,12 @@
 				B00EC4651D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC4681D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
+				B0D77FF21D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */,
+				B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B00EC4621D36D36100AD9673 /* CustomSearchController.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
+				B0C0CAA81D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
@@ -829,7 +978,10 @@
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B0C0CABB1D46D56800E2E251 /* MapChatTableCell.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
+				B0C0CABF1D46D57000E2E251 /* ChatSendLocation.swift in Sources */,
 				B00EC46B1D36D36100AD9673 /* FaeMapViewController.swift in Sources */,
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 			);

@@ -81,7 +81,7 @@ class FaeImage : NSObject{
             let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             
             dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                postImageToURL("files/avatar", parameter: ["avatar":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
+                postImageToURL("files/users/avatar", parameter: ["avatar":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
                     completion(code,message)
                 })
                 
@@ -96,7 +96,7 @@ extension UIImageView {
         self.image = placeHolder
 //        self.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
  
-        getImageFromURL("files/avatar/23", authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+        getImageFromURL("files/users/avatar/23", authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
             if status / 100 == 2 {
 //                self.image = image as! UIImage
 //                self.image = UIImage(data: image as! NSData)

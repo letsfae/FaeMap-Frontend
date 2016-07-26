@@ -13,7 +13,7 @@ target 'faeBeta' do
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
 	pod 'Kingfisher', '~> 2.4'
-
+	
 end
 
 target 'faeBetaTests' do
