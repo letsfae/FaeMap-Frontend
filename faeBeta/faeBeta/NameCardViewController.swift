@@ -38,6 +38,7 @@ class NameCardViewController: UIViewController {
     var viewHeaderUnderline : UIView!
     var viewHeader : UIView!
     var labelHeaderTitle : UILabel!
+    var viewAvatarShadow : UIView!
     var imageViewAvatar : UIImageView!
     var imageGender : UIImageView!
     var labelHeaderName : UILabel!
@@ -141,10 +142,21 @@ extension NameCardViewController : UICollectionViewDelegate, UICollectionViewDat
         viewHeader.layer.borderWidth = 2
         viewHeaderBackground.addSubview(viewHeader)
         
-        imageViewAvatar = UIImageView(frame: CGRectMake(182, 132 - 64, 50, 50))
-        imageViewAvatar.image = UIImage(named: "avatar_expand_no")
+        viewAvatarShadow = UIView(frame: CGRectMake((screenWidth-68)/2,123 - 64,68,68))//173,123 - 64
+        viewAvatarShadow.layer.shadowOpacity = 0.5
+        viewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 0)
+        viewAvatarShadow.layer.shadowColor = UIColor.blackColor().CGColor
+        viewAvatarShadow.layer.shadowRadius = 4.0
+        viewHeaderBackground.addSubview(viewAvatarShadow)
+        
+//        imageViewAvatar = UIImageView(frame: CGRectMake(177, 127 - 64, 60, 60))//50
+        imageViewAvatar = UIImageView(frame: CGRectMake(9, 9, 50, 50))
+        imageViewAvatar.image = UIImage(named: "myAvatorLin")
+//        imageViewAvatar.layer.shadow
         imageViewAvatar.layer.cornerRadius = imageViewAvatar.bounds.height / 2
-        viewHeaderBackground.addSubview(imageViewAvatar)
+        viewAvatarShadow.addSubview(imageViewAvatar)
+//        viewHeaderBackground.addSubview(imageViewAvatar)
+        
         let x : CGFloat = 42
         let y : CGFloat = 165
         imageGender = UIImageView(frame: CGRectMake(83-x, 198-y, 26, 18))

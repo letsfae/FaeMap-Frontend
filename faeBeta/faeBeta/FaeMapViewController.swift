@@ -78,7 +78,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var isInPinLocationSelect = false
     
     // MARK: -- My Position Marker
-    var myPositionIcon: UIImageView!
+    var myPositionIcon: UIButton!
     var myPositionOutsideMarker_1: UIImageView!
     var myPositionOutsideMarker_2: UIImageView!
     var myPositionOutsideMarker_3: UIImageView!
@@ -116,9 +116,20 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var commentPinBlurView: UIVisualEffectView!
     var commentPinCellNumCount = 0
     var commentPinUIViewArray = [CommentPinUIView]()
+    var scrollViewForCommentPinArray: UIScrollView!
+    var couldShowCommentPinCell = false
+    var commentPinCellGroupHeight: CGFloat = 0
+    var buttonCommentLike: UIButton!
+    var buttonAddComment: UIButton!
+    var expandedCommentPinCellTag = -999
+    var moreButtonDetailSubview: UIImageView!
+    var buttonShareOnCommentDetail: UIButton!
+    var buttonSaveOnCommentDetail: UIButton!
+    var buttonReportOnCommentDetail: UIButton!
+    var buttonMoreOnCommentCellExpanded = false
+    var commentPinCellsOpen = false
     
     // MARK: -- More Button Vars
-    
     var uiviewMoreButton: UIView!
     var dimBackgroundMoreButton: UIButton!
     
@@ -133,7 +144,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var middleTopActive = false
     
     // MARK: -- Map Chat
-    var mapChatSubview: UIView!
+    var mapChatSubview: UIButton!
     var mapChatWindow: UIView!
     var mapChatClose: UIButton!
     var labelMapChat: UILabel!
@@ -148,6 +159,52 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonMoreRight : UIButton!
     var imageViewAvatarMore : UIImageView!
     var labelMoreName : UILabel!
+    
+    // Windbell table view
+    var labelWindbellTableTitle: UILabel!
+    var tableviewWindbell = UITableView()
+    
+    var tableWindbellData = [["Title":"New Comment on your Pin","Content":"Wanna come over to bbq later today?","Time":"Just Now"],["Title":"New Faevors near you!","Content":"Help out others and start earning!","Time":"Just Now"],["Title":"5 likes on your Pin","Content":"Comment and talk to your fans!","Time":"Today - 9:25am"],["Title":"New Pins around you!","Content":"See what your community is up to!","Time":"Yesterday - 3:30pm"],["Title":"New Pins around you!","Content":"See what your community is up to!","Time":"Yesterday - 3:30pm"],["Title":"New Pins around you!","Content":"See what your community is up to!","Time":"Yesterday - 3:30pm"],["Title":"New Pins around you!","Content":"See what your community is up to!","Time":"Yesterday - 3:30pm"]]
+    
+    // Open User Pin View
+    
+    var uiviewDialog : UIView!
+    var uiviewFunction : UIView!
+    var uiviewTag : UIView!
+    var buttonFollow : UIButton!
+    var buttonShare : UIButton!
+    var buttonKeep : UIButton!
+    var buttonReport : UIButton!
+    var collectionViewPhotos : UICollectionView!
+    var cellPhotos = "cellPhotos"
+    var imageViewLeft : UIImageView!
+    var imageViewRight : UIImageView!
+    var imageview : UIImageView!
+    var imageviewNamecardAvatar : UIImageView!
+    var imageviewNamecardGender : UIImageView!
+    var labelNamecardName : UILabel!
+    var labelNamecardDescription : UILabel!
+    var viewLine : UIView!
+    var collectionPhotos : UICollectionView!
+    var buttonChat : UIButton!
+    var buttonMore : UIButton!
+    
+    let tagName = ["Single", "HMU", "I do Favors"]
+    var tagButtonSet = [UIButton]()
+    var selectedButtonSet = [UIButton]()
+    var tagLength = [CGFloat]()
+    var tagColor = [UIColor]()
+    var tagTitle = [NSMutableAttributedString]()
+    let exlength : CGFloat = 8
+    let selectedInterval : CGFloat = 11
+    let maxLength : CGFloat = 360
+    let lineInterval : CGFloat = 25.7
+    let intervalInLine : CGFloat = 13.8
+    let tagHeight : CGFloat = 18
+    
+    var openUserPinActive = false
+    
+    // System Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,6 +228,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadTableView()
         configureCustomSearchController()
         loadMapChat()
+        loadNamecard()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -318,7 +376,17 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
-        hideCommentPinCells()
+        if commentPinCellsOpen {
+            hideCommentPinCells()
+            commentPinCellsOpen = false
+        }
+        if buttonMoreOnCommentCellExpanded {
+            hideCommentPinMoreButtonDetails()
+        }
+        if openUserPinActive {
+            hideOpenUserPinAnimation()
+            openUserPinActive = false
+        }
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -387,10 +455,20 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+        if couldShowCommentPinCell {
+            showCommentPinCells()
+            couldShowCommentPinCell = false
+        }
+        
+        commentPinCellsOpen = true
         
         let uiviewCommentPin = CommentPinUIView()
+        uiviewCommentPin.clipsToBounds = true
         commentPinUIViewArray.append(uiviewCommentPin)
         uiviewCommentPin.buttonCommentPinLargerCover.addTarget(self, action: #selector(FaeMapViewController.actionExpandCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPin.buttonDeleteLargerCover.addTarget(self, action: #selector(FaeMapViewController.deleteOneCellAndMoveOtherCommentCellsUp(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPin.buttonMoreLargerCover.addTarget(self, action: #selector(FaeMapViewController.showCommentPinMoreButtonDetails(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
         let pinData = JSON(marker.userData!)
         if let name = pinData["user_id"].int {
             uiviewCommentPin.labelTitle.text = "\(name)"
@@ -408,135 +486,413 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             }
         }
         
-        print(commentPinCellNumCount)
-        
-        if commentPinCellNumCount == 3 {
-            commentPinBlurView.addSubview(uiviewCommentPin)
-            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
-            uiviewCommentPin.frame.size.height = 228
-            uiviewCommentPin.alpha = 0.0
-            uiviewCommentPin.uiviewUnderLine.center.y += 150
-            self.commentPinUIViewArray[1].lineNumber = 0
-            commentPinUIViewArray[1].buttonCommentPinLargerCover.tag = 0
-            self.commentPinUIViewArray[2].lineNumber = 1
-            commentPinUIViewArray[2].buttonCommentPinLargerCover.tag = 1
-            self.commentPinUIViewArray[3].lineNumber = 2
-            commentPinUIViewArray[3].buttonCommentPinLargerCover.tag = 2
-            hideOtherCommentPinCell(commentPinUIViewArray)
+        if commentPinCellNumCount >= 3 {
+            //            先shrink之前的cell if there is one
+            self.shrinkExpandedCommentCell(expandedCommentPinCellTag)
+            
+            let cellAtHeight = (CGFloat)(commentPinCellNumCount * 78)
+            scrollViewForCommentPinArray.addSubview(uiviewCommentPin)
+            scrollViewForCommentPinArray.contentSize.height += 228
             UIView.animateWithDuration(0.2, animations:({
-                self.commentPinBlurView.frame.size.height += 150
-                self.commentPinUIViewArray[0].center.y -= 78
-                self.commentPinUIViewArray[0].alpha = 0.0
-                self.commentPinUIViewArray[1].center.y -= 78
-                self.commentPinUIViewArray[2].center.y -= 78
-                self.commentPinUIViewArray[3].center.y -= 228
-                self.commentPinUIViewArray[3].alpha = 1.0
+                //                if some cell expanded, += 150
+                //                else, += 0
+                
+                if self.expandedCommentPinCellTag == -999 {
+                    self.commentPinBlurView.frame.size.height = 248
+                }
+                else {
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDeleteLargerCover.hidden = false
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMoreLargerCover.hidden = true
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDelete.alpha = 1.0
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMore.alpha = 0.0
+                    self.commentPinBlurView.frame.size.height += 0
+                }
+                uiviewCommentPin.uiviewUnderLine.center.y += 150
+                uiviewCommentPin.frame = CGRect(x: 0, y: cellAtHeight, width: self.screenWidth, height: 228)
+                self.commentPinBlurView.frame.size.height = 248
             }), completion: { (done: Bool) in
                 if done {
-                    self.commentPinUIViewArray[0].removeFromSuperview()
-                    self.commentPinUIViewArray.removeFirst()
-                    self.showCommentPinCellItems(uiviewCommentPin)
+                    self.showCommentPinCellDetails(uiviewCommentPin)
                 }
             })
+            
+            self.addTagToCommentPinCell(uiviewCommentPin)
+            commentPinCellNumCount += 1
+            
+            let bottomPoint = CGPointMake(0, cellAtHeight)
+            self.scrollViewForCommentPinArray.setContentOffset(bottomPoint, animated: false)
+            commentPinCellGroupHeight = 254
         }
         
         if commentPinCellNumCount == 2 {
-            commentPinBlurView.addSubview(uiviewCommentPin)
-            hideOtherCommentPinCell(commentPinUIViewArray)
-            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
-            print("两个cell以后：")
-            print(uiviewCommentPin.center.y)
-            if uiviewCommentPin.center.y == 52.0 {
-                uiviewCommentPin.center.y = 78
-            }
-            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            //            先shrink之前的cell if there is one
+            self.shrinkExpandedCommentCell(expandedCommentPinCellTag)
+            scrollViewForCommentPinArray.addSubview(uiviewCommentPin)
+            scrollViewForCommentPinArray.contentSize.height += 228
+            scrollViewForCommentPinArray.frame.size.height += 150
             UIView.animateWithDuration(0.2, animations:({
-                self.commentPinBlurView.frame.size.height += 228
-                uiviewCommentPin.frame.size.height = 228
+                //                if some cell expanded, += 150
+                //                else, += 0
+                if self.expandedCommentPinCellTag == -999 {
+                    self.commentPinBlurView.frame.size.height = 248
+                }
+                else {
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDeleteLargerCover.hidden = false
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMoreLargerCover.hidden = true
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDelete.alpha = 1.0
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMore.alpha = 0.0
+                    self.commentPinBlurView.frame.size.height += 0
+                }
+                uiviewCommentPin.uiviewUnderLine.center.y += 150
+                uiviewCommentPin.frame = CGRect(x: 0, y: 156, width: self.screenWidth, height: 228)
+                self.commentPinBlurView.frame.size.height = 248
             }), completion: { (done: Bool) in
                 if done {
-                    self.showCommentPinCellItems(uiviewCommentPin)
+                    self.showCommentPinCellDetails(uiviewCommentPin)
                 }
             })
+            self.addTagToCommentPinCell(uiviewCommentPin)
             commentPinCellNumCount += 1
-            uiviewCommentPin.lineNumber = 2
-            uiviewCommentPin.buttonCommentPinLargerCover.tag = 2
+            commentPinCellGroupHeight = 254
+            let bottomPoint = CGPointMake(0, 156)
+            self.scrollViewForCommentPinArray.setContentOffset(bottomPoint, animated: false)
         }
         
         if commentPinCellNumCount == 1 {
-            hideOtherCommentPinCell(commentPinUIViewArray)
-            commentPinBlurView.addSubview(uiviewCommentPin)
-            uiviewCommentPin.center.y = self.commentPinBlurView.frame.size.height
-            uiviewCommentPin.uiviewUnderLine.center.y += 150
+            //            先shrink之前的cell
+            self.shrinkExpandedCommentCell(expandedCommentPinCellTag)
+            scrollViewForCommentPinArray.addSubview(uiviewCommentPin)
+            scrollViewForCommentPinArray.contentSize.height += 228
+            scrollViewForCommentPinArray.frame.size.height += 150
             UIView.animateWithDuration(0.2, animations:({
-                self.commentPinBlurView.frame.size.height += 228
-                uiviewCommentPin.frame.size.height = 228
+                //                if some cell expanded, += 150
+                //                else, += 0
+                if self.expandedCommentPinCellTag == -999 {
+                    self.commentPinBlurView.frame.size.height += 150
+                }
+                else {
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDeleteLargerCover.hidden = false
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMoreLargerCover.hidden = true
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDelete.alpha = 1.0
+                    self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMore.alpha = 0.0
+                    self.commentPinBlurView.frame.size.height += 0
+                }
+                uiviewCommentPin.uiviewUnderLine.center.y += 150
+                uiviewCommentPin.frame = CGRect(x: 0, y: 78, width: self.screenWidth, height: 228)
+                self.commentPinBlurView.frame.size.height = 248
             }), completion: { (done: Bool) in
                 if done {
-                    self.showCommentPinCellItems(uiviewCommentPin)
+                    self.showCommentPinCellDetails(uiviewCommentPin)
                 }
             })
+            self.addTagToCommentPinCell(uiviewCommentPin)
             commentPinCellNumCount += 1
-            uiviewCommentPin.lineNumber = 1
-            uiviewCommentPin.buttonCommentPinLargerCover.tag = 1
+            commentPinCellGroupHeight = 176
+            let bottomPoint = CGPointMake(0, 78)
+            self.scrollViewForCommentPinArray.setContentOffset(bottomPoint, animated: false)
         }
         
         if commentPinCellNumCount == 0 {
+            scrollViewForCommentPinArray = UIScrollView(frame: CGRectMake(0, 20, screenWidth, 228))
             let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
             commentPinBlurView = UIVisualEffectView(effect:blurEffect)
             commentPinBlurView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0)
-            commentPinBlurView.addSubview(uiviewCommentPin)
+            
+            commentPinBlurView.addSubview(scrollViewForCommentPinArray)
+            scrollViewForCommentPinArray.addSubview(uiviewCommentPin)
+            scrollViewForCommentPinArray.contentSize.height = 228
+            scrollViewForCommentPinArray.scrollEnabled = false
+            scrollViewForCommentPinArray.clipsToBounds = true
             self.view.addSubview(commentPinBlurView)
+            
             commentPinBlurView.layer.zPosition = 1
             self.navigationController?.navigationBar.hidden = true
-            uiviewCommentPin.uiviewUnderLine.center.y += 150
             UIView.animateWithDuration(0.2, animations:({
                 self.commentPinBlurView.frame.size.height = 248
                 uiviewCommentPin.frame.size.height = 228
+                uiviewCommentPin.uiviewUnderLine.center.y += 150
             }), completion: { (done: Bool) in
                 if done {
-                    self.showCommentPinCellItems(uiviewCommentPin)
+                    self.showCommentPinCellDetails(uiviewCommentPin)
                 }
             })
+            self.addTagToCommentPinCell(uiviewCommentPin)
             commentPinCellNumCount += 1
-            uiviewCommentPin.lineNumber = 0
-            uiviewCommentPin.buttonCommentPinLargerCover.tag = 0
+            commentPinCellGroupHeight = 98
         }
+        print("Add!")
+        print("Where is comment cell blur view:")
+        print(self.commentPinBlurView.center.y)
         return true
     }
     
-    func hideOtherCommentPinCell(cells: [CommentPinUIView]) {
-        for cell in cells {
-            if cell.hasExpanded {
-                cell.hasExpanded = false
-                cell.buttonLike.hidden = true
-                cell.buttonAddComment.hidden = true
-                cell.textViewComment.hidden = true
-                UIView.animateWithDuration(0.2, animations: ({
-                    self.commentPinBlurView.frame.size.height -= 150
-                    cell.frame.size.height -= 150
-                    cell.frame.size.height = 78
-                    cell.uiviewUnderLine.center.y -= 150
-                }), completion: nil)
-                break
+    func showCommentPinMoreButtonDetails(sender: UIButton!) {
+        print("DEBUG: ")
+        if buttonMoreOnCommentCellExpanded == false {
+            moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 70, 0, 0))
+            moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
+            UIApplication.sharedApplication().keyWindow?.addSubview(moreButtonDetailSubview)
+            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(0, 0, 0, 0))
+            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
+            moreButtonDetailSubview.addSubview(buttonShareOnCommentDetail)
+            buttonShareOnCommentDetail.clipsToBounds = true
+            buttonShareOnCommentDetail.alpha = 0.0
+            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(0, 0, 0, 0))
+            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
+            moreButtonDetailSubview.addSubview(buttonSaveOnCommentDetail)
+            buttonSaveOnCommentDetail.clipsToBounds = true
+            buttonSaveOnCommentDetail.alpha = 0.0
+            buttonReportOnCommentDetail = UIButton(frame: CGRectMake(0, 0, 0, 0))
+            buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
+            moreButtonDetailSubview.addSubview(buttonReportOnCommentDetail)
+            buttonReportOnCommentDetail.clipsToBounds = true
+            buttonReportOnCommentDetail.alpha = 0.0
+            UIView.animateWithDuration(0.25, animations: ({
+                self.moreButtonDetailSubview.frame = CGRectMake(171, 70, 229, 110)
+                self.buttonShareOnCommentDetail.frame = CGRectMake(21, 40, 44, 51)
+                self.buttonSaveOnCommentDetail.frame = CGRectMake(91, 40, 44, 51)
+                self.buttonReportOnCommentDetail.frame = CGRectMake(161, 40, 44, 51)
+                self.buttonShareOnCommentDetail.alpha = 1.0
+                self.buttonSaveOnCommentDetail.alpha = 1.0
+                self.buttonReportOnCommentDetail.alpha = 1.0
+            }))
+            buttonMoreOnCommentCellExpanded = true
+        }
+        else {
+            hideCommentPinMoreButtonDetails()
+        }
+        
+    }
+    
+    func hideCommentPinMoreButtonDetails() {
+        buttonMoreOnCommentCellExpanded = false
+        UIView.animateWithDuration(0.25, animations: ({
+            self.moreButtonDetailSubview.frame = CGRectMake(400, 70, 0, 0)
+            self.buttonShareOnCommentDetail.frame = CGRectMake(0, 0, 0, 0)
+            self.buttonSaveOnCommentDetail.frame = CGRectMake(0, 0, 0, 0)
+            self.buttonReportOnCommentDetail.frame = CGRectMake(0, 0, 0, 0)
+            self.buttonShareOnCommentDetail.alpha = 0.0
+            self.buttonSaveOnCommentDetail.alpha = 0.0
+            self.buttonReportOnCommentDetail.alpha = 0.0
+        }))
+    }
+    
+    func addTagToCommentPinCell(cell: CommentPinUIView) {
+        cell.buttonCommentPinLargerCover.tag = commentPinCellNumCount
+        cell.buttonDeleteLargerCover.tag = commentPinCellNumCount
+        self.expandedCommentPinCellTag = commentPinCellNumCount
+    }
+    
+    func deleteOneCellAndMoveOtherCommentCellsUp(sender: UIButton!) {
+        
+        if commentPinCellNumCount == 1 {
+            self.commentPinCellNumCount = 0
+            self.commentPinUIViewArray.removeAtIndex(sender.tag)
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinBlurView.center.x -= self.commentPinBlurView.frame.size.width
+                self.scrollViewForCommentPinArray.contentSize.height -= 78
+            }), completion: {(done: Bool) in
+            })
+            print("after deleting in 1:")
+            print(commentPinCellNumCount)
+            
+        }
+        
+        if commentPinCellNumCount >= 2 {
+            self.commentPinCellNumCount -= 1
+            print("content size before deleting")
+            print(self.scrollViewForCommentPinArray.contentSize.height)
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinUIViewArray[sender.tag].center.x -= self.commentPinBlurView.frame.size.width
+                self.scrollViewForCommentPinArray.contentSize.height -= 78
+            }), completion: {(done: Bool) in
+                let m = sender.tag + 1
+                let n = self.commentPinUIViewArray.count - 1
+                if m <= n {
+                    for i in m...n {
+                        self.commentPinUIViewArray[i].buttonDeleteLargerCover.tag -= 1
+                        self.commentPinUIViewArray[i].buttonCommentPinLargerCover.tag -= 1
+                        UIView.animateWithDuration(0.25, animations: ({
+                            self.commentPinUIViewArray[i].center.y -= 78
+                        }))
+                    }
+                }
+                UIView.animateWithDuration(0.25, animations: ({
+                    if self.commentPinUIViewArray.count <= 3 {
+                        self.commentPinBlurView.frame.size.height -= 78
+                        self.scrollViewForCommentPinArray.frame.size.height -= 78
+                    }
+                }), completion: {(done: Bool) in
+                    print("content size after deleting")
+                    print(self.scrollViewForCommentPinArray.contentSize.height)
+                })
+                self.commentPinUIViewArray.removeAtIndex(sender.tag)
+            })
+            print("after deleting in 2:")
+            print(commentPinCellNumCount)
+        }
+        print("Delete!")
+        print("Where is comment cell blur view:")
+        print(self.commentPinBlurView.center.y)
+    }
+    
+    func hideCommentPinCells() {
+        if self.commentPinBlurView != nil {
+            couldShowCommentPinCell = true
+            self.buttonCommentLike.hidden = true
+            self.buttonAddComment.hidden = true
+            if self.expandedCommentPinCellTag != -999 {
+                self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDeleteLargerCover.hidden = false
+                self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMoreLargerCover.hidden = true
+                self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDelete.alpha = 1.0
+                self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMore.alpha = 0.0
             }
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinBlurView.center.y -= self.commentPinBlurView.frame.size.height
+            }), completion: { (done: Bool) in
+                if done {
+                    self.navigationController?.navigationBar.hidden = false
+                }
+            })
         }
     }
     
-    func showCommentPinCellItems(cell: CommentPinUIView) {
+    func showCommentPinCells() {
+        if self.commentPinBlurView != nil {
+            self.navigationController?.navigationBar.hidden = true
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinBlurView.center.y += self.commentPinBlurView.frame.size.height
+                self.commentPinBlurView.frame.size.height = 248
+            }), completion: { (done: Bool) in
+                if done {
+                    
+                }
+            })
+        }
+    }
+    
+    func showCommentPinCellDetails(cell: CommentPinUIView) {
         cell.imageViewAvatar.hidden = false
         cell.labelTitle.hidden = false
         cell.labelDes.hidden = false
-        cell.buttonDelete.hidden = false
         cell.uiviewUnderLine.hidden = false
+        cell.buttonMore.hidden = false
         cell.textViewComment.hidden = false
-        cell.buttonLike.hidden = false
-        cell.buttonAddComment.hidden = false
+        self.buttonAddComment.hidden = false
+        self.buttonCommentLike.hidden = false
+    }
+    
+    func shrinkExpandedCommentCell(tag: Int) {
+        
+        if tag == -999 {
+            return
+        }
+        UIView.animateWithDuration(0.25, animations: ({
+            self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDeleteLargerCover.hidden = false
+            self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMoreLargerCover.hidden = true
+            self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonDelete.alpha = 1.0
+            self.commentPinUIViewArray[self.expandedCommentPinCellTag].buttonMore.alpha = 0.0
+            self.shrinkCommentPinCell(tag)
+        }))
+        print("shrink expanded cell works!")
+        self.commentPinUIViewArray[tag].hasExpanded = false
+        self.commentPinUIViewArray[tag].textViewComment.hidden = true
+        self.scrollViewForCommentPinArray.contentSize.height -= 150
     }
     
     // MARK: -- Actions of Buttons
     func actionExpandCommentPinCell(sender: UIButton!) {
-        hideOtherCommentPinCell(commentPinUIViewArray)
+        if buttonMoreOnCommentCellExpanded {
+            hideCommentPinMoreButtonDetails()
+        }
+        if self.commentPinUIViewArray[sender.tag].hasExpanded == false {
+            self.shrinkExpandedCommentCell(expandedCommentPinCellTag)
+            self.scrollViewForCommentPinArray.contentSize.height += 150
+            self.expandedCommentPinCellTag = sender.tag
+            self.commentPinUIViewArray[sender.tag].buttonDeleteLargerCover.hidden = true
+            self.commentPinUIViewArray[sender.tag].buttonMoreLargerCover.hidden = false
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinUIViewArray[sender.tag].buttonDelete.alpha = 0.0
+                self.commentPinUIViewArray[sender.tag].buttonMore.alpha = 1.0
+                if sender.tag >= self.commentPinUIViewArray.count - 1 {
+                    self.commentPinBlurView.frame.size.height = 248
+                    self.scrollViewForCommentPinArray.frame.size.height = 228
+                }
+                else if sender.tag == self.commentPinUIViewArray.count - 2 {
+                    self.commentPinBlurView.frame.size.height = 326
+                    self.scrollViewForCommentPinArray.frame.size.height = 306
+                }
+                else {
+                    self.commentPinBlurView.frame.size.height = 404
+                    self.scrollViewForCommentPinArray.frame.size.height = 384
+                }
+                self.expandCommentPinCell(sender.tag)
+            }), completion: {(done: Bool) in
+                if done {
+                    self.buttonCommentLike.hidden = false
+                    self.buttonAddComment.hidden = false
+                    self.commentPinUIViewArray[sender.tag].textViewComment.hidden = false
+                }
+            })
+            self.commentPinUIViewArray[sender.tag].hasExpanded = true
+            self.scrollViewForCommentPinArray.scrollEnabled = false
+        }
+        else {
+            self.expandedCommentPinCellTag = -999
+            self.scrollViewForCommentPinArray.contentSize.height -= 150
+            self.buttonCommentLike.hidden = true
+            self.buttonAddComment.hidden = true
+            self.commentPinUIViewArray[sender.tag].textViewComment.hidden = true
+            self.commentPinUIViewArray[sender.tag].buttonDeleteLargerCover.hidden = false
+            self.commentPinUIViewArray[sender.tag].buttonMoreLargerCover.hidden = true
+            let toPoint = (CGFloat)(sender.tag * 78)
+            let scrollToPoint = CGPointMake(0, toPoint)
+            self.scrollViewForCommentPinArray.setContentOffset(scrollToPoint, animated: false)
+            UIView.animateWithDuration(0.25, animations: ({
+                self.commentPinUIViewArray[sender.tag].buttonDelete.alpha = 1.0
+                self.commentPinUIViewArray[sender.tag].buttonMore.alpha = 0.0
+                self.commentPinBlurView.frame.size.height = self.commentPinCellGroupHeight
+                self.scrollViewForCommentPinArray.frame.size.height = self.commentPinCellGroupHeight - 20
+                self.shrinkCommentPinCell(sender.tag)
+            }), completion: {(done: Bool) in
+                if done {
+                    
+                }
+            })
+            self.commentPinUIViewArray[sender.tag].hasExpanded = false
+            self.scrollViewForCommentPinArray.scrollEnabled = true
+            return
+        }
+        let cellAtHeight = (CGFloat)(sender.tag * 78)
+        print(cellAtHeight)
+        let scrollPoint = CGPointMake(0, cellAtHeight)
+        self.scrollViewForCommentPinArray.setContentOffset(scrollPoint, animated: true)
+    }
+    
+    func expandCommentPinCell(tag: Int) {
+        self.commentPinUIViewArray[tag].frame.size.height += 150
+        self.commentPinUIViewArray[tag].uiviewUnderLine.center.y += 150
+        if tag == self.commentPinUIViewArray.count - 1 {
+            return
+        }
+        let m = tag+1
+        let n = self.commentPinUIViewArray.count - 1
+        for i in m...n {
+            self.commentPinUIViewArray[i].center.y += 150
+        }
+    }
+    
+    func shrinkCommentPinCell(tag: Int) {
+        self.commentPinUIViewArray[tag].frame.size.height -= 150
+        self.commentPinUIViewArray[tag].uiviewUnderLine.center.y -= 150
+        if tag == self.commentPinUIViewArray.count - 1 {
+            return
+        }
+        let m = tag+1
+        let n = self.commentPinUIViewArray.count - 1
+        for i in m...n {
+            self.commentPinUIViewArray[i].center.y -= 150
+        }
     }
     
     func actionSelfPosition(sender: UIButton!) {
@@ -797,8 +1153,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.myPositionOutsideMarker_3.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
-        myPositionIcon = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 31.65, 40.84))
-        myPositionIcon.image = UIImage(named: "myPosition_icon")
+        myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 31.65, 40.84))
+        myPositionIcon.setImage(UIImage(named: "myPosition_icon"), forState: .Normal)
+        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
         myPositionAnimation()
@@ -844,21 +1201,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
             self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
         }), completion: nil)
-    }
-    
-    func hideCommentPinCells() {
-        if self.commentPinBlurView != nil {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.commentPinBlurView.center.y -= self.commentPinBlurView.frame.size.height
-            }), completion: { (done: Bool) in
-                if done {
-                    self.commentPinBlurView.removeFromSuperview()
-                    self.navigationController?.navigationBar.hidden = false
-                }
-            })
-        }
-        commentPinUIViewArray.removeAll()
-        commentPinCellNumCount = 0
     }
     
     // MARK: -- Blur View and Pins Creating Selections
@@ -1054,9 +1396,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     func loadButton() {
         let testButton = UIButton(frame: CGRectMake(300, 170, 100, 100))
-        testButton.backgroundColor = UIColor.redColor()
+        testButton.backgroundColor = colorFae
         self.view.addSubview(testButton)
         testButton.addTarget(self, action: #selector(FaeMapViewController.testing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        testButton.hidden = true
         
         let buttonLeftTopX: CGFloat = 15
         let buttonLeftTopY: CGFloat = 5
@@ -1136,6 +1479,20 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         UIApplication.sharedApplication().keyWindow?.addSubview(buttonSetLocationOnMap)
         buttonSetLocationOnMap.addTarget(self, action: #selector(FaeMapViewController.actionSetLocationForComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonSetLocationOnMap.hidden = true
+        
+        buttonAddComment = UIButton(frame: CGRect(x: 280, y: 212, width: 58, height: 58))
+        let imageLike = UIImage(named: "comment_pin_groupchat")
+        buttonAddComment.setImage(imageLike, forState: .Normal)
+        UIApplication.sharedApplication().keyWindow?.addSubview(buttonAddComment)
+        buttonAddComment.hidden = true
+        buttonAddComment.clipsToBounds = false
+        
+        buttonCommentLike = UIButton(frame: CGRect(x: 345, y: 212, width: 58, height: 58))
+        let imageAddComment = UIImage(named: "comment_pin_like")
+        buttonCommentLike.setImage(imageAddComment, forState: .Normal)
+        UIApplication.sharedApplication().keyWindow?.addSubview(buttonCommentLike)
+        buttonCommentLike.hidden = true
+        buttonCommentLike.clipsToBounds = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -1176,6 +1533,9 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         if tableView == tableviewMore {
             return 1
         }
+        else if tableView == tableviewWindbell{
+            return 1
+        }
         return 1
     }
     
@@ -1189,10 +1549,14 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         else if tableView == tableviewMore {
             return 7
         }
+        else if tableView == tableviewWindbell{
+            return tableWindbellData.count
+        }
         else{
             return 0
         }
     }
+    
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if(tableView == self.tblSearchResults){
@@ -1235,6 +1599,15 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 cell.labelTitle.text = "Account Settings"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell6")
             }
+            return cell
+            
+        }
+        else if tableView == self.tableviewWindbell{
+            let cell = tableView.dequeueReusableCellWithIdentifier("windbelltablecell", forIndexPath: indexPath)as! WindBellTableViewCell
+            cell.selectionStyle = .None
+            cell.labelTitle.text = tableWindbellData[indexPath.row]["Title"]
+            cell.labelContent.text = tableWindbellData[indexPath.row]["Content"]
+            cell.labelTime.text = tableWindbellData[indexPath.row]["Time"]
             return cell
             
         }
@@ -1291,11 +1664,13 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         else if tableView == tableviewMore {
             return 60
         }
+        else if tableView == tableviewWindbell{
+            return 82
+        }
         else{
             return 0
         }
     }
-    
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         
     }
@@ -1959,9 +2334,9 @@ extension FaeMapViewController {
         buttonMoreRight.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
         viewHeaderForMore.addSubview(buttonMoreRight)
         
-        imageViewAvatarMore = UIImageView(frame: CGRectMake(127,41,81,81))
+        imageViewAvatarMore = UIImageView(frame: CGRectMake(122,36,91,91))
         imageViewAvatarMore.layer.cornerRadius = 81 / 2
-        imageViewAvatarMore.image = UIImage(named: "myPosition_icon")
+        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
         labelMoreName = UILabel(frame: CGRectMake(78,134,180,27))
@@ -2004,6 +2379,24 @@ extension FaeMapViewController {
         uiviewWindBell = UIView(frame: CGRectMake(screenWidth, 0, 311, screenHeight))
         uiviewWindBell.backgroundColor = UIColor.whiteColor()
         UIApplication.sharedApplication().keyWindow?.addSubview(uiviewWindBell)
+        
+        labelWindbellTableTitle = UILabel(frame: CGRectMake(115,13+navigationBarHeight,82,26))
+        labelWindbellTableTitle.text = "Windbell"
+        labelWindbellTableTitle.font = UIFont(name: "AvenirNext-Medium", size: 18.0)
+        uiviewWindBell.addSubview(labelWindbellTableTitle)
+        
+        //initial tableview
+        tableviewWindbell = UITableView(frame: CGRectMake(0, 50+navigationBarHeight, 311, screenHeight))
+        tableviewWindbell.delegate = self
+        tableviewWindbell.dataSource = self
+        tableviewWindbell.registerNib(UINib(nibName: "WindBellTableViewCell",bundle: nil), forCellReuseIdentifier: "windbelltablecell")
+        tableviewWindbell.backgroundColor = UIColor.clearColor()
+        //tableviewWindbell.separatorStyle = .SingleLine
+        tableviewWindbell.separatorInset = UIEdgeInsetsZero
+        
+        tableviewWindbell.separatorColor = UIColor(red: 200.0/255.0, green: 199.0/255.0, blue: 204.0/255.0, alpha: 1.0)
+        
+        uiviewWindBell.addSubview(tableviewWindbell)
     }
     
     func animationWindBellShow(sender: UIButton!) {
@@ -2073,17 +2466,17 @@ extension FaeMapViewController {
                 self.customSearchController.customSearchBar.text = ""
             }
         })
-        
     }
     
 }
 //MARK: show unread chat tableView
 extension FaeMapViewController {
     func loadMapChat() {
-        mapChatSubview = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        mapChatSubview = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
         mapChatSubview.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
         mapChatSubview.alpha = 0.0
         UIApplication.sharedApplication().keyWindow?.addSubview(mapChatSubview)
+        mapChatSubview.addTarget(self, action: #selector(FaeMapViewController.animationMapChatHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         mapChatWindow = UIView(frame: CGRectMake(31, 115, 350, 439))
         mapChatWindow.layer.cornerRadius = 20

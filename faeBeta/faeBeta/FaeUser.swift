@@ -355,7 +355,11 @@ class FaeUser : NSObject {
                     print(userBirthday)
                 }
                 if let usergender = self.keyValue["gender"]{
-                    userGender = usergender as? Int
+                    if usergender as! String == "male" {
+                        userGender = 0
+                    } else {
+                        userGender = 1
+                    }
                     print("gender")
                     print(userGender)
                 }

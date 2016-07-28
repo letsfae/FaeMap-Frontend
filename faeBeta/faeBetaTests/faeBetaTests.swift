@@ -24,6 +24,31 @@ class faeBetaTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        faeUserSignUpTest()
+    }
+    func faeUserSignUpTest() {
+        let user = FaeUser()
+        user.whereKey("email", value: "aaa@usc.edu")
+        user.whereKey("password", value: "A1234567")
+        user.whereKey("first_name", value: "wwwwwwwwwwwwwwwww")
+        user.whereKey("last_name", value: "jjjjjj")
+        user.whereKey("birthday", value: "1991-12-30")
+        user.whereKey("gender", value: "male")
+        user.signUpInBackground { (status:Int?, message:AnyObject?) in
+            //            print(status)//if status is 201
+            XCTAssertTrue(status!/100 == 2)
+            if(status!/100 == 2){//success
+                print(status)
+                print("Sign Up Success!")
+                
+            }
+            else{
+                print(status)
+                print("Sign Up Fail!")
+                XCTFail("sign up test fail!")
+            }
+        }
+
     }
     
     func testPerformanceExample() {

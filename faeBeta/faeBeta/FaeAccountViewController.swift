@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class FaeAccountViewController: UIViewController {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -811,7 +812,9 @@ extension FaeAccountViewController : UITextFieldDelegate{
     }
     
     func jumpTowelcomeVC() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
+//        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
+//        self.presentViewController(vc, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
@@ -1168,6 +1171,7 @@ extension FaeAccountViewController {
             labelTitleFirstLast.text = "Your Last Name"
             buttonSaveName.tag = 1
         }
+        textFieldFirstLast.placeholder = "Please enter your name"
         self.view.addSubview(viewFirstLastBackground)
     }
 }

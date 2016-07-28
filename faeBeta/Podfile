@@ -26,6 +26,7 @@ target 'faeBetaTests' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
+	pod 'Kingfisher', '~> 2.4'
 
 end
 
@@ -39,6 +40,7 @@ target 'faeBetaUITests' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
+	pod 'Kingfisher', '~> 2.4'
 
 
 end

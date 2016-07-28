@@ -142,6 +142,7 @@ class RegisterViewController: UIViewController {
         textEmail = EmailTextField(frame: CGRectMake(xOffset, yOffset, width, height))
         let emailPlaceholder = NSAttributedString(string: "Email Address", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()])
         textEmail.attributedPlaceholder = emailPlaceholder;
+        textEmail.autocorrectionType = .No
         textEmail.layer.zPosition = uiLayer
         textEmail.textColor = ColorFae
         textEmail.font = UIFont(name: "AvenirNext-Regular", size: 18.0)

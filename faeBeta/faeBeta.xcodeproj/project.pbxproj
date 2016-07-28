@@ -57,6 +57,30 @@
 		B00EC4691D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
 		B00EC46A1D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
 		B00EC46B1D36D36100AD9673 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */; };
+		B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
+		B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
+		B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
+		B0301B171D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B161D4A88E100A05996 /* RetriveByEmailViewController.swift */; };
+		B0301B181D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B161D4A88E100A05996 /* RetriveByEmailViewController.swift */; };
+		B0301B191D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B161D4A88E100A05996 /* RetriveByEmailViewController.swift */; };
+		B0301B1B1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1A1D4A893A00A05996 /* AccountFoundViewController.swift */; };
+		B0301B1C1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1A1D4A893A00A05996 /* AccountFoundViewController.swift */; };
+		B0301B1D1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1A1D4A893A00A05996 /* AccountFoundViewController.swift */; };
+		B0301B1F1D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1E1D4A897F00A05996 /* VerificationCodeViewController.swift */; };
+		B0301B201D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1E1D4A897F00A05996 /* VerificationCodeViewController.swift */; };
+		B0301B211D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B1E1D4A897F00A05996 /* VerificationCodeViewController.swift */; };
+		B0301B231D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B221D4A89B300A05996 /* CreateNewPasswordViewController.swift */; };
+		B0301B241D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B221D4A89B300A05996 /* CreateNewPasswordViewController.swift */; };
+		B0301B251D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B221D4A89B300A05996 /* CreateNewPasswordViewController.swift */; };
+		B0301B271D4A89EB00A05996 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B261D4A89EB00A05996 /* PasswordTextField.swift */; };
+		B0301B281D4A89EB00A05996 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B261D4A89EB00A05996 /* PasswordTextField.swift */; };
+		B0301B291D4A89EB00A05996 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B261D4A89EB00A05996 /* PasswordTextField.swift */; };
+		B0301B2B1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2A1D4A89FA00A05996 /* PasswordAgainTextField.swift */; };
+		B0301B2C1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2A1D4A89FA00A05996 /* PasswordAgainTextField.swift */; };
+		B0301B2D1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2A1D4A89FA00A05996 /* PasswordAgainTextField.swift */; };
+		B0301B2F1D4A992F00A05996 /* OpenUserPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2E1D4A992F00A05996 /* OpenUserPinView.swift */; };
+		B0301B301D4A992F00A05996 /* OpenUserPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2E1D4A992F00A05996 /* OpenUserPinView.swift */; };
+		B0301B311D4A992F00A05996 /* OpenUserPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B2E1D4A992F00A05996 /* OpenUserPinView.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -64,8 +88,6 @@
 		B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
 		B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
 		B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */; };
-		B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */; };
-		B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */; };
 		B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
@@ -82,9 +104,6 @@
 		B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACBB1CE3A3C7002E0C9D /* faeBetaUITests.swift */; };
 		B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */; };
 		B0A2ACD11CE3B12C002E0C9D /* RegisterProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */; };
-		B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
-		B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
-		B0AA088C1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */; };
 		B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
 		B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
 		B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */; };
@@ -116,6 +135,12 @@
 		B0C0CABD1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
 		B0C0CABE1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
 		B0C0CABF1D46D57000E2E251 /* ChatSendLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */; };
+		B0C0CAC11D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAC01D47DD4900E2E251 /* WindBellTableViewCell.xib */; };
+		B0C0CAC21D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAC01D47DD4900E2E251 /* WindBellTableViewCell.xib */; };
+		B0C0CAC31D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0C0CAC01D47DD4900E2E251 /* WindBellTableViewCell.xib */; };
+		B0C0CAC51D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAC41D47DD5100E2E251 /* WindBellTableViewCell.swift */; };
+		B0C0CAC61D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAC41D47DD5100E2E251 /* WindBellTableViewCell.swift */; };
+		B0C0CAC71D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CAC41D47DD5100E2E251 /* WindBellTableViewCell.swift */; };
 		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A01CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
@@ -178,10 +203,6 @@
 		B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */; };
-		B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */; };
-		B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */; };
-		B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */; };
-		B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */; };
 		B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */; };
 		C59D639862A281330410E513 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC60336BA15119880B7DC52 /* Pods_faeBetaUITests.framework */; };
 /* End PBXBuildFile section */
@@ -225,11 +246,17 @@
 		B00EC4571D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
 		B00EC4581D36D36100AD9673 /* CommentPinUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinUIView.swift; sourceTree = "<group>"; };
 		B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
+		B0301B121D4A886700A05996 /* FaeAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountViewController.swift; sourceTree = "<group>"; };
+		B0301B161D4A88E100A05996 /* RetriveByEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetriveByEmailViewController.swift; sourceTree = "<group>"; };
+		B0301B1A1D4A893A00A05996 /* AccountFoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountFoundViewController.swift; sourceTree = "<group>"; };
+		B0301B1E1D4A897F00A05996 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
+		B0301B221D4A89B300A05996 /* CreateNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewPasswordViewController.swift; sourceTree = "<group>"; };
+		B0301B261D4A89EB00A05996 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
+		B0301B2A1D4A89FA00A05996 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
+		B0301B2E1D4A992F00A05996 /* OpenUserPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUserPinView.swift; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
-		B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
-		B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -248,7 +275,6 @@
 		B0A2ACBD1CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0A2ACCE1CE3B10A002E0C9D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterProfileViewController.swift; sourceTree = "<group>"; };
-		B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountViewController.swift; sourceTree = "<group>"; };
 		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
 		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
@@ -260,6 +286,8 @@
 		B0C0CAAD1D422E1400E2E251 /* NameCardAddTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardAddTableViewCell.xib; sourceTree = "<group>"; };
 		B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocation.swift; sourceTree = "<group>"; };
+		B0C0CAC01D47DD4900E2E251 /* WindBellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindBellTableViewCell.xib; sourceTree = "<group>"; };
+		B0C0CAC41D47DD5100E2E251 /* WindBellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindBellTableViewCell.swift; sourceTree = "<group>"; };
 		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
@@ -283,10 +311,6 @@
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportViewController.swift; sourceTree = "<group>"; };
-		B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetriveByEmailViewController.swift; sourceTree = "<group>"; };
-		B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountFoundViewController.swift; sourceTree = "<group>"; };
-		B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
-		B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		B6ABEDAB7BE3A05013F4EB31 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		CACB76AC23096F512E1A03DF /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -368,8 +392,8 @@
 			isa = PBXGroup;
 			children = (
 				B04BB9E91CEE2D13009B9531 /* EmailTextField.swift */,
-				B04BB9EA1CEE2D13009B9531 /* PasswordAgainTextField.swift */,
-				B04BB9EB1CEE2D13009B9531 /* PasswordTextField.swift */,
+				B0301B2A1D4A89FA00A05996 /* PasswordAgainTextField.swift */,
+				B0301B261D4A89EB00A05996 /* PasswordTextField.swift */,
 			);
 			name = support;
 			sourceTree = "<group>";
@@ -443,10 +467,10 @@
 				B0A2ACD01CE3B12C002E0C9D /* RegisterProfileViewController.swift */,
 				B0F688F01CE510CE00D91CF9 /* LogInViewController.swift */,
 				B0F688E61CE4FE0200D91CF9 /* SignInSupportViewController.swift */,
-				B0F688E81CE4FFB100D91CF9 /* RetriveByEmailViewController.swift */,
-				B0F688EA1CE4FFF800D91CF9 /* AccountFoundViewController.swift */,
-				B0F688EC1CE5006B00D91CF9 /* VerificationCodeViewController.swift */,
-				B0F688EE1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift */,
+				B0301B161D4A88E100A05996 /* RetriveByEmailViewController.swift */,
+				B0301B1A1D4A893A00A05996 /* AccountFoundViewController.swift */,
+				B0301B1E1D4A897F00A05996 /* VerificationCodeViewController.swift */,
+				B0301B221D4A89B300A05996 /* CreateNewPasswordViewController.swift */,
 				B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */,
 			);
 			name = SignIn;
@@ -488,7 +512,7 @@
 				B0D8CC731D3D525C0030939E /* Mood Avatar */,
 				B00EC3EC1D2F539000AD9673 /* FAE cell */,
 				B0D36BE81D1C0CE0002FC047 /* MyFaeViewController.swift */,
-				B0AA08891D23032D00EE2B2D /* FaeAccountViewController.swift */,
+				B0301B121D4A886700A05996 /* FaeAccountViewController.swift */,
 				B00EC3D81D2BA9BC00AD9673 /* AccountEmailViewController.swift */,
 				B00EC3DC1D2C47FB00AD9673 /* PhoneConnectViewController.swift */,
 				B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */,
@@ -502,6 +526,8 @@
 		B0D77FED1D419AD300D53114 /* Map cell */ = {
 			isa = PBXGroup;
 			children = (
+				B0C0CAC41D47DD5100E2E251 /* WindBellTableViewCell.swift */,
+				B0C0CAC01D47DD4900E2E251 /* WindBellTableViewCell.xib */,
 				B00EC4541D36D36100AD9673 /* CustomCellForAddressSearch.swift */,
 				B0D77FEE1D419AF900D53114 /* MoreVisibleTableViewCell.swift */,
 				B0D77FEF1D419AF900D53114 /* MoreVisibleTableViewCell.xib */,
@@ -532,6 +558,7 @@
 				B00EC4591D36D36100AD9673 /* FaeMapViewController.swift */,
 				B0C0CAB81D46D56800E2E251 /* MapChatTableCell.swift */,
 				B0C0CABC1D46D57000E2E251 /* ChatSendLocation.swift */,
+				B0301B2E1D4A992F00A05996 /* OpenUserPinView.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -660,6 +687,7 @@
 				B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0D77FF31D419AF900D53114 /* MoreVisibleTableViewCell.xib in Resources */,
+				B0C0CAC11D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */,
 				B0C0CAA91D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -672,6 +700,7 @@
 				B0C0CAA21D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B0D8CF131D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
+				B0C0CAC21D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
@@ -688,6 +717,7 @@
 				B0C0CAA31D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B0D8CF141D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
+				B0C0CAC31D47DD4900E2E251 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
@@ -827,19 +857,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
-				B0F688EB1CE4FFF800D91CF9 /* AccountFoundViewController.swift in Sources */,
+				B0301B2B1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */,
+				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B0F688E71CE4FE0200D91CF9 /* SignInSupportViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
-				B04BB9ED1CEE2D13009B9531 /* PasswordAgainTextField.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
-				B04BB9EE1CEE2D13009B9531 /* PasswordTextField.swift in Sources */,
+				B0301B1F1D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B0301B271D4A89EB00A05996 /* PasswordTextField.swift in Sources */,
 				B00EC45A1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
-				B0F688EF1CE5009E00D91CF9 /* CreateNewPasswordViewController.swift in Sources */,
 				B0D77FF01D419AF900D53114 /* MoreVisibleTableViewCell.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B00EC45D1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
@@ -850,17 +880,19 @@
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0C0CAB91D46D56800E2E251 /* MapChatTableCell.swift in Sources */,
+				B0C0CAC51D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B00EC4661D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
-				B0F688ED1CE5006B00D91CF9 /* VerificationCodeViewController.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0301B1B1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */,
 				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0C0CABD1D46D57000E2E251 /* ChatSendLocation.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
+				B0301B231D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
@@ -868,15 +900,15 @@
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0F688F11CE510CE00D91CF9 /* LogInViewController.swift in Sources */,
 				B04BB9EC1CEE2D13009B9531 /* EmailTextField.swift in Sources */,
+				B0301B171D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0A2ACCF1CE3B10A002E0C9D /* RegisterViewController.swift in Sources */,
 				B00EC4601D36D36100AD9673 /* CustomSearchController.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
+				B0301B2F1D4A992F00A05996 /* OpenUserPinView.swift in Sources */,
 				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
-				B0AA088A1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
-				B0F688E91CE4FFB100D91CF9 /* RetriveByEmailViewController.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
@@ -902,30 +934,38 @@
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
+				B0301B241D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */,
+				B0301B201D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */,
 				B00EC4671D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
+				B0301B301D4A992F00A05996 /* OpenUserPinView.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
-				B0AA088B1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B05DAFE71D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B00EC45B1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
+				B0301B2C1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */,
+				B0C0CAC61D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B00EC4641D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
+				B0301B281D4A89EB00A05996 /* PasswordTextField.swift in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
+				B0301B181D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0C0CABE1D46D57000E2E251 /* ChatSendLocation.swift in Sources */,
 				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0D36BEA1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
+				B0301B1C1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -943,17 +983,23 @@
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0301B1D1D4A893A00A05996 /* AccountFoundViewController.swift in Sources */,
 				B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0C0CAB01D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
+				B0C0CAC71D47DD5100E2E251 /* WindBellTableViewCell.swift in Sources */,
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
+				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
+				B0301B2D1D4A89FA00A05996 /* PasswordAgainTextField.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
+				B0301B291D4A89EB00A05996 /* PasswordTextField.swift in Sources */,
+				B0301B251D4A89B300A05996 /* CreateNewPasswordViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B00EC45C1D36D36100AD9673 /* CustomCellForAddressSearch.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -961,7 +1007,6 @@
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B00EC45F1D36D36100AD9673 /* CustomSearchBar.swift in Sources */,
-				B0AA088C1D23032D00EE2B2D /* FaeAccountViewController.swift in Sources */,
 				B00EC4651D36D36100AD9673 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC4681D36D36100AD9673 /* CommentPinUIView.swift in Sources */,
@@ -974,7 +1019,10 @@
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
+				B0301B311D4A992F00A05996 /* OpenUserPinView.swift in Sources */,
 				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B0301B191D4A88E100A05996 /* RetriveByEmailViewController.swift in Sources */,
+				B0301B211D4A897F00A05996 /* VerificationCodeViewController.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,

@@ -238,7 +238,7 @@ class ChatSendLocation: UIViewController, GMSMapViewDelegate, CustomSearchContro
         if(tableView == self.tblSearchResults){
             return 48.0
         }
-
+            
         else{
             return 0
         }

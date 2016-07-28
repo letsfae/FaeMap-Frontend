@@ -19,6 +19,10 @@ class MoreVisibleTableViewCell: UITableViewCell {
         // Initialization code
         switchInvisible.transform = CGAffineTransformMakeScale(0.74, 0.74)
         switchInvisible.hidden = true
+        switchInvisible.onTintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
+        labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        
         // default hidden
     }
 

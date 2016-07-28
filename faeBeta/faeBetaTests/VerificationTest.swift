@@ -24,16 +24,19 @@ class VerificationTest: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // MARK: email Verification
-        let validEmails = ["tianming@usc.edu", "mingjie@gmail.com"]
-        let invalidEmails = ["123!@org.com","123123"]
+        emailTest()
+        
+    }
+    // MARK: email Verification
+    func emailTest() {
+        let validEmails = ["tianming@usc.edu", "mingjie@gmail.com", "hehehe.google@gmail.com", "hehe.google@gmail.com.cn", "felis.Nulla.tempor@diamluctus.edu", "nulla@fringilla.org", "dictum@SednequeSed.co.uk"]
+        let invalidEmails = ["123!@org.com", "123123", "@gmail.com", "hehehehe@@gmail.com"]
         for validEmail in validEmails {
             XCTAssertEqual(emailVerification(validEmail), true)
         }
         for invalidEmail in invalidEmails {
             XCTAssertEqual(emailVerification(invalidEmail), false)
         }
-        //
 
     }
     func testPerformanceExample() {

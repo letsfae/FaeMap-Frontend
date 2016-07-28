@@ -17,28 +17,26 @@ class CommentPinUIView: UIView {
     var textViewComment: UITextView!
     
     var buttonDelete: UIButton!
-    var buttonLike: UIButton!
-    var buttonAddComment: UIButton!
-    
+    var buttonMore: UIButton!
     var buttonDeleteLargerCover: UIButton!
+    var buttonMoreLargerCover: UIButton!
     var buttonCommentPinLargerCover: UIButton!
     
     var uiviewUnderLine: UIView!
     
-    var lineNumber: Int!
-    
     var hasExpanded = true
+    
+    var cellY: CGFloat = 0
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     
     init() {
-        super.init(frame: CGRect(x: 0, y: 20, width: screenWidth, height: 0))
+        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 0))
         loadAvatar()
         loadLabel()
         loadUnderLine()
         loadButton()
         loadBackground()
-        lineNumber = 1
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,12 +44,12 @@ class CommentPinUIView: UIView {
     }
     
     func loadAvatar() {
-        imageViewAvatar = UIImageView(frame: CGRect(x: 16, y: 12, width: 50, height: 45))
+        imageViewAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imageViewAvatar.image = UIImage(named: "avatar_expand_no")
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true
         imageViewAvatar.hidden = true
-//        imageViewAvatar.layer.cornerRadius = imageViewAvatar.frame.width/2
+        //        imageViewAvatar.layer.cornerRadius = imageViewAvatar.frame.width/2
     }
     
     func loadLabel() {
@@ -78,27 +76,22 @@ class CommentPinUIView: UIView {
     
     func loadButton() {
         buttonDelete = UIButton(frame: CGRect(x: 381, y: 29, width: 18, height: 18))
-        //buttonExtend.setTitle("Delete", forState: .Normal)
         let imageDelete = UIImage(named: "comment_pin_delete")
         buttonDelete.setImage(imageDelete, forState: .Normal)
         self.addSubview(buttonDelete)
         buttonDeleteLargerCover = UIButton(frame: CGRect(x: screenWidth-50, y: 0, width: 50, height: 78))
         self.addSubview(buttonDeleteLargerCover)
-        buttonDelete.hidden = true
+        buttonDelete.alpha = 0.0
+        buttonDeleteLargerCover.hidden = true
         
-        buttonAddComment = UIButton(frame: CGRect(x: 284, y: 196, width: 50, height: 50))
-        let imageLike = UIImage(named: "comment_pin_groupchat")
-        buttonAddComment.setImage(imageLike, forState: .Normal)
-        self.addSubview(buttonAddComment)
-        buttonAddComment.hidden = true
-        buttonAddComment.clipsToBounds = false
-        
-        buttonLike = UIButton(frame: CGRect(x: 349, y: 196, width: 50, height: 50))
-        let imageAddComment = UIImage(named: "comment_pin_like")
-        buttonLike.setImage(imageAddComment, forState: .Normal)
-        self.addSubview(buttonLike)
-        buttonLike.hidden = true
-        buttonLike.clipsToBounds = false
+        buttonMore = UIButton(frame: CGRect(x: 372, y: 36, width: 27, height: 7.11))
+        let imageMore = UIImage(named: "commentPinMore")
+        buttonMore.setImage(imageMore, forState: .Normal)
+        self.addSubview(buttonMore)
+        buttonMoreLargerCover = UIButton(frame: CGRect(x: screenWidth-50, y: 0, width: 50, height: 78))
+        self.addSubview(buttonMoreLargerCover)
+        buttonMore.hidden = true
+        buttonMoreLargerCover.hidden = false
         
         buttonCommentPinLargerCover = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth-50, height: 78))
         self.addSubview(buttonCommentPinLargerCover)
