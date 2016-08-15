@@ -36,10 +36,11 @@ class faeBetaTests: XCTestCase {
         user.whereKey("gender", value: "male")
         user.signUpInBackground { (status:Int?, message:AnyObject?) in
             //            print(status)//if status is 201
-            XCTAssertTrue(status!/100 == 2)
+            XCTAssertTrue(status!/100 == 3)
             if(status!/100 == 2){//success
                 print(status)
                 print("Sign Up Success!")
+                XCTAssertEqual(201, 200)
                 
             }
             else{

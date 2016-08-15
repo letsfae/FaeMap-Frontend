@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="53.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZhU-Nw-CIR">
@@ -21,19 +21,22 @@
                             <constraint firstAttribute="height" constant="26" id="Rfd-oe-ar6"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4x-DF-VKF">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4x-DF-VKF">
                         <rect key="frame" x="68" y="16" width="87" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="90" id="s3m-TJ-pU4"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rg6-1o-jt8">
-                        <rect key="frame" x="149" y="16" width="136" height="22"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="lalalala" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rg6-1o-jt8">
+                        <rect key="frame" x="163" y="16" width="159" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="h9l-i3-oIs"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -41,7 +44,7 @@
                     <constraint firstItem="rg6-1o-jt8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="4d0-w2-Ug5"/>
                     <constraint firstItem="g4x-DF-VKF" firstAttribute="leading" secondItem="ZhU-Nw-CIR" secondAttribute="trailing" constant="26" id="BhQ-RI-Omn"/>
                     <constraint firstItem="rg6-1o-jt8" firstAttribute="leading" secondItem="g4x-DF-VKF" secondAttribute="trailing" constant="5" id="DSI-01-b6i"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="rg6-1o-jt8" secondAttribute="trailing" constant="27" id="QjP-fg-fiz"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="rg6-1o-jt8" secondAttribute="trailing" constant="-10" id="QjP-fg-fiz"/>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Ujy-5U-v0F"/>
                     <constraint firstItem="ZhU-Nw-CIR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="ZQf-g5-n32"/>
                     <constraint firstItem="g4x-DF-VKF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="dfX-JV-j4C"/>

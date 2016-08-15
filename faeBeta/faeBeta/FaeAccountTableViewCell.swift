@@ -19,6 +19,8 @@ class FaeAccountTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         labelDetail.textColor = UIColor(colorLiteralRed: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        
         // Initialization code
     }
 

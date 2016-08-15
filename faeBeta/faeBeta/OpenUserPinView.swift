@@ -9,13 +9,14 @@
 import UIKit
 import GoogleMaps
 
-extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func loadNamecard() {
         self.view.backgroundColor = UIColor.whiteColor()
         
-        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-360)/2, y: 135,width: 360,height: 335))
+        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-360)/2, y: 110,width: 360,height: 335))
         uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_namecard_dialog")!)
+        uiviewDialog.layer.zPosition = 20
 
         
         //avatar
@@ -103,12 +104,12 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
     }
     
-    func showOpenUserPinAnimation(sender: UIButton!) {
+    func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
         UIView.animateWithDuration(0.2, animations: ({
             self.uiviewDialog.alpha = 1.0
         }))
         openUserPinActive = true
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude+0.001, longitude: currentLongitude, zoom: 17)
+        let camera = GMSCameraPosition.cameraWithLatitude(lati+0.001, longitude: longi, zoom: 17)
         faeMapView.animateToCameraPosition(camera)
         if commentPinCellsOpen {
             hideCommentPinCells()

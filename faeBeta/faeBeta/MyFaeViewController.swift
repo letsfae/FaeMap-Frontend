@@ -6,6 +6,7 @@
 //  Copyright © 2016 fae. All rights reserved.
 //
 
+//MARK: 已经作废
 import UIKit
 //MARK: bug if user not log in
 class MyFaeViewController: UIViewController  {

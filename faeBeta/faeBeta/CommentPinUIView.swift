@@ -30,6 +30,8 @@ class CommentPinUIView: UIView {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     
+    var commentID: Int = -999
+    
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 0))
         loadAvatar()

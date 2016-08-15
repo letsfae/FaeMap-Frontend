@@ -16,6 +16,7 @@ class FaeAccountWithoutTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

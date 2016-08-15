@@ -789,10 +789,12 @@ extension FaeAccountViewController : UITextFieldDelegate{
         }
         cancelpopUpView()
     }
-    
+    // MARK:RetriveByEmailViewController is deleted
     func jumpToforgetPassword() {
+        /*
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RetriveByEmailViewController") as! RetriveByEmailViewController
         self.navigationController?.pushViewController(vc, animated: true)
+ */
     }
     
     func compareCode() -> Bool {

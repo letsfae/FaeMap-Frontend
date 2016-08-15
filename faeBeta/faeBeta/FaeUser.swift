@@ -403,8 +403,10 @@ class FaeUser : NSObject {
     }
     
     func verifyEmail(completion:(Int,AnyObject?)->Void){
+        print(headerAuthentication())
         postToURL("users/account/email/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
             if(status/100==2){
+                
                 if let newEmail = self.keyValue["email"]{
                     userEmail = newEmail as! String
                     let shareAPI = LocalStorageManager()
