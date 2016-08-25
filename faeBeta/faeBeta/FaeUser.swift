@@ -328,7 +328,7 @@ class FaeUser : NSObject {
             completion(status,message);
         }
     }
-
+    
     func updateAccountBasicInfo(completion:(Int,AnyObject?)->Void){// update local storage
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
             print(status)
@@ -436,6 +436,12 @@ class FaeUser : NSObject {
                     print(userPhoneNumber)
                 }
             }
+            completion(status,message)
+        }
+    }
+    
+    func getSynchronization(completion:(Int,AnyObject?)->Void){
+        getFromURL("sync", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
             completion(status,message)
         }
     }

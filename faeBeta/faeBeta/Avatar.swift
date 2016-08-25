@@ -8,6 +8,8 @@
 
 import Foundation
 
+// some function to handle avatar. Should fill code in when backend is done.
+
 // given avatar image, send and save it online. the url address is the time it is upload
 
 func uploadAvatar(image : UIImage, result : (imageLink : String?) -> Void) {

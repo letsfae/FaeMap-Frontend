@@ -8,6 +8,9 @@
 
 import Foundation
 
+// this is a class that work with stickerAlbum class. 
+// it is used to create a scroll view, size is based on the calculation of its StickerAlbum
+
 class StickerScrollView : UIScrollView {
     var stickerAlbum : StickerAlbum!
     override init(frame : CGRect) {

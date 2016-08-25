@@ -13,53 +13,57 @@ import FirebaseDatabase
 import IDMPhotoBrowser
 import Photos
 
+public let kAVATARSTATE = "avatarState"
+public let kFIRSTRUN = "firstRun"
+
 class ChatViewController: JSQMessagesViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
-    let appDeleget = UIApplication.sharedApplication().delegate as! AppDelegate
-    let ref = firebase.database.reference().child("Message")
+//    let appDeleget = UIApplication.sharedApplication().delegate as! AppDelegate
+    let ref = firebase.database.reference().child("Message")// reference to all chat room
     var messages : [JSQMessage] = []
-    var objects : [NSDictionary] = []
-    var loaded : [NSDictionary] = []
+    var objects : [NSDictionary] = []//
+    var loaded : [NSDictionary] = []// load dict from firebase that this chat room all message
     
-    var avatarImageDictionary : NSMutableDictionary?
-    var avatarDictionary : NSMutableDictionary?
+    var avatarImageDictionary : NSMutableDictionary?//not use anymore
+    var avatarDictionary : NSMutableDictionary?//not use anymore
     //
-    var showAvatar : Bool = false
-    let factor : CGFloat = 375 / 414
-    var firstLoad : Bool?
+    var showAvatar : Bool = false//false not show avatar , true show avatar
+    let factor : CGFloat = 375 / 414// autolayout factor MARK: 5s may has error, 6 and 6+ is ok
+    var firstLoad : Bool?// whether it is the first time to load this room.
 //    var withUser : BackendlessUser?
-    var withUserId : String?
-    var currentUserId : String?
-    var recent : NSDictionary?
+    var withUserId : String? // the user id we chat to
+    var currentUserId : String?// my user id
+    var recent : NSDictionary?//recent chat room message
     var chatRoomId : String!
-    var initialLoadComplete : Bool = false
+    var initialLoadComplete : Bool = false// the first time open this chat room, false means we need to load every message to the chat room, true means we only need to load the new messages.
     var outgoingBubble = JSQMessagesBubbleImageFactory(bubbleImage: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImageWithColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0))
-    
+    //the message I sent bubble
     let incomingBubble = JSQMessagesBubbleImageFactory(bubbleImage: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).incomingMessagesBubbleImageWithColor(UIColor.whiteColor())
-    
+    //the message other person sent bubble
     let userDefaults = NSUserDefaults.standardUserDefaults()
-    var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
+    var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)//gray color
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
+    //pink color
     
-    //voice
+    //voice MARK: has bug here can record and upload but can't replay after download, 
     var fileName = "audioFile.m4a"
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
     var recordingSession: AVAudioSession!
     var voiceData = NSData()
     var startRecording = false
-    //custom toolBar
+    //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
     var buttonImagePicker : UIButton!
-    //album
+    //album //a helper to send photo
     var photoPicker : PhotoPicker!
-    var photoQuickCollectionView : UICollectionView!
+    var photoQuickCollectionView : UICollectionView!//preview of the photoes
     let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
     var selectedImage = [UIImage]()
     var imageDict = [Int : UIImage]()
@@ -67,14 +71,15 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     var imageIndexDict = [UIImage : Int]()
     var indexImageDict = [Int : UIImage]()
     var frameImageName = ["photoQuickSelection1", "photoQuickSelection2", "photoQuickSelection3", "photoQuickSelection4","photoQuickSelection5", "photoQuickSelection6", "photoQuickSelection7", "photoQuickSelection8", "photoQuickSelection9", "photoQuickSelection10"]
+    // show at most 10 images
     let requestOption = PHImageRequestOptions()
-    var imageQuickPickerShow = false
+    var imageQuickPickerShow = false //false : not open the photo preview
     
-    var quickSendImageButton : UIButton!
-    var moreImageButton : UIButton!
+    var quickSendImageButton : UIButton!//right
+    var moreImageButton : UIButton!//left
     
     //sticker
-    var stickerViewShow = false
+    var stickerViewShow = false//false : not open the stick view
     var stickerPicker : StickerPickView!
     
     
@@ -122,26 +127,23 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         super.viewWillDisappear(true)
         closeStickerPanel()
         closeQuickPhotoPanel()
-        clearRecentCounter(chatRoomId)
-        ref.removeAllObservers()
+        clearRecentCounter(chatRoomId)// clear the unread message count
+        ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        setupRecorder()
-        initializeStickerView()
-//        observeTyping()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBarSet()
-        collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)
+        collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = currentUserId
         self.senderDisplayName = currentUserId
         collectionView?.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
         collectionView?.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
-        if withUserId == nil {
+        if withUserId == nil {// get avatar from our databse
 //            getWithUserFromRecent(recent!, result: { (withUser) in
 //                self.withUser = withUser
 //                self.title = withUser.name
@@ -175,12 +177,14 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     override func viewWillAppear(animated: Bool) {
         //check user default
         super.viewWillAppear(true)
+        setupRecorder()
+        initializeStickerView()
         loadUserDefault()
         self.scrollToBottomAnimated(true)
     }
     
     //MARK : JSQMessages dataSource functions
-    
+    // JSQMessage delegate not only should handle chat bubble itself, it should handle photoQuickSelect cell
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         if collectionView == photoQuickCollectionView {
@@ -232,6 +236,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         return messages.count
     }
     
+    //this delegate is used to tell which bubble image should be used on current message
     override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
         
         let data = messages[indexPath.row]
@@ -246,7 +251,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         }
     }
     
-    
+    //this is used to edit top label of every cell
     override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
         
         if indexPath.item % 3 == 0 {
@@ -287,7 +292,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         }
         
     }
-    
+    // bind avatar image
     override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
         
         let message = messages[indexPath.row]
@@ -416,14 +421,15 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     
     
     //MARK : Load Message
-    
+    // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     func loadMessage() {
         
         ref.child(chatRoomId).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
+                // becasue the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
                 
-                if self.initialLoadComplete {
+                if self.initialLoadComplete {//message has been downloaded from databse but not load to collectionview yet.
                     
                     let incoming = self.insertMessage(item)
                     
@@ -433,6 +439,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
                     }
                     
                     self.finishReceivingMessageAnimated(true)
+                    
                     
                 } else {
                     
@@ -451,13 +458,14 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         }
         
         ref.child(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+            //this function will run only once
             self.insertMessages()
             self.finishReceivingMessageAnimated(true)
             self.initialLoadComplete = true
         }
         
     }
-    
+    //parse information for firebase
     func insertMessages() {
         
         for item in loaded {
@@ -467,6 +475,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func insertMessage(item : NSDictionary) -> Bool {
+        //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
@@ -496,7 +505,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     
     //MARK: Helper functions
     
-    func haveAccessToLocation() -> Bool {
+    func haveAccessToLocation() -> Bool {// not use anymore
         return true
     }
     
@@ -585,6 +594,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     //MARK : JSQDelegate functions
     
     //taped bubble
+    // function when user tap the bubble, like image, location
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         
         closeStickerPanel()
@@ -634,7 +644,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     //MARK : UIImagePickerController
-    
+    // this function is not use anymore
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let picture = info[UIImagePickerControllerEditedImage] as! UIImage
         
@@ -683,11 +693,13 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func getCacheDirectory() -> String {
+        //record: get an available path we can use to save record file
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         return paths[0]
     }
     
     func getFileURL() -> NSURL {
+        //record: change the default save file path from getCacheDirectory
         let path = (getCacheDirectory() as NSString).stringByAppendingPathComponent(fileName)
         let filePath = NSURL(fileURLWithPath: path)
         
@@ -706,7 +718,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     //MARK: navigationItem function
-    
+    // right item , show all push notification
     func navigationItemTapped() {
     }
     
@@ -714,6 +726,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     
     override func textViewDidChange(textView: UITextView) {
         if textView.text.characters.count == 0 {
+            // when text has no char, cannot send message
             buttonSend.enabled = false
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
         } else {
@@ -787,6 +800,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func keyboardButtonClicked() {
+        //show keyboard and dismiss all other view, like stick and photoes preview
 //        isTyping = false
         if stickerViewShow {
             buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
@@ -819,6 +833,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     // sticker view
     
     func stickButtonClicked() {
+        //show stick view, and dismiss all other views, like keyboard and photoes preview
         if !stickerViewShow {
             view.endEditing(true)
             buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
@@ -844,6 +859,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func moveUpInputBar() {
+        //when keybord, stick, photoes preview show, move tool bar up
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
@@ -854,6 +870,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func moveDownInputBar() {
+        //
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
@@ -864,7 +881,9 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func scrollToBottom() {
+        //override: 
         let item = self.collectionView(self.collectionView!, numberOfItemsInSection: 0) - 1
+        //get the last item index
         if item >= 0 {
             let lastItemIndex = NSIndexPath(forItem: item, inSection: 0)
             self.collectionView?.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: UICollectionViewScrollPosition.Top, animated: true)
@@ -895,6 +914,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     //quick image picker and collection view delegate
     
     func initializePhotoQuickPicker() {
+        //photoes preview
         let layout = UICollectionViewFlowLayout()
 //        layout.itemSize = CGSizeMake(220, 235)
         layout.scrollDirection = .Horizontal
@@ -909,11 +929,11 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         moreImageButton.addTarget(self, action: #selector(ChatViewController.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
         moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
 
-        requestOption.resizeMode = .Fast
-        requestOption.deliveryMode = .HighQualityFormat
+        requestOption.resizeMode = .Fast //resize time fast
+        requestOption.deliveryMode = .HighQualityFormat //high pixel
 //        UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
     }
-    
+    //photoes preview delegate
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if collectionView == photoQuickCollectionView {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoQuickPickerCollectionViewCell
@@ -942,7 +962,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         }
     }
-    
+    //photoes preview layout
     override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1.5
     }
@@ -952,6 +972,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
     
     func shiftChosenFrameFromIndex(index : Int) {
+        // when deselect one image in photoes preview, we need to reshuffule
         var i = index
         while i < imageDict.count {
             let image = indexImageDict[i]
@@ -964,6 +985,7 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
     }
 
     func closeQuickPhotoPanel() {
+    
         if imageQuickPickerShow {
             photoQuickCollectionView.removeFromSuperview()
             moreImageButton.removeFromSuperview()
@@ -997,7 +1019,9 @@ class ChatViewController: JSQMessagesViewController, UINavigationControllerDeleg
         indexImageDict.removeAll()
     }
     
+    
     func getMoreImage() {
+        //jump to the get more image collection view, and deselect the image we select in photoes preview
         for image in [UIImage](imageDict.values) {
             let cell = photoQuickCollectionView.cellForItemAtIndexPath(imageReverseDict[image]!) as! PhotoQuickPickerCollectionViewCell
             cell.chosenFrameImageView.hidden = true

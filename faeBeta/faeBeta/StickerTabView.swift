@@ -8,6 +8,8 @@
 
 import Foundation
 
+// this delegate is used to switch between scroll views
+
 protocol SwitchStickerDelegate {
     func switchSticker(index : Int)
     func switchToHeader(index : Int)

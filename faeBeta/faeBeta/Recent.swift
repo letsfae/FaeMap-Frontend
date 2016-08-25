@@ -10,9 +10,10 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 
+// this file has some function to connect to firebase and change information in recent
+// which can be described as dictionary.
+// it should be connected to chat table in map view.
 
-public let kAVATARSTATE = "avatarState"
-public let kFIRSTRUN = "firstRun"
 
 let firebase = FIRDatabase.database().reference()
 let backendless = Backendless.sharedInstance()
@@ -207,6 +208,7 @@ func clearRecentCounter(chatRoomId : String) {
         }
     }
 }
+
 
 func ClearRecentCounterItem(recent : NSDictionary) {
     

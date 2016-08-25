@@ -9,6 +9,9 @@
 import Foundation
 import JSQMessagesViewController
 
+// this class is used to create JSQMessage object from information in firebase, it can be message from current user
+// or the other user who current user are chatting with.
+
 class IncomingMessage {
     var collectionView : JSQMessagesCollectionView
     init(collectionView_ : JSQMessagesCollectionView) {

@@ -32,7 +32,8 @@ extension FaeMapViewController {
         tableviewMore.separatorColor = UIColor.clearColor()
         tableviewMore.rowHeight = 60
 //        tableviewMore.scrollEnabled = falsey
-        
+        tableviewMore.alwaysBounceVertical = false
+        self.tableviewMore.bounces = false
         
         uiviewMoreButton.addSubview(tableviewMore)
         addHeaderViewForMore()
@@ -53,6 +54,12 @@ extension FaeMapViewController {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("FaeAccountViewController")as! FaeAccountViewController
         self.navigationController?.pushViewController(vc, animated: true)
         
+    }
+    func jumpToMyPins(){
+        
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MyPinsViewController")as! MyPinsViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+
     }
     
     func addHeaderViewForMore(){

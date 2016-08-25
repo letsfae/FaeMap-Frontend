@@ -10,6 +10,8 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 
+// this class is used to box information of one message user sent and send them to firebase.
+
 class OutgoingMessage {
     
     private let firebase = FIRDatabase.database().reference().child("Message")

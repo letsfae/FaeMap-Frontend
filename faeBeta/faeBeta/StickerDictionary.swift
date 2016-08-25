@@ -8,6 +8,10 @@
 
 import Foundation
 
+// this is data source of sticker image. In the dictionary, every key value pair is a set of sticker.
+// the key is the name of image that in the bottom tab, value is array of name of sticker image.
+// If you want to add a set of sticker, add name of its tab bar image in stickerIndex, and key value pair of the new set of sticker
+// and add image to asset and done!
 var stickerDictionary = [
     "stickerHistory" : [],
     "faeGuy" :

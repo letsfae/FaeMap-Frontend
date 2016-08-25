@@ -69,7 +69,6 @@ PODS:
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - Kingfisher (2.4.1)
-  - Kiwi (2.4.0)
   - pop (1.0.9)
   - SDWebImage (3.8.1):
     - SDWebImage/Core (= 3.8.1)
@@ -88,7 +87,6 @@ DEPENDENCIES:
   - IDMPhotoBrowser
   - JSQMessagesViewController
   - Kingfisher (~> 2.4)
-  - Kiwi
   - SDWebImage (~> 3.7)
   - SwiftyJSON (~> 2.3)
 
@@ -114,11 +112,10 @@ SPEC CHECKSUMS:
   JSQMessagesViewController: 0ee3f80237268192a3e8337fd0d787f1a1bf5a7a
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
-  Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: cd1d8a07219fe07918f86d8c7d88410ec20973d9
+PODFILE CHECKSUM: 4e093b3b6979a8f685640e588dc6d0245642475f
 
 COCOAPODS: 1.0.0

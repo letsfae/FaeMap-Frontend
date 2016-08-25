@@ -108,7 +108,9 @@ class FaeAccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Account"
         
+        self.navigationController?.navigationBar.topItem?.title = ""
         addTableView()
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
 //        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)

@@ -8,26 +8,35 @@
 
 import Foundation
 
+// this delegate is used to tell chatVC the name of sticker being send.
+
 protocol SendStickerDelegate {
     func sendStickerWithImageName(name : String)
 }
 
+// this class is used to show all content in sticker part. It has tab view to switch set of sticker,
+// scroll view to show set of sticker, page controller to show current page.
+
 class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, findStickerFromDictDelegate {
     
     var stickerScrollViews = [StickerScrollView]()
+    //MARK: maybe wast too much memory
+    //stickerScroll views is the same to the stickerFixView but it contain different sticker sets
     var stickerFixView = [StickerScrollView]()
-    
+    // stickerFixView is used to show tool scroll view such as favorite sticker, histroy page, and more
     var pageControl : UIPageControl!
     var stickerTabView : StickerTabView!
+    //a tab view to controll the stickerScrollView and the stickerFixView
     var currentScrollView : StickerScrollView!
+    //a pointer to point which view we need to display.
     
     var sendStickerDelegate : SendStickerDelegate!
     
     var historyDict : [String : Int]!
-    
+    //most recently stick sorted by frequently and show in the second stickTabView
     override init(frame : CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)
+        self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
         configureHistoryPage()
         configureScrollView()
         configurePageController()
@@ -46,7 +55,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     func configureScrollView() {
         for stickerName in stickerIndex {
-            let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195))
+            let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
             prepareAlbum(view, name: stickerName)
             attachButton(view)
             stickerScrollViews.append(view)
@@ -140,6 +149,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         }
     }
     
+    //make local storage to record history in map, to count the frequency.
+    
     func loadHistoryFromStorage() {
         let defaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("stickerHistory") == nil {
@@ -170,6 +181,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
 }
 
+
+//this extention is used to sort key value pair by value
 extension Dictionary {
     func sortedKeys(isOrderedBefore:(Key,Key) -> Bool) -> [Key] {
         return Array(self.keys).sort(isOrderedBefore)

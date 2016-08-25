@@ -8,9 +8,14 @@
 
 import Foundation
 
+// delegate to find sticker image name from dictionary by the frame of sticker being clicked
+
 protocol findStickerFromDictDelegate {
     func findStickerName(index : Int)
 }
+
+// this class is used to figure out position of all sticker in scroll view. Now the matrix is 5 column and 2 row, you can change formation by changing
+// rowPerPage and colPerPage, it will automaticly calculate number of total pages.
 
 class StickerAlbum {
     
