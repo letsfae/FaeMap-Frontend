@@ -1048,7 +1048,7 @@
                   moduleName = "faeBeta"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/FaeUser.swift"
-                  timestampString = "493762134.339111"
+                  timestampString = "494012550.216696"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "407"
@@ -1063,7 +1063,7 @@
                   moduleName = "faeBeta"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/FaeUser.swift"
-                  timestampString = "493762134.339248"
+                  timestampString = "494012550.216821"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "408"
@@ -1086,6 +1086,22 @@
             startingLineNumber = "333"
             endingLineNumber = "333"
             landmarkName = "verifyCode(_:email:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "faeBeta/FaeMapViewController.swift"
+            timestampString = "494010228.716521"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

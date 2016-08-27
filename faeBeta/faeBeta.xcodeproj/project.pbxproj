@@ -147,6 +147,7 @@
 		B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */; };
 		B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */; };
 		B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */; };
+		B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF221D7207DB00C078F5 /* FinishViewController.swift */; };
 		B0714D3D1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3F1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
@@ -418,6 +419,7 @@
 		B064EF131D6E353E00C078F5 /* WelcomeContentContainerFace.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WelcomeContentContainerFace.xib; sourceTree = "<group>"; };
 		B064EF1A1D6E354A00C078F5 /* WelcomePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomePageControl.swift; sourceTree = "<group>"; };
 		B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeImageContainerViewController.swift; sourceTree = "<group>"; };
+		B064EF221D7207DB00C078F5 /* FinishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
 		B0714D251D5E435200356705 /* CommentPinUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinUIView.swift; sourceTree = "<group>"; };
 		B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTextFieldsControl.swift; sourceTree = "<group>"; };
 		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
@@ -807,6 +809,7 @@
 				B0714E171D62534A00356705 /* LogInViewController.swift */,
 				B0714E1B1D62537300356705 /* SignInSupportViewController.swift */,
 				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
+				B064EF221D7207DB00C078F5 /* FinishViewController.swift */,
 			);
 			name = SignIn;
 			sourceTree = "<group>";
@@ -1264,6 +1267,7 @@
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
+				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B064EEA71D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,

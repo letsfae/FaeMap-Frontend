@@ -16,7 +16,7 @@ target 'faeBeta' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-
+	
 end
 
 target 'faeBetaTests' do
@@ -32,7 +32,7 @@ target 'faeBetaTests' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-
+	
 end
 
 target 'faeBetaUITests' do
@@ -48,5 +48,5 @@ target 'faeBetaUITests' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-
+	
 end

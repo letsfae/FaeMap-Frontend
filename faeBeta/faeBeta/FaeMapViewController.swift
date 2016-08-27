@@ -211,6 +211,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let user = FaeUser()
+        user.whereKey("email", value: "user9@email.com")
+        user.whereKey("password", value: "A1234567")
+        user.logInBackground({(status:Int, error:AnyObject?) in 
+            print(status)
+            if status / 100 == 2 {
+                print("login success")
+            }
+            }
+        )
         self.tabBarController?.tabBar.hidden = true
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()

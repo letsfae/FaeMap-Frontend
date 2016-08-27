@@ -241,6 +241,24 @@
             </objects>
             <point key="canvasLocation" x="4935" y="-1124"/>
         </scene>
+        <!--Finish View Controller-->
+        <scene sceneID="I7s-OH-za5">
+            <objects>
+                <viewController storyboardIdentifier="FinishViewController" id="knq-gP-SJ8" customClass="FinishViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="c8i-5P-rjp"/>
+                        <viewControllerLayoutGuide type="bottom" id="SDA-WG-19o"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aXY-PG-eRS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9dh-8y-3Ug" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5643" y="-1127"/>
+        </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="Cth-zx-THG">
             <objects>
@@ -505,6 +523,7 @@
                         <viewControllerLayoutGuide type="bottom" id="ept-qZ-vVj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Eg4-1Q-P3B">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
