@@ -97,6 +97,23 @@
             </objects>
             <point key="canvasLocation" x="1107" y="-1851"/>
         </scene>
+        <!--Sign In Support Code View Controller-->
+        <scene sceneID="tFA-BR-4tD">
+            <objects>
+                <viewController storyboardIdentifier="SignInSupportCodeViewController" id="Vhn-Si-T6I" customClass="SignInSupportCodeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LdE-Zq-fWb"/>
+                        <viewControllerLayoutGuide type="bottom" id="z4K-uW-WeL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Jrr-h4-Jzr">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fpU-VP-QFG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1836" y="-1851"/>
+        </scene>
         <!--Register Name View Controller-->
         <scene sceneID="EcE-ZC-cq6">
             <objects>

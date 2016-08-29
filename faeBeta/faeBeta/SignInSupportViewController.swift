@@ -8,186 +8,176 @@
 
 import UIKit
 
-class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
+class SignInSupportViewController: RegisterBaseViewController {
     
-    //MARK: - Interface
-    var screenWidth : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.width
-        }
-    }
-    var screenHeight : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.height
-        }
-    }
-    private var titleLabel: UILabel!
-    private var emailTextField: FAETextField!
-    private var infoButton: UIButton!
-    private var sendCodeButton: UIButton!
+    // MARK: - Variables
     
-    private enum pageStateType {
-        case enteringUserName
-        case enteringCode
-    }
+    var emailTableViewCell: RegisterTextfieldTableViewCell!
+    var email: String?
     
-    private var pageState = pageStateType.enteringUserName
-    private var numberKeyboard: FAENumberKeyboard!
-    private var verificationCodeView: FAEVerificationCodeView!
+    // MARK: - View Lifecycle
     
-    private var timer: NSTimer!
-    private var remainingTime = 59
-    
-    //MARK: - View did/will ...
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
-        setupInterface()
+        
         // Do any additional setup after loading the view.
+        createTopView("")
+        createTableView(view.frame.size.height - 175)
+        createBottomView(noAccountView())
+        
+        registerCell()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        emailTableViewCell.makeFirstResponder()
+    }
+    
+    // MARK: - Functions
+    
+    func noAccountView() -> UIView {
+        let noAccountView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
+        
+        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 125, 0, 250, 25))
+        label.textAlignment = .Center
+        label.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        label.textColor = UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        label.text = "We can't find an account with this Email."
+        
+        noAccountView.addSubview(label)
+        
+        return noAccountView
+    }
+    
+    func loginButtonPressed() {
+        
+    }
+    
+    override func backButtonPressed() {
+        view.endEditing(true)
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    override func continueButtonPressed() {
+        view.endEditing(true)
+        jumpToSignInSupportCode()
+    }
+    
+    func jumpToSignInSupportCode() {
+        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewControllerWithIdentifier("SignInSupportCodeViewController")as! SignInSupportCodeViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func validation() {
+        var isValid = false
+        
+        isValid = email != nil && email?.characters.count > 0 && isValidEmail(email!)
+        
+        enableContinueButton(isValid)
+    }
+    
+    
+    func isValidEmail(testStr:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluateWithObject(testStr)
+    }
+    
+    func registerCell() {
+        
+        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.registerNib(UINib(nibName: "SpacerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpacerTableViewCellIdentifier")
+        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        
+    }
+    
+    override func createBottomView(subview: UIView) {
+        
+        bottomView = UIView(frame: CGRectMake(0, view.frame.size.height - 80 - subview.frame.size.height, view.frame.size.width, subview.frame.size.height + 80))
+        
+        continueButton = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 150, subview.frame.size.height + 15, 300, 50))
+        continueButton.setImage(UIImage(named: "SendCodeDisabled"), forState: .Normal)
+        continueButton.enabled = false
+        continueButton.addTarget(self, action: #selector(self.continueButtonPressed), forControlEvents: .TouchUpInside)
+        
+        bottomView.addSubview(subview)
+        bottomView.addSubview(continueButton)
+        
+        view.addSubview(bottomView)
+    }
+    
+    override func enableContinueButton(enable: Bool) {
+        continueButton.enabled = enable
+        continueButton.setImage(UIImage(named: enable ? "SendCodeEnabled" : "SendCodeDisabled"), forState: .Normal)
+    }
+    
+    // MARK: - Memory Management
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    private func setupNavigationBar()
-    {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
-        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(SignInSupportViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
-    }
-    
-    private func setupInterface()
-    {
-        
-        // set up the title label
-        titleLabel = UILabel(frame: CGRectMake(30, 72, self.screenWidth - 60, 60))
-        titleLabel.numberOfLines = 2
-        titleLabel.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-        titleLabel.textAlignment = .Center
-        //        titleLabel.sizeToFit()
-        titleLabel.center.x = self.screenWidth / 2
-        self.view.addSubview(titleLabel)
-        
-        // set up the email/username text field
-        emailTextField = FAETextField(frame: CGRectMake(15,171, screenWidth - 30, 30))
-        emailTextField.placeholder = "Email Address"
-        self.view.addSubview(emailTextField)
-        
-        // set up the "We can’t find an account with this Email!" label
-        infoButton = UIButton(frame: CGRectMake(87, 407, screenWidth - 175, 18))
-        infoButton.setAttributedTitle(NSAttributedString(string: "We can’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]),
-                                      forState: .Normal)
-        infoButton.contentHorizontalAlignment = .Center
-        infoButton.sizeToFit()
-        infoButton.center.x = self.screenWidth / 2
-        self.view.addSubview(infoButton)
-        
-        // set up the send button
-        sendCodeButton = UIButton(frame: CGRectMake(57, 444, 300, 50))
-        sendCodeButton.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
-        sendCodeButton.layer.cornerRadius = 25
-        sendCodeButton.backgroundColor = UIColor.faeAppRedColor()
-        sendCodeButton.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(sendCodeButton, atIndex: 0)
-        
-    }
-    
-    func sendCodeButtonTapped()
-    {
-        if(pageState == .enteringUserName){
-            titleLabel.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-            titleLabel.sizeToFit()
-            titleLabel.center.x = self.screenWidth / 2
-            self.view.endEditing(true)
-            
-            // setup the fake keyboard for numbers input
-            numberKeyboard = FAENumberKeyboard(frame:CGRectMake(57,480,300,244))
-            self.view.addSubview(numberKeyboard)
-            numberKeyboard.delegate = self
-            numberKeyboard.transform = CGAffineTransformMakeTranslation(0, numberKeyboard.bounds.size.height)
-            
-            // setup the verification code screen
-            verificationCodeView = FAEVerificationCodeView(frame:CGRectMake(85, 148, 244, 82))
-            self.view.addSubview(verificationCodeView)
-            verificationCodeView.alpha = 0
-            
-            // start transaction animation
-            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut , animations: {
-                
-                self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
-                self.sendCodeButton.setAttributedTitle(NSAttributedString(string: "Continue", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
-                
-                self.infoButton.frame = CGRectMake(87, 373, self.screenWidth - 175, 18)
-                self.sendCodeButton.frame = CGRectMake(57, 409, 300, 50)
-                
-                self.emailTextField.alpha = 0
-                self.numberKeyboard.transform = CGAffineTransformMakeTranslation(0, 0)
-                self.verificationCodeView.alpha = 1
-                
-                self.view.layoutIfNeeded()
-                }, completion: { (Bool) in
-                    self.emailTextField.hidden = true
-                    self.startTimer()
-            })
-            
-            pageState = .enteringCode
-        }else{
-            let controller = UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-    
-    
-    //MARK: - FAENumberKeyboard delegate
-    func keyboardButtonTapped(num:Int)
-    {
-        verificationCodeView.addDigit(num)
-    }
-    
-    //MARK: helper
-    func startTimer()
-    {
-        infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
-        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(SignInSupportViewController.updateTime), userInfo: nil, repeats: true)
-    }
-    
-    func updateTime()
-    {
-        if(remainingTime > 0){
-            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
-            remainingTime = remainingTime - 1
-        }
-        else{
-            remainingTime = 59
-            timer.invalidate()
-            timer = nil
-            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), forState: .Normal)
-            self.infoButton.addTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), forControlEvents: .TouchUpInside )
-        }
-    }
-    
-    func resendVerificationCode()
-    {
-        startTimer()
-        infoButton.removeTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), forControlEvents: .TouchUpInside)
-    }
-    
-    
-    func navBarLeftButtonTapped()
-    {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
+
+extension SignInSupportViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            cell.setTitleLabelText("Enter your Email \nto Reset Password")
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("SpacerTableViewCellIdentifier") as! SpacerTableViewCell
+            return cell
+        case 2:
+            if emailTableViewCell == nil {
+                emailTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                emailTableViewCell.setPlaceholderLabelText("Email Address", indexPath: indexPath)
+                emailTableViewCell.delegate = self
+            }
+            return emailTableViewCell
+        default:
+            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            return cell
+            
+        }
+    }
+}
+
+extension SignInSupportViewController: RegisterTextfieldProtocol {
+    
+    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
+        activeIndexPath = indexPath
+    }
+    
+    func textFieldShouldReturn(indexPath: NSIndexPath) {
+        switch indexPath.row {
+        case 2:
+            emailTableViewCell.endAsResponder()
+            break
+        default: break
+        }
+    }
+    
+    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
+        switch indexPath.row {
+        case 2:
+            email = text
+            break
+        default: break
+        }
+        validation()
+    }
+}
+

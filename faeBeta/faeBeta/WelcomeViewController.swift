@@ -107,6 +107,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         createAccountButton.layer.borderColor = UIColor.faeAppRedColor().CGColor
         createAccountButton.layer.borderWidth = 2
         createAccountButton.layer.cornerRadius = 25
+        createAccountButton.addTarget(self, action: "jumpToSignUp", forControlEvents: .TouchUpInside)
         self.view.insertSubview(createAccountButton, atIndex: 0)
         
         // create copyright label
@@ -173,6 +174,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     func loginButtonTapped()
     {
         let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    func jumpToSignUp() {
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RegisterNameViewController")as! RegisterNameViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
 }
