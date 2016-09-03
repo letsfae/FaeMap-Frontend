@@ -9,7 +9,7 @@
 import UIKit
 
 class RegisterBaseViewController: UIViewController {
-
+    
     // MARK: - Variables
     
     var tableView: UITableView!
@@ -21,7 +21,7 @@ class RegisterBaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBarHidden = true
         
@@ -50,14 +50,14 @@ class RegisterBaseViewController: UIViewController {
     func handleTap(sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
-
+    
     // MARK: - Memory Management
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 
 extension RegisterBaseViewController {
@@ -67,7 +67,7 @@ extension RegisterBaseViewController {
         topView.backgroundColor = UIColor.whiteColor()
         
         let backButton = UIButton(frame: CGRectMake(10, 5, 40, 40))
-        backButton.setImage(UIImage(named: "BackArrow"), forState: .Normal)
+        backButton.setImage(UIImage(named: "Fill 1"), forState: .Normal)
         backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         backButton.addTarget(self, action: #selector(self.backButtonPressed), forControlEvents: .TouchUpInside)
         
@@ -91,7 +91,15 @@ extension RegisterBaseViewController {
         bottomView = UIView(frame: CGRectMake(0, view.frame.size.height - 80 - subview.frame.size.height, view.frame.size.width, subview.frame.size.height + 80))
         
         continueButton = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 150, subview.frame.size.height + 15, 300, 50))
-        continueButton.setImage(UIImage(named: "ContinueDisabled"), forState: .Normal)
+        continueButton.layer.cornerRadius = 25
+        continueButton.layer.masksToBounds = true
+        
+        continueButton.setTitle("Continue", forState: .Normal)
+        continueButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
+        
+        continueButton.backgroundColor = UIColor(red: 255/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1.0)
+        
+        
         continueButton.enabled = false
         continueButton.addTarget(self, action: #selector(self.continueButtonPressed), forControlEvents: .TouchUpInside)
         
@@ -107,7 +115,12 @@ extension RegisterBaseViewController {
     
     func enableContinueButton(enable: Bool) {
         continueButton.enabled = enable
-        continueButton.setImage(UIImage(named: enable ? "ContinueEnabled" : "ContinueDisabled"), forState: .Normal)
+        
+        if enable {
+            continueButton.backgroundColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        } else {
+            continueButton.backgroundColor = UIColor(red: 255/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1.0)
+        }
     }
     
     func createTableView(height: CGFloat) {

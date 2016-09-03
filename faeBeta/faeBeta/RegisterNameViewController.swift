@@ -54,20 +54,33 @@ class RegisterNameViewController: RegisterBaseViewController {
         
         let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 100, 0, 200, 25))
         
-        button.setImage(UIImage(named: "AlreadyGotAnAccount"), forState: .Normal)
-        button.addTarget(self, action: #selector(self.loginButtonPressed), forControlEvents: .TouchUpInside)
+        
+        let titleString = "Already got an Account? Log In!"
+        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
+        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0), range: NSRange(location: 0, length: 24))
+        
+        
+        let myRange1 = NSRange(location: 24, length: 7)
+        
+        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: myRange1)
+        
+        
+        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
+        
+        
+        button.setAttributedTitle(myAttrString, forState: .Normal)
+        
+        button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
         
         createAlreadyGotAnAccountView.addSubview(button)
         
         return createAlreadyGotAnAccountView
     }
     
-    func loginButtonPressed() {
-        
-    }
-    
     override func backButtonPressed() {
-        
+        view.endEditing(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     override func continueButtonPressed() {
@@ -76,8 +89,14 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterEmail() {
-        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func loginButtonTapped()
+    {
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     func validation() {

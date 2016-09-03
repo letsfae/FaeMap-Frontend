@@ -13,11 +13,11 @@ target 'faeBeta' do
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
 	pod 'Kingfisher', '~> 2.4'
-	pod 'GoogleMaps', '~> 1.13.2'
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-	pod 'Kiwi'
+	pod 'KTCenterFlowLayout'
+	pod 'GoogleMaps', '~> 1.13.2'
 end
 
 target 'faeBetaTests' do
@@ -30,11 +30,11 @@ target 'faeBetaTests' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
-	pod 'GoogleMaps', '~> 1.13.2'
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-	pod 'Kiwi'
+	pod 'KTCenterFlowLayout'
+	pod 'GoogleMaps', '~> 1.13.2'
 end
 
 target 'faeBetaUITests' do
@@ -47,9 +47,9 @@ target 'faeBetaUITests' do
 	pod 'Firebase/Crash'
 	pod 'Firebase/Database'
 	pod 'Firebase/RemoteConfig'
-	pod 'GoogleMaps', '~> 1.13.2'
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-	pod 'Kiwi'
+	pod 'KTCenterFlowLayout'
+	pod 'GoogleMaps', '~> 1.13.2'
 end

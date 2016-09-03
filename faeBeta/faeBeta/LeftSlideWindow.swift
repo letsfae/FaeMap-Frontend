@@ -72,12 +72,15 @@ extension FaeMapViewController {
         imageViewBackgroundMore.image = UIImage(named: "tableViewMoreBackground")
         viewHeaderForMore.addSubview(imageViewBackgroundMore)
         
-        buttonMoreLeft = UIButton(frame: CGRectMake(15,27,33,25))
-        buttonMoreLeft.setImage(UIImage(named: "tableViewMoreLeftButton"), forState: .Normal)
+        //exchange left and right button
+        //left button is mapboard button
+        buttonMoreLeft = UIButton(frame: CGRectMake(15,27,29,29))
+        buttonMoreLeft.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
         viewHeaderForMore.addSubview(buttonMoreLeft)
         
-        buttonMoreRight = UIButton(frame: CGRectMake((tableViewWeight - 27 - 15),26,27,27))
-        buttonMoreRight.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
+        //right button is my namecard button
+        buttonMoreRight = UIButton(frame: CGRectMake((tableViewWeight - 29 - 15),26,29,29))
+        buttonMoreRight.setImage(UIImage(named: "tableViewMoreLeftButton"), forState: .Normal)
         viewHeaderForMore.addSubview(buttonMoreRight)
         
         imageViewAvatarMore = UIImageView(frame: CGRectMake((tableViewWeight - 91) / 2,36,91,91))

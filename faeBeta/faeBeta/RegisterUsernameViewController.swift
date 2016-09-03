@@ -49,7 +49,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterPassword() {
-        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

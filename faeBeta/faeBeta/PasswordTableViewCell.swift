@@ -139,7 +139,8 @@ extension PasswordTableViewCell: UITextViewDelegate {
         let myAttribute = [ NSFontAttributeName: font!]
         
         let textAttachment = NSTextAttachment()
-        textAttachment.image = UIImage(named: imageName)!
+        print(imageName)
+        textAttachment.image = UIImage(named: imageName)
         
         var attributedString = NSMutableAttributedString()
         let attributedStringWithImage = NSMutableAttributedString()

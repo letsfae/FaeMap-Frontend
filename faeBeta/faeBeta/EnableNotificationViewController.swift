@@ -56,7 +56,7 @@ class EnableNotificationViewController: UIViewController {
         view.addSubview(descriptionLabel)
         
         enableLocationButton = UIButton(frame: CGRectMake(57, 650, 300, 50))
-        enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
+        enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Notifications", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
         enableLocationButton.layer.cornerRadius = 25
         enableLocationButton.backgroundColor = UIColor.faeAppRedColor()
         enableLocationButton.addTarget(self, action: #selector(EnableNotificationViewController.enableNotificationButtonTapped), forControlEvents: .TouchUpInside)
@@ -65,7 +65,14 @@ class EnableNotificationViewController: UIViewController {
     
     func enableNotificationButtonTapped()
     {
-        
+        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+        print(notificationType?.types)
+        if notificationType?.types == UIUserNotificationType.None {
+            UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+        }
+        else{
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     /*
      // MARK: - Navigation

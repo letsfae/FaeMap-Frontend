@@ -99,6 +99,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
         print(error)
     }
 }
+
 func getImageFromURL(className:String, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [

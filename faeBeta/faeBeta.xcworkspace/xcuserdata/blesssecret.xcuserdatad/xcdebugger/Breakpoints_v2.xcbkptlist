@@ -89,22 +89,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "faeBeta/AppDelegate.swift"
-            timestampString = "492719007.588887"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "application(_:didRegisterUserNotificationSettings:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "faeBetaTests/faeBetaTests.swift"
             timestampString = "487307853.917915"
             startingColumnNumber = "9223372036854775807"
@@ -113,22 +97,6 @@
             endingLineNumber = "12"
             landmarkName = "faeBetaTests"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "faeBeta/AppDelegate.swift"
-            timestampString = "493760939.908215"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
-            landmarkName = "applicationDidBecomeActive(_:)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -170,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "faeBeta/AppDelegate.swift"
-            timestampString = "493760939.908215"
+            timestampString = "494621589.136977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "applicationDidBecomeActive(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,27 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "faeBeta/AppDelegate.swift"
-            timestampString = "493760939.908215"
+            timestampString = "494621589.136977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
-            landmarkName = "applicationDidBecomeActive(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "faeBeta/AppDelegate.swift"
-            timestampString = "493760939.908215"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "applicationDidBecomeActive(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -495,6 +447,38 @@
             endingLineNumber = "128"
             landmarkName = "getImageFromURL(_:authentication:completion:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "faeBeta.getImageFromURL (Swift.String, authentication : Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.AnyObject&gt;&gt;, completion : (Swift.Int, Swift.Optional&lt;Swift.AnyObject&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "faeBeta"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/HTTPClient.swift"
+                  timestampString = "494622228.055641"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "3519">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "faeBeta.(getImageFromURL (Swift.String, authentication : Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.AnyObject&gt;&gt;, completion : (Swift.Int, Swift.Optional&lt;Swift.AnyObject&gt;) -&gt; ()) -&gt; ()).(closure #2)"
+                  moduleName = "faeBeta"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/HTTPClient.swift"
+                  timestampString = "494622228.055771"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "38">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1048,7 +1032,7 @@
                   moduleName = "faeBeta"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/FaeUser.swift"
-                  timestampString = "494203206.121971"
+                  timestampString = "494622228.058684"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "407"
@@ -1063,7 +1047,7 @@
                   moduleName = "faeBeta"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blesssecret/Desktop/Fae-CB1-Frontend/faeBeta/faeBeta/FaeUser.swift"
-                  timestampString = "494203206.122078"
+                  timestampString = "494622228.058794"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "408"
@@ -1102,6 +1086,22 @@
             startingLineNumber = "219"
             endingLineNumber = "219"
             landmarkName = "viewDidLoad()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "faeBeta/PasswordTableViewCell.swift"
+            timestampString = "494620558.647372"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "setTextToDot(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

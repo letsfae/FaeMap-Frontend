@@ -42,11 +42,11 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
-        performSegueWithIdentifier("ToRegisterConfirmViewController", sender: nil)
+        jumpToRegisterConfirm()
     }
     
     func jumpToRegisterConfirm() {
-        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterConfirmViewController") as! RegisterConfirmViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterConfirmViewController") as! RegisterConfirmViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

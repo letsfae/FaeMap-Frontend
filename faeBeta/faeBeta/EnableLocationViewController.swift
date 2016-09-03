@@ -15,6 +15,7 @@ class EnableLocationViewController: UIViewController {
     private var descriptionLabel: UILabel!
     private var infoLabel: UILabel!
     private var enableLocationButton: UIButton!
+    private var timer: NSTimer!
     
     var screenWidth : CGFloat {
         get{
@@ -67,11 +68,28 @@ class EnableLocationViewController: UIViewController {
         enableLocationButton.addTarget(self, action: #selector(EnableLocationViewController.enableLocationButtonTapped), forControlEvents: .TouchUpInside)
         self.view.addSubview(enableLocationButton)
         
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.checkLocationEnabled), userInfo: nil, repeats: true)
     }
     
     func enableLocationButtonTapped()
     {
-        
+        let authstate = CLLocationManager.authorizationStatus()
+        if(authstate == CLAuthorizationStatus.AuthorizedAlways){
+            timer.invalidate()
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        else{
+            UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+        }
+    }
+    
+    func checkLocationEnabled()
+    {
+        let authstate = CLLocationManager.authorizationStatus()
+        if(authstate == CLAuthorizationStatus.AuthorizedAlways){
+            timer.invalidate()
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     /*

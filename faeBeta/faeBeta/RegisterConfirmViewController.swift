@@ -49,7 +49,16 @@ class RegisterConfirmViewController: UIViewController {
         titleLabel1.text = "Welcome to Fae!"
         
         let finishButton = UIButton(frame: CGRectMake(viewWidth/2.0 - 150, viewHeight * 600/736.0, 300, 50))
-        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
+        //        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
+        finishButton.layer.cornerRadius = 25
+        finishButton.layer.masksToBounds = true
+        
+        finishButton.setTitle("Finish!", forState: .Normal)
+        finishButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
+        
+        finishButton.backgroundColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        finishButton.addTarget(self, action: #selector(self.finishButtonPressed), forControlEvents: .TouchUpInside)
+        
         
         let termsOfServiceLabel = UILabel(frame: CGRectMake(50, view.frame.size.height - 60, 314, 50))
         termsOfServiceLabel.numberOfLines = 2
@@ -85,6 +94,15 @@ class RegisterConfirmViewController: UIViewController {
     
     func backButtonPressed() {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func finishButtonPressed() {
+        jumpToEnableLocation()
+    }
+    
+    func jumpToEnableLocation() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: Memory Management

@@ -106,6 +106,7 @@
                         <viewControllerLayoutGuide type="bottom" id="z4K-uW-WeL"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Jrr-h4-Jzr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -171,7 +172,7 @@
         <!--Register Password View Controller-->
         <scene sceneID="E8e-os-2go">
             <objects>
-                <viewController id="iRV-1I-1XL" customClass="RegisterPasswordViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RegisterPasswordViewController" id="iRV-1I-1XL" customClass="RegisterPasswordViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L2Q-zb-pmb"/>
                         <viewControllerLayoutGuide type="bottom" id="JZ5-Vo-8vA"/>

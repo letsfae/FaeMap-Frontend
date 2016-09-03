@@ -46,17 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func openSettings() {
         UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
     }
-    func jumpToNotificationEnable() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NotificationEnableViewController")as! NotificationEnableViewController
+    func popUpEnableLocationViewController() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController") as! EnableLocationViewController
         
         self.window?.makeKeyAndVisible()
-        //        self.window?.
         self.window?.rootViewController!.presentViewController(vc, animated: true, completion:nil)
         
     }
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         UIApplication.sharedApplication().registerForRemoteNotifications()
-        
         /*
          let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
          print(notificationType?.types)
@@ -76,12 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
         //        print(token)
         headerDeviceID = String(token)
-        print("deviceToken")
         print(headerDeviceID)
     }
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         print(userInfo)
-        print(userInfo["custom data"]!["auth"])
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         print(error)
@@ -97,26 +93,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
-        print(UIApplication.sharedApplication().applicationIconBadgeNumber)
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
-        let user = FaeUser()
-        user.getSynchronization{ (status:Int, message:AnyObject?) in
-            print("statusss")
-            print(status)
-            print("message")
-            print(message)
-            if(status/100==2){
-                //user is online
-            }
-            else{
-                //user is offline
-            }
-        }
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
@@ -141,15 +122,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             
             dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-                print(notificationType?.types)
-                if notificationType?.types == UIUserNotificationType.None {
-                    self.jumpToNotificationEnable()
+                let authstate = CLLocationManager.authorizationStatus()
+                if(authstate != CLAuthorizationStatus.AuthorizedAlways){
+                    self.popUpEnableLocationViewController()
                 }
-                else{
-                    print("Notification enabled")
-                }
-                
             })
             /*
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
