@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (3.4.1)
-  - Backendless-ios-SDK (3.0.27)
+  - Backendless-ios-SDK (3.0.39)
   - DACircularProgress (2.3.1)
   - Firebase/AdMob (3.2.1):
     - Firebase/Analytics (= 3.2.1)
@@ -96,7 +96,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
-  Backendless-ios-SDK: f6e357a74a42f14cfa3a9aaef66717f4929f1964
+  Backendless-ios-SDK: 1902478a84c949f8a8e306aa9deafbeb204d1db0
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Firebase: 6c80ac28d59d06bfd9152a7b6ea17625ca93183d
   FirebaseAnalytics: 6f75b04e6bfb8e0b6e9ef298e04c24eea3b13863
@@ -124,4 +124,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c9ff8b77bed1176c55cc1e362df492c73dca5a77
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.0.1

@@ -918,7 +918,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
                 if(stickerViewShow){
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
