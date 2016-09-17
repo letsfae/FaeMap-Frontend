@@ -1,6 +1,0 @@
-framework module KTCenterFlowLayout {
-  umbrella header "KTCenterFlowLayout-umbrella.h"
-
-  export *
-  module * { export * }
-}
