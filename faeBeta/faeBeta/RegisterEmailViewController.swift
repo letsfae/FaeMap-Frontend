@@ -14,6 +14,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     var emailTableViewCell: RegisterTextfieldTableViewCell!
     var email: String?
+    var faeUser: FaeUser!
+    var emailExistButton: UIButton!
     
     // MARK: - View Lifecycle
     
@@ -21,7 +23,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("Progress2")
+        createTopView("ProgressBar2")
         createTableView(view.frame.size.height - 175)
         createBottomView(thisEmailIsAlreadyView())
         
@@ -59,14 +61,14 @@ class RegisterEmailViewController: RegisterBaseViewController {
         //        button.setImage(UIImage(named: "ThisEmailIsAlready"), forState: .Normal)
         button.setAttributedTitle(myAttrString, forState: .Normal)
         button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
-        
+        emailExistButton = button
+        button.hidden = true
         thisEmailIsAlreadyView.addSubview(button)
         
         return thisEmailIsAlreadyView
     }
     
-    func loginButtonTapped()
-    {
+    func loginButtonTapped() {
         let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -78,11 +80,12 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
-        jumpToRegisterUsername()
+        checkForUniqueEmail()
     }
     
     func jumpToRegisterUsername() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterUsernameViewController")as! RegisterUsernameViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterUsernameViewController")as! RegisterUsernameViewController
+        vc.faeUser = faeUser!
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -90,10 +93,31 @@ class RegisterEmailViewController: RegisterBaseViewController {
         var isValid = false
         
         isValid = email != nil && email?.characters.count > 0 && isValidEmail(email!)
-        
         enableContinueButton(isValid)
     }
     
+    func checkForUniqueEmail() {
+        faeUser.whereKey("email", value: email!)
+        showActivityIndicator()
+        faeUser.checkEmailExistence { (status, message) in
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                self.hideActivityIndicator()
+                if status/100 == 2 {
+                    let value = message?.valueForKey("existence")
+                    if (value != nil) {
+                        if value! as! Int == 0 {
+                            self.emailExistButton.hidden = true
+                            self.jumpToRegisterUsername()
+                        } else {
+                            self.emailExistButton.hidden = false
+                        }
+                    }
+                }
+            })
+            
+        }
+    }
     
     func isValidEmail(testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"

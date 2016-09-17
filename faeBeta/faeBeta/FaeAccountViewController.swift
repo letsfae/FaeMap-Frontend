@@ -226,7 +226,9 @@ extension FaeAccountViewController {
     
     func logOut() {
         let user = FaeUser()
-        user.logOut()
+
+        user.logOut{(status: Int, message: AnyObject?) in
+        }
         jumpTowelcomeVC()
     }
 }

@@ -15,6 +15,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     var passwordTableViewCell: PasswordTableViewCell!
     var password: String?
+    var faeUser: FaeUser!
     
     // MARK: - View LifeCycle
     
@@ -22,7 +23,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("Progress4")
+        createTopView("ProgressBar4")
         createTableView(view.frame.size.height - 175)
         createBottomView(getInfoView())
         
@@ -46,11 +47,13 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
+        savePasswordInUser()
         jumpToRegisterInfo()
     }
     
     func jumpToRegisterInfo() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterInfoViewController") as! RegisterInfoViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterInfoViewController") as! RegisterInfoViewController
+        vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -75,6 +78,9 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         enableContinueButton(isValid)
     }
     
+    func savePasswordInUser() {
+        faeUser.whereKey("password", value: password!)
+    }
     
     func registerCell() {
         

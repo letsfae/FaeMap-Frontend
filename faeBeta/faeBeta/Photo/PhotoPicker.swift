@@ -34,7 +34,7 @@ class PhotoPicker {
                 let numberOfAssets = assetsFetchResult.count
                 if numberOfAssets != 0 && assetCollection.localizedTitle! != "Videos" {
                     self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
-                    if assetCollection.localizedTitle! == "Camera Roll" {
+                    if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
                         self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
                         self.currentAlbum = self.cameraRoll
                     }
@@ -44,5 +44,5 @@ class PhotoPicker {
             }
         } )
     }
-
+    
 }

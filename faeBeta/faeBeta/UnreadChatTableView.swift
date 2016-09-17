@@ -7,53 +7,58 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 //MARK: Show unread chat tableView
 extension FaeMapViewController {
-    func loadMapChat() {
-        mapChatSubview = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        mapChatSubview.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
-        mapChatSubview.alpha = 0.0
-        UIApplication.sharedApplication().keyWindow?.addSubview(mapChatSubview)
-        mapChatSubview.addTarget(self, action: #selector(FaeMapViewController.animationMapChatHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        mapChatWindow = UIView(frame: CGRectMake(31, 115, 350, 439))
-        mapChatWindow.layer.cornerRadius = 20
-        mapChatWindow.backgroundColor = UIColor.whiteColor()
-        mapChatWindow.alpha = 0.0
-        UIApplication.sharedApplication().keyWindow?.addSubview(mapChatWindow)
-        
-        mapChatClose = UIButton(frame: CGRectMake(15, 27, 17, 17))
-        mapChatClose.setImage(UIImage(named: "mapChatClose"), forState: .Normal)
-        mapChatClose.addTarget(self, action: #selector(FaeMapViewController.animationMapChatHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        mapChatClose.clipsToBounds = true
-        mapChatWindow.addSubview(mapChatClose)
-        
-        labelMapChat = UILabel(frame: CGRectMake(128, 27, 97, 20))
-        labelMapChat.text = "Map Chats"
-        labelMapChat.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelMapChat.textAlignment = .Center
-        labelMapChat.clipsToBounds = true
-        mapChatWindow.addSubview(labelMapChat)
-        
-        let mapChatUnderLine = UIView(frame: CGRectMake(0, 59, 350, 1))
-        mapChatUnderLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
-        mapChatWindow.addSubview(mapChatUnderLine)
-        
-        mapChatTable = UITableView(frame: CGRectMake(0, 60, 350, 370))
-        mapChatWindow.addSubview(mapChatTable)
-        mapChatTable.delegate = self
-        mapChatTable.dataSource = self
-        mapChatTable.registerClass(MapChatTableCell.self, forCellReuseIdentifier: "mapChatTableCell")
-        mapChatTable.layer.cornerRadius = 20
+    
+    func loadMapChat()
+    {
+        self.labelUnreadMessages.hidden = true
+        if (backendless.userService.currentUser != nil){
+            // keep tracking the unread messages number
+            firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
+                var totalUnread = 0
+                if snapshot.exists() {
+                    for recent in snapshot.value!.allValues {
+                        let recentDic = recent as! NSDictionary
+                        totalUnread += recentDic["counter"] as! Int
+                    }
+                    if(totalUnread / 10 >= 1){
+                        self.labelUnreadMessages.text = "\(totalUnread)"
+                        self.labelUnreadMessages.frame.size.width = 23
+                    }else{
+                        self.labelUnreadMessages.text = "\(totalUnread)"
+                        self.labelUnreadMessages.frame.size.width = 20
+                    }
+                }
+                self.labelUnreadMessages.hidden = totalUnread == 0
+                UIApplication.sharedApplication().applicationIconBadgeNumber = totalUnread
+            }
+        }
+        if(backendless.userService.currentUser != nil && backendless.messagingService.currentDevice().deviceId != nil){
+            // update the user's device_id for future message receive
+            backendless.userService.currentUser.updateProperties(["device_id":backendless.messagingService.currentDevice().deviceId])
+            backendless.userService.update(backendless.userService.currentUser, response: { (updatedUser) in
+                print("Updated current device_id")
+                }, error: { (fault) in
+                    print("error couldn't update device_id \(fault)")
+            })
+        }
+    }
+    
+    func stopMapChat(){
+        firebase.child("Recent").removeAllObservers()// reference to all chat room
     }
     
     func animationMapChatShow(sender: UIButton!) {
-        UIView.animateWithDuration(0.25, animations: ({
-            self.mapChatSubview.alpha = 0.9
-            self.mapChatWindow.alpha = 1.0
-        }))
+        // check if the user's logged in the backendless
+        if(backendless.userService.currentUser != nil){
+            self.presentViewController (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
+        }
     }
+    
     
     func animationMapChatHide(sender: UIButton!) {
         UIView.animateWithDuration(0.25, animations: ({

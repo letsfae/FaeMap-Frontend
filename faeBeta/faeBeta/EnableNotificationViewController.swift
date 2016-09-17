@@ -66,13 +66,10 @@ class EnableNotificationViewController: UIViewController {
     func enableNotificationButtonTapped()
     {
         let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-        print(notificationType?.types)
         if notificationType?.types == UIUserNotificationType.None {
             UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
         }
-        else{
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     /*
      // MARK: - Navigation

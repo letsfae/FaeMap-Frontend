@@ -10,13 +10,7 @@ import UIKit
 import Alamofire
 import SDWebImage
 
-var baseURL = "https://api.letsfae.com"
-var version = "x.faeapp.v1"
-var headerAccept = "application/x.faeapp.v1+json"
-var headerContentType = "application/x-www-form-urlencoded"
-let headerClientVersion : String = "fae-ios-1.0.0"
-var headerDeviceID : String = "00000001111"
-var headerUserAgent : String = "iphone5"
+
 
 /*
  do {
@@ -40,9 +34,9 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
-//        "Device-ID" : headerDeviceID,
+        //        "Device-ID" : headerDeviceID,
         "Accept": headerAccept,
-//        "Content-Type" : "application/form-data"
+        //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil{
         for(key,value) in authentication! {
@@ -55,7 +49,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
             let imageData = parameter!["avatar"]as! NSData
             
             Alamofire.upload(.POST, URL, headers: headers, multipartFormData: { (MultipartFormData) in
-//                MultipartFormData.appendBodyPart
+                //                MultipartFormData.appendBodyPart
                 MultipartFormData.appendBodyPart(data: imageData, name: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
                 }, encodingMemoryThreshold: 100, encodingCompletion: { encodingResult in
                     print(encodingResult)
@@ -65,7 +59,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
                         upload.responseJSON { response in
                             print(response.response!.statusCode)
                             print(response)
-
+                            
                             if let respon = response.response{
                                 if(response.response!.statusCode != 0){
                                     print("finished")
@@ -85,7 +79,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
                             else{
                                 completion(-500,"Internet error")
                             }
-
+                            
                         }
                     case .Failure(let encodingError):
                         completion(-400,"failure")
@@ -112,25 +106,25 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
     if authentication != nil{
         for(key,value) in authentication! {
             headers[key] = "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw" as? String
-//            print(value)
+            //            print(value)
         }
     }
     let manager = SDWebImageManager().imageDownloader
-//    manager.setValue("User-Agent", forHTTPHeaderField: headerUserAgent)
-//    manager.setValue("Fae-Client-Version", forHTTPHeaderField: headerClientVersion)
-//    manager.setValue("Accept", forHTTPHeaderField: headerAccept)
+    //    manager.setValue("User-Agent", forHTTPHeaderField: headerUserAgent)
+    //    manager.setValue("Fae-Client-Version", forHTTPHeaderField: headerClientVersion)
+    //    manager.setValue("Accept", forHTTPHeaderField: headerAccept)
     manager.setValue("Authorization", forHTTPHeaderField: "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw")
     //get function doesn't work
     manager.downloadImageWithURL(NSURL(string: URL), options: SDWebImageDownloaderOptions.AllowInvalidSSLCertificates,
-        progress: {( receivedSize: Int, expectedSize: Int) in
-            print(receivedSize)
+                                 progress: {( receivedSize: Int, expectedSize: Int) in
+                                    print(receivedSize)
         }
         , completed: { (image:UIImage!, data:NSData!, error:NSError!, finished:Bool) -> Void in
-//            print(error)
+            //            print(error)
             if (image != nil)
             {
                 completion(201,image)
-//                completion(201,data)
+                //                completion(201,data)
             }
             else {
                 completion(400, error)
@@ -155,8 +149,8 @@ func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[
         if parameter != nil{
             Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
                 .responseJSON{response in
-                    print(response.response!.statusCode)
-                    print(response)
+                    //print(response.response!.statusCode)
+                    //print(response)
                     if let respon = response.response{
                         if(response.response!.statusCode != 0){
                             print("finished")
@@ -169,7 +163,7 @@ func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[
                             completion(response.response!.statusCode,resMess)
                         }
                         else{
-//                            MARK: bug here
+                            //                            MARK: bug here
                             completion(response.response!.statusCode,"no Json body")
                         }
                     }

@@ -9,9 +9,9 @@
 import Foundation
 import Firebase
 import FirebaseDatabase
+import AVFoundation
 
 // this class is used to box information of one message user sent and send them to firebase.
-
 class OutgoingMessage {
     
     private let firebase = FIRDatabase.database().reference().child("Message")
@@ -49,7 +49,7 @@ class OutgoingMessage {
     
     
     
-    func sendMessage(chatRoomId : String, item : NSMutableDictionary) {
+    func sendMessage(chatRoomId : String, item : NSMutableDictionary, receiverDeviceToken: String) {
         
         let reference = firebase.child(chatRoomId).childByAutoId()
         
@@ -59,10 +59,34 @@ class OutgoingMessage {
             
             if error != nil {
                 print("Error, couldn't send message: \(error)")
+            }else{
+                let messageText:String = (item["senderName"] as! String) + ": " + (item["message"] as! String)
+                self.publishMessageAsPushNotificationAsync(messageText, deviceId: receiverDeviceToken )
             }
         }
-
+        
         UpdateRecents(chatRoomId, lastMessage: (item["message"] as? String)!)
+    }
+    
+    func publishMessageAsPushNotificationAsync(message: String, deviceId: String) {
+        
+        let deliveryOptions = DeliveryOptions()
+        deliveryOptions.pushSinglecast = [deviceId]
+        
+        let publishOptions = PublishOptions()
+        publishOptions.assignHeaders(["ios-text":message,
+            "ios-badge":"5",
+            "ios-sound":"\(AudioServicesPlaySystemSound (1104))"])
+        backendless.messaging.publish("default", message: message,
+                                      publishOptions:publishOptions,
+                                      deliveryOptions:deliveryOptions,
+                                      response:{ ( messageStatus : MessageStatus!) -> () in
+                                        print("MessageStatus = \(messageStatus.status) ['\(messageStatus.messageId)']")
+            },
+                                      error: { ( fault : Fault!) -> () in
+                                        print("Server reported an error: \(fault)")
+            }
+        )
     }
     
 }

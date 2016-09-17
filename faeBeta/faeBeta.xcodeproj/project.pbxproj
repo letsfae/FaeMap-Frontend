@@ -259,12 +259,6 @@
 		B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DCB1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
-		B0714DCD1D5E475500356705 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC91D5E475500356705 /* ChatSendLocationController.swift */; };
-		B0714DCE1D5E475500356705 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC91D5E475500356705 /* ChatSendLocationController.swift */; };
-		B0714DCF1D5E475500356705 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC91D5E475500356705 /* ChatSendLocationController.swift */; };
-		B0714DED1D5E4DF900356705 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0714DEC1D5E4DF900356705 /* GoogleService-Info.plist */; };
-		B0714DEE1D5E4DF900356705 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0714DEC1D5E4DF900356705 /* GoogleService-Info.plist */; };
-		B0714DEF1D5E4DF900356705 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0714DEC1D5E4DF900356705 /* GoogleService-Info.plist */; };
 		B0714DF41D62513300356705 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
 		B0714DF61D62513300356705 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF31D62513300356705 /* PasswordTextField.swift */; };
@@ -316,6 +310,63 @@
 		B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
+		B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
+		B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
+		B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
+		B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
+		B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
+		B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
+		B0BF35451D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
+		B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
+		B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
+		B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
+		B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
+		B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
+		B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
+		B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
+		B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
+		B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
+		B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
+		B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
+		B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
+		B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
+		B0BF35571D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
+		B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
+		B0BF356D1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
+		B0BF356E1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
+		B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
+		B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
+		B0BF35711D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
+		B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
+		B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
+		B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
+		B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */; };
+		B0BF35761D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */; };
+		B0BF35771D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */; };
+		B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */; };
+		B0BF35791D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */; };
+		B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */; };
+		B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */; };
+		B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */; };
+		B0BF357D1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */; };
+		B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */; };
+		B0BF357F1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */; };
+		B0BF35801D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */; };
+		B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */; };
+		B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */; };
+		B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */; };
+		B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */; };
+		B0BF35851D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */; };
+		B0BF35861D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */; };
+		B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */; };
+		B0BF35881D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */; };
+		B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */; };
+		B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */; };
+		B0BF358D1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */; };
+		B0BF358E1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */; };
+		B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358B1D8DC96300B0540B /* RecentViewController.swift */; };
+		B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358B1D8DC96300B0540B /* RecentViewController.swift */; };
+		B0BF35911D8DC96300B0540B /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358B1D8DC96300B0540B /* RecentViewController.swift */; };
 		B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
 		B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
 		B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */; };
@@ -499,8 +550,6 @@
 		B0714D391D5E435200356705 /* WindBellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindBellTableViewCell.xib; sourceTree = "<group>"; };
 		B0714D811D5E465900356705 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		B0714DC81D5E475500356705 /* ChatMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMapViewController.swift; sourceTree = "<group>"; };
-		B0714DC91D5E475500356705 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
-		B0714DEC1D5E4DF900356705 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0714DF11D62513300356705 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
 		B0714DF21D62513300356705 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
 		B0714DF31D62513300356705 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
@@ -532,6 +581,34 @@
 		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
 		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
+		B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinPopupWindow.swift; sourceTree = "<group>"; };
+		B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinListCell.swift; sourceTree = "<group>"; };
+		B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitCommenPin.swift; sourceTree = "<group>"; };
+		B0BF35481D8DC7E200B0540B /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
+		B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
+		B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseUserViewController.swift; sourceTree = "<group>"; };
+		B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQLocationMediaItemCustom.h; sourceTree = "<group>"; };
+		B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQLocationMediaItemCustom.m; sourceTree = "<group>"; };
+		B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleImageFactoryCustom.h; sourceTree = "<group>"; };
+		B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesBubbleImageFactoryCustom.m; sourceTree = "<group>"; };
+		B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubblesSizeCalculatorCustom.h; sourceTree = "<group>"; };
+		B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesBubblesSizeCalculatorCustom.m; sourceTree = "<group>"; };
+		B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDelegateFlowLayoutCustom.h; sourceTree = "<group>"; };
+		B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewFlowLayoutCustom.h; sourceTree = "<group>"; };
+		B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewFlowLayoutCustom.m; sourceTree = "<group>"; };
+		B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesInputToolbarCustom.h; sourceTree = "<group>"; };
+		B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesInputToolbarCustom.m; sourceTree = "<group>"; };
+		B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesMediaViewBubbleImageMaskerCustom.h; sourceTree = "<group>"; };
+		B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesMediaViewBubbleImageMaskerCustom.m; sourceTree = "<group>"; };
+		B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesToolbarContentViewCustom.xib; sourceTree = "<group>"; };
+		B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesViewControllerCustom.h; sourceTree = "<group>"; };
+		B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesViewControllerCustom.m; sourceTree = "<group>"; };
+		B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesViewControllerCustom.xib; sourceTree = "<group>"; };
+		B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQPhotoMediaItemCustom.h; sourceTree = "<group>"; };
+		B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPhotoMediaItemCustom.m; sourceTree = "<group>"; };
+		B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentTableViewCell.swift; sourceTree = "<group>"; };
+		B0BF358B1D8DC96300B0540B /* RecentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
 		B0C0CA9C1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardGeneralTableViewCell.swift; sourceTree = "<group>"; };
 		B0C0CA9D1D42287E00E2E251 /* NameCardGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardGeneralTableViewCell.xib; sourceTree = "<group>"; };
 		B0C0CAA41D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardAddCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -698,12 +775,14 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */,
 				B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
 				B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */,
 				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
+				B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */,
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
 				B0714D371D5E435200356705 /* UpdateUserPin.swift */,
@@ -736,7 +815,9 @@
 		B0714D7F1D5E463B00356705 /* chat */ = {
 			isa = PBXGroup;
 			children = (
-				B0714DEC1D5E4DF900356705 /* GoogleService-Info.plist */,
+				B0BF35481D8DC7E200B0540B /* Chat.storyboard */,
+				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
+				B0BF35581D8DC8D600B0540B /* JSQExtension */,
 				B0714DC71D5E474600356705 /* Location */,
 				B0714DC21D5E471400356705 /* StickerAlbum */,
 				B0714DBD1D5E46EF00356705 /* UIviewController */,
@@ -769,6 +850,9 @@
 		B0714DBD1D5E46EF00356705 /* UIviewController */ = {
 			isa = PBXGroup;
 			children = (
+				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
+				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
+				B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
 			);
 			name = UIviewController;
@@ -791,7 +875,7 @@
 			isa = PBXGroup;
 			children = (
 				B0714DC81D5E475500356705 /* ChatMapViewController.swift */,
-				B0714DC91D5E475500356705 /* ChatSendLocationController.swift */,
+				B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */,
 			);
 			name = Location;
 			sourceTree = "<group>";
@@ -900,6 +984,32 @@
 			name = SignIn;
 			sourceTree = "<group>";
 		};
+		B0BF35581D8DC8D600B0540B /* JSQExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
+				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
+				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
+				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
+				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
+				B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */,
+				B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */,
+				B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */,
+				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
+				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
+				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
+				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
+				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
+				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
+				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
+				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
+				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
+				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
+				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
+			);
+			path = JSQExtension;
+			sourceTree = "<group>";
+		};
 		B0CFC9981CED2CE700EC356A /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -967,6 +1077,7 @@
 				B0714D7D1D5E43DA00356705 /* MapSearchBar(Custom) */,
 				B0714D7E1D5E440C00356705 /* MapCell */,
 				B0714D251D5E435200356705 /* CommentPinUIView.swift */,
+				B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */,
 				B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */,
 				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
@@ -1091,24 +1202,27 @@
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
+				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
+				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
+				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 				B0C0CAB11D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
+				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EF521D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */,
 				B064EF581D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
-				B0714DED1D5E4DF900356705 /* GoogleService-Info.plist in Resources */,
 				B064EF461D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
 				B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0714D791D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
@@ -1129,14 +1243,17 @@
 				B0714D7A1D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
+				B0BF357F1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF471D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */,
+				B0BF35851D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B064EF651D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
-				B0714DEE1D5E4DF900356705 /* GoogleService-Info.plist in Resources */,
 				B064EED21D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
+				B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EF531D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF591D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF5F1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
@@ -1159,14 +1276,17 @@
 				B0714D7B1D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
 				B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
+				B0BF35801D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF481D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */,
+				B0BF35861D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B064EF661D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
-				B0714DEF1D5E4DF900356705 /* GoogleService-Info.plist in Resources */,
 				B064EED31D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
+				B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EF541D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF5A1D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF601D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
@@ -1316,16 +1436,19 @@
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
+				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
+				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
+				B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
@@ -1342,15 +1465,17 @@
 				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
-				B0714DCD1D5E475500356705 /* ChatSendLocationController.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				B0714D731D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
+				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
+				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
@@ -1358,15 +1483,21 @@
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
+				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
+				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
+				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
+				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				B0BF35451D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
+				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */,
@@ -1388,6 +1519,7 @@
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
+				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
@@ -1397,6 +1529,7 @@
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
+				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
@@ -1406,6 +1539,7 @@
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
+				B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B0714D3D1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
@@ -1421,6 +1555,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B064EF441D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
+				B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B0714E191D62534A00356705 /* LogInViewController.swift in Sources */,
 				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EF261D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
@@ -1440,24 +1575,30 @@
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0714D771D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
+				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
+				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
+				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B064EEA81D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
+				B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				B0714D621D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
 				B064EF061D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
+				B0BF35761D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D6E1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
 				B064EF501D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714E211D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B0AA08901D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B0BF356D1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				B064EF331D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
@@ -1468,7 +1609,9 @@
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
+				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
+				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF691D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B064EEEE1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1478,9 +1621,11 @@
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B0714E051D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF5C1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
+				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B0714D411D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
+				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0714E0D1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714E111D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
@@ -1497,19 +1642,22 @@
 				B0714E1D1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B064EEF41D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
+				B0BF35881D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B0714E151D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
+				B0BF35791D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B064EF151D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
+				B0BF358D1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714DF91D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B064EF1C1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B0714D741D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
-				B0714DCE1D5E475500356705 /* ChatSendLocationController.swift in Sources */,
 				B064EEE51D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B064EEEB1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B064EEF11D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
+				B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B064EEF81D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
@@ -1540,7 +1688,9 @@
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
+				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D781D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
+				B0BF358E1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714D631D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
 				B064EEAC1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714D3F1D5E435200356705 /* CommentPinUIView.swift in Sources */,
@@ -1577,7 +1727,9 @@
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
+				B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				B064EED91D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714E0E1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714E161D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0714D511D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1595,23 +1747,27 @@
 				B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B064EF571D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
+				B0BF356E1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				B0714E1A1D62534A00356705 /* LogInViewController.swift in Sources */,
 				B05DAFE81D1320F700082A71 /* FaeMap.swift in Sources */,
 				B0714E0A1D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B0BF35571D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
+				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
+				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
-				B0714DCF1D5E475500356705 /* ChatSendLocationController.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B064EEA91D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714E221D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B064EF1D1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B064EF451D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
+				B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0714D721D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
@@ -1619,12 +1775,18 @@
 				B064EED61D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B0714D841D5E465900356705 /* Camera.swift in Sources */,
 				B0714D6F1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
+				B0BF35911D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EEEC1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B0714DFE1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
+				B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF5D1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
+				B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EEF21D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
+				B0BF35711D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B0714E121D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
+				B0BF357D1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF071D6E34E200C078F5 /* FAETextField.swift in Sources */,
+				B0BF35771D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B064EF0A1D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,

@@ -73,46 +73,46 @@ class IncomingMessage {
         let latitude = item["latitude"] as? Double
         let longitude = item["longitude"] as? Double
         
-        var mediaItem = JSQLocationMediaItem()
+        var mediaItem = JSQLocationMediaItemCustom()
         
-//        mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        //        mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         
         let location = CLLocation(latitude: latitude!, longitude: longitude!)
         
-//        mediaItem.setLocation(location) { 
-//            //update collectionView
-//            self.snapShotFromData(item, result: { (image) in
-//                mediaItem.cachedMapImageView = UIImageView(image: image)
-//                JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMaskToMediaView(mediaItem.cachedMapImageView, isOutgoing: mediaItem.appliesMediaViewMaskAsOutgoing)
-//                mediaItem.cachedMapImageView.contentMode = .ScaleAspectFill
-//                mediaItem.cachedMapImageView.clipsToBounds = true
-//                mediaItem.mediaView()
-//            })
-//            self.collectionView.reloadData()
-//        }
+        //        mediaItem.setLocation(location) {
+        //            //update collectionView
+        //            self.snapShotFromData(item, result: { (image) in
+        //                mediaItem.cachedMapImageView = UIImageView(image: image)
+        //                JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMaskToMediaView(mediaItem.cachedMapImageView, isOutgoing: mediaItem.appliesMediaViewMaskAsOutgoing)
+        //                mediaItem.cachedMapImageView.contentMode = .ScaleAspectFill
+        //                mediaItem.cachedMapImageView.clipsToBounds = true
+        //                mediaItem.mediaView()
+        //            })
+        //            self.collectionView.reloadData()
+        //        }
         
         self.snapShotFromData(item) { (image) in
-            mediaItem = JSQLocationMediaItem(location: location, snapImage: image)
+            mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: image)
             
         }
         
         
-//                let location = CLLocation(latitude: latitude!, longitude: longitude!)
-//        
-//                let mediaItem = JSQGoogleLocationMediaItem(location: location)
-//        
-//                mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
-//        
-////                mediaItem.setLocation(location, withCompletionHandler: nil)
-//        
-//                    //update collectionView
-//        //            self.collectionView.reloadData()
-//                imageFromData(item) { (image) in
-//                    mediaItem.setCachedImage(image!)
-//                    mediaItem.mediaView()
-//                    self.collectionView.reloadData()
-//                }
-
+        //                let location = CLLocation(latitude: latitude!, longitude: longitude!)
+        //
+        //                let mediaItem = JSQGoogleLocationMediaItem(location: location)
+        //
+        //                mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        //
+        ////                mediaItem.setLocation(location, withCompletionHandler: nil)
+        //
+        //                    //update collectionView
+        //        //            self.collectionView.reloadData()
+        //                imageFromData(item) { (image) in
+        //                    mediaItem.setCachedImage(image!)
+        //                    mediaItem.mediaView()
+        //                    self.collectionView.reloadData()
+        //                }
+        
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
     }
     
@@ -131,7 +131,7 @@ class IncomingMessage {
         let userId = item["senderId"] as? String
         let date = dateFormatter().dateFromString((item["date"] as? String)!)
         
-        let mediaItem = JSQPhotoMediaItem(image: nil)
+        let mediaItem = JSQPhotoMediaItemCustom(image: nil)
         
         mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         

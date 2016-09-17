@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    let APP_ID = "D0956627-FB0B-3962-FFF9-34E6AD3A7600"
-    let SECRET_KEY = "53419A71-7646-43AB-FF96-7C5D37B00500"
+    let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
+    let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
     let VERSION_NUM = "v1"
     
     
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         
         backendless.initApp(APP_ID, secret:SECRET_KEY, version:VERSION_NUM)
-        
+        backendless.messaging.registerForRemoteNotifications()
         FIRDatabase.database().persistenceEnabled = true
         
         
@@ -75,9 +75,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        print(token)
         headerDeviceID = String(token)
         print(headerDeviceID)
+        registerDevice(deviceToken)
+
     }
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        print(userInfo)
+        UIApplication.sharedApplication().applicationIconBadgeNumber += 1
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         print(error)
@@ -207,6 +209,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort()
             }
         }
+    }
+    
+    //MARK: - backendless register
+    func registerDevice(deviceToken:NSData){
+        backendless.messagingService.registerDeviceToken(deviceToken,response: {(responseData: String!) -> Void in print("responseData: \(responseData)")
+            
+            },error :{(fault: Fault!) -> Void in
+                print("Backendless register device fault: \(fault)")
+                self.registerDevice(deviceToken)
+        })
     }
     
 }

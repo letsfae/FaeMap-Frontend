@@ -16,6 +16,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     var lastNameTableViewCell: RegisterTextfieldTableViewCell!
     var firstName: String?
     var lastName: String?
+    var faeUser: FaeUser?
     
     // MARK: View Life Cycle
     
@@ -23,7 +24,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("Progress1")
+        createTopView("ProgressBar1")
         createTableView(view.frame.size.height - 175)
         createBottomView(createAlreadyGotAnAccountView())
         
@@ -85,16 +86,23 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
+        createUser()
         jumpToRegisterEmail()
     }
     
     func jumpToRegisterEmail() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
+        vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func loginButtonTapped()
-    {
+    func createUser() {
+        faeUser = FaeUser()
+        faeUser?.whereKey("first_name", value: firstName!)
+        faeUser?.whereKey("last_name", value: lastName!)
+    }
+    
+    func loginButtonTapped() {
         let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }

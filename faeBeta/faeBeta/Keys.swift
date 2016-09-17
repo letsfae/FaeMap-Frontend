@@ -9,6 +9,16 @@
 import Foundation
 import UIKit
 
+var baseURL = "https://api.letsfae.com"
+var version = "x.faeapp.v1"
+var headerAccept = "application/x.faeapp.v1+json"
+var headerContentType = "application/x-www-form-urlencoded"
+let headerClientVersion : String = "fae-ios-1.0.0"
+var headerDeviceID : String = "00000001111"
+var headerUserAgent : String = "iphone5"
+
+
+
 var userToken : String!
 var userTokenEncode : String!
 var session_id : NSNumber!
@@ -31,6 +41,8 @@ var userPhoneNumber : String?
 
 var userEmailVerified : Bool = false
 var userPhoneVerified : Bool = false
+
+var userAvatarMap = "maleHappy" // new var by Yue Shen
 
 var arrayNameCard = [Int:UIImage]()
 //var arrayNameCard : [Int: UIImage]!

@@ -75,7 +75,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         super.viewDidLoad()
         collectionView?.backgroundColor = UIColor.whiteColor()
         collectionView?.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
-//        requestOption.synchronous = true
+        //        requestOption.synchronous = true
         requestOption.resizeMode = .Fast
         requestOption.deliveryMode = .HighQualityFormat
         self.collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
@@ -109,7 +109,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                 let numberOfAssets = assetsFetchResult.count
                 if numberOfAssets != 0 && assetCollection.localizedTitle! != "Videos" {
                     self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
-                    if assetCollection.localizedTitle! == "Camera Roll" {
+                    if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
                         self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
                         self.currentAlbum = self.cameraRoll
                         print("set album")
@@ -195,7 +195,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoPickerCellIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
         //get image from PHFetchResult
         dispatch_async(dispatch_get_main_queue(), { () in
-        
+            
             let asset : PHAsset = self.currentAlbum.albumContent[indexPath.item] as! PHAsset
             
             PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.view.frame.width - 1 / 3, self.view.frame.width - 1 / 3), contentMode: .AspectFill, options: self.requestOption) { (result, info) in
@@ -206,7 +206,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                 cell.ChosenFrameImageView.hidden = false
                 cell.ChosenFrameImageView.image = UIImage(named: self.frameImageName[self.imageIndexDict[self.imageDict[indexPath.row]!]!])
             }
-
+            
         })
         return cell
     }

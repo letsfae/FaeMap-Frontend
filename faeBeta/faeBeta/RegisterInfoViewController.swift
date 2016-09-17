@@ -18,6 +18,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     var gender: String?
     var maleButton: UIButton!
     var femaleButton: UIButton!
+    var faeUser: FaeUser!
     
     // MARK: - View Lifecycle
     
@@ -25,7 +26,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("Progress5")
+        createTopView("ProgressBar5")
         createDateOfBirthView()
         createGenderView()
         createBottomView(UIView(frame: CGRectZero))
@@ -42,11 +43,13 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
+        setValueInUser()
         jumpToRegisterConfirm()
     }
     
     func jumpToRegisterConfirm() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterConfirmViewController") as! RegisterConfirmViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterConfirmViewController") as! RegisterConfirmViewController
+        vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -124,15 +127,22 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     
     func maleButtonTapped() {
-        gender = "male"
-        maleButton.selected = true
-        femaleButton.selected = false
+        showGenderSelected("male")
     }
     
     func femaleButtonTapped() {
-        gender = "female"
-        maleButton.selected = false
-        femaleButton.selected = true
+        showGenderSelected("female")
+    }
+    
+    func showGenderSelected(gender: String) {
+        self.gender = gender
+        
+        let isMaleSelected = gender == "male"
+        
+        maleButton.selected = isMaleSelected
+        femaleButton.selected = !isMaleSelected
+        
+        validation()
     }
     
     func validation() {
@@ -143,8 +153,17 @@ class RegisterInfoViewController: RegisterBaseViewController {
         
         let date = dateFormatter.dateFromString(dateOfBirth!)
         
-        
         isValid = date != nil && dateOfBirth!.characters.count == 10
+        
+        if isValid {
+            let calendar = NSCalendar.init(calendarIdentifier: NSCalendarIdentifierGregorian)
+            
+            let currentYearInt = (calendar?.component(NSCalendarUnit.Year, fromDate: date!))!
+            
+            
+            isValid = isValid && currentYearInt > 1901
+        }
+        
         
         if isValid {
             isValid = date!.earlierDate(NSDate()).isEqualToDate(date!)
@@ -153,6 +172,20 @@ class RegisterInfoViewController: RegisterBaseViewController {
         isValid = isValid && gender != nil
         
         enableContinueButton(isValid)
+    }
+    
+    func setValueInUser() {
+        faeUser.whereKey("gender", value: gender!)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        let date = dateFormatter.dateFromString(dateOfBirth!)
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.stringFromDate(date!)
+        
+        faeUser.whereKey("birthday", value: dateString)
     }
     
     // MARK: - Memory Management

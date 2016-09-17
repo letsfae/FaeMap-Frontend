@@ -45,9 +45,6 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  */
 @property (readonly, nonatomic) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, retain, readwrite) UIImageView *cachedMapImageView;
-
-@property (nonatomic, retain, readwrite) UIImage *cachedMapSnapshotImage;
 /**
  *  Initializes and returns a location media item object having the given location.
  *
@@ -60,7 +57,7 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  Once the location data has been retrieved, you can then set the location property
  *  using `setLocation: withCompletionHandler:`
  */
-- (instancetype)initWithLocation:(CLLocation *)location snapImage: (UIImage *) snap;
+- (instancetype)initWithLocation:(CLLocation *)location;
 
 /**
  *  Sets the specified location for the location media item and immediately begins creating
@@ -72,7 +69,7 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  @param location   The location for the media item.
  *  @param completion The block to call after the map view snapshot for the given location has been created.
  */
-- (void)setLocation:(CLLocation *)location snapImage: (UIImage *) snap withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion;
+- (void)setLocation:(CLLocation *)location withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion;
 
 /**
  *  Sets the specified location for the location media item and immediately begins creating

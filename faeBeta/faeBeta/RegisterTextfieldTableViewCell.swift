@@ -41,6 +41,8 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     func setPlaceholderLabelText(text: String, indexPath: NSIndexPath)  {
         textfield.attributedPlaceholder = NSAttributedString(string:"placeholder text", attributes: [NSForegroundColorAttributeName: UIColor.init(colorLiteralRed: 155/255.0, green: 155/255.0, blue: 155/255.0, alpha: 1.0)])
         textfield.placeholder = text
+        textfield.autocorrectionType = .No
+        textfield.tintColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
         self.indexPath = indexPath
     }
     
@@ -114,7 +116,7 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
             let numberOfChars = newText.characters.count
             return numberOfChars < 16
         }
-
+        
         return true
     }
     

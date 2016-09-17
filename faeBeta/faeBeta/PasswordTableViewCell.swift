@@ -28,7 +28,7 @@ class PasswordTableViewCell: UITableViewCell {
     var isCharacterLimit = true
     var textEntered: String = ""
     var spaceText: String = ""
-    var imageName: String = "WeakPassword"
+    var imageName: String = "verification_dot"
     var showText = false
     var showPasswordButtonImageName = "check_eye_close_yellow"
     
@@ -43,6 +43,7 @@ class PasswordTableViewCell: UITableViewCell {
     
     func setPlaceholderLabelText(indexPath: NSIndexPath)  {
         self.indexPath = indexPath
+        textView.autocorrectionType = .No
     }
     
     func makeFirstResponder() {
@@ -56,8 +57,12 @@ class PasswordTableViewCell: UITableViewCell {
     // MARK: - IBAction
     
     @IBAction func showPasswordButtonTapped(sender: AnyObject) {
-        showPasswordButton.selected = !showPasswordButton.selected
+        
         showText = !showText
+        
+        changeColorOFImage(textEntered)
+        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), forState: .Normal)
+        
         let font = UIFont(name: "AvenirNext-Regular", size:22)
         
         let myAttribute = [ NSFontAttributeName: font!]
@@ -74,16 +79,16 @@ class PasswordTableViewCell: UITableViewCell {
             
             let attributedStringWithImage = NSMutableAttributedString()
             let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-
+            
             for _ in 0..<textEntered.characters.count {
                 attributedStringWithImage.appendAttributedString(attrStringWithImage)
                 attributedStringWithImage.appendAttributedString(NSAttributedString(string: " "))
             }
             
-
-                attributedStringWithImage.addAttributes(myAttribute, range: NSRange.init(location: 0, length: attributedStringWithImage.length))
-                
-                self.textView.attributedText = attributedStringWithImage;
+            
+            attributedStringWithImage.addAttributes(myAttribute, range: NSRange.init(location: 0, length: attributedStringWithImage.length))
+            
+            self.textView.attributedText = attributedStringWithImage;
             
         }
     }
@@ -124,7 +129,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         delegate?.textViewDidChange(textEntered, indexPath: indexPath)
         
         changeColorOFImage(textEntered)
-        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), forState: .Normal)        
+        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), forState: .Normal)
         if !showText {
             setTextToDot(text)
             return false
@@ -135,12 +140,11 @@ extension PasswordTableViewCell: UITextViewDelegate {
     func setTextToDot(text: String) {
         
         let font = UIFont(name: "AvenirNext-Regular", size:22)
-
+        
         let myAttribute = [ NSFontAttributeName: font!]
         
         let textAttachment = NSTextAttachment()
-        print(imageName)
-        textAttachment.image = UIImage(named: imageName)
+        textAttachment.image = UIImage(named: imageName)!
         
         var attributedString = NSMutableAttributedString()
         let attributedStringWithImage = NSMutableAttributedString()
@@ -211,4 +215,3 @@ extension PasswordTableViewCell: UITextViewDelegate {
     }
     
 }
-

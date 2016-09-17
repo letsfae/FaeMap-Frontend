@@ -1,0 +1,312 @@
+//
+//  RecentTableViewCell.swift
+//  quickChat
+//
+//  Created by User on 6/6/16.
+//  Copyright © 2016 User. All rights reserved.
+//
+
+import UIKit
+
+protocol SwipeableCellDelegate {
+    func cellDidOpen(cell:UITableViewCell)
+    func cellDidClose(cell:UITableViewCell)
+    func deleteButtonTapped(cell:UITableViewCell)
+}
+
+class RecentTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var lastMessageLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var counterLabel: UILabel!
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var countLabelLength: NSLayoutConstraint!
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var distanceToRight: NSLayoutConstraint!
+    @IBOutlet weak var distanceToLeft: NSLayoutConstraint!
+    @IBOutlet weak var mainView: UIView!
+    
+    var panRecognizer:UIPanGestureRecognizer!
+    var panStartPoint:CGPoint!
+    var startingRightLayoutConstraintConstant: CGFloat = 0
+    var buttonTotalWidth: CGFloat = 69
+    
+    let kBounceValue:CGFloat = 20.0
+    
+    var delegate: SwipeableCellDelegate!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
+        self.panRecognizer.delegate = self;
+        self.mainView.addGestureRecognizer(self.panRecognizer)
+    }
+
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+    
+    func bindData(recent : NSDictionary) {
+        
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height / 2
+        avatarImageView.layer.masksToBounds = true
+        
+        self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
+        
+        let withUserId = (recent.objectForKey("withUserUserId") as? String)!
+        
+        //get the backendless user and download avatar
+        
+        let whereClause = "objectId = '\(withUserId)'"
+        let dataQuery = BackendlessDataQuery()
+        dataQuery.whereClause = whereClause
+        
+        let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
+        
+        dataStore.find(dataQuery, response: { (user : BackendlessCollection!) in
+            
+            let withUser = user.data.first as! BackendlessUser
+            
+            //use withUser to get our avatar
+            
+            if let avatarUrl = withUser.getProperty("Avatar") {
+                getImageFromURL(avatarUrl as! String, result: { (image) in
+                    self.avatarImageView.image = image
+                })
+            }
+            
+            
+        }) { (fault : Fault!) in
+            print("error, couldn't get user avatar: \(fault)")
+        }
+        
+        nameLabel.text = recent["withUserUsername"] as? String
+        lastMessageLabel.text = recent["lastMessage"] as? String
+        counterLabel.text = ""
+        counterLabel.layer.cornerRadius = 10
+        counterLabel.layer.masksToBounds = true
+        counterLabel.backgroundColor = UIColor.faeAppRedColor()
+        if (recent["counter"] as? Int)! != 0 {
+            counterLabel.hidden = false
+            counterLabel.text = "\(recent["counter"]!)"
+            if(counterLabel.text?.characters.count == 2){
+                countLabelLength.constant = 23
+            }else{
+                countLabelLength.constant = 20
+            }
+        }else{
+            counterLabel.hidden = true
+        }
+        let date = dateFormatter().dateFromString((recent["date"] as? String)!)
+        let seconds = NSDate().timeIntervalSinceDate(date!)
+        dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
+        dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+    }
+    
+    func TimeElipsed(seconds : NSTimeInterval, lastMessageTime:NSDate) -> String {
+        let dayFormatter = dateFormatter()
+        dayFormatter.dateFormat = "yyyyMMdd"
+        let minFormatter = dateFormatter()
+        minFormatter.timeStyle = .ShortStyle
+        let weekdayFormatter = dateFormatter()
+        weekdayFormatter.dateFormat = "EEEE"
+        let realDateFormatter = dateFormatter()
+        realDateFormatter.dateFormat = "MM/dd/yy"
+        
+        let elipsed : String?
+        if seconds < 60 {
+            elipsed = "Just Now"
+        }else if (dayFormatter.stringFromDate(lastMessageTime) == dayFormatter.stringFromDate(NSDate())) {
+            elipsed = minFormatter.stringFromDate(lastMessageTime)
+        }else if (Int(dayFormatter.stringFromDate(NSDate()))! - Int(dayFormatter.stringFromDate(lastMessageTime))! == 1 ){
+            elipsed = "Yesterday"
+        }else if (Int(dayFormatter.stringFromDate(NSDate()))! - Int(dayFormatter.stringFromDate(lastMessageTime))! < 7 ){
+            elipsed = weekdayFormatter.stringFromDate(lastMessageTime)
+        }else{
+            elipsed = realDateFormatter.stringFromDate(lastMessageTime)
+        }
+
+        return elipsed!
+    }
+
+    @IBAction func deleteButtonTapped(sender: UIButton) {
+        self.delegate.deleteButtonTapped(self)
+    }
+    
+    func panThisCell(recognizer:UIPanGestureRecognizer){
+        switch (recognizer.state) {
+        case .Began:
+            self.panStartPoint = recognizer.translationInView(self.mainView)
+            self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+            break;
+        case .Changed:
+            let currentPoint = recognizer.translationInView(self.mainView)
+            let deltaX = currentPoint.x - self.panStartPoint.x;
+            var panningLeft = false
+            if (currentPoint.x < self.panStartPoint.x) {  //1
+                panningLeft = true;
+            }
+            
+            if (self.startingRightLayoutConstraintConstant == 0) { //2
+                //The cell was closed and is now opening
+                if (!panningLeft) {
+                    let constant = max(-deltaX, 0); //3
+                    if (constant == 0) { //4
+                        self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
+                    } else { //5
+                        self.distanceToRight.constant = constant;
+                    }
+                } else {
+                    let constant = min(-deltaX, self.buttonTotalWidth) //6
+                    if (constant == self.buttonTotalWidth) { //7
+                        self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
+                    } else { //8
+                        self.distanceToRight.constant = constant;
+                    }
+                }
+            
+            }else{
+                let adjustment = self.startingRightLayoutConstraintConstant - deltaX; //1
+                if (!panningLeft) {
+                    let constant = max(adjustment, 0); //2
+                    if (constant == 0) { //3
+                        self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
+                    } else { //4
+                        self.distanceToRight.constant = constant;
+                    }
+                } else {
+                    let constant = min(adjustment, self.buttonTotalWidth); //5
+                    if (constant == self.buttonTotalWidth) { //6
+                        self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
+                    } else { //7
+                        self.distanceToRight.constant = constant;
+                    }
+                }
+            }
+            self.distanceToLeft.constant = -self.distanceToRight.constant; //8
+            
+            break;
+        case .Ended:
+            
+//            if (self.startingRightLayoutConstraintConstant == 0) { //1
+                //Cell was opening
+                let halfOfButtonOne = CGRectGetWidth(self.deleteButton.frame) / 2; //2
+                if (self.distanceToRight.constant >= halfOfButtonOne) { //3
+                    //Open all the way
+                    self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
+                } else {
+                    //Re-close
+                    self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
+                }
+//            } else {
+//                //Cell was closing
+//                let halfOfButtonOne = CGRectGetWidth(self.deleteButton.frame) / 2; //2
+//                if (self.distanceToRight.constant >= halfOfButtonOne) { //5
+//                    //Re-open all the way
+//                    self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
+//                } else {
+//                    //Close
+//                    self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
+//                }
+//            }
+            
+            break;
+        case .Cancelled:
+            if (self.startingRightLayoutConstraintConstant == 0) {
+                //Cell was closed - reset everything to 0
+                self.resetConstraintContstantsToZero(true, notifyDelegateDidClose:true)
+            } else {
+                //Cell was open - reset to the open state
+                self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
+            }
+            break;
+        default:
+            break;
+        }
+    
+    }
+    
+    func resetConstraintContstantsToZero(animated: Bool, notifyDelegateDidClose notifyDelegate:Bool)
+    {
+        if (notifyDelegate) {
+            self.delegate.cellDidClose(self)
+        }
+        
+        if (self.startingRightLayoutConstraintConstant == 0 &&
+            self.distanceToRight.constant == 0) {
+            //Already all the way closed, no bounce necessary
+            return;
+        }
+        
+        self.distanceToRight.constant = -kBounceValue;
+        self.distanceToLeft.constant = kBounceValue;
+        
+        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            self.distanceToRight.constant = 0;
+            self.distanceToLeft.constant = 0;
+            
+            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+            });
+        });
+    }
+    
+    func setConstraintsToShowAllButtons(animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool)
+    {
+        if (notifyDelegate) {
+            self.delegate.cellDidOpen(self)
+        }
+        
+        if (self.startingRightLayoutConstraintConstant == self.buttonTotalWidth &&
+            self.distanceToRight.constant == self.buttonTotalWidth) {
+            return;
+        }
+        //2
+        self.distanceToLeft.constant = -self.buttonTotalWidth - kBounceValue;
+        self.distanceToRight.constant = self.buttonTotalWidth + kBounceValue;
+        
+        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            //3
+            self.distanceToLeft.constant = -self.buttonTotalWidth;
+            self.distanceToRight.constant = self.buttonTotalWidth;
+            
+            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                //4
+                self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+            })
+        })
+    }
+    
+    func updateConstraintsIfNeeded(animated:Bool, completion: ( (finised:Bool) -> Void))
+    {
+        var duration:Double = 0;
+        if (animated) {
+            duration = 0.1
+        }
+        UIView.animateWithDuration(duration, delay: 0, options:.CurveEaseOut , animations: {
+            self.layoutIfNeeded()
+        }, completion: completion)
+    }
+    
+    override func prepareForReuse()
+    {
+        super.prepareForReuse()
+        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+    }
+    
+    func openCell()
+    {
+        self.setConstraintsToShowAllButtons(false, notifyDelegateDidOpen:false)
+    }
+    func closeCell()
+    {
+        self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
+    }
+    
+//    override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
+}

@@ -23,29 +23,29 @@ let backendless = Backendless.sharedInstance()
 
 //given two BackendlessUser object, create a chat room for them.
 
-func startChat(user1 : String, user2 : String) -> String {
+func startChat(user1 : BackendlessUser, user2 : BackendlessUser) -> String {
     //user1 is current user
     
-//    let userId1 : String = user1.objectId
-//    let userId2 : String = user2.objectId
+    //    let userId1 : String = user1.objectId
+    //    let userId2 : String = user2.objectId
     
     var chatRoomId : String = ""
     
-    let value = user1.compare(user2).rawValue
+    let value = user1.objectId.compare(user2.objectId).rawValue
     
     if value < 0 {
-        chatRoomId = user1.stringByAppendingString("-" + user2)
+        chatRoomId = user1.objectId.stringByAppendingString("-" + user2.objectId)
     } else {
-        chatRoomId = user2.stringByAppendingString("-" + user1)
+        chatRoomId = user2.objectId.stringByAppendingString("-" + user1.objectId)
     }
     
-    let members = [user1, user2]
+    let members = [user1.objectId as String, user2.objectId as String]
     print("the chatRoom Id is \(chatRoomId)")
     //create recent object on both end of user on firebase.
     
     //create recent
-    createdRecent("1", chatRoomId: "1-13", members: members, withUserUsername: "13", withUserUserId: "13")
-    createdRecent("13", chatRoomId: "1-13", members: members, withUserUsername: "1", withUserUserId: "1")
+    createdRecent(user1.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user2.name, withUserUserId: user2.objectId)
+    createdRecent(user2.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user1.name, withUserUserId: user1.objectId)
     
     return chatRoomId
 }
@@ -67,8 +67,9 @@ func createdRecent(userId : String, chatRoomId : String, members : [String], wit
         if snapshot.exists() {
             print(snapshot)
             for recent in snapshot.value!.allValues {
-            //if we already have recent with passed userId, we dont create a new one
-                if recent["userId"] as! String == userId {
+                //if we already have recent with passed userId, we dont create a new one
+                let senderId = (recent as! NSDictionary).valueForKey("userId") as? String
+                if senderId == userId {
                     createRecent = false
                 }
             }
@@ -156,18 +157,17 @@ func updateRecentItem(recent : NSDictionary, lastMessage : String) {
 
 func restartRecentChat(recent : NSDictionary) {
     
-    for userId in recent["members"] as! [String] {
-        
-        let localStorage = LocalStorageManager()
-        localStorage.readLogInfo()
-
-        if userId !=  "\(user_id)" {
-            
-            createdRecent(userId, chatRoomId: (recent["chatRoomId"] as? String)!, members: recent["members"] as! [String], withUserUsername: "\(user_id)", withUserUserId: "\(user_id)")
-            
-        }
-        
-    }
+    let localStorage = LocalStorageManager()
+    localStorage.readLogInfo()
+    //    for userId in recent["members"] as! [String] {
+    
+    
+    //        if userId != backendless.userService.currentUser.objectId && userId != recent{
+    //            
+    //            createdRecent(userId, chatRoomId: (recent["chatRoomId"] as? String)!, members: recent["members"] as! [String], withUserUsername: backendless.userService.currentUser.name, withUserUserId: backendless.userService.currentUser.objectId)
+    //            
+    //        }
+    //    }
 }
 
 
@@ -199,7 +199,7 @@ func clearRecentCounter(chatRoomId : String) {
             localStorage.readLogInfo()
             
             for recent in snapshot.value!.allValues {
-                if recent.objectForKey("userId") as? String == "\(user_id)" {
+                if recent.objectForKey("userId") as? String == backendless.userService.currentUser.objectId {
                     //clear counter
                     ClearRecentCounterItem(recent as! NSDictionary)
                 }

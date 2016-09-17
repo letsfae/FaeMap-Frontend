@@ -22,41 +22,64 @@ extension FaeMapViewController {
         mainScreenSearchSubview.hidden = true
         mainScreenSearchSubview.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.blurViewMainScreenSearch.alpha = 0.0
+        loadMainSearchController()
+    }
+    
+    func loadMainSearchController() {
+        mainScreenSearchBarSubview = UIView(frame: CGRectMake(0, -5, screenWidth, 64))
+        UIApplication.sharedApplication().keyWindow?.addSubview(mainScreenSearchBarSubview)
+        
+        mainSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 25, screenWidth, 38), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!, searchBarTextColor: UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0), searchBarTintColor: UIColor.whiteColor())
+        mainSearchController.customSearchBar.placeholder = "Search Fae Map                             "
+        mainSearchController.customDelegate = self
+        mainSearchController.customSearchBar.layer.borderWidth = 2.0
+        mainSearchController.customSearchBar.layer.borderColor = UIColor.whiteColor().CGColor
+        mainSearchController.customSearchBar.setImage(nil, forSearchBarIcon: UISearchBarIcon.Search, state: .Normal)
+        
+        mainScreenSearchBarSubview.addSubview(mainSearchController.customSearchBar)
+        mainScreenSearchBarSubview.backgroundColor = UIColor.whiteColor()
+        
+        mainScreenSearchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
+        mainScreenSearchBarSubview.layer.borderWidth = 1.0
+        mainScreenSearchBarSubview.layer.cornerRadius = 2.0
+        
+        mainScreenSearchBarSubview.hidden = true
+        
+        buttonClearMainSearch = UIButton(frame: CGRectMake(375, 30.44, 22, 22))
+        let buttonClearSubview = UIView(frame: CGRectMake(375, 30.44, 30, 22))
+        buttonClearSubview.backgroundColor = UIColor.whiteColor()
+        mainScreenSearchBarSubview.addSubview(buttonClearSubview)
+        buttonClearMainSearch.setImage(UIImage(named: "clearMainSearch"), forState: .Normal)
+        mainScreenSearchBarSubview.addSubview(buttonClearMainSearch)
     }
     
     func animationMainScreenSearchShow(sender: UIButton!) {
+        self.mainSearchController.customSearchBar.becomeFirstResponder()
         self.mainScreenSearchActive = true
-        self.searchBarSubview.hidden = false
-        self.tblSearchResults.hidden = false
-        self.uiviewTableSubview.hidden = false
-        self.searchBarSubview.alpha = 0.0
-        self.tblSearchResults.alpha = 0.0
-        self.uiviewTableSubview.alpha = 0.0
+        self.mainScreenSearchBarSubview.hidden = false
+        self.mainScreenSearchBarSubview.alpha = 0.0
         self.middleTopActive = true
         self.mainScreenSearchSubview.hidden = false
         UIView.animateWithDuration(0.25, animations: ({
-            self.searchBarSubview.alpha = 1.0
-            self.tblSearchResults.alpha = 1.0
-            self.uiviewTableSubview.alpha = 1.0
+            self.blurViewMainScreenSearch.alpha = 1.0
+            self.mainScreenSearchBarSubview.alpha = 1.0
         }))
     }
     
     func animationMainScreenSearchHide(sender: UIButton!) {
-        self.customSearchController.customSearchBar.endEditing(true)
+        self.mainSearchController.customSearchBar.endEditing(true)
         self.mainScreenSearchSubview.hidden = true
         self.middleTopActive = false
         UIView.animateWithDuration(0.25, animations: ({
             self.blurViewMainScreenSearch.alpha = 0.0
-            self.searchBarSubview.alpha = 0.0
-            self.tblSearchResults.alpha = 0.0
-            self.uiviewTableSubview.alpha = 0.0
+            self.mainScreenSearchBarSubview.alpha = 0.0
+            
         }), completion: { (done: Bool) in
             if done {
-                self.searchBarSubview.hidden = true
-                self.tblSearchResults.hidden = true
-                self.uiviewTableSubview.hidden = true
+                self.mainScreenSearchBarSubview.hidden = true
+                
                 self.mainScreenSearchActive = false
-                self.customSearchController.customSearchBar.text = ""
+                self.mainSearchController.customSearchBar.text = ""
             }
         })
     }

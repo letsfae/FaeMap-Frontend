@@ -12,106 +12,106 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     // MARK: -- Load Map Main Screen Buttons
-    
     func loadButton() {
-//        let testButton = UIButton(frame: CGRectMake(300, 170, 100, 100))
-//        testButton.backgroundColor = colorFae
-//        self.view.addSubview(testButton)
-//        testButton.addTarget(self, action: #selector(FaeMapViewController.testing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//                testButton.hidden = true
+        //        let testButton = UIButton(frame: CGRectMake(300, 170, 100, 100))
+        //        testButton.backgroundColor = colorFae
+        //        self.view.addSubview(testButton)
+        //        testButton.addTarget(self, action: #selector(FaeMapViewController.testing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        //        testButton.hidden = true
         
-        let buttonLeftTopX: CGFloat = 15
-        let buttonLeftTopY: CGFloat = 5
-        let buttonLeftTopWidth: CGFloat = 32
-        let buttonLeftTopHeight: CGFloat = 33
-        buttonLeftTop = UIButton(frame: CGRectMake(buttonLeftTopX, buttonLeftTopY, buttonLeftTopWidth, buttonLeftTopHeight))
-        buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
+        self.buttonLeftTop = UIButton()
+        self.buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
         self.navigationController!.navigationBar.addSubview(buttonLeftTop)
-        buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(32)]", options: [], views: buttonLeftTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-5-[v0(33)]", options: [], views: buttonLeftTop)
         
-        let buttonMiddleTopX: CGFloat = 186
-        let buttonMiddleTopY: CGFloat = 1
-        let buttonMiddleTopWidth: CGFloat = 41
-        let buttonMiddleTopHeight: CGFloat = 41
-        buttonMiddleTop = UIButton(frame: CGRectMake(buttonMiddleTopX, buttonMiddleTopY, buttonMiddleTopWidth, buttonMiddleTopHeight))
-        buttonMiddleTop.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
+        
+        self.buttonMiddleTop = UIButton()
+        self.buttonMiddleTop.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
         self.navigationController!.navigationBar.addSubview(buttonMiddleTop)
-        buttonMiddleTop.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonMiddleTop.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(41)]", options: [], views: buttonMiddleTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-1-[v0(41)]", options: [], views: buttonMiddleTop)
+        NSLayoutConstraint(item: buttonMiddleTop, attribute: .CenterX, relatedBy: .Equal, toItem: self.navigationController!.navigationBar, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
-        let buttonRightTopX: CGFloat = 368
-        let buttonRightTopY: CGFloat = 4
-        let buttonRightTopWidth: CGFloat = 31
-        let buttonRightTopHeight: CGFloat = 36
-        buttonRightTop = UIButton(frame: CGRectMake(buttonRightTopX, buttonRightTopY, buttonRightTopWidth, buttonRightTopHeight))
-        buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
+        
+        self.buttonRightTop = UIButton()
+        self.buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
         self.navigationController!.navigationBar.addSubview(buttonRightTop)
-        buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(31)]-15-|", options: [], views: buttonRightTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-4-[v0(36)]", options: [], views: buttonRightTop)
         
-        let buttonToNorthX: CGFloat = 22
-        let buttonToNorthY: CGFloat = 582
-        let buttonToNorthWidth: CGFloat = 59
-        buttonToNorth = UIButton(frame: CGRectMake(buttonToNorthX, buttonToNorthY, buttonToNorthWidth, buttonToNorthWidth))
-        buttonToNorth.setImage(UIImage(named: "compass_new"), forState: .Normal)
+        
+        self.buttonToNorth = UIButton()
         self.view.addSubview(buttonToNorth)
-        buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonToNorth.setImage(UIImage(named: "compass_new"), forState: .Normal)
+        self.buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
         
-        let buttonSelfPositionX: CGFloat = 333
-        let buttonSelfPositionY: CGFloat = buttonToNorthY
-        let buttonSelfPositionWidth: CGFloat = buttonToNorthWidth
-        buttonSelfPosition = UIButton(frame: CGRectMake(buttonSelfPositionX, buttonSelfPositionY, buttonSelfPositionWidth, buttonSelfPositionWidth))
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
+        
+        self.buttonSelfPosition = UIButton()
         self.view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
+        self.buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
         
-        let buttonCancelSelectLocationWidth: CGFloat = buttonToNorthWidth
-        buttonCancelSelectLocation = UIButton(frame: CGRectMake(0, 0, buttonCancelSelectLocationWidth, buttonCancelSelectLocationWidth))
-        buttonCancelSelectLocation.center.x = 45.5
-        buttonCancelSelectLocation.center.y = 625.5
-        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
+        
+        let buttonCancelSelectLocationWidth: CGFloat = 59
+        self.buttonCancelSelectLocation = UIButton(frame: CGRectMake(0, 0, buttonCancelSelectLocationWidth, buttonCancelSelectLocationWidth))
+        self.buttonCancelSelectLocation.center.x = 45.5
+        self.buttonCancelSelectLocation.center.y = 625.5
+        self.buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
         self.view.addSubview(buttonCancelSelectLocation)
-        buttonCancelSelectLocation.addTarget(self, action: #selector(FaeMapViewController.actionCancelSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        buttonCancelSelectLocation.hidden = true
+        self.buttonCancelSelectLocation.addTarget(self, action: #selector(FaeMapViewController.actionCancelSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonCancelSelectLocation.hidden = true
         
-        let chatOnMapX: CGFloat = 12
-        let chatOnMapY: CGFloat = 646
-        let chatOnMapWidth: CGFloat = 79
-        buttonChatOnMap = UIButton(frame: CGRectMake(chatOnMapX, chatOnMapY, chatOnMapWidth, chatOnMapWidth))
-        buttonChatOnMap.setImage(UIImage(named: "chat_map"), forState: .Normal)
-        buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.buttonChatOnMap = UIButton()
+        self.buttonChatOnMap.setImage(UIImage(named: "chat_map"), forState: .Normal)
+        self.buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonChatOnMap)
+        self.view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
+        self.view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
         
-        let pinOnMapX: CGFloat = 323
-        let pinOnMapY: CGFloat = chatOnMapY
-        let pinOnMapWidth: CGFloat = chatOnMapWidth
-        buttonPinOnMap = UIButton(frame: CGRectMake(pinOnMapX, pinOnMapY, pinOnMapWidth, pinOnMapWidth))
-        buttonPinOnMap.setImage(UIImage(named: "pin_map"), forState: .Normal)
+        let unreadMessagesOnMapX: CGFloat = 67
+        let unreadMessagesOnMapY: CGFloat = 646
+        let unreadMessagesOnMapWidth: CGFloat = 20
+        labelUnreadMessages = UILabel(frame: CGRectMake(unreadMessagesOnMapX, unreadMessagesOnMapY, unreadMessagesOnMapWidth, unreadMessagesOnMapWidth))
+        labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
+        labelUnreadMessages.layer.cornerRadius = 10
+        labelUnreadMessages.layer.masksToBounds = true
+        labelUnreadMessages.text = "1"
+        labelUnreadMessages.textAlignment = .Center
+        labelUnreadMessages.textColor = UIColor.whiteColor()
+        self.view.addSubview(labelUnreadMessages)
+        
+        self.buttonPinOnMap = UIButton(frame: CGRectMake(323, 646, 79, 79))
+        self.buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map_outside"), forState: .Normal)
         self.view.addSubview(buttonPinOnMap)
-        buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        //        self.view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
+        //        self.view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonPinOnMap)
+        self.buttonPinOnMapInside = UIButton(frame: CGRectMake(344, 666, 38, 40))
+        self.buttonPinOnMapInside.setImage(UIImage(named: "set_pin_on_map_inside"), forState: .Normal)
+        self.buttonPinOnMapInside.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(buttonPinOnMapInside)
         
-        buttonSetLocationOnMap = UIButton(frame: CGRectMake(0, 671, screenWidth, 65))
-        buttonSetLocationOnMap.setTitle("Set Location", forState: .Normal)
-        buttonSetLocationOnMap.setTitle("Set Location", forState: .Highlighted)
-        buttonSetLocationOnMap.setTitleColor(colorFae, forState: .Normal)
-        buttonSetLocationOnMap.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
-        UIApplication.sharedApplication().keyWindow?.addSubview(buttonSetLocationOnMap)
-        buttonSetLocationOnMap.addTarget(self, action: #selector(FaeMapViewController.actionSetLocationForComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        buttonSetLocationOnMap.hidden = true
-        
-        buttonAddComment = UIButton(frame: CGRect(x: 280, y: 212, width: 58, height: 58))
-        let imageLike = UIImage(named: "comment_pin_groupchat")
-        buttonAddComment.setImage(imageLike, forState: .Normal)
-        UIApplication.sharedApplication().keyWindow?.addSubview(buttonAddComment)
-        buttonAddComment.hidden = true
-        buttonAddComment.clipsToBounds = false
-        
-        buttonCommentLike = UIButton(frame: CGRect(x: 345, y: 212, width: 58, height: 58))
-        let imageAddComment = UIImage(named: "comment_pin_like")
-        buttonCommentLike.setImage(imageAddComment, forState: .Normal)
-        UIApplication.sharedApplication().keyWindow?.addSubview(buttonCommentLike)
-        buttonCommentLike.hidden = true
-        buttonCommentLike.clipsToBounds = false
+        self.buttonSetLocationOnMap = UIButton()
+        self.buttonSetLocationOnMap.setTitle("Set Location", forState: .Normal)
+        self.buttonSetLocationOnMap.setTitle("Set Location", forState: .Highlighted)
+        self.buttonSetLocationOnMap.setTitleColor(colorFae, forState: .Normal)
+        self.buttonSetLocationOnMap.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        self.buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
+        self.buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
+        self.view.addSubview(buttonSetLocationOnMap)
+        self.buttonSetLocationOnMap.addTarget(self, action: #selector(FaeMapViewController.actionSetLocationForComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonSetLocationOnMap.hidden = true
+        self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonSetLocationOnMap)
+        self.view.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonSetLocationOnMap)
     }
     
     //MARK: Actions for these buttons
@@ -122,19 +122,136 @@ extension FaeMapViewController {
         self.currentLatitude = currentLocation.coordinate.latitude
         self.currentLongitude = currentLocation.coordinate.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.animateToCameraPosition(camera)
+        self.faeMapView.camera = camera
+        loadPositionAnimateImage()
     }
     
     func actionTrueNorth(sender: UIButton!) {
-        faeMapView.animateToBearing(0)
+        self.faeMapView.animateToBearing(0)
     }
     
     func actionCreatePin(sender: UIButton!) {
-        submitPinsShowAnimation()
-        uiviewCreateCommentPin.alpha = 0.0
-        uiviewPinSelections.alpha = 1.0
-        self.navigationController?.navigationBar.hidden = true
-        hideCommentPinCells()
+        self.uiviewCreateCommentPin.alpha = 0.0
+        self.uiviewPinSelections.alpha = 1.0
+        self.pinSelectionShowAnimation()
     }
     
+    func submitPinsHideAnimation() {
+        self.uiviewPinSelections.hidden = true
+        self.blurViewMap.alpha = 0.0
+        self.blurViewMap.hidden = true
+        self.labelSubmitTitle.frame = CGRectMake(135, 134, 145, 41)
+        self.labelSubmitTitle.alpha = 0.0
+        self.buttonClosePinBlurView.frame = CGRectMake(0, 736, self.screenWidth, 65)
+        self.buttonClosePinBlurView.alpha = 0.0
+        self.buttonMedia.frame = CGRect(x: 79, y: 205, width: 0, height: 0)
+        self.buttonChats.frame = CGRect(x: 208, y: 205, width: 0, height: 0)
+        self.buttonComment.frame = CGRect(x: 337, y: 205, width: 0, height: 0)
+        self.buttonEvent.frame = CGRect(x: 79, y: 347, width: 0, height: 0)
+        self.buttonFaevor.frame = CGRect(x: 208, y: 347, width: 0, height: 0)
+        self.buttonNow.frame = CGRect(x: 337, y: 347, width: 0, height: 0)
+        self.buttonJoinMe.frame = CGRect(x: 79, y: 489, width: 0, height: 0)
+        self.buttonSell.frame = CGRect(x: 208, y: 489, width: 0, height: 0)
+        self.buttonLive.frame = CGRect(x: 337, y: 489, width: 0, height: 0)
+        self.labelSubmitMedia.frame = CGRectMake(31, 224, 95, 27)
+        self.labelSubmitChats.frame = CGRectMake(160, 224, 95, 27)
+        self.labelSubmitComment.frame = CGRectMake(289, 224, 95, 27)
+        self.labelSubmitEvent.frame = CGRectMake(31, 366, 95, 27)
+        self.labelSubmitFaevor.frame = CGRectMake(160, 366, 95, 27)
+        self.labelSubmitNow.frame = CGRectMake(289, 366, 95, 27)
+        self.labelSubmitJoinMe.frame = CGRectMake(31, 508, 95, 27)
+        self.labelSubmitSell.frame = CGRectMake(160, 508, 95, 27)
+        self.labelSubmitLive.frame = CGRectMake(289, 508, 95, 27)
+        self.labelSubmitMedia.alpha = 0.0
+        self.labelSubmitChats.alpha = 0.0
+        self.labelSubmitComment.alpha = 0.0
+        self.labelSubmitEvent.alpha = 0.0
+        self.labelSubmitFaevor.alpha = 0.0
+        self.labelSubmitNow.alpha = 0.0
+        self.labelSubmitJoinMe.alpha = 0.0
+        self.labelSubmitSell.alpha = 0.0
+        self.labelSubmitLive.alpha = 0.0
+        self.buttonPinOnMap.frame = CGRectMake(323, 646, 79, 79)
+        self.buttonPinOnMap.alpha = 1.0
+        self.navigationController?.navigationBar.alpha = 1.0
+    }
+    
+    func pinSelectionShowAnimation() {
+        self.uiviewPinSelections.hidden = false
+        self.blurViewMap.hidden = false
+        self.blurViewMap.layer.opacity = 0.6
+        UIView.animateWithDuration(1.4, delay: 0, options: .CurveEaseOut, animations: {
+            self.blurViewMap.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.1, delay: 0, usingSpringWithDamping: 0, initialSpringVelocity: 20, options: .CurveEaseOut, animations: {
+            self.buttonPinOnMap.frame = CGRectMake(262.8, 585.8, 200, 200)
+            }, completion: {(done: Bool) in
+                if done {
+                    
+                }
+        })
+        UIView.animateWithDuration(0.2, delay: 0.5, options: .TransitionFlipFromBottom, animations: {
+            self.buttonClosePinBlurView.alpha = 1.0
+            self.buttonClosePinBlurView.frame = CGRectMake(0, 671, self.screenWidth, 65)
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.3, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.labelSubmitTitle.frame = CGRectMake(135, 68, 145, 41)
+            self.labelSubmitTitle.alpha = 1.0
+            self.buttonMedia.frame = CGRect(x: 34, y: 160, width: 90, height: 90)
+            self.labelSubmitMedia.frame = CGRect(x: 31, y: 257, width: 95, height: 27)
+            self.labelSubmitMedia.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.4, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonChats.frame = CGRect(x: 163, y: 160, width: 90, height: 90)
+            self.labelSubmitChats.frame = CGRect(x: 160, y: 257, width: 95, height: 27)
+            self.labelSubmitChats.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonComment.frame = CGRect(x: 292, y: 160, width: 90, height: 90)
+            self.labelSubmitComment.frame = CGRect(x: 289, y: 257, width: 95, height: 27)
+            self.labelSubmitComment.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.4, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonEvent.frame = CGRect(x: 34, y: 302, width: 90, height: 90)
+            self.labelSubmitEvent.frame = CGRect(x: 31, y: 399, width: 95, height: 27)
+            self.labelSubmitEvent.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonFaevor.frame = CGRect(x: 163, y: 302, width: 90, height: 90)
+            self.labelSubmitFaevor.frame = CGRect(x: 160, y: 399, width: 95, height: 27)
+            self.labelSubmitFaevor.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.6, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonNow.frame = CGRect(x: 292, y: 302, width: 90, height: 90)
+            self.labelSubmitNow.frame = CGRect(x: 289, y: 399, width: 95, height: 27)
+            self.labelSubmitNow.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonJoinMe.frame = CGRect(x: 34, y: 444, width: 90, height: 90)
+            self.labelSubmitJoinMe.frame = CGRect(x: 31, y: 541, width: 95, height: 27)
+            self.labelSubmitJoinMe.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.6, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonSell.frame = CGRect(x: 163, y: 444, width: 90, height: 90)
+            self.labelSubmitSell.frame = CGRect(x: 160, y: 541, width: 95, height: 27)
+            self.labelSubmitSell.alpha = 1.0
+            }, completion: nil)
+        UIView.animateWithDuration(0.883, delay: 0.7, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            self.buttonLive.frame = CGRect(x: 292, y: 444, width: 90, height: 90)
+            self.labelSubmitLive.frame = CGRect(x: 289, y: 541, width: 95, height: 27)
+            self.labelSubmitLive.alpha = 1.0
+            }, completion: nil)
+    }
+}
+
+extension UIView {
+    func addConstraintsWithFormat(format: String, options: NSLayoutFormatOptions, views: UIView...) {
+        var viewDictionary = [String: UIView]()
+        for (index, view) in views.enumerate() {
+            let key = "v\(index)"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            viewDictionary[key] = view
+        }
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(format, options: options, metrics: nil, views: viewDictionary))
+    }
 }

@@ -56,6 +56,7 @@ PODS:
   - GoogleIPhoneUtilities (1.2.1):
     - GoogleSymbolUtilities (~> 1.0)
     - GoogleUtilities (~> 1.0)
+  - GoogleMaps (1.13.2)
   - GoogleNetworkingUtilities (1.2.1):
     - GoogleSymbolUtilities (~> 1.0)
   - GoogleSymbolUtilities (1.1.1)
@@ -85,6 +86,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/RemoteConfig
   - Firebase/Storage
+  - GoogleMaps (~> 1.13.2)
   - IDMPhotoBrowser
   - JSQMessagesViewController
   - Kingfisher (~> 2.4)
@@ -107,6 +109,7 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 3c2a6656117989469bfe7645640aa1de024a4c6c
   GoogleInterchangeUtilities: def8415a862effc67d549d5b5b0b9c7a2f97d4de
   GoogleIPhoneUtilities: 63f25e93a3ddcb66884d182aab3a660d98f1479b
+  GoogleMaps: b20a103ff307f58392e603cf142e59d7e30374c1
   GoogleNetworkingUtilities: 3e83269048cfb498dc7ec83ab36813360965c74f
   GoogleSymbolUtilities: 33117db1b5f290c6fbf259585e4885b4c84b98d7
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
@@ -119,6 +122,6 @@ SPEC CHECKSUMS:
   SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 2634974b28e86eba4866ca53a22c7cdab54c6995
+PODFILE CHECKSUM: c9ff8b77bed1176c55cc1e362df492c73dca5a77
 
 COCOAPODS: 1.0.0

@@ -7,4 +7,8 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "Backendless.h"
-
+#import "JSQLocationMediaItemCustom.h"
+#import "JSQPhotoMediaItemCustom.h"
+#import "JSQMessagesViewControllerCustom.h"
+#import "JSQMessagesBubbleImageFactoryCustom.h"
+#import "JSQMessagesCollectionViewFlowLayoutCustom.h"

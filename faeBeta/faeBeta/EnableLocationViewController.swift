@@ -74,11 +74,7 @@ class EnableLocationViewController: UIViewController {
     func enableLocationButtonTapped()
     {
         let authstate = CLLocationManager.authorizationStatus()
-        if(authstate == CLAuthorizationStatus.AuthorizedAlways){
-            timer.invalidate()
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
-        else{
+        if(authstate != CLAuthorizationStatus.AuthorizedAlways){
             UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
         }
     }
@@ -86,9 +82,15 @@ class EnableLocationViewController: UIViewController {
     func checkLocationEnabled()
     {
         let authstate = CLLocationManager.authorizationStatus()
+        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+        
         if(authstate == CLAuthorizationStatus.AuthorizedAlways){
             timer.invalidate()
-            self.dismissViewControllerAnimated(true, completion: nil)
+            if (notificationType?.types == UIUserNotificationType.None && self.navigationController != nil) {
+                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("EnableNotificationViewController") , animated: true)
+            }else{
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
         }
     }
     

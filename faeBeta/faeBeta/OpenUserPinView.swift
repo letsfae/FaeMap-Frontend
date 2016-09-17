@@ -17,7 +17,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewDialog = UIView(frame: CGRect(x: (screenWidth-360)/2, y: 110,width: 360,height: 335))
         uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_namecard_dialog")!)
         uiviewDialog.layer.zPosition = 20
-
+        
         
         //avatar
         imageviewNamecardAvatar = UIImageView(frame: CGRect(x: 150, y: -17, width: 60, height: 60))
@@ -89,7 +89,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         loadTags()
         
-
+        
         uiviewDialog.addSubview(buttonMore)
         uiviewDialog.addSubview(labelNamecardName)
         uiviewDialog.addSubview(labelNamecardDescription)
@@ -101,7 +101,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         self.uiviewDialog.addSubview(imageviewNamecardAvatar)
         
         uiviewDialog.alpha = 0.0
-
+        
     }
     
     func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
@@ -111,10 +111,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         openUserPinActive = true
         let camera = GMSCameraPosition.cameraWithLatitude(lati+0.001, longitude: longi, zoom: 17)
         faeMapView.animateToCameraPosition(camera)
-        if commentPinCellsOpen {
-            hideCommentPinCells()
-            commentPinCellsOpen = false
-        }
     }
     
     func hideOpenUserPinAnimation() {
@@ -156,7 +152,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         var xOffset : CGFloat = (maxLength - totalTag - totalInterval) / 2
         
         for (var i=0; i<tagName.count; i++){
-             var buttonTag : UIButton = UIButton(frame: CGRect(x: xOffset, y: 0, width: tagLength[i], height: tagHeight))
+            var buttonTag : UIButton = UIButton(frame: CGRect(x: xOffset, y: 0, width: tagLength[i], height: tagHeight))
             buttonTag.backgroundColor = tagColor[i]
             buttonTag.setAttributedTitle(tagTitle[i], forState: .Normal)
             buttonTag.titleLabel?.textColor = UIColor.whiteColor()
@@ -218,7 +214,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func buttonReportAction(sender: UIButton!){
         print("Report")
     }
-
+    
     
     func buttonChatAction(sender: UIButton!){
         print("chat")
@@ -234,7 +230,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         labelNamecardName.hidden = false
         labelNamecardDescription.hidden = false
         uiviewTag.hidden = false
-        print("hiddend")
+        //        print("hiddend")
     }
     
     func showFunctionview(){
@@ -281,17 +277,17 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     
-
-
+    
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
 

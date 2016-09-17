@@ -47,11 +47,8 @@
     self.scrollsToTop = NO;
     self.userInteractionEnabled = YES;
 
-    self.font = [UIFont fontWithName:@"Avenir Next" size:18.0f];
-    self.textColor = [UIColor colorWithRed:146.0f/255.0f
-                                     green:146.0f/255.0f
-                                      blue:146.0f/255.0f
-                                     alpha:1.0f];;
+    self.font = [UIFont systemFontOfSize:16.0f];
+    self.textColor = [UIColor blackColor];
     self.textAlignment = NSTextAlignmentNatural;
 
     self.contentMode = UIViewContentModeRedraw;
@@ -62,7 +59,7 @@
 
     self.text = nil;
 
-    _placeHolder = @"Type Something...";
+    _placeHolder = nil;
     _placeHolderTextColor = [UIColor lightGrayColor];
 
     [self jsq_addTextViewNotificationObservers];

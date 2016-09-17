@@ -14,6 +14,8 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     var usernameTableViewCell: RegisterTextfieldTableViewCell!
     var username: String?
+    var faeUser: FaeUser!
+    var usernameExistLabel: UILabel!
     
     // MARK: View Lifecycle
     
@@ -21,7 +23,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("Progress3")
+        createTopView("ProgressBar3")
         createTableView(view.frame.size.height - 175)
         createBottomView(getSomeView())
         
@@ -45,11 +47,12 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         view.endEditing(true)
-        jumpToRegisterPassword()
+        checkForUniqueUsername()
     }
     
     func jumpToRegisterPassword() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
+        vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -93,8 +96,9 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         errorLabel.numberOfLines = 2
         errorLabel.textAlignment = .Center
         errorLabel.text = "This Username is currently Unavailable. \n Choose another One!"
+        errorLabel.hidden = true
         
-        
+        usernameExistLabel = errorLabel
         errorView.addSubview(errorLabel)
         
         return errorView
@@ -106,9 +110,30 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         
         isValid = username != nil && username?.characters.count > 0
         
-        enableContinueButton(isValid)
+        self.enableContinueButton(isValid)
+        
     }
     
+    func checkForUniqueUsername() {
+        faeUser.whereKey("username", value: username!)
+        showActivityIndicator()
+        faeUser.checkUserExistence { (status, message) in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.hideActivityIndicator()
+                if status/100 == 2 {
+                    let value = message?.valueForKey("existence")
+                    if (value != nil) {
+                        if value! as! Int == 0 {
+                            self.jumpToRegisterPassword()
+                            self.usernameExistLabel.hidden = true
+                        } else {
+                            self.usernameExistLabel.hidden = false
+                        }
+                    }
+                }
+            })
+        }
+    }
     
     func registerCell() {
         

@@ -19,8 +19,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
-    let widthFactor : CGFloat = 375 / 414
-    let heightFactor : CGFloat = 667 / 736
+    var widthFactor : CGFloat = 375 / 414
+    var heightFactor : CGFloat = 667 / 736
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     var locationDelegate : LocationSendDelegate!
@@ -57,6 +57,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBarHidden = true
+        widthFactor = screenWidth / 414
+        heightFactor = screenHeight / 736
         loadMapView()
         loadTableView()
         configureCustomSearchController()
@@ -141,7 +143,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func configureCustomSearchController() {
-        searchBarSubview = UIView(frame: CGRectMake(8 * widthFactor, 23 * heightFactor, 398 * widthFactor, 48 * heightFactor))
+        searchBarSubview = UIView(frame: CGRectMake(8 * widthFactor, 23 * heightFactor, (screenWidth - 8 * 2 * widthFactor), 48 * heightFactor))
         
         customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5 * heightFactor, 398 * widthFactor, 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
         customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
@@ -168,17 +170,17 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func loadButton() {
-        buttonSelfPosition = UIButton(frame: CGRectMake(339 * widthFactor, 596 * heightFactor, 59 * widthFactor, 59 * widthFactor))
+        buttonSelfPosition = UIButton(frame: CGRectMake(screenWidth - (16+59) *  widthFactor, screenHeight - 59 * widthFactor - 75 * heightFactor, 59 * widthFactor, 59 * widthFactor))
         buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
         self.view.addSubview(buttonSelfPosition)
         buttonSelfPosition.addTarget(self, action: #selector(ChatSendLocationController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        buttonCancelSelectLocation = UIButton(frame: CGRectMake(16 * widthFactor, 596 * heightFactor, 59 * widthFactor, 59 * widthFactor))
+        buttonCancelSelectLocation = UIButton(frame: CGRectMake(16 * widthFactor, screenHeight - 59 * widthFactor - 75 * heightFactor, 59 * widthFactor, 59 * widthFactor))
         buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
         self.view.addSubview(buttonCancelSelectLocation)
         buttonCancelSelectLocation.addTarget(self, action: #selector(ChatSendLocationController.actionCancelSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        buttonSetLocationOnMap = UIButton(frame: CGRectMake(0, 671 * heightFactor, screenWidth, 65 * heightFactor))
+        buttonSetLocationOnMap = UIButton(frame: CGRectMake(0, screenHeight - 65 * heightFactor, screenWidth, 65 * heightFactor))
         buttonSetLocationOnMap.setTitle("Send Location", forState: .Normal)
         buttonSetLocationOnMap.setTitle("Send Location", forState: .Highlighted)
         buttonSetLocationOnMap.setTitleColor(colorFae, forState: .Normal)

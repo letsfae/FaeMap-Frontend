@@ -65,7 +65,7 @@ func compressImage(image:UIImage)->NSData{
         return dates!
     }
 }
-class FaeImage : NSObject{
+class FaeImage : NSObject{ // it is ok to upload
 //    var keyValue = [String:AnyObject]()
     var image : UIImage!
 //    var imageView: UIImageView!
@@ -84,11 +84,10 @@ class FaeImage : NSObject{
                 postImageToURL("files/users/avatar", parameter: ["avatar":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
                     completion(code,message)
                 })
-                
             })
-
         }
     }
+    
 }
 
 extension UIImageView {
@@ -96,7 +95,7 @@ extension UIImageView {
         self.image = placeHolder
 //        self.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
  
-        getImageFromURL("files/users/avatar/23", authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+        getImageFromURL("files/users/21/avatar/", authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
             if status / 100 == 2 {
 //                self.image = image as! UIImage
 //                self.image = UIImage(data: image as! NSData)

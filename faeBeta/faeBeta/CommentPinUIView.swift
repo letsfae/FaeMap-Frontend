@@ -68,7 +68,9 @@ class CommentPinUIView: UIView {
         labelDes.hidden = true
         
         textViewComment = UITextView(frame: CGRect(x: 40, y: 81, width: 334, height: 91))
-        textViewComment.userInteractionEnabled = false
+        textViewComment.userInteractionEnabled = true
+        textViewComment.editable = false
+        textViewComment.indicatorStyle = UIScrollViewIndicatorStyle.White
         self.addSubview(textViewComment)
         textViewComment.textColor = UIColor.whiteColor()
         textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18.0)

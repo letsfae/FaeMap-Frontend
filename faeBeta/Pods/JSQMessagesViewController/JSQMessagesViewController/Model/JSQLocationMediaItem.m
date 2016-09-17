@@ -17,12 +17,17 @@
 //
 
 #import "JSQLocationMediaItem.h"
+
 #import "JSQMessagesMediaPlaceholderView.h"
 #import "JSQMessagesMediaViewBubbleImageMasker.h"
 
 
 @interface JSQLocationMediaItem ()
-@property (nonatomic, strong) UIImage *snap;
+
+@property (strong, nonatomic) UIImage *cachedMapSnapshotImage;
+
+@property (strong, nonatomic) UIImageView *cachedMapImageView;
+
 @end
 
 
@@ -30,11 +35,11 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithLocation:(CLLocation *)location snapImage:(UIImage *)snap
+- (instancetype)initWithLocation:(CLLocation *)location
 {
     self = [super init];
     if (self) {
-        [self setLocation:location snapImage: snap withCompletionHandler:nil];
+        [self setLocation:location withCompletionHandler:nil];
     }
     return self;
 }
@@ -47,9 +52,9 @@
 
 #pragma mark - Setters
 
-- (void)setLocation:(CLLocation *)location snapImage:(UIImage *)snap
+- (void)setLocation:(CLLocation *)location
 {
-    [self setLocation:location snapImage:snap withCompletionHandler:nil];
+    [self setLocation:location withCompletionHandler:nil];
 }
 
 - (void)setAppliesMediaViewMaskAsOutgoing:(BOOL)appliesMediaViewMaskAsOutgoing
@@ -59,23 +64,17 @@
     _cachedMapImageView = nil;
 }
 
-- (void)setCachedSnapImage:(UIImage *)cachedSnapImage
-{
-    self.cachedMapSnapshotImage = cachedSnapImage;
-}
-
 #pragma mark - Map snapshot
 
-- (void)setLocation:(CLLocation *)location snapImage:(UIImage *)snap withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion
+- (void)setLocation:(CLLocation *)location withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion
 {
-    self.cachedMapSnapshotImage = snap;
     [self setLocation:location region:MKCoordinateRegionMakeWithDistance(location.coordinate, 500.0, 500.0) withCompletionHandler:completion];
 }
 
 - (void)setLocation:(CLLocation *)location region:(MKCoordinateRegion)region withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion
 {
     _location = [location copy];
-//    _cachedMapSnapshotImage = nil;
+    _cachedMapSnapshotImage = nil;
     _cachedMapImageView = nil;
     
     if (_location == nil) {
@@ -93,39 +92,39 @@
 {
     NSParameterAssert(location != nil);
     
-//    MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
-//    options.region = region;
-//    options.size = [self mediaViewDisplaySize];
-//    options.scale = [UIScreen mainScreen].scale;
-//    
-//    MKMapSnapshotter *snapShotter = [[MKMapSnapshotter alloc] initWithOptions:options];
-//    
-//    [snapShotter startWithQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-//              completionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
-//                  if (snapshot == nil) {
-//                      NSLog(@"%s Error creating map snapshot: %@", __PRETTY_FUNCTION__, error);
-//                      return;
-//                  }
-//                  
-//                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
-//                  CGPoint coordinatePoint = [snapshot pointForCoordinate:location.coordinate];
-//                  UIImage *image = snapshot.image;
-//                  
-//                  coordinatePoint.x += pin.centerOffset.x - (CGRectGetWidth(pin.bounds) / 2.0);
-//                  coordinatePoint.y += pin.centerOffset.y - (CGRectGetHeight(pin.bounds) / 2.0);
-//                  
-//                  UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
-//                  {
-//                      [image drawAtPoint:CGPointZero];
-//                      [pin.image drawAtPoint:coordinatePoint];
-////                      self.cachedMapSnapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-//                  }
-//                  UIGraphicsEndImageContext();
-//                  
-//                  if (completion) {
-//                      dispatch_async(dispatch_get_main_queue(), completion);
-//                  }
-//              }];
+    MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
+    options.region = region;
+    options.size = [self mediaViewDisplaySize];
+    options.scale = [UIScreen mainScreen].scale;
+    
+    MKMapSnapshotter *snapShotter = [[MKMapSnapshotter alloc] initWithOptions:options];
+    
+    [snapShotter startWithQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+              completionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
+                  if (snapshot == nil) {
+                      NSLog(@"%s Error creating map snapshot: %@", __PRETTY_FUNCTION__, error);
+                      return;
+                  }
+                  
+                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
+                  CGPoint coordinatePoint = [snapshot pointForCoordinate:location.coordinate];
+                  UIImage *image = snapshot.image;
+                  
+                  coordinatePoint.x += pin.centerOffset.x - (CGRectGetWidth(pin.bounds) / 2.0);
+                  coordinatePoint.y += pin.centerOffset.y - (CGRectGetHeight(pin.bounds) / 2.0);
+                  
+                  UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
+                  {
+                      [image drawAtPoint:CGPointZero];
+                      [pin.image drawAtPoint:coordinatePoint];
+                      self.cachedMapSnapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+                  }
+                  UIGraphicsEndImageContext();
+                  
+                  if (completion) {
+                      dispatch_async(dispatch_get_main_queue(), completion);
+                  }
+              }];
 }
 
 #pragma mark - MKAnnotation
@@ -144,15 +143,13 @@
     }
     
     if (self.cachedMapImageView == nil) {
-        CGSize size = [self mediaViewDisplaySize];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:self.cachedMapSnapshotImage];
-        imageView.frame = CGRectMake(0, 0, size.width, size.height);
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.clipsToBounds = YES;
-        
         [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         self.cachedMapImageView = imageView;
-    }    
+    }
+    
     return self.cachedMapImageView;
 }
 
@@ -192,7 +189,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         CLLocation *location = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(location))];
-        [self setLocation:location snapImage: _snap withCompletionHandler:nil];
+        [self setLocation:location withCompletionHandler:nil];
     }
     return self;
 }
@@ -207,7 +204,7 @@
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    JSQLocationMediaItem *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap];
+    JSQLocationMediaItem *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location];
     copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
     return copy;
 }

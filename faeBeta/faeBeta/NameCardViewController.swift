@@ -65,8 +65,6 @@ class NameCardViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
-    
     func getColor(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }

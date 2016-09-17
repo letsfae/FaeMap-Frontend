@@ -16,6 +16,7 @@ class RegisterBaseViewController: UIViewController {
     var continueButton: UIButton!
     var bottomView: UIView!
     var activeIndexPath: NSIndexPath?
+    var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - View Lifecycle
     
@@ -32,6 +33,7 @@ class RegisterBaseViewController: UIViewController {
         super.viewWillAppear(animated)
         
         registerForNotifications()
+        createActivityIndicator()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -134,6 +136,36 @@ extension RegisterBaseViewController {
         tableView.allowsSelection = false
         tableView.scrollEnabled = false
         
+    }
+    
+    func createActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
+    }
+    
+    func showActivityIndicator() {
+        shouldShowActivityIndicator(true)
+    }
+    
+    func hideActivityIndicator() {
+        shouldShowActivityIndicator(false)
+    }
+    
+    func shouldShowActivityIndicator(show: Bool) {
+        
+        if show {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        
+        view.userInteractionEnabled = !show
     }
     
 }

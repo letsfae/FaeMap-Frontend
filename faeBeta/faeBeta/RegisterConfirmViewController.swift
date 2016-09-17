@@ -8,8 +8,11 @@
 
 import UIKit
 
-class RegisterConfirmViewController: UIViewController {
+class RegisterConfirmViewController: RegisterBaseViewController {
     
+    // MARK: - Variables
+    
+    var faeUser: FaeUser!
     
     // MARK: View Lifecycle
     
@@ -92,12 +95,37 @@ class RegisterConfirmViewController: UIViewController {
         
     }
     
-    func backButtonPressed() {
+    override func backButtonPressed() {
         navigationController?.popViewControllerAnimated(true)
     }
     
     func finishButtonPressed() {
-        jumpToEnableLocation()
+        signUpUser()
+    }
+    
+    func signUpUser() {
+        showActivityIndicator()
+        faeUser.signUpInBackground { (status, message) in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.hideActivityIndicator()
+                if status/100 == 2 {
+                    self.loginUser()
+                }
+            })
+        }
+    }
+    
+    func loginUser() {
+        showActivityIndicator()
+        faeUser.logInBackground({(status:Int, error:AnyObject?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.hideActivityIndicator()
+                if status / 100 == 2 {
+                    print("login success")
+                    self.jumpToEnableLocation()
+                }
+            })
+        })
     }
     
     func jumpToEnableLocation() {

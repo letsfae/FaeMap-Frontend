@@ -123,7 +123,7 @@ class MyFaeViewController: UIViewController  {
         headerImageView.layer.masksToBounds = true
 //        headerImageView.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
         //MARK: image download
-        let stringHeaderURL = "https://api.letsfae.com/files/users/avatar/" + user_id.stringValue
+        let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
         print(user_id)
         headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))//MARK: BUG here
         

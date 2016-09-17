@@ -92,7 +92,24 @@ class LogInViewController: UIViewController {
     
     func loginButtonTapped()
     {
-        
+        let user = FaeUser()
+        user.whereKey("email", value: usernameTextField.text!)
+        user.whereKey("password", value: passwordTextField.text!)
+//        user.whereKey("user_name", value: "heheda")
+        // for iphone: device_id is required and is_mobile should set to true
+        user.whereKey("device_id", value: headerDeviceID)
+        user.whereKey("is_mobile", value: "true")
+        user.logInBackground { (status:Int?, message:AnyObject?) in
+            if ( status! / 100 == 2 ){
+                //success
+//                self.testLabel.text = "login success
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+            else{
+                //failure
+//                self.testLabel.text = "login failure"
+            }
+        }
     }
     
     func supportButtonTapped()
