@@ -319,7 +319,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.sendCodeToEmail), forControlEvents: .TouchUpInside)
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
-        var labelEmail = UILabel(frame: CGRect(x: 30, y: 98, width: 290, height: 21))
+        let labelEmail = UILabel(frame: CGRect(x: 30, y: 98, width: 290, height: 21))
         labelEmail.font = UIFont(name: "Avenir Next", size: 20)
         let attributeEmail = NSMutableAttributedString(string: convertEmailAddress(getCurrentUserEmail()))
         attributeEmail.addAttribute(NSKernAttributeName, value: CGFloat(-0.3), range: NSRange(location: 0, length: attributeEmail.length))
@@ -941,12 +941,12 @@ extension FaeAccountViewController{
         
         buttonMale = UIButton(frame: CGRectMake(90-x,240-y,70,65))
         buttonMale.tag = 0
-        buttonMale.addTarget(self, action: "genderImage:", forControlEvents: .TouchUpInside)
+        buttonMale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonMale)
         
         buttonFemale = UIButton(frame: CGRectMake(267-x,240-y,58,65))
         buttonFemale.tag = 1
-        buttonFemale.addTarget(self, action: "genderImage:", forControlEvents: .TouchUpInside)
+        buttonFemale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonFemale)
         if gender == 0 {
             buttonMale.sendActionsForControlEvents(.TouchUpInside)
@@ -958,7 +958,7 @@ extension FaeAccountViewController{
         buttonSaveGender.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveGender.layer.cornerRadius = 7
         buttonSaveGender.setTitle("Save", forState: .Normal)
-        buttonSaveGender.addTarget(self, action: "actionSaveGender", forControlEvents: .TouchUpInside)
+        buttonSaveGender.addTarget(self, action: #selector(FaeAccountViewController.actionSaveGender), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonSaveGender)
         
     }
@@ -1012,7 +1012,7 @@ extension FaeAccountViewController {
         viewBirthdayBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundCloseBirthday = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseBirthday.addTarget(self, action: "actionCloseBrithdayView", forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
         viewBirthdayBackground.addSubview(buttonBackgroundCloseBirthday)
         
         viewBirthday = UIView(frame: CGRectMake(32,160,350,208))
@@ -1022,7 +1022,7 @@ extension FaeAccountViewController {
         
         buttonCloseBirthday = UIButton(frame: CGRectMake(47-x,175-y,17,17))
         buttonCloseBirthday.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseBirthday.addTarget(self, action: "actionCloseBrithdayView", forControlEvents: .TouchUpInside)
+        buttonCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
         viewBirthday.addSubview(buttonCloseBirthday)
         
         labelTitleBirthday = UILabel(frame: CGRectMake(0,190-y,350,21))
@@ -1045,14 +1045,14 @@ extension FaeAccountViewController {
         buttonSaveBirthday.layer.cornerRadius = 7
         buttonSaveBirthday.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveBirthday.setTitle("Save", forState: .Normal)
-        buttonSaveBirthday.addTarget(self, action: "actionSaveBirthday", forControlEvents: .TouchUpInside)
+        buttonSaveBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionSaveBirthday), forControlEvents: .TouchUpInside)
         viewBirthday.addSubview(buttonSaveBirthday)
         
         dataPickerBirthday = UIDatePicker(frame: CGRectMake(0,screenHeight-216,screenWidth,216))
         dataPickerBirthday.timeZone = NSTimeZone.localTimeZone()
         dataPickerBirthday.datePickerMode = UIDatePickerMode.Date
         dataPickerBirthday.backgroundColor = UIColor.whiteColor()
-        dataPickerBirthday.addTarget(self, action: "handleDatePicker:", forControlEvents: .ValueChanged)
+        dataPickerBirthday.addTarget(self, action: #selector(FaeAccountViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
         viewBirthdayBackground.addSubview(dataPickerBirthday)
     }
     //MARK: save birthday to database

@@ -82,7 +82,7 @@ class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate 
         buttonTryAgain.titleLabel?.textColor = UIColor.blueColor()
         buttonTryAgain.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonTryAgain.layer.cornerRadius = 7
-        buttonTryAgain.addTarget(self, action: "actionTry", forControlEvents: .TouchUpInside)
+        buttonTryAgain.addTarget(self, action: #selector(LocationEnableViewController.actionTry), forControlEvents: .TouchUpInside)
         
         self.view.addSubview(buttonTryAgain)
     }

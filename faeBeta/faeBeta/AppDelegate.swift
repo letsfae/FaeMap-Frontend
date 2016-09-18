@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
-        var token = NSString(format: "%@", deviceToken)
+        let token = NSString(format: "%@", deviceToken)
         //        print(token)
         //        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
         //        token = token.stringByReplacingOccurrencesOfString(">", withString: "")

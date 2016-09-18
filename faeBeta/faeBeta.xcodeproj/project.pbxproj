@@ -258,7 +258,6 @@
 		B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DF41D62513300356705 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
-		B0714DF61D62513300356705 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF31D62513300356705 /* PasswordTextField.swift */; };
 		B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
 		B0714DF91D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
 		B0714DFA1D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
@@ -443,6 +442,9 @@
 		B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
 		B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
 		B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */; };
 /* End PBXBuildFile section */
 
@@ -556,7 +558,6 @@
 		B0714DC81D5E475500356705 /* ChatMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMapViewController.swift; sourceTree = "<group>"; };
 		B0714DF11D62513300356705 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
 		B0714DF21D62513300356705 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
-		B0714DF31D62513300356705 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B0714DF71D62520900356705 /* RegisterNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameViewController.swift; sourceTree = "<group>"; };
 		B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterEmailViewController.swift; sourceTree = "<group>"; };
 		B0714DFF1D62525A00356705 /* RegisterUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterUsernameViewController.swift; sourceTree = "<group>"; };
@@ -641,6 +642,7 @@
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPin.swift; sourceTree = "<group>"; };
 		B837D1ED1D8F11C500E44FAE /* PinSelections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSelections.swift; sourceTree = "<group>"; };
+		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -897,7 +899,7 @@
 				B064EF041D6E34E200C078F5 /* FAEVerificationCodeView.xib */,
 				B0714DF11D62513300356705 /* EmailTextField.swift */,
 				B0714DF21D62513300356705 /* PasswordAgainTextField.swift */,
-				B0714DF31D62513300356705 /* PasswordTextField.swift */,
+				B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -1451,6 +1453,7 @@
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
+				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1539,7 +1542,6 @@
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
-				B0714DF61D62513300356705 /* PasswordTextField.swift in Sources */,
 				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
@@ -1634,6 +1636,7 @@
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0714E0D1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
+				B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B0714E111D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B064EECF1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
@@ -1693,6 +1696,7 @@
 				B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
+				B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,

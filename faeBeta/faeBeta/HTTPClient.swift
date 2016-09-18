@@ -215,7 +215,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
             Alamofire.request(.GET, URL,parameters:parameter,headers:headers)
                 .responseJSON{response in
                     //print(response.response!.statusCode)
-                    if let respon = response.response{
+                    if let _ = response.response{
                         if(response.response!.statusCode != 0){
                             print("finished")
                         }
