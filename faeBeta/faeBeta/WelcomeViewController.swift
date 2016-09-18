@@ -107,7 +107,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         createAccountButton.layer.borderColor = UIColor.faeAppRedColor().CGColor
         createAccountButton.layer.borderWidth = 2
         createAccountButton.layer.cornerRadius = 25
-        createAccountButton.addTarget(self, action: "jumpToSignUp", forControlEvents: .TouchUpInside)
+        createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), forControlEvents: .TouchUpInside)
         self.view.insertSubview(createAccountButton, atIndex: 0)
         
         // create copyright label

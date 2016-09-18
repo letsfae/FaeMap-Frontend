@@ -636,7 +636,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func incoming(item : NSDictionary) -> Bool {
-        if currentUserId == item["senderId"] as! String {
+        if currentUserId == item["senderId"] as? String {
             return false
         } else {
             return true
@@ -644,7 +644,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func outgoing(item : NSDictionary) -> Bool {
-        if currentUserId == item["senderId"] as! String {
+        if currentUserId == item["senderId"] as? String {
             return true
         } else {
             return false

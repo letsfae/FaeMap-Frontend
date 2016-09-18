@@ -47,7 +47,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func navigationBarSet() {
-        let centerView = UIView(frame: CGRect(x: 0,y: 0,width: 100,height: 30))
+
         let sortButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
         sortButton.titleLabel?.text = ""
         sortButton.addTarget(self, action: #selector(RecentViewController.sortAlert), forControlEvents: .TouchUpInside)
@@ -61,13 +61,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: "Avenir Next", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        //        centerView.addSubview(titleLabel)
-        //
-        //
-        //        var arrow = UIImageView(frame: CGRect(x: 47, y: 25, width: 10, height: 6))
-        //        arrow.image = UIImage(named: "arrow")
-        //        centerView.addSubview(arrow)
-        //        centerView.addSubview(sortButton)
+        
         self.navigationItem.titleView = titleLabel
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .Plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))

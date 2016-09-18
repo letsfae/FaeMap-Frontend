@@ -319,7 +319,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.sendCodeToEmail), forControlEvents: .TouchUpInside)
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
-        var labelEmail = UILabel(frame: CGRect(x: 30, y: 98, width: 290, height: 21))
+        let labelEmail = UILabel(frame: CGRect(x: 30, y: 98, width: 290, height: 21))
         labelEmail.font = UIFont(name: "Avenir Next", size: 20)
         let attributeEmail = NSMutableAttributedString(string: convertEmailAddress(getCurrentUserEmail()))
         attributeEmail.addAttribute(NSKernAttributeName, value: CGFloat(-0.3), range: NSRange(location: 0, length: attributeEmail.length))
@@ -478,7 +478,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         let length : CGFloat = 13.0
         let height : CGFloat = 13.0
         let interval : CGFloat = 42.0
-        for (var i = 0 ; i < 6 ; i += 1) {
+        for i in 0  ..< 6 {
             imageCodeDotArray.append(UIImageView(frame : CGRectMake(xDistance, paddingTop, length, height)))
             xDistance += interval
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
@@ -492,7 +492,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         let height = 0.1114 * screenHeight - 8
         let paddingTop : CGFloat = 94.0
         let interval : CGFloat = 42
-        for (var i = 0 ; i < 6 ; i += 1) {
+        for i in 0  ..< 6 {
             textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
             if(isIPhone5) {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 40)
@@ -669,7 +669,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
     
     func update() {
         if(countDown > 0) {
-            let title = "Resend Code \(countDown--)"
+            let title = "Resend Code \(countDown)"
+            countDown -= 1
             buttonContinuePasswordChange.setTitle(title, forState: .Normal)
         } else {
             let title = "Resend Code"
@@ -919,7 +920,7 @@ extension FaeAccountViewController{
         viewGenderBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundCloseGender = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseGender.addTarget(self, action: "actionCloseGenderView", forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), forControlEvents: .TouchUpInside)
         viewGenderBackground.addSubview(buttonBackgroundCloseGender)
         
         viewGender = UIView(frame: CGRectMake(x,y,350,228))
@@ -929,7 +930,7 @@ extension FaeAccountViewController{
         
         buttonCloseGender = UIButton(frame: CGRectMake(47-x,175-y,17,17))
         buttonCloseGender.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseGender.addTarget(self, action: "actionCloseGenderView", forControlEvents: .TouchUpInside)
+        buttonCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonCloseGender)
         
         labelTitleGender = UILabel(frame: CGRectMake(0,190-y,350,21))
@@ -941,12 +942,12 @@ extension FaeAccountViewController{
         
         buttonMale = UIButton(frame: CGRectMake(90-x,240-y,70,65))
         buttonMale.tag = 0
-        buttonMale.addTarget(self, action: "genderImage:", forControlEvents: .TouchUpInside)
+        buttonMale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonMale)
         
         buttonFemale = UIButton(frame: CGRectMake(267-x,240-y,58,65))
         buttonFemale.tag = 1
-        buttonFemale.addTarget(self, action: "genderImage:", forControlEvents: .TouchUpInside)
+        buttonFemale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonFemale)
         if gender == 0 {
             buttonMale.sendActionsForControlEvents(.TouchUpInside)
@@ -958,7 +959,7 @@ extension FaeAccountViewController{
         buttonSaveGender.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveGender.layer.cornerRadius = 7
         buttonSaveGender.setTitle("Save", forState: .Normal)
-        buttonSaveGender.addTarget(self, action: "actionSaveGender", forControlEvents: .TouchUpInside)
+        buttonSaveGender.addTarget(self, action: #selector(FaeAccountViewController.actionSaveGender), forControlEvents: .TouchUpInside)
         viewGender.addSubview(buttonSaveGender)
         
     }
@@ -1012,7 +1013,7 @@ extension FaeAccountViewController {
         viewBirthdayBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundCloseBirthday = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseBirthday.addTarget(self, action: "actionCloseBrithdayView", forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
         viewBirthdayBackground.addSubview(buttonBackgroundCloseBirthday)
         
         viewBirthday = UIView(frame: CGRectMake(32,160,350,208))
@@ -1022,7 +1023,7 @@ extension FaeAccountViewController {
         
         buttonCloseBirthday = UIButton(frame: CGRectMake(47-x,175-y,17,17))
         buttonCloseBirthday.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseBirthday.addTarget(self, action: "actionCloseBrithdayView", forControlEvents: .TouchUpInside)
+        buttonCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
         viewBirthday.addSubview(buttonCloseBirthday)
         
         labelTitleBirthday = UILabel(frame: CGRectMake(0,190-y,350,21))
@@ -1045,14 +1046,14 @@ extension FaeAccountViewController {
         buttonSaveBirthday.layer.cornerRadius = 7
         buttonSaveBirthday.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveBirthday.setTitle("Save", forState: .Normal)
-        buttonSaveBirthday.addTarget(self, action: "actionSaveBirthday", forControlEvents: .TouchUpInside)
+        buttonSaveBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionSaveBirthday), forControlEvents: .TouchUpInside)
         viewBirthday.addSubview(buttonSaveBirthday)
         
         dataPickerBirthday = UIDatePicker(frame: CGRectMake(0,screenHeight-216,screenWidth,216))
         dataPickerBirthday.timeZone = NSTimeZone.localTimeZone()
         dataPickerBirthday.datePickerMode = UIDatePickerMode.Date
         dataPickerBirthday.backgroundColor = UIColor.whiteColor()
-        dataPickerBirthday.addTarget(self, action: "handleDatePicker:", forControlEvents: .ValueChanged)
+        dataPickerBirthday.addTarget(self, action: #selector(FaeAccountViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
         viewBirthdayBackground.addSubview(dataPickerBirthday)
     }
     //MARK: save birthday to database
@@ -1097,7 +1098,7 @@ extension FaeAccountViewController {
         viewFirstLastBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundClose = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundClose.addTarget(self, action: "closeFirstLastView", forControlEvents: .TouchUpInside)
+        buttonBackgroundClose.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), forControlEvents: .TouchUpInside)
         viewFirstLastBackground.addSubview(buttonBackgroundClose)
         
         viewFirstAndLast = UIView(frame: CGRectMake(32,160,350,258))
@@ -1107,7 +1108,7 @@ extension FaeAccountViewController {
         
         buttonCloseName = UIButton(frame: CGRectMake(47-x,175-y,17,17))
         buttonCloseName.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseName.addTarget(self, action: "closeFirstLastView", forControlEvents: .TouchUpInside)
+        buttonCloseName.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), forControlEvents: .TouchUpInside)
         viewFirstAndLast.addSubview(buttonCloseName)
         
         labelTitleFirstLast = UILabel(frame: CGRectMake(0,190-y,350,21))
@@ -1136,7 +1137,7 @@ extension FaeAccountViewController {
         buttonSaveName = UIButton(frame: CGRectMake(142-x,358-y,130,39))
         buttonSaveName.setTitle("Save", forState: .Normal)
 //        buttonSaveName.tag = sender
-        buttonSaveName.addTarget(self, action: "actionSaveFirstLastName:", forControlEvents: .TouchUpInside)
+        buttonSaveName.addTarget(self, action: #selector(FaeAccountViewController.actionSaveFirstLastName(_:)), forControlEvents: .TouchUpInside)
         buttonSaveName.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveName.layer.cornerRadius = 7
         viewFirstAndLast.addSubview(buttonSaveName)

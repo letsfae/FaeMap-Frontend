@@ -37,7 +37,7 @@ class LocalStorageManager: NSObject {
     func readUsername()->Bool{
         if(username == nil){
             if let usernames = readByKey("username"){
-                username = usernames as! String
+                username = usernames as? String
                 return true
             }
             //should we need to read from internet

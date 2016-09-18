@@ -76,8 +76,8 @@ class AccountEmailViewController: UIViewController {
         initialSendCodeInfo()
         initialEmaiVerify()
         intialEnterPassword()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "update", userInfo: nil, repeats: true)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AccountEmailViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(AccountEmailViewController.update), userInfo: nil, repeats: true)
     }
     func initialView(){
         labelTitle = UILabel(frame: CGRectMake(0,89,screenWidth,25))
@@ -94,14 +94,14 @@ class AccountEmailViewController: UIViewController {
         buttonVerify.setTitle("Verify", forState: .Normal)
         buttonVerify.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonVerify.layer.cornerRadius = 7
-        buttonVerify.addTarget(self, action: "showSendCodeInfo", forControlEvents: .TouchUpInside)
+        buttonVerify.addTarget(self, action: #selector(AccountEmailViewController.showSendCodeInfo), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonVerify)
         
         buttonChange = UIButton(frame: CGRectMake(99,283,217,39))
         buttonChange.setTitle("Change", forState: .Normal)
         buttonChange.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonChange.layer.cornerRadius = 7
-        buttonChange.addTarget(self, action: "showChangeEmailView", forControlEvents: .TouchUpInside)
+        buttonChange.addTarget(self, action: #selector(AccountEmailViewController.showChangeEmailView), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonChange)
     }
     func keyboardWillShow(notification:NSNotification) {
@@ -134,7 +134,7 @@ extension AccountEmailViewController {
         viewBackgroundEnterPassword.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundEnterPassword = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundEnterPassword.addTarget(self, action: "removeEnterPassword", forControlEvents: .TouchUpInside)
+        buttonBackgroundEnterPassword.addTarget(self, action: #selector(AccountEmailViewController.removeEnterPassword), forControlEvents: .TouchUpInside)
         viewBackgroundEnterPassword.addSubview(buttonBackgroundEnterPassword)
         
         viewEnterPassword = UIView(frame: CGRectMake(x,y,350,229))
@@ -143,7 +143,7 @@ extension AccountEmailViewController {
         viewBackgroundEnterPassword.addSubview(viewEnterPassword)
         
         buttonCloseEnterPassword = UIButton(frame: CGRectMake(47-x,175-y,17,17))
-        buttonCloseEnterPassword.addTarget(self, action: "removeEnterPassword", forControlEvents: .TouchUpInside)
+        buttonCloseEnterPassword.addTarget(self, action: #selector(AccountEmailViewController.removeEnterPassword), forControlEvents: .TouchUpInside)
         buttonCloseEnterPassword.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
         viewEnterPassword.addSubview(buttonCloseEnterPassword)
         
@@ -171,14 +171,14 @@ extension AccountEmailViewController {
         buttonContinuePassword.layer.cornerRadius = 7
         buttonContinuePassword.backgroundColor = UIColor(colorLiteralRed: 255/255, green: 160/255, blue: 160/255, alpha: 1)
         buttonContinuePassword.setTitle("Continue", forState: .Normal)
-        buttonContinuePassword.addTarget(self, action: "continuePassword", forControlEvents: .TouchUpInside)
+        buttonContinuePassword.addTarget(self, action: #selector(AccountEmailViewController.continuePassword), forControlEvents: .TouchUpInside)
         viewEnterPassword.addSubview(buttonContinuePassword)
         
         buttonForgotPassword = UIButton(frame: CGRectMake(158-x,357-y,100,18))
         buttonForgotPassword.setTitle("Forgot Password", forState: .Normal)
         buttonForgotPassword.tintColor = UIColor(colorLiteralRed: 138/255, green: 138/255, blue: 138/255, alpha: 1)
         buttonForgotPassword.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        buttonForgotPassword.addTarget(self, action: "forgotPassword", forControlEvents: .TouchUpInside)
+        buttonForgotPassword.addTarget(self, action: #selector(AccountEmailViewController.forgotPassword), forControlEvents: .TouchUpInside)
         viewEnterPassword.addSubview(buttonForgotPassword)
     }
     func forgotPassword(){
@@ -193,7 +193,7 @@ extension AccountEmailViewController {
             textFieldEnterPassword.text = ""
             labelTitleEnterPassword.text = "Oops...Wrong Password!"
             if passwordTryLeft > 0 {
-                passwordTryLeft--
+                passwordTryLeft -= 1
             }
             labelSubtitleEnterPassword.text = "\(passwordTryLeft) more tries left"
         }
@@ -216,7 +216,7 @@ extension AccountEmailViewController {
         viewBackgroundEmailVerify.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundCloseEmailVerify = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseEmailVerify.addTarget(self, action: "removeEmailVerify", forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseEmailVerify.addTarget(self, action: #selector(AccountEmailViewController.removeEmailVerify), forControlEvents: .TouchUpInside)
         viewBackgroundEmailVerify.addSubview(buttonBackgroundCloseEmailVerify)
         
         viewEmailVerify = UIView(frame: CGRectMake(x,y,350,239))
@@ -226,7 +226,7 @@ extension AccountEmailViewController {
         
         buttonCloseEmailVerify = UIButton(frame: CGRectMake(47-x,154-y,17,17))
         buttonCloseEmailVerify.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseEmailVerify.addTarget(self, action: "removeEmailVerify", forControlEvents: .TouchUpInside)
+        buttonCloseEmailVerify.addTarget(self, action: #selector(AccountEmailViewController.removeEmailVerify), forControlEvents: .TouchUpInside)
         viewEmailVerify.addSubview(buttonCloseEmailVerify)
         
         labelTitleEmailVerify = UILabel(frame: CGRectMake(85-x,163-y,244,54))
@@ -239,7 +239,7 @@ extension AccountEmailViewController {
         
         let imageX = 95 - x
         let imageY = 260 - y
-        var distance : CGFloat = 42
+        let distance : CGFloat = 42
         for i in 0...5 {
             imageCodeDotArray.append(UIImageView(frame: CGRectMake(imageX + distance * CGFloat(i), imageY, 13, 13)))
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
@@ -265,20 +265,20 @@ extension AccountEmailViewController {
         buttonResend.setTitle("Resend Code", forState: .Normal)
         buttonResend.layer.cornerRadius = 7
         buttonResend.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        buttonResend.addTarget(self, action: "resendButtonDidPressed", forControlEvents: .TouchUpInside)
+        buttonResend.addTarget(self, action: #selector(AccountEmailViewController.resendButtonDidPressed), forControlEvents: .TouchUpInside)
         disableButton(buttonResend)
         viewEmailVerify.addSubview(buttonResend)
         
         buttonProceed = UIButton (frame: CGRectMake(0,441,screenWidth,56))
         buttonProceed.setTitle("Proceed", forState: .Normal)
         buttonProceed.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        buttonProceed.addTarget(self, action: "proceedCode", forControlEvents: .TouchUpInside)
+        buttonProceed.addTarget(self, action: #selector(AccountEmailViewController.proceedCode), forControlEvents: .TouchUpInside)
         disableButton(buttonProceed)
         viewBackgroundEmailVerify.addSubview(buttonProceed)
         
         viewEmailVerify.addSubview(TextFieldDummy)
         TextFieldDummy.keyboardType = UIKeyboardType.NumberPad
-        TextFieldDummy.addTarget(self, action: "textFieldValueDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
+        TextFieldDummy.addTarget(self, action: #selector(AccountEmailViewController.textFieldValueDidChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
         TextFieldDummy.becomeFirstResponder()
         
         
@@ -352,7 +352,8 @@ extension AccountEmailViewController {
     }
     func update() {
         if(countDown > 0) {
-            let title = "Resend Code \(countDown--)"
+            let title = "Resend Code \(countDown)"
+            countDown -= 1
             buttonResend.setTitle(title, forState: .Normal)
             disableButton(buttonResend)
         } else {
@@ -421,7 +422,7 @@ extension AccountEmailViewController {
         buttonGot.layer.cornerRadius = 7
         buttonGot.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonGot.setTitle("Got it!", forState: .Normal)
-        buttonGot.addTarget(self, action: "showEmailVerify", forControlEvents: .TouchUpInside)
+        buttonGot.addTarget(self, action: #selector(AccountEmailViewController.showEmailVerify), forControlEvents: .TouchUpInside)
         viewSendCodeInfo.addSubview(buttonGot)
         
     }
@@ -441,7 +442,7 @@ extension AccountEmailViewController {
         viewBackgroundChangeEmail.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
         buttonBackgroundChangeEmail = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundChangeEmail.addTarget(self, action: "removeChangeEmailView", forControlEvents: .TouchUpInside)
+        buttonBackgroundChangeEmail.addTarget(self, action: #selector(AccountEmailViewController.removeChangeEmailView), forControlEvents: .TouchUpInside)
         viewBackgroundChangeEmail.addSubview(buttonBackgroundChangeEmail)
         
         viewChangeEmail = UIView(frame: CGRectMake(x,y,350,208))
@@ -451,7 +452,7 @@ extension AccountEmailViewController {
         
         buttonCloseChangeEmail = UIButton(frame: CGRectMake(47-x,175-y,17,17))
         buttonCloseChangeEmail.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseChangeEmail.addTarget(self, action: "removeChangeEmailView", forControlEvents: .TouchUpInside)
+        buttonCloseChangeEmail.addTarget(self, action: #selector(AccountEmailViewController.removeChangeEmailView), forControlEvents: .TouchUpInside)
         viewChangeEmail.addSubview(buttonCloseChangeEmail)
         
         labelTitleChangeEmail = UILabel(frame: CGRectMake(0,190-y,350,21))

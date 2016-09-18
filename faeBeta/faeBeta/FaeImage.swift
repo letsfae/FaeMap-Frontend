@@ -99,7 +99,7 @@ extension UIImageView {
             if status / 100 == 2 {
 //                self.image = image as! UIImage
 //                self.image = UIImage(data: image as! NSData)
-                self.image = image as! UIImage
+                self.image = image as? UIImage
             }
         })
 //        SDWebImageDownloader *manager = [SDWebImageManager sharedManager].imageDownloader;
