@@ -12,11 +12,13 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     func actionSelectLocation(sender: UIButton!) {
-        submitPinsHideAnimation()
+        self.blurViewMap.hidden = true
+        self.blurViewMap.alpha = 0.0
         self.faeMapView.addSubview(imagePinOnMap)
         self.buttonToNorth.hidden = true
         self.buttonChatOnMap.hidden = true
         self.buttonPinOnMap.hidden = true
+        self.buttonPinOnMapInside.hidden = true
         self.buttonSetLocationOnMap.hidden = false
         self.imagePinOnMap.hidden = false
         self.navigationController?.navigationBar.hidden = true
@@ -25,10 +27,15 @@ extension FaeMapViewController {
         self.tblSearchResults.hidden = false
         self.uiviewTableSubview.hidden = false
         self.customSearchController.customSearchBar.text = ""
-        
         self.buttonSelfPosition.hidden = false
         self.buttonCancelSelectLocation.hidden = false
         self.isInPinLocationSelect = true
+        self.myPositionIcon.hidden = true
+        self.myPositionOutsideMarker_1.hidden = true
+        self.myPositionOutsideMarker_2.hidden = true
+        self.myPositionOutsideMarker_3.hidden = true
+        self.view.addConstraintsWithFormat("H:[v0(59)]-16-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-81-|", options: [], views: buttonSelfPosition)
     }
     
     func actionCancelSelectLocation(sender: UIButton!) {
@@ -42,6 +49,14 @@ extension FaeMapViewController {
         self.buttonSelfPosition.center.x = 362.5
         self.buttonSelfPosition.center.y = 611.5
         self.buttonCancelSelectLocation.hidden = true
+        self.blurViewMap.hidden = false
+        self.blurViewMap.alpha = 1.0
+        self.myPositionIcon.hidden = false
+        self.myPositionOutsideMarker_1.hidden = false
+        self.myPositionOutsideMarker_2.hidden = false
+        self.myPositionOutsideMarker_3.hidden = false
+        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
     }
     
     func actionCreateCommentPin(sender: UIButton!) {
@@ -57,9 +72,31 @@ extension FaeMapViewController {
             self.uiviewPinSelections.alpha = 1.0
             self.uiviewCreateCommentPin.alpha = 0.0
         }), completion: nil)
-        for textFiled in textFieldArray {
-            textFiled.endEditing(true)
+        self.textViewForCommentPin.endEditing(true)
+        if self.textViewForCommentPin.text == "" {
+            self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+            self.buttonCommentSubmit.enabled = false
         }
+    }
+    
+    func actionCloseSubmitPins(sender: UIButton!) {
+        self.submitPinsHideAnimation()
+        self.buttonToNorth.hidden = false
+        self.buttonSelfPosition.hidden = false
+        self.buttonChatOnMap.hidden = false
+        self.buttonPinOnMap.hidden = false
+        self.buttonPinOnMapInside.hidden = false
+        self.buttonSetLocationOnMap.hidden = true
+        self.imagePinOnMap.hidden = true
+        self.navigationController?.navigationBar.hidden = false
+        self.searchBarSubview.hidden = true
+        self.tblSearchResults.hidden = true
+        self.uiviewTableSubview.hidden = true
+        self.textViewForCommentPin.text = ""
+        self.textViewForCommentPin.endEditing(true)
+        self.lableTextViewPlaceholder.hidden = false
+        self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+        self.buttonCommentSubmit.enabled = false
     }
     
     func actionSetLocationForComment(sender: UIButton!) {
@@ -73,7 +110,10 @@ extension FaeMapViewController {
                 if let fullAddress = response?.firstResult()?.lines {
                     var addressToSearchBar = ""
                     for line in fullAddress {
-                        if fullAddress.indexOf(line) == fullAddress.count-1 {
+                        if line == "" {
+                            continue
+                        }
+                        else if fullAddress.indexOf(line) == fullAddress.count-1 {
                             addressToSearchBar += line + ""
                         }
                         else {
@@ -87,16 +127,24 @@ extension FaeMapViewController {
         else {
             self.labelSelectLocationContent.text = valueInSearchBar
         }
-        isInPinLocationSelect = false
-        searchBarSubview.hidden = true
-        tblSearchResults.hidden = true
-        uiviewTableSubview.hidden = true
-        imagePinOnMap.hidden = true
-        buttonSetLocationOnMap.hidden = true
-        buttonSelfPosition.hidden = true
-        buttonSelfPosition.center.x = 362.5
-        buttonSelfPosition.center.y = 611.5
-        buttonCancelSelectLocation.hidden = true
+        self.isInPinLocationSelect = false
+        self.searchBarSubview.hidden = true
+        self.tblSearchResults.hidden = true
+        self.uiviewTableSubview.hidden = true
+        self.imagePinOnMap.hidden = true
+        self.buttonSetLocationOnMap.hidden = true
+        self.buttonSelfPosition.hidden = true
+        self.buttonSelfPosition.center.x = 362.5
+        self.buttonSelfPosition.center.y = 611.5
+        self.buttonCancelSelectLocation.hidden = true
+        self.blurViewMap.hidden = false
+        self.blurViewMap.alpha = 1.0
+        self.myPositionIcon.hidden = false
+        self.myPositionOutsideMarker_1.hidden = false
+        self.myPositionOutsideMarker_2.hidden = false
+        self.myPositionOutsideMarker_3.hidden = false
+        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
     }
     
     func actionSubmitComment(sender: UIButton) {
@@ -114,22 +162,19 @@ extension FaeMapViewController {
             submitLongitude = "\(self.longitudeForPin)"
         }
         
-        var commentContent = ""
-        for everyTextField in textFieldArray {
-            if let textContent = everyTextField.text {
-                commentContent += textContent
-            }
-        }
+        let commentContent = self.textViewForCommentPin.text
+        
+        print(commentContent)
         
         if commentContent == "" {
-            let alertUIView = UIAlertView(title: "Content Field is Empty!", message: nil, delegate: self, cancelButtonTitle: "OK, I got it")
-            alertUIView.show()
             return
         }
         
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
+        
+        
         postSingleComment.postComment{(status:Int,message:AnyObject?) in
             if let getMessage = message {
                 if let getMessageID = getMessage["comment_id"] {
@@ -148,11 +193,13 @@ extension FaeMapViewController {
                     self.buttonSelfPosition.hidden = false
                     self.buttonChatOnMap.hidden = false
                     self.buttonPinOnMap.hidden = false
+                    self.buttonPinOnMapInside.hidden = false
                     self.buttonSetLocationOnMap.hidden = true
                     self.imagePinOnMap.hidden = true
                     self.navigationController?.navigationBar.hidden = false
                     
                     let getJustPostedComment = FaeMap()
+                    
                     getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
                         let mapInfoJSON = JSON(message!)
                         var pinData = [String: AnyObject]()
@@ -177,13 +224,8 @@ extension FaeMapViewController {
                         }
                         commentMarker.userData = pinData
                     }
-                    self.textFieldArray.removeAll()
-                    self.borderArray.removeAll()
-                    for every in self.uiviewArray {
-                        every.removeFromSuperview()
-                    }
-                    self.uiviewArray.removeAll()
-                    self.loadBasicTextField()
+                    self.textViewForCommentPin.text = ""
+                    self.lableTextViewPlaceholder.hidden = false
                 }
                 else {
                     print("Cannot get comment_id of this posted comment")

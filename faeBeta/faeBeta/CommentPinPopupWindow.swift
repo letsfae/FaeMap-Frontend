@@ -492,30 +492,50 @@ extension FaeMapViewController {
         }
         
         print("Avoid Dic after deleting: \(self.commentPinAvoidDic)")
-        
-        //                let m = sender.tag + 1
-        //                let n = self.commentPinCellArray.count - 1
-        //                if m <= n {
-        //                    for i in m...n {
-        //                        self.commentPinCellArray[i].jumpToDetail.tag -= 1
-        //                        self.commentPinCellArray[i].deleteButton.tag -= 1
-        //                        UIView.animateWithDuration(0.25, animations: ({
-        //                            self.commentPinCellArray[i].center.y -= 76
-        //                        }))
-        //                    }
-        //                }
-        //                UIView.animateWithDuration(0.25, animations: ({
-        //                    if self.commentPinCellArray.count <= 3 {
-        //                        self.commentListScrollView.frame.size.height = 228
-        //                    }
-        //                    else {
-        //                        self.commentListScrollView.frame.size.height -= 76
-        //                    }
-        //                }), completion: {(done: Bool) in
-        //
-        //                })
-        //                self.commentPinCellArray[sender.tag].removeFromSuperview()
-        //                self.commentPinCellArray.removeAtIndex(sender.tag)
 
+    }
+    
+    func showCommentPinDetail() {
+        if self.uiviewCommentPinDetail != nil {
+            self.navigationController?.navigationBar.hidden = true
+            UIView.animateWithDuration(0.25, animations: ({
+                self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
+            }), completion: { (done: Bool) in
+                if done {
+                    self.commentPinDetailShowed = true
+                    self.commentListShowed = false
+                }
+            })
+        }
+    }
+    
+    func hideCommentPinDetail() {
+        if self.uiviewCommentPinDetail != nil {
+            if self.commentPinDetailShowed {
+                UIView.animateWithDuration(0.25, animations: ({
+                    self.uiviewCommentPinDetail.center.y -= self.uiviewCommentPinDetail.frame.size.height
+                }), completion: { (done: Bool) in
+                    if done {
+                        self.navigationController?.navigationBar.hidden = false
+                        self.commentPinDetailShowed = false
+                        self.commentListShowed = false
+                    }
+                })
+            }
+            if self.commentListShowed {
+                UIView.animateWithDuration(0.25, animations: ({
+                    self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
+                }), completion: { (done: Bool) in
+                    if done {
+                        self.navigationController?.navigationBar.hidden = false
+                        self.commentPinDetailShowed = false
+                        self.commentListShowed = false
+                        self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
+                        self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
+                    }
+                })
+            }
+            
+        }
     }
 }

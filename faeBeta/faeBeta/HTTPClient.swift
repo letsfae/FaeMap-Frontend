@@ -10,8 +10,6 @@ import UIKit
 import Alamofire
 import SDWebImage
 
-
-
 /*
  do {
  let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
@@ -27,7 +25,6 @@ import SDWebImage
  print(error)
  }*/
 // not use anymore
-
 
 func postImageToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
