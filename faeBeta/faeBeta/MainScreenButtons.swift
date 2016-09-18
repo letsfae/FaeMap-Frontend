@@ -124,7 +124,9 @@ extension FaeMapViewController {
         self.currentLongitude = currentLocation.coordinate.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView.camera = camera
-        loadPositionAnimateImage()
+        if self.isInPinLocationSelect == false {
+            self.loadPositionAnimateImage()
+        }
     }
     
     func actionTrueNorth(sender: UIButton!) {

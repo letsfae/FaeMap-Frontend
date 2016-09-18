@@ -34,6 +34,8 @@ extension FaeMapViewController {
         self.myPositionOutsideMarker_1.hidden = true
         self.myPositionOutsideMarker_2.hidden = true
         self.myPositionOutsideMarker_3.hidden = true
+        self.view.addConstraintsWithFormat("H:[v0(59)]-16-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-81-|", options: [], views: buttonSelfPosition)
     }
     
     func actionCancelSelectLocation(sender: UIButton!) {
@@ -53,6 +55,8 @@ extension FaeMapViewController {
         self.myPositionOutsideMarker_1.hidden = false
         self.myPositionOutsideMarker_2.hidden = false
         self.myPositionOutsideMarker_3.hidden = false
+        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
     }
     
     func actionCreateCommentPin(sender: UIButton!) {
@@ -117,6 +121,8 @@ extension FaeMapViewController {
         self.myPositionOutsideMarker_1.hidden = false
         self.myPositionOutsideMarker_2.hidden = false
         self.myPositionOutsideMarker_3.hidden = false
+        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
     }
     
     func actionSubmitComment(sender: UIButton) {
