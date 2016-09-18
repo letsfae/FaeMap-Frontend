@@ -23,7 +23,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // MARK: -- Map main screen Objects
     var faeMapView: GMSMapView!
     var buttonLeftTop: UIButton!
-    var buttonMiddleTop: UIButton!
+    var buttonMainScreenSearch: UIButton!
+//    var buttonMiddleTop: UIButton!
     var buttonRightTop: UIButton!
     var buttonToNorth: UIButton!
     var buttonSelfPosition: UIButton!
@@ -324,7 +325,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         loadPositionAnimateImage()
         self.buttonLeftTop.hidden = false
-        self.buttonMiddleTop.hidden = false
+        self.buttonMainScreenSearch.hidden = false
         self.buttonRightTop.hidden = false
         loadTransparentNavBarItems()
         loadMapChat()
@@ -334,7 +335,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     override func viewWillDisappear(animated: Bool) {
         self.buttonLeftTop.hidden = true
-        self.buttonMiddleTop.hidden = true
+        self.buttonMainScreenSearch.hidden = true
         self.buttonRightTop.hidden = true
         // Need a Comment Clearance??????
         self.navigationController!.navigationBar.translucent = false
