@@ -741,18 +741,19 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Actions of Buttons
     func actionCloseSubmitPins(sender: UIButton!) {
-        submitPinsHideAnimation()
-        buttonToNorth.hidden = false
-        buttonSelfPosition.hidden = false
-        buttonChatOnMap.hidden = false
-        buttonPinOnMap.hidden = false
-        buttonSetLocationOnMap.hidden = true
-        imagePinOnMap.hidden = true
+        self.submitPinsHideAnimation()
+        self.buttonToNorth.hidden = false
+        self.buttonSelfPosition.hidden = false
+        self.buttonChatOnMap.hidden = false
+        self.buttonPinOnMap.hidden = false
+        self.buttonPinOnMapInside.hidden = false
+        self.buttonSetLocationOnMap.hidden = true
+        self.imagePinOnMap.hidden = true
         self.navigationController?.navigationBar.hidden = false
-        searchBarSubview.hidden = true
-        tblSearchResults.hidden = true
-        uiviewTableSubview.hidden = true
-        for textFiled in textFieldArray {
+        self.searchBarSubview.hidden = true
+        self.tblSearchResults.hidden = true
+        self.uiviewTableSubview.hidden = true
+        for textFiled in self.textFieldArray {
             textFiled.endEditing(true)
         }
         self.textFieldArray.removeAll()

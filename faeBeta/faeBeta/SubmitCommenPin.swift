@@ -12,11 +12,13 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     func actionSelectLocation(sender: UIButton!) {
-        submitPinsHideAnimation()
+        self.blurViewMap.hidden = true
+        self.blurViewMap.alpha = 0.0
         self.faeMapView.addSubview(imagePinOnMap)
         self.buttonToNorth.hidden = true
         self.buttonChatOnMap.hidden = true
         self.buttonPinOnMap.hidden = true
+        self.buttonPinOnMapInside.hidden = true
         self.buttonSetLocationOnMap.hidden = false
         self.imagePinOnMap.hidden = false
         self.navigationController?.navigationBar.hidden = true
@@ -25,10 +27,13 @@ extension FaeMapViewController {
         self.tblSearchResults.hidden = false
         self.uiviewTableSubview.hidden = false
         self.customSearchController.customSearchBar.text = ""
-        
         self.buttonSelfPosition.hidden = false
         self.buttonCancelSelectLocation.hidden = false
         self.isInPinLocationSelect = true
+        self.myPositionIcon.hidden = true
+        self.myPositionOutsideMarker_1.hidden = true
+        self.myPositionOutsideMarker_2.hidden = true
+        self.myPositionOutsideMarker_3.hidden = true
     }
     
     func actionCancelSelectLocation(sender: UIButton!) {
@@ -42,6 +47,12 @@ extension FaeMapViewController {
         self.buttonSelfPosition.center.x = 362.5
         self.buttonSelfPosition.center.y = 611.5
         self.buttonCancelSelectLocation.hidden = true
+        self.blurViewMap.hidden = false
+        self.blurViewMap.alpha = 1.0
+        self.myPositionIcon.hidden = false
+        self.myPositionOutsideMarker_1.hidden = false
+        self.myPositionOutsideMarker_2.hidden = false
+        self.myPositionOutsideMarker_3.hidden = false
     }
     
     func actionCreateCommentPin(sender: UIButton!) {
@@ -73,7 +84,10 @@ extension FaeMapViewController {
                 if let fullAddress = response?.firstResult()?.lines {
                     var addressToSearchBar = ""
                     for line in fullAddress {
-                        if fullAddress.indexOf(line) == fullAddress.count-1 {
+                        if line == "" {
+                            continue
+                        }
+                        else if fullAddress.indexOf(line) == fullAddress.count-1 {
                             addressToSearchBar += line + ""
                         }
                         else {
@@ -87,16 +101,22 @@ extension FaeMapViewController {
         else {
             self.labelSelectLocationContent.text = valueInSearchBar
         }
-        isInPinLocationSelect = false
-        searchBarSubview.hidden = true
-        tblSearchResults.hidden = true
-        uiviewTableSubview.hidden = true
-        imagePinOnMap.hidden = true
-        buttonSetLocationOnMap.hidden = true
-        buttonSelfPosition.hidden = true
-        buttonSelfPosition.center.x = 362.5
-        buttonSelfPosition.center.y = 611.5
-        buttonCancelSelectLocation.hidden = true
+        self.isInPinLocationSelect = false
+        self.searchBarSubview.hidden = true
+        self.tblSearchResults.hidden = true
+        self.uiviewTableSubview.hidden = true
+        self.imagePinOnMap.hidden = true
+        self.buttonSetLocationOnMap.hidden = true
+        self.buttonSelfPosition.hidden = true
+        self.buttonSelfPosition.center.x = 362.5
+        self.buttonSelfPosition.center.y = 611.5
+        self.buttonCancelSelectLocation.hidden = true
+        self.blurViewMap.hidden = false
+        self.blurViewMap.alpha = 1.0
+        self.myPositionIcon.hidden = false
+        self.myPositionOutsideMarker_1.hidden = false
+        self.myPositionOutsideMarker_2.hidden = false
+        self.myPositionOutsideMarker_3.hidden = false
     }
     
     func actionSubmitComment(sender: UIButton) {
@@ -148,6 +168,7 @@ extension FaeMapViewController {
                     self.buttonSelfPosition.hidden = false
                     self.buttonChatOnMap.hidden = false
                     self.buttonPinOnMap.hidden = false
+                    self.buttonPinOnMapInside.hidden = false
                     self.buttonSetLocationOnMap.hidden = true
                     self.imagePinOnMap.hidden = true
                     self.navigationController?.navigationBar.hidden = false
