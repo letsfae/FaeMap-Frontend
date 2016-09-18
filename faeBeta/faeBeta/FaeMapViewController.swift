@@ -11,10 +11,9 @@ import GoogleMaps
 import CoreLocation
 import SwiftyJSON
 
-class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate {
+class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
     // MARK: -- Common Used Vars and Constants
-    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let navigationBarHeight : CGFloat = 20
@@ -24,7 +23,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var faeMapView: GMSMapView!
     var buttonLeftTop: UIButton!
     var buttonMainScreenSearch: UIButton!
-//    var buttonMiddleTop: UIButton!
     var buttonRightTop: UIButton!
     var buttonToNorth: UIButton!
     var buttonSelfPosition: UIButton!
@@ -74,11 +72,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // MARK: -- Create Comment Pin
     var uiviewCreateCommentPin: UIView!
     var labelSelectLocationContent: UILabel!
+    var textViewForCommentPin: UITextView!
+    var lableTextViewPlaceholder: UILabel!
     
     // MARK: -- Create Pin
     var imagePinOnMap: UIImageView!
     var buttonSetLocationOnMap: UIButton!
     var isInPinLocationSelect = false
+    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
     
     // MARK: -- My Position Marker
     var myPositionIcon: UIButton!
@@ -96,18 +97,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var customSearchController: CustomSearchController!
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
-    
-    // MARK: -- Custom Scrollable TextFields
-    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
-    
-    var uiviewArray = [CustomUIViewForScrollableTextField]()
-    var textFieldArray = [UITextField]()
-    var borderArray = [UIView]()
-    
-    var exist1stLine = false
-    var exist4thLine = false
-    
-    var token = true
     
     var myPositionIconFirstLoaded = true
     
@@ -156,7 +145,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var imageViewAvatarMore : UIImageView!
     var labelMoreName : UILabel!
     let tableViewWeight : CGFloat = 290
-    var imagePicker : UIImagePickerController!// MARK: new var
+    var imagePicker : UIImagePickerController! // MARK: new var Wenye
     var buttonImagePicker : UIButton!
     
     // Windbell table view
@@ -595,9 +584,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     if self.commentPinAvoidDic[commentID] != nil {
                         print("Comment exists!")
                         print(self.commentPinAvoidDic)
-                        //                        if let rowNum = self.commentPinAvoidDic[commentID] {
-                        //                            
-                        //                        }
                         return true
                     }
                 }
@@ -621,148 +607,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             }
         }
         return true
-    }
-    
-    func deleteOneCellAndMoveOtherCommentCellsUp(sender: UIButton!) {
-        print("Avoid Dic before delete")
-        print(self.commentPinAvoidDic)
-        
-        let commentID = self.commentPinCellArray[sender.tag].commentID
-        
-        print("content size before deleting")
-        print(self.commentListScrollView.contentSize.height)
-        if commentPinCellNumCount == 1 {
-            self.commentPinCellNumCount = 0
-            self.commentPinCellArray.removeAtIndex(sender.tag)
-            UIView.animateWithDuration(0.25, animations: ({
-                self.commentPinCellArray[sender.tag].center.x -= self.screenWidth
-                self.commentListScrollView.contentSize.height -= 76
-            }), completion: {(done: Bool) in
-                
-            })
-            print("In == 1:")
-        }
-        
-        if commentPinCellNumCount >= 2 {
-            self.commentPinCellNumCount -= 1
-            UIView.animateWithDuration(0.25, animations: ({
-                self.commentPinCellArray[sender.tag].center.x -= self.screenWidth
-                self.commentListScrollView.contentSize.height -= 76
-            }), completion: {(done: Bool) in
-                let m = sender.tag + 1
-                let n = self.commentPinCellArray.count - 1
-                if m <= n {
-                    for i in m...n {
-                        self.commentPinCellArray[i].jumpToDetail.tag -= 1
-                        self.commentPinCellArray[i].deleteButton.tag -= 1
-                        UIView.animateWithDuration(0.25, animations: ({
-                            self.commentPinCellArray[i].center.y -= 78
-                        }))
-                    }
-                }
-                //                UIView.animateWithDuration(0.25, animations: ({
-                //                    if self.commentPinCellArray.count <= 3 {
-                //                        self.commentListScrollView.frame.size.height -= 76
-                //                    }
-                //                }), completion: {(done: Bool) in
-                //                    print("content size after deleting")
-                //                    print(self.commentListScrollView.contentSize.height)
-                //                })
-                self.commentPinCellArray.removeAtIndex(sender.tag)
-            })
-            print("In >= 2:")
-        }
-        print("content size after deleting")
-        print(self.commentListScrollView.contentSize.height)
-        if let aDictionaryIndex = self.commentPinAvoidDic.indexForKey(commentID) {
-            // This will remove the key/value pair from the dictionary and return it as a tuple pair.
-            let (key, value) = self.commentPinAvoidDic.removeAtIndex(aDictionaryIndex)
-            print(key) // anotherKey
-            print(value) // bar
-        }
-        print("Avoid Dic After delete")
-        print(self.commentPinAvoidDic)
-        print("Delete!")
-    }
-    
-    
-    func showCommentPinDetail() {
-        if self.uiviewCommentPinDetail != nil {
-            self.navigationController?.navigationBar.hidden = true
-            UIView.animateWithDuration(0.25, animations: ({
-                self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
-            }), completion: { (done: Bool) in
-                if done {
-                    self.commentPinDetailShowed = true
-                    self.commentListShowed = false
-                }
-            })
-        }
-    }
-    
-    func hideCommentPinDetail() {
-        if self.uiviewCommentPinDetail != nil {
-            if self.commentPinDetailShowed {
-                UIView.animateWithDuration(0.25, animations: ({
-                    self.uiviewCommentPinDetail.center.y -= self.uiviewCommentPinDetail.frame.size.height
-                }), completion: { (done: Bool) in
-                    if done {
-                        self.navigationController?.navigationBar.hidden = false
-                        self.commentPinDetailShowed = false
-                        self.commentListShowed = false
-                    }
-                })
-            }
-            if self.commentListShowed {
-                UIView.animateWithDuration(0.25, animations: ({
-                    self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
-                }), completion: { (done: Bool) in
-                    if done {
-                        self.navigationController?.navigationBar.hidden = false
-                        self.commentPinDetailShowed = false
-                        self.commentListShowed = false
-                        self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
-                        self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
-                    }
-                })
-            }
-            
-        }
-    }
-    
-    func showCommentPinCellDetails(cell: CommentPinUIView) {
-        cell.imageViewAvatar.hidden = false
-        cell.labelTitle.hidden = false
-        cell.labelDes.hidden = false
-        cell.uiviewUnderLine.hidden = false
-        cell.buttonMore.hidden = false
-        cell.textViewComment.hidden = false
-    }
-    
-    // MARK: -- Actions of Buttons
-    func actionCloseSubmitPins(sender: UIButton!) {
-        self.submitPinsHideAnimation()
-        self.buttonToNorth.hidden = false
-        self.buttonSelfPosition.hidden = false
-        self.buttonChatOnMap.hidden = false
-        self.buttonPinOnMap.hidden = false
-        self.buttonPinOnMapInside.hidden = false
-        self.buttonSetLocationOnMap.hidden = true
-        self.imagePinOnMap.hidden = true
-        self.navigationController?.navigationBar.hidden = false
-        self.searchBarSubview.hidden = true
-        self.tblSearchResults.hidden = true
-        self.uiviewTableSubview.hidden = true
-        for textFiled in self.textFieldArray {
-            textFiled.endEditing(true)
-        }
-        self.textFieldArray.removeAll()
-        self.borderArray.removeAll()
-        for every in self.uiviewArray {
-            every.removeFromSuperview()
-        }
-        self.uiviewArray.removeAll()
-        self.loadBasicTextField()
     }
     
     // MARK: -- Animations
@@ -827,231 +671,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
             self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
         }), completion: nil)
-    }
-    
-    // MARK: -- Blur View and Pins Creating Selections
-    
-    func loadBlurAndPinSelection() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
-        blurViewMap = UIVisualEffectView(effect: blurEffect)
-        blurViewMap.frame = CGRectMake(0, 0, screenWidth, screenHeight)
-        UIApplication.sharedApplication().keyWindow?.addSubview(blurViewMap)
-        loadPinSelections()
-        loadCreateCommentPinView()
-        uiviewCreateCommentPin.hidden = false
-        uiviewCreateCommentPin.alpha = 0.0
-        blurViewMap.alpha = 0.0
-        blurViewMap.hidden = true
-    }
-    
-    // MARK: -- Create Comment Pin Blur View
-    
-    func loadCreateCommentPinView() {
-        uiviewCreateCommentPin = UIView(frame: self.blurViewMap.bounds)
-        self.blurViewMap.addSubview(uiviewCreateCommentPin)
-        
-        self.loadBasicTextField()
-        
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(FaeMapViewController.tapOutsideToDismissKeyboard(_:)))
-        self.uiviewCreateCommentPin.addGestureRecognizer(tapToDismissKeyboard)
-        
-        let imageCreateCommentPin = UIImageView(frame: CGRectMake(166, 41, 83, 90))
-        imageCreateCommentPin.image = UIImage(named: "comment_pin_main_create")
-        self.uiviewCreateCommentPin.addSubview(imageCreateCommentPin)
-        let labelCreateCommentPinTitle = UILabel(frame: CGRectMake(109, 139, 196, 27))
-        labelCreateCommentPinTitle.text = "Create Comment Pin"
-        labelCreateCommentPinTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        labelCreateCommentPinTitle.textAlignment = .Center
-        labelCreateCommentPinTitle.textColor = UIColor.whiteColor()
-        self.uiviewCreateCommentPin.addSubview(labelCreateCommentPinTitle)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(83)][v1(196)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-41-[v0(90)]-8-[v1(27)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
-        NSLayoutConstraint(item: imageCreateCommentPin, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        
-        
-        let buttonBackToPinSelection = UIButton(frame: CGRectMake(15, 36, 18, 18))
-        buttonBackToPinSelection.setImage(UIImage(named: "comment_main_back"), forState: .Normal)
-        self.uiviewCreateCommentPin.addSubview(buttonBackToPinSelection)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:|-15-[v0(18)]", options: [], views: buttonBackToPinSelection)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(18)]", options: [], views: buttonBackToPinSelection)
-        
-        let buttonBackToPinSelectionLargerCover = UIButton(frame: CGRectMake(15, 36, 54, 54))
-        uiviewCreateCommentPin.addSubview(buttonBackToPinSelectionLargerCover)
-        buttonBackToPinSelectionLargerCover.addTarget(self, action: #selector(FaeMapViewController.actionBackToPinSelections(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonBackToPinSelection)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(54)]", options: [], views: buttonBackToPinSelection)
-        
-        let buttonCloseCreateComment = UIButton(frame: CGRectMake(381, 36, 18, 18))
-        buttonCloseCreateComment.setImage(UIImage(named: "comment_main_close"), forState: .Normal)
-        self.uiviewCreateCommentPin.addSubview(buttonCloseCreateComment)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: buttonCloseCreateComment)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(18)]", options: [], views: buttonCloseCreateComment)
-        
-        let buttonCloseCreateCommentLargerCover = UIButton(frame: CGRectMake(345, 36, 54, 54))
-        uiviewCreateCommentPin.addSubview(buttonCloseCreateCommentLargerCover)
-        buttonCloseCreateCommentLargerCover.addTarget(self, action: #selector(FaeMapViewController.actionCloseSubmitPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(54)]-15-|", options: [], views: buttonCloseCreateCommentLargerCover)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(54)]", options: [], views: buttonCloseCreateCommentLargerCover)
-        
-        let uiviewSelectLocation = UIView()
-        self.uiviewCreateCommentPin.addSubview(uiviewSelectLocation)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(276)]", options: [], views: uiviewSelectLocation)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(29)]-155-|", options: [], views: uiviewSelectLocation)
-        NSLayoutConstraint(item: uiviewSelectLocation, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        
-        let imageSelectLocation_1 = UIImageView()
-        imageSelectLocation_1.image = UIImage(named: "pin_select_location_1")
-        uiviewSelectLocation.addSubview(imageSelectLocation_1)
-        uiviewSelectLocation.addConstraintsWithFormat("H:|-0-[v0(25)]", options: [], views: imageSelectLocation_1)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageSelectLocation_1)
-        
-        let imageSelectLocation_2 = UIImageView()
-        imageSelectLocation_2.image = UIImage(named: "pin_select_location_2")
-        uiviewSelectLocation.addSubview(imageSelectLocation_2)
-        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageSelectLocation_2)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
-        
-        labelSelectLocationContent = UILabel()
-        labelSelectLocationContent.text = "Current Location"
-        labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelSelectLocationContent.textAlignment = .Left
-        labelSelectLocationContent.textColor = UIColor.whiteColor()
-        uiviewSelectLocation.addSubview(labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
-        
-        let buttonSelectLocation = UIButton()
-        uiviewSelectLocation.addSubview(buttonSelectLocation)
-        buttonSelectLocation.addTarget(self, action: #selector(FaeMapViewController.actionSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(276)]-0-|", options: [], views: buttonSelectLocation)
-        uiviewSelectLocation.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonSelectLocation)
-        
-        buttonCommentSubmit = UIButton()
-        buttonCommentSubmit.setTitle("Submit!", forState: .Normal)
-        buttonCommentSubmit.setTitle("Submit!", forState: .Highlighted)
-        buttonCommentSubmit.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        buttonCommentSubmit.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        buttonCommentSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1.0)
-        self.uiviewCreateCommentPin.addSubview(buttonCommentSubmit)
-        buttonCommentSubmit.addTarget(self, action: #selector(FaeMapViewController.actionSubmitComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.blurViewMap.addSubview(uiviewCreateCommentPin)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonCommentSubmit)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonCommentSubmit)
-    }
-    
-    // MARK: -- Temporary Methods!!!
-    func actionLogOut(sender: UIButton!) {
-        let logOut = FaeUser()
-        logOut.logOut{ (status:Int?, message:AnyObject?) in
-            if ( status! / 100 == 2 ){
-                //success
-//                self.testLabel.text = "logout success"
-            }
-            else{
-                //failure
-//                self.testLabel.text = "logout failure"
-            }
-        }
-        submitPinsHideAnimation()
-        jumpToWelcomeView()
-    }
-    
-    func actionGetMapInfo(sender: UIButton!) {
-        loadCurrentRegionPins()
-    }
-    
-    func actionClearAllUserPins(sender: UIButton!) {
-        clearAllMyPins()
-    }
-    
-    func clearAllMyPins() {
-        let clearUserPins = FaeMap()
-        clearUserPins.getUserAllComments("\(user_id)"){(status:Int,message:AnyObject?) in
-            let clearUserPinsJSON = JSON(message!)
-            print(clearUserPinsJSON)
-            for i in 0...clearUserPinsJSON.count {
-                if let commentID = clearUserPinsJSON[i]["comments"]["comment_id"].int {
-                    clearUserPins.deleteCommentById("\(commentID)"){(status:Int,message:AnyObject?) in
-                        print("Successfully Delete Comment by ID: \(commentID)")
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: -- Pins Creating Selections View
-    
-    func loadPinSelections() {
-        self.uiviewPinSelections = UIView(frame: self.blurViewMap.bounds)
-        
-        self.labelSubmitTitle = UILabel(frame: CGRectMake(135, 134, 145, 41))
-        self.labelSubmitTitle.alpha = 0.0
-        self.labelSubmitTitle.text = "Create Pin"
-        self.labelSubmitTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
-        self.labelSubmitTitle.textAlignment = .Center
-        self.labelSubmitTitle.textColor = UIColor.whiteColor()
-        self.uiviewPinSelections.addSubview(labelSubmitTitle)
-        
-        self.buttonMedia = createSubmitButton(79, y: 205, width: 0, height: 0, picName: "submit_media")
-        self.buttonChats = createSubmitButton(208, y: 205, width: 0, height: 0, picName: "submit_chats")
-        self.buttonComment = createSubmitButton(337, y: 205, width: 0, height: 0, picName: "submit_comment")
-        self.buttonComment.addTarget(self, action: #selector(FaeMapViewController.actionCreateCommentPin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        self.buttonEvent = createSubmitButton(79, y: 347, width: 0, height: 0, picName: "submit_event")
-        self.buttonFaevor = createSubmitButton(208, y: 347, width: 0, height: 0, picName: "submit_faevor")
-        self.buttonNow = createSubmitButton(337, y: 347, width: 0, height: 0, picName: "submit_now")
-        self.buttonNow.addTarget(self, action: #selector(FaeMapViewController.actionGetMapInfo(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        self.buttonJoinMe = createSubmitButton(79, y: 489, width: 0, height: 0, picName: "submit_joinme")
-        self.buttonJoinMe.addTarget(self, action: #selector(FaeMapViewController.actionLogOut(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonSell = createSubmitButton(208, y: 489, width: 0, height: 0, picName: "submit_sell")
-        self.buttonSell.addTarget(self, action: #selector(FaeMapViewController.actionClearAllUserPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonLive = createSubmitButton(337, y: 489, width: 0, height: 0, picName: "submit_live")
-        
-        self.labelSubmitMedia = createSubmitLabel(31, y: 224, width: 95, height: 27, title: "Media")
-        self.labelSubmitChats = createSubmitLabel(160, y: 224, width: 95, height: 27, title: "Chats")
-        self.labelSubmitComment = createSubmitLabel(289, y: 224, width: 95, height: 27, title: "Comment")
-        
-        self.labelSubmitEvent = createSubmitLabel(31, y: 366, width: 95, height: 27, title: "Event")
-        self.labelSubmitFaevor = createSubmitLabel(160, y: 366, width: 95, height: 27, title: "Faevor")
-        self.labelSubmitNow = createSubmitLabel(289, y: 366, width: 95, height: 27, title: "Now")
-        
-        self.labelSubmitJoinMe = createSubmitLabel(31, y: 508, width: 95, height: 27, title: "Join Me!")
-        self.labelSubmitSell = createSubmitLabel(160, y: 508, width: 95, height: 27, title: "Sell")
-        self.labelSubmitLive = createSubmitLabel(289, y: 508, width: 95, height: 27, title: "Live")
-        
-        self.buttonClosePinBlurView = UIButton(frame: CGRectMake(0, 736, self.screenWidth, 65))
-        self.buttonClosePinBlurView.setTitle("Close", forState: .Normal)
-        self.buttonClosePinBlurView.setTitle("Close", forState: .Highlighted)
-        self.buttonClosePinBlurView.alpha = 0.0
-        self.buttonClosePinBlurView.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        self.buttonClosePinBlurView.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        self.buttonClosePinBlurView.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        self.buttonClosePinBlurView.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
-        self.uiviewPinSelections.addSubview(buttonClosePinBlurView)
-        self.buttonClosePinBlurView.addTarget(self, action: #selector(FaeMapViewController.actionCloseSubmitPins(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        UIApplication.sharedApplication().keyWindow?.addSubview(uiviewPinSelections)
-        self.uiviewPinSelections.hidden = true
-    }
-    
-    func createSubmitButton(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, picName: String) -> UIButton {
-        let button = UIButton(frame: CGRectMake(x, y, width, height))
-        button.setImage(UIImage(named: picName), forState: .Normal)
-        self.uiviewPinSelections.addSubview(button)
-        return button
-    }
-    
-    func createSubmitLabel(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String) -> UILabel {
-        let label = UILabel(frame: CGRectMake(x, y, width, height))
-        label.text = title
-        label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        label.textAlignment = .Center
-        label.textColor = UIColor.whiteColor()
-        label.alpha = 0.0
-        self.uiviewPinSelections.addSubview(label)
-        return label
     }
     
     override func didReceiveMemoryWarning() {

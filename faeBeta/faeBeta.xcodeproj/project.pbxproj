@@ -193,9 +193,6 @@
 		B0714D3D1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3F1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
-		B0714D401D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
-		B0714D411D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
-		B0714D421D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
 		B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
 		B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
 		B0714D451D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
@@ -440,6 +437,12 @@
 		B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
 		FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */; };
 /* End PBXBuildFile section */
 
@@ -530,7 +533,6 @@
 		B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnterCodeTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportCodeViewController.swift; sourceTree = "<group>"; };
 		B0714D251D5E435200356705 /* CommentPinUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinUIView.swift; sourceTree = "<group>"; };
-		B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTextFieldsControl.swift; sourceTree = "<group>"; };
 		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
 		B0714D281D5E435200356705 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
@@ -637,6 +639,8 @@
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPin.swift; sourceTree = "<group>"; };
+		B837D1ED1D8F11C500E44FAE /* PinSelections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSelections.swift; sourceTree = "<group>"; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -776,11 +780,12 @@
 			isa = PBXGroup;
 			children = (
 				B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */,
-				B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */,
+				B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
 				B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */,
 				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
+				B837D1ED1D8F11C500E44FAE /* PinSelections.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
 				B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */,
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
@@ -1437,6 +1442,7 @@
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
@@ -1515,7 +1521,6 @@
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
-				B0714D401D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
@@ -1528,6 +1533,7 @@
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
@@ -1608,6 +1614,7 @@
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
+				B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
@@ -1622,7 +1629,6 @@
 				B0714E051D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF5C1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
-				B0714D411D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
@@ -1645,6 +1651,7 @@
 				B0BF35881D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B0714E151D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF35791D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
@@ -1703,10 +1710,10 @@
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
-				B0714D421D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
+				B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
@@ -1743,6 +1750,7 @@
 				B0C0CAA81D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
+				B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,

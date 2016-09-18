@@ -78,17 +78,16 @@ extension FaeMapViewController {
         self.view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
         self.view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
         
-        let unreadMessagesOnMapX: CGFloat = 67
-        let unreadMessagesOnMapY: CGFloat = 646
-        let unreadMessagesOnMapWidth: CGFloat = 20
-        labelUnreadMessages = UILabel(frame: CGRectMake(unreadMessagesOnMapX, unreadMessagesOnMapY, unreadMessagesOnMapWidth, unreadMessagesOnMapWidth))
-        labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
-        labelUnreadMessages.layer.cornerRadius = 10
-        labelUnreadMessages.layer.masksToBounds = true
-        labelUnreadMessages.text = "1"
-        labelUnreadMessages.textAlignment = .Center
-        labelUnreadMessages.textColor = UIColor.whiteColor()
-        self.view.addSubview(labelUnreadMessages)
+        self.labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 23, 20))
+        self.labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
+        self.labelUnreadMessages.layer.cornerRadius = 10
+        self.labelUnreadMessages.layer.masksToBounds = true
+        self.labelUnreadMessages.layer.opacity = 0.9
+        self.labelUnreadMessages.text = "1"
+        self.labelUnreadMessages.textAlignment = .Center
+        self.labelUnreadMessages.textColor = UIColor.whiteColor()
+        self.labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 11)
+        self.buttonChatOnMap.addSubview(labelUnreadMessages)
         
         self.buttonPinOnMap = UIButton(frame: CGRectMake(323, 646, 79, 79))
         self.buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map_outside"), forState: .Normal)
