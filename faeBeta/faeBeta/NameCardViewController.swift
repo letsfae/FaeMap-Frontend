@@ -289,7 +289,7 @@ extension NameCardViewController {
     
     func selectTag(sender : UIButton) {
         if selectedButtonSet.count != 3 && !sender.hidden {
-            var newButton = UIButton(frame: sender.frame)
+            let newButton = UIButton(frame: sender.frame)
             let attributedString = NSMutableAttributedString(string: (sender.titleLabel?.text)!)
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.1), range: NSRange(location: 0, length: attributedString.length))
             attributedString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold",size: 11)!, range: NSRange(location: 0, length: attributedString.length))
@@ -309,7 +309,7 @@ extension NameCardViewController {
     
     func attachSelectedTag() {
         
-        var totalInterval = (CGFloat)(selectedButtonSet.count - 1) * selectedInterval
+        let totalInterval = (CGFloat)(selectedButtonSet.count - 1) * selectedInterval
         var totalTag : CGFloat = 0
         for button in selectedButtonSet {
             totalTag += button.frame.width
@@ -331,7 +331,7 @@ extension NameCardViewController {
                 break
             }
         }
-        for (var i = 0; i < selectedButtonSet.count; i++) {
+        for (var i = 0; i < selectedButtonSet.count; i += 1) {
             if selectedButtonSet[i].titleLabel?.text == sender.titleLabel?.text {
                 selectedButtonSet[i].removeFromSuperview()
                 selectedButtonSet.removeAtIndex(i)
@@ -383,7 +383,7 @@ extension NameCardViewController {
             tagTitle.append(attributedString)
         }
         
-        var originPoint = CGPoint(x: 0, y: 0)
+        let originPoint = CGPoint(x: 0, y: 0)
         
         var totalTagLength : CGFloat = 0
         

@@ -10,8 +10,6 @@ import UIKit
 import Alamofire
 import SDWebImage
 
-
-
 /*
  do {
  let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
@@ -27,7 +25,6 @@ import SDWebImage
  print(error)
  }*/
 // not use anymore
-
 
 func postImageToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
@@ -60,7 +57,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
                             print(response.response!.statusCode)
                             print(response)
                             
-                            if let respon = response.response{
+                            if let _ = response.response{
                                 if(response.response!.statusCode != 0){
                                     print("finished")
                                 }
@@ -104,9 +101,9 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
         //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil{
-        for(key,value) in authentication! {
+        for(key, _) in authentication! {
             headers[key] = "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw" as? String
-            //            print(value)
+            
         }
     }
     let manager = SDWebImageManager().imageDownloader
@@ -151,7 +148,7 @@ func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[
                 .responseJSON{response in
                     //print(response.response!.statusCode)
                     //print(response)
-                    if let respon = response.response{
+                    if let _ = response.response{
                         if(response.response!.statusCode != 0){
                             print("finished")
                         }
@@ -199,7 +196,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
             Alamofire.request(.GET, URL,headers:headers)
                 .responseJSON{response in
                     //print(response.response!.statusCode)
-                    if let respon = response.response{
+                    if let _ = response.response{
                         if(response.response!.statusCode != 0){
                             print("finished")
                         }
@@ -218,7 +215,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
             Alamofire.request(.GET, URL,parameters:parameter,headers:headers)
                 .responseJSON{response in
                     //print(response.response!.statusCode)
-                    if let respon = response.response{
+                    if let _ = response.response{
                         if(response.response!.statusCode != 0){
                             print("finished")
                         }
@@ -260,7 +257,7 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
         Alamofire.request(.DELETE, URL,headers:headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
-                if let respon = response.response{
+                if let _ = response.response{
                     if(response.response!.statusCode != 0){
                         print("finished")
                     }
@@ -299,7 +296,7 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
         Alamofire.request(.PUT, URL, parameters: parameter,headers:headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
-                if let respon = response.response{
+                if let _ = response.response{
                     if(response.response!.statusCode != 0){
                         print("finished")
                     }
@@ -327,13 +324,13 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
 
 //utf-5 encode
 func utf8Encode(inputString:String)->String{
-    var encodedString = inputString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+    let encodedString = inputString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
     return encodedString!
 }
 
 //utf-8 decode
 func utf8Decode(inputString:String)->String{
-    var decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+    let decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
     return decodeString
 }
 

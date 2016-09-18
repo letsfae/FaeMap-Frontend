@@ -131,7 +131,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         tagColor.append(getColor(178, green: 228, blue: 77))
         tagColor.append(getColor(255, green: 126, blue: 126))
         
-        var totalInterval = (CGFloat)(tagName.count - 1) * selectedInterval
+        let totalInterval = (CGFloat)(tagName.count - 1) * selectedInterval
         var totalTag : CGFloat = 0
         
         
@@ -152,7 +152,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         var xOffset : CGFloat = (maxLength - totalTag - totalInterval) / 2
         
         for (var i=0; i<tagName.count; i++){
-            var buttonTag : UIButton = UIButton(frame: CGRect(x: xOffset, y: 0, width: tagLength[i], height: tagHeight))
+            let buttonTag : UIButton = UIButton(frame: CGRect(x: xOffset, y: 0, width: tagLength[i], height: tagHeight))
             buttonTag.backgroundColor = tagColor[i]
             buttonTag.setAttributedTitle(tagTitle[i], forState: .Normal)
             buttonTag.titleLabel?.textColor = UIColor.whiteColor()

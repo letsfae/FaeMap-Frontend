@@ -72,9 +72,31 @@ extension FaeMapViewController {
             self.uiviewPinSelections.alpha = 1.0
             self.uiviewCreateCommentPin.alpha = 0.0
         }), completion: nil)
-        for textFiled in textFieldArray {
-            textFiled.endEditing(true)
+        self.textViewForCommentPin.endEditing(true)
+        if self.textViewForCommentPin.text == "" {
+            self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+            self.buttonCommentSubmit.enabled = false
         }
+    }
+    
+    func actionCloseSubmitPins(sender: UIButton!) {
+        self.submitPinsHideAnimation()
+        self.buttonToNorth.hidden = false
+        self.buttonSelfPosition.hidden = false
+        self.buttonChatOnMap.hidden = false
+        self.buttonPinOnMap.hidden = false
+        self.buttonPinOnMapInside.hidden = false
+        self.buttonSetLocationOnMap.hidden = true
+        self.imagePinOnMap.hidden = true
+        self.navigationController?.navigationBar.hidden = false
+        self.searchBarSubview.hidden = true
+        self.tblSearchResults.hidden = true
+        self.uiviewTableSubview.hidden = true
+        self.textViewForCommentPin.text = ""
+        self.textViewForCommentPin.endEditing(true)
+        self.lableTextViewPlaceholder.hidden = false
+        self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+        self.buttonCommentSubmit.enabled = false
     }
     
     func actionSetLocationForComment(sender: UIButton!) {
@@ -140,22 +162,19 @@ extension FaeMapViewController {
             submitLongitude = "\(self.longitudeForPin)"
         }
         
-        var commentContent = ""
-        for everyTextField in textFieldArray {
-            if let textContent = everyTextField.text {
-                commentContent += textContent
-            }
-        }
+        let commentContent = self.textViewForCommentPin.text
+        
+        print(commentContent)
         
         if commentContent == "" {
-            let alertUIView = UIAlertView(title: "Content Field is Empty!", message: nil, delegate: self, cancelButtonTitle: "OK, I got it")
-            alertUIView.show()
             return
         }
         
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
+        
+        
         postSingleComment.postComment{(status:Int,message:AnyObject?) in
             if let getMessage = message {
                 if let getMessageID = getMessage["comment_id"] {
@@ -180,6 +199,7 @@ extension FaeMapViewController {
                     self.navigationController?.navigationBar.hidden = false
                     
                     let getJustPostedComment = FaeMap()
+                    
                     getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
                         let mapInfoJSON = JSON(message!)
                         var pinData = [String: AnyObject]()
@@ -204,13 +224,8 @@ extension FaeMapViewController {
                         }
                         commentMarker.userData = pinData
                     }
-                    self.textFieldArray.removeAll()
-                    self.borderArray.removeAll()
-                    for every in self.uiviewArray {
-                        every.removeFromSuperview()
-                    }
-                    self.uiviewArray.removeAll()
-                    self.loadBasicTextField()
+                    self.textViewForCommentPin.text = ""
+                    self.lableTextViewPlaceholder.hidden = false
                 }
                 else {
                     print("Cannot get comment_id of this posted comment")
