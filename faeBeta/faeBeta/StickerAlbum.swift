@@ -25,7 +25,7 @@ class StickerAlbum {
     var colPerPage : CGFloat = 4
     var stickerName = [[String]]()
     var stickerPos = [CGRect]()
-    let widthPage : CGFloat = 375
+    let widthPage : CGFloat = UIScreen.mainScreen().bounds.width
     let heightPage : CGFloat = 195
     let length : CGFloat = 82
     var pageNumber = 0
