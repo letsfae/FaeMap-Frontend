@@ -280,20 +280,20 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.jumpToWelcomeView()
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
-        myPositionIconFirstLoaded = true
+        self.myPositionIconFirstLoaded = true
         
-        loadMapView()
-        loadTransparentNavBarItems()
-        loadButton()
-        loadBlurAndPinSelection()
-        loadMore()
-        loadWindBell()
-        loadMainScreenSearch()
-        loadTableView()
-        configureCustomSearchController()
-        loadNamecard()
-        loadCommentPinDetailWindow()
-        loadCommentPinList()
+        self.loadMapView()
+        self.loadTransparentNavBarItems()
+        self.loadButton()
+        self.loadBlurAndPinSelection()
+        self.loadMore()
+        self.loadWindBell()
+        self.loadMainScreenSearch()
+        self.loadTableView()
+        self.configureCustomSearchController()
+        self.loadNamecard()
+        self.loadCommentPinDetailWindow()
+        self.loadCommentPinList()
         
         //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         
@@ -316,10 +316,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.buttonLeftTop.hidden = false
         self.buttonMainScreenSearch.hidden = false
         self.buttonRightTop.hidden = false
-        loadTransparentNavBarItems()
-        loadMapChat()
-
-        print("DEBUG: WILL APPEAR!!!")
+        self.loadTransparentNavBarItems()
+        self.loadMapChat()
     }
     
     override func viewWillDisappear(animated: Bool) {
