@@ -50,12 +50,9 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     func bindData(recent : NSDictionary) {
-        
-        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height / 2
-        avatarImageView.layer.masksToBounds = true
-        
+        self.avatarImageView.layer.cornerRadius = 30 // half the cell's height
+        self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
-        
         let withUserId = (recent.objectForKey("withUserUserId") as? String)!
         
         //get the backendless user and download avatar

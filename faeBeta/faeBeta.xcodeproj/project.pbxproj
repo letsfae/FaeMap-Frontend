@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		273CD157633C35BD2EE44A98 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */; };
+		86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A531D8FB5EE006BDE27 /* Alamofire.framework */; };
+		86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */; };
+		86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */; };
+		86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */; };
+		86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */; };
+		86721A641D8FB5EE006BDE27 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A581D8FB5EE006BDE27 /* Kingfisher.framework */; };
+		86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */; };
+		86721A661D8FB5EE006BDE27 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */; };
+		86721A671D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */; };
+		86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5C1D8FB5EE006BDE27 /* pop.framework */; };
+		86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */; };
+		86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */; };
 		9F920B03E78FC6CEC5948B97 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */; };
 		B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */; };
 		B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */; };
@@ -470,6 +482,18 @@
 		34940A6B4E600A0233A15CDA /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		482E633A931EEC713897BA18 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		86721A531D8FB5EE006BDE27 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
+		86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DACircularProgress.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/DACircularProgress/DACircularProgress.framework"; sourceTree = "<group>"; };
+		86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDMPhotoBrowser.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/IDMPhotoBrowser/IDMPhotoBrowser.framework"; sourceTree = "<group>"; };
+		86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQMessagesViewController.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQMessagesViewController/JSQMessagesViewController.framework"; sourceTree = "<group>"; };
+		86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQSystemSoundPlayer.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework"; sourceTree = "<group>"; };
+		86721A581D8FB5EE006BDE27 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/Kingfisher/Kingfisher.framework"; sourceTree = "<group>"; };
+		86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KTCenterFlowLayout.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/KTCenterFlowLayout/KTCenterFlowLayout.framework"; sourceTree = "<group>"; };
+		86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_faeBetaTests.framework; path = "Pods/../build/Debug-iphoneos/Pods_faeBetaTests.framework"; sourceTree = "<group>"; };
+		86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_faeBetaUITests.framework; path = "Pods/../build/Debug-iphoneos/Pods_faeBetaUITests.framework"; sourceTree = "<group>"; };
+		86721A5C1D8FB5EE006BDE27 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/pop/pop.framework"; sourceTree = "<group>"; };
+		86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SDWebImage/SDWebImage.framework"; sourceTree = "<group>"; };
+		86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
 		8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
@@ -652,6 +676,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */,
+				86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */,
+				86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */,
+				86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */,
+				86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */,
+				86721A641D8FB5EE006BDE27 /* Kingfisher.framework in Frameworks */,
+				86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */,
+				86721A661D8FB5EE006BDE27 /* Pods_faeBetaTests.framework in Frameworks */,
+				86721A671D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework in Frameworks */,
+				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
+				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
+				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
 				FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -678,6 +714,18 @@
 		011919C07ABA312DB42AF81B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86721A531D8FB5EE006BDE27 /* Alamofire.framework */,
+				86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */,
+				86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */,
+				86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */,
+				86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */,
+				86721A581D8FB5EE006BDE27 /* Kingfisher.framework */,
+				86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */,
+				86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */,
+				86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */,
+				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
+				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
+				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
 				1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */,
 				69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */,
 				8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */,
@@ -1941,6 +1989,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1964,6 +2016,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

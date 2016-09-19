@@ -41,6 +41,19 @@
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bov-zv-dPz">
                                                     <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatarPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="I0r-k2-xtt">
+                                                            <color key="backgroundColor" red="1" green="0.21159445722236259" blue="0.37480409325113817" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="d0t-ur-tWu"/>
+                                                                <constraint firstAttribute="width" constant="60" id="h1b-RZ-SOl"/>
+                                                                <constraint firstAttribute="height" constant="60" id="vTq-xV-TdM"/>
+                                                            </constraints>
+                                                            <variation key="default">
+                                                                <mask key="constraints">
+                                                                    <exclude reference="d0t-ur-tWu"/>
+                                                                </mask>
+                                                            </variation>
+                                                        </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXC-7e-MuD">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="22" id="fJV-0T-Zbl"/>
@@ -54,18 +67,6 @@
                                                             <color key="textColor" red="0.5725490196078431" green="0.5725490196078431" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I0r-k2-xtt">
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="d0t-ur-tWu"/>
-                                                                <constraint firstAttribute="width" constant="60" id="h1b-RZ-SOl"/>
-                                                                <constraint firstAttribute="height" constant="60" id="vTq-xV-TdM"/>
-                                                            </constraints>
-                                                            <variation key="default">
-                                                                <mask key="constraints">
-                                                                    <exclude reference="d0t-ur-tWu"/>
-                                                                </mask>
-                                                            </variation>
-                                                        </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tqv-um-nvH">
                                                             <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
@@ -220,7 +221,7 @@
         <scene sceneID="LRW-mA-PzX">
             <objects>
                 <collectionViewController storyboardIdentifier="CustomCollectionViewController" id="oIf-UI-O3w" customClass="CustomCollectionViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="kLt-3H-cXF">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="kLt-3H-cXF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="KcW-wk-zr4">
@@ -433,6 +434,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="avatarPlaceholder" width="125" height="125"/>
         <image name="deleteButton" width="69" height="75"/>
     </resources>
 </document>
