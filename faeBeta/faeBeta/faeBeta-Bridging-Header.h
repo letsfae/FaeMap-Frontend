@@ -12,3 +12,4 @@
 #import "JSQMessagesViewControllerCustom.h"
 #import "JSQMessagesBubbleImageFactoryCustom.h"
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
+#import "JSQMessagesCollectionViewCustom.h"

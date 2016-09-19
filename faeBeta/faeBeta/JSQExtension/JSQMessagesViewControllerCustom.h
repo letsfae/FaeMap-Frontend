@@ -18,7 +18,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import <JSQMessagesViewController/JSQMessagesCollectionView.h>
+#import "JSQMessagesCollectionViewCustom.h"
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
 #import "JSQMessagesInputToolbarCustom.h"
 #import <JSQMessagesViewController/JSQMessagesKeyboardController.h>
@@ -29,7 +29,7 @@
  *
  *  @warning This class is intended to be subclassed. You should not use it directly.
  */
-@interface JSQMessagesViewControllerCustom : UIViewController <JSQMessagesCollectionViewDataSource,
+@interface JSQMessagesViewControllerCustom : UIViewController <JSQMessagesCollectionViewDataSourceCustom,
                                                          JSQMessagesCollectionViewDelegateFlowLayoutCustom,
                                                          UITextViewDelegate>
 
@@ -37,7 +37,7 @@
  *  Returns the collection view object managed by this view controller.
  *  This view controller is the collection view's data source and delegate.
  */
-@property (weak, nonatomic, readonly) JSQMessagesCollectionView *collectionView;
+@property (weak, nonatomic, readonly) JSQMessagesCollectionViewCustom *collectionView;
 
 /**
  *  Returns the input toolbar view object managed by this view controller.

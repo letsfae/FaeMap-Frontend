@@ -724,7 +724,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         return cell
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         
         return messages[indexPath.row]
         
@@ -738,7 +738,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //this delegate is used to tell which bubble image should be used on current message
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
         
         let data = messages[indexPath.row]
         
@@ -753,7 +753,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //this is used to edit top label of every cell
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
         
         if indexPath.item % 3 == 0 {
             let message = messages[indexPath.item]
@@ -765,7 +765,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         
         if indexPath.item % 3 == 0 {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
@@ -775,12 +775,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         return 0.0
     }
     
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
         
         let message = objects[indexPath.row]
         
@@ -794,7 +794,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     // bind avatar image
-    override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
         
         let message = messages[indexPath.row]
         let avatar = avatarDictionary!.objectForKey(message.senderId) as! JSQMessageAvatarImageDataSource
@@ -842,7 +842,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //taped bubble
     // function when user tap the bubble, like image, location
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         
         closeStickerPanel()
         closeQuickPhotoPanel()
