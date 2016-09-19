@@ -14,10 +14,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     
-    var recents: [NSDictionary] = []
+    var recents: [NSDictionary] = [] // an array of dic to store recent chatting informations
     var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
     
-    
+    // MARK: - View did/will funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.backgroundColor = UIColor.whiteColor()
@@ -29,14 +29,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         // Do any additional setup after loading the view.
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     /*
-     // MARK: - Navigation
+     // MARK: - setup
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -74,6 +68,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func addGestureRecognizer()
     {
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(RecentViewController.closeAllCell)))
+    }
+    
+    func crossTapped() {
+        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
+    }
+    
+    func navigationLeftItemTapped() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func navigationRightItemTapped() {
+        
     }
     
     //MARK:- tableView delegate
@@ -128,7 +133,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         performSegueWithIdentifier("recentToChooseUserVC", sender: self)
     }
     
-    //MARK : UItableViewDataSource
+    //MARK: - UItableViewDataSource
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -151,6 +156,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
+    //MARK: - helpers
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "recentToChooseUserVC" {
             let vc = segue.destinationViewController as! ChooseUserViewController
@@ -257,17 +263,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         optionMenu.addAction(markers)
         optionMenu.addAction(cancelAction)
         self.presentViewController(optionMenu, animated: true, completion: nil)
-    }
-    
-    func crossTapped() {
-        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
-    }
-    
-    func navigationLeftItemTapped() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    func navigationRightItemTapped() {
-        
     }
     
     func closeAllCell(recognizer:UITapGestureRecognizer){
