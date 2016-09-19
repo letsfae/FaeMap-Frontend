@@ -50,7 +50,8 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     func bindData(recent : NSDictionary) {
-        self.avatarImageView.layer.cornerRadius = 30 // half the cell's height
+        self.layoutIfNeeded()
+        self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
         let withUserId = (recent.objectForKey("withUserUserId") as? String)!
