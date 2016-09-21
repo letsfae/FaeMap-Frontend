@@ -205,7 +205,8 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
     func textFieldDidChange(text: String, indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
-            username = text
+            let index = text.startIndex.advancedBy(1)
+            username = text.substringFromIndex(index)
             break
         default: break
         }

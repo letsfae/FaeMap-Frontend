@@ -105,6 +105,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func signUpUser() {
         showActivityIndicator()
+        print(faeUser.keyValue)
         faeUser.signUpInBackground { (status, message) in
             dispatch_async(dispatch_get_main_queue(), {
                 self.hideActivityIndicator()

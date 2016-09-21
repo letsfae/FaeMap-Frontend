@@ -41,6 +41,10 @@ class FaeUser : NSObject {
      */
     func signUpInBackground(completion:(Int,AnyObject?)->Void){
         postToURL("users", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
+            print("status")
+            print(status)
+            print("message")
+            print(message)
             if(status / 100 == 2 ) {
                 //success
                 self.saveUserSignUpInfo()
@@ -191,9 +195,7 @@ class FaeUser : NSObject {
     func checkUserExistence(completion:(Int,AnyObject?)->Void){
         if let username = keyValue["user_name"] as? String{
             getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
-                print("status")
-                print(status)
-                print("message")
+
                 print(message)
                 //self.clearKeyValue()
                 completion(status,message);
