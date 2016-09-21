@@ -115,7 +115,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func checkForUniqueUsername() {
-        faeUser.whereKey("username", value: username!)
+        faeUser.whereKey("user_name", value: username!)
         showActivityIndicator()
         faeUser.checkUserExistence { (status, message) in
             dispatch_async(dispatch_get_main_queue(), {
@@ -205,7 +205,8 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
     func textFieldDidChange(text: String, indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
-            username = text
+            let index = text.startIndex.advancedBy(1)
+            username = text.substringFromIndex(index)
             break
         default: break
         }

@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class JSQMessagesCollectionView;
+@class JSQMessagesCollectionViewCustom;
 @class JSQMessagesCollectionViewFlowLayoutCustom;
 @class JSQMessagesCollectionViewCell;
 @class JSQMessagesLoadEarlierHeaderView;
@@ -45,7 +45,7 @@
  *
  *  @see JSQMessagesCollectionViewCell.
  */
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
@@ -59,7 +59,7 @@
  *
  *  @see JSQMessagesCollectionViewCell.
  */
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
@@ -73,7 +73,7 @@
  *
  *  @see JSQMessagesCollectionViewCell.
  */
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
@@ -83,7 +83,7 @@
  *  @param avatarImageView The avatar image view that was tapped.
  *  @param indexPath       The index path of the item for which the avatar was tapped.
  */
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath;
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath;
 
 /**
  *  Notifies the delegate that the message bubble at the specified indexPath did receive a tap event.
@@ -91,7 +91,7 @@
  *  @param collectionView The collection view object that is notifying the delegate of the tap event.
  *  @param indexPath      The index path of the item for which the message bubble was tapped.
  */
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath;
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  *  Notifies the delegate that the cell at the specified indexPath did receive a tap event at the specified touchLocation.
@@ -107,7 +107,7 @@
  *  @see `collectionView:didTapAvatarImageView:atIndexPath:`
  *  @see `collectionView:didTapMessageBubbleAtIndexPath:atIndexPath:`
  */
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation;
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation;
 
 /**
  *  Notifies the delegate that the collection view's header did receive a tap event.
@@ -116,7 +116,7 @@
  *  @param headerView     The header view in the collection view.
  *  @param sender         The button that was tapped.
  */
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                 header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender;
 
 @end

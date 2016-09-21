@@ -48,14 +48,12 @@ class RecentTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+    // MARK: populate cell 
     func bindData(recent : NSDictionary) {
-        
-        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height / 2
-        avatarImageView.layer.masksToBounds = true
-        
+        self.layoutIfNeeded()
+        self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
+        self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
-        
         let withUserId = (recent.objectForKey("withUserUserId") as? String)!
         
         //get the backendless user and download avatar
@@ -105,7 +103,7 @@ class RecentTableViewCell: UITableViewCell {
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
     }
-    
+    // MARK: helper
     func TimeElipsed(seconds : NSTimeInterval, lastMessageTime:NSDate) -> String {
         let dayFormatter = dateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
@@ -132,6 +130,8 @@ class RecentTableViewCell: UITableViewCell {
         return elipsed!
     }
 
+    
+    //MARK: - delete button related
     @IBAction func deleteButtonTapped(sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
     }

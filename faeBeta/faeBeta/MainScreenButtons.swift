@@ -23,25 +23,26 @@ extension FaeMapViewController {
         self.buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
         self.navigationController!.navigationBar.addSubview(buttonLeftTop)
         self.buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(32)]", options: [], views: buttonLeftTop)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-5-[v0(33)]", options: [], views: buttonLeftTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(29)]", options: [], views: buttonLeftTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(29)]", options: [], views: buttonLeftTop)
+        print("bar height:")
+        print(UIApplication.sharedApplication().statusBarFrame.size.height)
         
-        
-        self.buttonMiddleTop = UIButton()
-        self.buttonMiddleTop.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
-        self.navigationController!.navigationBar.addSubview(buttonMiddleTop)
-        self.buttonMiddleTop.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(41)]", options: [], views: buttonMiddleTop)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-1-[v0(41)]", options: [], views: buttonMiddleTop)
-        NSLayoutConstraint(item: buttonMiddleTop, attribute: .CenterX, relatedBy: .Equal, toItem: self.navigationController!.navigationBar, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        self.buttonMainScreenSearch = UIButton()
+        self.buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
+        self.navigationController!.navigationBar.addSubview(buttonMainScreenSearch)
+        self.buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(27)]", options: [], views: buttonMainScreenSearch)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(29)]", options: [], views: buttonMainScreenSearch)
+        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.navigationController!.navigationBar, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         
         self.buttonRightTop = UIButton()
         self.buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
         self.navigationController!.navigationBar.addSubview(buttonRightTop)
         self.buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(31)]-15-|", options: [], views: buttonRightTop)
-        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-4-[v0(36)]", options: [], views: buttonRightTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(28)]-15-|", options: [], views: buttonRightTop)
+        self.navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(31)]", options: [], views: buttonRightTop)
         
         
         self.buttonToNorth = UIButton()
@@ -77,17 +78,16 @@ extension FaeMapViewController {
         self.view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
         self.view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
         
-        let unreadMessagesOnMapX: CGFloat = 67
-        let unreadMessagesOnMapY: CGFloat = 646
-        let unreadMessagesOnMapWidth: CGFloat = 20
-        labelUnreadMessages = UILabel(frame: CGRectMake(unreadMessagesOnMapX, unreadMessagesOnMapY, unreadMessagesOnMapWidth, unreadMessagesOnMapWidth))
-        labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
-        labelUnreadMessages.layer.cornerRadius = 10
-        labelUnreadMessages.layer.masksToBounds = true
-        labelUnreadMessages.text = "1"
-        labelUnreadMessages.textAlignment = .Center
-        labelUnreadMessages.textColor = UIColor.whiteColor()
-        self.view.addSubview(labelUnreadMessages)
+        self.labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 23, 20))
+        self.labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
+        self.labelUnreadMessages.layer.cornerRadius = 10
+        self.labelUnreadMessages.layer.masksToBounds = true
+        self.labelUnreadMessages.layer.opacity = 0.9
+        self.labelUnreadMessages.text = "1"
+        self.labelUnreadMessages.textAlignment = .Center
+        self.labelUnreadMessages.textColor = UIColor.whiteColor()
+        self.labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 11)
+        self.buttonChatOnMap.addSubview(labelUnreadMessages)
         
         self.buttonPinOnMap = UIButton(frame: CGRectMake(323, 646, 79, 79))
         self.buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map_outside"), forState: .Normal)
@@ -123,7 +123,9 @@ extension FaeMapViewController {
         self.currentLongitude = currentLocation.coordinate.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView.camera = camera
-        loadPositionAnimateImage()
+        if self.isInPinLocationSelect == false {
+            self.loadPositionAnimateImage()
+        }
     }
     
     func actionTrueNorth(sender: UIButton!) {

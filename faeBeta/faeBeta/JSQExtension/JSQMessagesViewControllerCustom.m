@@ -118,10 +118,10 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
 
 
 
-@interface JSQMessagesViewControllerCustom () <JSQMessagesInputToolbarDelegate,
+@interface JSQMessagesViewControllerCustom () <JSQMessagesInputToolbarDelegateCustom,
 JSQMessagesKeyboardControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet JSQMessagesCollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet JSQMessagesCollectionViewCustom *collectionView;
 @property (weak, nonatomic) IBOutlet JSQMessagesInputToolbarCustom *inputToolbar;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarHeightConstraint;
@@ -485,40 +485,40 @@ JSQMessagesKeyboardControllerDelegate>
 
 #pragma mark - JSQMessages collection view data source
 
-- (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+- (id<JSQMessageData>)collectionView:(JSQMessagesCollectionViewCustom *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
 {
     NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
 }
 
-- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
-    return nil;
-}
-
-- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionViewCustom *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
 
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionViewCustom *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionViewCustom *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
 
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionViewCustom *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
 
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionViewCustom *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
@@ -535,7 +535,7 @@ JSQMessagesKeyboardControllerDelegate>
     return 1;
 }
 
-- (UICollectionViewCell *)collectionView:(JSQMessagesCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(JSQMessagesCollectionViewCustom *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
     NSParameterAssert(messageItem != nil);
@@ -624,7 +624,7 @@ JSQMessagesKeyboardControllerDelegate>
     return cell;
 }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
   accessibilityForCell:(JSQMessagesCollectionViewCell*)cell
              indexPath:(NSIndexPath *)indexPath
                message:(id<JSQMessageData>)messageItem
@@ -642,7 +642,7 @@ JSQMessagesKeyboardControllerDelegate>
     }
 }
 
-- (UICollectionReusableView *)collectionView:(JSQMessagesCollectionView *)collectionView
+- (UICollectionReusableView *)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind
                                  atIndexPath:(NSIndexPath *)indexPath
 {
@@ -678,7 +678,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 #pragma mark - Collection view delegate
 
-- (BOOL)collectionView:(JSQMessagesCollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)collectionView:(JSQMessagesCollectionViewCustom *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //  disable menu for media messages
     id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
@@ -707,7 +707,7 @@ JSQMessagesKeyboardControllerDelegate>
     return NO;
 }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(copy:)) {
         id<JSQMessageData> messageData = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
@@ -723,7 +723,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 #pragma mark - Collection view delegate flow layout
 
-- (CGSize)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGSize)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                   layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView == self.collectionView) {
@@ -733,31 +733,31 @@ JSQMessagesKeyboardControllerDelegate>
     }
 }
 
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return 0.0f;
 }
 
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return 0.0f;
 }
 
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+- (CGFloat)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayoutCustom *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return 0.0f;
 }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
  didTapAvatarImageView:(UIImageView *)avatarImageView
            atIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(JSQMessagesCollectionView *)collectionView
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
  didTapCellAtIndexPath:(NSIndexPath *)indexPath
          touchLocation:(CGPoint)touchLocation { }
 

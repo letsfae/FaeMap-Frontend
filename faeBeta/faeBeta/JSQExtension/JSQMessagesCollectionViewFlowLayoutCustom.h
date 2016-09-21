@@ -23,9 +23,9 @@
 
 #import <UIKit/UIKit.h>
 
-#import <JSQMessagesViewController/JSQMessagesBubbleSizeCalculating.h>
+#import "JSQMessagesBubbleSizeCalculatingCustom.h"
 
-@class JSQMessagesCollectionView;
+@class JSQMessagesCollectionViewCustom;
 
 
 /**
@@ -62,14 +62,14 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault;
 // TODO: fix, rename "messagesCollectionView", see #920
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-property-type"
-@property (readonly, nonatomic) JSQMessagesCollectionView *collectionView;
+@property (readonly, nonatomic) JSQMessagesCollectionViewCustom *collectionView;
 #pragma clang diagnostic pop
 
 /**
  *  The object that the layout uses to calculate bubble sizes.
  *  The default value is an instance of `JSQMessagesBubblesSizeCalculator`.
  */
-@property (strong, nonatomic) id<JSQMessagesBubbleSizeCalculating> bubbleSizeCalculator;
+@property (strong, nonatomic) id<JSQMessagesBubbleSizeCalculatingCustom> bubbleSizeCalculator;
 
 /**
  *  Specifies whether or not the layout should enable spring behavior dynamics for its items using `UIDynamics`.

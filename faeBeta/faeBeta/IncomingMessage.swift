@@ -13,8 +13,8 @@ import JSQMessagesViewController
 // or the other user who current user are chatting with.
 
 class IncomingMessage {
-    var collectionView : JSQMessagesCollectionView
-    init(collectionView_ : JSQMessagesCollectionView) {
+    var collectionView : JSQMessagesCollectionViewCustom
+    init(collectionView_ : JSQMessagesCollectionViewCustom) {
         collectionView = collectionView_
     }
     

@@ -31,10 +31,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var avatarImageDictionary : NSMutableDictionary?//not use anymore
     var avatarDictionary : NSMutableDictionary?//not use anymore
     //
-    var showAvatar : Bool = false//false not show avatar , true show avatar
+    var showAvatar : Bool = true//false not show avatar , true show avatar
     let factor : CGFloat = 375 / 414// autolayout factor MARK: 5s may has error, 6 and 6+ is ok
     var firstLoad : Bool?// whether it is the first time to load this room.
     var withUser : BackendlessUser?
+    {
+        didSet{
+            self.getAvatar()
+        }
+    }
     var withUserId : String? // the user id we chat to
     var currentUserId : String?// my user id
     var recent : NSDictionary?//recent chat room message
@@ -135,14 +140,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //update recent
         closeQuickPhotoPanel()
         closeStickerPanel()
-        clearRecentCounter(chatRoomId)// clear the unread message count
+//        clearRecentCounter(chatRoomId)// clear the unread message count
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
         
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        clearRecentCounter(chatRoomId)// clear the unread message count
+//        clearRecentCounter(chatRoomId)// clear the unread message count
     }
     
     override func viewDidLoad() {
@@ -154,16 +159,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.senderDisplayName = backendless.userService.currentUser.name
         collectionView?.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
         collectionView?.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
-        if withUserId == nil {// get avatar from our databse
-            //            getWithUserFromRecent(recent!, result: { (withUser) in
-            //                self.withUser = withUser
-            //                self.title = withUser.name
-            //                self.getAvatar()
-            //            })
-        } else {
-            //            self.title = withUser!.name
-            //            self.getAvatar()
-        }
         self.inputToolbar.contentView.textView.delegate = self
         //load firebase messages
         loadMessage()
@@ -249,8 +244,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             userDefaults.setBool(showAvatar, forKey: kAVATARSTATE)
             userDefaults.synchronize()
         }
-        
-        showAvatar = userDefaults.boolForKey(kAVATARSTATE)
+        showAvatar = true
+//        showAvatar = userDefaults.boolForKey(kAVATARSTATE)
     }
     
     //MARK: load custom input tool bar
@@ -636,7 +631,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func incoming(item : NSDictionary) -> Bool {
-        if currentUserId == item["senderId"] as! String {
+        if currentUserId == item["senderId"] as? String {
             return false
         } else {
             return true
@@ -644,7 +639,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func outgoing(item : NSDictionary) -> Bool {
-        if currentUserId == item["senderId"] as! String {
+        if currentUserId == item["senderId"] as? String {
             return true
         } else {
             return false
@@ -720,11 +715,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             cell.textView?.textColor = UIColor(red: 107.0/255.0, green: 105.0/255.0, blue: 105.0/255.0, alpha: 1.0)
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
-        
+        cell.avatarImageView.layer.cornerRadius = 17.5
         return cell
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        if collectionView == self.collectionView && indexPath.row == messages.count - 1{
+            clearRecentCounter(chatRoomId)
+        }
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         
         return messages[indexPath.row]
         
@@ -738,7 +739,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //this delegate is used to tell which bubble image should be used on current message
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
         
         let data = messages[indexPath.row]
         
@@ -753,7 +754,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //this is used to edit top label of every cell
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
         
         if indexPath.item % 3 == 0 {
             let message = messages[indexPath.item]
@@ -765,7 +766,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         
         if indexPath.item % 3 == 0 {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
@@ -775,12 +776,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         return 0.0
     }
     
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
         
         let message = objects[indexPath.row]
         
@@ -794,7 +795,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     // bind avatar image
-    override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
         
         let message = messages[indexPath.row]
         let avatar = avatarDictionary!.objectForKey(message.senderId) as! JSQMessageAvatarImageDataSource
@@ -842,7 +843,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //taped bubble
     // function when user tap the bubble, like image, location
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
+    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         
         closeStickerPanel()
         closeQuickPhotoPanel()
@@ -918,7 +919,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
                 if(stickerViewShow){
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
@@ -964,76 +965,78 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             //            avatarImageFromBackendlessUser(withUser!)
             
             //create avatars
-            //            createAvatars(avatarImageDictionary)
+            createAvatars(avatarImageDictionary)
         }
     }
     
-    //    func getWithUserFromRecent(recent : NSDictionary, result : (withUser : BackendlessUser) -> Void ) {
-    //
-    //        let withUserId = recent["withUserUserId"] as? String
-    //
-    //        let whereClause = "objectId = '\(withUserId!)'"
-    //        let dataQuery = BackendlessDataQuery()
-    //        dataQuery.whereClause = whereClause
-    //
-    //        let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-    //
-    //        dataStore.find(dataQuery, response: { (users : BackendlessCollection!) -> Void in
-    //
-    //            let withUser = users.data.first as! BackendlessUser
-    //
-    //            result(withUser: withUser)
-    //
-    //        }) { (fault : Fault!) -> Void in
-    //            print("Server report an error : \(fault)")
-    //        }
-    //
-    //    }
+//        func getWithUserFromRecent(recent : NSDictionary, result : (withUser : BackendlessUser) -> Void ) {
+//    
+//            let withUserId = recent["withUserUserId"] as? String
+//    
+//            let whereClause = "objectId = '\(withUserId!)'"
+//            let dataQuery = BackendlessDataQuery()
+//            dataQuery.whereClause = whereClause
+//    
+//            let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
+//    
+//            dataStore.find(dataQuery, response: { (users : BackendlessCollection!) -> Void in
+//    
+//                let withUser = users.data.first as! BackendlessUser
+//    
+//                result(withUser: withUser)
+//    
+//            }) { (fault : Fault!) -> Void in
+//                print("Server report an error : \(fault)")
+//            }
+//    
+//        }
     
-    //    func createAvatars(avatars : NSMutableDictionary?) {
-    //        var currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-    //        var withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-    //
-    //        if let avat = avatars {
-    //            if let currentUserAvatarImage = avat.objectForKey(backendless.userService.currentUser.objectId) {
-    //
-    //                currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: currentUserAvatarImage as! NSData), diameter: 70)
-    //                self.collectionView?.reloadData()
-    //            }
-    //        }
-    //
-    //        if let avat = avatars {
-    //            if let withUserAvatarImage = avat.objectForKey(withUser!.objectId!) {
-    //
-    //                withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: withUserAvatarImage as! NSData), diameter: 70)
-    //                self.collectionView?.reloadData()
-    //            }
-    //        }
-    //
-    //        avatarDictionary = [backendless.userService.currentUser.objectId! : currentUserAvatar, withUser!.objectId! : withUserAvatar]
-    //    }
+        func createAvatars(avatars : NSMutableDictionary?) {
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
     
-    //    func avatarImageFromBackendlessUser(user : BackendlessUser) {
-    //
-    //        if let imageLink = user.getProperty("Avatar") {
-    //
-    //            getImageFromURL(imageLink as! String, result: { (image) -> Void in
-    //
-    //                let imageData = UIImageJPEGRepresentation(image!, 1.0)
-    //
-    //                if self.avatarImageDictionary != nil {
-    //
-    //                    self.avatarImageDictionary!.removeObjectForKey(user.objectId)
-    //                    self.avatarImageDictionary!.setObject(imageData!, forKey: user.objectId!)
-    //                } else {
-    //                    self.avatarImageDictionary = [user.objectId! : imageData!]
-    //                }
-    //                self.createAvatars(self.avatarImageDictionary)
-    //
-    //            })
-    //        }
-    //
-    //    }
+//            if let avat = avatars {
+//                if let currentUserAvatarImage = avat.objectForKey(backendless.userService.currentUser.objectId) {
+//    
+//                    currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: currentUserAvatarImage as! NSData), diameter: 70)
+//                    self.collectionView?.reloadData()
+//                }
+//            }
+//    
+//            if let avat = avatars {
+//                if let withUserAvatarImage = avat.objectForKey(withUser!.objectId!) {
+//    
+//                    withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: withUserAvatarImage as! NSData), diameter: 70)
+//                    self.collectionView?.reloadData()
+//                }
+//            }
+    
+            avatarDictionary = [backendless.userService.currentUser.objectId! : currentUserAvatar, withUser!.objectId! : withUserAvatar]
+            // need to check if collectionView exist before reload
+            if collectionView != nil {collectionView.reloadData()}
+        }
+    
+//        func avatarImageFromBackendlessUser(user : BackendlessUser) {
+//    
+//            if let imageLink = user.getProperty("Avatar") {
+//    
+//                getImageFromURL(imageLink as! String, result: { (image) -> Void in
+//    
+//                    let imageData = UIImageJPEGRepresentation(image!, 1.0)
+//    
+//                    if self.avatarImageDictionary != nil {
+//    
+//                        self.avatarImageDictionary!.removeObjectForKey(user.objectId)
+//                        self.avatarImageDictionary!.setObject(imageData!, forKey: user.objectId!)
+//                    } else {
+//                        self.avatarImageDictionary = [user.objectId! : imageData!]
+//                    }
+//                    self.createAvatars(self.avatarImageDictionary)
+//    
+//                })
+//            }
+//    
+//        }
     
     func getCacheDirectory() -> String {
         //record: get an available path we can use to save record file

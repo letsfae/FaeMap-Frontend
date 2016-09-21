@@ -8,6 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		273CD157633C35BD2EE44A98 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */; };
+		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
+		8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
+		8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
+		86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A531D8FB5EE006BDE27 /* Alamofire.framework */; };
+		86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */; };
+		86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */; };
+		86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */; };
+		86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */; };
+		86721A641D8FB5EE006BDE27 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A581D8FB5EE006BDE27 /* Kingfisher.framework */; };
+		86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */; };
+		86721A661D8FB5EE006BDE27 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */; };
+		86721A671D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */; };
+		86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5C1D8FB5EE006BDE27 /* pop.framework */; };
+		86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */; };
+		86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */; };
 		9F920B03E78FC6CEC5948B97 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */; };
 		B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */; };
 		B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */; };
@@ -193,9 +208,6 @@
 		B0714D3D1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
 		B0714D3F1D5E435200356705 /* CommentPinUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D251D5E435200356705 /* CommentPinUIView.swift */; };
-		B0714D401D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
-		B0714D411D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
-		B0714D421D5E435200356705 /* CommentTextFieldsControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */; };
 		B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
 		B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
 		B0714D451D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
@@ -261,7 +273,6 @@
 		B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DF41D62513300356705 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
-		B0714DF61D62513300356705 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF31D62513300356705 /* PasswordTextField.swift */; };
 		B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
 		B0714DF91D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
 		B0714DFA1D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
@@ -440,6 +451,15 @@
 		B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
+		B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
+		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */; };
 /* End PBXBuildFile section */
 
@@ -465,6 +485,22 @@
 		34940A6B4E600A0233A15CDA /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		482E633A931EEC713897BA18 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCustom.h; sourceTree = "<group>"; };
+		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
+		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
+		8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleSizeCalculatingCustom.h; sourceTree = "<group>"; };
+		86721A531D8FB5EE006BDE27 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
+		86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DACircularProgress.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/DACircularProgress/DACircularProgress.framework"; sourceTree = "<group>"; };
+		86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDMPhotoBrowser.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/IDMPhotoBrowser/IDMPhotoBrowser.framework"; sourceTree = "<group>"; };
+		86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQMessagesViewController.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQMessagesViewController/JSQMessagesViewController.framework"; sourceTree = "<group>"; };
+		86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQSystemSoundPlayer.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework"; sourceTree = "<group>"; };
+		86721A581D8FB5EE006BDE27 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/Kingfisher/Kingfisher.framework"; sourceTree = "<group>"; };
+		86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KTCenterFlowLayout.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/KTCenterFlowLayout/KTCenterFlowLayout.framework"; sourceTree = "<group>"; };
+		86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_faeBetaTests.framework; path = "Pods/../build/Debug-iphoneos/Pods_faeBetaTests.framework"; sourceTree = "<group>"; };
+		86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_faeBetaUITests.framework; path = "Pods/../build/Debug-iphoneos/Pods_faeBetaUITests.framework"; sourceTree = "<group>"; };
+		86721A5C1D8FB5EE006BDE27 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/pop/pop.framework"; sourceTree = "<group>"; };
+		86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SDWebImage/SDWebImage.framework"; sourceTree = "<group>"; };
+		86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
 		8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
@@ -530,7 +566,6 @@
 		B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnterCodeTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportCodeViewController.swift; sourceTree = "<group>"; };
 		B0714D251D5E435200356705 /* CommentPinUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinUIView.swift; sourceTree = "<group>"; };
-		B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTextFieldsControl.swift; sourceTree = "<group>"; };
 		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
 		B0714D281D5E435200356705 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
@@ -554,7 +589,6 @@
 		B0714DC81D5E475500356705 /* ChatMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMapViewController.swift; sourceTree = "<group>"; };
 		B0714DF11D62513300356705 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
 		B0714DF21D62513300356705 /* PasswordAgainTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordAgainTextField.swift; sourceTree = "<group>"; };
-		B0714DF31D62513300356705 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B0714DF71D62520900356705 /* RegisterNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameViewController.swift; sourceTree = "<group>"; };
 		B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterEmailViewController.swift; sourceTree = "<group>"; };
 		B0714DFF1D62525A00356705 /* RegisterUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterUsernameViewController.swift; sourceTree = "<group>"; };
@@ -637,6 +671,9 @@
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPin.swift; sourceTree = "<group>"; };
+		B837D1ED1D8F11C500E44FAE /* PinSelections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSelections.swift; sourceTree = "<group>"; };
+		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -646,6 +683,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */,
+				86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */,
+				86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */,
+				86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */,
+				86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */,
+				86721A641D8FB5EE006BDE27 /* Kingfisher.framework in Frameworks */,
+				86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */,
+				86721A661D8FB5EE006BDE27 /* Pods_faeBetaTests.framework in Frameworks */,
+				86721A671D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework in Frameworks */,
+				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
+				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
+				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
 				FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -672,6 +721,18 @@
 		011919C07ABA312DB42AF81B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86721A531D8FB5EE006BDE27 /* Alamofire.framework */,
+				86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */,
+				86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */,
+				86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */,
+				86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */,
+				86721A581D8FB5EE006BDE27 /* Kingfisher.framework */,
+				86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */,
+				86721A5A1D8FB5EE006BDE27 /* Pods_faeBetaTests.framework */,
+				86721A5B1D8FB5EE006BDE27 /* Pods_faeBetaUITests.framework */,
+				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
+				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
+				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
 				1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */,
 				69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */,
 				8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */,
@@ -776,11 +837,12 @@
 			isa = PBXGroup;
 			children = (
 				B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */,
-				B0714D261D5E435200356705 /* CommentTextFieldsControl.swift */,
+				B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
 				B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */,
 				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
+				B837D1ED1D8F11C500E44FAE /* PinSelections.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
 				B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */,
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
@@ -892,7 +954,7 @@
 				B064EF041D6E34E200C078F5 /* FAEVerificationCodeView.xib */,
 				B0714DF11D62513300356705 /* EmailTextField.swift */,
 				B0714DF21D62513300356705 /* PasswordAgainTextField.swift */,
-				B0714DF31D62513300356705 /* PasswordTextField.swift */,
+				B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -993,6 +1055,10 @@
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
 				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
 				B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */,
+				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
+				8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */,
+				8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */,
+				8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */,
 				B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */,
 				B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */,
 				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
@@ -1092,12 +1158,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC01CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBeta" */;
 			buildPhases = (
-				D3E1C75D329E9EC1147123FD /* 📦 Check Pods Manifest.lock */,
+				D3E1C75D329E9EC1147123FD /* [CP] Check Pods Manifest.lock */,
 				B0A2AC911CE3A3C6002E0C9D /* Sources */,
 				B0A2AC921CE3A3C6002E0C9D /* Frameworks */,
 				B0A2AC931CE3A3C6002E0C9D /* Resources */,
-				369111F6CD17C8178AE024D4 /* 📦 Embed Pods Frameworks */,
-				442516213E15D551809BCE65 /* 📦 Copy Pods Resources */,
+				369111F6CD17C8178AE024D4 /* [CP] Embed Pods Frameworks */,
+				442516213E15D551809BCE65 /* [CP] Copy Pods Resources */,
+				45E889AFA51744D0F48E59B4 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1112,12 +1179,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC31CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaTests" */;
 			buildPhases = (
-				E3167724F3EE89AA88CD622C /* 📦 Check Pods Manifest.lock */,
+				E3167724F3EE89AA88CD622C /* [CP] Check Pods Manifest.lock */,
 				B0A2ACA81CE3A3C7002E0C9D /* Sources */,
 				B0A2ACA91CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACAA1CE3A3C7002E0C9D /* Resources */,
-				81BE929218F0F100C60CDACD /* 📦 Embed Pods Frameworks */,
-				6E61B7C73FD6963D04FAAF3C /* 📦 Copy Pods Resources */,
+				81BE929218F0F100C60CDACD /* [CP] Embed Pods Frameworks */,
+				6E61B7C73FD6963D04FAAF3C /* [CP] Copy Pods Resources */,
+				8158D6296C4A190CE762EAF1 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1133,11 +1201,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC61CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaUITests" */;
 			buildPhases = (
-				8F9B5CF23CF5A63B3A6FEA93 /* 📦 Check Pods Manifest.lock */,
+				8F9B5CF23CF5A63B3A6FEA93 /* [CP] Check Pods Manifest.lock */,
 				B0A2ACB31CE3A3C7002E0C9D /* Sources */,
 				B0A2ACB41CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACB51CE3A3C7002E0C9D /* Resources */,
-				097690AB2848DFBD4D204C46 /* 📦 Copy Pods Resources */,
+				097690AB2848DFBD4D204C46 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1156,19 +1224,23 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = fae;
 				TargetAttributes = {
 					B0A2AC941CE3A3C6002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 8VEL98QL9Q;
+						DevelopmentTeam = J9H8DRZ5QS;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					B0A2ACAB1CE3A3C7002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = B0A2AC941CE3A3C6002E0C9D;
 					};
 					B0A2ACB61CE3A3C7002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = B0A2AC941CE3A3C6002E0C9D;
 					};
 				};
@@ -1299,14 +1371,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		097690AB2848DFBD4D204C46 /* 📦 Copy Pods Resources */ = {
+		097690AB2848DFBD4D204C46 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1314,14 +1386,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		369111F6CD17C8178AE024D4 /* 📦 Embed Pods Frameworks */ = {
+		369111F6CD17C8178AE024D4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1329,14 +1401,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		442516213E15D551809BCE65 /* 📦 Copy Pods Resources */ = {
+		442516213E15D551809BCE65 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1344,14 +1416,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6E61B7C73FD6963D04FAAF3C /* 📦 Copy Pods Resources */ = {
+		45E889AFA51744D0F48E59B4 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E61B7C73FD6963D04FAAF3C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1359,14 +1446,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		81BE929218F0F100C60CDACD /* 📦 Embed Pods Frameworks */ = {
+		8158D6296C4A190CE762EAF1 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1374,14 +1461,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F9B5CF23CF5A63B3A6FEA93 /* 📦 Check Pods Manifest.lock */ = {
+		81BE929218F0F100C60CDACD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F9B5CF23CF5A63B3A6FEA93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1389,14 +1491,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D3E1C75D329E9EC1147123FD /* 📦 Check Pods Manifest.lock */ = {
+		D3E1C75D329E9EC1147123FD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1404,14 +1506,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E3167724F3EE89AA88CD622C /* 📦 Check Pods Manifest.lock */ = {
+		E3167724F3EE89AA88CD622C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1437,6 +1539,7 @@
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
@@ -1445,6 +1548,7 @@
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
+				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1515,7 +1619,6 @@
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
-				B0714D401D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
@@ -1528,14 +1631,15 @@
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
-				B0714DF61D62513300356705 /* PasswordTextField.swift in Sources */,
 				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
@@ -1565,6 +1669,7 @@
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0714DCB1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
+				8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */,
@@ -1608,6 +1713,7 @@
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
+				B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
@@ -1622,12 +1728,12 @@
 				B0714E051D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF5C1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
-				B0714D411D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0714E0D1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
+				B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B0714E111D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B064EECF1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
@@ -1645,6 +1751,7 @@
 				B0BF35881D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B0714E151D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF35791D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
@@ -1686,6 +1793,7 @@
 				B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
+				B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
@@ -1703,10 +1811,10 @@
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
-				B0714D421D5E435200356705 /* CommentTextFieldsControl.swift in Sources */,
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
+				B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
@@ -1723,6 +1831,7 @@
 				B0714D5D1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1743,6 +1852,7 @@
 				B0C0CAA81D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
+				B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
@@ -1842,8 +1952,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1865,7 +1977,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1887,8 +1999,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1904,9 +2018,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1915,19 +2030,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1936,18 +2056,26 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1956,11 +2084,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 34940A6B4E600A0233A15CDA /* Pods-faeBetaTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = faeBetaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBetaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/faeBeta.app/faeBeta";
 			};
 			name = Debug;
@@ -1969,11 +2099,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = faeBetaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBetaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/faeBeta.app/faeBeta";
 			};
 			name = Release;
@@ -1982,10 +2114,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBetaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = faeBeta;
 			};
 			name = Debug;
@@ -1994,10 +2128,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 482E633A931EEC713897BA18 /* Pods-faeBetaUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.faeBetaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = faeBeta;
 			};
 			name = Release;
