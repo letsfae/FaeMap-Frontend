@@ -52,7 +52,7 @@ class FaeUser : NSObject {
             else{
                 //fail
             }
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message);
         }
     }
