@@ -992,8 +992,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        }
     
         func createAvatars(avatars : NSMutableDictionary?) {
-            var currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-            var withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
     
 //            if let avat = avatars {
 //                if let currentUserAvatarImage = avat.objectForKey(backendless.userService.currentUser.objectId) {

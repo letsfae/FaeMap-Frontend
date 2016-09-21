@@ -97,7 +97,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         loginButton.backgroundColor = UIColor.faeAppRedColor()
         loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), forControlEvents: .TouchUpInside)
         self.view.insertSubview(loginButton, atIndex: 0)
-        
+        self.view.bringSubviewToFront(loginButton)
         
         // create account button
         createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106, 300, 50))
@@ -109,7 +109,8 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         createAccountButton.layer.cornerRadius = 25
         createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), forControlEvents: .TouchUpInside)
         self.view.insertSubview(createAccountButton, atIndex: 0)
-        
+        self.view.bringSubviewToFront(createAccountButton)
+
         // create copyright label
         font = UIFont(name: "AvenirNext-Regular", size: 10)
         
