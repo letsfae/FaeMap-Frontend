@@ -41,6 +41,10 @@ class FaeUser : NSObject {
      */
     func signUpInBackground(completion:(Int,AnyObject?)->Void){
         postToURL("users", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
+            print("status")
+            print(status)
+            print("message")
+            print(message)
             if(status / 100 == 2 ) {
                 //success
                 self.saveUserSignUpInfo()
@@ -57,9 +61,9 @@ class FaeUser : NSObject {
         let shareAPI = LocalStorageManager()
         userEmail = keyValue["email"]as! String
         userPassword = keyValue["password"]as! String
-        userFirstname = keyValue["first_name"]as! String
-        userLastname = keyValue["last_name"]as! String
-        userBirthday = keyValue["birthday"]as! String
+        userFirstname = keyValue["first_name"]as? String
+        userLastname = keyValue["last_name"]as? String
+        userBirthday = keyValue["birthday"]as? String
         let gender = keyValue["gender"]as! String
         if gender == "male" {
             userGender = 0
@@ -465,12 +469,12 @@ class FaeUser : NSObject {
     
     func setSelfStatus(completion:(Int,AnyObject?)->Void){
         if keyValue["status"] != nil {
-            userStatus = keyValue["status"] as! Int
+            userStatus = keyValue["status"] as? Int
         }else {
             completion(-400,"no status number found")
         }
         if keyValue["message"] != nil {
-            userStatusMessage = keyValue["message"] as! String
+            userStatusMessage = keyValue["message"] as? String
         }else {
             completion(-400,"no message found")
         }

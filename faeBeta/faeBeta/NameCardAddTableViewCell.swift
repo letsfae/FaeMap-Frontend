@@ -49,7 +49,7 @@ class NameCardAddTableViewCell: UITableViewCell, UICollectionViewDelegate,UIColl
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         imageIndex = indexPath.row
         print(indexPath)
-        var menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
+        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
         let showLibrary = UIAlertAction(title: "Choose from library", style: .Default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .PhotoLibrary
             menu.removeFromParentViewController()

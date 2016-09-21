@@ -41,7 +41,7 @@ class FAENumberKeyboard: UIView {
     //MARK: - setup
     private func loadNib()
     {
-        uiview = NSBundle.mainBundle().loadNibNamed("FAENumberKeyboard", owner: self, options: nil)[0] as? UIView
+        uiview = NSBundle.mainBundle().loadNibNamed("FAENumberKeyboard", owner: self, options: nil)![0] as? UIView
         self.insertSubview(uiview!, atIndex: 0)
         uiview!.frame = self.bounds
         uiview!.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]

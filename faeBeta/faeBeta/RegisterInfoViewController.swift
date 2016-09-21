@@ -152,7 +152,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
         let date = dateFormatter.dateFromString(dateOfBirth!)
-        
+        print("dateOfBirth")
+        print(dateOfBirth)
         isValid = date != nil && dateOfBirth!.characters.count == 10
         
         if isValid {
@@ -164,12 +165,13 @@ class RegisterInfoViewController: RegisterBaseViewController {
             isValid = isValid && currentYearInt > 1901
         }
         
-        
+
         if isValid {
             isValid = date!.earlierDate(NSDate()).isEqualToDate(date!)
         }
-        
+
         isValid = isValid && gender != nil
+
         
         enableContinueButton(isValid)
     }

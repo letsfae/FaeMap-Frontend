@@ -116,7 +116,7 @@ class VerificationPhoneViewController: UIViewController {
         let length = 0.03*screenWidth
         let height = 0.017*screenHeigh
         let interval = 0.1014 * screenWidth
-        for (var i = 0 ; i < 6 ; i += 1) {
+        for i in 0  ..< 6 {
             imageCodeDotArray.append(UIImageView(frame : CGRectMake(xDistance, paddingTop, length, height)))
             xDistance += interval
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
@@ -163,7 +163,7 @@ class VerificationPhoneViewController: UIViewController {
         let height = 0.1114 * screenHeigh
         let paddingTop = 0.28*screenHeigh
         let interval = 0.102*screenWidth
-        for (var i = 0 ; i < 6 ; i += 1) {
+        for i in 0  ..< 6 {
             textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
             if(isIPhone5) {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)

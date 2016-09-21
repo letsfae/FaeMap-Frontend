@@ -77,7 +77,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.pageControl.pageIndicatorTintColor = UIColor(red: 182 / 255, green: 182 / 255, blue: 182 / 255, alpha: 1.0)
         self.pageControl.currentPageIndicatorTintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         self.pageControl.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)
-        self.pageControl.addTarget(self, action: Selector("changePage:"), forControlEvents: UIControlEvents.ValueChanged)
+        self.pageControl.addTarget(self, action: #selector(StickerPickView.changePage(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.addSubview(pageControl)
     }
     

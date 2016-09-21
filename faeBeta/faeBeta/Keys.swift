@@ -14,10 +14,8 @@ var version = "x.faeapp.v1"
 var headerAccept = "application/x.faeapp.v1+json"
 var headerContentType = "application/x-www-form-urlencoded"
 let headerClientVersion : String = "fae-ios-1.0.0"
-var headerDeviceID : String = "00000001111"
+var headerDeviceID : String = "01a12f6e7afd9ecac368a58bbc29bffb41295f7d992d7c116ecf65a8aa27ef32"
 var headerUserAgent : String = "iphone5"
-
-
 
 var userToken : String!
 var userTokenEncode : String!

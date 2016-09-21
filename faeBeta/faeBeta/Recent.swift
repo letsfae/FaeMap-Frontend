@@ -109,11 +109,11 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
 
 //given a chatRoomId, we update last message for it.
 
-func UpdateRecents(chatRooId : String, lastMessage : String) {
+func UpdateRecents(chatRoomId : String, lastMessage : String) {
     
     //firebase query
     
-    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRooId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
         
         if snapshot.exists() {
             
@@ -135,7 +135,7 @@ func updateRecentItem(recent : NSDictionary, lastMessage : String) {
     let localStorage = LocalStorageManager()
     localStorage.readLogInfo()
     
-    if recent["userId"] as? String !=  "\(user_id)" {
+    if recent["userId"] as? String !=  "\(backendless.userService.currentUser.objectId)" {
         counter += 1
     }
     

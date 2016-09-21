@@ -211,7 +211,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         self.faeMapView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
         self.navigationController?.popViewControllerAnimated(true)
-        locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : screenShotImage.highestQualityJPEGNSData)
+        locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : screenShotImage!.highestQualityJPEGNSData)
     }
     
     func actionActiveSearchBar(sender: UIButton!) {

@@ -90,11 +90,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
-        let directionMap = position.bearing
-        let direction: CGFloat = CGFloat(directionMap)
-        let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
-        //buttonToNorth.transform = CGAffineTransformMakeRotation(angle)
-        
+
         if startUpdatingLocation {
             currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude

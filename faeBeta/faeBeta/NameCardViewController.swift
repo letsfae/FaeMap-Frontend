@@ -114,7 +114,6 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
             cell.viewSelf = self
             return cell
         }
-        return UITableViewCell()
     }
 }
 //MARK: add Header view
@@ -289,7 +288,7 @@ extension NameCardViewController {
     
     func selectTag(sender : UIButton) {
         if selectedButtonSet.count != 3 && !sender.hidden {
-            var newButton = UIButton(frame: sender.frame)
+            let newButton = UIButton(frame: sender.frame)
             let attributedString = NSMutableAttributedString(string: (sender.titleLabel?.text)!)
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.1), range: NSRange(location: 0, length: attributedString.length))
             attributedString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold",size: 11)!, range: NSRange(location: 0, length: attributedString.length))
@@ -309,7 +308,7 @@ extension NameCardViewController {
     
     func attachSelectedTag() {
         
-        var totalInterval = (CGFloat)(selectedButtonSet.count - 1) * selectedInterval
+        let totalInterval = (CGFloat)(selectedButtonSet.count - 1) * selectedInterval
         var totalTag : CGFloat = 0
         for button in selectedButtonSet {
             totalTag += button.frame.width
@@ -331,7 +330,7 @@ extension NameCardViewController {
                 break
             }
         }
-        for (var i = 0; i < selectedButtonSet.count; i++) {
+        for i in 0 ..< selectedButtonSet.count {
             if selectedButtonSet[i].titleLabel?.text == sender.titleLabel?.text {
                 selectedButtonSet[i].removeFromSuperview()
                 selectedButtonSet.removeAtIndex(i)
@@ -365,7 +364,7 @@ extension NameCardViewController {
     }
     
     func attachColor() {
-        for (var i = 0; i < tagButtonSet.count; i++) {
+        for i in 0 ..< tagButtonSet.count {
             tagButtonSet[i].backgroundColor = tagColor[i]
         }
     }
@@ -383,7 +382,7 @@ extension NameCardViewController {
             tagTitle.append(attributedString)
         }
         
-        var originPoint = CGPoint(x: 0, y: 0)
+        let originPoint = CGPoint(x: 0, y: 0)
         
         var totalTagLength : CGFloat = 0
         
@@ -392,8 +391,9 @@ extension NameCardViewController {
         var line : CGFloat = 0
         
         var tagInOneLine = [NSMutableAttributedString]()
-        
-        for (var i = 0; i < tagName.count; i += 1) {
+        // Ren: change for loop to while loop
+        var i = 0
+        while i < tagName.count{
             
             if totalLength == 0 {
                 tagInOneLine.append(tagTitle[i])
@@ -422,7 +422,7 @@ extension NameCardViewController {
                     totalTagLength = 0
                 }
             }
-            
+            i += 1
         }
         var xOffset : CGFloat = 0
         

@@ -510,38 +510,222 @@ extension FaeMapViewController: UITextFieldDelegate {
     }
     
     func loadBasicTextField() {
-        self.createNewTextField()
-        self.createNewTextField()
-        self.uiviewArray[0].alpha = 1.0
-        self.uiviewArray[0].center.y = uiviewArray[0].center.y - 100.0
+        createNewTextField()
+        createNewTextField()
+        uiviewArray[0].alpha = 1.0
+        uiviewArray[0].center.y = uiviewArray[0].center.y - 100.0
         let placeholder = NSAttributedString(string: "Type a comment...", attributes: [NSForegroundColorAttributeName: colorPlaceHolder])
-        self.uiviewArray[0].customTextField.attributedPlaceholder = placeholder
-        self.uiviewArray[0].lineNumber = 2
-        self.uiviewArray[0].customTextField.autocapitalizationType = UITextAutocapitalizationType.None
-        self.uiviewArray[1].alpha = 1.0
-        self.uiviewArray[1].center.y = uiviewArray[1].center.y - 50.0
-        self.uiviewArray[1].lineNumber = 3
+        uiviewArray[0].customTextField.attributedPlaceholder = placeholder
+        uiviewArray[0].lineNumber = 2
+        uiviewArray[0].customTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        uiviewArray[1].alpha = 1.0
+        uiviewArray[1].center.y = uiviewArray[1].center.y - 50.0
+        uiviewArray[1].lineNumber = 3
         
         let gesture_2 = UIPanGestureRecognizer(target: self, action: #selector(FaeMapViewController.userDragged_2(_:)))
         let gesture_3 = UIPanGestureRecognizer(target: self, action: #selector(FaeMapViewController.userDragged_3(_:)))
-        self.uiviewArray[0].addGestureRecognizer(gesture_2)
-        self.uiviewArray[1].addGestureRecognizer(gesture_3)
+        uiviewArray[0].addGestureRecognizer(gesture_2)
+        uiviewArray[1].addGestureRecognizer(gesture_3)
     }
     
     func createNewTextField() {
         let newTextField = CustomUIViewForScrollableTextField()
         self.uiviewCreateCommentPin.addSubview(newTextField)
-        
         newTextField.customTextField.delegate = self
-        self.uiviewArray.append(newTextField)
-        self.textFieldArray.append(newTextField.customTextField)
-        self.borderArray.append(newTextField.customBorder)
+        uiviewArray.append(newTextField)
+        textFieldArray.append(newTextField.customTextField)
+        borderArray.append(newTextField.customBorder)
         newTextField.alpha = 0.0
     }
     
     func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
         for textFiled in textFieldArray {
             textFiled.endEditing(true)
+        }
+    }
+    func actionSelectLocation(sender: UIButton!) {
+        submitPinsHideAnimation()
+        faeMapView.addSubview(imagePinOnMap)
+        buttonToNorth.hidden = true
+        buttonChatOnMap.hidden = true
+        buttonPinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = false
+        imagePinOnMap.hidden = false
+        self.navigationController?.navigationBar.hidden = true
+        searchBarSubview.alpha = 1.0
+        searchBarSubview.hidden = false
+        tblSearchResults.hidden = false
+        uiviewTableSubview.hidden = false
+        self.customSearchController.customSearchBar.text = ""
+        buttonSelfPosition.center.x = 368.5
+        buttonSelfPosition.center.y = 625.5
+        buttonSelfPosition.hidden = false
+        buttonCancelSelectLocation.hidden = false
+        isInPinLocationSelect = true
+    }
+    
+    func actionCancelSelectLocation(sender: UIButton!) {
+        submitPinsShowAnimation()
+        isInPinLocationSelect = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
+        buttonSelfPosition.center.x = 362.5
+        buttonSelfPosition.center.y = 611.5
+        buttonCancelSelectLocation.hidden = true
+    }
+    
+    func actionCreateCommentPin(sender: UIButton!) {
+        UIView.animateWithDuration(0.4, delay: 0, options: .TransitionFlipFromBottom, animations: ({
+            self.uiviewPinSelections.alpha = 0.0
+            self.uiviewCreateCommentPin.alpha = 1.0
+        }), completion: nil)
+        labelSelectLocationContent.text = "Current Location"
+    }
+    
+    func actionBackToPinSelections(sender: UIButton!) {
+        UIView.animateWithDuration(0.4, delay: 0, options: .TransitionFlipFromBottom, animations: ({
+            self.uiviewPinSelections.alpha = 1.0
+            self.uiviewCreateCommentPin.alpha = 0.0
+        }), completion: nil)
+        for textFiled in textFieldArray {
+            textFiled.endEditing(true)
+        }
+    }
+    
+    func actionSetLocationForComment(sender: UIButton!) {
+        // May have bug here
+        submitPinsShowAnimation()
+        let valueInSearchBar = self.customSearchController.customSearchBar.text
+        if valueInSearchBar == "" {
+            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+            let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+            GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
+                (response, error) -> Void in
+                if let fullAddress = response?.firstResult()?.lines {
+                    var addressToSearchBar = ""
+                    for line in fullAddress {
+                        if fullAddress.indexOf(line) == fullAddress.count-1 {
+                            addressToSearchBar += line + ""
+                        }
+                        else {
+                            addressToSearchBar += line + ", "
+                        }
+                    }
+                    self.labelSelectLocationContent.text = addressToSearchBar
+                }
+            })
+        }
+        else {
+            self.labelSelectLocationContent.text = valueInSearchBar
+        }
+        isInPinLocationSelect = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
+        buttonSelfPosition.center.x = 362.5
+        buttonSelfPosition.center.y = 611.5
+        buttonCancelSelectLocation.hidden = true
+    }
+    
+    func actionSubmitComment(sender: UIButton) {
+        
+        let postSingleComment = FaeMap()
+        var submitLatitude = ""
+        var submitLongitude = ""
+        
+        if self.labelSelectLocationContent.text == "Current Location" {
+            submitLatitude = "\(self.currentLatitude)"
+            submitLongitude = "\(self.currentLongitude)"
+        }
+        else {
+            submitLatitude = "\(self.latitudeForPin)"
+            submitLongitude = "\(self.longitudeForPin)"
+        }
+        
+        var commentContent = ""
+        for everyTextField in textFieldArray {
+            if let textContent = everyTextField.text {
+                commentContent += textContent
+            }
+        }
+        
+        if commentContent == "" {
+            let alertUIView = UIAlertView(title: "Content Field is Empty!", message: nil, delegate: self, cancelButtonTitle: "OK, I got it")
+            alertUIView.show()
+            return
+        }
+        
+        postSingleComment.whereKey("geo_latitude", value: submitLatitude)
+        postSingleComment.whereKey("geo_longitude", value: submitLongitude)
+        postSingleComment.whereKey("content", value: commentContent)
+        postSingleComment.postComment{(status:Int,message:AnyObject?) in
+            if let getMessage = message {
+                if let getMessageID = getMessage["comment_id"] {
+                    self.submitPinsHideAnimation()
+                    let commentMarker = GMSMarker()
+                    var mapCenter = self.faeMapView.center
+                    // Attention: the actual location of this marker is 6 points different from the displayed one
+                    mapCenter.y = mapCenter.y + 6.0
+                    let mapCenterCoordinate = self.faeMapView.projection.coordinateForPoint(mapCenter)
+                    commentMarker.icon = UIImage(named: "comment_pin_marker")
+                    commentMarker.position = mapCenterCoordinate
+                    commentMarker.appearAnimation = kGMSMarkerAnimationPop
+                    commentMarker.map = self.faeMapView
+                    self.buttonToNorth.hidden = false
+                    self.buttonSelfPosition.hidden = false
+                    self.buttonChatOnMap.hidden = false
+                    self.buttonPinOnMap.hidden = false
+                    self.buttonSetLocationOnMap.hidden = true
+                    self.imagePinOnMap.hidden = true
+                    self.navigationController?.navigationBar.hidden = false
+                    
+                    let getJustPostedComment = FaeMap()
+                    getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
+                        let mapInfoJSON = JSON(message!)
+                        var pinData = [String: AnyObject]()
+                        
+                        pinData["comment_id"] = getMessageID!
+                        pinData["type"] = "comment"
+                        
+                        if let userIDInfo = mapInfoJSON["user_id"].int {
+                            pinData["user_id"] = userIDInfo
+                        }
+                        if let createdTimeInfo = mapInfoJSON["created_at"].string {
+                            pinData["created_at"] = createdTimeInfo
+                        }
+                        if let contentInfo = mapInfoJSON["content"].string {
+                            pinData["content"] = contentInfo
+                        }
+                        if let latitudeInfo = mapInfoJSON["geolocation"]["latitude"].double {
+                            pinData["latitude"] = latitudeInfo
+                        }
+                        if let longitudeInfo = mapInfoJSON["geolocation"]["longitude"].double {
+                            pinData["longitude"] = longitudeInfo
+                        }
+                        commentMarker.userData = pinData
+                    }
+                    self.textFieldArray.removeAll()
+                    self.borderArray.removeAll()
+                    for every in self.uiviewArray {
+                        every.removeFromSuperview()
+                    }
+                    self.uiviewArray.removeAll()
+                    self.loadBasicTextField()
+                }
+                else {
+                    print("Cannot get comment_id of this posted comment")
+                }
+            }
+            else {
+                print("Post Comment Fail")
+            }
         }
     }
 }

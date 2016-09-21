@@ -107,14 +107,14 @@ extension FaeMapViewController {
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
         buttonImagePicker = UIButton(frame: CGRectMake((tableViewWeight - 91) / 2, 36, 91, 91))
-        buttonImagePicker.addTarget(self, action: "showPhotoSelected", forControlEvents: .TouchUpInside)
+        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
         viewHeaderForMore.addSubview(buttonImagePicker)
         
         labelMoreName = UILabel(frame: CGRectMake((tableViewWeight - 180) / 2,134,180,27))
         labelMoreName.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         labelMoreName.textAlignment = .Center
         labelMoreName.textColor = UIColor.whiteColor()
-        if let name = userFirstname {
+        if userFirstname != nil {
             labelMoreName.text = userFirstname! + " " + userLastname!
         }
         labelMoreName.text = "Anynomous"
@@ -137,7 +137,7 @@ extension FaeMapViewController {
         self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
     }
     func showPhotoSelected() {
-        var menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
+        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
         let showLibrary = UIAlertAction(title: "Choose from library", style: .Default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .PhotoLibrary
             menu.removeFromParentViewController()

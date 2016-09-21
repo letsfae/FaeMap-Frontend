@@ -103,7 +103,7 @@ class PasswordTexField : UITextField {
         }
         return false
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
     }

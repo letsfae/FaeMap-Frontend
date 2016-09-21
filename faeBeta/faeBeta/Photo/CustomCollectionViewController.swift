@@ -237,7 +237,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         centerView.addSubview(titleLabel)
         
         
-        var arrow = UIImageView(frame: CGRect(x: 97, y: 25, width: 10, height: 6))
+        let arrow = UIImageView(frame: CGRect(x: 97, y: 25, width: 10, height: 6))
         arrow.image = UIImage(named: "arrow")
         centerView.addSubview(arrow)
         centerView.addSubview(showTableButton)

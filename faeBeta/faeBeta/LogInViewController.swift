@@ -32,7 +32,7 @@ class LogInViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         setupInterface()
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
         // Do any additional setup after loading the view.
     }
     
@@ -124,6 +124,18 @@ class LogInViewController: UIViewController {
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
+    // MARK: - keyboard 
+    
+    // This is just a temporary method to make the login button clickable
+    func keyboardWillShow(notification:NSNotification){
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.loginButton.frame.origin.y += (self.screenHeight - keyboardFrame.height) - self.loginButton.frame.origin.y - 50
+        })
+
+    }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

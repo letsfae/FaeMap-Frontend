@@ -184,7 +184,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let fontSize:CGFloat = 12.0
         viewStatusBackground = UIView(frame:CGRectMake(0,0,screenWidth,screenHeight))
         let buttonBackgroudn = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroudn.addTarget(self, action: "statusViewCancel", forControlEvents: .TouchUpInside)
+        buttonBackgroudn.addTarget(self, action: #selector(MyFaeViewController.statusViewCancel), forControlEvents: .TouchUpInside)
         viewStatusBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         viewStatusBackground.addSubview(buttonBackgroudn)
         self.view.addSubview(viewStatusBackground)
@@ -197,7 +197,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonOnline = UIButton(frame: CGRectMake(50,67,50,50))
         buttonOnline.setBackgroundImage(UIImage(named: "online"), forState: .Normal)
         buttonOnline.tag = 0
-        buttonOnline.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonOnline.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonOnline)
         let labelOnline = UILabel(frame: CGRectMake(87-32,230-106,39,10))
         labelOnline.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -208,7 +208,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonNoDistrub = UIButton(frame: CGRectMake(150,67,50,50))
         buttonNoDistrub.setBackgroundImage(UIImage(named: "noDisturb"), forState: .Normal)
         buttonNoDistrub.tag = 1
-        buttonNoDistrub.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonNoDistrub.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonNoDistrub)
         let labelNoDistrub = UILabel(frame: CGRectMake(175-32,230-106,63,10))
         labelNoDistrub.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -219,7 +219,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonBusy = UIButton(frame: CGRectMake(250,67,50,50))
         buttonBusy.setBackgroundImage(UIImage(named: "busy"), forState: .Normal)
         buttonBusy.tag = 2
-        buttonBusy.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonBusy.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonBusy)
         let labelBusy = UILabel(frame: CGRectMake(294-32,230-106,27,13))
         labelBusy.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -230,7 +230,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonAway = UIButton(frame: CGRectMake(50,160,50,50))
         buttonAway.setBackgroundImage(UIImage(named: "away"), forState: .Normal)
         buttonAway.tag = 3
-        buttonAway.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonAway.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonAway)
         let labelAway = UILabel(frame: CGRectMake(91-32,323-106,32,13))
         labelAway.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -241,7 +241,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonInvisible = UIButton(frame: CGRectMake(150,160,50,50))
         buttonInvisible.setBackgroundImage(UIImage(named: "invisible"), forState: .Normal)
         buttonInvisible.tag = 4
-        buttonInvisible.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonInvisible.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonInvisible)
         let labelInvisible = UILabel(frame: CGRectMake(184-32,323-106,46,10))
         labelInvisible.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -252,7 +252,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         let buttonOffline = UIButton(frame: CGRectMake(250,160,50,50))
         buttonOffline.setBackgroundImage(UIImage(named: "offline"), forState: .Normal)
         buttonOffline.tag = 5
-        buttonOffline.addTarget(self, action: "actionStatus:", forControlEvents: .TouchUpInside)
+        buttonOffline.addTarget(self, action: #selector(MyFaeViewController.actionStatus(_:)), forControlEvents: .TouchUpInside)
         viewStatus.addSubview(buttonOffline)
         let labelOffline = UILabel(frame: CGRectMake(288-32,323-106,39,11))
         labelOffline.font = UIFont(name: "AvenirNext-Medium", size: fontSize)
@@ -264,7 +264,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         textInputView.placeholder = "Add a short status message"
         textInputView.textAlignment = .Center
         textInputView.delegate = self
-        textInputView.addTarget(self, action: "textInputIsChange", forControlEvents: .EditingChanged)
+        textInputView.addTarget(self, action: #selector(MyFaeViewController.textInputIsChange), forControlEvents: .EditingChanged)
         viewStatus.addSubview(textInputView)
         
         let underlineInputView = UIView(frame: CGRectMake(42,273,266,2))
@@ -278,7 +278,7 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
         
         let buttonCancel = UIButton(frame: CGRectMake(42,274,266,59))
         buttonCancel.setTitle("Cancel", forState: .Normal)
-        buttonCancel.addTarget(self, action: "statusViewCancel", forControlEvents: .TouchUpInside)
+        buttonCancel.addTarget(self, action: #selector(MyFaeViewController.statusViewCancel), forControlEvents: .TouchUpInside)
         buttonCancel.setTitleColor(UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1.0), forState: .Normal)
         viewStatus.addSubview(buttonCancel)
 
@@ -302,9 +302,6 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
             
         case .offline:
             return "offline"
-            
-        default:
-            return "online"
         }
 
     }
@@ -327,9 +324,6 @@ extension MyFaeViewController: UITextFieldDelegate {//my status
             
         case .offline:
             return "Offline"
-            
-        default:
-            return nil
         }
     }
     func actionStatus(sender:UIButton){
