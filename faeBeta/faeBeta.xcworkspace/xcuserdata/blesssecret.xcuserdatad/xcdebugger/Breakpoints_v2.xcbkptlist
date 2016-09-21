@@ -574,9 +574,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "478"
-            endingLineNumber = "478"
-            landmarkName = "showChangeEmailView()"
-            landmarkType = "5">
+            endingLineNumber = "478">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -750,9 +748,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "333"
-            endingLineNumber = "333"
-            landmarkName = "verifyCode(_:email:)"
-            landmarkType = "5">
+            endingLineNumber = "333">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
