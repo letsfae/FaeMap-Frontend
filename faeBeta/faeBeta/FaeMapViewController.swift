@@ -208,6 +208,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonOptionOfCommentPin: UIButton!
     var buttonCommentPinDownVote: UIButton!
     var buttonCommentPinUpVote: UIButton!
+    var buttonCommentPinBackToMap: UIButton!
     
     var buttonCommentPinLike: UIButton!
     var boolCommentPinLiked = false

@@ -14,7 +14,7 @@ extension FaeMapViewController {
     // Load comment pin detail window
     func loadCommentPinDetailWindow() {
         // Header
-        self.uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 0, self.screenWidth, self.screenHeight))
+        self.uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 0, self.screenWidth, 320))
         self.uiviewCommentPinDetail.layer.zPosition = 100
         self.uiviewCommentPinDetail.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(uiviewCommentPinDetail)
@@ -30,13 +30,22 @@ extension FaeMapViewController {
         self.uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
         self.uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine01)
         
+        // Button 0: Back to Map
+        self.buttonCommentPinBackToMap = UIButton()
+        self.buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), forState: .Normal)
+        self.buttonCommentPinBackToMap.addTarget(self, action: #selector(FaeMapViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.uiviewCommentPinDetail.addSubview(buttonCommentPinBackToMap)
+        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
+        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(26)]", options: [], views: buttonCommentPinBackToMap)
+        self.buttonCommentPinBackToMap.alpha = 0.0
+        
         // Button 1: Back to Comment Pin List
         self.buttonBackToCommentPinLists = UIButton()
         self.buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
                 self.buttonBackToCommentPinLists.addTarget(self, action: #selector(FaeMapViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.uiviewCommentPinDetail.addSubview(buttonBackToCommentPinLists)
         self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonBackToCommentPinLists)
+        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: buttonBackToCommentPinLists)
         
         // Button 2: Comment Pin Option
         self.buttonOptionOfCommentPin = UIButton()
@@ -47,13 +56,35 @@ extension FaeMapViewController {
         self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfCommentPin)
         
         // ScrollView at 65
-        self.commentDetailFullBoardScrollView = UIScrollView(frame: CGRectMake(0, 65, self.screenWidth, self.screenHeight-183))
+        self.commentDetailFullBoardScrollView = UIScrollView(frame: CGRectMake(0, 65, self.screenWidth, 228))
         self.uiviewCommentPinDetail.addSubview(self.commentDetailFullBoardScrollView)
-        self.commentDetailFullBoardScrollView.scrollEnabled = true
-        self.commentDetailFullBoardScrollView.contentSize.height = 420 + 281
+        self.commentDetailFullBoardScrollView.scrollEnabled = false
+        self.commentDetailFullBoardScrollView.contentSize.height = 228
+        self.commentDetailFullBoardScrollView.showsVerticalScrollIndicator = false
+        
+        // Line at y = 292
+        self.uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 292, self.screenWidth, 1))
+        self.uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
+        //red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0
+        self.commentDetailFullBoardScrollView.addSubview(uiviewCommentPinUnderLine02)
+        self.commentDetailFullBoardScrollView.delaysContentTouches = false
+        
+        // Main buttons' container of comment pin detail
+        self.uiviewCommentPinDetailMainButtons = UIView(frame: CGRectMake(0, 190, self.screenWidth, 22))
+        self.commentDetailFullBoardScrollView.addSubview(uiviewCommentPinDetailMainButtons)
+        
+        // Table comments for comment
+        self.tableCommentsForComment = UITableView(frame: CGRectMake(0, 353, self.screenWidth, 420))
+        self.tableCommentsForComment.delegate = self
+        self.tableCommentsForComment.dataSource = self
+        self.tableCommentsForComment.allowsSelection = false
+        self.tableCommentsForComment.delaysContentTouches = false
+        self.tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
+        self.tableCommentsForComment.scrollEnabled = false
+        self.commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
         
         // Textview width based on different resolutions
-        var textViewWidth = 0
+        var textViewWidth: CGFloat = 0
         if self.screenWidth == 414 { // 5.5
             textViewWidth = 360
         }
@@ -64,35 +95,8 @@ extension FaeMapViewController {
             textViewWidth = 321
         }
         
-        // Line at y = 292
-        self.uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 292, self.screenWidth, 1))
-        self.uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
-        //red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0
-        self.commentDetailFullBoardScrollView.addSubview(uiviewCommentPinUnderLine02)
-        self.commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentPinUnderLine02)
-        self.commentDetailFullBoardScrollView.delaysContentTouches = false
-        
-        // Main buttons container of comment pin detail
-        self.uiviewCommentPinDetailMainButtons = UIView(frame: CGRectMake(0, 190, self.screenWidth, 22))
-        self.commentDetailFullBoardScrollView.addSubview(uiviewCommentPinDetailMainButtons)
-//        self.uiviewCommentPinDetailMainButtons.layer.borderColor = UIColor.blackColor().CGColor
-//        self.uiviewCommentPinDetailMainButtons.layer.borderWidth = 1.0
-        
-        // Table comments for comment
-        self.tableCommentsForComment = UITableView()
-        self.tableCommentsForComment.delegate = self
-        self.tableCommentsForComment.dataSource = self
-        self.tableCommentsForComment.allowsSelection = false
-        self.tableCommentsForComment.delaysContentTouches = false
-        self.tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        self.tableCommentsForComment.scrollEnabled = false
-        self.commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
-        self.commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: tableCommentsForComment)
-//        self.tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-//        self.tableCommentsForComment.layer.borderWidth = 1.0
-        
         // Textview of comment pin detail
-        self.textviewCommentPinDetail = UITextView(frame: CGRectMake(27, 75, 361, 100))
+        self.textviewCommentPinDetail = UITextView(frame: CGRectMake(27, 75, textViewWidth, 100))
         self.textviewCommentPinDetail.text = "Content"
         self.textviewCommentPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         self.textviewCommentPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
@@ -101,13 +105,10 @@ extension FaeMapViewController {
         self.textviewCommentPinDetail.textContainerInset = UIEdgeInsetsZero
         self.textviewCommentPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.White
         self.commentDetailFullBoardScrollView.addSubview(textviewCommentPinDetail)
-//        self.textviewCommentPinDetail.layer.borderColor = UIColor.blackColor().CGColor
-//        self.textviewCommentPinDetail.layer.borderWidth = 1.0
         
         // View to hold three buttons
-        self.uiviewCommentDetailThreeButtons = UIView()
+        self.uiviewCommentDetailThreeButtons = UIView(frame: CGRectMake(0, 311, self.screenWidth, 42))
         self.commentDetailFullBoardScrollView.addSubview(uiviewCommentDetailThreeButtons)
-        self.commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentDetailThreeButtons)
         
         let widthOfThreeButtons = self.screenWidth / 3
         
@@ -124,12 +125,6 @@ extension FaeMapViewController {
         self.uiviewRedSlidingLine.layer.borderWidth = 1.0
         self.uiviewRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).CGColor
         self.uiviewCommentDetailThreeButtons.addSubview(uiviewRedSlidingLine)
-        
-        // ScrollView to control scrolling function of this comment detail view
-        self.commentDetailFullBoardScrollView.addConstraintsWithFormat("H:[v0(\(textViewWidth))][v1(\(self.screenWidth))]", options: [], views: textviewCommentPinDetail, uiviewCommentPinDetailMainButtons)
-        self.commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-75-[v0(100)]-15-[v1(22)]-15-[v2(15)]-0-[v3(42)]-0-[v4(420)]", options: [], views: textviewCommentPinDetail, uiviewCommentPinDetailMainButtons, uiviewCommentPinUnderLine02, uiviewCommentDetailThreeButtons, tableCommentsForComment)
-        NSLayoutConstraint(item: textviewCommentPinDetail, attribute: .CenterX, relatedBy: .Equal, toItem: self.commentDetailFullBoardScrollView, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        NSLayoutConstraint(item: uiviewCommentPinDetailMainButtons, attribute: .CenterX, relatedBy: .Equal, toItem: self.commentDetailFullBoardScrollView, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         // "Comments" of this uiview
         self.buttonCommentDetailViewComments = UIButton()
@@ -669,6 +664,7 @@ extension FaeMapViewController {
     // Show comment pin detail window
     func showCommentPinDetail() {
         if self.uiviewCommentPinDetail != nil {
+            self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
             self.navigationController?.navigationBar.hidden = true
             UIView.animateWithDuration(0.25, animations: ({
                 self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
@@ -713,18 +709,49 @@ extension FaeMapViewController {
     
     // When clicking reply button in comment pin detail window
     func actionReplyToThisComment(sender: UIButton) {
+        
         let numLines = Int(self.textviewCommentPinDetail.contentSize.height / self.textviewCommentPinDetail.font!.lineHeight)
-        if numLines > 4 {
-            let diffHeight: CGFloat = self.textviewCommentPinDetail.contentSize.height - self.textviewCommentPinDetail.frame.size.height
-            self.textviewCommentPinDetail.scrollEnabled = true
-            UIView.animateWithDuration(0.25, animations: ({
-                self.uiviewCommentPinDetail.frame.size.height += diffHeight
+        let diffHeight: CGFloat = self.textviewCommentPinDetail.contentSize.height - self.textviewCommentPinDetail.frame.size.height
+        self.textviewCommentPinDetail.scrollEnabled = false
+        self.commentDetailFullBoardScrollView.scrollEnabled = true
+        UIView.animateWithDuration(0.25, animations: ({
+            self.buttonBackToCommentPinLists.alpha = 0.0
+            self.buttonCommentPinBackToMap.alpha = 1.0
+            self.uiviewCommentPinDetail.frame.size.height = self.screenHeight
+            self.uiviewCommentPinUnderLine02.center.y = self.screenHeight - 28
+            self.commentDetailFullBoardScrollView.frame.size.height = self.screenHeight - 155
+            if numLines > 4 {
+                self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
-        }
+                self.commentDetailFullBoardScrollView.contentSize.height = 420 + 281 + diffHeight // 420 is table height, 281 is fixed
+            }
+            else {
+                self.commentDetailFullBoardScrollView.contentSize.height = 420 + 281 // 420 is table height, 281 is fixed
+            }
+        }), completion: { (done: Bool) in
+            if done {
+                
+            }
+        })
+    }
+    
+    func actionBackToMap(sender: UIButton) {
+        UIView.animateWithDuration(0.25, animations: ({
+            self.uiviewCommentPinDetail.center.y -= self.screenHeight
+            self.buttonBackToCommentPinLists.alpha = 1.0
+            self.buttonCommentPinBackToMap.alpha = 0.0
+        }), completion: { (done: Bool) in
+            if done {
+                self.commentPinDetailShowed = false
+                self.textviewCommentPinDetail.scrollEnabled = true
+                self.textviewCommentPinDetail.frame.size.height = 100
+                self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
+                self.commentDetailFullBoardScrollView.scrollEnabled = false
+                self.uiviewCommentPinDetail.frame.size.height = 320
+                self.commentDetailFullBoardScrollView.frame.size.height = 228
+                self.commentDetailFullBoardScrollView.contentSize.height = 228
+                
+            }
+        })
     }
 }
