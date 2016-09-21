@@ -67,13 +67,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
-        let token = NSString(format: "%@", deviceToken)
+        var token = NSString(format: "%@", deviceToken)
         //        print(token)
-        //        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
-        //        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
-        //        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
+        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
+        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
+        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
         //        print(token)
         headerDeviceID = String(token)
+        print("device id: yueshen")
         print(headerDeviceID)
         registerDevice(deviceToken)
 

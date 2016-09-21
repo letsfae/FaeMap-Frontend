@@ -239,6 +239,19 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonMoreOnCommentCellExpanded = false
     var moreButtonDetailSubview: UIImageView!
     
+    var uiviewCommentPinDetailMainButtons: UIView!
+    
+    var commentDetailFullBoardScrollView: UIScrollView!
+    
+    var tableCommentsForComment: UITableView!
+    
+    var uiviewCommentDetailThreeButtons: UIView!
+    var buttonCommentDetailViewComments: UIButton!
+    var buttonCommentDetailViewActive: UIButton!
+    var buttonCommentDetailViewPeople: UIButton!
+    var uiviewRedSlidingLine: UIView!
+    var uiviewGrayBaseLine: UIView!
+    
     // For Dragging
     var buttonCenter = CGPointZero
     var commentPinSizeFrom: CGFloat = 0
@@ -295,8 +308,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadCommentPinDetailWindow()
         self.loadCommentPinList()
         
+        print("device id: yueshen")
+        print(headerDeviceID)
         //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -541,7 +555,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
-                showOpenUserPinAnimation(latitude, longi: longitude)
+//                showOpenUserPinAnimation(latitude, longi: longitude)
                 if let userid = marker.userData!["user_id"] {
                     print(userid)
                 }
@@ -639,7 +653,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
-        myPositionAnimation()
+        self.myPositionAnimation()
     }
     
     func myPositionAnimation() {

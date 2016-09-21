@@ -48,7 +48,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults){
+        if(tableView == self.tblSearchResults) {
             return placeholder.count
         }
         else if(tableView == self.mapChatTable) {
@@ -57,8 +57,11 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         else if tableView == tableviewMore {
             return 7
         }
-        else if tableView == tableviewWindbell{
+        else if tableView == tableviewWindbell {
             return tableWindbellData.count
+        }
+        else if tableView == tableCommentsForComment {
+            return 3
         }
         else{
             return 0
@@ -67,9 +70,33 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if(tableView == self.tblSearchResults){
+        if tableView == self.tblSearchResults {
             let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
+            cell.separatorInset = UIEdgeInsetsZero
+            cell.layoutMargins = UIEdgeInsetsZero
+            return cell
+        }
+        else if tableView == self.tableCommentsForComment {
+            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CommentPinCommentsCell
+            if indexPath.row == 0 {
+                cell.labelUsername.text = "The Kid"
+                cell.labelTimestamp.text = "September 23, 2015"
+                cell.textViewComment.text = "LOL what are you talking abouta???"
+                cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
+            }
+            else if indexPath.row == 1 {
+                cell.labelUsername.text = "Boogie Woogie Woogie"
+                cell.labelTimestamp.text = "September 23, 2015"
+                cell.textViewComment.text = "I understand perfectly @___@"
+                cell.imageViewAvatar.image = UIImage(named: "Ted Logan")
+            }
+            else if indexPath.row == 2 {
+                cell.labelUsername.text = "Boogie Woogie Woogie"
+                cell.labelTimestamp.text = "September 23, 2015"
+                cell.textViewComment.text = "HI HI HI"
+                cell.imageViewAvatar.image = UIImage(named: "Ted Logan")
+            }
             cell.separatorInset = UIEdgeInsetsZero
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
@@ -178,6 +205,9 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         }
         else if tableView == tableviewWindbell{
             return 82
+        }
+        else if tableView == self.tableCommentsForComment {
+            return 139
         }
         else{
             return 0

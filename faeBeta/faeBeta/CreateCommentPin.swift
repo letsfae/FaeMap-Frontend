@@ -16,15 +16,16 @@ extension FaeMapViewController: UITextViewDelegate {
         uiviewCreateCommentPin = UIView(frame: self.blurViewMap.bounds)
         self.blurViewMap.addSubview(uiviewCreateCommentPin)
         
-        self.textViewForCommentPin = UITextView(frame: CGRectMake(60, 198, 294, 200))
+        self.textViewForCommentPin = UITextView(frame: CGRectMake(60, 198, 294, 27))
         self.textViewForCommentPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
         self.textViewForCommentPin.textColor = UIColor.whiteColor()
         self.textViewForCommentPin.backgroundColor = UIColor.clearColor()
         self.textViewForCommentPin.tintColor = UIColor.whiteColor()
         self.textViewForCommentPin.delegate = self
+        self.textViewForCommentPin.scrollEnabled = false
         self.uiviewCreateCommentPin.addSubview(textViewForCommentPin)
         self.uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: textViewForCommentPin)
-        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-198-[v0(200)]", options: [], views: textViewForCommentPin)
+        self.uiviewCreateCommentPin.addConstraintsWithFormat("V:|-198-[v0(44)]", options: [], views: textViewForCommentPin)
         NSLayoutConstraint(item: textViewForCommentPin, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         self.lableTextViewPlaceholder = UILabel(frame: CGRectMake(5, 8, 171, 27))
         self.lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
@@ -138,6 +139,21 @@ extension FaeMapViewController: UITextViewDelegate {
                 self.lableTextViewPlaceholder.hidden = false
                 self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
             }
+            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
+            print(numLines)
+            if numLines <= 8 {
+                let fixedWidth = textView.frame.size.width
+                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+                var newFrame = textView.frame
+                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+                textView.frame = newFrame
+                textView.scrollEnabled = false
+            }
+            else if numLines > 8 {
+                textView.scrollEnabled = true
+            }
+            print(textView.text)
         }
     }
 
