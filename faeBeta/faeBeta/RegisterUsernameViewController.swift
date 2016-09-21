@@ -115,7 +115,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func checkForUniqueUsername() {
-        faeUser.whereKey("username", value: username!)
+        faeUser.whereKey("user_name", value: username!)
         showActivityIndicator()
         faeUser.checkUserExistence { (status, message) in
             dispatch_async(dispatch_get_main_queue(), {
