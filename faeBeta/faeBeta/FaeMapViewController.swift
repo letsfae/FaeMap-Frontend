@@ -14,10 +14,10 @@ import SwiftyJSON
 class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
     // MARK: -- Common Used Vars and Constants
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
-    let navigationBarHeight : CGFloat = 20
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
+    let navigationBarHeight : CGFloat = 20
+    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.mainScreen().bounds.width
     
     // MARK: -- Map main screen Objects
     var faeMapView: GMSMapView!
@@ -195,63 +195,49 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var mapUserPinsDic = [Int: GMSMarker]()
     
     // New Comment Pin Popup Window
-    var uiviewCommentPinDetail: UIView!
-    var uiviewCommentPinListBlank: UIView!
     
-    var uiviewCommentPinUnderLine01: UIView!
-    var uiviewCommentPinUnderLine02: UIView!
+    var boolCommentPinLiked = false
+    var buttonBackToCommentPinDetail: UIButton!
+    var buttonBackToCommentPinLists: UIButton!
+    var buttonCommentDetailViewActive: UIButton!
+    var buttonCommentDetailViewComments: UIButton!
+    var buttonCommentDetailViewPeople: UIButton!
+    var buttonCommentPinAddComment: UIButton!
+    var buttonCommentPinBackToMap: UIButton!
+    var buttonCommentPinDetailDragToLargeSize: UIButton!
+    var buttonCommentPinDownVote: UIButton!
+    var buttonCommentPinLike: UIButton!
+    var buttonCommentPinListClear: UIButton!
+    var buttonCommentPinListDragToLargeSize: UIButton!
+    var buttonCommentPinUpVote: UIButton!
+    var buttonMoreOnCommentCellExpanded = false
+    var buttonOptionOfCommentPin: UIButton!
+    var commentDetailFullBoardScrollView: UIScrollView!
+    var commentListExpand = false
+    var commentListScrollView: UIScrollView!
+    var commentListShowed = false
+    var commentPinCellArray = [CommentPinListCell]()
+    var commentPinDetailShowed = false
+    var imageCommentPinUserAvatar: UIImageView!
+    var labelCommentPinListTitle: UILabel!
+    var labelCommentPinTimestamp: UILabel!
+    var labelCommentPinTitle: UILabel!
+    var labelCommentPinUserName: UILabel!
+    var labelCommentPinVoteCount: UILabel!
+    var moreButtonDetailSubview: UIImageView!
+    var tableCommentsForComment: UITableView!
+    var textviewCommentPinDetail: UITextView!
+    var uiviewCommentDetailThreeButtons: UIView!
+    var uiviewCommentPinDetail: UIView!
+    var uiviewCommentPinDetailGrayBlock: UIView!
+    var uiviewCommentPinDetailMainButtons: UIView!
+    var uiviewCommentPinListBlank: UIView!
     var uiviewCommentPinListUnderLine01: UIView!
     var uiviewCommentPinListUnderLine02: UIView!
-    
-    var buttonBackToCommentPinLists: UIButton!
-    var buttonBackToCommentPinDetail: UIButton!
-    var buttonOptionOfCommentPin: UIButton!
-    var buttonCommentPinDownVote: UIButton!
-    var buttonCommentPinUpVote: UIButton!
-    var buttonCommentPinBackToMap: UIButton!
-    
-    var buttonCommentPinLike: UIButton!
-    var boolCommentPinLiked = false
-    
-    var buttonCommentPinListClear: UIButton!
-    
-    var buttonCommentPinAddComment: UIButton!
-    var buttonCommentPinDetailDragToLargeSize: UIButton!
-    var buttonCommentPinListDragToLargeSize: UIButton!
-    
-    var imageCommentPinUserAvatar: UIImageView!
-    
-    var labelCommentPinTitle: UILabel!
-    var labelCommentPinVoteCount: UILabel!
-    var labelCommentPinUserName: UILabel!
-    var labelCommentPinTimestamp: UILabel!
-    var labelCommentPinListTitle: UILabel!
-    
-    var textviewCommentPinDetail: UITextView!
-    
-    var commentPinCellArray = [CommentPinListCell]()
-    
-    var commentListScrollView: UIScrollView!
-    
-    var commentListExpand = false
-    var commentListShowed = false
-    var commentPinDetailShowed = false
-    
-    var buttonMoreOnCommentCellExpanded = false
-    var moreButtonDetailSubview: UIImageView!
-    
-    var uiviewCommentPinDetailMainButtons: UIView!
-    
-    var commentDetailFullBoardScrollView: UIScrollView!
-    
-    var tableCommentsForComment: UITableView!
-    
-    var uiviewCommentDetailThreeButtons: UIView!
-    var buttonCommentDetailViewComments: UIButton!
-    var buttonCommentDetailViewActive: UIButton!
-    var buttonCommentDetailViewPeople: UIButton!
-    var uiviewRedSlidingLine: UIView!
+    var uiviewCommentPinUnderLine01: UIView!
+    var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
+    var uiviewRedSlidingLine: UIView!
     
     // For Dragging
     var buttonCenter = CGPointZero
