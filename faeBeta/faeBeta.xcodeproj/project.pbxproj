@@ -1041,8 +1041,8 @@
 		B0BF35581D8DC8D600B0540B /* JSQExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
 				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
+				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
 				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
