@@ -41,6 +41,10 @@ class FaeUser : NSObject {
      */
     func signUpInBackground(completion:(Int,AnyObject?)->Void){
         postToURL("users", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
+            print("status")
+            print(status)
+            print("message")
+            print(message)
             if(status / 100 == 2 ) {
                 //success
                 self.saveUserSignUpInfo()
@@ -48,7 +52,7 @@ class FaeUser : NSObject {
             else{
                 //fail
             }
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message);
         }
     }
@@ -178,7 +182,7 @@ class FaeUser : NSObject {
     func checkEmailExistence(completion:(Int,AnyObject?)->Void){
         if let email = keyValue["email"] as? String{
             getFromURL("existence/email/"+email, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
-                self.clearKeyValue()
+                //self.clearKeyValue()
                 completion(status,message);
             }
         }
@@ -191,7 +195,9 @@ class FaeUser : NSObject {
     func checkUserExistence(completion:(Int,AnyObject?)->Void){
         if let username = keyValue["user_name"] as? String{
             getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
-                self.clearKeyValue()
+
+                print(message)
+                //self.clearKeyValue()
                 completion(status,message);
             }
         }

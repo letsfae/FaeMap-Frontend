@@ -18,7 +18,7 @@
 
 #import "JSQMessagesBubblesSizeCalculatorCustom.h"
 
-#import <JSQMessagesViewController/JSQMessagesCollectionView.h>
+#import "JSQMessagesCollectionViewCustom.h"
 #import <JSQMessagesViewController/JSQMessagesCollectionViewDataSource.h>
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
 #import <JSQMessagesViewController/JSQMessageData.h>

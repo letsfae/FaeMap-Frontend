@@ -1,4 +1,4 @@
 faeBeta/Pods
 faeBeta/Pods/*
-faeBeta/*.lock
-faeBeta/faeBeta.xcworkspace/xcuserdata
+faeBeta/Podfile.lock
+faeBeta/faeBeta.xcodeproj/xcuserdata

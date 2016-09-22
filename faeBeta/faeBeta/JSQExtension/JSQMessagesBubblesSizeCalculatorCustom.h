@@ -18,13 +18,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import <JSQMessagesViewController/JSQMessagesBubbleSizeCalculating.h>
-
+#import "JSQMessagesBubbleSizeCalculatingCustom.h"
 /**
  *  An instance of `JSQMessagesBubblesSizeCalculator` is responsible for calculating
  *  message bubble sizes for an instance of `JSQMessagesCollectionViewFlowLayout`.
  */
-@interface JSQMessagesBubblesSizeCalculatorCustom : NSObject <JSQMessagesBubbleSizeCalculating>
+@interface JSQMessagesBubblesSizeCalculatorCustom : NSObject <JSQMessagesBubbleSizeCalculatingCustom>
 
 /**
  *  Initializes and returns a bubble size calculator with the given cache and minimumBubbleWidth.

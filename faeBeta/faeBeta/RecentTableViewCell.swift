@@ -48,7 +48,7 @@ class RecentTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+    // MARK: populate cell 
     func bindData(recent : NSDictionary) {
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
@@ -103,7 +103,7 @@ class RecentTableViewCell: UITableViewCell {
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
     }
-    
+    // MARK: helper
     func TimeElipsed(seconds : NSTimeInterval, lastMessageTime:NSDate) -> String {
         let dayFormatter = dateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
@@ -130,6 +130,8 @@ class RecentTableViewCell: UITableViewCell {
         return elipsed!
     }
 
+    
+    //MARK: - delete button related
     @IBAction func deleteButtonTapped(sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
     }

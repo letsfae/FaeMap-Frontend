@@ -25,7 +25,7 @@
 
 #import "JSQMessageData.h"
 
-#import "JSQMessagesCollectionView.h"
+#import "JSQMessagesCollectionViewCustom.h"
 #import "JSQMessagesCollectionViewCell.h"
 
 #import "JSQMessagesCollectionViewLayoutAttributes.h"
@@ -126,7 +126,7 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
 
 #pragma mark - Setters
 
-- (void)setBubbleSizeCalculator:(id<JSQMessagesBubbleSizeCalculating>)bubbleSizeCalculator
+- (void)setBubbleSizeCalculator:(id<JSQMessagesBubbleSizeCalculatingCustom>)bubbleSizeCalculator
 {
     NSParameterAssert(bubbleSizeCalculator != nil);
     _bubbleSizeCalculator = bubbleSizeCalculator;
@@ -218,7 +218,7 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
     return _visibleIndexPaths;
 }
 
-- (id<JSQMessagesBubbleSizeCalculating>)bubbleSizeCalculator
+- (id<JSQMessagesBubbleSizeCalculatingCustom>)bubbleSizeCalculator
 {
     if (_bubbleSizeCalculator == nil) {
         _bubbleSizeCalculator = [JSQMessagesBubblesSizeCalculatorCustom new];

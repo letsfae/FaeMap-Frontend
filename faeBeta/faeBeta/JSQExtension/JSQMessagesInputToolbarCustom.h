@@ -20,11 +20,33 @@
 #import <UIKit/UIKit.h>
 
 #import <JSQMessagesViewController/JSQMessagesToolbarContentView.h>
-#import <JSQMessagesViewController/JSQMessagesInputToolbar.h>
 
 @class JSQMessagesInputToolbarCustom;
 
 
+@protocol JSQMessagesInputToolbarDelegateCustom <UIToolbarDelegate>
+
+@required
+
+/**
+ *  Tells the delegate that the toolbar's `rightBarButtonItem` has been pressed.
+ *
+ *  @param toolbar The object representing the toolbar sending this information.
+ *  @param sender  The button that received the touch event.
+ */
+- (void)messagesInputToolbar:(JSQMessagesInputToolbarCustom *)toolbar
+      didPressRightBarButton:(UIButton *)sender;
+
+/**
+ *  Tells the delegate that the toolbar's `leftBarButtonItem` has been pressed.
+ *
+ *  @param toolbar The object representing the toolbar sending this information.
+ *  @param sender  The button that received the touch event.
+ */
+- (void)messagesInputToolbar:(JSQMessagesInputToolbarCustom *)toolbar
+       didPressLeftBarButton:(UIButton *)sender;
+
+@end
 
 /**
  *  An instance of `JSQMessagesInputToolbar` defines the input toolbar for
@@ -35,7 +57,7 @@
 /**
  *  The object that acts as the delegate of the toolbar.
  */
-@property (weak, nonatomic) id<JSQMessagesInputToolbarDelegate> delegate;
+@property (weak, nonatomic) id<JSQMessagesInputToolbarDelegateCustom> delegate;
 
 /**
  *  Returns the content view of the toolbar. This view contains all subviews of the toolbar.
