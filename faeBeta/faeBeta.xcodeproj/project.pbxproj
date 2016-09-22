@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7DF4B697CF46EA5D6DD0C938 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F1F70F78B43BF3935274943 /* Pods_faeBetaTests.framework */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
-		8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A531D8FB5EE006BDE27 /* Alamofire.framework */; };
 		86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */; };
@@ -463,7 +461,7 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
-		FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */; };
+		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -484,10 +482,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0F1F70F78B43BF3935274943 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		17BFEF407C3BBD84A2EDC7E5 /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
-		5307925791F85794E7F6CDF1 /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		6587B57F858C9513753B1DC4 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCustom.h; sourceTree = "<group>"; };
 		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
 		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
@@ -699,7 +693,7 @@
 				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
 				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
 				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
-				FBFBDC2E826EA82B3DE5DA5A /* Pods_faeBeta.framework in Frameworks */,
+				FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,7 +701,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				273CD157633C35BD2EE44A98 /* Pods_faeBetaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,8 +730,6 @@
 				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
 				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
 				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
-				1A05F6E46980544B063AE7EA /* Pods_faeBeta.framework */,
-				69DE1779A60DB9CD8DBE215D /* Pods_faeBetaTests.framework */,
 				8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */,
 			);
 			name = Frameworks;
@@ -749,10 +740,8 @@
 			children = (
 				AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */,
 				E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */,
-				34940A6B4E600A0233A15CDA /* Pods-faeBetaTests.debug.xcconfig */,
 				88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */,
 				DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */,
-				482E633A931EEC713897BA18 /* Pods-faeBetaUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2011,10 +2000,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2056,7 +2042,6 @@
 		};
 		B0A2ACC41CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 34940A6B4E600A0233A15CDA /* Pods-faeBetaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2100,7 +2085,6 @@
 		};
 		B0A2ACC81CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 482E633A931EEC713897BA18 /* Pods-faeBetaUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
