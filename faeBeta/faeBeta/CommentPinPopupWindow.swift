@@ -267,10 +267,14 @@ extension FaeMapViewController {
         uiviewCommentPinListBlank.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
         uiviewCommentPinListBlank.center.x -= screenWidth
         
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(FaeMapViewController.actionBackToCommentDetail(_:)))
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(FaeMapViewController.actionBackToList(_:)))
-        let upSwipe = UISwipeGestureRecognizer(target: self, action: #selector(FaeMapViewController.shrinkCommentList))
-        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(FaeMapViewController.expandCommentList))
+        let leftSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.actionBackToCommentDetail(_:)))
+        let rightSwipe = UISwipeGestureRecognizer(target: self,
+                                                  action: #selector(FaeMapViewController.actionBackToList(_:)))
+        let upSwipe = UISwipeGestureRecognizer(target: self,
+                                               action: #selector(FaeMapViewController.shrinkCommentList))
+        let downSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.expandCommentList))
         
         leftSwipe.direction = .Left
         rightSwipe.direction = .Right

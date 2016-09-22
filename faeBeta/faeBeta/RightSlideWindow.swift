@@ -18,8 +18,13 @@ extension FaeMapViewController {
         UIApplication.sharedApplication().keyWindow?.addSubview(dimBackgroundWindBell)
         dimBackgroundWindBell.addTarget(self, action: #selector(FaeMapViewController.animationWindBellHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
+        let rightSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.animationWindBellHide(_:)))
+        rightSwipe.direction = .Right
+
         uiviewWindBell = UIView(frame: CGRectMake(screenWidth, 0, 311, screenHeight))
         uiviewWindBell.backgroundColor = UIColor.whiteColor()
+        uiviewWindBell.addGestureRecognizer(rightSwipe)
         UIApplication.sharedApplication().keyWindow?.addSubview(uiviewWindBell)
         
         labelWindbellTableTitle = UILabel(frame: CGRectMake(115,13+navigationBarHeight,82,26))

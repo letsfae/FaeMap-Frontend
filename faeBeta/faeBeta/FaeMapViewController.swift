@@ -68,7 +68,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     var buttonClosePinBlurView: UIButton!
     var buttonCommentSubmit: UIButton!
-    
+        
     // MARK: -- Create Comment Pin
     var uiviewCreateCommentPin: UIView!
     var labelSelectLocationContent: UILabel!

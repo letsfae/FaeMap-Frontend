@@ -75,7 +75,7 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
-  - SwiftyJSON (2.3.2)
+  - SwiftyJSON (2.4.0)
 
 DEPENDENCIES:
   - Alamofire (~> 3.4)
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   KTCenterFlowLayout: 2905970d36c653d9a7736c20bfa0d37dcf797d6b
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
 
 PODFILE CHECKSUM: d311c34ed938b20a2f4feb400abe21516e99984f
 
