@@ -213,6 +213,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
+    var commentIDCommentPinDetailView: String?
     var commentPinDetailLiked = false
     var commentDetailFullBoardScrollView: UIScrollView!
     var commentListExpand = false
@@ -227,7 +228,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
     var labelCommentPinLikeCount: UILabel!
-    var labelCommentPinShareCount: UILabel!
+    var labelCommentPinCommentsCount: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
@@ -346,7 +347,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "5000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
-        loadPinsByZoomLevel.getMapInformation{(status:Int,message:AnyObject?) in
+        loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             print("获取地图数据：")
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
@@ -587,6 +588,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 var commentID = -999
                 
                 if let commentIDGet = pinData["comment_id"].int {
+                    commentIDCommentPinDetailView = "\(commentIDGet)"
                     commentID = commentIDGet
                     if commentPinAvoidDic[commentID] != nil {
                         print("Comment exists!")

@@ -165,7 +165,7 @@ extension FaeMapViewController {
         postSingleComment.whereKey("content", value: commentContent)
         
         
-        postSingleComment.postComment{(status:Int,message:AnyObject?) in
+        postSingleComment.postComment{(status:Int, message:AnyObject?) in
             if let getMessage = message {
                 if let getMessageID = getMessage["comment_id"] {
                     self.submitPinsHideAnimation()

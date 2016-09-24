@@ -176,15 +176,15 @@ extension FaeMapViewController {
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelCommentPinLikeCount)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinLikeCount)
         
-        // Label of Share Count
-        labelCommentPinShareCount = UILabel()
-        labelCommentPinShareCount.text = "0"
-        labelCommentPinShareCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        labelCommentPinShareCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        labelCommentPinShareCount.textAlignment = .Right
-        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinShareCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelCommentPinShareCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinShareCount)
+        // Label of Comments of Coment Pin Count
+        labelCommentPinCommentsCount = UILabel()
+        labelCommentPinCommentsCount.text = "3"
+        labelCommentPinCommentsCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinCommentsCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinCommentsCount.textAlignment = .Right
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinCommentsCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelCommentPinCommentsCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinCommentsCount)
         
         // Button 3: Comment Pin DownVote
         buttonCommentPinDownVote = UIButton()
@@ -387,6 +387,7 @@ extension FaeMapViewController {
             commentPinLikeCount = Int(tempString)!
         }
         animateHeart()
+        likeThisPin()
     }
     
     // Down vote comment pin
@@ -804,5 +805,22 @@ extension FaeMapViewController {
         animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
         animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+    }
+    
+    func likeThisPin() {
+        let likeThisPin = FaePinAction()
+        likeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != nil {
+            print("DEBUG: Like This Pin")
+            likeThisPin.likeThisPin("comment", commentId: commentIDCommentPinDetailView!) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully like this comment pin!")
+                }
+            }
+            likeThisPin.getPinAttribute("comment", commentId: commentIDCommentPinDetailView!) {(status: Int, message: AnyObject?) in
+                print(status)
+                print(message)
+            }
+        }
     }
 }
