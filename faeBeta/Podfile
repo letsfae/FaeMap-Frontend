@@ -4,7 +4,7 @@ use_frameworks!
 
 target 'faeBeta' do
 	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
+  pod 'SwiftyJSON', '~> 2.3'
 	pod 'SDWebImage', '~>3.7'
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
@@ -22,7 +22,7 @@ end
 
 target 'faeBetaTests' do
 	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
+  pod 'SwiftyJSON', '~> 2.3'
 	pod 'SDWebImage', '~>3.7'
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
@@ -39,7 +39,7 @@ end
 
 target 'faeBetaUITests' do
 	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
+  pod 'SwiftyJSON', '~> 2.3'
 	pod 'SDWebImage', '~>3.7'
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'

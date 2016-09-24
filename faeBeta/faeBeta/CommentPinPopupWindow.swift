@@ -166,6 +166,26 @@ extension FaeMapViewController {
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
         
+        // Label of Like Count
+        labelCommentPinLikeCount = UILabel()
+        labelCommentPinLikeCount.text = "0"
+        labelCommentPinLikeCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinLikeCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinLikeCount.textAlignment = .Right
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinLikeCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelCommentPinLikeCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinLikeCount)
+        
+        // Label of Share Count
+        labelCommentPinShareCount = UILabel()
+        labelCommentPinShareCount.text = "0"
+        labelCommentPinShareCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinShareCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinShareCount.textAlignment = .Right
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinShareCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelCommentPinShareCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinShareCount)
+        
         // Button 3: Comment Pin DownVote
         buttonCommentPinDownVote = UIButton()
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)

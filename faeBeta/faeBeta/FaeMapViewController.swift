@@ -213,6 +213,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
+    var commentPinDetailLiked = false
     var commentDetailFullBoardScrollView: UIScrollView!
     var commentListExpand = false
     var commentListScrollView: UIScrollView!
@@ -225,6 +226,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
+    var labelCommentPinLikeCount: UILabel!
+    var labelCommentPinShareCount: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
@@ -249,17 +252,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var commentPinLikeCount: Int = 0 {
         //我们需要在age属性变化前做点什么
         willSet {
-            print("New Value is \(newValue)")
-            if self.isUpVoting {
-                self.labelCommentPinVoteCount.text = "\(newValue+1)"
+//            print("New Value is \(newValue)")
+            if isUpVoting && commentPinDetailLiked == false {
+                commentPinDetailLiked = true
+                labelCommentPinVoteCount.text = "\(newValue+1)"
+                labelCommentPinLikeCount.text = "\(newValue+1)"
             }
-            else if self.isDownVoting {
-                self.labelCommentPinVoteCount.text = "\(newValue-1)"
+            else if isDownVoting && commentPinDetailLiked {
+                commentPinDetailLiked = false
+                labelCommentPinVoteCount.text = "\(newValue-1)"
+                labelCommentPinLikeCount.text = "\(newValue-1)"
             }
         }
         //我们需要在age属性发生变化后，更新一下nickName这个属性
         didSet {
-            print("Old Value is \(oldValue)")
+//            print("Old Value is \(oldValue)")
         }
     }
     
