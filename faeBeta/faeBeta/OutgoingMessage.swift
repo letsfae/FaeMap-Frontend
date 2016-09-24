@@ -77,7 +77,8 @@ class OutgoingMessage {
         publishOptions.assignHeaders(["ios-text":message,
             "ios-badge":"5",
             "ios-sound":"\(AudioServicesPlaySystemSound (1104))"])
-        backendless.messaging.publish("default", message: message,
+        backendless.messaging.publish("default",
+                                      message: message,
                                       publishOptions:publishOptions,
                                       deliveryOptions:deliveryOptions,
                                       response:{ ( messageStatus : MessageStatus!) -> () in
