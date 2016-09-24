@@ -366,6 +366,7 @@ extension FaeMapViewController {
         if let tempString = labelCommentPinVoteCount.text {
             commentPinLikeCount = Int(tempString)!
         }
+        animateHeart()
     }
     
     // Down vote comment pin
@@ -667,8 +668,9 @@ extension FaeMapViewController {
     func hideCommentPinDetail() {
         if uiviewCommentPinDetail != nil {
             if commentPinDetailShowed {
+                actionBackToMap(self.buttonCommentPinBackToMap)
                 UIView.animateWithDuration(0.25, animations: ({
-                    self.uiviewCommentPinDetail.center.y -= self.uiviewCommentPinDetail.frame.size.height
+                    
                 }), completion: { (done: Bool) in
                     if done {
                         self.navigationController?.navigationBar.hidden = false
@@ -747,5 +749,40 @@ extension FaeMapViewController {
                 self.uiviewCommentPinUnderLine02.frame.origin.y = 292
             }
         })
+    }
+    
+    func animateHeart() {
+        animatingHeart = UIImageView(frame: CGRectMake(0, 0, 26, 22))
+        animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
+        
+        //创建用于转移坐标的Transform，这样我们不用按照实际显示做坐标计算
+        let randomX = CGFloat(arc4random_uniform(150))
+        let randomY = CGFloat(arc4random_uniform(50) + 100)
+        let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
+        
+        var transform: CGAffineTransform = CGAffineTransformMakeTranslation(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+        let path =  CGPathCreateMutable()
+        CGPathMoveToPoint(path, &transform, 0, 0)
+        CGPathAddLineToPoint(path, &transform, randomX-75, -randomY)
+        
+        let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")
+        scaleAnimation.values = [NSValue(CATransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(CATransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        scaleAnimation.duration = 1
+        
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.fromValue = 1.0
+        fadeAnimation.toValue = 0.0
+        fadeAnimation.duration = 1
+        
+        let orbit = CAKeyframeAnimation(keyPath: "position")
+        orbit.duration = 1
+        orbit.path = path
+        orbit.calculationMode = kCAAnimationPaced
+        animatingHeart.layer.addAnimation(orbit, forKey:"Move")
+        animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+        animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
+        animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
     }
 }

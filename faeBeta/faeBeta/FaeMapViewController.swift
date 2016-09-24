@@ -196,6 +196,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // New Comment Pin Popup Window
     
+    var animatingHeart: UIImageView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinDetail: UIButton!
     var buttonBackToCommentPinLists: UIButton!
@@ -455,7 +456,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         customSearchController.customSearchBar.endEditing(true)
         if commentPinDetailShowed || commentListShowed{
-            self.hideCommentPinDetail()
+            hideCommentPinDetail()
         }
         
         if openUserPinActive {
@@ -580,7 +581,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 
                 if let commentIDGet = pinData["comment_id"].int {
                     commentID = commentIDGet
-                    if self.commentPinAvoidDic[commentID] != nil {
+                    if commentPinAvoidDic[commentID] != nil {
                         print("Comment exists!")
                         print(self.commentPinAvoidDic)
                         return true
