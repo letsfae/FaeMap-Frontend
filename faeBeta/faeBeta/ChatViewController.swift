@@ -95,6 +95,23 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //scroll view
     var scrollViewOriginOffset: CGFloat! = 0
     
+    //step by step loading
+    let numberOfMessagesOneTime = 15
+    var numberOfMeesagesReceived = 0
+    var numberOfMessagesLoaded = 0
+    var totalNumberOfMessages : Int{
+        get{
+            if let lastMessage = objects.last{
+                return lastMessage["index"] as! Int
+            }
+            return 0
+        }
+        set{
+            
+        }
+    }
+    var isLoadingPreviousMessages = false
+    
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
     //    var userTypingQuery : FIRDatabaseQuery!
@@ -484,19 +501,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //if text message
         if text != nil {
             // send message
-            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text")
+            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1)
             
         }
         if let pic = picture {
             // send picture message
             let imageData = UIImagePNGRepresentation(pic)
-            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture")
+            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1)
         }
         
         if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker")
+            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1)
         }
         
         
@@ -505,12 +522,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let lat : NSNumber = NSNumber(double: loc.coordinate.latitude)
             let lon : NSNumber = NSNumber(double: loc.coordinate.longitude)
             
-            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location")
+            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1)
         }
         
         if audio != nil {
             //create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio")
+            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1)
             
         }
         
@@ -568,7 +585,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     func loadMessage() {
         
-        ref.child(chatRoomId).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).queryLimitedToLast(UInt(numberOfMessagesOneTime)).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
                 // becasue the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
@@ -585,10 +602,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     self.finishReceivingMessageAnimated(true)
                     
                     
-                } else {
-                    
+                }
+                else {
                     // add each dictionary to loaded array
                     self.loaded.append(item)
+                    self.numberOfMessagesLoaded += 1
                 }
             }
         }
@@ -609,6 +627,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         
     }
+    
+    func loadPreviousMessages(){
+        self.isLoadingPreviousMessages = true
+        if(totalNumberOfMessages > numberOfMessagesLoaded){
+            ref.child(chatRoomId).queryOrderedByChild("index").queryStartingAtValue(max(totalNumberOfMessages - numberOfMessagesLoaded - numberOfMessagesOneTime + 1,1)).queryEndingAtValue(totalNumberOfMessages - numberOfMessagesLoaded).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+                if snapshot.exists() {
+                    let result = snapshot.value!.allValues as! [NSDictionary]
+                    for item in result.sort({ ($0["index"] as! Int) > ($1["index"] as! Int)}) {
+                        self.insertMessage(item,atIndex: 0)
+                        self.numberOfMessagesLoaded += 1
+
+                    }
+                    let oldOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y
+                    self.collectionView.reloadData()
+                    self.collectionView.layoutIfNeeded()
+                    self.collectionView.contentOffset = CGPointMake(0.0, self.collectionView.contentSize.height - oldOffset);
+
+                }
+                self.isLoadingPreviousMessages = false
+            }
+        }else{
+            self.isLoadingPreviousMessages = false
+        }
+    }
+    
     //parse information for firebase
     func insertMessages() {
         
@@ -626,6 +669,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         objects.append(item)
         messages.append(message!)
+        
+        return incoming(item)
+    }
+    
+    func insertMessage(item : NSDictionary, atIndex index: Int) -> Bool {
+        //unpack the message from data load to the JSQmessage
+        let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
+        
+        let message = incomingMessage.createMessage(item)
+        
+        objects.insert(item, atIndex: index)
+        messages.insert(message!, atIndex: index)
         
         return incoming(item)
     }
@@ -905,6 +960,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
+            }
+            if scrollViewCurrentOffset < 5 && !isLoadingPreviousMessages{
+                loadPreviousMessages()
             }
         }
     }
