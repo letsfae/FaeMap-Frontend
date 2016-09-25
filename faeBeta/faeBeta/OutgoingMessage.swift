@@ -49,7 +49,7 @@ class OutgoingMessage {
     
     
     
-    func sendMessage(chatRoomId : String, item : NSMutableDictionary, receiverDeviceToken: String) {
+    func sendMessage(chatRoomId : String, item : NSMutableDictionary, receiverDeviceToken: String, withUserId userId: String) {
         
         let reference = firebase.child(chatRoomId).childByAutoId()
         
@@ -60,22 +60,39 @@ class OutgoingMessage {
             if error != nil {
                 print("Error, couldn't send message: \(error)")
             }else{
-                let messageText:String = (item["senderName"] as! String) + ": " + (item["message"] as! String)
-                self.publishMessageAsPushNotificationAsync(messageText, deviceId: receiverDeviceToken )
+                
+                self.checkNumberOfUsersUnreadMessages(userId){
+                    (numberOfUnreadMessages:Int) -> Void in
+                    let messageText:String = (item["senderName"] as! String) + ": " + (item["message"] as! String)
+                    self.publishMessageAsPushNotificationAsync(messageText, deviceId: receiverDeviceToken, numberOfUnreadMessages: numberOfUnreadMessages)
+                    UpdateRecents(chatRoomId, lastMessage: (item["message"] as? String)!)
+                }
             }
         }
         
-        UpdateRecents(chatRoomId, lastMessage: (item["message"] as? String)!)
     }
     
-    func publishMessageAsPushNotificationAsync(message: String, deviceId: String) {
+    private func checkNumberOfUsersUnreadMessages(userId:String,completion : (numberOfUnreadMessages:Int) -> Void){
+        // keep tracking the unread messages number
+        FIRDatabase.database().reference().child("Recent").queryOrderedByChild("userId").queryEqualToValue(userId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+            var totalUnread = 0
+            if snapshot.exists() {
+                for recent in snapshot.value!.allValues {
+                    let recentDic = recent as! NSDictionary
+                    totalUnread += recentDic["counter"] as! Int
+                }
+            }
+            completion(numberOfUnreadMessages: totalUnread + 1)
+        }
+    }
+    
+    private func publishMessageAsPushNotificationAsync(message: String, deviceId: String, numberOfUnreadMessages: Int) {
         
         let deliveryOptions = DeliveryOptions()
         deliveryOptions.pushSinglecast = [deviceId]
-        
         let publishOptions = PublishOptions()
         publishOptions.assignHeaders(["ios-text":message,
-            "ios-badge":"5",
+            "ios-badge":numberOfUnreadMessages,
             "ios-sound":"\(AudioServicesPlaySystemSound (1104))"])
         backendless.messaging.publish("default",
                                       message: message,

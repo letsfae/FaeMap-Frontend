@@ -112,7 +112,6 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
 func UpdateRecents(chatRoomId : String, lastMessage : String) {
     
     //firebase query
-    
     firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
         
         if snapshot.exists() {

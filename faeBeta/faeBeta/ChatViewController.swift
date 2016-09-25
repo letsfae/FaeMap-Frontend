@@ -543,7 +543,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         if(withUser != nil){
             // add this outgoing message under chatRoom with id and content
-            outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, receiverDeviceToken: withUser?.getProperty("device_id")! as! String)
+            outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, receiverDeviceToken: withUser?.getProperty("device_id")! as! String, withUserId: withUser!.objectId!)
         }
     }
     
