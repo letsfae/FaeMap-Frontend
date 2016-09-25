@@ -608,8 +608,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 else {
                     // add each dictionary to loaded array
                     self.loaded.append(item)
-                    self.numberOfMessagesLoaded += 1
                 }
+                self.numberOfMessagesLoaded += 1
             }
         }
         
@@ -626,6 +626,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.insertMessages()
             self.finishReceivingMessageAnimated(true)
             self.initialLoadComplete = true
+            self.scrollToBottom(true)
         }
         
     }
@@ -966,7 +967,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
             }
-            if scrollViewCurrentOffset < 5 && !isLoadingPreviousMessages{
+            if scrollViewCurrentOffset < -5 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
             }
         }
