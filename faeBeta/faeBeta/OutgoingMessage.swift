@@ -18,32 +18,32 @@ class OutgoingMessage {
     
     let messageDictionary : NSMutableDictionary
     //text
-    init(message : String, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int) {
-        messageDictionary = NSMutableDictionary(objects: [message, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index], forKeys: ["message", "senderId", "senderName", "date", "status", "type", "index"])
+    init(message : String, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
+        messageDictionary = NSMutableDictionary(objects: [message, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }
     //location
-    init(message : String, latitude: NSNumber, longitude : NSNumber, snapImage : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int) {
+    init(message : String, latitude: NSNumber, longitude : NSNumber, snapImage : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let snap = snapImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, latitude, longitude, snap, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index], forKeys: ["message", "latitude", "longitude", "snapImage", "senderId", "senderName", "date", "status", "type", "index"])
+        messageDictionary = NSMutableDictionary(objects: [message, latitude, longitude, snap, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "latitude", "longitude", "snapImage", "senderId", "senderName", "date", "status", "type", "index","hasTimeStamp"])
     }
     //picture
-    init(message : String, picture : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int) {
+    init(message : String, picture : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let pic = picture.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index], forKeys: ["message", "picture","senderId", "senderName", "date", "status", "type", "index"])
+        messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "picture","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }
     
     
     // outgoing message for sticker
-    init (message : String, sticker : NSData, senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int) {
+    init (message : String, sticker : NSData, senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let stick = sticker.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-        messageDictionary = NSMutableDictionary(objects: [message, stick, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index], forKeys: ["message", "picture","senderId", "senderName", "date", "status", "type", "index"])
+        messageDictionary = NSMutableDictionary(objects: [message, stick, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "picture","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }
     
     // outgoing message for audio
-    init (message : String, audio : NSData, senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int) {
+    init (message : String, audio : NSData, senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         
         let voice = audio.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, voice, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index], forKeys: ["message", "audio","senderId", "senderName", "date", "status", "type", "index"])
+        messageDictionary = NSMutableDictionary(objects: [message, voice, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "audio","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }
     
     

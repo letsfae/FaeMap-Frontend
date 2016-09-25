@@ -107,10 +107,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             return 0
         }
         set{
-            
         }
     }
     var isLoadingPreviousMessages = false
+    
+    //time stamp
+    var lastMarkerDate: NSDate! = NSDate.distantPast()
     
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
@@ -497,23 +499,23 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
         
         var outgoingMessage = OutgoingMessage?()
-        
+        let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300
         //if text message
         if text != nil {
             // send message
-            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1)
+            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
         if let pic = picture {
             // send picture message
             let imageData = UIImagePNGRepresentation(pic)
-            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1)
+            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1)
+            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         
@@ -522,12 +524,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let lat : NSNumber = NSNumber(double: loc.coordinate.latitude)
             let lon : NSNumber = NSNumber(double: loc.coordinate.longitude)
             
-            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1)
+            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         if audio != nil {
             //create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1)
+            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
         
@@ -592,9 +594,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 
                 if self.initialLoadComplete {//message has been downloaded from databse but not load to collectionview yet.
                     
-                    let incoming = self.insertMessage(item)
+                    let isIncoming = self.insertMessage(item)
                     
-                    if incoming {
+                    if isIncoming {
                         
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
@@ -666,7 +668,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
-        
+        if(item["hasTimeStamp"] as! Bool){
+            let date = dateFormatter().dateFromString((item["date"] as? String)!)
+            lastMarkerDate = date
+        }
         objects.append(item)
         messages.append(message!)
         
@@ -810,8 +815,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //this is used to edit top label of every cell
     override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        
-        if indexPath.item % 3 == 0 {
+        let object = objects[indexPath.row]
+        if object["hasTimeStamp"] as! Bool {
             let message = messages[indexPath.item]
             
             return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
@@ -822,8 +827,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        
-        if indexPath.item % 3 == 0 {
+        let object = objects[indexPath.row]
+        if object["hasTimeStamp"] as! Bool  {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
         
