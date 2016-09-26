@@ -93,6 +93,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var keyboardShow = false // false: keyboard is hide
     
     //scroll view
+    var isClosingStickerOrImagePicker = false
     var scrollViewOriginOffset: CGFloat! = 0
     
     //step by step loading
@@ -193,7 +194,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewWillAppear(animated: Bool) {
         //check user default
         super.viewWillAppear(true)
-        setupRecorder()
+//        setupRecorder()
         initializeStickerView()
         loadUserDefault()
         self.scrollToBottomAnimated(true)
@@ -410,9 +411,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.scrollToBottom(false)
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
             }else{
+                self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
                     self.stickerPicker.frame.origin.y = self.screenHeight - 271
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
                 })
             }
             
@@ -450,11 +454,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
             }else{
+                self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
                     self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
                     self.quickSendImageButton.alpha = 1
                     self.moreImageButton.alpha = 1
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
                 })
             }
             
@@ -950,13 +957,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
     // MARK: - scroll view delegate
     
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow)){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker){
                 if(stickerViewShow){
                     self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }else if(imageQuickPickerShow){
@@ -985,6 +991,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
                 if(stickerViewShow){
+                    isClosingStickerOrImagePicker = true
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
                         self.stickerPicker.frame.origin.y = self.screenHeight
@@ -992,8 +999,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.stickerViewShow = false
                             self.buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
                             self.stickerPicker.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
                     })
                 }else if (imageQuickPickerShow){
+                    isClosingStickerOrImagePicker = true
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
                         self.photoQuickCollectionView.frame.origin.y = self.screenHeight
@@ -1005,6 +1014,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.photoQuickCollectionView.removeFromSuperview()
                             self.moreImageButton.removeFromSuperview()
                             self.quickSendImageButton.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
                     })
                 }
             }
@@ -1146,7 +1156,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 155
+        let yPosition = screenHeight - 153
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
