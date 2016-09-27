@@ -45,7 +45,7 @@ func startChat(user1 : BackendlessUser, user2 : BackendlessUser) -> String {
     
     //create recent
     createdRecent(user1.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user2.name, withUserUserId: user2.objectId)
-    createdRecent(user2.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user1.name, withUserUserId: user1.objectId)
+//    createdRecent(user2.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user1.name, withUserUserId: user1.objectId)
     
     return chatRoomId
 }
@@ -76,14 +76,14 @@ func createdRecent(userId : String, chatRoomId : String, members : [String], wit
         }
         if createRecent {
             
-            CreateRecentItem(userId, chatRoomId: chatRoomId, members: members, withUserUsername: withUserUsername, withUserUserId: withUserUserId)
+            CreateRecentItem(userId, chatRoomId: chatRoomId, members: members, withUserUsername: withUserUsername, withUserUserId: withUserUserId, lastMessage: "", counter: 0)
         }
     })
 }
 
 // creating a recent object
 
-func CreateRecentItem(userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String) {
+func CreateRecentItem(userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String, lastMessage: String, counter: Int) {
     
     // let firebase create a reference with a random generated id
     
@@ -93,7 +93,7 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
     
     let date = dateFormatter().stringFromDate(NSDate())
     
-    let recent = ["recentId" : recentId, "userId" : userId, "chatRoomId" : chatRoomId, "members" : members, "withUserUsername" : withUserUsername, "lastMessage" : "", "counter" : 0, "date" : date, "withUserUserId" : withUserUserId]
+    let recent = ["recentId" : recentId, "userId" : userId, "chatRoomId" : chatRoomId, "members" : members, "withUserUsername" : withUserUsername, "lastMessage" : lastMessage, "counter" : counter, "date" : date, "withUserUserId" : withUserUserId]
     
     // set value for the reference
     
@@ -109,19 +109,21 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
 
 //given a chatRoomId, we update last message for it.
 
-func UpdateRecents(chatRoomId : String, lastMessage : String) {
-    
+func UpdateRecents(chatRoomId : String, lastMessage : String, withUser: BackendlessUser) {
+
     //firebase query
     firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
         
         if snapshot.exists() {
-            
             for recent in snapshot.value!.allValues {
                 
                 //update recent
                 updateRecentItem(recent as! NSDictionary, lastMessage: lastMessage)
             }
             
+            if(snapshot.value!.allValues.count == 1){
+                CreateRecentItem(withUser.objectId, chatRoomId: chatRoomId, members: [backendless.userService.currentUser.objectId as String, withUser.objectId as String], withUserUsername: backendless.userService.currentUser.name, withUserUserId: backendless.userService.currentUser.objectId, lastMessage: lastMessage, counter: 1)
+            }
         }
     }
 }

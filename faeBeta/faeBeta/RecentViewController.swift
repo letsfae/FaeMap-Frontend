@@ -23,10 +23,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.backgroundColor = UIColor.whiteColor()
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
-        loadRecents()
         addGestureRecognizer()
-        
+        firebase.keepSynced(true)
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        firebase.removeAllObservers()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        loadRecents()
     }
     
     /*
@@ -208,7 +215,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: load recents form firebase
     
     func loadRecents() {
-        
         firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
             self.recents.removeAll()
             
@@ -303,8 +309,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         recents.removeAtIndex(indexPath.row)
         
         //delect recent from firebase
-        
         DeleteRecentItem(recent)
+        
+        cellsCurrentlyEditing.removeObject(indexPath)
         
         let range = NSMakeRange(0, self.tableView.numberOfSections)
         let sections = NSIndexSet(indexesInRange: range)
