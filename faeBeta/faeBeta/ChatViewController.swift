@@ -200,6 +200,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.scrollToBottomAnimated(true)
     }
     
+    func appWillEnterForeground(){
+        self.collectionView.reloadData()
+    }
+    
     // MARK: - setup
     
     func navigationBarSet() {
@@ -223,6 +227,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func addObservers(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+
     }
     
     // sticker view
