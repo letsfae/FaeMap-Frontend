@@ -285,6 +285,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: - swipeable cell delegate
     
+    func cellwillOpen(cell: UITableViewCell) {
+        closeAllCell(UITapGestureRecognizer())
+    }
+    
     func cellDidOpen(cell: UITableViewCell)
     {
         let currentEditingIndexPath = self.tableView.indexPathForCell(cell)

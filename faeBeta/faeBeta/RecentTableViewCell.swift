@@ -9,6 +9,7 @@
 import UIKit
 
 protocol SwipeableCellDelegate {
+    func cellwillOpen(cell:UITableViewCell)
     func cellDidOpen(cell:UITableViewCell)
     func cellDidClose(cell:UITableViewCell)
     func deleteButtonTapped(cell:UITableViewCell)
@@ -160,6 +161,7 @@ class RecentTableViewCell: UITableViewCell {
                         self.distanceToRight.constant = constant;
                     }
                 } else {
+                    self.delegate.cellwillOpen(self)
                     let constant = min(-deltaX, self.buttonTotalWidth) //6
                     if (constant == self.buttonTotalWidth) { //7
                         self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
