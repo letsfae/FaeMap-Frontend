@@ -186,7 +186,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         loadInputBarComponent()
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.whiteColor()
-        initializePhotoQuickPicker()
+        self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);        initializePhotoQuickPicker()
         photoPicker = PhotoPicker()
         addObservers()
     }

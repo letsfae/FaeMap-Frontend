@@ -18,7 +18,7 @@
 
 #import "JSQMessagesInputToolbarCustom.h"
 
-#import "JSQMessagesComposerTextView.h"
+#import "JSQMessagesComposerTextViewCustom.h"
 
 #import "JSQMessagesToolbarButtonFactory.h"
 
@@ -54,7 +54,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     self.preferredDefaultHeight = 90.0f;
     self.maximumHeight = NSNotFound;
 
-    JSQMessagesToolbarContentView *toolbarContentView = [self loadToolbarContentView];
+    JSQMessagesToolbarContentViewCustom *toolbarContentView = [self loadToolbarContentView];
     toolbarContentView.frame = self.frame;
     [self addSubview:toolbarContentView];
     [self jsq_pinAllEdgesOfSubview:toolbarContentView];
@@ -69,7 +69,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     [self toggleSendButtonEnabled];
 }
 
-- (JSQMessagesToolbarContentView *)loadToolbarContentView
+- (JSQMessagesToolbarContentViewCustom *)loadToolbarContentView
 {
     NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:@"JSQMessagesToolbarContentViewCustom"
                                                                                           owner:nil
