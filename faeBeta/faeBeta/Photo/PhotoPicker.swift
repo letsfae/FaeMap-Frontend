@@ -30,7 +30,7 @@ class PhotoPicker {
         getSmartAlbum()
     }
     
-    func getSmartAlbum() {
+    private func getSmartAlbum() {
         let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .AlbumRegular, options: nil)
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -51,5 +51,4 @@ class PhotoPicker {
             }
         } )
     }
-    
 }
