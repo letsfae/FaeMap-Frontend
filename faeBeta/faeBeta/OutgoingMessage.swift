@@ -28,6 +28,7 @@ class OutgoingMessage {
     }
     //picture
     init(message : String, picture : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
+        
         let pic = picture.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
         messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "picture","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }

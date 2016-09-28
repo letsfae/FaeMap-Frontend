@@ -112,7 +112,6 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                     if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
                         self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
                         self.currentAlbum = self.cameraRoll
-                        print("set album")
                     }
                 }
                 let estimatedCount =  (assetCollection.estimatedAssetCount == NSNotFound) ? -1 : assetCollection.estimatedAssetCount

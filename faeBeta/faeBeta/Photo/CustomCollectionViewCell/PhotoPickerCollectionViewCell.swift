@@ -31,7 +31,6 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     }
 
     override func prepareForReuse() {
-        print("prepare for reuse")
         photoImageView.image = nil
         ChosenFrameImageView.hidden = true
     }

@@ -390,7 +390,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         closeStickerPanel()
         closeQuickPhotoPanel()
         let camera = Camera(delegate_: self)
-        camera.presentPhotoCamera(self, canEdit: true)
+        camera.presentPhotoCamera(self, canEdit: false)
     }
     
     
@@ -521,7 +521,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         if let pic = picture {
             // send picture message
-            let imageData = UIImagePNGRepresentation(pic)
+            
+            var imageData = UIImageJPEGRepresentation(pic,1)
+            let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+            imageData = UIImageJPEGRepresentation(pic,factor)
             outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
@@ -550,8 +553,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        print(outgoingMessage!.messageDictionary)
-        print(chatRoomId)
+//        print(outgoingMessage!.messageDictionary)
+//        print(chatRoomId)
         self.finishSendingMessage()
         
         if(withUser != nil){
@@ -563,7 +566,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //send image delegate function
     func sendImages(images: [UIImage]) {
         for image in images {
-            print("sending one image")
+//            print("sending one image")
             self.sendMessage(nil, date: NSDate(), picture: image, sticker : nil, location: nil, snapImage : nil, audio: nil)
         }
     }
@@ -761,10 +764,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoQuickPickerCollectionViewCell
             //get image from PHFetchResult
             dispatch_async(dispatch_get_main_queue(), { () in
-                
-                let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.item] as! PHAsset
-                
-                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.view.frame.width - 1 / 3, self.view.frame.width - 1 / 3), contentMode: .AspectFill, options: self.requestOption) { (result, info) in
+                let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
+                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.view.frame.width - 1 / 3, self.view.frame.width - 1 / 3), contentMode: .AspectFit, options: self.requestOption) { (result, info) in
                     cell.setImage(result!)
                 }
                 
@@ -902,7 +903,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 imageDict[indexPath.row] = nil
                 imageReverseDict[deselectedImage!] = nil
             }
-            print("imageDict has \(imageDict.count) images")
+//            print("imageDict has \(imageDict.count) images")
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         }
     }
@@ -1241,7 +1242,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: UIImagePickerController
     // this function is not use anymore
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let picture = info[UIImagePickerControllerEditedImage] as! UIImage
+        let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
         
