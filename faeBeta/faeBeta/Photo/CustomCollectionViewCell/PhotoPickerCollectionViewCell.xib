@@ -31,7 +31,7 @@
             </constraints>
             <size key="customSize" width="256" height="245"/>
             <connections>
-                <outlet property="ChosenFrameImageView" destination="yPd-ep-n5C" id="AUr-7D-15c"/>
+                <outlet property="chosenFrameImageView" destination="yPd-ep-n5C" id="AUr-7D-15c"/>
                 <outlet property="photoImageView" destination="o9w-qM-Ju0" id="ECR-lp-xR8"/>
             </connections>
             <point key="canvasLocation" x="277" y="463"/>

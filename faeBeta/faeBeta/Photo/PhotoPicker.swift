@@ -13,13 +13,20 @@ import Photos
 // you can check the groups by switching album in choose photo screen
 class PhotoPicker {
     
+    class var shared:PhotoPicker {
+        struct Singleton {
+            static let instance = PhotoPicker()
+        }
+        return Singleton.instance
+    }
+    
     var selectedAlbum = [SmartAlbum]()
     var currentAlbum : SmartAlbum! = nil
     var cameraRoll : SmartAlbum! = nil
     let selectedPhoto = [UIImage]()
     var currentAlbumIndex : Int = 0
     
-    init() {
+    private init() {
         getSmartAlbum()
     }
     

@@ -92,12 +92,6 @@
 		B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
-		B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
@@ -538,8 +532,6 @@
 		B064EEA61D6E0CA100C078F5 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
-		B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoQuickPickerCollectionViewCell.swift; sourceTree = "<group>"; };
-		B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoQuickPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumTableViewCell.xib; sourceTree = "<group>"; };
@@ -805,8 +797,6 @@
 			children = (
 				B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */,
 				B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */,
-				B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */,
-				B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */,
 			);
 			path = CustomCollectionViewCell;
 			sourceTree = "<group>";
@@ -1301,7 +1291,6 @@
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
-				B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
@@ -1354,7 +1343,6 @@
 				B064EF531D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF591D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF5F1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF181D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1387,7 +1375,6 @@
 				B064EF541D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF5A1D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF601D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF191D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1583,7 +1570,6 @@
 				B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
-				B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -1679,7 +1665,6 @@
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
-				B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
@@ -1867,7 +1852,6 @@
 				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
-				B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,

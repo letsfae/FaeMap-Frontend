@@ -22,18 +22,11 @@ protocol SendMutipleImagesDelegate {
 
 class CustomCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
     
+    var photoPicker : PhotoPicker!
+    
     let photoPickerCellIdentifier = "photoPickerCellIdentifier"
     
     let layOut = UICollectionViewFlowLayout()
-    
-    let selectedPhoto = [UIImage]()
-    
-    var selectedAlbum = [SmartAlbum]()
-    
-    var cameraRoll : SmartAlbum! = nil
-    
-    var currentAlbum : SmartAlbum! = nil
-    var currentAlbumIndex : Int = 0
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -46,13 +39,14 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     let requestOption = PHImageRequestOptions()
     
     var currentCell : AlbumTableViewCell!
+    
     // table view variable
     
     var tableViewAlbum : UITableView!
     let albumReuseIdentifiler = "AlbumTableViewCell"
     var tableViewAlbumVisible = false
-    
-    //send image delegaet
+
+    //send image delegate
     
     var imageDelegate : SendMutipleImagesDelegate!
     
@@ -73,14 +67,13 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        photoPicker = PhotoPicker.shared
         collectionView?.backgroundColor = UIColor.whiteColor()
         collectionView?.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
-        //        requestOption.synchronous = true
+        requestOption.synchronous = false
         requestOption.resizeMode = .Fast
         requestOption.deliveryMode = .HighQualityFormat
         self.collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
-        getSmartAlbum()
-        print(selectedAlbum.count)
         navigationBarSet()
     }
     
@@ -96,28 +89,6 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         tableViewAlbum.registerNib(UINib(nibName: "AlbumTableViewCell", bundle: nil), forCellReuseIdentifier: albumReuseIdentifiler)
         tableViewAlbum.delegate = self
         tableViewAlbum.dataSource = self
-    }
-    
-    func getSmartAlbum() {
-        let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .AlbumRegular, options: nil)
-        let allPhotosOptions = PHFetchOptions()
-        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        smartAlbums.enumerateObjectsUsingBlock( {
-            if let assetCollection = $0.0 as? PHAssetCollection {
-                print("album title: \(assetCollection.localizedTitle)")
-                let assetsFetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: allPhotosOptions)
-                let numberOfAssets = assetsFetchResult.count
-                if numberOfAssets != 0 && assetCollection.localizedTitle! != "Videos" {
-                    self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
-                    if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
-                        self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
-                        self.currentAlbum = self.cameraRoll
-                    }
-                }
-                let estimatedCount =  (assetCollection.estimatedAssetCount == NSNotFound) ? -1 : assetCollection.estimatedAssetCount
-                print("Assets count: \(numberOfAssets), estimate: \(estimatedCount)")
-            }
-        } )
     }
     
     func getUserAlbumSet() {
@@ -149,19 +120,19 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
         
-        if cell.ChosenFrameImageView.hidden {
+        if cell.chosenFrameImageView.hidden {
             if imageDict.count == 10 {
                 showAlertView()
             } else {
                 imageDict[indexPath.row] = cell.photoImageView.image
                 imageIndexDict[cell.photoImageView.image!] = imageDict.count - 1
                 indexImageDict[imageDict.count - 1] = cell.photoImageView.image
-                cell.ChosenFrameImageView.image = UIImage(named: frameImageName[imageDict.count - 1])
-                cell.ChosenFrameImageView.hidden = false
+                cell.chosenFrameImageView.image = UIImage(named: frameImageName[imageDict.count - 1])
+                cell.chosenFrameImageView.hidden = false
                 imageReverseDict[cell.photoImageView.image!] = indexPath
             }
         } else {
-            cell.ChosenFrameImageView.hidden = true
+            cell.chosenFrameImageView.hidden = true
             let deselectedImage = imageDict[indexPath.row]
             let deselectedIndex = imageIndexDict[deselectedImage!]
             imageIndexDict[deselectedImage!] = nil
@@ -175,7 +146,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.currentAlbum.albumContent.count
+        return photoPicker.currentAlbum.albumContent.count
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -192,22 +163,18 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoPickerCellIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
-        //get image from PHFetchResult
-        dispatch_async(dispatch_get_main_queue(), { () in
-            
-            let asset : PHAsset = self.currentAlbum.albumContent[indexPath.item] as! PHAsset
-            
-            PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.view.frame.width - 1 / 3, self.view.frame.width - 1 / 3), contentMode: .AspectFill, options: self.requestOption) { (result, info) in
-                cell.setImage(result!)
-            }
-            
-            if self.imageDict[indexPath.row] != nil {
-                cell.ChosenFrameImageView.hidden = false
-                cell.ChosenFrameImageView.image = UIImage(named: self.frameImageName[self.imageIndexDict[self.imageDict[indexPath.row]!]!])
-            }
-            
-        })
         return cell
+    }
+    
+    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! PhotoPickerCollectionViewCell
+        //get image from PHFetchResult
+        let asset : PHAsset = photoPicker.currentAlbum.albumContent[indexPath.item] as! PHAsset
+        cell.loadImage(asset, requestOption: requestOption)
+        if self.imageDict[indexPath.row] != nil {
+            cell.chosenFrameImageView.hidden = false
+            cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[self.imageIndexDict[self.imageDict[indexPath.row]!]!])
+        }
     }
     
     override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
@@ -304,7 +271,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             let image = indexImageDict[i]
             imageIndexDict[image!] = i - 1
             let cell = collectionView?.cellForItemAtIndexPath(imageReverseDict[image!]!) as! PhotoPickerCollectionViewCell
-            cell.ChosenFrameImageView.image = UIImage(named: frameImageName[i-1])
+            cell.chosenFrameImageView.image = UIImage(named: frameImageName[i-1])
             indexImageDict[i-1] = image
             i += 1
         }
@@ -319,15 +286,15 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(albumReuseIdentifiler) as! AlbumTableViewCell
-        cell.albumTitleLabel.text = selectedAlbum[indexPath.row].albumName
-        cell.albumNumberLabel.text = "\(selectedAlbum[indexPath.row].albumCount)"
-        cell.checkMarkImage.hidden = selectedAlbum[indexPath.row].albumName != currentAlbum.albumName
+        cell.albumTitleLabel.text = photoPicker.selectedAlbum[indexPath.row].albumName
+        cell.albumNumberLabel.text = "\(photoPicker.selectedAlbum[indexPath.row].albumCount)"
+        cell.checkMarkImage.hidden = photoPicker.selectedAlbum[indexPath.row].albumName != photoPicker.currentAlbum.albumName
         
         if !cell.checkMarkImage.hidden {
             currentCell = cell
         }
         //set thumbnail
-        let asset : PHAsset = self.selectedAlbum[indexPath.row].albumContent[0] as! PHAsset
+        let asset : PHAsset = self.photoPicker.selectedAlbum[indexPath.row].albumContent[0] as! PHAsset
         
         PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(view.frame.width - 1 / 10, view.frame.width - 1 / 10), contentMode: .AspectFill, options: nil) { (result, info) in
             cell.titleImageView.image = result!
@@ -337,7 +304,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return selectedAlbum.count
+        return photoPicker.selectedAlbum.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -347,11 +314,11 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! AlbumTableViewCell
         if cell.checkMarkImage.hidden {
-            currentAlbum = selectedAlbum[indexPath.row]
+            photoPicker.currentAlbum = photoPicker.selectedAlbum[indexPath.row]
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             dismissAlbumTable()
             tableViewAlbumVisible = !tableViewAlbumVisible
-            self.titleLabel.text = currentAlbum.albumName
+            self.titleLabel.text = photoPicker.currentAlbum.albumName
             currentCell.checkMarkImage.hidden = true
             let cellNew = tableView.cellForRowAtIndexPath(indexPath) as! AlbumTableViewCell
             cellNew.checkMarkImage.hidden = false
