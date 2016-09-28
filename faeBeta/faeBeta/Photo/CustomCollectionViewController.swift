@@ -14,7 +14,7 @@ import Photos
 
 protocol SendMutipleImagesDelegate {
     
-    func sendImages(images : [UIImage])
+    func sendImages()
     
 }
 
@@ -50,16 +50,6 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     var imageDelegate : SendMutipleImagesDelegate!
     
-    var selectedImage = [UIImage]()
-    
-    var imageDict = [Int : UIImage]()
-    
-    var imageReverseDict = [UIImage : NSIndexPath]()
-    
-    var imageIndexDict = [UIImage : Int]()
-    
-    var indexImageDict = [Int : UIImage]()
-    
     var frameImageName = ["photoSelection1", "photoSelection2", "photoSelection3", "photoSelection4","photoSelection5", "photoSelection6", "photoSelection7", "photoSelection8", "photoSelection9", "photoSelection10"]
     
     
@@ -73,8 +63,9 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         requestOption.synchronous = false
         requestOption.resizeMode = .Fast
         requestOption.deliveryMode = .HighQualityFormat
-        self.collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
+        self.collectionView?.decelerationRate = UIScrollViewDecelerationRateNormal
         navigationBarSet()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -119,31 +110,39 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         
         if cell.chosenFrameImageView.hidden {
-            if imageDict.count == 10 {
+            if photoPicker.indexAssetDict.count == 10 {
                 showAlertView()
             } else {
-                imageDict[indexPath.row] = cell.photoImageView.image
-                imageIndexDict[cell.photoImageView.image!] = imageDict.count - 1
-                indexImageDict[imageDict.count - 1] = cell.photoImageView.image
-                cell.chosenFrameImageView.image = UIImage(named: frameImageName[imageDict.count - 1])
+                
+                photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                
+                let highQRequestOption = PHImageRequestOptions()
+                highQRequestOption.resizeMode = .Exact //resize time fast
+                requestOption.deliveryMode = .HighQualityFormat //high pixel
+                requestOption.synchronous = true
+                
+                let count = self.photoPicker.indexImageDict.count
+                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                    self.photoPicker.indexImageDict[count] = result
+                }
+                
+                cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
                 cell.chosenFrameImageView.hidden = false
-                imageReverseDict[cell.photoImageView.image!] = indexPath
             }
         } else {
             cell.chosenFrameImageView.hidden = true
-            let deselectedImage = imageDict[indexPath.row]
-            let deselectedIndex = imageIndexDict[deselectedImage!]
-            imageIndexDict[deselectedImage!] = nil
-            indexImageDict[deselectedIndex!] = nil
+            let deselectedIndex = photoPicker.assetIndexDict[asset]
+            photoPicker.assetIndexDict.removeValueForKey(asset)
+            photoPicker.indexAssetDict.removeValueForKey(deselectedIndex!)
+            photoPicker.indexImageDict.removeValueForKey(deselectedIndex!)
             shiftChosenFrameFromIndex(deselectedIndex! + 1)
-            imageDict[indexPath.row] = nil
-            imageReverseDict[deselectedImage!] = nil
         }
-        print("imageDict has \(imageDict.count) images")
-        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
-    }
+        //            print("imageDict has \(imageDict.count) images")
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)    }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoPicker.currentAlbum.albumContent.count
@@ -169,11 +168,13 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let cell = cell as! PhotoPickerCollectionViewCell
         //get image from PHFetchResult
-        let asset : PHAsset = photoPicker.currentAlbum.albumContent[indexPath.item] as! PHAsset
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         cell.loadImage(asset, requestOption: requestOption)
-        if self.imageDict[indexPath.row] != nil {
+        if photoPicker.assetIndexDict[asset] != nil {
             cell.chosenFrameImageView.hidden = false
-            cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[self.imageIndexDict[self.imageDict[indexPath.row]!]!])
+            cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
+        }else{
+            cell.chosenFrameImageView.hidden = true
         }
     }
     
@@ -198,7 +199,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
         titleLabel.text = "Camera Roll"
         titleLabel.textAlignment = .Center
-        titleLabel.font = UIFont(name: "Avenir Next", size: 20)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         centerView.addSubview(titleLabel)
         
@@ -231,12 +232,16 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func sendImages() {
         showProcessIndicator()
-        imageDelegate.sendImages([UIImage](imageDict.values))
+        imageDelegate.sendImages()
         hideProcessIndicator()
         cancelSend()
     }
     
     func cancelSend() {
+        photoPicker.indexAssetDict.removeAll()
+        photoPicker.assetIndexDict.removeAll()
+        photoPicker.indexImageDict.removeAll()
+
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -266,17 +271,31 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     }
     
     func shiftChosenFrameFromIndex(index : Int) {
-        var i = index
-        while i < imageDict.count {
-            let image = indexImageDict[i]
-            imageIndexDict[image!] = i - 1
-            let cell = collectionView?.cellForItemAtIndexPath(imageReverseDict[image!]!) as! PhotoPickerCollectionViewCell
-            cell.chosenFrameImageView.image = UIImage(named: frameImageName[i-1])
-            indexImageDict[i-1] = image
-            i += 1
+        // when deselect one image in photoes preview, we need to reshuffule
+        if index > photoPicker.indexImageDict.count {
+            return
         }
+        for i in index...photoPicker.indexImageDict.count {
+            let image = photoPicker.indexImageDict[i]
+            let asset = photoPicker.indexAssetDict[i]
+            photoPicker.assetIndexDict[asset!] = i - 1
+            photoPicker.indexImageDict[i-1] = image
+            photoPicker.indexAssetDict[i-1] = asset
+        }
+        photoPicker.indexAssetDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
+        photoPicker.indexImageDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
+        self.collectionView?.performBatchUpdates({
+            self.collectionView?.reloadSections(NSIndexSet(index: 0) )
+            }, completion: nil)
+
     }
     
+    func appWillEnterForeground(){
+        photoPicker.getSmartAlbum()
+        self.collectionView?.reloadData()
+        self.tableViewAlbum.reloadData()
+        
+    }
     
     //MARK: table view delegate method
     
@@ -323,8 +342,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             let cellNew = tableView.cellForRowAtIndexPath(indexPath) as! AlbumTableViewCell
             cellNew.checkMarkImage.hidden = false
             currentCell = cellNew
-            imageDict.removeAll()
             collectionView?.reloadData()
+        }
+        else{
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            dismissAlbumTable()
+            tableViewAlbumVisible = !tableViewAlbumVisible
         }
     }
 }

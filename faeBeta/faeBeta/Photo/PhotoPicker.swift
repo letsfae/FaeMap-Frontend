@@ -23,14 +23,18 @@ class PhotoPicker {
     var selectedAlbum = [SmartAlbum]()
     var currentAlbum : SmartAlbum! = nil
     var cameraRoll : SmartAlbum! = nil
-    let selectedPhoto = [UIImage]()
     var currentAlbumIndex : Int = 0
+    
+    var assetIndexDict = [PHAsset : Int]()
+    var indexAssetDict = [Int : PHAsset]()
+    var indexImageDict = [Int: UIImage]()
     
     private init() {
         getSmartAlbum()
     }
     
-    private func getSmartAlbum() {
+    func getSmartAlbum() {
+        selectedAlbum.removeAll()
         let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .AlbumRegular, options: nil)
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]

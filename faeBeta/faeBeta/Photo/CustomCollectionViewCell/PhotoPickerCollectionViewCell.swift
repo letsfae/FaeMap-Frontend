@@ -30,6 +30,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         photoImageView.image = thumbnailImage
     }
     func loadImage(asset: PHAsset,requestOption option: PHImageRequestOptions){
+
         PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.frame.width - 1 / 3, self.frame.width - 1 / 3), contentMode: .AspectFill, options: option) { (result, info) in
             self.setImage(result!)
         }

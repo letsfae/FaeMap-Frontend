@@ -60,7 +60,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = "Social"
         titleLabel.textAlignment = .Center
-        titleLabel.font = UIFont(name: "Avenir Next", size: 20)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         
         self.navigationItem.titleView = titleLabel
@@ -190,7 +190,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             
             dataStore.find(dataQuery, response: { (users : BackendlessCollection!) in
                 chatVC.withUser = users.data[0] as? BackendlessUser
-                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
+//                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
             }) { (fault : Fault!) in
                 print("Error, couldn't retrive users: \(fault)")
             }
