@@ -197,7 +197,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         self.navigationController?.navigationBar.translucent = false
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = "Camera Roll"
+        titleLabel.text = "All photos"
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
