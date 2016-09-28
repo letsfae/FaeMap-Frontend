@@ -439,6 +439,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showLibrary() {
         if !imageQuickPickerShow {
             self.photoQuickCollectionView?.reloadData()
+            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
             UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
             UIApplication.sharedApplication().keyWindow?.addSubview(quickSendImageButton)
             UIApplication.sharedApplication().keyWindow?.addSubview(moreImageButton)
