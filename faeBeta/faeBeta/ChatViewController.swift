@@ -71,8 +71,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var photoPicker : PhotoPicker!
     var photoQuickCollectionView : UICollectionView!//preview of the photoes
     let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
-
-
+    var isContinuallySending = false
     
     var frameImageName = ["photoQuickSelection1", "photoQuickSelection2", "photoQuickSelection3", "photoQuickSelection4","photoQuickSelection5", "photoQuickSelection6", "photoQuickSelection7", "photoQuickSelection8", "photoQuickSelection9", "photoQuickSelection10"]
     // show at most 10 images
@@ -516,11 +515,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //        startRecording = !startRecording
     //    }
     //MARK: - send message
-    
     func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
         
         var outgoingMessage = OutgoingMessage?()
-        let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300
+        let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300 && !isContinuallySending
         //if text message
         if text != nil {
             // send message
@@ -534,6 +532,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
             imageData = UIImageJPEGRepresentation(pic,factor)
             outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            isContinuallySending = true
+            NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
         }
         
         if let sti = sticker {
@@ -1037,6 +1037,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     //MARK: - Helper functions
+    func enableTimeStamp(){
+        self.isContinuallySending = false
+    }
     
     func haveAccessToLocation() -> Bool {// not use anymore
         return true
