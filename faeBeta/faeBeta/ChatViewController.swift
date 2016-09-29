@@ -986,7 +986,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
             }
-            if scrollViewCurrentOffset < -5 && !isLoadingPreviousMessages{
+            if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
             }
         }
