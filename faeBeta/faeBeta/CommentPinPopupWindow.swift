@@ -107,13 +107,15 @@ extension FaeMapViewController {
         let widthOfThreeButtons = screenWidth / 3
         
         // Table comments for comment
-        tableCommentsForComment = UITableView(frame: CGRectMake(0, 281, screenWidth, 420))
+        tableCommentsForComment = UITableView(frame: CGRectMake(0, 281, screenWidth, 0))
         tableCommentsForComment.delegate = self
         tableCommentsForComment.dataSource = self
         tableCommentsForComment.allowsSelection = false
         tableCommentsForComment.delaysContentTouches = false
         tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.scrollEnabled = false
+//        tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
+//        tableCommentsForComment.layer.borderWidth = 1.0
         commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
         
         // Three buttons bottom gray line
@@ -383,11 +385,14 @@ extension FaeMapViewController {
 
         isUpVoting = true
         isDownVoting = false
-        if let tempString = labelCommentPinVoteCount.text {
-            commentPinLikeCount = Int(tempString)!
-        }
+//        if let tempString = labelCommentPinVoteCount.text {
+//            commentPinLikeCount = Int(tempString)!
+//        }
         animateHeart()
-        likeThisPin()
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
+        }
     }
     
     // Down vote comment pin
@@ -718,9 +723,12 @@ extension FaeMapViewController {
     
     // When clicking reply button in comment pin detail window
     func actionReplyToThisComment(sender: UIButton) {
-        
+        if commentIDCommentPinDetailView != "-999" {
+            getPinAttributeCommentsNum("comment", pinID: commentIDCommentPinDetailView)
+        }
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
+        let newHeight = CGFloat(140 * self.numberOfCommentTableCells)
         textviewCommentPinDetail.scrollEnabled = false
         commentDetailFullBoardScrollView.scrollEnabled = true
         UIView.animateWithDuration(0.25, animations: ({
@@ -729,9 +737,10 @@ extension FaeMapViewController {
             self.uiviewCommentPinDetail.frame.size.height = self.screenHeight + 26
             self.uiviewCommentPinUnderLine02.frame.origin.y = self.screenHeight
             self.commentDetailFullBoardScrollView.frame.size.height = self.screenHeight - 155
+            self.tableCommentsForComment.frame = CGRectMake(0, 281, self.screenWidth, newHeight)
             if numLines > 4 {
                 // 420 is table height, 281 is fixed
-                self.commentDetailFullBoardScrollView.contentSize.height = 420 + 281 + diffHeight
+                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281 + diffHeight
                 self.tableCommentsForComment.center.y += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
                 self.uiviewCommentDetailThreeButtons.center.y += diffHeight
@@ -740,7 +749,7 @@ extension FaeMapViewController {
             }
             else {
                 // 420 is table height, 281 is fixed
-                self.commentDetailFullBoardScrollView.contentSize.height = 420 + 281
+                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
             }
         }), completion: { (done: Bool) in
             if done {
@@ -807,19 +816,96 @@ extension FaeMapViewController {
         animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
     }
     
-    func likeThisPin() {
+    func likeThisPin(type: String, pinID: String) {
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
-        if commentIDCommentPinDetailView != nil {
+        if commentIDCommentPinDetailView != "-999" {
             print("DEBUG: Like This Pin")
-            likeThisPin.likeThisPin("comment", commentId: commentIDCommentPinDetailView!) {(status: Int, message: AnyObject?) in
+            likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
                 if status == 201 {
                     print("Successfully like this comment pin!")
                 }
             }
-            likeThisPin.getPinAttribute("comment", commentId: commentIDCommentPinDetailView!) {(status: Int, message: AnyObject?) in
-                print(status)
-                print(message)
+        }
+    }
+    
+    func getPinAttributeNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
+            
+            if let likes = mapInfoJSON["likes"].int {
+                self.labelCommentPinLikeCount.text = "\(likes)"
+                self.labelCommentPinVoteCount.text = "\(likes)"
+            }
+            if let _ = mapInfoJSON["saves"].int {
+                
+            }
+            if let _ = mapInfoJSON["type"].string {
+            
+            }
+            if let _ = mapInfoJSON["pin_id"].string {
+            
+            }
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+            }
+        }
+    }
+    
+    func getPinAttributeCommentsNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+                self.numberOfCommentTableCells = comments
+                self.tableCommentsForComment.reloadData()
+            }
+        }
+    }
+    
+    func getPinCommentsDetail(type: String, pinID: String) {
+        dictCommentsOnCommentDetail.removeAll()
+        let getPinCommentsDetail = FaePinAction()
+        getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let commentsOfCommentJSON = JSON(message!)
+            if commentsOfCommentJSON.count > 0 {
+                for i in 0...(commentsOfCommentJSON.count-1) {
+                    var dicCell = [String: AnyObject]()
+                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
+                        print(pin_comment_id)
+                        dicCell["pin_comment_id"] = pin_comment_id
+                    }
+                    if let user_id = commentsOfCommentJSON[i]["user_id"].int {
+                        print(user_id)
+                        dicCell["user_id"] = user_id
+                    }
+                    if let content = commentsOfCommentJSON[i]["content"].string {
+                        print(content)
+                        dicCell["content"] = content
+                    }
+                    if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
+                        print(date)
+                        dicCell["date"] = date
+                    }
+                    if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
+                        print(timezone_type)
+                        dicCell["timezone_type"] = timezone_type
+                    }
+                    if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
+                        print(timezone)
+                        dicCell["timezone"] = timezone
+                    }
+                    self.dictCommentsOnCommentDetail.append(dicCell)
+                    print("===分割线===")
+                }
             }
         }
     }

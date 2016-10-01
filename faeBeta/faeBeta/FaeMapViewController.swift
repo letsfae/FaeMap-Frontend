@@ -196,6 +196,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // New Comment Pin Popup Window
     
+    var numberOfCommentTableCells: Int = 0
+    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinDetail: UIButton!
@@ -213,22 +215,22 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
-    var commentIDCommentPinDetailView: String?
-    var commentPinDetailLiked = false
     var commentDetailFullBoardScrollView: UIScrollView!
+    var commentIDCommentPinDetailView: String = "-999"
     var commentListExpand = false
     var commentListScrollView: UIScrollView!
     var commentListShowed = false
     var commentPinCellArray = [CommentPinListCell]()
+    var commentPinDetailLiked = false
     var commentPinDetailShowed = false
     var imageCommentPinUserAvatar: UIImageView!
+    var labelCommentPinCommentsCount: UILabel!
+    var labelCommentPinLikeCount: UILabel!
     var labelCommentPinListTitle: UILabel!
     var labelCommentPinTimestamp: UILabel!
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
-    var labelCommentPinLikeCount: UILabel!
-    var labelCommentPinCommentsCount: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
@@ -250,26 +252,27 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var commentPinSizeTo: CGFloat = 0
     
     // Like Function
-    var commentPinLikeCount: Int = 0 {
-        //我们需要在age属性变化前做点什么
-        willSet {
-//            print("New Value is \(newValue)")
-            if isUpVoting && commentPinDetailLiked == false {
-                commentPinDetailLiked = true
-                labelCommentPinVoteCount.text = "\(newValue+1)"
-                labelCommentPinLikeCount.text = "\(newValue+1)"
-            }
-            else if isDownVoting && commentPinDetailLiked {
-                commentPinDetailLiked = false
-                labelCommentPinVoteCount.text = "\(newValue-1)"
-                labelCommentPinLikeCount.text = "\(newValue-1)"
-            }
-        }
-        //我们需要在age属性发生变化后，更新一下nickName这个属性
-        didSet {
-//            print("Old Value is \(oldValue)")
-        }
-    }
+    var commentPinLikeCount: Int = 0
+//    {
+//        //我们需要在age属性变化前做点什么
+//        willSet {
+////            print("New Value is \(newValue)")
+//            if isUpVoting && commentPinDetailLiked == false {
+//                commentPinDetailLiked = true
+//                labelCommentPinVoteCount.text = "\(newValue+1)"
+//                labelCommentPinLikeCount.text = "\(newValue+1)"
+//            }
+//            else if isDownVoting && commentPinDetailLiked {
+//                commentPinDetailLiked = false
+//                labelCommentPinVoteCount.text = "\(newValue-1)"
+//                labelCommentPinLikeCount.text = "\(newValue-1)"
+//            }
+//        }
+//        //我们需要在age属性发生变化后，更新一下nickName这个属性
+//        didSet {
+////            print("Old Value is \(oldValue)")
+//        }
+//    }
     
     var isUpVoting = false
     var isDownVoting = false
@@ -589,6 +592,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIDCommentPinDetailView = "\(commentIDGet)"
+                    getPinAttributeNum("comment", pinID: "\(commentIDGet)")
+                    getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
+                    getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
                     commentID = commentIDGet
                     if commentPinAvoidDic[commentID] != nil {
                         print("Comment exists!")

@@ -50,6 +50,17 @@ class FaePinAction : NSObject {
         }
     }
     
+    // Get pin's comments
+    func getPinComments(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
+        if type != nil && commentId != nil {
+            getFromURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+                self.clearKeyValue()
+                completion(status,message)
+            }
+        }
+    }
+    
+    
 //    func deleteCommentById(commentId:String?, completion:(Int,AnyObject?)->Void){
 //        if commentId != nil{
 //            deleteFromURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
