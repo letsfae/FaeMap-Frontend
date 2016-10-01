@@ -166,12 +166,15 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var cellPhotos = "cellPhotos"
     var imageViewLeft : UIImageView!
     var imageViewRight : UIImageView!
+    var imageViewGender : UIImageView!
     var imageview : UIImageView!
     var imageviewNamecardAvatar : UIImageView!
     var imageviewNamecardGender : UIImageView!
+    var imageviewUserPinBackground : UIImageView!
     var labelNamecardName : UILabel!
     var labelNamecardDescription : UILabel!
     var viewLine : UIView!
+    var viewLine2 : UIView!
     var collectionPhotos : UICollectionView!
     var buttonChat : UIButton!
     var buttonMore : UIButton!
@@ -184,7 +187,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var tagTitle = [NSMutableAttributedString]()
     let exlength : CGFloat = 8
     let selectedInterval : CGFloat = 11
-    let maxLength : CGFloat = 360
+    let maxLength : CGFloat = 320
     let lineInterval : CGFloat = 25.7
     let intervalInLine : CGFloat = 13.8
     let tagHeight : CGFloat = 18

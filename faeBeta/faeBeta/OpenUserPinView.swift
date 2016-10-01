@@ -14,86 +14,83 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func loadNamecard() {
         self.view.backgroundColor = UIColor.whiteColor()
         
-        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-360)/2, y: 110,width: 360,height: 335))
-        uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_namecard_dialog")!)
+        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-maxLength)/2, y: 150,width: maxLength,height: 302))
+        uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_userpin_dialog")!)
         uiviewDialog.layer.zPosition = 20
         
         
         //avatar
-        imageviewNamecardAvatar = UIImageView(frame: CGRect(x: 150, y: -17, width: 60, height: 60))
+        imageviewNamecardAvatar = UIImageView(frame: CGRect(x: (maxLength-70)/2, y: 90, width: 70, height: 70))
         imageviewNamecardAvatar.image = UIImage(named: "map_namecard_photo1")
-        imageviewNamecardAvatar.layer.cornerRadius = 30
+        imageviewNamecardAvatar.layer.cornerRadius = 35
         imageviewNamecardAvatar.clipsToBounds = true
         imageviewNamecardAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         imageviewNamecardAvatar.layer.borderWidth = 5
         
+        //background
+        imageviewUserPinBackground = UIImageView(frame: CGRect(x: (maxLength - 268)/2, y: 20, width: 268, height: 126))
+        imageviewUserPinBackground.image = UIImage(named: "map_userpin_background")
+        imageviewUserPinBackground.clipsToBounds = false
+        
+        
         //button more
-        buttonMore = UIButton(frame: CGRect(x: (maxLength-52), y: 32/736*screenHeight, width: 27, height: 7))
-        let imageMore = UIImage(named: "map_namecard_dots")
-        buttonMore.setImage(imageMore, forState: .Normal)
+        buttonMore = UIButton(frame: CGRect(x: (maxLength-72), y: 40/736*screenHeight, width: 37, height: 17))
+        
+        buttonMore.setImage(UIImage(named: "map_namecard_dots"), forState: UIControlState.Normal)
+        
+        //buttonMore.backgroundColor = UIColor.blackColor()
         buttonMore.addTarget(self, action: #selector(FaeMapViewController.buttonMoreAction(_:)), forControlEvents: .TouchUpInside)
         
         //load function view
         loadFunctionview()
         
         //label name
-        labelNamecardName = UILabel(frame: CGRect(x: (maxLength-180)/2, y: 54, width: 180, height: 27))
+        labelNamecardName = UILabel(frame: CGRect(x: (maxLength-180)/2, y: 166, width: 180, height: 27))
         labelNamecardName.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
         labelNamecardName.textColor = UIColor.darkGrayColor()
         labelNamecardName.textAlignment = .Center
         labelNamecardName.text = "LinLInLiN"
         
         //label description
-        labelNamecardDescription = UILabel(frame: CGRect(x: (maxLength-294)/2, y: 85, width: 294, height: 44))
+        labelNamecardDescription = UILabel(frame: CGRect(x: (maxLength-294)/2, y: 100, width: 294, height: 44))
         labelNamecardDescription.numberOfLines = 2
         labelNamecardDescription.font = UIFont(name: "AvenirNext-Medium", size: 15.0)
         labelNamecardDescription.textColor = UIColor.lightGrayColor()
         labelNamecardDescription.textAlignment = .Center
         labelNamecardDescription.text = "hahahaaahahah\nahaahahahahahahahe\nhahahhahahahahahahahahahahah"
         
-        //line 
-        viewLine = UIView(frame: CGRect(x: (maxLength-252)/2, y: 158, width: 252, height: 1))
+        //line
+        viewLine2 = UIView(frame: CGRect(x: (maxLength-268)/2, y: 80, width: 268, height: 1))
+        viewLine2.backgroundColor = UIColor.lightGrayColor()
+        viewLine2.hidden = true
+        viewLine = UIView(frame: CGRect(x: (maxLength-252)/2, y: 210, width: 252, height: 1))
         viewLine.backgroundColor = UIColor.lightGrayColor()
         
-        //collection view
-        let x : CGFloat = 47
-        let y : CGFloat = 155
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .Horizontal
-        flowLayout.minimumLineSpacing = 9
-        flowLayout.minimumInteritemSpacing = 9
-        flowLayout.itemSize = CGSize(width: 58, height: 58)
-        collectionViewPhotos = UICollectionView(frame: CGRectMake(96 - x, 328 - y, 263, 58), collectionViewLayout: flowLayout)
-        collectionViewPhotos.registerNib(UINib(nibName: "NameCardAddCollectionViewCell",bundle: nil), forCellWithReuseIdentifier: cellPhotos)
-        collectionViewPhotos.delegate = self
-        collectionViewPhotos.dataSource = self
-        collectionViewPhotos.backgroundColor = UIColor.clearColor()
-        //collectionViewPhotos.alwaysBounceVertical = true
-        uiviewDialog.addSubview(collectionViewPhotos)
-        
-        imageViewLeft = UIImageView(frame: CGRectMake(80 - x, 351 - y, 7.5, 13))
-        imageViewLeft.image = UIImage(named: "nameCardLeft")
-        uiviewDialog.addSubview(imageViewLeft)
-        
-        imageViewRight = UIImageView(frame: CGRectMake(366 - x, 351 - y, 7.5, 13))
-        imageViewRight.image = UIImage(named: "nameCardRight")
-        uiviewDialog.addSubview(imageViewRight)
+        //gender
+        imageViewGender = UIImageView(frame: CGRectMake(37, 40, 50, 19))
+        imageViewGender.image = UIImage(named: "map_userpin_male")
+        imageViewGender.hidden = true
+        uiviewDialog.addSubview(imageViewGender)
         
         //load button
-        buttonChat = UIButton(frame: CGRect(x:(maxLength-130)/2, y: 245, width: 130, height: 39))
+        buttonChat = UIButton(frame: CGRect(x:(maxLength-190)/2, y: 230, width: 190, height: 39))
         buttonChat.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
-        buttonChat.layer.cornerRadius = 7
+        buttonChat.layer.cornerRadius = 19
         buttonChat.setTitle("Chat", forState: .Normal)
         buttonChat.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20.0)
         buttonChat.addTarget(self, action: #selector(FaeMapViewController.buttonChatAction(_:)), forControlEvents: .TouchUpInside)
         
         loadTags()
+        uiviewTag.hidden = true
         
         
         uiviewDialog.addSubview(buttonMore)
         uiviewDialog.addSubview(labelNamecardName)
         uiviewDialog.addSubview(labelNamecardDescription)
         uiviewDialog.addSubview(viewLine)
+        uiviewDialog.addSubview(viewLine2)
+        
+        uiviewDialog.addSubview(imageviewUserPinBackground)
         
         uiviewDialog.addSubview(buttonChat)
         
@@ -124,7 +121,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func loadTags(){
-        uiviewTag = UIView(frame: CGRect(x: 0, y: 135, width: maxLength, height: tagHeight))
+        uiviewTag = UIView(frame: CGRect(x: 0, y: 168, width: maxLength, height: tagHeight))
         uiviewDialog.addSubview(uiviewTag)
         
         tagColor.append(getColor(255, green: 114, blue: 169))
@@ -159,6 +156,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             uiviewTag.addSubview(buttonTag)
             xOffset += (tagLength[i]+intervalInLine)
         }
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -166,33 +164,39 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             if(touch.view != uiviewFunction && touch.view != buttonMore){
                 hideFunctionview()
             }
+            if(touch.view == uiviewDialog){
+                imageviewUserPinBackground.hidden = true
+                imageviewNamecardAvatar.frame.origin.y = -10
+                viewLine2.hidden = false
+                labelNamecardName.hidden = true
+                uiviewTag.hidden = false
+                imageViewGender.hidden = false
+            }
         }
     }
     
     func loadFunctionview(){
-        uiviewFunction = UIView(frame: CGRect(x: (maxLength-298)/2+5,y: 42,width: 298,height: 110))
-        uiviewFunction.backgroundColor = UIColor(patternImage: UIImage(named: "map_namecard_popup")!)
+        
+        
+        uiviewFunction = UIView(frame: CGRect(x: (maxLength - 288)/2,y: 116,width: 288,height: 70))
+        uiviewFunction.backgroundColor = UIColor.clearColor()
         uiviewDialog.addSubview(uiviewFunction)
         
-        let buttonWidth = 42.0
-        let interval = 25.0
-        buttonFollow = UIButton(frame: CGRect(x: (298-4*buttonWidth-3*interval)/2,y: 10,width: buttonWidth,height: 110))
-        buttonFollow.setImage(UIImage(named: "map_namecard_follow"), forState: .Normal)
-        buttonFollow.addTarget(self, action: #selector(buttonFollowAction(_:)), forControlEvents: .TouchUpInside)
-        uiviewFunction.addSubview(buttonFollow)
+        let buttonWidth = 44.0
+        let interval = 26.0
         
-        buttonShare = UIButton(frame: CGRect(x: (298-2*buttonWidth-interval)/2,y: 10,width: buttonWidth,height: 110))
-        buttonShare.setImage(UIImage(named: "map_namecard_share"), forState: .Normal)
+        buttonShare = UIButton(frame: CGRect(x: (298-3*buttonWidth-3*interval)/2,y: 10,width: buttonWidth,height: 51))
+        buttonShare.setImage(UIImage(named: "map_userpin_share"), forState: .Normal)
         buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), forControlEvents: .TouchUpInside)
         uiviewFunction.addSubview(buttonShare)
         
-        buttonKeep = UIButton(frame: CGRect(x: (298-2*buttonWidth-interval)/2+interval+buttonWidth,y: 10,width: buttonWidth,height: 110))
-        buttonKeep.setImage(UIImage(named: "map_namecard_keep"), forState: .Normal)
+        buttonKeep = UIButton(frame: CGRect(x: (298-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
+        buttonKeep.setImage(UIImage(named: "map_userpin_keep"), forState: .Normal)
         buttonKeep.addTarget(self, action: #selector(buttonKeepAction(_:)), forControlEvents: .TouchUpInside)
         uiviewFunction.addSubview(buttonKeep)
         
-        buttonReport = UIButton(frame: CGRect(x: (298-2*buttonWidth-interval)/2+2*interval+2*buttonWidth,y: 10,width: buttonWidth,height: 110))
-        buttonReport.setImage(UIImage(named: "map_namecard_report"), forState: .Normal)
+        buttonReport = UIButton(frame: CGRect(x: (298-3*buttonWidth-2*interval)/2+2*interval+2*buttonWidth,y: 10,width: buttonWidth,height: 51))
+        buttonReport.setImage(UIImage(named: "map_userpin_report"), forState: .Normal)
         buttonReport.addTarget(self, action: #selector(buttonReportAction(_:)), forControlEvents: .TouchUpInside)
         uiviewFunction.addSubview(buttonReport)
         
@@ -226,16 +230,16 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func hideFunctionview(){
+        buttonMore.setImage(UIImage(named: "map_userpin_more"), forState: .Normal)
         uiviewFunction.hidden = true
-        labelNamecardName.hidden = false
         labelNamecardDescription.hidden = false
         uiviewTag.hidden = false
-        //        print("hiddend")
+        print("hiddend")
     }
     
     func showFunctionview(){
+        buttonMore.setImage(UIImage(named: "map_userpin_dark"), forState: UIControlState.Normal)
         uiviewFunction.hidden = false
-        labelNamecardName.hidden = true
         labelNamecardDescription.hidden = true
         uiviewTag.hidden = true
         print("show")
@@ -290,14 +294,4 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
      */
     
 }
-// to solve this bug, because I have delete the namecardviewcontroller
-extension NSAttributedString {
-    
-    func widthWithConstrainedHeight(height: CGFloat) -> CGFloat {
-        let constraintRect = CGSize(width: CGFloat.max, height: height)
-        
-        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
-        
-        return boundingBox.width
-    }
-}
+
