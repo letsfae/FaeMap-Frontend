@@ -289,7 +289,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="BTo-0x-BeF" kind="relationship" relationship="viewControllers" id="o6V-Gb-2AR"/>
-                        <segue destination="cEB-6s-U0j" kind="relationship" relationship="viewControllers" id="O2i-gD-5Ct"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eUm-HD-lOR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -368,25 +367,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XUR-K6-AaZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976.5" y="863"/>
-        </scene>
-        <!--My Fae View Controller-->
-        <scene sceneID="MaT-UL-Wuv">
-            <objects>
-                <viewController storyboardIdentifier="MyFaeViewController" id="2Dm-5S-BRR" customClass="MyFaeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="sjd-qz-oV6"/>
-                        <viewControllerLayoutGuide type="bottom" id="Qbz-yr-BVB"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="IRX-Is-lQd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="ogy-LR-4ZP"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UA8-Cq-z3N" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1896" y="1591"/>
         </scene>
         <!--Fae Account View Controller-->
         <scene sceneID="rrc-Y1-bif">
@@ -496,24 +476,23 @@
             </objects>
             <point key="canvasLocation" x="6675" y="2619"/>
         </scene>
-        <!--My Fae-->
-        <scene sceneID="DYc-mm-d9e">
+        <!--Name Card Tags View Controller-->
+        <scene sceneID="u5S-YN-pqE">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cEB-6s-U0j" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Fae" image="myfae_gray" selectedImage="myfae_red" id="gHG-Wq-U62"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6XU-Bu-z6k">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="2Dm-5S-BRR" kind="relationship" relationship="rootViewController" id="WUb-iW-imk"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eZ1-0L-4YL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="NameCardTagsViewController" id="5E5-9j-rd9" customClass="NameCardTagsViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9UW-mb-1PB"/>
+                        <viewControllerLayoutGuide type="bottom" id="Hta-2B-7ty"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="avo-AE-HGM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fac-RQ-Bz8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="978" y="1591"/>
+            <point key="canvasLocation" x="909" y="1925"/>
         </scene>
         <!--Name Card View Controller-->
         <scene sceneID="KFW-JY-lBf">
@@ -573,7 +552,5 @@
     <resources>
         <image name="map_gray" width="34" height="29"/>
         <image name="map_red" width="32" height="27"/>
-        <image name="myfae_gray" width="30" height="31"/>
-        <image name="myfae_red" width="30" height="29"/>
     </resources>
 </document>

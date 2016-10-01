@@ -27,6 +27,9 @@ var userPassword : String!
 let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
 
 var username : String?
+//new add global var
+var nickname : String?
+var shortIntro : String?
 
 var userStatus : Int?
 var userStatusMessage : String?

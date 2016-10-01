@@ -10,11 +10,9 @@ import UIKit
 
 class MyFaeGeneralTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var imageViewTitle: UIImageView!
     
     @IBOutlet weak var labelTitle: UILabel!
     
-    @IBOutlet weak var imageViewStatus: UIImageView!
     
     @IBOutlet weak var labelStatus: UILabel!
     
@@ -23,7 +21,7 @@ class MyFaeGeneralTableViewCell: UITableViewCell {
         labelStatus.text = ""
         labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         labelStatus.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
-        imageViewTitle.contentMode = .ScaleAspectFill
+
         // Initialization code
     }
 

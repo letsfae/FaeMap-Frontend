@@ -290,4 +290,14 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
      */
     
 }
-
+// to solve this bug, because I have delete the namecardviewcontroller
+extension NSAttributedString {
+    
+    func widthWithConstrainedHeight(height: CGFloat) -> CGFloat {
+        let constraintRect = CGSize(width: CGFloat.max, height: height)
+        
+        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+        
+        return boundingBox.width
+    }
+}
