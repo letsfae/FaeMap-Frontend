@@ -71,11 +71,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var photoPicker : PhotoPicker!
     var photoQuickCollectionView : UICollectionView!//preview of the photoes
     let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
-    var selectedImage = [UIImage]()
-    var imageDict = [Int : UIImage]()
-    var imageReverseDict = [UIImage : NSIndexPath]()
-    var imageIndexDict = [UIImage : Int]()
-    var indexImageDict = [Int : UIImage]()
+    var isContinuallySending = false
+    
     var frameImageName = ["photoQuickSelection1", "photoQuickSelection2", "photoQuickSelection3", "photoQuickSelection4","photoQuickSelection5", "photoQuickSelection6", "photoQuickSelection7", "photoQuickSelection8", "photoQuickSelection9", "photoQuickSelection10"]
     // show at most 10 images
     let requestOption = PHImageRequestOptions()
@@ -93,7 +90,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var keyboardShow = false // false: keyboard is hide
     
     //scroll view
+    var isClosingStickerOrImagePicker = false
     var scrollViewOriginOffset: CGFloat! = 0
+    
+    //step by step loading
+    let numberOfMessagesOneTime = 15
+    var numberOfMeesagesReceived = 0
+    var numberOfMessagesLoaded = 0
+    var totalNumberOfMessages : Int{
+        get{
+            if let lastMessage = objects.last{
+                return lastMessage["index"] as! Int
+            }
+            return 0
+        }
+        set{
+        }
+    }
+    var isLoadingPreviousMessages = false
+    
+    //time stamp
+    var lastMarkerDate: NSDate! = NSDate.distantPast()
     
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
@@ -166,18 +183,30 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         loadInputBarComponent()
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.whiteColor()
-        initializePhotoQuickPicker()
-        photoPicker = PhotoPicker()
+        self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);        initializePhotoQuickPicker()
+        photoPicker = PhotoPicker.shared
         addObservers()
+        // setup requestion option 
+        requestOption.resizeMode = .Fast //resize time fast
+        requestOption.deliveryMode = .HighQualityFormat //high pixel
+        requestOption.synchronous = false
+        cleanUpSelectedPhotos()
     }
     
     override func viewWillAppear(animated: Bool) {
         //check user default
         super.viewWillAppear(true)
-        setupRecorder()
+//        setupRecorder()
         initializeStickerView()
         loadUserDefault()
         self.scrollToBottomAnimated(true)
+    }
+    
+    func appWillEnterForeground(){
+        self.collectionView.reloadData()
+        photoPicker.getSmartAlbum()
+        self.photoQuickCollectionView.reloadData()
+
     }
     
     // MARK: - setup
@@ -203,6 +232,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func addObservers(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+
     }
     
     // sticker view
@@ -219,8 +250,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let layout = UICollectionViewFlowLayout()
         //        layout.itemSize = CGSizeMake(220, 235)
         layout.scrollDirection = .Horizontal
+        layout.minimumLineSpacing = 1000.0
         photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y:screenHeight - 271, width: screenWidth, height: screenHeight), collectionViewLayout: layout)
-        photoQuickCollectionView.registerNib(UINib(nibName: "PhotoQuickPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+        photoQuickCollectionView.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
         photoQuickCollectionView.delegate = self
         photoQuickCollectionView.dataSource = self
         quickSendImageButton = UIButton(frame: CGRect(x: 10, y: screenHeight - 52, width: 42, height: 42))
@@ -229,9 +261,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         moreImageButton = UIButton(frame: CGRect(x: screenWidth - 52, y: screenHeight - 52, width: 42, height: 42))
         moreImageButton.addTarget(self, action: #selector(ChatViewController.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
         moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
-        
-        requestOption.resizeMode = .Fast //resize time fast
-        requestOption.deliveryMode = .HighQualityFormat //high pixel
+    
         //        UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
     }
     
@@ -364,7 +394,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         closeStickerPanel()
         closeQuickPhotoPanel()
         let camera = Camera(delegate_: self)
-        camera.presentPhotoCamera(self, canEdit: true)
+        camera.presentPhotoCamera(self, canEdit: false)
     }
     
     
@@ -391,9 +421,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.scrollToBottom(false)
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
             }else{
+                self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
                     self.stickerPicker.frame.origin.y = self.screenHeight - 271
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
                 })
             }
             
@@ -404,6 +437,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showLibrary() {
         if !imageQuickPickerShow {
+            self.photoQuickCollectionView?.reloadData()
+            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
             UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
             UIApplication.sharedApplication().keyWindow?.addSubview(quickSendImageButton)
             UIApplication.sharedApplication().keyWindow?.addSubview(moreImageButton)
@@ -431,11 +467,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
             }else{
+                self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
                     self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
                     self.quickSendImageButton.alpha = 1
                     self.moreImageButton.alpha = 1
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
                 })
             }
             
@@ -476,27 +515,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //        startRecording = !startRecording
     //    }
     //MARK: - send message
-    
     func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
         
         var outgoingMessage = OutgoingMessage?()
-        
+        let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300 && !isContinuallySending
         //if text message
         if text != nil {
             // send message
-            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text")
+            outgoingMessage = OutgoingMessage(message: text!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
         if let pic = picture {
             // send picture message
-            let imageData = UIImagePNGRepresentation(pic)
-            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture")
+            
+            var imageData = UIImageJPEGRepresentation(pic,1)
+            let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+            imageData = UIImageJPEGRepresentation(pic,factor)
+            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            isContinuallySending = true
+            NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
         }
         
         if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker")
+            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         
@@ -505,12 +548,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let lat : NSNumber = NSNumber(double: loc.coordinate.latitude)
             let lon : NSNumber = NSNumber(double: loc.coordinate.longitude)
             
-            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location")
+            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         if audio != nil {
             //create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio")
+            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: currentUserId!, senderName: backendless.userService.currentUser.name, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
         
@@ -518,22 +561,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        print(outgoingMessage!.messageDictionary)
-        print(chatRoomId)
+//        print(outgoingMessage!.messageDictionary)
+//        print(chatRoomId)
         self.finishSendingMessage()
         
         if(withUser != nil){
             // add this outgoing message under chatRoom with id and content
-            outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, receiverDeviceToken: withUser?.getProperty("device_id")! as! String)
+            outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, receiverDeviceToken: withUser?.getProperty("device_id")! as! String, withUser: withUser!)
         }
     }
     
     //send image delegate function
-    func sendImages(images: [UIImage]) {
-        for image in images {
-            print("sending one image")
-            self.sendMessage(nil, date: NSDate(), picture: image, sticker : nil, location: nil, snapImage : nil, audio: nil)
-        }
+    func sendImages() {
+        sendImageFromQuickPicker()
     }
     
     func sendStickerWithImageName(name: String) {
@@ -543,20 +583,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func sendImageFromQuickPicker() {
-        for image in [UIImage](imageDict.values) {
-            self.sendMessage(nil, date: NSDate(), picture: image, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        for i in 0..<photoPicker.indexImageDict.count{
+            self.sendMessage(nil, date: NSDate(), picture: photoPicker.indexImageDict[i], sticker : nil, location: nil, snapImage : nil, audio: nil)
         }
-        for image in [UIImage](imageDict.values) {
-            let cell = photoQuickCollectionView.cellForItemAtIndexPath(imageReverseDict[image]!) as?PhotoQuickPickerCollectionViewCell
-            if(cell != nil){
-                cell!.chosenFrameImageView.hidden = true
-            }
-        }
-        selectedImage.removeAll()
-        imageDict.removeAll()
-        imageReverseDict.removeAll()
-        imageIndexDict.removeAll()
-        indexImageDict.removeAll()
+        cleanUpSelectedPhotos()
     }
     
     //MARK: locationSend Delegate
@@ -568,16 +598,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     func loadMessage() {
         
-        ref.child(chatRoomId).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).queryLimitedToLast(UInt(numberOfMessagesOneTime)).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
                 // becasue the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
                 
                 if self.initialLoadComplete {//message has been downloaded from databse but not load to collectionview yet.
                     
-                    let incoming = self.insertMessage(item)
+                    let isIncoming = self.insertMessage(item)
                     
-                    if incoming {
+                    if isIncoming {
                         
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
@@ -585,11 +615,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     self.finishReceivingMessageAnimated(true)
                     
                     
-                } else {
-                    
+                }
+                else {
                     // add each dictionary to loaded array
                     self.loaded.append(item)
                 }
+                self.numberOfMessagesLoaded += 1
             }
         }
         
@@ -606,9 +637,35 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.insertMessages()
             self.finishReceivingMessageAnimated(true)
             self.initialLoadComplete = true
+            self.scrollToBottom(true)
         }
         
     }
+    
+    func loadPreviousMessages(){
+        self.isLoadingPreviousMessages = true
+        if(totalNumberOfMessages > numberOfMessagesLoaded){
+            ref.child(chatRoomId).queryOrderedByChild("index").queryStartingAtValue(max(totalNumberOfMessages - numberOfMessagesLoaded - numberOfMessagesOneTime + 1,1)).queryEndingAtValue(totalNumberOfMessages - numberOfMessagesLoaded).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+                if snapshot.exists() {
+                    let result = snapshot.value!.allValues as! [NSDictionary]
+                    for item in result.sort({ ($0["index"] as! Int) > ($1["index"] as! Int)}) {
+                        self.insertMessage(item,atIndex: 0)
+                        self.numberOfMessagesLoaded += 1
+
+                    }
+                    let oldOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y
+                    self.collectionView.reloadData()
+                    self.collectionView.layoutIfNeeded()
+                    self.collectionView.contentOffset = CGPointMake(0.0, self.collectionView.contentSize.height - oldOffset);
+
+                }
+                self.isLoadingPreviousMessages = false
+            }
+        }else{
+            self.isLoadingPreviousMessages = false
+        }
+    }
+    
     //parse information for firebase
     func insertMessages() {
         
@@ -623,9 +680,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
-        
+        if(item["hasTimeStamp"] as! Bool){
+            let date = dateFormatter().dateFromString((item["date"] as? String)!)
+            lastMarkerDate = date
+        }
         objects.append(item)
         messages.append(message!)
+        
+        return incoming(item)
+    }
+    
+    func insertMessage(item : NSDictionary, atIndex index: Int) -> Bool {
+        //unpack the message from data load to the JSQmessage
+        let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
+        
+        let message = incomingMessage.createMessage(item)
+        
+        objects.insert(item, atIndex: index)
+        messages.insert(message!, atIndex: index)
         
         return incoming(item)
     }
@@ -684,24 +756,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         if collectionView == photoQuickCollectionView {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoQuickPickerCollectionViewCell
-            //get image from PHFetchResult
-            dispatch_async(dispatch_get_main_queue(), { () in
-                
-                let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.item] as! PHAsset
-                
-                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.view.frame.width - 1 / 3, self.view.frame.width - 1 / 3), contentMode: .AspectFill, options: self.requestOption) { (result, info) in
-                    cell.setImage(result!)
-                }
-                
-                if self.imageDict[indexPath.row] != nil {
-                    cell.chosenFrameImageView.hidden = false
-                    cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[self.imageIndexDict[self.imageDict[indexPath.row]!]!])
-                }
-                
-            })
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
             return cell
-            
         }
         
         let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
@@ -722,6 +778,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if collectionView == self.collectionView && indexPath.row == messages.count - 1{
             clearRecentCounter(chatRoomId)
+        }else if collectionView == self.photoQuickCollectionView {
+            let cell = cell as! PhotoPickerCollectionViewCell
+            //get image from PHFetchResult
+            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+            cell.loadImage(asset, requestOption: requestOption)
+            
+            if photoPicker.assetIndexDict[asset] != nil {
+                cell.chosenFrameImageView.hidden = false
+                cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
+            }else{
+                cell.chosenFrameImageView.hidden = true
+            }
         }
     }
     
@@ -733,9 +801,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == photoQuickCollectionView {
-            return photoPicker.currentAlbum.albumCount
+            return 1
         }
         return messages.count
+    }
+    
+    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        if collectionView == photoQuickCollectionView{
+            return photoPicker.cameraRoll.albumCount
+        }
+        return super.numberOfSectionsInCollectionView(collectionView)
     }
     
     //this delegate is used to tell which bubble image should be used on current message
@@ -755,8 +830,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //this is used to edit top label of every cell
     override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        
-        if indexPath.item % 3 == 0 {
+        let object = objects[indexPath.row]
+        if object["hasTimeStamp"] as! Bool {
             let message = messages[indexPath.item]
             
             return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
@@ -767,8 +842,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        
-        if indexPath.item % 3 == 0 {
+        let object = objects[indexPath.row]
+        if object["hasTimeStamp"] as! Bool  {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
         
@@ -806,39 +881,45 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //photoes preview delegate
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if collectionView == photoQuickCollectionView {
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoQuickPickerCollectionViewCell
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
+            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+
             if cell.chosenFrameImageView.hidden {
-                if imageDict.count == 10 {
+                if photoPicker.indexAssetDict.count == 10 {
                     showAlertView()
                 } else {
-                    imageDict[indexPath.row] = cell.photoImageView.image
-                    imageIndexDict[cell.photoImageView.image!] = imageDict.count - 1
-                    indexImageDict[imageDict.count - 1] = cell.photoImageView.image
-                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[imageDict.count - 1])
+                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                    let count = self.photoPicker.indexImageDict.count
+                    let highQRequestOption = PHImageRequestOptions()
+                    highQRequestOption.resizeMode = .Exact //resize time fast
+                    requestOption.deliveryMode = .HighQualityFormat //high pixel
+                    requestOption.synchronous = true
+                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                        self.photoPicker.indexImageDict[count] = result
+                    }
+                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
                     cell.chosenFrameImageView.hidden = false
-                    imageReverseDict[cell.photoImageView.image!] = indexPath
                 }
             } else {
                 cell.chosenFrameImageView.hidden = true
-                let deselectedImage = imageDict[indexPath.row]
-                let deselectedIndex = imageIndexDict[deselectedImage!]
-                imageIndexDict[deselectedImage!] = nil
-                indexImageDict[deselectedIndex!] = nil
+                let deselectedIndex = photoPicker.assetIndexDict[asset]
+                photoPicker.assetIndexDict.removeValueForKey(asset)
+                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex!)
+                photoPicker.indexImageDict.removeValueForKey(deselectedIndex!)
                 shiftChosenFrameFromIndex(deselectedIndex! + 1)
-                imageDict[indexPath.row] = nil
-                imageReverseDict[deselectedImage!] = nil
             }
-            print("imageDict has \(imageDict.count) images")
+//            print("imageDict has \(imageDict.count) images")
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         }
     }
     //photoes preview layout
     override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1.5
+        return 10
     }
     
     override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
+        return 10
     }
     
     //taped bubble
@@ -889,13 +970,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
     // MARK: - scroll view delegate
     
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow)){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker){
                 if(stickerViewShow){
                     self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }else if(imageQuickPickerShow){
@@ -905,6 +985,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
+            }
+            if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
+                loadPreviousMessages()
             }
         }
     }
@@ -921,6 +1004,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
                 if(stickerViewShow){
+                    isClosingStickerOrImagePicker = true
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
                         self.stickerPicker.frame.origin.y = self.screenHeight
@@ -928,8 +1012,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.stickerViewShow = false
                             self.buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
                             self.stickerPicker.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
                     })
                 }else if (imageQuickPickerShow){
+                    isClosingStickerOrImagePicker = true
                     UIView.animateWithDuration(0.2, animations: {
                         self.moveDownInputBar()
                         self.photoQuickCollectionView.frame.origin.y = self.screenHeight
@@ -941,6 +1027,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.photoQuickCollectionView.removeFromSuperview()
                             self.moreImageButton.removeFromSuperview()
                             self.quickSendImageButton.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
+                            self.cleanUpSelectedPhotos()
                     })
                 }
             }
@@ -949,6 +1037,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     //MARK: - Helper functions
+    func enableTimeStamp(){
+        self.isContinuallySending = false
+    }
     
     func haveAccessToLocation() -> Bool {// not use anymore
         return true
@@ -1082,7 +1173,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 155
+        let yPosition = screenHeight - 153
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
@@ -1119,21 +1210,32 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             scrollToBottom(true)
             imageQuickPickerShow = false
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-            
         }
     }
     
+    func cleanUpSelectedPhotos(){
+        photoPicker.indexAssetDict.removeAll()
+        photoPicker.assetIndexDict.removeAll()
+        photoPicker.indexImageDict.removeAll()
+        self.photoQuickCollectionView.reloadData()
+    }
+    
+    
     func shiftChosenFrameFromIndex(index : Int) {
         // when deselect one image in photoes preview, we need to reshuffule
-        var i = index
-        while i < imageDict.count {
-            let image = indexImageDict[i]
-            imageIndexDict[image!] = i - 1
-            let cell = photoQuickCollectionView?.cellForItemAtIndexPath(imageReverseDict[image!]!) as! PhotoQuickPickerCollectionViewCell
-            cell.chosenFrameImageView.image = UIImage(named: frameImageName[i-1])
-            indexImageDict[i-1] = image
-            i += 1
+        if index > photoPicker.indexImageDict.count {
+            return
         }
+        for i in index...photoPicker.indexImageDict.count {
+            let image = photoPicker.indexImageDict[i]
+            let asset = photoPicker.indexAssetDict[i]
+            photoPicker.assetIndexDict[asset!] = i - 1
+            photoPicker.indexImageDict[i-1] = image
+            photoPicker.indexAssetDict[i-1] = asset
+        }
+        photoPicker.indexAssetDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
+        photoPicker.indexImageDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
+        self.photoQuickCollectionView.reloadData()
     }
     
     func showAlertView() {
@@ -1144,15 +1246,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func getMoreImage() {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
-        for image in [UIImage](imageDict.values) {
-            let cell = photoQuickCollectionView.cellForItemAtIndexPath(imageReverseDict[image]!) as! PhotoQuickPickerCollectionViewCell
-            cell.chosenFrameImageView.hidden = true
-        }
-        selectedImage.removeAll()
-        imageDict.removeAll()
-        imageReverseDict.removeAll()
-        imageIndexDict.removeAll()
-        indexImageDict.removeAll()
         let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("CustomCollectionViewController")as! CustomCollectionViewController
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
@@ -1161,7 +1254,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: UIImagePickerController
     // this function is not use anymore
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let picture = info[UIImagePickerControllerEditedImage] as! UIImage
+        let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
         

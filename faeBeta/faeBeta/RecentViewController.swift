@@ -23,10 +23,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.backgroundColor = UIColor.whiteColor()
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
-        loadRecents()
         addGestureRecognizer()
-        
+        firebase.keepSynced(true)
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        firebase.removeAllObservers()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        loadRecents()
     }
     
     /*
@@ -53,7 +60,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = "Social"
         titleLabel.textAlignment = .Center
-        titleLabel.font = UIFont(name: "Avenir Next", size: 20)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         
         self.navigationItem.titleView = titleLabel
@@ -183,7 +190,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             
             dataStore.find(dataQuery, response: { (users : BackendlessCollection!) in
                 chatVC.withUser = users.data[0] as? BackendlessUser
-                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
+//                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
             }) { (fault : Fault!) in
                 print("Error, couldn't retrive users: \(fault)")
             }
@@ -208,7 +215,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: load recents form firebase
     
     func loadRecents() {
-        
         firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
             self.recents.removeAll()
             
@@ -279,6 +285,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: - swipeable cell delegate
     
+    func cellwillOpen(cell: UITableViewCell) {
+        closeAllCell(UITapGestureRecognizer())
+    }
+    
     func cellDidOpen(cell: UITableViewCell)
     {
         let currentEditingIndexPath = self.tableView.indexPathForCell(cell)
@@ -303,8 +313,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         recents.removeAtIndex(indexPath.row)
         
         //delect recent from firebase
-        
         DeleteRecentItem(recent)
+        
+        cellsCurrentlyEditing.removeObject(indexPath)
         
         let range = NSMakeRange(0, self.tableView.numberOfSections)
         let sections = NSIndexSet(indexesInRange: range)

@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import <JSQMessagesViewController/JSQMessagesToolbarContentView.h>
+#import "JSQMessagesToolbarContentViewCustom.h"
 
 @class JSQMessagesInputToolbarCustom;
 
@@ -62,7 +62,7 @@
 /**
  *  Returns the content view of the toolbar. This view contains all subviews of the toolbar.
  */
-@property (weak, nonatomic, readonly) JSQMessagesToolbarContentView *contentView;
+@property (weak, nonatomic, readonly) JSQMessagesToolbarContentViewCustom *contentView;
 
 /**
  *  A boolean value indicating whether the send button is on the right side of the toolbar or not.
@@ -100,6 +100,6 @@
  *
  *  @return An initialized `JSQMessagesToolbarContentView` if successful, otherwise `nil`.
  */
-- (JSQMessagesToolbarContentView *)loadToolbarContentView;
+- (JSQMessagesToolbarContentViewCustom *)loadToolbarContentView;
 
 @end

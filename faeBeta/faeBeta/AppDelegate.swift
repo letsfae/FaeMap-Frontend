@@ -32,12 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
+//        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         FIRApp.configure()
         
         backendless.initApp(APP_ID, secret:SECRET_KEY, version:VERSION_NUM)
-        backendless.messaging.registerForRemoteNotifications()
         FIRDatabase.database().persistenceEnabled = true
         
         
@@ -55,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         UIApplication.sharedApplication().registerForRemoteNotifications()
+//        backendless.messaging.registerForRemoteNotifications()
         /*
          let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
          print(notificationType?.types)
@@ -77,8 +77,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("device id: yueshen")
         print(headerDeviceID)
         registerDevice(deviceToken)
-
     }
+    func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
+        if identifier == "answerAction" {
+            
+        }else if identifier == "declineAction"{
+        
+        }
+    }
+    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         UIApplication.sharedApplication().applicationIconBadgeNumber += 1
     }
@@ -101,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        NSNotificationCenter.defaultCenter().postNotificationName("appWillEnterForeground", object: nil)
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
@@ -218,7 +225,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             },error :{(fault: Fault!) -> Void in
                 print("Backendless register device fault: \(fault)")
-                self.registerDevice(deviceToken)
         })
     }
     

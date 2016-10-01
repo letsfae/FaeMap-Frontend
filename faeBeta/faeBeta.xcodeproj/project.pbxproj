@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D57736EEEA42FF298B54BBE /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */; };
+		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
+		86242F981D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
+		86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A531D8FB5EE006BDE27 /* Alamofire.framework */; };
@@ -87,12 +94,6 @@
 		B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
-		B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
@@ -466,6 +467,7 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
 		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
@@ -507,6 +509,7 @@
 		88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A7973C20B43CE3D1497DC12 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
@@ -529,8 +532,6 @@
 		B064EEA61D6E0CA100C078F5 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
-		B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoQuickPickerCollectionViewCell.swift; sourceTree = "<group>"; };
-		B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoQuickPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumTableViewCell.xib; sourceTree = "<group>"; };
@@ -798,8 +799,6 @@
 			children = (
 				B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */,
 				B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */,
-				B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */,
-				B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */,
 			);
 			path = CustomCollectionViewCell;
 			sourceTree = "<group>";
@@ -994,6 +993,7 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
+				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */,
 				B0714D7F1D5E463B00356705 /* chat */,
@@ -1074,6 +1074,10 @@
 				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
 				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
 				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
+				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
+				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
+				86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */,
+				86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */,
 				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
 				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
 				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
@@ -1249,6 +1253,11 @@
 						DevelopmentTeam = J9H8DRZ5QS;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					B0A2ACAB1CE3A3C7002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
@@ -1293,7 +1302,6 @@
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
-				B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
@@ -1346,7 +1354,6 @@
 				B064EF531D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF591D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF5F1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF181D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1379,7 +1386,6 @@
 				B064EF541D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF5A1D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF601D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF191D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1648,6 +1654,7 @@
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
+				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
@@ -1695,7 +1702,6 @@
 				B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
-				B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -1742,6 +1748,7 @@
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
+				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
@@ -1790,7 +1797,6 @@
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
-				B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
@@ -1822,6 +1828,7 @@
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
+				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
@@ -1864,6 +1871,7 @@
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				86242F981D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B064EF151D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B0BF358D1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B0714DF91D62520900356705 /* RegisterNameViewController.swift in Sources */,
@@ -1948,6 +1956,7 @@
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B0D36BEB1D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
 				B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B064EED91D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714E0E1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
@@ -1977,7 +1986,6 @@
 				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
-				B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
@@ -1990,6 +1998,7 @@
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
+				86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0714D721D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
@@ -2146,8 +2155,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -2155,6 +2166,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
@@ -2170,8 +2182,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -2182,6 +2196,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = 1;

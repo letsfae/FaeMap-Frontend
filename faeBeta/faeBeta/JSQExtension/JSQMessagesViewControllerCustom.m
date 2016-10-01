@@ -321,7 +321,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
@@ -334,23 +334,23 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
+//    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+//    [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    if (self.showTypingIndicator) {
-        self.showTypingIndicator = NO;
-        self.showTypingIndicator = YES;
-        [self.collectionView reloadData];
-    }
+//    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+//    if (self.showTypingIndicator) {
+//        self.showTypingIndicator = NO;
+//        self.showTypingIndicator = YES;
+//        [self.collectionView reloadData];
+//    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [self jsq_resetLayoutAndCaches];
+//    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+//    [self jsq_resetLayoutAndCaches];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
