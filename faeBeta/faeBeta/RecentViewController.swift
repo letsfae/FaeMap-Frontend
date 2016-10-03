@@ -164,6 +164,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     //MARK: - helpers
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "recentToChooseUserVC" {
             let vc = segue.destinationViewController as! ChooseUserViewController
@@ -180,22 +181,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.recent = recent
             chatVC.chatRoomId = recent["chatRoomId"] as? String
             let withUserUserId = recent["withUserUserId"] as! String
-            // find user
-            let whereClause = "objectId = '\(withUserUserId)'"
-            
-            let dataQuery = BackendlessDataQuery()
-            dataQuery.whereClause = whereClause
-            
-            let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-            
-            dataStore.find(dataQuery, response: { (users : BackendlessCollection!) in
-                chatVC.withUser = users.data[0] as? BackendlessUser
-//                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
-            }) { (fault : Fault!) in
-                print("Error, couldn't retrive users: \(fault)")
-            }
+            let withUserName = recent["withUserUsername"] as! String
+            chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }
-        
     }
     
     func createChatroom(withUser: BackendlessUser) {
@@ -205,7 +193,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         chatVC.hidesBottomBarWhenPushed = true
         // set chatVC recent to our recent.
         
-        chatVC.withUser = withUser
+//        chatVC.withUser = withUser
         
         chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
         
@@ -215,7 +203,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: load recents form firebase
     
     func loadRecents() {
-        firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
+        firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(user_id?.stringValue).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
             self.recents.removeAll()
             
             if snapshot.exists() {

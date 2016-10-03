@@ -50,7 +50,7 @@ class OutgoingMessage {
     
     
     
-    func sendMessage(chatRoomId : String, item : NSMutableDictionary, receiverDeviceToken: String, withUser user:BackendlessUser) {
+    func sendMessage(chatRoomId : String, item : NSMutableDictionary, withUser user:FaeWithUser) {
         
         let reference = firebase.child(chatRoomId).childByAutoId()
         
@@ -62,10 +62,9 @@ class OutgoingMessage {
                 print("Error, couldn't send message: \(error)")
             }else{
                 
-                self.checkNumberOfUsersUnreadMessages(user.objectId!){
+                self.checkNumberOfUsersUnreadMessages(user.userId){
                     (numberOfUnreadMessages:Int) -> Void in
                     let messageText:String = (item["senderName"] as! String) + ": " + (item["message"] as! String)
-                    self.publishMessageAsPushNotificationAsync(messageText, deviceId: receiverDeviceToken, numberOfUnreadMessages: numberOfUnreadMessages)
                     UpdateRecents(chatRoomId, lastMessage: (item["message"] as? String)!, withUser: user)
                 }
             }

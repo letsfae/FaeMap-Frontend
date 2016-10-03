@@ -462,6 +462,7 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
 		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
@@ -681,6 +682,7 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -909,6 +911,7 @@
 			isa = PBXGroup;
 			children = (
 				B064EEA31D6E0CA100C078F5 /* Avatar.swift */,
+				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				B064EEA61D6E0CA100C078F5 /* Recent.swift */,
@@ -1567,6 +1570,7 @@
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
+				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
 				B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,

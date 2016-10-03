@@ -109,7 +109,7 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
 
 //given a chatRoomId, we update last message for it.
 
-func UpdateRecents(chatRoomId : String, lastMessage : String, withUser: BackendlessUser) {
+func UpdateRecents(chatRoomId : String, lastMessage : String, withUser: FaeWithUser) {
 
     //firebase query
     firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
@@ -122,7 +122,7 @@ func UpdateRecents(chatRoomId : String, lastMessage : String, withUser: Backendl
             }
             
             if(snapshot.value!.allValues.count == 1){
-                CreateRecentItem(withUser.objectId, chatRoomId: chatRoomId, members: [backendless.userService.currentUser.objectId as String, withUser.objectId as String], withUserUsername: backendless.userService.currentUser.name, withUserUserId: backendless.userService.currentUser.objectId, lastMessage: lastMessage, counter: 1)
+                CreateRecentItem(withUser.userId, chatRoomId: chatRoomId, members: [user_id.stringValue, withUser.userId], withUserUsername: username!, withUserUserId: user_id.stringValue, lastMessage: lastMessage, counter: 1)
             }
         }
     }
@@ -200,7 +200,7 @@ func clearRecentCounter(chatRoomId : String) {
             localStorage.readLogInfo()
             
             for recent in snapshot.value!.allValues {
-                if recent.objectForKey("userId") as? String == backendless.userService.currentUser.objectId {
+                if recent.objectForKey("userId") as? String == user_id.stringValue {
                     //clear counter
                     ClearRecentCounterItem(recent as! NSDictionary)
                 }

@@ -55,33 +55,7 @@ class RecentTableViewCell: UITableViewCell {
         self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
-        let withUserId = (recent.objectForKey("withUserUserId") as? String)!
-        
-        //get the backendless user and download avatar
-        
-        let whereClause = "objectId = '\(withUserId)'"
-        let dataQuery = BackendlessDataQuery()
-        dataQuery.whereClause = whereClause
-        
-        let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-        
-        dataStore.find(dataQuery, response: { (user : BackendlessCollection!) in
-            
-            let withUser = user.data.first as! BackendlessUser
-            
-            //use withUser to get our avatar
-            
-            if let avatarUrl = withUser.getProperty("Avatar") {
-                getImageFromURL(avatarUrl as! String, result: { (image) in
-                    self.avatarImageView.image = image
-                })
-            }
-            
-            
-        }) { (fault : Fault!) in
-            print("error, couldn't get user avatar: \(fault)")
-        }
-        
+
         nameLabel.text = recent["withUserUsername"] as? String
         lastMessageLabel.text = recent["lastMessage"] as? String
         counterLabel.text = ""

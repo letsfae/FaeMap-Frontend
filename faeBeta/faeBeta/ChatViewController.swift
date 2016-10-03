@@ -34,13 +34,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var showAvatar : Bool = true//false not show avatar , true show avatar
     let factor : CGFloat = 375 / 414// autolayout factor MARK: 5s may has error, 6 and 6+ is ok
     var firstLoad : Bool?// whether it is the first time to load this room.
-    var withUser : BackendlessUser?
+    var withUser : FaeWithUser?
     {
         didSet{
             self.getAvatar()
         }
     }
     var withUserId : String? // the user id we chat to
+    var withUserName : String? // the user name we chat to
     var currentUserId : String?// my user id
     var recent : NSDictionary?//recent chat room message
     var chatRoomId : String!
@@ -222,7 +223,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
-        titleLabel.text = withUser == nil ? recent!["withUserUsername"] as? String : withUser?.name
+        titleLabel.text = withUser!.userName
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
@@ -565,10 +566,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        print(chatRoomId)
         self.finishSendingMessage()
         
-        if(withUser != nil){
-            // add this outgoing message under chatRoom with id and content
-            outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, receiverDeviceToken: withUser?.getProperty("device_id")! as! String, withUser: withUser!)
-        }
+        // add this outgoing message under chatRoom with id and content
+        outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, withUser: withUser!)
     }
     
     //send image delegate function
@@ -1102,7 +1101,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //                }
 //            }
     
-            avatarDictionary = [backendless.userService.currentUser.objectId! : currentUserAvatar, withUser!.objectId! : withUserAvatar]
+            avatarDictionary = [user_id : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
             if collectionView != nil {collectionView.reloadData()}
         }
