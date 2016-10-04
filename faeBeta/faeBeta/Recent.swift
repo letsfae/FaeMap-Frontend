@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import FirebaseDatabase
+import SwiftyJSON
 
 // this file has some function to connect to firebase and change information in recent
 // which can be described as dictionary.
@@ -175,15 +176,11 @@ func restartRecentChat(recent : NSDictionary) {
 
 //MARK : delete recent functions
 
-func DeleteRecentItem(recent : NSDictionary) {
-    
-    //firebase query delete item (recent)
-    
-    firebase.child("Recent").child((recent["recentId"] as? String)!).removeValueWithCompletionBlock { (error, ref) in
-        if error != nil {
-            print("Error deleting recent item: \(error)")
-        }
-    }
+func DeleteRecentItem(recent : JSON) {
+    let chat_room_id = recent["chat_id"].string
+    deleteFromURL("chats/:\(chat_room_id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+        
+    })
 }
 
 //MARK : Clear recent counter function

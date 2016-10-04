@@ -290,15 +290,15 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let recent = recents![indexPath.row]
         
         //remove recent form the array
-//        recents.removeAtIndex(indexPath.row)
+//        recents.
         
         //delect recent from firebase
-//        DeleteRecentItem(recent)
+        DeleteRecentItem(recent)
         
         cellsCurrentlyEditing.removeObject(indexPath)
         
         let range = NSMakeRange(0, self.tableView.numberOfSections)
         let sections = NSIndexSet(indexesInRange: range)
-        self.tableView.reloadSections(sections, withRowAnimation: .Automatic)
+        self.tableView.reloadSections(sections, withRowAnimation: .Middle)
     }
 }
