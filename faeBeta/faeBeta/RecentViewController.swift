@@ -34,7 +34,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-        loadRecents()
+        loadRecents(false, removeIndexPaths: nil)
     }
     
     /*
@@ -94,7 +94,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             
-            let recent = recents![indexPath.row]
+//            let recent = recents![indexPath.row]
             
             //create recent for both users
             
@@ -203,11 +203,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: load recents form firebase
     
-    func loadRecents() {
+    func loadRecents(animated:Bool, removeIndexPaths indexPathSet:[NSIndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             let json = JSON(result!)
             self.recents = json
-            self.tableView.reloadData()
+            if(animated){
+//                let range = NSMakeRange(0, self.tableView.numberOfSections)
+//                let sections = NSIndexSet(indexesInRange: range)
+//                self.tableView.reloadSections(sections, withRowAnimation: .Left)
+                self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
+            }else{
+                self.tableView.reloadData()
+            }
         }
 
     }
@@ -293,12 +300,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 //        recents.
         
         //delect recent from firebase
-        DeleteRecentItem(recent)
+        DeleteRecentItem(recent, completion: {(statusCode, result) -> Void in
+            if statusCode / 100 == 2{
+                self.loadRecents(true, removeIndexPaths: [indexPath])
+            }
+        })
         
         cellsCurrentlyEditing.removeObject(indexPath)
-        
-        let range = NSMakeRange(0, self.tableView.numberOfSections)
-        let sections = NSIndexSet(indexesInRange: range)
-        self.tableView.reloadSections(sections, withRowAnimation: .Middle)
     }
 }
