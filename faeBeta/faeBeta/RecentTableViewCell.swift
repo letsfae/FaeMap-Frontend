@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol SwipeableCellDelegate {
     func cellwillOpen(cell:UITableViewCell)
@@ -50,21 +51,21 @@ class RecentTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     // MARK: populate cell 
-    func bindData(recent : NSDictionary) {
+    func bindData(recent : JSON) {
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
 
-        nameLabel.text = recent["withUserUsername"] as? String
-        lastMessageLabel.text = recent["lastMessage"] as? String
+        nameLabel.text = recent["with_user_id"].string
+        lastMessageLabel.text = recent["last_message"].string
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 10
         counterLabel.layer.masksToBounds = true
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
-        if (recent["counter"] as? Int)! != 0 {
+        if (recent["unread_count"].int)! != 0 {
             counterLabel.hidden = false
-            counterLabel.text = "\(recent["counter"]!)"
+            counterLabel.text = "\(recent["unread_count"].int)"
             if(counterLabel.text?.characters.count == 2){
                 countLabelLength.constant = 23
             }else{
@@ -73,7 +74,17 @@ class RecentTableViewCell: UITableViewCell {
         }else{
             counterLabel.hidden = true
         }
-        let date = dateFormatter().dateFromString((recent["date"] as? String)!)
+        var timeString = recent["last_message_timestamp"].string
+        var index = 0
+        for c in (timeString?.characters)!{
+            if c < "0" || c > "9" {
+                timeString?.removeAtIndex((timeString?.characters.startIndex.advancedBy(index))!)
+            }else{
+                index += 1
+            }
+        }
+        
+        let date = dateFormatter().dateFromString(timeString!)
         let seconds = NSDate().timeIntervalSinceDate(date!)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
@@ -177,18 +188,6 @@ class RecentTableViewCell: UITableViewCell {
                     //Re-close
                     self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
                 }
-//            } else {
-//                //Cell was closing
-//                let halfOfButtonOne = CGRectGetWidth(self.deleteButton.frame) / 2; //2
-//                if (self.distanceToRight.constant >= halfOfButtonOne) { //5
-//                    //Re-open all the way
-//                    self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
-//                } else {
-//                    //Close
-//                    self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-//                }
-//            }
-            
             break;
         case .Cancelled:
             if (self.startingRightLayoutConstraintConstant == 0) {

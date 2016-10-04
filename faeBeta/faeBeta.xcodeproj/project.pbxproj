@@ -463,6 +463,9 @@
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
+		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
+		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
+		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
 		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
@@ -683,6 +686,9 @@
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
+		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
+		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
+		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -912,6 +918,7 @@
 			children = (
 				B064EEA31D6E0CA100C078F5 /* Avatar.swift */,
 				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
+				DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				B064EEA61D6E0CA100C078F5 /* Recent.swift */,
@@ -926,6 +933,8 @@
 				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
 				B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
+				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,
+				DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */,
 			);
 			name = UIviewController;
 			sourceTree = "<group>";
@@ -1551,6 +1560,7 @@
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
+				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
@@ -1564,6 +1574,7 @@
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
+				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
@@ -1591,6 +1602,7 @@
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				B0D36BE91D1C0CE0002FC047 /* MyFaeViewController.swift in Sources */,
+				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
 				B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
@@ -2030,6 +2042,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2060,6 +2073,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

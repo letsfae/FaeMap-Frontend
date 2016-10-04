@@ -189,25 +189,9 @@ func DeleteRecentItem(recent : NSDictionary) {
 //MARK : Clear recent counter function
 
 func clearRecentCounter(chatRoomId : String) {
-    
-    //firebase query
-    
-    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+    postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: headerAuthentication(), completion: { (statusCode, result) in
         
-        if snapshot.exists() {
-            
-            let localStorage = LocalStorageManager()
-            localStorage.readLogInfo()
-            
-            for recent in snapshot.value!.allValues {
-                if recent.objectForKey("userId") as? String == user_id.stringValue {
-                    //clear counter
-                    ClearRecentCounterItem(recent as! NSDictionary)
-                }
-            }
-            
-        }
-    }
+    })
 }
 
 

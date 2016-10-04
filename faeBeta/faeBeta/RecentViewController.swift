@@ -9,12 +9,13 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import SwiftyJSON
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var recents: [NSDictionary] = [] // an array of dic to store recent chatting informations
+    var recents: JSON? // an array of dic to store recent chatting informations
     var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
     
     // MARK: - View did/will funcs
@@ -93,11 +94,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             
-            let recent = recents[indexPath.row]
+            let recent = recents![indexPath.row]
             
             //create recent for both users
             
-            restartRecentChat(recent)
+//            restartRecentChat(recent)
             
             performSegueWithIdentifier("recentToChatSeg", sender: indexPath)
         }else{
@@ -147,14 +148,14 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recents.count
+        return recents == nil ? 0 : recents!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! RecentTableViewCell
         cell.delegate = self
-        let recent = recents[indexPath.row]
+        let recent = recents![indexPath.row]
         
         cell.bindData(recent)
         if (self.cellsCurrentlyEditing.containsObject(indexPath)) {
@@ -176,12 +177,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.hidesBottomBarWhenPushed = true
             
             
-            let recent = recents[indexPath.row]
+            let recent = recents![indexPath.row]
             
-            chatVC.recent = recent
-            chatVC.chatRoomId = recent["chatRoomId"] as? String
-            let withUserUserId = recent["withUserUserId"] as! String
-            let withUserName = recent["withUserUsername"] as! String
+//            chatVC.recent = recent
+            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].string)" : "\(recent["with_user_id"].string)-\(user_id)"
+            let withUserUserId = recent["with_user_id"].string
+            let withUserName = "default"
             chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }
     }
@@ -203,20 +204,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: load recents form firebase
     
     func loadRecents() {
-        firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(user_id?.stringValue).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
-            self.recents.removeAll()
-            
-            if snapshot.exists() {
-                let sorted = (snapshot.value!.allValues as NSArray).sortedArrayUsingDescriptors([NSSortDescriptor(key : "date", ascending: false)])
-                for recent in sorted {
-                    self.recents.append(recent as! NSDictionary)
-                    // add function to have offline access as well
-                    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(recent["ChatRoomId"]).observeEventType(.Value, withBlock: { (snapshot : FIRDataSnapshot) in
-                    })
-                }
-                self.tableView.reloadData()
-            }
+        getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            let json = JSON(result!)
+            self.recents = json
+            self.tableView.reloadData()
         }
+
     }
     
     //MARK: sortAlertView
@@ -294,14 +287,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func deleteButtonTapped(cell: UITableViewCell) {
         let indexPath = tableView.indexPathForCell(cell)!
-        let recent = recents[indexPath.row]
+        let recent = recents![indexPath.row]
         
         //remove recent form the array
-        
-        recents.removeAtIndex(indexPath.row)
+//        recents.removeAtIndex(indexPath.row)
         
         //delect recent from firebase
-        DeleteRecentItem(recent)
+//        DeleteRecentItem(recent)
         
         cellsCurrentlyEditing.removeObject(indexPath)
         
