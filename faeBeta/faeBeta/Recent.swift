@@ -177,9 +177,10 @@ func restartRecentChat(recent : NSDictionary) {
 //MARK : delete recent functions
 
 func DeleteRecentItem(recent : JSON) {
-    let chat_room_id = recent["chat_id"].string
-    deleteFromURL("chats/:\(chat_room_id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
-        
+    let chat_room_id = recent["chat_id"].number
+    deleteFromURL("chats/\(chat_room_id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+        print(statusCode)
+        print(result)
     })
 }
 
