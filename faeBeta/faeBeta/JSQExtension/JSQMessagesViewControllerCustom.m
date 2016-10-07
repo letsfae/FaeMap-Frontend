@@ -210,6 +210,11 @@ JSQMessagesKeyboardControllerDelegate>
                                                                      panGestureRecognizer:self.collectionView.panGestureRecognizer
                                                                                  delegate:self];
     }
+    
+    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1:)];
+    
+    [[UIMenuController sharedMenuController] setMenuItems: @[miCustom1]];
+    [[UIMenuController sharedMenuController] update];
 }
 
 - (void)dealloc
@@ -699,7 +704,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1)) {
+    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1:)) {
         return YES;
     }
 
@@ -858,9 +863,6 @@ JSQMessagesKeyboardControllerDelegate>
 
     JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPathForMenu];
     CGRect selectedCellMessageBubbleFrame = [selectedCell convertRect:selectedCell.messageBubbleContainerView.frame toView:self.view];
-    
-    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1)];
-    [menu setMenuItems:[NSArray arrayWithObjects: miCustom1, nil]];
     
     [menu setTargetRect:selectedCellMessageBubbleFrame inView:self.view];
     [menu setMenuVisible:YES animated:YES];
@@ -1154,7 +1156,7 @@ JSQMessagesKeyboardControllerDelegate>
     }
 }
 
-- (void)customAction1{
+- (void)customAction1: (id)sender{
     printf("custom");
 }
 
