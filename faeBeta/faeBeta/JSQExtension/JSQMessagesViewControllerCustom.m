@@ -615,7 +615,8 @@ JSQMessagesKeyboardControllerDelegate>
     }
 
     cell.textView.dataDetectorTypes = UIDataDetectorTypeAll;
-
+    cell.textView.selectable = NO;
+    
     cell.backgroundColor = [UIColor clearColor];
     cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
     cell.layer.shouldRasterize = YES;
@@ -692,15 +693,13 @@ JSQMessagesKeyboardControllerDelegate>
     //  however, this allows the 'copy, define, select' UIMenuController to show
     //  which conflicts with the collection view's UIMenuController
     //  temporarily disable 'selectable' to prevent this issue
-    JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    selectedCell.textView.selectable = NO;
 
     return YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(copy:) || action == @selector(delete:)) {
+    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1)) {
         return YES;
     }
 
@@ -755,7 +754,9 @@ JSQMessagesKeyboardControllerDelegate>
  didTapAvatarImageView:(UIImageView *)avatarImageView
            atIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath {
+
+}
 
 - (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
  didTapCellAtIndexPath:(NSIndexPath *)indexPath
@@ -857,7 +858,10 @@ JSQMessagesKeyboardControllerDelegate>
 
     JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPathForMenu];
     CGRect selectedCellMessageBubbleFrame = [selectedCell convertRect:selectedCell.messageBubbleContainerView.frame toView:self.view];
-
+    
+    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1)];
+    [menu setMenuItems:[NSArray arrayWithObjects: miCustom1, nil]];
+    
     [menu setTargetRect:selectedCellMessageBubbleFrame inView:self.view];
     [menu setMenuVisible:YES animated:YES];
 
@@ -872,11 +876,6 @@ JSQMessagesKeyboardControllerDelegate>
     if (!self.selectedIndexPathForMenu) {
         return;
     }
-
-    //  per comment above in 'shouldShowMenuForItemAtIndexPath:'
-    //  re-enable 'selectable', thus re-enabling data detectors if present
-    JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPathForMenu];
-    selectedCell.textView.selectable = YES;
     self.selectedIndexPathForMenu = nil;
 }
 
@@ -1153,6 +1152,10 @@ JSQMessagesKeyboardControllerDelegate>
                                                                       action:@selector(jsq_handleInteractivePopGestureRecognizer:)];
         self.currentInteractivePopGestureRecognizer = self.navigationController.interactivePopGestureRecognizer;
     }
+}
+
+- (void)customAction1{
+    printf("custom");
 }
 
 @end

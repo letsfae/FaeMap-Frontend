@@ -26,7 +26,7 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == backendless.userService.currentUser.objectId {
+        if data.senderId == user_id.stringValue {
             cell.textView?.textColor = UIColor.whiteColor()
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
@@ -80,7 +80,7 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == backendless.userService.currentUser.objectId {
+        if data.senderId == user_id.stringValue {
             if data.isMediaMessage {
                 outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubbleImage: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleRedColor())
             }

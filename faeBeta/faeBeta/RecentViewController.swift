@@ -180,8 +180,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let recent = recents![indexPath.row]
             
 //            chatVC.recent = recent
-            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].string)" : "\(recent["with_user_id"].string)-\(user_id)"
-            let withUserUserId = recent["with_user_id"].string
+            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+            let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = "default"
             chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }

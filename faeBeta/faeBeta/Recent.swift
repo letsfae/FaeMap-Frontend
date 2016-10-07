@@ -137,7 +137,7 @@ func updateRecentItem(recent : NSDictionary, lastMessage : String) {
     let localStorage = LocalStorageManager()
     localStorage.readLogInfo()
     
-    if recent["userId"] as? String !=  "\(backendless.userService.currentUser.objectId)" {
+    if recent["userId"] as? String !=  "\(user_id.stringValue)" {
         counter += 1
     }
     

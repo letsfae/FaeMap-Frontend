@@ -18,7 +18,7 @@ extension FaeMapViewController {
         self.labelUnreadMessages.hidden = true
         if (backendless.userService.currentUser != nil){
             // keep tracking the unread messages number
-            firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
+            firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(user_id?.stringValue).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
                 var totalUnread = 0
                 if snapshot.exists() {
                     for recent in snapshot.value!.allValues {

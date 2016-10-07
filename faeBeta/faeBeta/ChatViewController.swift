@@ -171,9 +171,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewDidLoad()
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
-        self.currentUserId = backendless.userService.currentUser.objectId
-        self.senderId = backendless.userService.currentUser.objectId
-        self.senderDisplayName = backendless.userService.currentUser.name
+        self.senderId = user_id.stringValue
+        self.senderDisplayName = username!
         collectionView?.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
         collectionView?.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
         self.inputToolbar.contentView.textView.delegate = self
