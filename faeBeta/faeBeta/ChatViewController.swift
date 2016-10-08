@@ -736,7 +736,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.inputToolbar.frame.origin.y - 271
+        let yPosition = self.screenHeight - 271 - 150
         UIView.setAnimationsEnabled(false)
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
