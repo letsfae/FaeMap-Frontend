@@ -34,6 +34,27 @@ extension ChatViewController {
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
         cell.avatarImageView.layer.cornerRadius = 17.5
+        
+        let object = objects[indexPath.row]
+        switch (object["type"] as! String) {
+            case "text":
+                cell.contentType = Text
+                break
+            case "picture":
+                cell.contentType = Picture
+                break
+            case "sticker":
+                cell.contentType = Sticker
+                break
+            case "location":
+                cell.contentType = Location
+                break
+            case "audio":
+                cell.contentType = Audio
+                break
+            default:
+                break
+        }
         return cell
     }
     

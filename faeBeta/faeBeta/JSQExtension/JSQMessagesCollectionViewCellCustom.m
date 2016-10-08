@@ -28,10 +28,9 @@
 }
 
 -(BOOL) canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1:)) {
+    if (action == @selector(copy:) ||( (self.contentType == Picture || self.contentType == Sticker) && action == @selector(customAction1:))) {
         return YES;
     }
-    
     return NO;
 }
 

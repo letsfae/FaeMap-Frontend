@@ -22,6 +22,17 @@
 
 @class JSQMessagesCollectionViewCellCustom;
 
+typedef enum CONTENT_TYPE CONTENT_TYPE;
+enum CONTENT_TYPE {
+    Text,
+    Picture,
+    Sticker,
+    Location,
+    Audio
+};
 
 @interface JSQMessagesCollectionViewCellCustom : JSQMessagesCollectionViewCell
+
+@property CONTENT_TYPE contentType;
+
 @end
