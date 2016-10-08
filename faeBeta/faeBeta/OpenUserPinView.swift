@@ -172,6 +172,9 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 uiviewTag.hidden = false
                 imageViewGender.hidden = false
             }
+            if(touch.view != uiviewDialog){
+                uiviewDialog.alpha = 0.0
+            }
         }
     }
     

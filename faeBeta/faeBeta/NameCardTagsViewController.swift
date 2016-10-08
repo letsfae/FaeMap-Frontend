@@ -17,6 +17,8 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     let cellText = "cellText"
     let cellSize = TagsCollectionViewCell()
     var buttonSuggest : UIButton!
+    var buttonSave : UIBarButtonItem!
+    var labelTitle : UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = KTCenterFlowLayout()
@@ -49,14 +51,28 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         colorSelf.append(colors(122, green: 212, blue: 134))
         
         buttonSuggest = UIButton(frame: CGRectMake((screenWidth - 300)/2, screenHeight - 80 - 64, 300, 50))
-        buttonSuggest.titleLabel?.text = "+ Suggest New Tags"
+//        buttonSuggest.titleLabel?.text = "+ Suggest New Tags"
         buttonSuggest.setTitle("+ Suggest New Tags", forState: .Normal)
         buttonSuggest.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
+        buttonSuggest.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
 //        buttonSuggest.titleLabel?.textColor = colors(249, green: 90, blue: 90)
         buttonSuggest.layer.cornerRadius = 15
         buttonSuggest.layer.borderWidth = 2.0
         buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).CGColor
         self.view.addSubview(buttonSuggest)
+        
+//        buttonSave = UIBarButtonItem(frame: CGRectMake(screenWidth - 44 - 14, 32 - 64, 44, 27))
+        buttonSave = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NameCardTagsViewController.saveTags))
+//        buttonSave.setTitle("Save", forState: .Normal)
+//        buttonSave.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
+//        self.view.addSubview(buttonSave)
+        self.navigationItem.rightBarButtonItem = buttonSave
+        
+        labelTitle = UILabel(frame: CGRectMake((screenWidth - 173) / 2, 0, 174, 64))
+        labelTitle.text = "Choose some Tags that represent you!"
+        labelTitle.numberOfLines = 0
+        labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        self.view.addSubview(labelTitle)
     }
 
     override func didReceiveMemoryWarning() {

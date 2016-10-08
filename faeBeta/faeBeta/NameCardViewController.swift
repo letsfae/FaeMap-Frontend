@@ -26,7 +26,18 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     var labelNickname : UILabel!
     //header view 2
     var viewNameCardDescr : UIView!
+    var imageViewDescrProfile : UIImageView!
+    var viewGender : UIView!
+    var imageViewGender : UIImageView!
+    var labelAge : UILabel!
     
+    var buttonMore : UIButton!
+    var viewLine : UIView!
+    var labelIntro : UILabel!
+    var buttonDoFaevor : UIButton!
+    var buttonFriends : UIButton!
+    
+    //image picker
     var imagePicker : UIImagePickerController!
     var imagePick : Int!
     
@@ -129,6 +140,7 @@ extension NameCardViewController {
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 10
+        viewNameCardTitle.clipsToBounds = true
         viewHeaderBackground.addSubview(viewNameCardTitle)
         
         imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268, 120))
@@ -141,7 +153,7 @@ extension NameCardViewController {
         imageViewTitleProfile.layer.masksToBounds = true
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
-        imageViewTitleProfile.layer.borderColor = UIColor.clearColor().CGColor
+        imageViewTitleProfile.layer.borderColor = UIColor.whiteColor().CGColor
         viewNameCardTitle.addSubview(imageViewTitleProfile)
         if user_id != nil {
             let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
@@ -157,12 +169,90 @@ extension NameCardViewController {
         viewNameCardTitle.addSubview(labelNickname)
         
         //the second header view
-        viewNameCardDescr = UIView(frame: CGRectMake(73,119,268,180))
+        
+        viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119,268,180))
         viewNameCardDescr.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardDescr.layer.borderWidth = 1.0
         viewNameCardDescr.layer.cornerRadius = 10
         viewHeaderBackground.addSubview(viewNameCardDescr)
         
+        imageViewDescrProfile = UIImageView(frame: CGRectMake((screenWidth - 61) / 2, 96 - 119, 61, 61))
+        imageViewDescrProfile.layer.cornerRadius = 61 / 2
+        imageViewDescrProfile.layer.masksToBounds = true
+        imageViewDescrProfile.clipsToBounds = true
+        imageViewDescrProfile.layer.borderWidth = 5
+        imageViewDescrProfile.layer.borderColor = UIColor.whiteColor().CGColor
+        viewNameCardDescr.addSubview(imageViewDescrProfile)
+        if user_id != nil {
+            let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
+            print(user_id)
+            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+        }
+        viewGender = UIView(frame: CGRectMake(90 - 73, 139 - 119, 50, 18))
+        viewGender.backgroundColor = getColor(149, green: 207, blue: 246)
+        let tempImage = UIImageView(frame: CGRectMake(0, 0, 50, 18))
+        tempImage.image = UIImage(named: "map_userpin_male")
+        viewGender.addSubview(tempImage)
+        viewNameCardDescr.addSubview(viewGender)
+//        imageViewGender = UIImageView(frame: CGRectMake(9, 3, 12, 12))
+//        imageViewGender.image = UIImage(named: "nameCardMale")
+//        viewGender.addSubview(imageViewGender)
+//        labelAge = UILabel(frame: CGRectMake(27,0,16,18))
+//        labelAge.text = "21"//Mark : not finished
+//        labelAge.textColor = UIColor.whiteColor()
+//        viewGender.addSubview(labelAge)
+        
+        buttonMore = UIButton(frame: CGRectMake(292 - 73, 139 - 119, 32, 18))
+        buttonMore.setImage(UIImage(named: "map_userpin_dark"), forState: .Normal)
+        viewNameCardDescr.addSubview(buttonMore)
+        
+        viewLine = UIView(frame: CGRectMake(0, 56,268,1))
+        viewLine.backgroundColor = getColor(200, green: 199, blue: 204)
+        viewNameCardDescr.addSubview(viewLine)
+        
+        labelIntro = UILabel(frame: CGRectMake(97 - 90, 193 - 119,220, 40))
+        labelIntro.textColor = getColor(155, green: 155, blue: 155)
+        labelIntro.numberOfLines = 0
+        labelIntro.textAlignment = .Center
+        labelIntro.text = "wwwwwwwwwwwwjjjjjjjjjjj"
+        labelIntro.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        viewNameCardDescr.addSubview(labelIntro)
+        
+        buttonDoFaevor = UIButton(frame: CGRectMake(101 - 73, 248 - 119, 104, 27))
+        buttonDoFaevor.backgroundColor = getColor(255, green: 128, blue: 128)
+        buttonDoFaevor.setTitle("I do Faevors", forState: .Normal)
+        buttonDoFaevor.titleLabel?.textColor = UIColor.whiteColor()
+        buttonDoFaevor.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        buttonDoFaevor.layer.cornerRadius = 4.6
+        viewNameCardDescr.addSubview(buttonDoFaevor)
+        
+        buttonFriends = UIButton(frame: CGRectMake(215 - 73, 248 - 119, 99, 27))
+        buttonFriends.backgroundColor = getColor(230, green: 140, blue: 102)
+        buttonFriends.setTitle("LF Friends", forState: .Normal)
+        buttonFriends.titleLabel?.textColor = UIColor.whiteColor()
+        buttonFriends.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        buttonFriends.layer.cornerRadius = 4.6
+        viewNameCardDescr.addSubview(buttonFriends)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(NameCardViewController.showNameCardTitle))
+        swipeRight.direction = .Right
+        self.viewHeaderBackground.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(NameCardViewController.showNameCardDescr))
+        swipeLeft.direction = .Left
+        self.viewHeaderBackground.addGestureRecognizer(swipeLeft)
+    }
+    func showNameCardTitle() {// right swipe
+        UIView.animateWithDuration(0.25, animations: ({
+            self.viewNameCardTitle.center.x = self.view.center.x
+            self.viewNameCardDescr.center.x = self.view.center.x + self.screenWidth
+        }))
+    }
+    func showNameCardDescr() {// left swipe
+        UIView.animateWithDuration(0.25, animations: ({
+            self.viewNameCardTitle.center.x = self.view.center.x - self.screenWidth
+            self.viewNameCardDescr.center.x = self.view.center.x
+        }))
     }
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         //        arrayNameCard[imageIndex] = image
