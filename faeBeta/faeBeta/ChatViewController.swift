@@ -199,7 +199,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        setupRecorder()
         initializeStickerView()
         loadUserDefault()
-//        self.scrollToBottomAnimated(true)
+        // This line is to fix the collectionView messed up function
         moveDownInputBar()
     }
     
