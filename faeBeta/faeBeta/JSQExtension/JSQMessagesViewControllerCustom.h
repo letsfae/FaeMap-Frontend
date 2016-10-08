@@ -172,6 +172,8 @@
  */
 @property (assign, nonatomic) CGFloat topContentAdditionalInset;
 
+@property (strong, nonatomic) NSIndexPath *selectedIndexPathForMenu;
+
 #pragma mark - Class methods
 
 /**

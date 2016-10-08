@@ -23,8 +23,8 @@
 #import <JSQMessagesViewController/JSQMessageBubbleImageDataSource.h>
 #import <JSQMessagesViewController/JSQMessageAvatarImageDataSource.h>
 
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellIncoming.h>
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellOutgoing.h>
+#import "JSQMessagesCollectionViewCellIncomingCustom.h"
+#import "JSQMessagesCollectionViewCellOutgoingCustom.h"
 
 #import <JSQMessagesViewController/JSQMessagesTypingIndicatorFooterView.h>
 #import <JSQMessagesViewController/JSQMessagesLoadEarlierHeaderView.h>
@@ -131,8 +131,6 @@ JSQMessagesKeyboardControllerDelegate>
 
 @property (assign, nonatomic) BOOL jsq_isObserving;
 
-@property (strong, nonatomic) NSIndexPath *selectedIndexPathForMenu;
-
 @property (weak, nonatomic) UIGestureRecognizer *currentInteractivePopGestureRecognizer;
 
 @property (assign, nonatomic) BOOL textViewWasFirstResponderDuringInteractivePop;
@@ -142,6 +140,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 
 @implementation JSQMessagesViewControllerCustom
+
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
 
 #pragma mark - Class methods
 
@@ -186,11 +186,11 @@ JSQMessagesKeyboardControllerDelegate>
 
     self.automaticallyScrollsToMostRecentMessage = YES;
 
-    self.outgoingCellIdentifier = [JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier];
-    self.outgoingMediaCellIdentifier = [JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier];
+    self.outgoingCellIdentifier = [JSQMessagesCollectionViewCellOutgoingCustom cellReuseIdentifier];
+    self.outgoingMediaCellIdentifier = [JSQMessagesCollectionViewCellOutgoingCustom mediaCellReuseIdentifier];
 
-    self.incomingCellIdentifier = [JSQMessagesCollectionViewCellIncoming cellReuseIdentifier];
-    self.incomingMediaCellIdentifier = [JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier];
+    self.incomingCellIdentifier = [JSQMessagesCollectionViewCellIncomingCustom cellReuseIdentifier];
+    self.incomingMediaCellIdentifier = [JSQMessagesCollectionViewCellIncomingCustom mediaCellReuseIdentifier];
 
     // NOTE: let this behavior be opt-in for now
     // [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
@@ -556,7 +556,7 @@ JSQMessagesKeyboardControllerDelegate>
         cellIdentifier = isOutgoingMessage ? self.outgoingCellIdentifier : self.incomingCellIdentifier;
     }
 
-    JSQMessagesCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    JSQMessagesCollectionViewCellCustom *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.delegate = collectionView;
 
     if (!isMediaMessage) {
@@ -687,10 +687,10 @@ JSQMessagesKeyboardControllerDelegate>
 - (BOOL)collectionView:(JSQMessagesCollectionViewCustom *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //  disable menu for media messages
-    id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
-    if ([messageItem isMediaMessage]) {
-        return NO;
-    }
+//    id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
+//    if ([messageItem isMediaMessage]) {
+//        return NO;
+//    }
 
     self.selectedIndexPathForMenu = indexPath;
 

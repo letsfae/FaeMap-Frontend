@@ -182,7 +182,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         loadInputBarComponent()
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.whiteColor()
-        self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);        initializePhotoQuickPicker()
+        self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
+        initializePhotoQuickPicker()
         photoPicker = PhotoPicker.shared
         addObservers()
         // setup requestion option 
@@ -198,7 +199,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        setupRecorder()
         initializeStickerView()
         loadUserDefault()
-        self.scrollToBottomAnimated(true)
+//        self.scrollToBottomAnimated(true)
+        moveDownInputBar()
     }
     
     func appWillEnterForeground(){
@@ -232,7 +234,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
-
     }
     
     // sticker view
@@ -289,24 +290,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonKeyBoard.addTarget(self, action: #selector(keyboardButtonClicked), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonKeyBoard)
         
-        buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: 54, width: 29, height: 29))
+        buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
         buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonSticker)
         
-        buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: 54, width: 29, height: 29))
+        buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
         contentView.addSubview(buttonImagePicker)
         
         buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
         
-        let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: 54, width: 29, height: 29))
+        let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
         contentView.addSubview(buttonCamera)
         
         buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
         
-        let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: 54, width: 29, height: 29))
+        let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Normal)
         //add a function
         buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), forControlEvents: .TouchUpInside)
@@ -314,7 +315,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         buttonLocation.addTarget(self, action: #selector(ChatViewController.initializeStickerView), forControlEvents: .TouchUpInside)
         
-        buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: 54, width: 29, height: 29))
+        buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
         contentView.addSubview(buttonSend)
         buttonSend.enabled = false

@@ -462,6 +462,21 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE201DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE211DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE231DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE281DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE291DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
@@ -685,6 +700,14 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellCustom.h; sourceTree = "<group>"; };
+		DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellCustom.m; sourceTree = "<group>"; };
+		DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellIncomingCustom.h; sourceTree = "<group>"; };
+		DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellIncomingCustom.m; sourceTree = "<group>"; };
+		DC74CE1D1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellOutgoingCustom.h; sourceTree = "<group>"; };
+		DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellOutgoingCustom.m; sourceTree = "<group>"; };
+		DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellIncomingCustom.xib; sourceTree = "<group>"; };
+		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
@@ -1069,8 +1092,8 @@
 		B0BF35581D8DC8D600B0540B /* JSQExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
 				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
+				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
 				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
@@ -1084,16 +1107,24 @@
 				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
 				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
 				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
+				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
 				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
 				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */,
 				86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */,
 				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
 				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
-				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
 				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
 				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
 				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
+				DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */,
+				DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */,
+				DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */,
+				DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */,
+				DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */,
+				DC74CE1D1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.h */,
+				DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */,
+				DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */,
 				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
 				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
 			);
@@ -1300,11 +1331,13 @@
 				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
+				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
@@ -1343,12 +1376,14 @@
 				B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0BF357F1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF471D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				DC74CE281DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35851D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
+				DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B064EF651D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED21D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1375,12 +1410,14 @@
 				B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0BF35801D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF481D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				DC74CE291DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35861D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
+				DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B064EF661D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED31D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1579,6 +1616,7 @@
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
+				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
@@ -1593,6 +1631,7 @@
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
+				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
@@ -1623,6 +1662,7 @@
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
+				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
@@ -1659,6 +1699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B064EF441D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
+				DC74CE201DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B0714E191D62534A00356705 /* LogInViewController.swift in Sources */,
 				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
@@ -1704,6 +1745,7 @@
 				B0BF356D1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				B064EF331D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
+				DC74CE231DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
@@ -1729,6 +1771,7 @@
 				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
+				DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0714E0D1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
@@ -1785,6 +1828,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
+				DC74CE211DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B064EED01D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
@@ -1830,6 +1874,7 @@
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0714D5D1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
+				DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
@@ -1855,6 +1900,7 @@
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
+				DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,

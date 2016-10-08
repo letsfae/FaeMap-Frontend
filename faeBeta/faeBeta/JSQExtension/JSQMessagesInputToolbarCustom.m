@@ -71,7 +71,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 
 - (JSQMessagesToolbarContentViewCustom *)loadToolbarContentView
 {
-    NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:@"JSQMessagesToolbarContentViewCustom"
+    NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:NSStringFromClass([JSQMessagesToolbarContentViewCustom class])
                                                                                           owner:nil
                                                                                         options:nil];
     return nibViews.firstObject;

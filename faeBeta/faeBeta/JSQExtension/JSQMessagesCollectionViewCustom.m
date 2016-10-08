@@ -19,8 +19,8 @@
 #import "JSQMessagesCollectionViewCustom.h"
 
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellIncoming.h>
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellOutgoing.h>
+#import "JSQMessagesCollectionViewCellIncomingCustom.h"
+#import "JSQMessagesCollectionViewCellOutgoingCustom.h"
 
 #import <JSQMessagesViewController/JSQMessagesTypingIndicatorFooterView.h>
 #import <JSQMessagesViewController/JSQMessagesLoadEarlierHeaderView.h>
@@ -52,17 +52,17 @@
     self.alwaysBounceVertical = YES;
     self.bounces = YES;
     
-    [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming cellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellIncomingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncomingCustom cellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellOutgoingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoingCustom cellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellIncomingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncomingCustom mediaCellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellOutgoingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoingCustom mediaCellReuseIdentifier]];
     
     [self registerNib:[JSQMessagesTypingIndicatorFooterView nib]
           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter

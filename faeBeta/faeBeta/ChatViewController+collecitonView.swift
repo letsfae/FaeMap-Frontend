@@ -22,7 +22,7 @@ extension ChatViewController {
             return cell
         }
         
-        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
+        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCellCustom
         
         let data = messages[indexPath.row]
         
@@ -230,6 +230,18 @@ extension ChatViewController {
             
             soundPlayer.play()
         }
+    }
+    
+    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        var returnValue = false
+        
+        let object = objects[indexPath.row]
+        
+        if object["type"] as! String == "picture" || object["type"] as! String == "text" || object["type"] as! String == "sticker"{
+            returnValue = true
+        }
+        self.selectedIndexPathForMenu = indexPath;
+        return returnValue
     }
 
 }
