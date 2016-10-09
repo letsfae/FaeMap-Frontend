@@ -34,11 +34,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let factor : CGFloat = 375 / 414// autolayout factor MARK: 5s may has error, 6 and 6+ is ok
     var firstLoad : Bool?// whether it is the first time to load this room.
     var withUser : FaeWithUser?
-    {
-        didSet{
-            self.getAvatar()
-        }
-    }
+
     var withUserId : String? // the user id we chat to
     var withUserName : String? // the user name we chat to
     var currentUserId : String?// my user id
@@ -169,12 +165,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = user_id.stringValue
         self.senderDisplayName = username!
-        collectionView?.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
-        collectionView?.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
         self.inputToolbar.contentView.textView.delegate = self
         //load firebase messages
         loadMessage()
@@ -201,6 +196,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         loadUserDefault()
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
+        getAvatar()
     }
     
     func appWillEnterForeground(){
@@ -552,7 +548,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
                 if(stickerViewShow){
                     self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }else if(imageQuickPickerShow){
@@ -624,16 +620,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func getAvatar() {
         if showAvatar {
-            
-            collectionView?.collectionViewLayout.incomingAvatarViewSize = CGSizeMake(35, 35)
-            collectionView?.collectionViewLayout.outgoingAvatarViewSize = CGSizeMake(35, 35)
-            
+            createAvatars(avatarImageDictionary)
+            self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeMake(35, 35)
+            self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeMake(35, 35)
+            if collectionView != nil {
+                collectionView.reloadData()
+            }
+
             //download avatars
             //            avatarImageFromBackendlessUser(backendless.userService.currentUser)
             //            avatarImageFromBackendlessUser(withUser!)
             
             //create avatars
-            createAvatars(avatarImageDictionary)
         }
     }
     
@@ -679,9 +677,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //                }
 //            }
     
-            avatarDictionary = [user_id : currentUserAvatar, withUser!.userId : withUserAvatar]
+            avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
-            if collectionView != nil {collectionView.reloadData()}
         }
     
 //        func avatarImageFromBackendlessUser(user : BackendlessUser) {

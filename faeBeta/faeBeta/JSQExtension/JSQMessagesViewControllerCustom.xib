@@ -8,7 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JSQMessagesViewControllerCustom">
             <connections>
-                <outlet property="collectionView" destination="l9u-2b-4LK" id="h9Y-iK-D2D"/>
+                <outlet property="collectionView" destination="l9u-2b-4LK" id="NBY-hH-ibr"/>
                 <outlet property="inputToolbar" destination="BoD-Az-3DM" id="7xb-B9-Gjo"/>
                 <outlet property="toolbarBottomLayoutGuide" destination="rHs-6q-NX4" id="WLb-30-5Ln"/>
                 <outlet property="toolbarHeightConstraint" destination="HIk-02-qcW" id="3v6-fE-Ic8"/>

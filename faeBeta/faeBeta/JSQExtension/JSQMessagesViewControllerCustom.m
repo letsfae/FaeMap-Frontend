@@ -631,7 +631,7 @@ JSQMessagesKeyboardControllerDelegate>
 }
 
 - (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
-  accessibilityForCell:(JSQMessagesCollectionViewCell*)cell
+  accessibilityForCell:(JSQMessagesCollectionViewCellCustom*)cell
              indexPath:(NSIndexPath *)indexPath
                message:(id<JSQMessageData>)messageItem
 {
