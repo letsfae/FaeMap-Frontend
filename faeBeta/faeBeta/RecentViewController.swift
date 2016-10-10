@@ -17,6 +17,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     var recents: JSON? // an array of dic to store recent chatting informations
     var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
+    var loadingRecentTimer: NSTimer!
     
     // MARK: - View did/will funcs
     override func viewDidLoad() {
@@ -31,10 +32,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewWillDisappear(animated: Bool) {
         firebase.removeAllObservers()
+        loadingRecentTimer.invalidate()
     }
     
     override func viewWillAppear(animated: Bool) {
-        loadRecents(false, removeIndexPaths: nil)
+        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
     }
     
     /*
@@ -201,6 +203,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
+    func startCheckingRecent(){
+        print("check")
+        loadRecents(false, removeIndexPaths: nil)
+    }
     //MARK: load recents form firebase
     
     func loadRecents(animated:Bool, removeIndexPaths indexPathSet:[NSIndexPath]? ) {
@@ -208,9 +214,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let json = JSON(result!)
             self.recents = json
             if(animated){
-//                let range = NSMakeRange(0, self.tableView.numberOfSections)
-//                let sections = NSIndexSet(indexesInRange: range)
-//                self.tableView.reloadSections(sections, withRowAnimation: .Left)
                 self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
             }else{
                 self.tableView.reloadData()
