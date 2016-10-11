@@ -17,8 +17,8 @@ extension FaeMapViewController {
         buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
         navigationController!.navigationBar.addSubview(buttonLeftTop)
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(29)]", options: [], views: buttonLeftTop)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(29)]", options: [], views: buttonLeftTop)
+        navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
+        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(30)]", options: [], views: buttonLeftTop)
         print("bar height:")
         print(UIApplication.sharedApplication().statusBarFrame.size.height)
         
@@ -26,8 +26,8 @@ extension FaeMapViewController {
         buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
         navigationController!.navigationBar.addSubview(buttonMainScreenSearch)
         buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(27)]", options: [], views: buttonMainScreenSearch)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(29)]", options: [], views: buttonMainScreenSearch)
+        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
+        navigationController!.navigationBar.addConstraintsWithFormat("V:|-4-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: navigationController!.navigationBar, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         
@@ -35,8 +35,8 @@ extension FaeMapViewController {
         buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
         navigationController!.navigationBar.addSubview(buttonRightTop)
         buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(28)]-15-|", options: [], views: buttonRightTop)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(31)]", options: [], views: buttonRightTop)
+        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
+        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(30)]", options: [], views: buttonRightTop)
         
         
         buttonToNorth = UIButton()
@@ -125,6 +125,11 @@ extension FaeMapViewController {
     
     func actionTrueNorth(sender: UIButton!) {
         faeMapView.animateToBearing(0)
+        faeMapView.clear()
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+        originPointForRefresh = mapCenterCoordinate
+        loadCurrentRegionPins()
     }
     
     func actionCreatePin(sender: UIButton!) {
@@ -215,53 +220,53 @@ extension FaeMapViewController {
         UIView.animateWithDuration(1.4, delay: 0, options: .CurveEaseOut, animations: {
             self.blurViewMap.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.2, delay: 0.5, options: .TransitionFlipFromBottom, animations: {
+        UIView.animateWithDuration(0.2, delay: 0.35, options: .TransitionFlipFromBottom, animations: {
             self.buttonClosePinBlurView.alpha = 1.0
             self.buttonClosePinBlurView.frame = CGRectMake(0, self.screenHeight-65, self.screenWidth, 65)
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.3, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.15, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.labelSubmitTitle.center.y -= labelTitleDiff
             self.labelSubmitTitle.alpha = 1.0
             self.reCreateCGRectForButton(self.buttonMedia, x: buttonOriginX_1, y: buttonOriginY_1)
             self.labelSubmitMedia.center.y += labelDiff
             self.labelSubmitMedia.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.4, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.25, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonChats, x: buttonOriginX_2, y: buttonOriginY_1)
             self.labelSubmitChats.center.y += labelDiff
             self.labelSubmitChats.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.35, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonComment, x: buttonOriginX_3, y: buttonOriginY_1)
             self.labelSubmitComment.center.y += labelDiff
             self.labelSubmitComment.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.4, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.25, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonEvent, x: buttonOriginX_1, y: buttonOriginY_2)
             self.labelSubmitEvent.center.y += labelDiff
             self.labelSubmitEvent.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.35, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonFaevor, x: buttonOriginX_2, y: buttonOriginY_2)
             self.labelSubmitFaevor.center.y += labelDiff
             self.labelSubmitFaevor.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.6, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.45, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonNow, x: buttonOriginX_3, y: buttonOriginY_2)
             self.labelSubmitNow.center.y += labelDiff
             self.labelSubmitNow.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.35, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonJoinMe, x: buttonOriginX_1, y: buttonOriginY_3)
             self.labelSubmitJoinMe.center.y += labelDiff
             self.labelSubmitJoinMe.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.6, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.45, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonSell, x: buttonOriginX_2, y: buttonOriginY_3)
             self.labelSubmitSell.center.y += labelDiff
             self.labelSubmitSell.alpha = 1.0
             }, completion: nil)
-        UIView.animateWithDuration(0.883, delay: 0.7, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animateWithDuration(0.883, delay: 0.55, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .CurveLinear, animations: {
             self.reCreateCGRectForButton(self.buttonLive, x: buttonOriginX_3, y: buttonOriginY_3)
             self.labelSubmitLive.center.y += labelDiff
             self.labelSubmitLive.alpha = 1.0

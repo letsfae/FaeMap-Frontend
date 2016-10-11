@@ -199,7 +199,7 @@ extension FaeMapViewController {
         // Button 4: Comment Pin UpVote
         buttonCommentPinUpVote = UIButton()
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
@@ -250,7 +250,7 @@ extension FaeMapViewController {
         
         // Comment Pin Username
         labelCommentPinUserName = UILabel()
-        labelCommentPinUserName.text = "Username"
+        labelCommentPinUserName.text = ""
         labelCommentPinUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelCommentPinUserName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         labelCommentPinTitle.textAlignment = .Left
@@ -275,6 +275,16 @@ extension FaeMapViewController {
                 break
             }
         }
+        
+        // image view appears when saved pin button pressed
+        imageViewSaved = UIImageView()
+        imageViewSaved.image = UIImage(named: "imageSavedThisPin")
+        view.addSubview(imageViewSaved)
+        view.addConstraintsWithFormat("H:[v0(182)]", options: [], views: imageViewSaved)
+        view.addConstraintsWithFormat("V:|-107-[v0(58)]", options: [], views: imageViewSaved)
+        NSLayoutConstraint(item: imageViewSaved, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        imageViewSaved.layer.zPosition = 104
+        imageViewSaved.alpha = 0.0
     }
     
     // Load comment pin list
@@ -377,7 +387,7 @@ extension FaeMapViewController {
         })
     }
     
-    // Like and upvote comment pin
+    // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
@@ -395,15 +405,35 @@ extension FaeMapViewController {
         }
     }
     
+    // Upvote comment pin
+    func actionUpvoteThisComment(sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        if animatingHeart != nil {
+            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        }
+        
+        isUpVoting = true
+        isDownVoting = false
+        
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
     // Down vote comment pin
     func actionDownVoteThisComment(sender: UIButton) {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+        animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+        
         isUpVoting = false
         isDownVoting = true//test
-        if let tempString = labelCommentPinVoteCount.text {
-            commentPinLikeCount = Int(tempString)!
+        
+        if commentIDCommentPinDetailView != "-999" {
+            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
         }
     }
     
@@ -496,7 +526,9 @@ extension FaeMapViewController {
             buttonFakeTransparentClosingView = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
             buttonFakeTransparentClosingView.layer.zPosition = 101
             self.view.addSubview(buttonFakeTransparentClosingView)
-            buttonFakeTransparentClosingView.addTarget(self, action: #selector(FaeMapViewController.actionToCloseOtherViews(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            buttonFakeTransparentClosingView.addTarget(self,
+                                                       action: #selector(FaeMapViewController.actionToCloseOtherViews(_:)),
+                                                       forControlEvents: UIControlEvents.TouchUpInside)
             
             moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 57, 0, 0))
             moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
@@ -509,7 +541,9 @@ extension FaeMapViewController {
             self.view.addSubview(buttonShareOnCommentDetail)
             buttonShareOnCommentDetail.clipsToBounds = true
             buttonShareOnCommentDetail.alpha = 0.0
-            buttonShareOnCommentDetail.addTarget(self, action: #selector(FaeMapViewController.actionShareComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            buttonShareOnCommentDetail.addTarget(self,
+                                                 action: #selector(FaeMapViewController.actionShareComment(_:)),
+                                                 forControlEvents: UIControlEvents.TouchUpInside)
             
             buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
             buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
@@ -517,6 +551,9 @@ extension FaeMapViewController {
             self.view.addSubview(buttonSaveOnCommentDetail)
             buttonSaveOnCommentDetail.clipsToBounds = true
             buttonSaveOnCommentDetail.alpha = 0.0
+            buttonSaveOnCommentDetail.addTarget(self,
+                                                       action: #selector(FaeMapViewController.actionSavedThisPin(_:)),
+                                                       forControlEvents: UIControlEvents.TouchUpInside)
             
             buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
             buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
@@ -545,6 +582,24 @@ extension FaeMapViewController {
     // When clicking share button in comment pin detail window's more options button
     func actionShareComment(sender: UIButton!) {
         print("Share Clicks!")
+    }
+    
+    // When clicking save button in comment pin detail window's more options button
+    func actionSavedThisPin(sender: UIButton) {
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        UIView.animateWithDuration(0.5, animations: ({
+            self.imageViewSaved.alpha = 1.0
+        }), completion: { (done: Bool) in
+            if done {
+                UIView.animateWithDuration(0.5, delay: 1.0, options: [], animations: { 
+                    self.imageViewSaved.alpha = 0.0
+                    }, completion: { (done: Bool) in
+                    if done {
+                    
+                    }
+                })
+            }
+        })
     }
     
     // Expand or shrink comment pin list
@@ -824,6 +879,27 @@ extension FaeMapViewController {
             likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
                 if status == 201 {
                     print("Successfully like this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to like this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func unlikeThisPin(type: String, pinID: String) {
+        let unlikeThisPin = FaePinAction()
+        unlikeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Unlike This Pin")
+            unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: AnyObject?) in
+                if status/100 == 2 {
+                    print("Successfully unlike this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to unlike this comment pin!")
                 }
             }
         }

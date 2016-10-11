@@ -17,6 +17,8 @@ extension FaeMapViewController {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
         blurViewMap = UIVisualEffectView(effect: blurEffect)
         blurViewMap.frame = CGRectMake(0, 0, screenWidth, screenHeight)
+//        blurViewMap.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.1)
+//        blurViewMap.layer.opacity = 0.6
         UIApplication.sharedApplication().keyWindow?.addSubview(blurViewMap)
         loadPinSelections()
         loadCreateCommentPinView()
@@ -91,7 +93,7 @@ extension FaeMapViewController {
                                          action: #selector(FaeMapViewController.actionCloseSubmitPins(_:)),
                                          forControlEvents: UIControlEvents.TouchUpInside)
         buttonClosePinBlurView.alpha = 0.0
-        buttonClosePinBlurView.backgroundColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 0.5)
+        buttonClosePinBlurView.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
         buttonClosePinBlurView.setTitle("Close", forState: .Highlighted)
         buttonClosePinBlurView.setTitle("Close", forState: .Normal)
         buttonClosePinBlurView.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)

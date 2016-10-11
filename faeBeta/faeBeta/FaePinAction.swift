@@ -29,15 +29,23 @@ class FaePinAction : NSObject {
     }
     
     // Like this pin
-    func likeThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void){
-        
-            postToURL("pins/"+type!+"/"+commentId!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-                print(type!)
-                print(commentId!)
+    func likeThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
+        postToURL("pins/"+type!+"/"+commentId!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            print(type!)
+            print(commentId!)
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    // Unlike this pin
+    func unlikeThisPin(type: String?, commentID: String?, completion:(Int, AnyObject?) -> Void) {
+        if commentID != nil{
+            deleteFromURL("pins/"+type!+"/"+commentID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
                 self.clearKeyValue()
-                completion(status, message)
+                completion(status,message)
             }
-
+        }
     }
     
     // Get pin's attribute
@@ -59,6 +67,8 @@ class FaePinAction : NSObject {
             }
         }
     }
+    
+    
     
     
 //    func deleteCommentById(commentId:String?, completion:(Int,AnyObject?)->Void){

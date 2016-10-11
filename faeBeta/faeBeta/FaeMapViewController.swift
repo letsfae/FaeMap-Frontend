@@ -224,6 +224,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
     var imageCommentPinUserAvatar: UIImageView!
+    var imageViewSaved: UIImageView!
     var labelCommentPinCommentsCount: UILabel!
     var labelCommentPinLikeCount: UILabel!
     var labelCommentPinListTitle: UILabel!
@@ -352,6 +353,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("type", value: "comment")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             print("获取地图数据：")
+            print(message)
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
@@ -384,6 +386,19 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                         pinData["longitude"] = longitudeInfo
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
+                    if let isLiked = mapInfoJSON[i]["user_pin_operations"]["is_liked"].bool {
+                        pinData["is_liked"] = isLiked
+                    }
+                    if let likedTimestamp = mapInfoJSON[i]["user_pin_operations"]["liked_timestamp"].string {
+                        pinData["liked_timestamp"] = likedTimestamp
+                    }
+                    if let isSaved = mapInfoJSON[i]["user_pin_operations"]["is_saved"].bool {
+                        pinData["is_saved"] = isSaved
+                    }
+                    if let savedTimestamp = mapInfoJSON[i]["user_pin_operations"]["saved_timestamp"].string {
+                        pinData["saved_timestamp"] = savedTimestamp
+                    }
+                    
                     pinShowOnMap.userData = pinData
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
                     pinShowOnMap.map = self.faeMapView
@@ -496,8 +511,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
+        var mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+        var mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
         if originPointForRefreshFirstLoad {
             originPointForRefresh = mapCenterCoordinate
             originPointForRefreshFirstLoad = false
@@ -507,8 +522,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         if isInPinLocationSelect {
             self.faeMapView.clear()
-            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-            let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
+            mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+            mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
             GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
                 (response, error) -> Void in
                 if let fullAddress = response?.firstResult()?.lines {
@@ -575,9 +590,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 cell.jumpToDetail.addTarget(self, action: #selector(FaeMapViewController.actionJumpToDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 cell.deleteButton.addTarget(self, action: #selector(FaeMapViewController.deleteCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 
-                if let name = pinData["user_id"].int {
-                    labelCommentPinUserName.text = "\(name)"
-                    cell.userID = "\(name)"
+                if let toGetUserName = pinData["user_id"].int {
+                    let getUserName = FaeUser()
+                    getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
+                        let userProfile = JSON(message!)
+                        if let username = userProfile["user_name"].string {
+                            print(username)
+                            self.labelCommentPinUserName.text = username
+                            cell.userID = username
+                        }
+                    }
                 }
                 if let time = pinData["created_at"].string {
                     labelCommentPinTimestamp.text = "\(time)"
@@ -596,6 +618,34 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
                     getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
                     commentID = commentIDGet
+                    let getCommentById = FaeMap()
+                    getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
+                        print(message)
+                        let commentInfoJSON = JSON(message!)
+                        if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
+                            print("is_liked: \(isLiked)")
+                            if isLiked == false {
+                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+                                if self.animatingHeart != nil {
+                                    self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+                                }
+                                self.isUpVoting = false
+                                self.isDownVoting = true
+                            }
+                            else {
+                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+                                if self.animatingHeart != nil {
+                                    self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
+                                }
+                                self.isUpVoting = true
+                                self.isDownVoting = false
+                            }
+                        }
+                    }
                     if commentPinAvoidDic[commentID] != nil {
                         print("Comment exists!")
                         print(self.commentPinAvoidDic)

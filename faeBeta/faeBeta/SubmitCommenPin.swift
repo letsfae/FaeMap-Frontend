@@ -191,6 +191,10 @@ extension FaeMapViewController {
                     let getJustPostedComment = FaeMap()
                     
                     getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
+                        print("DEBUG: GETCOMMENT!!-----=-=-=-==================")
+                        
+                        print(status)
+                        
                         let mapInfoJSON = JSON(message!)
                         var pinData = [String: AnyObject]()
                         
