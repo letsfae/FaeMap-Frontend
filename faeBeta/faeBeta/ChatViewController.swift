@@ -509,7 +509,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         soundRecorder.stop()
      // send voice message to firebase
         voiceData = NSData(contentsOfURL: getFileURL())!
-        
+        startRecording = !startRecording
+
         // add a check to avoid short sound message
         do {
             soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
@@ -521,7 +522,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             return;
         }
         sendMessage(nil, date: NSDate(), picture: nil,sticker: nil, location: nil, snapImage : nil,audio: voiceData)
-        startRecording = !startRecording
     }
     
     func sendMessageButtonTapped() {

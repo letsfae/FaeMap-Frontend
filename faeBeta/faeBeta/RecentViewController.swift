@@ -216,13 +216,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func loadRecents(animated:Bool, removeIndexPaths indexPathSet:[NSIndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
-            let json = JSON(result!)
-            self.recents = json
-            NSUserDefaults.standardUserDefaults().setObject(result as! NSArray, forKey: "recentData")
-            if(animated){
-                self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
+            if let cacheRecent = result as? NSArray {
+                let json = JSON(result!)
+                self.recents = json
+                    NSUserDefaults.standardUserDefaults().setObject(cacheRecent, forKey: "recentData")
+
+                if(animated){
+                    self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
+                }else{
+                    self.tableView.reloadData()
+                }
             }else{
-                self.tableView.reloadData()
+                self.recents = JSON([])
             }
         }
 
