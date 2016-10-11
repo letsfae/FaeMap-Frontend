@@ -27,7 +27,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         navigationBarSet()
         addGestureRecognizer()
         firebase.keepSynced(true)
-        // Do any additional setup after loading the view.
+
+        if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey("recentData"){
+            self.recents = JSON(recentData)
+            self.tableView.reloadData()
+        }
+
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -213,6 +218,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             let json = JSON(result!)
             self.recents = json
+            NSUserDefaults.standardUserDefaults().setObject(result as! NSArray, forKey: "recentData")
             if(animated){
                 self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
             }else{
