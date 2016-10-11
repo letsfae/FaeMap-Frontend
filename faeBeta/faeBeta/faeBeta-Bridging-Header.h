@@ -14,3 +14,4 @@
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
 #import "JSQMessagesCollectionViewCustom.h"
 #import "JSQMessagesCollectionViewCellCustom.h"
+#import "JSQAudioMediaItemCustom.h"

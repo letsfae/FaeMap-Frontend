@@ -243,7 +243,7 @@ extension ChatViewController {
         if object["type"] as! String == "audio" {
             let message = messages[indexPath.row]
             
-            let mediaItem = message.media as! JSQAudioMediaItem
+            let mediaItem = message.media as! JSQAudioMediaItemCustom
             
             let data = mediaItem.audioData
             

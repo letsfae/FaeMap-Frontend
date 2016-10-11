@@ -462,6 +462,12 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC4EC36A1DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
 		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
 		DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
 		DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
@@ -700,6 +706,10 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
+		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
+		DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItemCustom.h; sourceTree = "<group>"; };
+		DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItemCustom.m; sourceTree = "<group>"; };
 		DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellCustom.h; sourceTree = "<group>"; };
 		DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellCustom.m; sourceTree = "<group>"; };
 		DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellIncomingCustom.h; sourceTree = "<group>"; };
@@ -1092,31 +1102,17 @@
 		B0BF35581D8DC8D600B0540B /* JSQExtension */ = {
 			isa = PBXGroup;
 			children = (
+				DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */,
+				DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */,
+				DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */,
+				DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */,
 				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
 				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
+				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
 				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
 				B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */,
-				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
-				8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */,
-				8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */,
-				8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */,
-				B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */,
-				B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */,
-				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
-				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
-				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
-				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
-				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
-				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
-				86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */,
-				86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */,
-				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
-				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
-				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
-				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
-				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
 				DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */,
 				DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */,
 				DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */,
@@ -1125,6 +1121,24 @@
 				DC74CE1D1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.h */,
 				DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */,
 				DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */,
+				8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */,
+				8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */,
+				8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */,
+				B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */,
+				B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */,
+				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
+				86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */,
+				86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */,
+				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
+				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
+				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
+				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
+				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
+				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
+				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
+				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
+				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
+				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
 				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
 				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
 			);
@@ -1560,6 +1574,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
+				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
@@ -1648,6 +1663,7 @@
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
+				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
@@ -1727,6 +1743,7 @@
 				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B064EEA81D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
+				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
@@ -1810,6 +1827,7 @@
 				B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
+				DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B064EEF81D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714D681D5E435200356705 /* OpenUserPinView.swift in Sources */,
@@ -1856,6 +1874,7 @@
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
+				DC4EC36A1DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
@@ -1939,6 +1958,7 @@
 				B0714DFE1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF5D1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
+				DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EEF21D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0BF35711D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
