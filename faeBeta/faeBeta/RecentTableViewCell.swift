@@ -63,9 +63,9 @@ class RecentTableViewCell: UITableViewCell {
         counterLabel.layer.cornerRadius = 10
         counterLabel.layer.masksToBounds = true
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
-        if (recent["unread_count"].int)! != 0 {
+        if (recent["unread_count"].number)!.intValue != 0 {
             counterLabel.hidden = false
-            counterLabel.text = "\(recent["unread_count"].int)"
+            counterLabel.text = "\(recent["unread_count"].number!.intValue)"
             if(counterLabel.text?.characters.count == 2){
                 countLabelLength.constant = 23
             }else{
@@ -125,7 +125,7 @@ class RecentTableViewCell: UITableViewCell {
     func panThisCell(recognizer:UIPanGestureRecognizer){
         switch (recognizer.state) {
         case .Began:
-            isMovingCell = true
+            isDraggingRecentTableViewCell = true
             self.panStartPoint = recognizer.translationInView(self.mainView)
             self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
             break;
@@ -226,7 +226,7 @@ class RecentTableViewCell: UITableViewCell {
             
             self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
                 self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
-                isMovingCell = false
+                isDraggingRecentTableViewCell = false
 
             });
         });

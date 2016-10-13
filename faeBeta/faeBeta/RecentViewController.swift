@@ -11,7 +11,7 @@ import Firebase
 import FirebaseDatabase
 import SwiftyJSON
 
-public var isMovingCell = false
+public var isDraggingRecentTableViewCell = false
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
     
@@ -43,7 +43,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
     }
     
     /*
@@ -190,6 +190,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             
 //            chatVC.recent = recent
             chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+            chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = "default"
             chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
@@ -226,7 +227,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 if(animated){
                     self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
                 }else{
-                    if(!isMovingCell){
+                    if(!isDraggingRecentTableViewCell){
                         self.tableView.reloadData()
                     }
                 }

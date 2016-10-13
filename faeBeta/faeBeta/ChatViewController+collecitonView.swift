@@ -60,7 +60,7 @@ extension ChatViewController {
     
     override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if collectionView == self.collectionView && indexPath.row == messages.count - 1{
-            clearRecentCounter(chatRoomId)
+            clearRecentCounter(chat_id)
         }else if collectionView == self.photoQuickCollectionView {
             let cell = cell as! PhotoPickerCollectionViewCell
             //get image from PHFetchResult
