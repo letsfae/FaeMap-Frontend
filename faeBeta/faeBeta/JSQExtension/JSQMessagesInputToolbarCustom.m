@@ -45,7 +45,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self != nil){
-        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         
         self.jsq_isObserving = NO;
         self.sendButtonOnRight = YES;

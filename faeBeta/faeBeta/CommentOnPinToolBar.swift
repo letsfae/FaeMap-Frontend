@@ -12,7 +12,7 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     func loadInputToolbar() {
-        commentInputToolbar = JSQMessagesInputToolbarCustom(frame: CGRectMake(0, screenHeight-90, screenWidth, 90))
+        commentInputToolbar = JSQMessagesInputToolbarCustom (frame: CGRectMake(0, screenHeight-90, screenWidth, 90))
         loadInputBarComponent()
         self.view.addSubview(commentInputToolbar)
         self.view.bringSubviewToFront(commentInputToolbar)
