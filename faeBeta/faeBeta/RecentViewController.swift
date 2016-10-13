@@ -30,7 +30,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         addGestureRecognizer()
         firebase.keepSynced(true)
 
-        if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey("recentData"){
+        if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
             self.tableView.reloadData()
         }
@@ -222,7 +222,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
                 self.recents = json
-                    NSUserDefaults.standardUserDefaults().setObject(cacheRecent, forKey: "recentData")
+                    NSUserDefaults.standardUserDefaults().setObject(cacheRecent, forKey: (user_id.stringValue + "recentData"))
 
                 if(animated){
                     self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
