@@ -58,7 +58,10 @@ extension FaeMapViewController {
             self.presentViewController (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
         }
     }
-    
+
+    func segueToChat(withUserId: NSNumber ){
+        
+    }
     
     func animationMapChatHide(sender: UIButton!) {
         UIView.animateWithDuration(0.25, animations: ({

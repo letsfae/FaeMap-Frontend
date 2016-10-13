@@ -69,6 +69,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     [self toggleSendButtonEnabled];
 }
 
+
 - (JSQMessagesToolbarContentViewCustom *)loadToolbarContentView
 {
     NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:NSStringFromClass([JSQMessagesToolbarContentViewCustom class])
