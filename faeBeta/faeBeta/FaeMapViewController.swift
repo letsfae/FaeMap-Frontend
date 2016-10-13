@@ -281,6 +281,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // Fake Transparent View For Closing
     var buttonFakeTransparentClosingView: UIButton!
     
+    // Comment on pin input toolbar
+    var commentInputToolbar: JSQMessagesInputToolbarCustom!
     
     // System Functions
     
@@ -307,6 +309,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadNamecard()
         self.loadCommentPinDetailWindow()
         self.loadCommentPinList()
+        self.loadInputToolbar()
+//        self.loadInputBarComponent()
         
         print("device id: yueshen")
         print(headerDeviceID)

@@ -13,3 +13,4 @@
 #import "JSQMessagesBubbleImageFactoryCustom.h"
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
 #import "JSQMessagesCollectionViewCustom.h"
+#import "JSQMessagesInputToolbarCustom.h"

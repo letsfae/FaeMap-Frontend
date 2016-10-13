@@ -465,6 +465,9 @@
 		B8C2F6851D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
+		B8F98EDD1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
+		B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
 		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
@@ -684,6 +687,7 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
+		B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentOnPinToolBar.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
@@ -858,6 +862,7 @@
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
 				B0714D371D5E435200356705 /* UpdateUserPin.swift */,
+				B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1760,6 +1765,7 @@
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
+				B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
@@ -1825,6 +1831,7 @@
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
+				B8F98EDD1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0714D621D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
 				B064EF061D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
@@ -1952,6 +1959,7 @@
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
+				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
