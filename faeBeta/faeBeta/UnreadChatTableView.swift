@@ -50,8 +50,17 @@ extension FaeMapViewController {
         }
     }
 
-    func segueToChat(withUserId: NSNumber ){
+    func segueToChat(withUserId: NSNumber, withUserName: String ){
+        let chatVC = ChatViewController()
         
+        chatVC.hidesBottomBarWhenPushed = true
+        
+        //            chatVC.recent = recent
+        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
+//        chatVC.chat_id = recent["chat_id"].number?.stringValue
+        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func animationMapChatHide(sender: UIButton!) {

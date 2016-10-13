@@ -187,10 +187,12 @@ func DeleteRecentItem(recent : JSON, completion: ((Int,AnyObject?) -> Void)?) {
 
 //MARK : Clear recent counter function
 
-func clearRecentCounter(chatRoomId : String) {
-    postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: headerAuthentication(), completion: { (statusCode, result) in
-        
-    })
+func clearRecentCounter(chatRoomId : String?) {
+    if let chatRoomId = chatRoomId{
+        postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            
+        })
+    }
 }
 
 

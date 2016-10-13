@@ -40,7 +40,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var currentUserId : String?// my user id
     var recent : NSDictionary?//recent chat room message
     var chatRoomId : String!
-    var chat_id: String!//the chat Id returned by the server
+    var chat_id: String?//the chat Id returned by the server
     var initialLoadComplete : Bool = false// the first time open this chat room, false means we need to load every message to the chat room, true means we only need to load the new messages.
     var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubbleImage: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImageWithColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0))
     //the message I sent bubble

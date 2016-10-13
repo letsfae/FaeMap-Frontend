@@ -11,7 +11,7 @@ import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
 
-extension ChatViewController{
+extension ChatViewController: OutgoingMessageProtocol{
     //MARK: - send message
     func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
         
@@ -62,6 +62,8 @@ extension ChatViewController{
         //        print(outgoingMessage!.messageDictionary)
         //        print(chatRoomId)
         self.finishSendingMessage()
+        
+        outgoingMessage!.delegate = self
         
         // add this outgoing message under chatRoom with id and content
         outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, withUser: withUser!)
@@ -213,5 +215,10 @@ extension ChatViewController{
             return false
         }
         
+    }
+    
+    // outgoingmessage delegate
+    func updateChat_Id(newId: String) {
+        chat_id = newId
     }
 }

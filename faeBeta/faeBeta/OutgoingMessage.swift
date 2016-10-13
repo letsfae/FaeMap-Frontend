@@ -11,12 +11,18 @@ import Firebase
 import FirebaseDatabase
 import AVFoundation
 
+protocol OutgoingMessageProtocol {
+    func updateChat_Id(newId: String)
+}
+
 // this class is used to box information of one message user sent and send them to firebase.
 class OutgoingMessage {
     
     private let firebase = FIRDatabase.database().reference().child("Message")
     
     let messageDictionary : NSMutableDictionary
+    
+    var delegate : OutgoingMessageProtocol!
     //text
     init(message : String, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         messageDictionary = NSMutableDictionary(objects: [message, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
@@ -59,7 +65,11 @@ class OutgoingMessage {
                 print("Error, couldn't send message: \(error)")
             }else{
                 postToURL("chats", parameter: ["receiver_id": user.userId, "message": item["message"] as! String, "type": item["type"] as! String], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                    print("[OutgoingMessage] Sending result: \(result)")
+                    if(statusCode / 100 == 2){
+                        if let resultDic = result as? NSDictionary{
+                            self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)
+                        }
+                    }
                 })
             }
         }
