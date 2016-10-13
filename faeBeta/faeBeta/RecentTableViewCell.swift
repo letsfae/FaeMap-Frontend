@@ -125,6 +125,7 @@ class RecentTableViewCell: UITableViewCell {
     func panThisCell(recognizer:UIPanGestureRecognizer){
         switch (recognizer.state) {
         case .Began:
+            isMovingCell = true
             self.panStartPoint = recognizer.translationInView(self.mainView)
             self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
             break;
@@ -225,6 +226,8 @@ class RecentTableViewCell: UITableViewCell {
             
             self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
                 self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+                isMovingCell = false
+
             });
         });
     }

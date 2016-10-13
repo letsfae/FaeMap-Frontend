@@ -11,6 +11,8 @@ import Firebase
 import FirebaseDatabase
 import SwiftyJSON
 
+public var isMovingCell = false
+
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -41,7 +43,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
     }
     
     /*
@@ -165,12 +167,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let recent = recents![indexPath.row]
         
         cell.bindData(recent)
+
         if (self.cellsCurrentlyEditing.containsObject(indexPath)) {
             cell.openCell()
         }
         return cell
     }
-    
     //MARK: - helpers
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -224,7 +226,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 if(animated){
                     self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
                 }else{
-                    self.tableView.reloadData()
+                    if(!isMovingCell){
+                        self.tableView.reloadData()
+                    }
                 }
             }else{
                 self.recents = JSON([])
