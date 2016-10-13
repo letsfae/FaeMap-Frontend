@@ -48,6 +48,16 @@ class FaePinAction : NSObject {
         }
     }
     
+    // Save this pin
+    func saveThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
+        postToURL("pins/"+type!+"/"+commentId!+"/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            print(type!)
+            print(commentId!)
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     // Get pin's attribute
     func getPinAttribute(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
         if type != nil && commentId != nil {

@@ -309,7 +309,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadNamecard()
         self.loadCommentPinDetailWindow()
         self.loadCommentPinList()
-        self.loadInputToolbar()
+//        self.loadInputToolbar()
 //        self.loadInputBarComponent()
         
         print("device id: yueshen")

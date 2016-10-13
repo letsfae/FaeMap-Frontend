@@ -586,6 +586,9 @@ extension FaeMapViewController {
     
     // When clicking save button in comment pin detail window's more options button
     func actionSavedThisPin(sender: UIButton) {
+        if commentIDCommentPinDetailView != "-999" {
+            saveThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
         UIView.animateWithDuration(0.5, animations: ({
             self.imageViewSaved.alpha = 1.0
@@ -883,6 +886,23 @@ extension FaeMapViewController {
                 }
                 else {
                     print("Fail to like this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func saveThisPin(type: String, pinID: String) -> Int {
+        let saveThisPin = FaePinAction()
+        saveThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Save This Pin")
+            saveThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully save this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to save this comment pin!")
                 }
             }
         }
