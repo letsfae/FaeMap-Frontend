@@ -74,7 +74,7 @@ class FAETextField: UITextField {
     private func setupPasswordTextField()
     {
         self.textColor = UIColor.faeAppRedColor()
-        rightButton = UIButton(frame: CGRectMake(contentInset - 20, 5, 20, 20))
+        rightButton = UIButton(frame: CGRectMake(contentInset - 20, 0, 20, 30))
         rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
         rightPlaceHolderView.addSubview(rightButton)
 

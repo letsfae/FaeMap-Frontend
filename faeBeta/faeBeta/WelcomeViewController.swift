@@ -26,10 +26,13 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     var loginButton:UIButton!
     var createAccountButton:UIButton!
     var rightLabel:UILabel!
-    
+    var heightSizeFactor:CGFloat!
+    var widthSizeFactor:CGFloat!
     // MARK: - View did/will
     override func viewDidLoad() {
         super.viewDidLoad()
+        heightSizeFactor = screenHeight / 736
+        widthSizeFactor = screenWidth / 414
         setupViewFrame()
         setupImageContainerPageViewController()
         setupBottomPart()
@@ -68,8 +71,8 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         self.addChildViewController(self.imageContainerPageViewController)
         self.view.addSubview(self.imageContainerPageViewController.view)
         self.imageContainerPageViewController.didMoveToParentViewController(self)
-        self.imageContainerPageViewController.view.frame = CGRectMake(0, 110, self.screenWidth, 400);
-        
+        self.imageContainerPageViewController.view.frame = CGRectMake(0, 90 * heightSizeFactor, self.screenWidth, self.screenHeight - 336 * heightSizeFactor);
+        self.imageContainerPageViewController.view.layoutIfNeeded()
         for view in self.imageContainerPageViewController.view.subviews {
             if let scrollView = view as? UIScrollView {
                 scrollView.delegate = self
@@ -80,7 +83,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     private func setupBottomPart()
     {
         // look around label
-        lookAroundButton = UIButton(frame: CGRectMake(0,screenHeight - 216,125,22))
+        lookAroundButton = UIButton(frame: CGRectMake(0,screenHeight - 216 * heightSizeFactor,125,22))
         lookAroundButton.center.x = self.screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 16)
         
@@ -90,23 +93,23 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
-        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 176, 300, 50))
+        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 176 * heightSizeFactor, screenWidth - 114 * widthSizeFactor * widthSizeFactor, 50 * heightSizeFactor))
         loginButton.center.x = self.screenWidth / 2
         loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        loginButton.layer.cornerRadius = 25
+        loginButton.layer.cornerRadius = 25*heightSizeFactor
         loginButton.backgroundColor = UIColor.faeAppRedColor()
         loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), forControlEvents: .TouchUpInside)
         self.view.insertSubview(loginButton, atIndex: 0)
         self.view.bringSubviewToFront(loginButton)
         
         // create account button
-        createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106, 300, 50))
+        createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106 * heightSizeFactor, screenWidth - 114 * widthSizeFactor * widthSizeFactor, 50 * heightSizeFactor))
         createAccountButton.center.x = self.screenWidth / 2
         createAccountButton.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
         createAccountButton.backgroundColor = UIColor.whiteColor()
         createAccountButton.layer.borderColor = UIColor.faeAppRedColor().CGColor
-        createAccountButton.layer.borderWidth = 2
-        createAccountButton.layer.cornerRadius = 25
+        createAccountButton.layer.borderWidth = 3
+        createAccountButton.layer.cornerRadius = 25*heightSizeFactor
         createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), forControlEvents: .TouchUpInside)
         self.view.insertSubview(createAccountButton, atIndex: 0)
         self.view.bringSubviewToFront(createAccountButton)
