@@ -42,7 +42,8 @@ class WelcomeImageContainerViewController: UIViewController {
         var description : String = ""
         switch index {
         case 0:
-            title = "Fae Map"
+            title = " "
+            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
             description = "Connecting People & Communities \non a Real Time Social Map"
             break
         case 1:

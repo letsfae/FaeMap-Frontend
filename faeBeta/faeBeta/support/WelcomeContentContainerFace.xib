@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="descriptionLabel" destination="bPD-AN-9Gu" id="ND8-T4-5tL"/>
                 <outlet property="imageView" destination="bC8-jW-vG9" id="gJZ-Nu-5C2"/>
+                <outlet property="titleIcon" destination="MFs-dP-CLo" id="akx-WB-5Es"/>
                 <outlet property="titleLabel" destination="31y-Rv-AgS" id="HKC-fv-lp3"/>
             </connections>
         </placeholder>
@@ -37,14 +38,22 @@ in any area near or far!</string>
                     <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MFs-dP-CLo">
+                    <constraints>
+                        <constraint firstAttribute="height" constant="27" id="eks-AO-RjE"/>
+                        <constraint firstAttribute="width" constant="120" id="qyu-X9-iLf"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstItem="bC8-jW-vG9" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="26:37" id="9Vt-Hf-mjS"/>
                 <constraint firstItem="bC8-jW-vG9" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="G4j-uH-cGT"/>
                 <constraint firstItem="31y-Rv-AgS" firstAttribute="top" secondItem="bC8-jW-vG9" secondAttribute="bottom" id="RnQ-yY-WVW"/>
+                <constraint firstItem="MFs-dP-CLo" firstAttribute="top" secondItem="bC8-jW-vG9" secondAttribute="bottom" constant="-5" id="Tp8-na-GpT"/>
                 <constraint firstItem="bPD-AN-9Gu" firstAttribute="top" secondItem="31y-Rv-AgS" secondAttribute="bottom" constant="5" id="fGa-n1-yQy"/>
                 <constraint firstItem="bC8-jW-vG9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gGz-vy-3xq"/>
                 <constraint firstItem="31y-Rv-AgS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="gpf-Lt-7Td"/>
+                <constraint firstItem="MFs-dP-CLo" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="wqM-M5-TXX"/>
                 <constraint firstItem="bPD-AN-9Gu" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="zO1-bi-9ql"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

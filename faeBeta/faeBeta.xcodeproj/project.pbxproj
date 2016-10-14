@@ -483,6 +483,7 @@
 		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
@@ -718,6 +719,7 @@
 		DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellOutgoingCustom.m; sourceTree = "<group>"; };
 		DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellIncomingCustom.xib; sourceTree = "<group>"; };
 		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
+		DCEAE5441DB165A30047110B /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
@@ -998,6 +1000,7 @@
 			isa = PBXGroup;
 			children = (
 				B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */,
+				DCEAE5441DB165A30047110B /* ScreenFactor.swift */,
 				B064EF1A1D6E354A00C078F5 /* WelcomePageControl.swift */,
 				B064EF121D6E353E00C078F5 /* WelcomeContentContainerFace.swift */,
 				B064EF131D6E353E00C078F5 /* WelcomeContentContainerFace.xib */,
@@ -1672,6 +1675,7 @@
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
+				DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,

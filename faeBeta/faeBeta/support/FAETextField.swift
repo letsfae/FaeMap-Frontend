@@ -20,7 +20,7 @@ class FAETextField: UITextField {
     {
         set {
             super.secureTextEntry = newValue
-            if newValue {
+            if newValue && rightButton == nil {
                 setupPasswordTextField()
             }
         }
@@ -74,8 +74,8 @@ class FAETextField: UITextField {
     private func setupPasswordTextField()
     {
         self.textColor = UIColor.faeAppRedColor()
-        rightButton = UIButton(frame: CGRectMake(contentInset - 20, 0, 20, 30))
-        rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+        rightButton = UIButton(frame: CGRectMake(contentInset - 20, 5, 20, 20))
+        rightButton.setImage(UIImage(named: "check_eye_close_red_new")!, forState: UIControlState.Normal)
         rightPlaceHolderView.addSubview(rightButton)
 
         rightButton.addTarget(self, action: #selector(FAETextField.rightButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
@@ -86,10 +86,10 @@ class FAETextField: UITextField {
     {
         secureTextEntry = !secureTextEntry
         if secureTextEntry {
-            rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_close_red_new")!, forState: UIControlState.Normal)
             self.textColor = UIColor.faeAppRedColor()
         }else{
-            rightButton.setImage(UIImage(named: "check_eye_open_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_open_red_new")!, forState: UIControlState.Normal)
             self.textColor = UIColor.faeAppInputTextGrayColor()
         }
         
