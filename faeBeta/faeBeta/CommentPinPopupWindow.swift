@@ -11,252 +11,446 @@ import GoogleMaps
 import SwiftyJSON
 
 extension FaeMapViewController {
+    // Load comment pin detail window
     func loadCommentPinDetailWindow() {
         // Header
-        self.uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 0, self.screenWidth, 320))
-        self.uiviewCommentPinDetail.layer.zPosition = 100
-        self.uiviewCommentPinDetail.backgroundColor = UIColor.whiteColor()
+        uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 0, screenWidth, 320))
+        uiviewCommentPinDetail.backgroundColor = UIColor.whiteColor()
+        uiviewCommentPinDetail.center.y -= uiviewCommentPinDetail.frame.size.height
+        uiviewCommentPinDetail.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
+        uiviewCommentPinDetail.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        uiviewCommentPinDetail.layer.shadowOpacity = 0.3
+        uiviewCommentPinDetail.layer.shadowRadius = 10.0
+        uiviewCommentPinDetail.layer.zPosition = 100
         self.view.addSubview(uiviewCommentPinDetail)
-        self.uiviewCommentPinDetail.layer.shadowOpacity = 0.3
-        self.uiviewCommentPinDetail.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        self.uiviewCommentPinDetail.layer.shadowRadius = 10.0
-        self.uiviewCommentPinDetail.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinDetail.center.y = self.uiviewCommentPinDetail.center.y - 320
         
         // Line at y = 64
-        self.uiviewCommentPinUnderLine01 = UIView(frame: CGRectMake(0, 64, self.screenWidth, 1))
-        self.uiviewCommentPinUnderLine01.layer.borderWidth = screenWidth
-        self.uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine01)
+        uiviewCommentPinUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))
+        uiviewCommentPinUnderLine01.layer.borderWidth = screenWidth
+        uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
+        uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine01)
         
         // Line at y = 292
-        self.uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 292, self.screenWidth, 1))
-        self.uiviewCommentPinUnderLine02.layer.borderWidth = screenWidth
-        self.uiviewCommentPinUnderLine02.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine02)
+        uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 292, screenWidth, 1))
+        uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine02)
+        
+        // Button 0: Back to Map
+        buttonCommentPinBackToMap = UIButton()
+        buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), forState: .Normal)
+        buttonCommentPinBackToMap.addTarget(self, action: #selector(FaeMapViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetail.addSubview(buttonCommentPinBackToMap)
+        uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
+        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(26)]", options: [], views: buttonCommentPinBackToMap)
+        buttonCommentPinBackToMap.alpha = 0.0
         
         // Button 1: Back to Comment Pin List
-        self.buttonBackToCommentPinLists = UIButton()
-        self.buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
-                self.buttonBackToCommentPinLists.addTarget(self, action: #selector(FaeMapViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonBackToCommentPinLists)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonBackToCommentPinLists)
+        buttonBackToCommentPinLists = UIButton()
+        buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
+                buttonBackToCommentPinLists.addTarget(self, action: #selector(FaeMapViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetail.addSubview(buttonBackToCommentPinLists)
+        uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
+        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: buttonBackToCommentPinLists)
         
         // Button 2: Comment Pin Option
-        self.buttonOptionOfCommentPin = UIButton()
-        self.buttonOptionOfCommentPin.setImage(UIImage(named: "commentPinOption"), forState: .Normal)
-        self.buttonOptionOfCommentPin.addTarget(self, action: #selector(FaeMapViewController.showCommentPinMoreButtonDetails(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonOptionOfCommentPin)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(27)]-15-|", options: [], views: buttonOptionOfCommentPin)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfCommentPin)
+        buttonOptionOfCommentPin = UIButton()
+        buttonOptionOfCommentPin.setImage(UIImage(named: "commentPinOption"), forState: .Normal)
+        buttonOptionOfCommentPin.addTarget(self, action: #selector(FaeMapViewController.showCommentPinMoreButtonDetails(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetail.addSubview(buttonOptionOfCommentPin)
+        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(27)]-15-|", options: [], views: buttonOptionOfCommentPin)
+        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfCommentPin)
         
-        // Button 3: Comment Pin DownVote
-        self.buttonCommentPinDownVote = UIButton()
-        self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-                self.buttonCommentPinDownVote.addTarget(self, action: #selector(FaeMapViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonCommentPinDownVote)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-15-[v0(25)]", options: [], views: buttonCommentPinDownVote)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(13)]-43-|", options: [], views: buttonCommentPinDownVote)
+        // ScrollView at 65
+        commentDetailFullBoardScrollView = UIScrollView(frame: CGRectMake(0, 65, screenWidth, 228))
+        uiviewCommentPinDetail.addSubview(commentDetailFullBoardScrollView)
+        commentDetailFullBoardScrollView.scrollEnabled = false
+        commentDetailFullBoardScrollView.contentSize.height = 228
+        commentDetailFullBoardScrollView.showsVerticalScrollIndicator = false
+        commentDetailFullBoardScrollView.delaysContentTouches = false
         
-        // Button 4: Comment Pin UpVote
-        self.buttonCommentPinUpVote = UIButton()
-        self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                self.buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonCommentPinUpVote)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-116-[v0(25)]", options: [], views: buttonCommentPinUpVote)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(13)]-43-|", options: [], views: buttonCommentPinUpVote)
+        // Textview width based on different resolutions
+        var textViewWidth: CGFloat = 0
+        if screenWidth == 414 { // 5.5
+            textViewWidth = 360
+        }
+        else if screenWidth == 320 { // 4.0
+            textViewWidth = 266
+        }
+        else if screenWidth == 375 { // 4.7
+            textViewWidth = 321
+        }
         
-        // Button 5: Comment Pin Like
-        self.buttonCommentPinLike = UIButton()
-        self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        self.buttonCommentPinLike.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonCommentPinLike)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(26)]-105-|", options: [], views: buttonCommentPinLike)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(22)]-43-|", options: [], views: buttonCommentPinLike)
+        // Textview of comment pin detail
+        textviewCommentPinDetail = UITextView(frame: CGRectMake(27, 75, textViewWidth, 100))
+        textviewCommentPinDetail.text = "Content"
+        textviewCommentPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        textviewCommentPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        textviewCommentPinDetail.userInteractionEnabled = true
+        textviewCommentPinDetail.editable = false
+        textviewCommentPinDetail.textContainerInset = UIEdgeInsetsZero
+        textviewCommentPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.White
+        commentDetailFullBoardScrollView.addSubview(textviewCommentPinDetail)
         
-        // Button 6: Add Comment
-        self.buttonCommentPinAddComment = UIButton()
-        self.buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), forState: .Normal)
-        //        self.buttonCommentPinAddComment.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonCommentPinAddComment)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(26)]-14-|", options: [], views: buttonCommentPinAddComment)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(22)]-43-|", options: [], views: buttonCommentPinAddComment)
+        // Main buttons' container of comment pin detail
+        uiviewCommentPinDetailMainButtons = UIView(frame: CGRectMake(0, 190, screenWidth, 22))
+        commentDetailFullBoardScrollView.addSubview(uiviewCommentPinDetailMainButtons)
         
-        // Button 7: Drag to larger
-        self.buttonCommentPinDetailDragToLargeSize = UIButton()
-        self.buttonCommentPinDetailDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-        //        self.buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinDetail.addSubview(buttonCommentPinDetailDragToLargeSize)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(\(self.screenWidth))]", options: [], views: buttonCommentPinDetailDragToLargeSize)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(17)]-4-|", options: [], views: buttonCommentPinDetailDragToLargeSize)
-        NSLayoutConstraint(item: buttonCommentPinDetailDragToLargeSize, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        // Gray Block
+        uiviewCommentPinDetailGrayBlock = UIView(frame: CGRectMake(0, 227, screenWidth, 12))
+        uiviewCommentPinDetailGrayBlock.backgroundColor = UIColor(red: 244/255, green: 244/255, blue: 244/255, alpha: 1.0)
+        commentDetailFullBoardScrollView.addSubview(uiviewCommentPinDetailGrayBlock)
         
-        // Label of Title
-        self.labelCommentPinTitle = UILabel()
-        self.labelCommentPinTitle.text = "Comment"
-        self.labelCommentPinTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        self.labelCommentPinTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.labelCommentPinTitle.textAlignment = .Center
-        self.uiviewCommentPinDetail.addSubview(labelCommentPinTitle)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
-        NSLayoutConstraint(item: labelCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        // View to hold three buttons
+        uiviewCommentDetailThreeButtons = UIView(frame: CGRectMake(0, 239, screenWidth, 42))
+        commentDetailFullBoardScrollView.addSubview(uiviewCommentDetailThreeButtons)
+        
+        let widthOfThreeButtons = screenWidth / 3
+        
+        // Table comments for comment
+        tableCommentsForComment = UITableView(frame: CGRectMake(0, 281, screenWidth, 0))
+        tableCommentsForComment.delegate = self
+        tableCommentsForComment.dataSource = self
+        tableCommentsForComment.allowsSelection = false
+        tableCommentsForComment.delaysContentTouches = false
+        tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
+        tableCommentsForComment.scrollEnabled = false
+//        tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
+//        tableCommentsForComment.layer.borderWidth = 1.0
+        commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
+        
+        // Three buttons bottom gray line
+        uiviewGrayBaseLine = UIView()
+        uiviewGrayBaseLine.layer.borderWidth = 1.0
+        uiviewGrayBaseLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
+        uiviewCommentDetailThreeButtons.addSubview(uiviewGrayBaseLine)
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewGrayBaseLine)
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: uiviewGrayBaseLine)
+        
+        // Three buttons bottom sliding red line
+        uiviewRedSlidingLine = UIView(frame: CGRectMake(0, 40, widthOfThreeButtons, 2))
+        uiviewRedSlidingLine.layer.borderWidth = 1.0
+        uiviewRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).CGColor
+        uiviewCommentDetailThreeButtons.addSubview(uiviewRedSlidingLine)
+        
+        // "Comments" of this uiview
+        buttonCommentDetailViewComments = UIButton()
+        buttonCommentDetailViewComments.setImage(UIImage(named: "commentDetailThreeButtonComments"), forState: .Normal)
+        buttonCommentDetailViewComments.addTarget(self, action: #selector(FaeMapViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewComments)
+        buttonCommentDetailViewComments.tag = 1
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewComments)
+        
+        // "Active" of this uiview
+        buttonCommentDetailViewActive = UIButton()
+        buttonCommentDetailViewActive.setImage(UIImage(named: "commentDetailThreeButtonActive"), forState: .Normal)
+        buttonCommentDetailViewActive.addTarget(self, action: #selector(FaeMapViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewActive)
+        buttonCommentDetailViewActive.tag = 3
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewActive)
+        
+        // "People" of this uiview
+        buttonCommentDetailViewPeople = UIButton()
+        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
+        buttonCommentDetailViewPeople.addTarget(self, action: #selector(FaeMapViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewPeople)
+        buttonCommentDetailViewPeople.tag = 5
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewPeople)
+        
+        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: buttonCommentDetailViewComments, buttonCommentDetailViewActive, buttonCommentDetailViewPeople)
         
         // Label of Vote Count
-        self.labelCommentPinVoteCount = UILabel()
-        self.labelCommentPinVoteCount.text = "0"
-        self.labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        self.labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelCommentPinVoteCount.textAlignment = .Center
-        self.uiviewCommentPinDetail.addSubview(labelCommentPinVoteCount)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-48-[v0(56)]", options: [], views: labelCommentPinVoteCount)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(21)]-40-|", options: [], views: labelCommentPinVoteCount)
+        labelCommentPinVoteCount = UILabel()
+        labelCommentPinVoteCount.text = "0"
+        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinVoteCount.textAlignment = .Center
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
         
-        // Comment Pin User Avatar
-        self.imageCommentPinUserAvatar = UIImageView()
-        self.imageCommentPinUserAvatar.image = UIImage(named: "commentPinSampleAvatar")
-        self.uiviewCommentPinDetail.addSubview(imageCommentPinUserAvatar)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-80-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
+        // Label of Like Count
+        labelCommentPinLikeCount = UILabel()
+        labelCommentPinLikeCount.text = "0"
+        labelCommentPinLikeCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinLikeCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinLikeCount.textAlignment = .Right
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinLikeCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelCommentPinLikeCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinLikeCount)
         
-        // Comment Pin Username
-        self.labelCommentPinUserName = UILabel()
-        self.labelCommentPinUserName.text = "Username"
-        self.labelCommentPinUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        self.labelCommentPinUserName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.labelCommentPinTitle.textAlignment = .Left
-        self.uiviewCommentPinDetail.addSubview(labelCommentPinUserName)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-80-[v0(250)]", options: [], views: labelCommentPinUserName)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-84-[v0(25)]", options: [], views: labelCommentPinUserName)
+        // Label of Comments of Coment Pin Count
+        labelCommentPinCommentsCount = UILabel()
+        labelCommentPinCommentsCount.text = "3"
+        labelCommentPinCommentsCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinCommentsCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinCommentsCount.textAlignment = .Right
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinCommentsCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelCommentPinCommentsCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinCommentsCount)
         
-        // Comment Pin Timestamp
-        self.labelCommentPinTimestamp = UILabel()
-        self.labelCommentPinTimestamp.text = "Time"
-        self.labelCommentPinTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        self.labelCommentPinTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelCommentPinTimestamp.textAlignment = .Left
-        self.uiviewCommentPinDetail.addSubview(labelCommentPinTimestamp)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-80-[v0(200)]", options: [], views: labelCommentPinTimestamp)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-105-[v0(27)]", options: [], views: labelCommentPinTimestamp)
+        // Button 3: Comment Pin DownVote
+        buttonCommentPinDownVote = UIButton()
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+                buttonCommentPinDownVote.addTarget(self, action: #selector(FaeMapViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinDownVote)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonCommentPinDownVote)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinDownVote)
         
-        // Comment Pin Content
-        self.textviewCommentPinDetail = UITextView()
-        self.textviewCommentPinDetail.text = "Content"
-        self.textviewCommentPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        self.textviewCommentPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.textviewCommentPinDetail.userInteractionEnabled = true
-        self.textviewCommentPinDetail.editable = false
-        self.textviewCommentPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.White
-        self.uiviewCommentPinDetail.addSubview(textviewCommentPinDetail)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: textviewCommentPinDetail)
-        self.uiviewCommentPinDetail.addConstraintsWithFormat("V:|-140-[v0(100)]", options: [], views: textviewCommentPinDetail)
-    }
-    
-    func loadCommentPinList() {
-        self.uiviewCommentPinListBlank = UIView(frame: CGRectMake(0, 0, self.screenWidth, 320))
-        self.uiviewCommentPinListBlank.layer.zPosition = 100
-        self.uiviewCommentPinListBlank.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(uiviewCommentPinListBlank)
-        self.uiviewCommentPinListBlank.layer.shadowOpacity = 0.3
-        self.uiviewCommentPinListBlank.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        self.uiviewCommentPinListBlank.layer.shadowRadius = 10.0
-        self.uiviewCommentPinListBlank.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinListBlank.center.x -= self.screenWidth
+        // Button 4: Comment Pin UpVote
+        buttonCommentPinUpVote = UIButton()
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+                buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
         
-        // Scrollview
-        self.commentListScrollView = UIScrollView(frame: CGRectMake(0, 65, self.screenWidth, 228))
-        self.uiviewCommentPinListBlank.addSubview(commentListScrollView)
+        // Button 5: Comment Pin Like
+        buttonCommentPinLike = UIButton()
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+        buttonCommentPinLike.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinLike)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonCommentPinLike)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinLike)
         
-        // Line at y = 64
-        self.uiviewCommentPinListUnderLine01 = UIView(frame: CGRectMake(0, 64, self.screenWidth, 1))
-        self.uiviewCommentPinListUnderLine01.layer.borderWidth = screenWidth
-        self.uiviewCommentPinListUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine01)
+        // Button 6: Add Comment
+        buttonCommentPinAddComment = UIButton()
+        buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), forState: .Normal)
+                buttonCommentPinAddComment.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinAddComment)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonCommentPinAddComment)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinAddComment)
         
-        // Line at y = 292
-        self.uiviewCommentPinListUnderLine02 = UIView(frame: CGRectMake(0, 292, self.screenWidth, 1))
-        self.uiviewCommentPinListUnderLine02.layer.borderWidth = screenWidth
-        self.uiviewCommentPinListUnderLine02.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        self.uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine02)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentPinListUnderLine02)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("V:[v0(1)]-27-|", options: [], views: uiviewCommentPinListUnderLine02)
-        
-        // Button: Back to Comment Detail
-        self.buttonBackToCommentPinDetail = UIButton()
-        self.buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-        self.buttonBackToCommentPinDetail.addTarget(self, action: #selector(FaeMapViewController.actionBackToCommentDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinListBlank.addSubview(buttonBackToCommentPinDetail)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
-        
-        // Button: Clear Comment Pin List
-        self.buttonCommentPinListClear = UIButton()
-        self.buttonCommentPinListClear.setImage(UIImage(named: "commentPinListClear"), forState: .Normal)
-        self.buttonCommentPinListClear.addTarget(self, action: #selector(FaeMapViewController.actionClearCommentPinList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinListBlank.addSubview(buttonCommentPinListClear)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
-        
-        // Button: Drag to larger
-        self.buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 293, self.screenWidth, 27))
-        self.buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-        self.buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(FaeMapViewController.actionListExpandShrink(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.uiviewCommentPinListBlank.addSubview(buttonCommentPinListDragToLargeSize)
-        //self.uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(\(self.screenWidth))]", options: [], views: buttonCommentPinListDragToLargeSize)
-        //self.uiviewCommentPinListBlank.addConstraintsWithFormat("V:[v0(27)]-(-1)-|", options: [], views: buttonCommentPinListDragToLargeSize)
-        //NSLayoutConstraint(item: buttonCommentPinListDragToLargeSize, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCommentPinListBlank, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(FaeMapViewController.panActionCommentPinListDrag(_:)))
-        self.buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)
+        // Button 7: Drag to larger
+        buttonCommentPinDetailDragToLargeSize = UIButton()
+        buttonCommentPinDetailDragToLargeSize.backgroundColor = UIColor.whiteColor()
+        buttonCommentPinDetailDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
+        //        buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinDetail.addSubview(buttonCommentPinDetailDragToLargeSize)
+        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(\(screenWidth))]", options: [], views: buttonCommentPinDetailDragToLargeSize)
+        uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(26)]-0-|", options: [], views: buttonCommentPinDetailDragToLargeSize)
+        NSLayoutConstraint(item: buttonCommentPinDetailDragToLargeSize, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         // Label of Title
-        self.labelCommentPinListTitle = UILabel()
-        self.labelCommentPinListTitle.text = "Opened Pins"
-        self.labelCommentPinListTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        self.labelCommentPinListTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.labelCommentPinListTitle.textAlignment = .Center
-        self.uiviewCommentPinListBlank.addSubview(labelCommentPinListTitle)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
-        self.uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
-        NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.uiviewCommentPinListBlank, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        labelCommentPinTitle = UILabel()
+        labelCommentPinTitle.text = "Comment"
+        labelCommentPinTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelCommentPinTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelCommentPinTitle.textAlignment = .Center
+        uiviewCommentPinDetail.addSubview(labelCommentPinTitle)
+        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
+        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
+        NSLayoutConstraint(item: labelCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        
+        // Comment Pin User Avatar
+        imageCommentPinUserAvatar = UIImageView()
+        imageCommentPinUserAvatar.image = UIImage(named: "commentPinSampleAvatar")
+        commentDetailFullBoardScrollView.addSubview(imageCommentPinUserAvatar)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
+        
+        // Comment Pin Username
+        labelCommentPinUserName = UILabel()
+        labelCommentPinUserName.text = ""
+        labelCommentPinUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelCommentPinUserName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelCommentPinTitle.textAlignment = .Left
+        commentDetailFullBoardScrollView.addSubview(labelCommentPinUserName)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-80-[v0(250)]", options: [], views: labelCommentPinUserName)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: labelCommentPinUserName)
+        
+        // Timestamp of comment pin detail
+        labelCommentPinTimestamp = UILabel()
+        labelCommentPinTimestamp.text = "Time"
+        labelCommentPinTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        labelCommentPinTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinTimestamp.textAlignment = .Left
+        commentDetailFullBoardScrollView.addSubview(labelCommentPinTimestamp)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-80-[v0(200)]", options: [], views: labelCommentPinTimestamp)
+        commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-40-[v0(27)]", options: [], views: labelCommentPinTimestamp)
+        
+        // Cancel all the touch down delays for uibutton caused by tableview's subviews
+        for view in tableCommentsForComment.subviews {
+            if view is UIScrollView {
+                (view as? UIScrollView)!.delaysContentTouches = false
+                break
+            }
+        }
+        
+        // image view appears when saved pin button pressed
+        imageViewSaved = UIImageView()
+        imageViewSaved.image = UIImage(named: "imageSavedThisPin")
+        view.addSubview(imageViewSaved)
+        view.addConstraintsWithFormat("H:[v0(182)]", options: [], views: imageViewSaved)
+        view.addConstraintsWithFormat("V:|-107-[v0(58)]", options: [], views: imageViewSaved)
+        NSLayoutConstraint(item: imageViewSaved, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        imageViewSaved.layer.zPosition = 104
+        imageViewSaved.alpha = 0.0
     }
     
+    // Load comment pin list
+    func loadCommentPinList() {
+        uiviewCommentPinListBlank = UIView(frame: CGRectMake(0, 0, screenWidth, 320))
+        uiviewCommentPinListBlank.layer.zPosition = 100
+        uiviewCommentPinListBlank.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(uiviewCommentPinListBlank)
+        uiviewCommentPinListBlank.layer.shadowOpacity = 0.3
+        uiviewCommentPinListBlank.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        uiviewCommentPinListBlank.layer.shadowRadius = 10.0
+        uiviewCommentPinListBlank.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
+        uiviewCommentPinListBlank.center.x -= screenWidth
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.actionBackToCommentDetail(_:)))
+        let rightSwipe = UISwipeGestureRecognizer(target: self,
+                                                  action: #selector(FaeMapViewController.actionBackToList(_:)))
+        let upSwipe = UISwipeGestureRecognizer(target: self,
+                                               action: #selector(FaeMapViewController.shrinkCommentList))
+        let downSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.expandCommentList))
+        
+        leftSwipe.direction = .Left
+        rightSwipe.direction = .Right
+        upSwipe.direction = .Up
+        downSwipe.direction = .Down
+        
+        uiviewCommentPinListBlank.addGestureRecognizer(leftSwipe)
+        uiviewCommentPinListBlank.addGestureRecognizer(upSwipe)
+        uiviewCommentPinListBlank.addGestureRecognizer(downSwipe)
+        uiviewCommentPinDetail.addGestureRecognizer(rightSwipe)
+        
+        // Scrollview
+        commentListScrollView = UIScrollView(frame: CGRectMake(0, 65, screenWidth, 228))
+        uiviewCommentPinListBlank.addSubview(commentListScrollView)
+        
+        // Line at y = 64
+        uiviewCommentPinListUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))
+        uiviewCommentPinListUnderLine01.layer.borderWidth = screenWidth
+        uiviewCommentPinListUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
+        uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine01)
+        
+        // Line at y = 292
+        uiviewCommentPinListUnderLine02 = UIView(frame: CGRectMake(0, 292, screenWidth, 1))
+        uiviewCommentPinListUnderLine02.layer.borderWidth = screenWidth
+        uiviewCommentPinListUnderLine02.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
+        uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine02)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewCommentPinListUnderLine02)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("V:[v0(1)]-27-|", options: [], views: uiviewCommentPinListUnderLine02)
+        
+        // Button: Back to Comment Detail
+        buttonBackToCommentPinDetail = UIButton()
+        buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
+        buttonBackToCommentPinDetail.addTarget(self, action: #selector(FaeMapViewController.actionBackToCommentDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinListBlank.addSubview(buttonBackToCommentPinDetail)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
+        
+        // Button: Clear Comment Pin List
+        buttonCommentPinListClear = UIButton()
+        buttonCommentPinListClear.setImage(UIImage(named: "commentPinListClear"), forState: .Normal)
+        buttonCommentPinListClear.addTarget(self, action: #selector(FaeMapViewController.actionClearCommentPinList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinListBlank.addSubview(buttonCommentPinListClear)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
+        
+        // Button: Drag to larger
+        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 293, screenWidth, 27))
+        buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
+        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(FaeMapViewController.actionListExpandShrink(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        uiviewCommentPinListBlank.addSubview(buttonCommentPinListDragToLargeSize)
+        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(FaeMapViewController.panActionCommentPinListDrag(_:)))
+        buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)
+        
+        // Label of Title
+        labelCommentPinListTitle = UILabel()
+        labelCommentPinListTitle.text = "Opened Pins"
+        labelCommentPinListTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelCommentPinListTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelCommentPinListTitle.textAlignment = .Center
+        uiviewCommentPinListBlank.addSubview(labelCommentPinListTitle)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
+        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
+        NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinListBlank, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+    }
+    
+    // Animation of the red sliding line
+    func animationRedSlidingLine(sender: UIButton) {
+        let tag = CGFloat(sender.tag)
+        let centerAtOneThird = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneThird)
+        print("animated red line")
+        UIView.animateWithDuration(0.25, animations:({
+            self.uiviewRedSlidingLine.center.x = targetCenter
+        }), completion: { (done: Bool) in
+            if done {
+                
+            }
+        })
+    }
+    
+    // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
-        self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
 
-        self.isUpVoting = true
-        self.isDownVoting = false
-        if let tempString = self.labelCommentPinVoteCount.text {
-            self.commentPinLikeCount = Int(tempString)!
+        isUpVoting = true
+        isDownVoting = false
+//        if let tempString = labelCommentPinVoteCount.text {
+//            commentPinLikeCount = Int(tempString)!
+//        }
+        animateHeart()
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
         }
     }
     
+    // Upvote comment pin
+    func actionUpvoteThisComment(sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        if animatingHeart != nil {
+            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        }
+        
+        isUpVoting = true
+        isDownVoting = false
+        
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    // Down vote comment pin
     func actionDownVoteThisComment(sender: UIButton) {
-        self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-        self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-        self.isUpVoting = false
-        self.isDownVoting = true//test
-        if let tempString = self.labelCommentPinVoteCount.text {
-            self.commentPinLikeCount = Int(tempString)!
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+        animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+        
+        isUpVoting = false
+        isDownVoting = true//test
+        
+        if commentIDCommentPinDetailView != "-999" {
+            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
         }
     }
     
+    // Pan gesture for dragging comment pin list dragging button
     func panActionCommentPinListDrag(pan: UIPanGestureRecognizer) {
         if pan.state == .Began {
-            if self.uiviewCommentPinListBlank.frame.size.height == 320 {
-                self.commentPinSizeFrom = 320
-                self.commentPinSizeTo = self.screenHeight
+            if uiviewCommentPinListBlank.frame.size.height == 320 {
+                commentPinSizeFrom = 320
+                commentPinSizeTo = screenHeight
             }
             else {
-                self.commentPinSizeFrom = self.screenHeight
-                self.commentPinSizeTo = 320
+                commentPinSizeFrom = screenHeight
+                commentPinSizeTo = 320
             }
         } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
             let location = pan.locationInView(view)
-            if abs(location.y - self.commentPinSizeFrom) >= 60 {
+            if abs(location.y - commentPinSizeFrom) >= 60 {
                 UIView.animateWithDuration(0.2, animations: {
                     self.buttonCommentPinListDragToLargeSize.center.y = self.commentPinSizeTo - 13.5
                     self.uiviewCommentPinListBlank.frame.size.height = self.commentPinSizeTo
@@ -275,29 +469,32 @@ extension FaeMapViewController {
         } else {
             let location = pan.locationInView(view)
             if location.y >= 306.5 {
-                self.buttonCommentPinListDragToLargeSize.center.y = location.y
-                self.uiviewCommentPinListBlank.frame.size.height = location.y + 13.5
-                self.commentListScrollView.frame.size.height = location.y - 78.5
+                buttonCommentPinListDragToLargeSize.center.y = location.y
+                uiviewCommentPinListBlank.frame.size.height = location.y + 13.5
+                commentListScrollView.frame.size.height = location.y - 78.5
             }
         }
     }
     
+    // Reset comment pin list window and remove all saved data
     func actionClearCommentPinList(sender: UIButton) {
         for cell in commentPinCellArray {
             cell.removeFromSuperview()
         }
-        self.commentPinCellArray.removeAll()
-        self.commentPinAvoidDic.removeAll()
-        self.commentPinCellNumCount = 0
-        self.disableTheButton(self.buttonBackToCommentPinDetail)
+        commentPinCellArray.removeAll()
+        commentPinAvoidDic.removeAll()
+        commentPinCellNumCount = 0
+        disableTheButton(buttonBackToCommentPinDetail)
     }
     
+    // Close more options button when it is open, the subview is under it
     func actionToCloseOtherViews(sender: UIButton) {
         if buttonMoreOnCommentCellExpanded == true {
-            self.hideCommentPinMoreButtonDetails()
+            hideCommentPinMoreButtonDetails()
         }
     }
     
+    // Back to comment pin list window when in detail window
     func actionBackToList(sender: UIButton!) {
         UIView.animateWithDuration(0.25, animations:({
             self.uiviewCommentPinListBlank.center.x += self.screenWidth
@@ -310,6 +507,7 @@ extension FaeMapViewController {
         })
     }
     
+    // Back to comment pin detail window when in pin list window
     func actionBackToCommentDetail(sender: UIButton!) {
         UIView.animateWithDuration(0.25, animations:({
             self.uiviewCommentPinListBlank.center.x -= self.screenWidth
@@ -322,40 +520,47 @@ extension FaeMapViewController {
         })
     }
     
+    // Show more options button in comment pin detail window
     func showCommentPinMoreButtonDetails(sender: UIButton!) {
-        print("DEBUG: ")
         if buttonMoreOnCommentCellExpanded == false {
-            self.buttonFakeTransparentClosingView = UIButton(frame: CGRectMake(0, 0, self.screenWidth, self.screenHeight))
-            self.buttonFakeTransparentClosingView.layer.zPosition = 101
+            buttonFakeTransparentClosingView = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+            buttonFakeTransparentClosingView.layer.zPosition = 101
             self.view.addSubview(buttonFakeTransparentClosingView)
-            self.buttonFakeTransparentClosingView.addTarget(self, action: #selector(FaeMapViewController.actionToCloseOtherViews(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            buttonFakeTransparentClosingView.addTarget(self,
+                                                       action: #selector(FaeMapViewController.actionToCloseOtherViews(_:)),
+                                                       forControlEvents: UIControlEvents.TouchUpInside)
             
-            self.moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 57, 0, 0))
-            self.moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
-            self.moreButtonDetailSubview.layer.zPosition = 102
+            moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 57, 0, 0))
+            moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
+            moreButtonDetailSubview.layer.zPosition = 102
             self.view.addSubview(moreButtonDetailSubview)
             
-            self.buttonShareOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
-            self.buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
-            self.buttonShareOnCommentDetail.layer.zPosition = 103
+            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
+            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
+            buttonShareOnCommentDetail.layer.zPosition = 103
             self.view.addSubview(buttonShareOnCommentDetail)
-            self.buttonShareOnCommentDetail.clipsToBounds = true
-            self.buttonShareOnCommentDetail.alpha = 0.0
-            self.buttonShareOnCommentDetail.addTarget(self, action: #selector(FaeMapViewController.actionShareComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            buttonShareOnCommentDetail.clipsToBounds = true
+            buttonShareOnCommentDetail.alpha = 0.0
+            buttonShareOnCommentDetail.addTarget(self,
+                                                 action: #selector(FaeMapViewController.actionShareComment(_:)),
+                                                 forControlEvents: UIControlEvents.TouchUpInside)
             
-            self.buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
-            self.buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
-            self.buttonSaveOnCommentDetail.layer.zPosition = 103
+            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
+            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
+            buttonSaveOnCommentDetail.layer.zPosition = 103
             self.view.addSubview(buttonSaveOnCommentDetail)
-            self.buttonSaveOnCommentDetail.clipsToBounds = true
-            self.buttonSaveOnCommentDetail.alpha = 0.0
+            buttonSaveOnCommentDetail.clipsToBounds = true
+            buttonSaveOnCommentDetail.alpha = 0.0
+            buttonSaveOnCommentDetail.addTarget(self,
+                                                       action: #selector(FaeMapViewController.actionSavedThisPin(_:)),
+                                                       forControlEvents: UIControlEvents.TouchUpInside)
             
-            self.buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
-            self.buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
-            self.buttonReportOnCommentDetail.layer.zPosition = 103
+            buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
+            buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
+            buttonReportOnCommentDetail.layer.zPosition = 103
             self.view.addSubview(buttonReportOnCommentDetail)
-            self.buttonReportOnCommentDetail.clipsToBounds = true
-            self.buttonReportOnCommentDetail.alpha = 0.0
+            buttonReportOnCommentDetail.clipsToBounds = true
+            buttonReportOnCommentDetail.alpha = 0.0
             
             
             UIView.animateWithDuration(0.25, animations: ({
@@ -367,26 +572,49 @@ extension FaeMapViewController {
                 self.buttonSaveOnCommentDetail.alpha = 1.0
                 self.buttonReportOnCommentDetail.alpha = 1.0
             }))
-            self.buttonMoreOnCommentCellExpanded = true
+            buttonMoreOnCommentCellExpanded = true
         }
         else {
             hideCommentPinMoreButtonDetails()
         }
     }
     
+    // When clicking share button in comment pin detail window's more options button
     func actionShareComment(sender: UIButton!) {
         print("Share Clicks!")
     }
     
+    // When clicking save button in comment pin detail window's more options button
+    func actionSavedThisPin(sender: UIButton) {
+        if commentIDCommentPinDetailView != "-999" {
+            saveThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        UIView.animateWithDuration(0.5, animations: ({
+            self.imageViewSaved.alpha = 1.0
+        }), completion: { (done: Bool) in
+            if done {
+                UIView.animateWithDuration(0.5, delay: 1.0, options: [], animations: { 
+                    self.imageViewSaved.alpha = 0.0
+                    }, completion: { (done: Bool) in
+                    if done {
+                    
+                    }
+                })
+            }
+        })
+    }
+    
+    // Expand or shrink comment pin list
     func actionListExpandShrink(sender: UIButton!) {
-        if self.commentListExpand == false {
+        if commentListExpand == false {
             UIView.animateWithDuration(0.25, animations: ({
                 self.buttonCommentPinListDragToLargeSize.center.y = self.screenHeight - 13.5
                 self.uiviewCommentPinListBlank.frame.size.height = self.screenHeight
                 self.uiviewCommentPinListUnderLine02.center.y = self.screenHeight - 27.5
                 self.commentListScrollView.frame.size.height = self.screenHeight - 91
             }))
-            self.commentListExpand = true
+            commentListExpand = true
         }
         else {
             UIView.animateWithDuration(0.25, animations: ({
@@ -395,18 +623,46 @@ extension FaeMapViewController {
                 self.uiviewCommentPinListUnderLine02.center.y = 292.5
                 self.commentListScrollView.frame.size.height = 228
             }))
-            self.commentListExpand = false
+            commentListExpand = false
         }
     }
     
-    func actionJumpToDetail(sender: UIButton!) {
-        actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
-        let row = sender.tag
-        self.labelCommentPinUserName.text = self.commentPinCellArray[row].userID
-        self.labelCommentPinTimestamp.text = self.commentPinCellArray[row].time.text
-        self.textviewCommentPinDetail.text = self.commentPinCellArray[row].content.text
+    // Shrink comment pin list
+    func shrinkCommentList() {
+        if commentListExpand {
+            UIView.animateWithDuration(0.25, animations: ({
+                self.uiviewCommentPinListBlank.frame.size.height = 320
+                self.buttonCommentPinListDragToLargeSize.center.y = 306.5
+                self.uiviewCommentPinListUnderLine02.center.y = 292.5
+                self.commentListScrollView.frame.size.height = 228
+            }))
+            commentListExpand = false
+        }
     }
     
+    // Expand comment pin list
+    func expandCommentList() {
+        if commentListExpand == false {
+            UIView.animateWithDuration(0.25, animations: ({
+                self.buttonCommentPinListDragToLargeSize.center.y = self.screenHeight - 13.5
+                self.uiviewCommentPinListBlank.frame.size.height = self.screenHeight
+                self.uiviewCommentPinListUnderLine02.center.y = self.screenHeight - 27.5
+                self.commentListScrollView.frame.size.height = self.screenHeight - 91
+            }))
+            commentListExpand = true
+        }
+    }
+    
+    // When clicking a cell in comment pin list, it jumps to its detail window
+    func actionJumpToDetail(sender: UIButton!) {
+        actionBackToCommentDetail(buttonBackToCommentPinDetail)
+        let row = sender.tag
+        labelCommentPinUserName.text = commentPinCellArray[row].userID
+        labelCommentPinTimestamp.text = commentPinCellArray[row].time.text
+        textviewCommentPinDetail.text = commentPinCellArray[row].content.text
+    }
+    
+    // Hide comment pin more options' button
     func hideCommentPinMoreButtonDetails() {
         buttonMoreOnCommentCellExpanded = false
         UIView.animateWithDuration(0.25, animations: ({
@@ -421,13 +677,15 @@ extension FaeMapViewController {
         buttonFakeTransparentClosingView.removeFromSuperview()
     }
     
+    // Add line number to comment pin list cell, make it trackable when deleting a cell
     func addTagCommentPinCell(cell: CommentPinListCell, commentID: Int) {
-        cell.jumpToDetail.tag = self.commentPinCellNumCount
-        cell.deleteButton.tag = self.commentPinCellNumCount
+        cell.jumpToDetail.tag = commentPinCellNumCount
+        cell.deleteButton.tag = commentPinCellNumCount
         cell.commentID = commentID
-        self.commentPinAvoidDic[commentID] = self.commentPinCellNumCount
+        commentPinAvoidDic[commentID] = commentPinCellNumCount
     }
     
+    // Disable a button, make it unclickable
     func disableTheButton(button: UIButton) {
         let origImage = button.imageView?.image
         let tintedImage = origImage?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
@@ -436,67 +694,48 @@ extension FaeMapViewController {
         button.userInteractionEnabled = false
     }
     
+    // Delete comment pin list cell, ### still has bug ###
     func deleteCommentPinCell(sender: UIButton!) {
-        print("Avoid Dic before deleting: \(self.commentPinAvoidDic)")
         
-        let commentID = self.commentPinCellArray[sender.tag].commentID
-        print("Deleted sender tag: \(sender.tag)")
+        print("DEBUG - DELETE: sender.tag: \(sender.tag)")
         
+//        print("Avoid Dic before deleting: \(commentPinAvoidDic)")
+        
+        let commentID = commentPinCellArray[sender.tag].commentID
         let rowToDelete = sender.tag
         
-        if self.commentPinCellNumCount == 1 {
-            self.commentPinCellNumCount = 0
-            self.disableTheButton(self.buttonBackToCommentPinDetail)
-            UIView.animateWithDuration(0.25, animations: ({
-                self.commentPinCellArray.first!.center.x -= self.screenWidth
-                self.commentListScrollView.contentSize.height -= 76
-            }), completion: {(done: Bool) in
-                self.commentPinCellArray.first!.removeFromSuperview()
-                self.commentPinCellArray.removeAll()
-            })
+        if commentPinCellNumCount == 1 {
+            commentPinCellNumCount = 0
+            disableTheButton(buttonBackToCommentPinDetail)
+            commentListScrollView.contentSize.height -= 76
+            commentPinCellArray.first!.removeFromSuperview()
+            commentPinCellArray.removeAll()
         }
         
-        else if self.commentPinCellNumCount >= 2 {
-            self.commentPinCellNumCount -= 1
-            UIView.animateWithDuration(0.25, animations: ({
-                self.commentPinCellArray[rowToDelete].center.x -= self.screenWidth
-                self.commentListScrollView.contentSize.height -= 76
-            }), completion: {(done: Bool) in
-                let m = rowToDelete + 1
-                let n = self.commentPinCellArray.count - 1
-                if m < n {
-                    for i in m...n {
-                        self.commentPinCellArray[i].jumpToDetail.tag -= 1
-                        self.commentPinCellArray[i].deleteButton.tag -= 1
-                        UIView.animateWithDuration(0.25, animations: ({
-                            self.commentPinCellArray[i].center.y -= 76
-                        }))
-                    }
+        else if commentPinCellNumCount >= 2 {
+            commentPinCellNumCount -= 1
+            commentPinCellArray[rowToDelete].removeFromSuperview()
+            commentPinCellArray.removeAtIndex(rowToDelete)
+            commentListScrollView.contentSize.height -= 76
+            for (index, cell) in commentPinCellArray.enumerate() {
+                if index >= rowToDelete {
+                    cell.jumpToDetail.tag -= 1
+                    cell.deleteButton.tag -= 1
+                    cell.center.y -= 76
                 }
-                else if m == n {
-                    self.commentPinCellArray[m].jumpToDetail.tag -= 1
-                    self.commentPinCellArray[m].deleteButton.tag -= 1
-                    UIView.animateWithDuration(0.25, animations: ({
-                        self.commentPinCellArray[m].center.y -= 76
-                    }))
-                }
-                self.commentPinCellArray[rowToDelete].removeFromSuperview()
-                self.commentPinCellArray.removeAtIndex(rowToDelete)
-            })
+            }
         }
         
-        if let aDictionaryIndex = self.commentPinAvoidDic.indexForKey(commentID) {
+        if let aDictionaryIndex = commentPinAvoidDic.indexForKey(commentID) {
             // This will remove the key/value pair from the dictionary and return it as a tuple pair.
-            let (key, value) = self.commentPinAvoidDic.removeAtIndex(aDictionaryIndex)
-            print("Deleted cell in avoid dic: [\(key): \(value)]")
+            let (_, _) = commentPinAvoidDic.removeAtIndex(aDictionaryIndex)
         }
-        
-        print("Avoid Dic after deleting: \(self.commentPinAvoidDic)")
-
     }
     
+    // Show comment pin detail window
     func showCommentPinDetail() {
-        if self.uiviewCommentPinDetail != nil {
+        if uiviewCommentPinDetail != nil {
+            uiviewCommentPinDetail.frame = CGRectMake(0, -320, screenWidth, 320)
             self.navigationController?.navigationBar.hidden = true
             UIView.animateWithDuration(0.25, animations: ({
                 self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
@@ -509,11 +748,13 @@ extension FaeMapViewController {
         }
     }
     
+    // Hide comment pin detail window
     func hideCommentPinDetail() {
-        if self.uiviewCommentPinDetail != nil {
-            if self.commentPinDetailShowed {
+        if uiviewCommentPinDetail != nil {
+            if commentPinDetailShowed {
+                actionBackToMap(self.buttonCommentPinBackToMap)
                 UIView.animateWithDuration(0.25, animations: ({
-                    self.uiviewCommentPinDetail.center.y -= self.uiviewCommentPinDetail.frame.size.height
+                    
                 }), completion: { (done: Bool) in
                     if done {
                         self.navigationController?.navigationBar.hidden = false
@@ -535,7 +776,233 @@ extension FaeMapViewController {
                     }
                 })
             }
+        }
+    }
+    
+    // When clicking reply button in comment pin detail window
+    func actionReplyToThisComment(sender: UIButton) {
+        if commentIDCommentPinDetailView != "-999" {
+            getPinAttributeCommentsNum("comment", pinID: commentIDCommentPinDetailView)
+        }
+        let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
+        let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
+        let newHeight = CGFloat(140 * self.numberOfCommentTableCells)
+        textviewCommentPinDetail.scrollEnabled = false
+        commentDetailFullBoardScrollView.scrollEnabled = true
+        UIView.animateWithDuration(0.25, animations: ({
+            self.buttonBackToCommentPinLists.alpha = 0.0
+            self.buttonCommentPinBackToMap.alpha = 1.0
+            self.uiviewCommentPinDetail.frame.size.height = self.screenHeight + 26
+            self.uiviewCommentPinUnderLine02.frame.origin.y = self.screenHeight
+            self.commentDetailFullBoardScrollView.frame.size.height = self.screenHeight - 155
+            self.tableCommentsForComment.frame = CGRectMake(0, 281, self.screenWidth, newHeight)
+            if numLines > 4 {
+                // 420 is table height, 281 is fixed
+                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281 + diffHeight
+                self.tableCommentsForComment.center.y += diffHeight
+                self.textviewCommentPinDetail.frame.size.height += diffHeight
+                self.uiviewCommentDetailThreeButtons.center.y += diffHeight
+                self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
+                self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
+            }
+            else {
+                // 420 is table height, 281 is fixed
+                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
+            }
+        }), completion: { (done: Bool) in
+            if done {
+                
+            }
+        })
+    }
+    
+    func actionBackToMap(sender: UIButton) {
+        UIView.animateWithDuration(0.25, animations: ({
+            self.uiviewCommentPinDetail.center.y -= self.screenHeight
+            self.buttonBackToCommentPinLists.alpha = 1.0
+            self.buttonCommentPinBackToMap.alpha = 0.0
+        }), completion: { (done: Bool) in
+            if done {
+                self.commentDetailFullBoardScrollView.contentSize.height = 228
+                self.commentDetailFullBoardScrollView.frame.size.height = 228
+                self.commentDetailFullBoardScrollView.scrollEnabled = false
+                self.commentPinDetailShowed = false
+                self.tableCommentsForComment.frame.origin.y = 281
+                self.textviewCommentPinDetail.frame.size.height = 100
+                self.textviewCommentPinDetail.scrollEnabled = true
+                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
+                self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
+                self.uiviewCommentPinDetail.frame.size.height = 320
+                self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
+                self.uiviewCommentPinUnderLine02.frame.origin.y = 292
+            }
+        })
+    }
+    
+    func animateHeart() {
+        animatingHeart = UIImageView(frame: CGRectMake(0, 0, 26, 22))
+        animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
+        
+        //创建用于转移坐标的Transform，这样我们不用按照实际显示做坐标计算
+        let randomX = CGFloat(arc4random_uniform(150))
+        let randomY = CGFloat(arc4random_uniform(50) + 100)
+        let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
+        
+        var transform: CGAffineTransform = CGAffineTransformMakeTranslation(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+        let path =  CGPathCreateMutable()
+        CGPathMoveToPoint(path, &transform, 0, 0)
+        CGPathAddLineToPoint(path, &transform, randomX-75, -randomY)
+        
+        let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")
+        scaleAnimation.values = [NSValue(CATransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(CATransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        scaleAnimation.duration = 1
+        
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.fromValue = 1.0
+        fadeAnimation.toValue = 0.0
+        fadeAnimation.duration = 1
+        
+        let orbit = CAKeyframeAnimation(keyPath: "position")
+        orbit.duration = 1
+        orbit.path = path
+        orbit.calculationMode = kCAAnimationPaced
+        animatingHeart.layer.addAnimation(orbit, forKey:"Move")
+        animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+        animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
+        animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+    }
+    
+    func likeThisPin(type: String, pinID: String) {
+        let likeThisPin = FaePinAction()
+        likeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Like This Pin")
+            likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully like this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to like this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func saveThisPin(type: String, pinID: String) {
+        let saveThisPin = FaePinAction()
+        saveThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Save This Pin")
+            saveThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully save this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to save this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func unlikeThisPin(type: String, pinID: String) {
+        let unlikeThisPin = FaePinAction()
+        unlikeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Unlike This Pin")
+            unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: AnyObject?) in
+                if status/100 == 2 {
+                    print("Successfully unlike this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to unlike this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func getPinAttributeNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
             
+            if let likes = mapInfoJSON["likes"].int {
+                self.labelCommentPinLikeCount.text = "\(likes)"
+                self.labelCommentPinVoteCount.text = "\(likes)"
+            }
+            if let _ = mapInfoJSON["saves"].int {
+                
+            }
+            if let _ = mapInfoJSON["type"].string {
+            
+            }
+            if let _ = mapInfoJSON["pin_id"].string {
+            
+            }
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+            }
+        }
+    }
+    
+    func getPinAttributeCommentsNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+                self.numberOfCommentTableCells = comments
+                self.tableCommentsForComment.reloadData()
+            }
+        }
+    }
+    
+    func getPinCommentsDetail(type: String, pinID: String) {
+        dictCommentsOnCommentDetail.removeAll()
+        let getPinCommentsDetail = FaePinAction()
+        getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let commentsOfCommentJSON = JSON(message!)
+            if commentsOfCommentJSON.count > 0 {
+                for i in 0...(commentsOfCommentJSON.count-1) {
+                    var dicCell = [String: AnyObject]()
+                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
+                        print(pin_comment_id)
+                        dicCell["pin_comment_id"] = pin_comment_id
+                    }
+                    if let user_id = commentsOfCommentJSON[i]["user_id"].int {
+                        print(user_id)
+                        dicCell["user_id"] = user_id
+                    }
+                    if let content = commentsOfCommentJSON[i]["content"].string {
+                        print(content)
+                        dicCell["content"] = content
+                    }
+                    if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
+                        print(date)
+                        dicCell["date"] = date
+                    }
+                    if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
+                        print(timezone_type)
+                        dicCell["timezone_type"] = timezone_type
+                    }
+                    if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
+                        print(timezone)
+                        dicCell["timezone"] = timezone
+                    }
+                    self.dictCommentsOnCommentDetail.append(dicCell)
+                    print("===分割线===")
+                }
+            }
         }
     }
 }

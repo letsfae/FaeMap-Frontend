@@ -125,7 +125,7 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
             }
     })
 }
-func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[String: AnyObject]?, completion:(Int, AnyObject?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -142,7 +142,7 @@ func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[
     
     // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
-        Alamofire.request(.POST, URL, parameters: parameter,headers:headers)
+        Alamofire.request(.POST, URL, parameters: parameter, headers: headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 //print(response)
@@ -152,22 +152,20 @@ func postToURL(className:String,parameter:[String:AnyObject]? , authentication:[
                     }
                     if let JSON = response.response?.allHeaderFields{
                         print(JSON)
-                        
                     }
                     if let resMess = response.result.value {
-                        completion(response.response!.statusCode,resMess)
+                        completion(response.response!.statusCode, resMess)
                     }
                     else{
                         //                            MARK: bug here
-                        completion(response.response!.statusCode,"no Json body")
+                        completion(response.response!.statusCode, "no Json body")
                     }
                 }
                 else{
-                    completion(-500,"Internet error")
+                    completion(-500, "Internet error")
                 }
         }
     }
-
 }
 
 
@@ -188,8 +186,8 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
     }
     
     // Ren: delete do-catch here because no error thrown in do
-    if parameter==nil{
-        Alamofire.request(.GET, URL,headers:headers)
+    if parameter == nil{
+        Alamofire.request(.GET, URL, headers: headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
@@ -208,7 +206,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
         }
     }
     else{
-        Alamofire.request(.GET, URL,parameters:parameter,headers:headers)
+        Alamofire.request(.GET, URL, parameters: parameter, headers:headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
