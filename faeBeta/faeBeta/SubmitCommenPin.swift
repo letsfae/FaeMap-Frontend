@@ -12,51 +12,45 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     func actionSelectLocation(sender: UIButton!) {
-        self.blurViewMap.hidden = true
-        self.blurViewMap.alpha = 0.0
-        self.faeMapView.addSubview(imagePinOnMap)
-        self.buttonToNorth.hidden = true
-        self.buttonChatOnMap.hidden = true
-        self.buttonPinOnMap.hidden = true
-        self.buttonPinOnMapInside.hidden = true
-        self.buttonSetLocationOnMap.hidden = false
-        self.imagePinOnMap.hidden = false
-        self.navigationController?.navigationBar.hidden = true
-        self.searchBarSubview.alpha = 1.0
-        self.searchBarSubview.hidden = false
-        self.tblSearchResults.hidden = false
-        self.uiviewTableSubview.hidden = false
-        self.customSearchController.customSearchBar.text = ""
-        self.buttonSelfPosition.hidden = false
-        self.buttonCancelSelectLocation.hidden = false
-        self.isInPinLocationSelect = true
-        self.myPositionIcon.hidden = true
-        self.myPositionOutsideMarker_1.hidden = true
-        self.myPositionOutsideMarker_2.hidden = true
-        self.myPositionOutsideMarker_3.hidden = true
-        self.view.addConstraintsWithFormat("H:[v0(59)]-16-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-81-|", options: [], views: buttonSelfPosition)
+        blurViewMap.hidden = true
+        blurViewMap.alpha = 0.0
+        faeMapView.addSubview(imagePinOnMap)
+        buttonToNorth.hidden = true
+        buttonChatOnMap.hidden = true
+        buttonPinOnMap.hidden = true
+//        buttonPinOnMapInside.hidden = true
+        buttonSetLocationOnMap.hidden = false
+        imagePinOnMap.hidden = false
+        navigationController?.navigationBar.hidden = true
+        searchBarSubview.alpha = 1.0
+        searchBarSubview.hidden = false
+        tblSearchResults.hidden = false
+        uiviewTableSubview.hidden = false
+        customSearchController.customSearchBar.text = ""
+        buttonSelfPosition.hidden = false
+        buttonCancelSelectLocation.hidden = false
+        isInPinLocationSelect = true
+        myPositionIcon.hidden = true
+        myPositionOutsideMarker_1.hidden = true
+        myPositionOutsideMarker_2.hidden = true
+        myPositionOutsideMarker_3.hidden = true
     }
     
     func actionCancelSelectLocation(sender: UIButton!) {
-        self.isInPinLocationSelect = false
-        self.searchBarSubview.hidden = true
-        self.tblSearchResults.hidden = true
-        self.uiviewTableSubview.hidden = true
-        self.imagePinOnMap.hidden = true
-        self.buttonSetLocationOnMap.hidden = true
-        self.buttonSelfPosition.hidden = true
-        self.buttonSelfPosition.center.x = 362.5
-        self.buttonSelfPosition.center.y = 611.5
-        self.buttonCancelSelectLocation.hidden = true
-        self.blurViewMap.hidden = false
-        self.blurViewMap.alpha = 1.0
-        self.myPositionIcon.hidden = false
-        self.myPositionOutsideMarker_1.hidden = false
-        self.myPositionOutsideMarker_2.hidden = false
-        self.myPositionOutsideMarker_3.hidden = false
-        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
+        isInPinLocationSelect = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
+        buttonCancelSelectLocation.hidden = true
+        blurViewMap.hidden = false
+        blurViewMap.alpha = 1.0
+        myPositionIcon.hidden = false
+        myPositionOutsideMarker_1.hidden = false
+        myPositionOutsideMarker_2.hidden = false
+        myPositionOutsideMarker_3.hidden = false
     }
     
     func actionCreateCommentPin(sender: UIButton!) {
@@ -72,36 +66,36 @@ extension FaeMapViewController {
             self.uiviewPinSelections.alpha = 1.0
             self.uiviewCreateCommentPin.alpha = 0.0
         }), completion: nil)
-        self.textViewForCommentPin.endEditing(true)
-        if self.textViewForCommentPin.text == "" {
-            self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
-            self.buttonCommentSubmit.enabled = false
+        textViewForCommentPin.endEditing(true)
+        if textViewForCommentPin.text == "" {
+            buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+            buttonCommentSubmit.enabled = false
         }
     }
     
     func actionCloseSubmitPins(sender: UIButton!) {
-        self.submitPinsHideAnimation()
-        self.buttonToNorth.hidden = false
-        self.buttonSelfPosition.hidden = false
-        self.buttonChatOnMap.hidden = false
-        self.buttonPinOnMap.hidden = false
-        self.buttonPinOnMapInside.hidden = false
-        self.buttonSetLocationOnMap.hidden = true
-        self.imagePinOnMap.hidden = true
-        self.navigationController?.navigationBar.hidden = false
-        self.searchBarSubview.hidden = true
-        self.tblSearchResults.hidden = true
-        self.uiviewTableSubview.hidden = true
-        self.textViewForCommentPin.text = ""
-        self.textViewForCommentPin.endEditing(true)
-        self.lableTextViewPlaceholder.hidden = false
-        self.buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
-        self.buttonCommentSubmit.enabled = false
+        submitPinsHideAnimation()
+        buttonToNorth.hidden = false
+        buttonSelfPosition.hidden = false
+        buttonChatOnMap.hidden = false
+        buttonPinOnMap.hidden = false
+//        buttonPinOnMapInside.hidden = false
+        buttonSetLocationOnMap.hidden = true
+        imagePinOnMap.hidden = true
+        navigationController?.navigationBar.hidden = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        textViewForCommentPin.text = ""
+        textViewForCommentPin.endEditing(true)
+        lableTextViewPlaceholder.hidden = false
+        buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+        buttonCommentSubmit.enabled = false
     }
     
     func actionSetLocationForComment(sender: UIButton!) {
         // May have bug here
-        let valueInSearchBar = self.customSearchController.customSearchBar.text
+        let valueInSearchBar = customSearchController.customSearchBar.text
         if valueInSearchBar == "" {
             let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
@@ -125,26 +119,22 @@ extension FaeMapViewController {
             })
         }
         else {
-            self.labelSelectLocationContent.text = valueInSearchBar
+            labelSelectLocationContent.text = valueInSearchBar
         }
-        self.isInPinLocationSelect = false
-        self.searchBarSubview.hidden = true
-        self.tblSearchResults.hidden = true
-        self.uiviewTableSubview.hidden = true
-        self.imagePinOnMap.hidden = true
-        self.buttonSetLocationOnMap.hidden = true
-        self.buttonSelfPosition.hidden = true
-        self.buttonSelfPosition.center.x = 362.5
-        self.buttonSelfPosition.center.y = 611.5
-        self.buttonCancelSelectLocation.hidden = true
-        self.blurViewMap.hidden = false
-        self.blurViewMap.alpha = 1.0
-        self.myPositionIcon.hidden = false
-        self.myPositionOutsideMarker_1.hidden = false
-        self.myPositionOutsideMarker_2.hidden = false
-        self.myPositionOutsideMarker_3.hidden = false
-        self.view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
+        isInPinLocationSelect = false
+        searchBarSubview.hidden = true
+        tblSearchResults.hidden = true
+        uiviewTableSubview.hidden = true
+        imagePinOnMap.hidden = true
+        buttonSetLocationOnMap.hidden = true
+        buttonSelfPosition.hidden = true
+        buttonCancelSelectLocation.hidden = true
+        blurViewMap.hidden = false
+        blurViewMap.alpha = 1.0
+        myPositionIcon.hidden = false
+        myPositionOutsideMarker_1.hidden = false
+        myPositionOutsideMarker_2.hidden = false
+        myPositionOutsideMarker_3.hidden = false
     }
     
     func actionSubmitComment(sender: UIButton) {
@@ -153,16 +143,16 @@ extension FaeMapViewController {
         var submitLatitude = ""
         var submitLongitude = ""
         
-        if self.labelSelectLocationContent.text == "Current Location" {
-            submitLatitude = "\(self.currentLatitude)"
-            submitLongitude = "\(self.currentLongitude)"
+        if labelSelectLocationContent.text == "Current Location" {
+            submitLatitude = "\(currentLatitude)"
+            submitLongitude = "\(currentLongitude)"
         }
         else {
-            submitLatitude = "\(self.latitudeForPin)"
-            submitLongitude = "\(self.longitudeForPin)"
+            submitLatitude = "\(latitudeForPin)"
+            submitLongitude = "\(longitudeForPin)"
         }
         
-        let commentContent = self.textViewForCommentPin.text
+        let commentContent = textViewForCommentPin.text
         
         print(commentContent)
         
@@ -175,7 +165,7 @@ extension FaeMapViewController {
         postSingleComment.whereKey("content", value: commentContent)
         
         
-        postSingleComment.postComment{(status:Int,message:AnyObject?) in
+        postSingleComment.postComment{(status:Int, message:AnyObject?) in
             if let getMessage = message {
                 if let getMessageID = getMessage["comment_id"] {
                     self.submitPinsHideAnimation()
@@ -193,7 +183,7 @@ extension FaeMapViewController {
                     self.buttonSelfPosition.hidden = false
                     self.buttonChatOnMap.hidden = false
                     self.buttonPinOnMap.hidden = false
-                    self.buttonPinOnMapInside.hidden = false
+//                    buttonPinOnMapInside.hidden = false
                     self.buttonSetLocationOnMap.hidden = true
                     self.imagePinOnMap.hidden = true
                     self.navigationController?.navigationBar.hidden = false
@@ -201,6 +191,10 @@ extension FaeMapViewController {
                     let getJustPostedComment = FaeMap()
                     
                     getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
+                        print("DEBUG: GETCOMMENT!!-----=-=-=-==================")
+                        
+                        print(status)
+                        
                         let mapInfoJSON = JSON(message!)
                         var pinData = [String: AnyObject]()
                         
