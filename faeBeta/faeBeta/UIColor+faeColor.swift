@@ -16,6 +16,11 @@ extension UIColor
         return UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1)
     }
     
+    class func faeAppDisabledRedColor() -> UIColor
+    {
+        return UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 1)
+    }
+    
     class func faeAppInputTextGrayColor() -> UIColor
     {
         return UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
