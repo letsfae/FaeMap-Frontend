@@ -12,6 +12,7 @@ import FirebaseDatabase
 import SwiftyJSON
 
 public var isDraggingRecentTableViewCell = false
+public var avatarDic = [NSNumber:UIImage]()
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
     

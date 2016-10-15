@@ -55,9 +55,11 @@ class RecentTableViewCell: UITableViewCell {
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
-        self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
+        self.avatarImageView.image = avatarDic[recent["with_user_id"].number!] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[recent["with_user_id"].number!]
 
-        nameLabel.text = recent["with_user_id"].string
+        if let name = recent["with_user_name"].string{
+            nameLabel.text = name
+        }
         lastMessageLabel.text = recent["last_message"].string
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 10
@@ -88,6 +90,15 @@ class RecentTableViewCell: UITableViewCell {
         let seconds = NSDate().timeIntervalSinceDate(date!)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+        
+        if(avatarDic[recent["with_user_id"].number!] == nil){
+            getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+                if status / 100 == 2 {
+                    avatarDic[recent["with_user_id"].number!] = image as? UIImage
+                }
+            })
+        }
+        
     }
     // MARK: helper
     func TimeElipsed(seconds : NSTimeInterval, lastMessageTime:NSDate) -> String {
