@@ -23,8 +23,8 @@
 #import <JSQMessagesViewController/JSQMessageBubbleImageDataSource.h>
 #import <JSQMessagesViewController/JSQMessageAvatarImageDataSource.h>
 
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellIncoming.h>
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellOutgoing.h>
+#import "JSQMessagesCollectionViewCellIncomingCustom.h"
+#import "JSQMessagesCollectionViewCellOutgoingCustom.h"
 
 #import <JSQMessagesViewController/JSQMessagesTypingIndicatorFooterView.h>
 #import <JSQMessagesViewController/JSQMessagesLoadEarlierHeaderView.h>
@@ -131,8 +131,6 @@ JSQMessagesKeyboardControllerDelegate>
 
 @property (assign, nonatomic) BOOL jsq_isObserving;
 
-@property (strong, nonatomic) NSIndexPath *selectedIndexPathForMenu;
-
 @property (weak, nonatomic) UIGestureRecognizer *currentInteractivePopGestureRecognizer;
 
 @property (assign, nonatomic) BOOL textViewWasFirstResponderDuringInteractivePop;
@@ -142,6 +140,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 
 @implementation JSQMessagesViewControllerCustom
+
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
 
 #pragma mark - Class methods
 
@@ -186,11 +186,11 @@ JSQMessagesKeyboardControllerDelegate>
 
     self.automaticallyScrollsToMostRecentMessage = YES;
 
-    self.outgoingCellIdentifier = [JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier];
-    self.outgoingMediaCellIdentifier = [JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier];
+    self.outgoingCellIdentifier = [JSQMessagesCollectionViewCellOutgoingCustom cellReuseIdentifier];
+    self.outgoingMediaCellIdentifier = [JSQMessagesCollectionViewCellOutgoingCustom mediaCellReuseIdentifier];
 
-    self.incomingCellIdentifier = [JSQMessagesCollectionViewCellIncoming cellReuseIdentifier];
-    self.incomingMediaCellIdentifier = [JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier];
+    self.incomingCellIdentifier = [JSQMessagesCollectionViewCellIncomingCustom cellReuseIdentifier];
+    self.incomingMediaCellIdentifier = [JSQMessagesCollectionViewCellIncomingCustom mediaCellReuseIdentifier];
 
     // NOTE: let this behavior be opt-in for now
     // [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
@@ -210,6 +210,11 @@ JSQMessagesKeyboardControllerDelegate>
                                                                      panGestureRecognizer:self.collectionView.panGestureRecognizer
                                                                                  delegate:self];
     }
+    
+    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1:)];
+    
+    [[UIMenuController sharedMenuController] setMenuItems: @[miCustom1]];
+    [[UIMenuController sharedMenuController] update];
 }
 
 - (void)dealloc
@@ -321,7 +326,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
@@ -334,23 +339,23 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
+//    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+//    [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    if (self.showTypingIndicator) {
-        self.showTypingIndicator = NO;
-        self.showTypingIndicator = YES;
-        [self.collectionView reloadData];
-    }
+//    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+//    if (self.showTypingIndicator) {
+//        self.showTypingIndicator = NO;
+//        self.showTypingIndicator = YES;
+//        [self.collectionView reloadData];
+//    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [self jsq_resetLayoutAndCaches];
+//    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+//    [self jsq_resetLayoutAndCaches];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -551,7 +556,7 @@ JSQMessagesKeyboardControllerDelegate>
         cellIdentifier = isOutgoingMessage ? self.outgoingCellIdentifier : self.incomingCellIdentifier;
     }
 
-    JSQMessagesCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    JSQMessagesCollectionViewCellCustom *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.delegate = collectionView;
 
     if (!isMediaMessage) {
@@ -615,7 +620,8 @@ JSQMessagesKeyboardControllerDelegate>
     }
 
     cell.textView.dataDetectorTypes = UIDataDetectorTypeAll;
-
+    cell.textView.selectable = NO;
+    
     cell.backgroundColor = [UIColor clearColor];
     cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
     cell.layer.shouldRasterize = YES;
@@ -625,7 +631,7 @@ JSQMessagesKeyboardControllerDelegate>
 }
 
 - (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
-  accessibilityForCell:(JSQMessagesCollectionViewCell*)cell
+  accessibilityForCell:(JSQMessagesCollectionViewCellCustom*)cell
              indexPath:(NSIndexPath *)indexPath
                message:(id<JSQMessageData>)messageItem
 {
@@ -681,10 +687,10 @@ JSQMessagesKeyboardControllerDelegate>
 - (BOOL)collectionView:(JSQMessagesCollectionViewCustom *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //  disable menu for media messages
-    id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
-    if ([messageItem isMediaMessage]) {
-        return NO;
-    }
+//    id<JSQMessageData> messageItem = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
+//    if ([messageItem isMediaMessage]) {
+//        return NO;
+//    }
 
     self.selectedIndexPathForMenu = indexPath;
 
@@ -692,15 +698,13 @@ JSQMessagesKeyboardControllerDelegate>
     //  however, this allows the 'copy, define, select' UIMenuController to show
     //  which conflicts with the collection view's UIMenuController
     //  temporarily disable 'selectable' to prevent this issue
-    JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    selectedCell.textView.selectable = NO;
 
     return YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(copy:) || action == @selector(delete:)) {
+    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1:)) {
         return YES;
     }
 
@@ -755,7 +759,9 @@ JSQMessagesKeyboardControllerDelegate>
  didTapAvatarImageView:(UIImageView *)avatarImageView
            atIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath {
+
+}
 
 - (void)collectionView:(JSQMessagesCollectionViewCustom *)collectionView
  didTapCellAtIndexPath:(NSIndexPath *)indexPath
@@ -857,7 +863,7 @@ JSQMessagesKeyboardControllerDelegate>
 
     JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPathForMenu];
     CGRect selectedCellMessageBubbleFrame = [selectedCell convertRect:selectedCell.messageBubbleContainerView.frame toView:self.view];
-
+    
     [menu setTargetRect:selectedCellMessageBubbleFrame inView:self.view];
     [menu setMenuVisible:YES animated:YES];
 
@@ -872,11 +878,6 @@ JSQMessagesKeyboardControllerDelegate>
     if (!self.selectedIndexPathForMenu) {
         return;
     }
-
-    //  per comment above in 'shouldShowMenuForItemAtIndexPath:'
-    //  re-enable 'selectable', thus re-enabling data detectors if present
-    JSQMessagesCollectionViewCell *selectedCell = (JSQMessagesCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPathForMenu];
-    selectedCell.textView.selectable = YES;
     self.selectedIndexPathForMenu = nil;
 }
 
@@ -1153,6 +1154,10 @@ JSQMessagesKeyboardControllerDelegate>
                                                                       action:@selector(jsq_handleInteractivePopGestureRecognizer:)];
         self.currentInteractivePopGestureRecognizer = self.navigationController.interactivePopGestureRecognizer;
     }
+}
+
+- (void)customAction1: (id)sender{
+    printf("custom");
 }
 
 @end

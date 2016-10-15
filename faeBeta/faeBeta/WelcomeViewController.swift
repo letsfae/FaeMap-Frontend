@@ -10,26 +10,19 @@ import UIKit
 
 class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     // MARK: - Interface
-    var screenWidth : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.width
-        }
-    }
-    var screenHeight : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.height
-        }
-    }
+
     var imageContainerPageViewController : UIPageViewController! 
     var pageControl: WelcomePageControl!
     var lookAroundButton: UIButton!
     var loginButton:UIButton!
     var createAccountButton:UIButton!
     var rightLabel:UILabel!
-    
     // MARK: - View did/will
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().shadowImage = UIImage()
         setupViewFrame()
         setupImageContainerPageViewController()
         setupBottomPart()
@@ -48,7 +41,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     private func setupViewFrame()
     {
-        self.view.frame = CGRectMake(0, 0, self.screenWidth, screenHeight)
+        self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight)
         self.view.backgroundColor = UIColor.whiteColor()
     }
     
@@ -68,8 +61,8 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         self.addChildViewController(self.imageContainerPageViewController)
         self.view.addSubview(self.imageContainerPageViewController.view)
         self.imageContainerPageViewController.didMoveToParentViewController(self)
-        self.imageContainerPageViewController.view.frame = CGRectMake(0, 110, self.screenWidth, 400);
-        
+        self.imageContainerPageViewController.view.frame = CGRectMake(0, 90 * screenHeightFactor, screenWidth, screenHeight - 336 * screenHeightFactor);
+        self.imageContainerPageViewController.view.layoutIfNeeded()
         for view in self.imageContainerPageViewController.view.subviews {
             if let scrollView = view as? UIScrollView {
                 scrollView.delegate = self
@@ -80,8 +73,8 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     private func setupBottomPart()
     {
         // look around label
-        lookAroundButton = UIButton(frame: CGRectMake(0,screenHeight - 216,125,22))
-        lookAroundButton.center.x = self.screenWidth / 2
+        lookAroundButton = UIButton(frame: CGRectMake(0,screenHeight - 216 * screenHeightFactor,125,22))
+        lookAroundButton.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 16)
         
         lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
@@ -90,23 +83,23 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
-        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 176, 300, 50))
-        loginButton.center.x = self.screenWidth / 2
+        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 176 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        loginButton.center.x = screenWidth / 2
         loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        loginButton.layer.cornerRadius = 25
+        loginButton.layer.cornerRadius = 25*screenHeightFactor
         loginButton.backgroundColor = UIColor.faeAppRedColor()
         loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), forControlEvents: .TouchUpInside)
         self.view.insertSubview(loginButton, atIndex: 0)
         self.view.bringSubviewToFront(loginButton)
         
         // create account button
-        createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106, 300, 50))
-        createAccountButton.center.x = self.screenWidth / 2
+        createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        createAccountButton.center.x = screenWidth / 2
         createAccountButton.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
         createAccountButton.backgroundColor = UIColor.whiteColor()
         createAccountButton.layer.borderColor = UIColor.faeAppRedColor().CGColor
-        createAccountButton.layer.borderWidth = 2
-        createAccountButton.layer.cornerRadius = 25
+        createAccountButton.layer.borderWidth = 3
+        createAccountButton.layer.cornerRadius = 25*screenHeightFactor
         createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), forControlEvents: .TouchUpInside)
         self.view.insertSubview(createAccountButton, atIndex: 0)
         self.view.bringSubviewToFront(createAccountButton)
@@ -119,7 +112,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
         rightLabel.textAlignment = .Center
         rightLabel.sizeToFit()
-        rightLabel.center.x = self.screenWidth / 2
+        rightLabel.center.x = screenWidth / 2
         self.view.insertSubview(rightLabel, atIndex: 0)
         
     }

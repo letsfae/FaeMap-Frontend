@@ -19,8 +19,8 @@
 #import "JSQMessagesCollectionViewCustom.h"
 
 #import "JSQMessagesCollectionViewFlowLayoutCustom.h"
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellIncoming.h>
-#import <JSQMessagesViewController/JSQMessagesCollectionViewCellOutgoing.h>
+#import "JSQMessagesCollectionViewCellIncomingCustom.h"
+#import "JSQMessagesCollectionViewCellOutgoingCustom.h"
 
 #import <JSQMessagesViewController/JSQMessagesTypingIndicatorFooterView.h>
 #import <JSQMessagesViewController/JSQMessagesLoadEarlierHeaderView.h>
@@ -52,17 +52,17 @@
     self.alwaysBounceVertical = YES;
     self.bounces = YES;
     
-    [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming cellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellIncomingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncomingCustom cellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellOutgoingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoingCustom cellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellIncomingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncomingCustom mediaCellReuseIdentifier]];
     
-    [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier]];
+    [self registerNib:[JSQMessagesCollectionViewCellOutgoingCustom nib]
+          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoingCustom mediaCellReuseIdentifier]];
     
     [self registerNib:[JSQMessagesTypingIndicatorFooterView nib]
           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
@@ -135,7 +135,7 @@
 
 #pragma mark - Messages collection view cell delegate
 
-- (void)messagesCollectionViewCellDidTapAvatar:(JSQMessagesCollectionViewCell *)cell
+- (void)messagesCollectionViewCellDidTapAvatar:(JSQMessagesCollectionViewCellCustom *)cell
 {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     if (indexPath == nil) {
@@ -147,7 +147,7 @@
                       atIndexPath:indexPath];
 }
 
-- (void)messagesCollectionViewCellDidTapMessageBubble:(JSQMessagesCollectionViewCell *)cell
+- (void)messagesCollectionViewCellDidTapMessageBubble:(JSQMessagesCollectionViewCellCustom *)cell
 {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     if (indexPath == nil) {
@@ -157,7 +157,7 @@
     [self.delegate collectionView:self didTapMessageBubbleAtIndexPath:indexPath];
 }
 
-- (void)messagesCollectionViewCellDidTapCell:(JSQMessagesCollectionViewCell *)cell atPosition:(CGPoint)position
+- (void)messagesCollectionViewCellDidTapCell:(JSQMessagesCollectionViewCellCustom *)cell atPosition:(CGPoint)position
 {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     if (indexPath == nil) {
@@ -169,7 +169,7 @@
                     touchLocation:position];
 }
 
-- (void)messagesCollectionViewCell:(JSQMessagesCollectionViewCell *)cell didPerformAction:(SEL)action withSender:(id)sender
+- (void)messagesCollectionViewCell:(JSQMessagesCollectionViewCellCustom *)cell didPerformAction:(SEL)action withSender:(id)sender
 {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     if (indexPath == nil) {

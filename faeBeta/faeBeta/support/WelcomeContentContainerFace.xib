@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WelcomeContentContainerFace" customModule="faeBeta" customModuleProvider="target">
             <connections>
                 <outlet property="descriptionLabel" destination="bPD-AN-9Gu" id="ND8-T4-5tL"/>
                 <outlet property="imageView" destination="bC8-jW-vG9" id="gJZ-Nu-5C2"/>
+                <outlet property="titleIcon" destination="MFs-dP-CLo" id="akx-WB-5Es"/>
                 <outlet property="titleLabel" destination="31y-Rv-AgS" id="HKC-fv-lp3"/>
             </connections>
         </placeholder>
@@ -18,33 +22,38 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bC8-jW-vG9">
-                    <rect key="frame" x="77" y="0.0" width="260" height="260"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="260" id="BoY-bT-SRe"/>
-                        <constraint firstAttribute="width" constant="260" id="evl-uK-hf6"/>
+                        <constraint firstAttribute="height" secondItem="bC8-jW-vG9" secondAttribute="width" multiplier="1:1" id="VXO-xg-qhi"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="31y-Rv-AgS">
-                    <rect key="frame" x="179" y="270" width="56" height="31"/>
                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="22"/>
-                    <color key="textColor" red="0.45098039215686275" green="0.45098039215686275" blue="0.45098039215686275" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.45098039215686275" green="0.45098039215686275" blue="0.45098039215686275" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bPD-AN-9Gu">
-                    <rect key="frame" x="93" y="306" width="229" height="50"/>
                     <string key="text">Chat &amp; Interact with people 
 in any area near or far!</string>
-                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
-                    <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
+                    <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MFs-dP-CLo">
+                    <constraints>
+                        <constraint firstAttribute="height" constant="27" id="eks-AO-RjE"/>
+                        <constraint firstAttribute="width" constant="120" id="qyu-X9-iLf"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <constraints>
+                <constraint firstItem="bC8-jW-vG9" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="26:37" id="9Vt-Hf-mjS"/>
                 <constraint firstItem="bC8-jW-vG9" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="G4j-uH-cGT"/>
-                <constraint firstItem="31y-Rv-AgS" firstAttribute="top" secondItem="bC8-jW-vG9" secondAttribute="bottom" constant="10" id="RnQ-yY-WVW"/>
+                <constraint firstItem="31y-Rv-AgS" firstAttribute="top" secondItem="bC8-jW-vG9" secondAttribute="bottom" id="RnQ-yY-WVW"/>
+                <constraint firstItem="MFs-dP-CLo" firstAttribute="top" secondItem="bC8-jW-vG9" secondAttribute="bottom" constant="-5" id="Tp8-na-GpT"/>
                 <constraint firstItem="bPD-AN-9Gu" firstAttribute="top" secondItem="31y-Rv-AgS" secondAttribute="bottom" constant="5" id="fGa-n1-yQy"/>
                 <constraint firstItem="bC8-jW-vG9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gGz-vy-3xq"/>
                 <constraint firstItem="31y-Rv-AgS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="gpf-Lt-7Td"/>
+                <constraint firstItem="MFs-dP-CLo" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="wqM-M5-TXX"/>
                 <constraint firstItem="bPD-AN-9Gu" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="zO1-bi-9ql"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

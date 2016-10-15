@@ -14,7 +14,18 @@ class FAEVerificationCodeView: UIView {
     var uiview:UIView?
 
     @IBOutlet var numberLabels: [UILabel]!
+
     private var pointer = 0
+    
+    var displayValue: String{
+        get{
+            var s = ""
+            for label in numberLabels{
+                s += label.text!
+            }
+            return s
+        }
+    }
     
     // MARK: - init
     override init(frame: CGRect)
@@ -49,7 +60,13 @@ class FAEVerificationCodeView: UIView {
     }
     
     //MARK: - display methods
-    func addDigit(digit:Int)
+    
+    /// add a digit to the code view
+    ///
+    /// - parameter digit: the int that need to be appended
+    ///
+    /// - returns: the numebr of digits appened
+    func addDigit(digit:Int) -> Int
     {
         if(digit >= 0 && pointer < numberLabels.count){
             let label = numberLabels[pointer]
@@ -62,5 +79,8 @@ class FAEVerificationCodeView: UIView {
             label.attributedText = NSAttributedString(string: "･" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
             label.textAlignment = .Center
         }
+        return pointer
     }
+    
+    
 }

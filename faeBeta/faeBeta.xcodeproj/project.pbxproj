@@ -86,12 +86,6 @@
 		B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
 		B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
-		B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */; };
-		B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
-		B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
@@ -541,8 +535,6 @@
 		B064EEA61D6E0CA100C078F5 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
-		B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoQuickPickerCollectionViewCell.swift; sourceTree = "<group>"; };
-		B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoQuickPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumTableViewCell.xib; sourceTree = "<group>"; };
@@ -813,8 +805,6 @@
 			children = (
 				B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */,
 				B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */,
-				B064EEB71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift */,
-				B064EEB81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib */,
 			);
 			path = CustomCollectionViewCell;
 			sourceTree = "<group>";
@@ -926,6 +916,8 @@
 			isa = PBXGroup;
 			children = (
 				B064EEA31D6E0CA100C078F5 /* Avatar.swift */,
+				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
+				DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				B064EEA61D6E0CA100C078F5 /* Recent.swift */,
@@ -940,6 +932,8 @@
 				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
 				B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
+				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,
+				DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */,
 			);
 			name = UIviewController;
 			sourceTree = "<group>";
@@ -970,6 +964,7 @@
 			isa = PBXGroup;
 			children = (
 				B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */,
+				DCEAE5441DB165A30047110B /* ScreenFactor.swift */,
 				B064EF1A1D6E354A00C078F5 /* WelcomePageControl.swift */,
 				B064EF121D6E353E00C078F5 /* WelcomeContentContainerFace.swift */,
 				B064EF131D6E353E00C078F5 /* WelcomeContentContainerFace.xib */,
@@ -1019,6 +1014,7 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
+				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0A2AC9A1CE3A3C7002E0C9D /* ViewController.swift */,
 				B0714D7F1D5E463B00356705 /* chat */,
@@ -1089,19 +1085,31 @@
 				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
+				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
 				B0BF355D1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.h */,
 				B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */,
-				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
+				DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */,
+				DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */,
+				DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */,
+				DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */,
+				DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */,
+				DC74CE1D1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.h */,
+				DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */,
+				DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */,
 				8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */,
 				8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */,
 				8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */,
 				B0BF355F1D8DC8D600B0540B /* JSQMessagesCollectionViewDelegateFlowLayoutCustom.h */,
 				B0BF35601D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.h */,
 				B0BF35611D8DC8D600B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m */,
+				86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */,
+				86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */,
 				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
 				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
 				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
 				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
+				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
+				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
 				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
 				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
@@ -1275,6 +1283,11 @@
 						DevelopmentTeam = J9H8DRZ5QS;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					B0A2ACAB1CE3A3C7002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
@@ -1316,10 +1329,10 @@
 				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
-				B064EEC81D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				B09E49BC1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
@@ -1364,19 +1377,20 @@
 				B0C0CAB21D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0BF357F1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF471D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				DC74CE281DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35851D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
+				DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B064EF651D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED21D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EF531D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF591D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF5F1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EEC91D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF181D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1399,19 +1413,20 @@
 				B0C0CAB31D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B0BF35801D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF481D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
+				DC74CE291DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35861D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
+				DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B064EF661D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED31D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EF541D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF5A1D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF601D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EECA1D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.xib in Resources */,
 				B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF191D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
@@ -1668,6 +1683,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
+				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
@@ -1679,6 +1695,7 @@
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
+				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */,
@@ -1705,6 +1722,7 @@
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
+				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
@@ -1720,17 +1738,19 @@
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
+				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B09E49E41D96F77F0075EE45 /* README.md in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
+				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
+				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
 				B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
-				B064EEC51D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -1739,6 +1759,7 @@
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
+				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
@@ -1753,6 +1774,7 @@
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
+				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
@@ -1761,12 +1783,14 @@
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
+				DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
+				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
@@ -1776,6 +1800,7 @@
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
+				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
@@ -1803,6 +1828,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B064EF441D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
+				DC74CE201DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B0714E191D62534A00356705 /* LogInViewController.swift in Sources */,
 				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
@@ -1826,12 +1852,12 @@
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
-				B064EEC61D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B064EEA81D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
+				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
@@ -1851,6 +1877,7 @@
 				B0BF356D1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				B064EF331D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
+				DC74CE231DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
@@ -1858,6 +1885,7 @@
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
+				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
@@ -1902,6 +1930,7 @@
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				86242F981D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B064EF151D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B0BF358D1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B09E49B51D9626140075EE45 /* AutoLayout.swift in Sources */,
@@ -1933,6 +1962,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CFC9C01CED42A800EC356A /* Verification.swift in Sources */,
+				DC74CE211DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B064EED01D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B0AA08911D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
@@ -1963,6 +1993,7 @@
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
+				DC4EC36A1DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
@@ -1981,6 +2012,7 @@
 				B04BB9E71CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0714D5D1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
+				DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
@@ -1989,6 +2021,7 @@
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
+				86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B064EED91D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714E0E1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
@@ -2005,6 +2038,7 @@
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
+				DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B064EF211D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
@@ -2018,7 +2052,6 @@
 				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
-				B064EEC71D6E0CEA00C078F5 /* PhotoQuickPickerCollectionViewCell.swift in Sources */,
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
@@ -2043,6 +2076,7 @@
 				B0714DFE1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF5D1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
+				DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B064EEF21D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B0BF35711D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
@@ -2188,10 +2222,12 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2214,6 +2250,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = J9H8DRZ5QS;
@@ -2221,6 +2258,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

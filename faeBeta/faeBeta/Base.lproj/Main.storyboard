@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -300,7 +300,7 @@
             <objects>
                 <navigationController storyboardIdentifier="NavigationWelcomeViewController" automaticallyAdjustsScrollViewInsets="NO" id="rAJ-5e-EZa" customClass="NavigationWelcomeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Owe-ie-wR5">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Owe-ie-wR5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -355,7 +355,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BTo-0x-BeF" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" image="map_gray" selectedImage="map_red" id="KaP-GL-FEn"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="q0C-nr-PUU">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="q0C-nr-PUU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

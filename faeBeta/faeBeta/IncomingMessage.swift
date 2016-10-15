@@ -38,7 +38,7 @@ class IncomingMessage {
             message = createPictureMessage(dictionary)
         }
         
-        if type == "voice" {
+        if type == "audio" {
             message = createAudioMessage(dictionary)
         }
         
@@ -118,7 +118,7 @@ class IncomingMessage {
     
     func returnOutgoingStatusFromUser(senderId : String) -> Bool {
         
-        if senderId == backendless.userService.currentUser.objectId {
+        if senderId == user_id.stringValue {
             //outgoings
             return true
         } else {
@@ -149,7 +149,7 @@ class IncomingMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().dateFromString((item["date"] as? String)!)
-        let mediaItem = JSQAudioMediaItem(data: nil)
+        let mediaItem = JSQAudioMediaItemCustom(data: nil)
         
         voiceFromData(item) { (voiceData) in
             mediaItem.audioData = voiceData

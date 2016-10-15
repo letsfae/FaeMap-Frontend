@@ -9,13 +9,17 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import SwiftyJSON
+
+public var isDraggingRecentTableViewCell = false
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var recents: [NSDictionary] = [] // an array of dic to store recent chatting informations
+    var recents: JSON? // an array of dic to store recent chatting informations
     var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
+    var loadingRecentTimer: NSTimer!
     
     // MARK: - View did/will funcs
     override func viewDidLoad() {
@@ -23,10 +27,23 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.backgroundColor = UIColor.whiteColor()
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
-        loadRecents()
         addGestureRecognizer()
-        
-        // Do any additional setup after loading the view.
+        firebase.keepSynced(true)
+
+        if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
+            self.recents = JSON(recentData)
+            self.tableView.reloadData()
+        }
+
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        firebase.removeAllObservers()
+        loadingRecentTimer.invalidate()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
     }
     
     /*
@@ -53,7 +70,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = "Social"
         titleLabel.textAlignment = .Center
-        titleLabel.font = UIFont(name: "Avenir Next", size: 20)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         
         self.navigationItem.titleView = titleLabel
@@ -86,11 +103,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             
-            let recent = recents[indexPath.row]
+//            let recent = recents![indexPath.row]
             
             //create recent for both users
             
-            restartRecentChat(recent)
+//            restartRecentChat(recent)
             
             performSegueWithIdentifier("recentToChatSeg", sender: indexPath)
         }else{
@@ -140,23 +157,24 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recents.count
+        return recents == nil ? 0 : recents!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! RecentTableViewCell
         cell.delegate = self
-        let recent = recents[indexPath.row]
+        let recent = recents![indexPath.row]
         
         cell.bindData(recent)
+
         if (self.cellsCurrentlyEditing.containsObject(indexPath)) {
             cell.openCell()
         }
         return cell
     }
-    
     //MARK: - helpers
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "recentToChooseUserVC" {
             let vc = segue.destinationViewController as! ChooseUserViewController
@@ -168,27 +186,15 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.hidesBottomBarWhenPushed = true
             
             
-            let recent = recents[indexPath.row]
+            let recent = recents![indexPath.row]
             
-            chatVC.recent = recent
-            chatVC.chatRoomId = recent["chatRoomId"] as? String
-            let withUserUserId = recent["withUserUserId"] as! String
-            // find user
-            let whereClause = "objectId = '\(withUserUserId)'"
-            
-            let dataQuery = BackendlessDataQuery()
-            dataQuery.whereClause = whereClause
-            
-            let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-            
-            dataStore.find(dataQuery, response: { (users : BackendlessCollection!) in
-                chatVC.withUser = users.data[0] as? BackendlessUser
-                print("RecentViewController: withuser id: \(chatVC.withUser?.getProperty("device_id"))")
-            }) { (fault : Fault!) in
-                print("Error, couldn't retrive users: \(fault)")
-            }
+//            chatVC.recent = recent
+            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+            chatVC.chat_id = recent["chat_id"].number?.stringValue
+            let withUserUserId = recent["with_user_id"].number?.stringValue
+            let withUserName = "default"
+            chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }
-        
     }
     
     func createChatroom(withUser: BackendlessUser) {
@@ -198,31 +204,38 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         chatVC.hidesBottomBarWhenPushed = true
         // set chatVC recent to our recent.
         
-        chatVC.withUser = withUser
+//        chatVC.withUser = withUser
         
         chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
         
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
+    func startCheckingRecent(){
+        print("check")
+        loadRecents(false, removeIndexPaths: nil)
+    }
     //MARK: load recents form firebase
     
-    func loadRecents() {
-        
-        firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
-            self.recents.removeAll()
-            
-            if snapshot.exists() {
-                let sorted = (snapshot.value!.allValues as NSArray).sortedArrayUsingDescriptors([NSSortDescriptor(key : "date", ascending: false)])
-                for recent in sorted {
-                    self.recents.append(recent as! NSDictionary)
-                    // add function to have offline access as well
-                    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(recent["ChatRoomId"]).observeEventType(.Value, withBlock: { (snapshot : FIRDataSnapshot) in
-                    })
+    func loadRecents(animated:Bool, removeIndexPaths indexPathSet:[NSIndexPath]? ) {
+        getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            if let cacheRecent = result as? NSArray {
+                let json = JSON(result!)
+                self.recents = json
+                    NSUserDefaults.standardUserDefaults().setObject(cacheRecent, forKey: (user_id.stringValue + "recentData"))
+
+                if(animated){
+                    self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
+                }else{
+                    if(!isDraggingRecentTableViewCell){
+                        self.tableView.reloadData()
+                    }
                 }
-                self.tableView.reloadData()
+            }else{
+                self.recents = JSON([])
             }
         }
+
     }
     
     //MARK: sortAlertView
@@ -279,6 +292,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: - swipeable cell delegate
     
+    func cellwillOpen(cell: UITableViewCell) {
+        closeAllCell(UITapGestureRecognizer())
+    }
+    
     func cellDidOpen(cell: UITableViewCell)
     {
         let currentEditingIndexPath = self.tableView.indexPathForCell(cell)
@@ -296,18 +313,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func deleteButtonTapped(cell: UITableViewCell) {
         let indexPath = tableView.indexPathForCell(cell)!
-        let recent = recents[indexPath.row]
+        let recent = recents![indexPath.row]
         
         //remove recent form the array
-        
-        recents.removeAtIndex(indexPath.row)
+//        recents.
         
         //delect recent from firebase
+        DeleteRecentItem(recent, completion: {(statusCode, result) -> Void in
+            if statusCode / 100 == 2{
+                self.loadRecents(true, removeIndexPaths: [indexPath])
+            }
+        })
         
-        DeleteRecentItem(recent)
-        
-        let range = NSMakeRange(0, self.tableView.numberOfSections)
-        let sections = NSIndexSet(indexesInRange: range)
-        self.tableView.reloadSections(sections, withRowAnimation: .Automatic)
+        cellsCurrentlyEditing.removeObject(indexPath)
     }
 }
