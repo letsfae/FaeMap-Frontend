@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3727C882F217FA4B8F814DC4 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855FA5EC0F36B3DD9102944D /* Pods_faeBetaTests.framework */; };
-		47CE1ED32E6A039E632CE58C /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2362BD57A2E13EC845BCC383 /* Pods_faeBetaUITests.framework */; };
-		6C4A88915E6046207CE8942D /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF5C1C3A59E577AEC158561F /* Pods_faeBeta.framework */; };
+		3D57736EEEA42FF298B54BBE /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */; };
+		55BBEBBA2C0D5567577FBEE8 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */; };
+		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
+		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
+		86242F981D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
+		86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
@@ -474,6 +479,36 @@
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
+		DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC4EC36A1DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
+		DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE201DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE211DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
+		DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE231DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
+		DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE281DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE291DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
+		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
+		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
+		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
+		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
+		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
+		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
+		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -494,11 +529,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07701B4456CE4BB6C70C0F72 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
-		2362BD57A2E13EC845BCC383 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		59BCD4290E72C5EE4793DF08 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
-		7E3034E331A86F9D101FC58D /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
-		855FA5EC0F36B3DD9102944D /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
+		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
+		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
+		86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesToolbarContentViewCustom.h; sourceTree = "<group>"; };
+		86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesToolbarContentViewCustom.m; sourceTree = "<group>"; };
 		8660BBEE1D9063D000D4820C /* JSQMessagesCollectionViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCustom.h; sourceTree = "<group>"; };
 		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
 		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
@@ -513,7 +550,10 @@
 		86721A5C1D8FB5EE006BDE27 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/pop/pop.framework"; sourceTree = "<group>"; };
 		86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SDWebImage/SDWebImage.framework"; sourceTree = "<group>"; };
 		86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
-		AF5C1C3A59E577AEC158561F /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
+		8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
@@ -690,9 +730,27 @@
 		B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPin.swift; sourceTree = "<group>"; };
 		B837D1ED1D8F11C500E44FAE /* PinSelections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSelections.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
-		D4AAFAEE37083C5A4C2B12E0 /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		DB47EE6272A03BA519FF29BE /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
-		E4C9C7F882128656AF8EEE7B /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
+		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
+		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
+		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
+		DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItemCustom.h; sourceTree = "<group>"; };
+		DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItemCustom.m; sourceTree = "<group>"; };
+		DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellCustom.h; sourceTree = "<group>"; };
+		DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellCustom.m; sourceTree = "<group>"; };
+		DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellIncomingCustom.h; sourceTree = "<group>"; };
+		DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellIncomingCustom.m; sourceTree = "<group>"; };
+		DC74CE1D1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellOutgoingCustom.h; sourceTree = "<group>"; };
+		DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellOutgoingCustom.m; sourceTree = "<group>"; };
+		DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellIncomingCustom.xib; sourceTree = "<group>"; };
+		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
+		DCEAE5441DB165A30047110B /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
+		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
+		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
+		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
+		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
+		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -710,7 +768,8 @@
 				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
 				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
 				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
-				6C4A88915E6046207CE8942D /* Pods_faeBeta.framework in Frameworks */,
+				FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */,
+				EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,7 +777,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3727C882F217FA4B8F814DC4 /* Pods_faeBetaTests.framework in Frameworks */,
+				3D57736EEEA42FF298B54BBE /* Pods_faeBetaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,7 +785,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47CE1ED32E6A039E632CE58C /* Pods_faeBetaUITests.framework in Frameworks */,
+				55BBEBBA2C0D5567577FBEE8 /* Pods_faeBetaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,9 +805,9 @@
 				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
 				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
 				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
-				AF5C1C3A59E577AEC158561F /* Pods_faeBeta.framework */,
-				855FA5EC0F36B3DD9102944D /* Pods_faeBetaTests.framework */,
-				2362BD57A2E13EC845BCC383 /* Pods_faeBetaUITests.framework */,
+				8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */,
+				234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */,
+				C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -756,12 +815,12 @@
 		5AE2FD8B731260004DD7B6D4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E4C9C7F882128656AF8EEE7B /* Pods-faeBeta.debug.xcconfig */,
-				07701B4456CE4BB6C70C0F72 /* Pods-faeBeta.release.xcconfig */,
-				7E3034E331A86F9D101FC58D /* Pods-faeBetaTests.debug.xcconfig */,
-				DB47EE6272A03BA519FF29BE /* Pods-faeBetaTests.release.xcconfig */,
-				D4AAFAEE37083C5A4C2B12E0 /* Pods-faeBetaUITests.debug.xcconfig */,
-				59BCD4290E72C5EE4793DF08 /* Pods-faeBetaUITests.release.xcconfig */,
+				AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */,
+				E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */,
+				88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */,
+				DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */,
+				636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */,
+				96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1081,6 +1140,10 @@
 		B0BF35581D8DC8D600B0540B /* JSQExtension */ = {
 			isa = PBXGroup;
 			children = (
+				DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */,
+				DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */,
+				DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */,
+				DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */,
 				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
 				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
@@ -1335,6 +1398,7 @@
 				B0AA08921D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
+				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B09E49BC1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
 				B09E49E11D96F77F0075EE45 /* LICENSE in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
@@ -1768,6 +1832,7 @@
 				B0BF35451D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
+				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
 				B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
@@ -1904,6 +1969,7 @@
 				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
+				DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B09E49C11D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B09E49BA1D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
@@ -1944,6 +2010,8 @@
 				B09E49DF1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
+				B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
+				DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B064EEF81D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714D681D5E435200356705 /* OpenUserPinView.swift in Sources */,
@@ -2064,6 +2132,8 @@
 				B064EF451D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
+				86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B0714D721D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B001825F1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
@@ -2216,7 +2286,7 @@
 		};
 		B0A2ACC11CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4C9C7F882128656AF8EEE7B /* Pods-faeBeta.debug.xcconfig */;
+			baseConfigurationReference = AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2244,7 +2314,7 @@
 		};
 		B0A2ACC21CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07701B4456CE4BB6C70C0F72 /* Pods-faeBeta.release.xcconfig */;
+			baseConfigurationReference = E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2274,7 +2344,7 @@
 		};
 		B0A2ACC41CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E3034E331A86F9D101FC58D /* Pods-faeBetaTests.debug.xcconfig */;
+			baseConfigurationReference = 636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2289,7 +2359,7 @@
 		};
 		B0A2ACC51CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB47EE6272A03BA519FF29BE /* Pods-faeBetaTests.release.xcconfig */;
+			baseConfigurationReference = 88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2304,7 +2374,7 @@
 		};
 		B0A2ACC71CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4AAFAEE37083C5A4C2B12E0 /* Pods-faeBetaUITests.debug.xcconfig */;
+			baseConfigurationReference = DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
@@ -2318,7 +2388,7 @@
 		};
 		B0A2ACC81CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59BCD4290E72C5EE4793DF08 /* Pods-faeBetaUITests.release.xcconfig */;
+			baseConfigurationReference = 96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
