@@ -90,10 +90,11 @@ extension RegisterBaseViewController {
     
     func createBottomView(subview: UIView) {
         
-        bottomView = UIView(frame: CGRectMake(0, view.frame.size.height - 80 - subview.frame.size.height, view.frame.size.width, subview.frame.size.height + 80))
+        bottomView = UIView(frame: CGRectMake(0, screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, view.frame.size.width, subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
         
-        continueButton = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 150, subview.frame.size.height + 15, 300, 50))
-        continueButton.layer.cornerRadius = 25
+        continueButton = UIButton(frame: CGRectMake(0, subview.frame.size.height + 18, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        continueButton.center.x = screenWidth / 2
+        continueButton.layer.cornerRadius = 25 * screenHeightFactor
         continueButton.layer.masksToBounds = true
         
         continueButton.setTitle("Continue", forState: .Normal)
@@ -119,9 +120,9 @@ extension RegisterBaseViewController {
         continueButton.enabled = enable
         
         if enable {
-            continueButton.backgroundColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+            continueButton.backgroundColor = UIColor.faeAppRedColor()
         } else {
-            continueButton.backgroundColor = UIColor(red: 255/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1.0)
+            continueButton.backgroundColor = UIColor.faeAppDisabledRedColor()
         }
     }
     
@@ -190,14 +191,13 @@ extension RegisterBaseViewController {
         
         
         var bottomViewFrame = bottomView.frame
-        bottomViewFrame.origin.y = view.frame.height - keyboardFrame.size.height - bottomViewFrame.size.height
+        bottomViewFrame.origin.y = view.frame.height - keyboardFrame.size.height - bottomViewFrame.size.height + 15
         
         var tableViewFrame: CGRect?
         
         if tableView != nil {
             tableViewFrame = tableView.frame
-            tableViewFrame!.size.height = view.frame.size.height - bottomViewFrame.size.height - keyboardFrame.size.height - 70
-            tableView.scrollEnabled = true
+            tableViewFrame!.origin.y = min(screenHeight - keyboardFrame.size.height - bottomViewFrame.size.height - tableViewFrame!.size.height, 70)
         }
         
         UIView.animateWithDuration(0.3, animations: { () -> Void in
@@ -207,8 +207,6 @@ extension RegisterBaseViewController {
             }
             
         })
-        
-        makeLowerCellVisible()
     }
     
     func keyboardWillHide(notification: NSNotification) {
@@ -220,7 +218,7 @@ extension RegisterBaseViewController {
         
         if tableView != nil {
             tableViewFrame = tableView.frame
-            tableViewFrame!.size.height = view.frame.size.height - bottomViewFrame.size.height - 70
+            tableViewFrame!.origin.y = 70
             tableView.scrollEnabled = false
         }
         
@@ -230,11 +228,5 @@ extension RegisterBaseViewController {
                 self.tableView.frame = tableViewFrame!
             }
         })
-    }
-    
-    func makeLowerCellVisible() {
-        if activeIndexPath != nil && tableView != nil {
-            tableView.scrollToRowAtIndexPath(activeIndexPath!, atScrollPosition: .Bottom, animated: true)
-        }
     }
 }

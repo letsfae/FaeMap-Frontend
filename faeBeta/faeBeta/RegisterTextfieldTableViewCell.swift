@@ -39,10 +39,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     // MARK: - Functions
     
     func setPlaceholderLabelText(text: String, indexPath: NSIndexPath)  {
-        textfield.attributedPlaceholder = NSAttributedString(string:"placeholder text", attributes: [NSForegroundColorAttributeName: UIColor.init(colorLiteralRed: 155/255.0, green: 155/255.0, blue: 155/255.0, alpha: 1.0)])
         textfield.placeholder = text
-        textfield.autocorrectionType = .No
-        textfield.tintColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
         self.indexPath = indexPath
     }
     

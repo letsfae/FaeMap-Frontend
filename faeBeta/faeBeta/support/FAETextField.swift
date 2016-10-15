@@ -52,6 +52,11 @@ class FAETextField: UITextField {
         setup()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setup()
+    }
+    
     private func setup()
     {
         self.autocorrectionType = .No

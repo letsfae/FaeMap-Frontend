@@ -24,8 +24,8 @@ class RegisterNameViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        createTableView(210 * screenHeightFactor + 59)
         createTopView("ProgressBar1")
-        createTableView(view.frame.size.height - 175)
         createBottomView(createAlreadyGotAnAccountView())
         
         registerCell()
@@ -36,7 +36,6 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        firstNameTableViewCell.makeFirstResponder()
     }
     
     // MARK: - Functions
@@ -162,6 +161,21 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             
         }
     }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+            case 0:
+                return 59
+            case 1:
+                return 60 * screenHeightFactor
+            case 2:
+                return 75 * screenHeightFactor
+            case 3:
+                return 75 * screenHeightFactor
+            default:
+                return 0
+        }
+    }
 }
 
 extension RegisterNameViewController: RegisterTextfieldProtocol {
@@ -173,14 +187,12 @@ extension RegisterNameViewController: RegisterTextfieldProtocol {
     func textFieldShouldReturn(indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
-            firstNameTableViewCell.endAsResponder()
             lastNameTableViewCell.makeFirstResponder()
             break
         case 3:
             if continueButton.enabled {
                 lastNameTableViewCell.endAsResponder()
             } else {
-                lastNameTableViewCell.endAsResponder()
                 firstNameTableViewCell.makeFirstResponder()
             }
         default: break
