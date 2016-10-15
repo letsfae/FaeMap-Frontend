@@ -18,7 +18,7 @@ import Foundation
  // NSString! returned (optional)
  */
 class FaeUser : NSObject {
-    
+    //test line 1
     var keyValue = [String:AnyObject]()
     override init (){
         //local storage

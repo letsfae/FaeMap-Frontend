@@ -66,8 +66,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     func configureHistoryPage() {
         loadHistoryFromStorage()
-        print("the images is \(stickerDictionary["history"])")
-        print("the dict is \(historyDict)")
+//        print("the images is \(stickerDictionary["history"])")
+//        print("the dict is \(historyDict)")
     }
     
     func configurePageController() {
@@ -171,10 +171,11 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject(historyDict, forKey: "stickerHistory")
         stickerDictionary["stickerHistory"] = historyDict.keysSortedByValue(>)
+        reloadHistory()
     }
     
     func reloadHistory() {
-        let historyView = stickerFixView[1]
+        let historyView = stickerScrollViews[1]
         historyView.stickerAlbum.clearAll()
         prepareAlbum(historyView, name: "stickerHistory")
         attachButton(historyView)

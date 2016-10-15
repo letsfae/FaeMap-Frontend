@@ -15,14 +15,13 @@ target 'faeBeta' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
-	pod 'Kingfisher', '~> 2.4'
 	pod 'KTCenterFlowLayout'
 	pod 'GoogleMaps', '~> 1.13.2'
 end
 
 target 'faeBetaTests' do
 	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
+  pod 'SwiftyJSON', '~> 2.3'
 	pod 'SDWebImage', '~>3.7'
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
@@ -33,12 +32,13 @@ target 'faeBetaTests' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
+	pod 'KTCenterFlowLayout'
 	pod 'GoogleMaps', '~> 1.13.2'
 end
 
 target 'faeBetaUITests' do
 	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
+  pod 'SwiftyJSON', '~> 2.3'
 	pod 'SDWebImage', '~>3.7'
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
@@ -49,5 +49,6 @@ target 'faeBetaUITests' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
+	pod 'KTCenterFlowLayout'
 	pod 'GoogleMaps', '~> 1.13.2'
 end

@@ -87,7 +87,7 @@ class StickerAlbum {
     
     func clearAll() {
         self.stickerName.removeAll()
-        self.stickerPos.removeAll()
+        self.pageNumber = 0
         clearButton()
     }
     

@@ -29,6 +29,11 @@ class WelcomeImageContainerViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.containerView.frame = self.view.bounds
+
+    }
     
     func setupContentContainer()
     {
@@ -37,8 +42,9 @@ class WelcomeImageContainerViewController: UIViewController {
         var description : String = ""
         switch index {
         case 0:
-            title = "Fae Map"
-            description = "The Real Way to Connect the World"
+            title = " "
+            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
+            description = "Connecting People & Communities \non a Real Time Social Map"
             break
         case 1:
             title = "Chat"

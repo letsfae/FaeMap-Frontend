@@ -22,9 +22,14 @@ extension FaeMapViewController {
         dimBackgroundMoreButton.layer.zPosition = 99
         dimBackgroundMoreButton.addTarget(self, action: #selector(FaeMapViewController.animationMoreHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
+        let leftSwipe = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(FaeMapViewController.animationMoreHide(_:)))
+        leftSwipe.direction = .Left
+        
         uiviewMoreButton = UIView(frame: CGRectMake(-tableViewWeight, 0, tableViewWeight, screenHeight))
         uiviewMoreButton.backgroundColor = UIColor.whiteColor()
         uiviewMoreButton.layer.zPosition = 100
+        uiviewMoreButton.addGestureRecognizer(leftSwipe)
         self.view.addSubview(uiviewMoreButton)
         
         imagePicker = UIImagePickerController()

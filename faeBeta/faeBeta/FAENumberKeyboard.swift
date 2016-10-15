@@ -54,15 +54,8 @@ class FAENumberKeyboard: UIView {
             button.backgroundColor = UIColor.clearColor()
             button.setAttributedTitle(NSAttributedString(string: "\(button.tag)" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 38)!]), forState: .Normal)
             button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), forControlEvents: .TouchUpInside)
-            let tag = button.tag
-            if(tag == 1 || tag == 4 || tag == 7){
-                button.contentHorizontalAlignment = .Left
-            }
-            else if(tag == 3 || tag == 6 || tag == 9){
-                button.contentHorizontalAlignment = .Right
-            }
         }
-        let deleteIcon = UIImageView(frame: CGRectMake(69, 20, 31, 22))
+        let deleteIcon = UIImageView(frame: CGRectMake(screenWidth / 6 - 20 , 20 * screenHeightFactor * screenHeightFactor, 31, 22))
         deleteIcon.image = UIImage(named: "erase")
         deleteButton.addSubview(deleteIcon)
         deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), forControlEvents: .TouchUpInside)

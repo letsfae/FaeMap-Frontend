@@ -18,7 +18,7 @@
 
 #import "JSQMessagesInputToolbarCustom.h"
 
-#import "JSQMessagesComposerTextView.h"
+#import "JSQMessagesComposerTextViewCustom.h"
 
 #import "JSQMessagesToolbarButtonFactory.h"
 
@@ -42,7 +42,29 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 @dynamic delegate;
 
 #pragma mark - Initialization
-
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if(self != nil){
+//        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+        
+        self.jsq_isObserving = NO;
+        self.sendButtonOnRight = YES;
+        
+        self.preferredDefaultHeight = 90.0f;
+        self.maximumHeight = NSNotFound;
+        
+        JSQMessagesToolbarContentViewCustom *toolbarContentView = [self loadToolbarContentView];
+        toolbarContentView.frame = self.frame;
+        [self addSubview:toolbarContentView];
+        [self jsq_pinAllEdgesOfSubview:toolbarContentView];
+        [self setNeedsUpdateConstraints];
+        _contentView = toolbarContentView;
+        
+        [self jsq_addObservers];
+        [self toggleSendButtonEnabled];
+    }
+    return self;
+}
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -54,7 +76,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     self.preferredDefaultHeight = 90.0f;
     self.maximumHeight = NSNotFound;
 
-    JSQMessagesToolbarContentView *toolbarContentView = [self loadToolbarContentView];
+    JSQMessagesToolbarContentViewCustom *toolbarContentView = [self loadToolbarContentView];
     toolbarContentView.frame = self.frame;
     [self addSubview:toolbarContentView];
     [self jsq_pinAllEdgesOfSubview:toolbarContentView];
@@ -69,9 +91,10 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     [self toggleSendButtonEnabled];
 }
 
-- (JSQMessagesToolbarContentView *)loadToolbarContentView
+
+- (JSQMessagesToolbarContentViewCustom *)loadToolbarContentView
 {
-    NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:@"JSQMessagesToolbarContentViewCustom"
+    NSArray *nibViews = [[NSBundle bundleForClass:[JSQMessagesInputToolbarCustom class]] loadNibNamed:NSStringFromClass([JSQMessagesToolbarContentViewCustom class])
                                                                                           owner:nil
                                                                                         options:nil];
     return nibViews.firstObject;

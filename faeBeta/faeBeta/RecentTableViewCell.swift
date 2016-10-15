@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol SwipeableCellDelegate {
+    func cellwillOpen(cell:UITableViewCell)
     func cellDidOpen(cell:UITableViewCell)
     func cellDidClose(cell:UITableViewCell)
     func deleteButtonTapped(cell:UITableViewCell)
@@ -49,47 +51,21 @@ class RecentTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     // MARK: populate cell 
-    func bindData(recent : NSDictionary) {
+    func bindData(recent : JSON) {
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = CGRectGetWidth(self.avatarImageView.bounds) / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.image = UIImage(named: "avatarPlaceholder")
-        let withUserId = (recent.objectForKey("withUserUserId") as? String)!
-        
-        //get the backendless user and download avatar
-        
-        let whereClause = "objectId = '\(withUserId)'"
-        let dataQuery = BackendlessDataQuery()
-        dataQuery.whereClause = whereClause
-        
-        let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-        
-        dataStore.find(dataQuery, response: { (user : BackendlessCollection!) in
-            
-            let withUser = user.data.first as! BackendlessUser
-            
-            //use withUser to get our avatar
-            
-            if let avatarUrl = withUser.getProperty("Avatar") {
-                getImageFromURL(avatarUrl as! String, result: { (image) in
-                    self.avatarImageView.image = image
-                })
-            }
-            
-            
-        }) { (fault : Fault!) in
-            print("error, couldn't get user avatar: \(fault)")
-        }
-        
-        nameLabel.text = recent["withUserUsername"] as? String
-        lastMessageLabel.text = recent["lastMessage"] as? String
+
+        nameLabel.text = recent["with_user_id"].string
+        lastMessageLabel.text = recent["last_message"].string
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 10
         counterLabel.layer.masksToBounds = true
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
-        if (recent["counter"] as? Int)! != 0 {
+        if (recent["unread_count"].number)!.intValue != 0 {
             counterLabel.hidden = false
-            counterLabel.text = "\(recent["counter"]!)"
+            counterLabel.text = "\(recent["unread_count"].number!.intValue)"
             if(counterLabel.text?.characters.count == 2){
                 countLabelLength.constant = 23
             }else{
@@ -98,7 +74,17 @@ class RecentTableViewCell: UITableViewCell {
         }else{
             counterLabel.hidden = true
         }
-        let date = dateFormatter().dateFromString((recent["date"] as? String)!)
+        var timeString = recent["last_message_timestamp"].string
+        var index = 0
+        for c in (timeString?.characters)!{
+            if c < "0" || c > "9" {
+                timeString?.removeAtIndex((timeString?.characters.startIndex.advancedBy(index))!)
+            }else{
+                index += 1
+            }
+        }
+        
+        let date = dateFormatter().dateFromString(timeString!)
         let seconds = NSDate().timeIntervalSinceDate(date!)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
@@ -139,6 +125,7 @@ class RecentTableViewCell: UITableViewCell {
     func panThisCell(recognizer:UIPanGestureRecognizer){
         switch (recognizer.state) {
         case .Began:
+            isDraggingRecentTableViewCell = true
             self.panStartPoint = recognizer.translationInView(self.mainView)
             self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
             break;
@@ -160,6 +147,7 @@ class RecentTableViewCell: UITableViewCell {
                         self.distanceToRight.constant = constant;
                     }
                 } else {
+                    self.delegate.cellwillOpen(self)
                     let constant = min(-deltaX, self.buttonTotalWidth) //6
                     if (constant == self.buttonTotalWidth) { //7
                         self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
@@ -201,18 +189,6 @@ class RecentTableViewCell: UITableViewCell {
                     //Re-close
                     self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
                 }
-//            } else {
-//                //Cell was closing
-//                let halfOfButtonOne = CGRectGetWidth(self.deleteButton.frame) / 2; //2
-//                if (self.distanceToRight.constant >= halfOfButtonOne) { //5
-//                    //Re-open all the way
-//                    self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
-//                } else {
-//                    //Close
-//                    self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-//                }
-//            }
-            
             break;
         case .Cancelled:
             if (self.startingRightLayoutConstraintConstant == 0) {
@@ -250,6 +226,8 @@ class RecentTableViewCell: UITableViewCell {
             
             self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
                 self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+                isDraggingRecentTableViewCell = false
+
             });
         });
     }

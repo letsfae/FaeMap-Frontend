@@ -16,15 +16,14 @@ extension FaeMapViewController {
     func loadMapChat()
     {
         self.labelUnreadMessages.hidden = true
-        if (backendless.userService.currentUser != nil){
-            // keep tracking the unread messages number
-            firebase.child("Recent").queryOrderedByChild("userId").queryEqualToValue(backendless.userService.currentUser.objectId).observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
-                var totalUnread = 0
-                if snapshot.exists() {
-                    for recent in snapshot.value!.allValues {
-                        let recentDic = recent as! NSDictionary
-                        totalUnread += recentDic["counter"] as! Int
-                    }
+        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(self.updateUnreadChatIndicator), userInfo: nil, repeats: true)
+    }
+
+    func updateUnreadChatIndicator(){
+        getFromURL("sync", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            if(status / 100 == 2){
+                if let cacheRecent = result as? NSDictionary {
+                    let totalUnread = (cacheRecent["chat"] as! NSNumber).intValue + (cacheRecent["chat_room"] as! NSNumber).intValue
                     if(totalUnread / 10 >= 1){
                         self.labelUnreadMessages.text = "\(totalUnread)"
                         self.labelUnreadMessages.frame.size.width = 23
@@ -32,19 +31,11 @@ extension FaeMapViewController {
                         self.labelUnreadMessages.text = "\(totalUnread)"
                         self.labelUnreadMessages.frame.size.width = 20
                     }
+                    
+                    self.labelUnreadMessages.hidden = totalUnread == 0
+                    UIApplication.sharedApplication().applicationIconBadgeNumber = Int(totalUnread)
                 }
-                self.labelUnreadMessages.hidden = totalUnread == 0
-                UIApplication.sharedApplication().applicationIconBadgeNumber = totalUnread
             }
-        }
-        if(backendless.userService.currentUser != nil && backendless.messagingService.currentDevice().deviceId != nil){
-            // update the user's device_id for future message receive
-            backendless.userService.currentUser.updateProperties(["device_id":backendless.messagingService.currentDevice().deviceId])
-            backendless.userService.update(backendless.userService.currentUser, response: { (updatedUser) in
-                print("Updated current device_id")
-                }, error: { (fault) in
-                    print("error couldn't update device_id \(fault)")
-            })
         }
     }
     
@@ -58,7 +49,19 @@ extension FaeMapViewController {
             self.presentViewController (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
         }
     }
-    
+
+    func segueToChat(withUserId: NSNumber, withUserName: String ){
+        let chatVC = ChatViewController()
+        
+        chatVC.hidesBottomBarWhenPushed = true
+        
+        //            chatVC.recent = recent
+        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
+//        chatVC.chat_id = recent["chat_id"].number?.stringValue
+        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        
+        navigationController?.pushViewController(chatVC, animated: true)
+    }
     
     func animationMapChatHide(sender: UIButton!) {
         UIView.animateWithDuration(0.25, animations: ({
