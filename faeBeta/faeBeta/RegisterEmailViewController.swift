@@ -15,7 +15,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var emailTableViewCell: RegisterTextfieldTableViewCell!
     var email: String?
     var faeUser: FaeUser!
-    var emailExistButton: UIButton!
+    var emailExistLabel: UIView!
     
     // MARK: - View Lifecycle
     
@@ -24,8 +24,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
         
         // Do any additional setup after loading the view.
         createTopView("ProgressBar2")
-        createTableView(view.frame.size.height - 175)
-        createBottomView(thisEmailIsAlreadyView())
+        createTableView(59 + 135 * screenHeightFactor)
+        emailExistLabel = thisEmailIsAlreadyView()
+        createBottomView(emailExistLabel)
         
         registerCell()
         
@@ -43,28 +44,24 @@ class RegisterEmailViewController: RegisterBaseViewController {
     func thisEmailIsAlreadyView() -> UIView {
         let thisEmailIsAlreadyView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
         
-        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 125, 0, 250, 25))
+        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 118, 0, 190, 25))
+        label.attributedText = NSAttributedString(string: "This email is already registered! ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
+        )
+        thisEmailIsAlreadyView.addSubview(label)
         
-        let titleString = "This email is already registered! Log In!"
-        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 + 73, 0, 45, 25))
+        let titleString = "Log In!"
+        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!,
+                          NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: NSRange(location: 0, length: 33))
         
-        
-        let myRange1 = NSRange(location: 33, length: 8)
-        
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: myRange1)
-        
-        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
-        
-        
-        //        button.setImage(UIImage(named: "ThisEmailIsAlready"), forState: .Normal)
         button.setAttributedTitle(myAttrString, forState: .Normal)
         button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
-        emailExistButton = button
-        button.hidden = true
-        thisEmailIsAlreadyView.addSubview(button)
         
+
+        thisEmailIsAlreadyView.addSubview(button)
+        thisEmailIsAlreadyView.hidden = true
         return thisEmailIsAlreadyView
     }
     
@@ -107,10 +104,10 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     let value = message?.valueForKey("existence")
                     if (value != nil) {
                         if value! as! Int == 0 {
-                            self.emailExistButton.hidden = true
+                            self.emailExistLabel.hidden = true
                             self.jumpToRegisterUsername()
                         } else {
-                            self.emailExistButton.hidden = false
+                            self.emailExistLabel.hidden = false
                         }
                     }
                 }
@@ -120,10 +117,10 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     func isValidEmail(testStr:String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? true : false
+        return result
     }
     
     func registerCell() {
@@ -172,6 +169,19 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
             let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 59
+        case 1:
+            return 60 * screenHeightFactor
+        case 2:
+            return 75 * screenHeightFactor
+        default:
+            return 0
         }
     }
 }

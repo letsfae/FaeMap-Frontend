@@ -109,7 +109,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         
         rightLabel = UILabel(frame: CGRectMake(0, screenHeight - 35, 300, 50))
         rightLabel.numberOfLines = 2
-        rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
+        rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae Maps ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
         rightLabel.textAlignment = .Center
         rightLabel.sizeToFit()
         rightLabel.center.x = screenWidth / 2

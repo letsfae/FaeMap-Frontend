@@ -52,25 +52,21 @@ class RegisterNameViewController: RegisterBaseViewController {
     func createAlreadyGotAnAccountView() -> UIView {
         let createAlreadyGotAnAccountView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
         
-        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 100, 0, 200, 25))
         
+        //Already got an Account? 
+        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 94, 0, 155, 25))
+        label.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor()]
+        )
+        createAlreadyGotAnAccountView.addSubview(label)
         
-        let titleString = "Already got an Account? Log In!"
-        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 + 54, 0, 45, 25))
+        let titleString = "Log In!"
+        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!,
+                          NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0), range: NSRange(location: 0, length: 24))
-        
-        
-        let myRange1 = NSRange(location: 24, length: 7)
-        
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: myRange1)
-        
-        
-        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
-        
         
         button.setAttributedTitle(myAttrString, forState: .Normal)
-        
         button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
         
         createAlreadyGotAnAccountView.addSubview(button)
@@ -92,7 +88,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     func jumpToRegisterEmail() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
         vc.faeUser = faeUser
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func createUser() {

@@ -34,7 +34,7 @@ class FAETextField: UITextField {
     {
         set{
             _placeholder = newValue!
-            let font = UIFont(name: "AvenirNext-Regular", size: 25)
+            let font = UIFont(name: "AvenirNext-Regular", size: 22)
             self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
         }
         get{
@@ -73,7 +73,7 @@ class FAETextField: UITextField {
         self.leftView = rightPlaceHolderView
         self.leftViewMode = .WhileEditing
         self.clipsToBounds = true
-
+        self.minimumFontSize = 18
     }
     
     private func setupPasswordTextField()

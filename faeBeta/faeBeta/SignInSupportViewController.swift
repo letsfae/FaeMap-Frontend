@@ -69,7 +69,6 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // set up the email/username text field
         emailTextField = FAETextField(frame: CGRectMake(15,171, screenWidth - 30, 30))
         emailTextField.placeholder = "Email Address"
-        emailTextField.minimumFontSize = 18
         emailTextField.adjustsFontSizeToFitWidth = true
         self.view.addSubview(emailTextField)
         
