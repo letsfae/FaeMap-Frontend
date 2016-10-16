@@ -70,27 +70,6 @@ class CommentPinViewController: UIViewController {
     
     // Like Function
     var commentPinLikeCount: Int = 0
-    //    {
-    //        //我们需要在age属性变化前做点什么
-    //        willSet {
-    ////            print("New Value is \(newValue)")
-    //            if isUpVoting && commentPinDetailLiked == false {
-    //                commentPinDetailLiked = true
-    //                labelCommentPinVoteCount.text = "\(newValue+1)"
-    //                labelCommentPinLikeCount.text = "\(newValue+1)"
-    //            }
-    //            else if isDownVoting && commentPinDetailLiked {
-    //                commentPinDetailLiked = false
-    //                labelCommentPinVoteCount.text = "\(newValue-1)"
-    //                labelCommentPinLikeCount.text = "\(newValue-1)"
-    //            }
-    //        }
-    //        //我们需要在age属性发生变化后，更新一下nickName这个属性
-    //        didSet {
-    ////            print("Old Value is \(oldValue)")
-    //        }
-    //    }
-    
     var isUpVoting = false
     var isDownVoting = false
     
@@ -99,8 +78,7 @@ class CommentPinViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
