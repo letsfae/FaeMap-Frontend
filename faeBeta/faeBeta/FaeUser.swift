@@ -18,7 +18,6 @@ import Foundation
  // NSString! returned (optional)
  */
 class FaeUser : NSObject {
-    //te
     var keyValue = [String:AnyObject]()
     override init (){
         //local storage
@@ -436,14 +435,14 @@ class FaeUser : NSObject {
     func getSelfProfile(completion:(Int,AnyObject?)->Void){
         getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //print(self.keyValue)
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message);
         }
     }
     
     func getOthersProfile(otherUser:String, completion:(Int,AnyObject?)->Void){
         getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message);
         }
     }
@@ -454,6 +453,15 @@ class FaeUser : NSObject {
             completion(status,message)
         }
     }
+    
+    func getNamecardsOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
+        getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
+    
+    
+
     
     
     
