@@ -454,19 +454,19 @@ class FaeUser : NSObject {
         }
     }
     
-    func getNamecardsOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
-        getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+    func getNamecardOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
+        getFromURL("users/"+otherUser+"/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             completion(status,message);
         }
     }
     
-    
+    func getSelfNamecard(otherUser:String, completion:(Int,AnyObject?)->Void){
+        getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
 
-    
-    
-    
-    
-    
+
     
     func getSelfStatus(completion:(Int,AnyObject?)->Void){//解包 //local storage
         getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
