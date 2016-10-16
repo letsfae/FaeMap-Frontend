@@ -237,7 +237,7 @@ extension RegisterInfoViewController {
     override func keyboardWillShow(notification: NSNotification) {
         textField.resignFirstResponder()
         if numKeyPad == nil {
-            numKeyPad = FAENumberKeyboard(frame:CGRectMake(57,view.frame.size.height, 300, 244))
+            numKeyPad = FAENumberKeyboard(frame:CGRectMake(0,view.frame.size.height, view.frame.size.width, 244 * screenHeightFactor))
             self.view.addSubview(numKeyPad)
             numKeyPad.delegate = self
         }
@@ -245,8 +245,8 @@ extension RegisterInfoViewController {
         UIView .animateWithDuration(0.3) {
             var frame = self.numKeyPad!.frame
             
-            self.bottomView.frame.origin.y = self.view.frame.height - 244 - self.bottomView.frame.size.height
-            frame.origin.y = self.view.frame.size.height - 244
+            self.bottomView.frame.origin.y = self.view.frame.height - 244 * screenHeightFactor - self.bottomView.frame.size.height + 15
+            frame.origin.y = self.view.frame.size.height - 244 * screenHeightFactor
             self.numKeyPad.frame = frame
         }
     }

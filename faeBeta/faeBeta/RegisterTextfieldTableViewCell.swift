@@ -18,9 +18,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var textfield: UITextField!
-    @IBOutlet weak var showPasswordButton: UIButton!
-    
+    @IBOutlet weak var textfield: FAETextField!
     
     // MARK: - Variables
     
@@ -45,7 +43,6 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     func setTextFieldForPasswordConfiguration() {
         textfield.secureTextEntry = true
-        showPasswordButton.hidden = false
     }
     
     func setCharacterLimit() {
@@ -56,20 +53,48 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         isUsernameField = true
     }
     
+    func setLeftPlaceHolderDisplay(bool:Bool){
+        textfield.isUsernameTextField = bool
+        self.setNeedsDisplay()
+    }
+    
+    func setRightPlaceHolderDisplay(bool:Bool){
+        textfield.secureTextEntry = bool
+        self.setNeedsDisplay()
+    }
+    
+    func updateTextColorAccordingToPassword(text:String){
+        if(!textfield.secureTextEntry ){
+            return;
+        }
+        
+        var count = 0
+        for c in text.characters{
+            if c < "a" || c > "z" {
+                count += 1
+            }
+        }
+        
+        switch count {
+        case 0:
+            textfield.defaultTextColor = UIColor.faeAppWeakPasswordYellowColor()
+            break
+        case 1:
+            textfield.defaultTextColor = UIColor.faeAppOkPasswordOrangeColor()
+            break
+        default:
+            textfield.defaultTextColor = UIColor.faeAppRedColor()
+
+        }
+        
+    }
+    
     func makeFirstResponder() {
         textfield.becomeFirstResponder()
     }
     
     func endAsResponder() {
         textfield.resignFirstResponder()
-    }
-    
-    
-    // MARK: - IBAction
-    
-    @IBAction func showPasswordButtonTapped(sender: AnyObject) {
-        showPasswordButton.selected = !showPasswordButton.selected
-        textfield.secureTextEntry = !showPasswordButton.selected
     }
     
     // MARK: - Selection Function
@@ -86,37 +111,27 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
+//        if(isUsernameField){
+//            let fixedHeight = textfield.frame.size.height
+//            let fixedWidth = textfield.frame.size.width
+//
+//            textfield.sizeThatFits(CGSize(width: CGFloat.max, height: fixedHeight))
+//            let newSize = textfield.sizeThatFits(CGSize(width: CGFloat.max, height: fixedHeight))
+//            var newFrame = textfield.frame
+//            newFrame.size = CGSize(width: min(newSize.width, fixedWidth), height: fixedHeight)
+//            textfield.frame = newFrame;
+//        }
+        
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
         delegate?.textFieldDidBeginEditing(indexPath)
-        if isUsernameField {
-            textField.text = "@"
-        }
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         delegate?.textFieldShouldReturn(indexPath)
         return true
     }
-    
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if isUsernameField {
-            if textField.text?.characters.count == 0 && string != "@" {
-                textField.text = "@\(string)"
-                return false
-            }
-        }
-        if isCharacterLimit {
-            let newText = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            let numberOfChars = newText.characters.count
-            return numberOfChars < 16
-        }
-        
-        return true
-    }
-    
 }
 
 

@@ -72,7 +72,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {
@@ -83,7 +83,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     func jumpToRegisterUsername() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterUsernameViewController")as! RegisterUsernameViewController
         vc.faeUser = faeUser!
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func validation() {
@@ -205,6 +205,7 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             email = text
+            emailExistLabel.hidden = true
             break
         default: break
         }

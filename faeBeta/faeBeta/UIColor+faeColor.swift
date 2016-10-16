@@ -16,6 +16,16 @@ extension UIColor
         return UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1)
     }
     
+    class func faeAppWeakPasswordYellowColor() -> UIColor
+    {
+        return UIColor(red: 251/255, green: 201/255, blue: 64/255, alpha: 1)
+    }
+    
+    class func faeAppOkPasswordOrangeColor() -> UIColor
+    {
+        return UIColor(red: 254/255, green: 171/255, blue: 55/255, alpha: 1)
+    }
+    
     class func faeAppDisabledRedColor() -> UIColor
     {
         return UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 1)
