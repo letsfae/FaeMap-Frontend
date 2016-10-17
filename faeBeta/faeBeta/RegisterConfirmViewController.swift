@@ -93,6 +93,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         view.addSubview(finishButton)
         view.addSubview(titleLabel1)
         view.addSubview(termsOfServiceLabel)
+        view.bringSubviewToFront(backButton)
         
     }
     

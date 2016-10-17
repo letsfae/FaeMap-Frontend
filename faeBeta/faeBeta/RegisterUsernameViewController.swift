@@ -77,7 +77,11 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func validation() {
         var isValid = false
         
-        isValid = username != nil && username?.characters.count > 0
+        let userNameRegEx = ".*[^A-Za-z0-9].*"
+        let range = username!.rangeOfString(userNameRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? false : true
+        
+        isValid = username != nil && username?.characters.count > 0 && result
         
         self.enableContinueButton(isValid)
         
@@ -145,7 +149,7 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
                 usernameTableViewCell.setPlaceholderLabelText("NewUsername", indexPath: indexPath)
                 usernameTableViewCell.setTextFieldForUsernameConfiguration()
                 usernameTableViewCell.isUsernameField = true
-                usernameTableViewCell.setCharacterLimit()
+                usernameTableViewCell.setCharacterLimit(20)
                 usernameTableViewCell.setLeftPlaceHolderDisplay(true)
                 usernameTableViewCell.delegate = self
             }
@@ -196,4 +200,5 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
         }
         validation()
     }
+
 }

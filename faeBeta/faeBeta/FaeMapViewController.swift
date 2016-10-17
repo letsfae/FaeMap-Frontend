@@ -417,7 +417,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func jumpToLocationEnable(){
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
         self.presentViewController(vc, animated: true, completion: nil)
     }
     

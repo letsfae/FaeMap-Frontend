@@ -18,7 +18,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var textfield: FAETextField!
+    var textfield: FAETextField!
     
     // MARK: - Variables
     
@@ -26,12 +26,23 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     var indexPath: NSIndexPath!
     var isUsernameField = false
     var isCharacterLimit = false
-    
+    var limitNumber: Int = Int.max
     // MARK: - Awake
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        textfield = FAETextField(frame: CGRectMake(15, self.contentView.frame.height / 2 - 17 ,self.contentView.frame.width - 30, 34))
+        self.contentView.addSubview(textfield)
+        textfield.delegate = self
+        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), forControlEvents:.EditingChanged )
+
         // Initialization code
+    }
+
+    override func layoutSubviews(){
+        super.layoutSubviews()
+        textfield.frame =  CGRectMake(15, self.contentView.frame.height / 2 - 17 ,self.contentView.frame.width - 30, 34)
+
     }
     
     // MARK: - Functions
@@ -45,8 +56,9 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         textfield.secureTextEntry = true
     }
     
-    func setCharacterLimit() {
+    func setCharacterLimit(number:Int) {
         isCharacterLimit = true
+        limitNumber = number
     }
     
     func setTextFieldForUsernameConfiguration() {
@@ -64,7 +76,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     }
     
     func updateTextColorAccordingToPassword(text:String){
-        if(!textfield.secureTextEntry ){
+        if(!textfield.secureTextEntry){
             return;
         }
         
@@ -84,7 +96,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
             break
         default:
             textfield.defaultTextColor = UIColor.faeAppRedColor()
-
+            break
         }
         
     }
@@ -109,19 +121,8 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
 
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
-    @IBAction func textFieldDidChange(sender: AnyObject) {
+    func textFieldDidChange(textField: UITextField) {
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
-//        if(isUsernameField){
-//            let fixedHeight = textfield.frame.size.height
-//            let fixedWidth = textfield.frame.size.width
-//
-//            textfield.sizeThatFits(CGSize(width: CGFloat.max, height: fixedHeight))
-//            let newSize = textfield.sizeThatFits(CGSize(width: CGFloat.max, height: fixedHeight))
-//            var newFrame = textfield.frame
-//            newFrame.size = CGSize(width: min(newSize.width, fixedWidth), height: fixedHeight)
-//            textfield.frame = newFrame;
-//        }
-        
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -131,6 +132,16 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         delegate?.textFieldShouldReturn(indexPath)
         return true
+    }
+    
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let currentCharacterCount = textField.text?.characters.count ?? 0
+        if (range.length + range.location > currentCharacterCount){
+            return false
+        }
+        let newLength = currentCharacterCount + string.characters.count - range.length
+        return (newLength <= limitNumber) || (!isCharacterLimit)
     }
 }
 

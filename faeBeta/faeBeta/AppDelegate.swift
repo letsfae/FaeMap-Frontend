@@ -32,11 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-//        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         FIRApp.configure()
         
-        backendless.initApp(APP_ID, secret:SECRET_KEY, version:VERSION_NUM)
         FIRDatabase.database().persistenceEnabled = true
         
         

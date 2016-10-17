@@ -40,6 +40,20 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(animated: Bool){
+        super.viewWillAppear(animated)
+        
+        //if it's back from set password
+        if numberKeyboard != nil{
+            self.infoButton.frame = CGRectMake(87, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, screenWidth - 175, 18)
+            self.infoButton.alpha = 1
+            
+            self.sendCodeButton.frame = CGRectMake(57, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor)
+            self.sendCodeButton.center.x = screenWidth / 2
+        }
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -172,6 +186,8 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
             postToURL("reset_login/code/verify", parameter: ["email": emailTextField.text!, "code": verificationCodeView.displayValue], authentication: nil, completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
                         let controller = UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
+                        controller.email = self.emailTextField.text!
+                        controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
                     }else{
                         for _ in 0..<6{

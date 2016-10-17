@@ -26,6 +26,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         setupViewFrame()
         setupImageContainerPageViewController()
         setupBottomPart()
+        addObservers()
         // Do any additional setup after loading the view.
     }
     
@@ -34,6 +35,12 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     // MARK: - Setup
+    private func addObservers()
+    {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: "resetPasswordSucceed", object: nil)
+
+    }
+    
     private func setupNavigationBar()
     {
         self.navigationController?.navigationBarHidden = true
@@ -171,9 +178,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         self.navigationController?.pushViewController(controller, animated: true)
     }
     func jumpToSignUp() {
-//        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RegisterNameViewController")as! RegisterNameViewController
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RegisterConfirmViewController")as! RegisterConfirmViewController
-
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RegisterNameViewController")as! RegisterNameViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
 }
