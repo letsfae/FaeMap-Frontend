@@ -193,7 +193,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
-            let withUserName = "default"
+            let withUserName = recent["with_user_name"].string
             chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }
     }

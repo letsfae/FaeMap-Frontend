@@ -171,7 +171,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = user_id.stringValue
-        self.senderDisplayName = username!
+        self.senderDisplayName = withUser!.userName
         self.inputToolbar.contentView.textView.delegate = self
         //load firebase messages
         loadMessage()
