@@ -152,6 +152,8 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
                 usernameTableViewCell.setCharacterLimit(20)
                 usernameTableViewCell.setLeftPlaceHolderDisplay(true)
                 usernameTableViewCell.delegate = self
+                usernameTableViewCell.textfield.keyboardType = .NamePhonePad
+
             }
             return usernameTableViewCell
         default:

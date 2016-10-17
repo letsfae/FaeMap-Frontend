@@ -32,7 +32,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         
         
         let backButton = UIButton(frame: CGRectMake(10, 25, 40, 40))
-        backButton.setImage(UIImage(named: "BackArrow"), forState: .Normal)
+        backButton.setImage(UIImage(named: "NavigationBackNew"), forState: .Normal)
         backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         backButton.addTarget(self, action: #selector(self.backButtonPressed), forControlEvents: .TouchUpInside)
         

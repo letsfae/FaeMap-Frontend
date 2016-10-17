@@ -141,6 +141,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             if firstNameTableViewCell == nil {
                 firstNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 firstNameTableViewCell.setPlaceholderLabelText("First Name", indexPath: indexPath)
+                firstNameTableViewCell.textfield.autocapitalizationType = .Words
                 firstNameTableViewCell.delegate = self
             }
             return firstNameTableViewCell
@@ -148,6 +149,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             if lastNameTableViewCell == nil {
                 lastNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 lastNameTableViewCell.setPlaceholderLabelText("Last Name", indexPath: indexPath)
+                lastNameTableViewCell.textfield.autocapitalizationType = .Words
                 lastNameTableViewCell.delegate = self
             }
             return lastNameTableViewCell

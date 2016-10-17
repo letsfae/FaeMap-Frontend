@@ -185,6 +185,7 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 emailTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 emailTableViewCell.setPlaceholderLabelText("Email Address", indexPath: indexPath)
                 emailTableViewCell.delegate = self
+                emailTableViewCell.textfield.keyboardType = .EmailAddress
                 errorImage = UIImageView(frame: CGRectMake(screenWidth - 30, 37 * screenHeightFactor - 9, 6, 17))
                 errorImage.image = UIImage(named:"exclamation_red_new")
                 errorImage.hidden = true
