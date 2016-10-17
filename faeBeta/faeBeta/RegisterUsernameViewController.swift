@@ -77,11 +77,11 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func validation() {
         var isValid = false
         
-        let userNameRegEx = ".*[^A-Za-z0-9].*"
+        let userNameRegEx = ".*[^A-Za-z0-9_].*"
         let range = username!.rangeOfString(userNameRegEx, options:.RegularExpressionSearch)
         let result = range != nil ? false : true
         
-        isValid = username != nil && username?.characters.count > 0 && result
+        isValid = username != nil && username?.characters.count > 5 && result
         
         self.enableContinueButton(isValid)
         
@@ -141,7 +141,7 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
-            cell.setSubTitleLabelText("Letters & Numbers Only")
+            cell.setSubTitleLabelText("Letters & Numbers & Underscore Only")
             return cell
         case 2:
             if usernameTableViewCell == nil {
