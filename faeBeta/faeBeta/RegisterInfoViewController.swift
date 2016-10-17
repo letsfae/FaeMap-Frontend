@@ -46,7 +46,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {

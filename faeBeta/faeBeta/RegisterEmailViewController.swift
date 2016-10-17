@@ -102,7 +102,6 @@ class RegisterEmailViewController: RegisterBaseViewController {
         faeUser.checkEmailExistence { (status, message) in
             dispatch_async(dispatch_get_main_queue(), {
                 
-                self.hideActivityIndicator()
                 if status/100 == 2 {
                     let value = message?.valueForKey("existence")
                     if (value != nil) {
@@ -112,8 +111,11 @@ class RegisterEmailViewController: RegisterBaseViewController {
 //                            self.jumpToRegisterUsername()
                         } else {
                             self.emailExistLabel.hidden = false
+                            self.hideActivityIndicator()
                         }
                     }
+                }else{
+                    self.hideActivityIndicator()
                 }
             })
             
@@ -124,10 +126,10 @@ class RegisterEmailViewController: RegisterBaseViewController {
         let URL = "https://apilayer.net/api/check?access_key=6f981d91c2bc1196705ae37e32606c32&email=" + email + "&smtp=1&format=1"
         Alamofire.request(.GET, URL, headers: nil)
             .responseJSON{response in
-                //print(response.response!.statusCode)
+                self.hideActivityIndicator()
                 if response.response != nil{
                     let json = JSON(response.result.value!)
-                    if(json["mx_found"].bool != nil && json["smtp_check"].bool != nil && json["mx_found"].bool! && json["smtp_check"].bool!){
+                    if(json["mx_found"].bool != nil && json["mx_found"].bool!){
                         completion()
                     }else{
                         self.errorImage.hidden = false

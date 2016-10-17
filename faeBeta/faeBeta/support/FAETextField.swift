@@ -90,6 +90,7 @@ class FAETextField: UITextField {
         self.contentHorizontalAlignment = .Center
         self.textAlignment = .Center
         self.tintColor = UIColor.faeAppRedColor()
+        self.autocapitalizationType = .None
         rightPlaceHolderView = UIView(frame: CGRectMake(0, 0, contentInset, 30))
         leftPlaceHolderView = UIView(frame: CGRectMake(0, 0, contentInset, 30))
         self.rightView = rightPlaceHolderView
