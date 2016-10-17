@@ -19,7 +19,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     var maleButton: UIButton!
     var femaleButton: UIButton!
     var faeUser: FaeUser!
-    var exclamationMarkButton : UIButton!
+    var exclamationMarkButton : UIImageView!
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -75,8 +75,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
         textField.placeholder = "MM/DD/YYYY"
         textField.enabled = false
         
-        exclamationMarkButton = UIButton(frame: CGRectMake(screenWidth / 2 + 70, 72 * screenHeightFactor, 6, 17))
-        exclamationMarkButton.setBackgroundImage( UIImage(named:"exclamation_red_new") , forState: .Normal)
+        exclamationMarkButton = UIImageView(frame: CGRectMake(screenWidth / 2 + 70, 72 * screenHeightFactor, 6, 17))
+        exclamationMarkButton.image = UIImage(named:"exclamation_red_new")
         exclamationMarkButton.hidden = true
         
         dobView.addSubview(titleLabel)

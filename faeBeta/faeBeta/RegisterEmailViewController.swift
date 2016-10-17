@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class RegisterEmailViewController: RegisterBaseViewController {
     
@@ -16,6 +18,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var email: String?
     var faeUser: FaeUser!
     var emailExistLabel: UIView!
+    var errorImage: UIImageView!
     
     // MARK: - View Lifecycle
     
@@ -105,7 +108,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     if (value != nil) {
                         if value! as! Int == 0 {
                             self.emailExistLabel.hidden = true
-                            self.jumpToRegisterUsername()
+                            self.checkForValidEmail(self.email!, completion: self.jumpToRegisterUsername)
+//                            self.jumpToRegisterUsername()
                         } else {
                             self.emailExistLabel.hidden = false
                         }
@@ -113,6 +117,22 @@ class RegisterEmailViewController: RegisterBaseViewController {
                 }
             })
             
+        }
+    }
+    
+    func checkForValidEmail(email: String, completion: () -> Void){
+        let URL = "https://apilayer.net/api/check?access_key=6f981d91c2bc1196705ae37e32606c32&email=" + email + "&smtp=1&format=1"
+        Alamofire.request(.GET, URL, headers: nil)
+            .responseJSON{response in
+                //print(response.response!.statusCode)
+                if response.response != nil{
+                    let json = JSON(response.result.value!)
+                    if(json["mx_found"].bool != nil && json["smtp_check"].bool != nil && json["mx_found"].bool! && json["smtp_check"].bool!){
+                        completion()
+                    }else{
+                        self.errorImage.hidden = false
+                    }
+                }
         }
     }
     
@@ -163,6 +183,11 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 emailTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 emailTableViewCell.setPlaceholderLabelText("Email Address", indexPath: indexPath)
                 emailTableViewCell.delegate = self
+                errorImage = UIImageView(frame: CGRectMake(screenWidth - 30, 37 * screenHeightFactor - 9, 6, 17))
+                errorImage.image = UIImage(named:"exclamation_red_new")
+                errorImage.hidden = true
+                emailTableViewCell.contentView.addSubview(errorImage)
+                
             }
             return emailTableViewCell
         default:
@@ -206,6 +231,7 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         case 2:
             email = text
             emailExistLabel.hidden = true
+            errorImage.hidden = true
             break
         default: break
         }
