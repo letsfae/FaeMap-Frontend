@@ -51,10 +51,11 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         titleLabel1.textAlignment = .Center
         titleLabel1.text = "Welcome to Fae!"
         
-        let finishButton = UIButton(frame: CGRectMake(viewWidth/2.0 - 150, viewHeight * 600/736.0, 300, 50))
+        let finishButton = UIButton(frame: CGRectMake(0, screenHeight - 131 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
         //        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
-        finishButton.layer.cornerRadius = 25
+        finishButton.layer.cornerRadius = 25 * screenHeightFactor
         finishButton.layer.masksToBounds = true
+        finishButton.center.x = screenWidth / 2
         
         finishButton.setTitle("Finish!", forState: .Normal)
         finishButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
@@ -63,7 +64,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         finishButton.addTarget(self, action: #selector(self.finishButtonPressed), forControlEvents: .TouchUpInside)
         
         
-        let termsOfServiceLabel = UILabel(frame: CGRectMake(50, view.frame.size.height - 60, 314, 50))
+        let termsOfServiceLabel = UILabel(frame: CGRectMake(0, screenHeight - 56, screenWidth, 50))
         termsOfServiceLabel.numberOfLines = 2
         termsOfServiceLabel.textAlignment = .Center
         
