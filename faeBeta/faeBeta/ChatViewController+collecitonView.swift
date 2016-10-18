@@ -240,17 +240,17 @@ extension ChatViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        if object["type"] as! String == "audio" {
-            let message = messages[indexPath.row]
-            
-            let mediaItem = message.media as! JSQAudioMediaItemCustom
-            
-            let data = mediaItem.audioData
-            
-            preparePlayer(data!)
-            
-            soundPlayer.play()
-        }
+//        if object["type"] as! String == "audio" {
+//            let message = messages[indexPath.row]
+//            
+//            let mediaItem = message.media as! JSQAudioMediaItemCustom
+//            
+//            let data = mediaItem.audioData
+//            
+//            preparePlayer(data!)
+//            
+//            soundPlayer.play()
+//        }
     }
     
     override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {

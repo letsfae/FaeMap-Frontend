@@ -305,6 +305,7 @@
         self.progressView.frame = CGRectMake(xOffset, (size.height - self.progressView.frame.size.height) / 2,
                                              width, self.progressView.frame.size.height);
         self.progressView.tintColor = self.audioViewAttributes.tintColor;
+        self.progressView.trackTintColor = [self.audioViewAttributes.tintColor colorWithAlphaComponent:0.35];
         [playView addSubview:self.progressView];
 
         [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:playView isOutgoing:self.appliesMediaViewMaskAsOutgoing];

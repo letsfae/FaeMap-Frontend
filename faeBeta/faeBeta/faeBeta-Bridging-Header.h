@@ -15,7 +15,7 @@
 #import "JSQMessagesCollectionViewCustom.h"
 #import "JSQMessagesCollectionViewCellCustom.h"
 #import "JSQAudioMediaItemCustom.h"
-
+#import "JSQAudioMediaViewAttributesCustom.h"
 #import "KTCenterFlowLayout/KTCenterFlowLayout.h"
 //#import "KTCenterFlowLayout.h"
 

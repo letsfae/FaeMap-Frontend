@@ -149,7 +149,22 @@ class IncomingMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().dateFromString((item["date"] as? String)!)
-        let mediaItem = JSQAudioMediaItemCustom(data: nil)
+        
+        let isOutGoingMessage = userId! == user_id.stringValue
+        let options: AVAudioSessionCategoryOptions = [AVAudioSessionCategoryOptions.DuckOthers, AVAudioSessionCategoryOptions.DefaultToSpeaker,AVAudioSessionCategoryOptions.AllowBluetooth]
+        let font = UIFont(name: "AvenirNext-DemiBold", size: 16)
+        let attribute = JSQAudioMediaViewAttributesCustom(
+            playButtonImage: UIImage(named: isOutGoingMessage ? "playButton_white.png" : "playButton_red.png")!,
+            pauseButtonImage: UIImage(named: isOutGoingMessage ? "pauseButton_white.png" : "pauseButton_red.png")!,
+            labelFont: font!,
+            showFractionalSecodns:false,
+            backgroundColor: isOutGoingMessage ? UIColor.faeAppRedColor() : UIColor.whiteColor(),
+            tintColor: isOutGoingMessage ? UIColor.whiteColor() : UIColor.faeAppRedColor(),
+            controlInsets:UIEdgeInsetsMake(6, 6, 6, 18),
+            controlPadding:6,
+            audioCategory:"AVAudioSessionCategoryPlayback",
+            audioCategoryOptions: options)
+        let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes : attribute)
         
         voiceFromData(item) { (voiceData) in
             mediaItem.audioData = voiceData
