@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="AudioRecorderView" customModule="faeBeta" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="270"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NeC-Ib-E9U">
+                    <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="133" id="Mfb-ZT-VKj"/>
+                        <constraint firstAttribute="height" constant="133" id="nLt-cR-Zyv"/>
+                    </constraints>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AbQ-NI-Y1Y">
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="1Ol-IK-dNe"/>
+                        <constraint firstAttribute="height" constant="60" id="aG3-MC-bd0"/>
+                    </constraints>
+                    <state key="normal" image="playButtonIcon"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYw-KS-bva">
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="3SA-p1-wP8"/>
+                        <constraint firstAttribute="height" constant="60" id="SkH-P1-z3c"/>
+                    </constraints>
+                    <state key="normal" image="trashButtonIcon"/>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signalIcon_gray" translatesAutoresizingMaskIntoConstraints="NO" id="ggA-YV-wZf">
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="CDj-br-DqN"/>
+                        <constraint firstAttribute="width" constant="50" id="VWA-y4-pFh"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold &amp; Speak!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EfE-pU-clm">
+                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="EfE-pU-clm" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="34" id="9Rw-xq-h1T"/>
+                <constraint firstAttribute="bottom" secondItem="NeC-Ib-E9U" secondAttribute="bottom" constant="53" id="DOA-3M-lf5"/>
+                <constraint firstItem="EfE-pU-clm" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="P1f-vq-t9B"/>
+                <constraint firstItem="NeC-Ib-E9U" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="c6B-HH-kJc"/>
+                <constraint firstAttribute="bottom" secondItem="iYw-KS-bva" secondAttribute="bottom" constant="12" id="jn9-Gd-mV6"/>
+                <constraint firstAttribute="bottom" secondItem="AbQ-NI-Y1Y" secondAttribute="bottom" constant="12" id="mBr-sx-xE5"/>
+                <constraint firstItem="ggA-YV-wZf" firstAttribute="centerX" secondItem="NeC-Ib-E9U" secondAttribute="centerX" id="nkY-CO-CWM"/>
+                <constraint firstAttribute="trailing" secondItem="iYw-KS-bva" secondAttribute="trailing" constant="15" id="plu-B7-gch"/>
+                <constraint firstItem="ggA-YV-wZf" firstAttribute="centerY" secondItem="NeC-Ib-E9U" secondAttribute="centerY" id="qLa-CZ-w0o"/>
+                <constraint firstItem="AbQ-NI-Y1Y" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="tUd-ye-8wj"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="infoLabel" destination="EfE-pU-clm" id="cSe-35-Yqb"/>
+                <outlet property="leftButton" destination="AbQ-NI-Y1Y" id="0g1-Oh-Vng"/>
+                <outlet property="mainButton" destination="NeC-Ib-E9U" id="0nG-Ii-B6c"/>
+                <outlet property="rightButton" destination="iYw-KS-bva" id="sme-n7-J7U"/>
+                <outlet property="signalImageView" destination="ggA-YV-wZf" id="cUh-BC-e8o"/>
+            </connections>
+        </view>
+    </objects>
+    <resources>
+        <image name="playButtonIcon" width="74" height="74"/>
+        <image name="signalIcon_gray" width="46" height="30"/>
+        <image name="trashButtonIcon" width="74" height="74"/>
+    </resources>
+</document>

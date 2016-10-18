@@ -510,6 +510,8 @@
 		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
+		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
@@ -755,6 +757,8 @@
 		DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellOutgoingCustom.m; sourceTree = "<group>"; };
 		DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellIncomingCustom.xib; sourceTree = "<group>"; };
 		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
+		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
 		DCEAE5441DB165A30047110B /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
@@ -965,6 +969,7 @@
 				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
 				B0714DC71D5E474600356705 /* Location */,
+				DCBE69091DB60EED00BFF46C /* Audio */,
 				B0714DC21D5E471400356705 /* StickerAlbum */,
 				B0714DBD1D5E46EF00356705 /* UIviewController */,
 				B0714DAC1D5E46D600356705 /* FireBaseData */,
@@ -1272,6 +1277,15 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		DCBE69091DB60EED00BFF46C /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */,
+				DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1418,6 +1432,7 @@
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
+				DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 				B0C0CAB11D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
 				B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
@@ -1768,6 +1783,7 @@
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
+				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,

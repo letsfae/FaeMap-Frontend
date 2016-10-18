@@ -16,7 +16,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: NSData!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate, AudioRecorderViewDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -53,11 +53,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //voice MARK: has bug here can record and upload but can't replay after download,
     var fileName = "audioFile.caf"
-    var soundRecorder : AVAudioRecorder!
-    var soundPlayer : AVAudioPlayer!
-    var recordingSession: AVAudioSession!
-    var voiceData = NSData()
-    var startRecording = false
+//    var soundPlayer : AVAudioPlayer!
+
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
@@ -82,6 +79,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //sticker
     var stickerViewShow = false//false : not open the stick view
     var stickerPicker : StickerPickView!
+    
+    //record
+    var recordShow = false
+    var audioRecorderView: AudioRecorderView!
     
     //keyboard
     var keyboardHeight: CGFloat! = 0
@@ -308,8 +309,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonVoiceRecorder = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
         //add a function
-        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.startRecord), forControlEvents: .TouchDown)
-        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.stopRecord), forControlEvents: .TouchUpInside)
+        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.showRecord), forControlEvents: .TouchUpInside)
         
         contentView.addSubview(buttonVoiceRecorder)
         
@@ -343,25 +343,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: voice helper function
     
     func setupRecorder() {
-        recordingSession = AVAudioSession.sharedInstance()
-        do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try recordingSession.overrideOutputAudioPort(.Speaker)
-        } catch let error as NSError {
-            print(error.description)
-        }
-        let recordSettings = [AVFormatIDKey : Int(kAudioFormatAppleLossless),
-                              AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
-                              AVEncoderBitRateKey : 320000,
-                              AVNumberOfChannelsKey : 2,
-                              AVSampleRateKey : 44100.0 ]
-        do {
-            soundRecorder = try AVAudioRecorder(URL: getFileURL(), settings: recordSettings as! [String : AnyObject])
-            soundRecorder.delegate = self
-            soundRecorder.prepareToRecord()
-        } catch {
-            print("cannot record")
-        }
+        self.audioRecorderView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as? AudioRecorderView
+        self.audioRecorderView.frame = CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271)
+        self.audioRecorderView.delegate = self
     }
     
     //MARK: - JSQMessages Delegate function
@@ -490,6 +474,28 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(true)
     }
     
+    func showRecord() {
+        if !recordShow {
+            
+            UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderView)
+            self.audioRecorderView.frame.origin.y = screenHeight
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
+
+            self.collectionView.scrollEnabled = false
+            UIView.animateWithDuration(0.3, animations: {
+                self.moveUpInputBar()
+                self.audioRecorderView.frame.origin.y = self.screenHeight - 271
+                }, completion:{ (Bool) -> Void in
+                    self.collectionView.scrollEnabled = true
+            })
+            recordShow = true
+        }
+        scrollToBottom(true)
+    }
+    
     func sendLocation() {
         closeStickerPanel()
         let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewControllerWithIdentifier("ChatSendLocationController") as! ChatSendLocationController
@@ -497,33 +503,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func startRecord(){
-        if !startRecording {
-            print("recording")
-            soundRecorder.record()
-            startRecording = true
-        }
-            
-    }
-    
-    func stopRecord(){
-        soundRecorder.stop()
-     // send voice message to firebase
-        voiceData = NSData(contentsOfURL: getFileURL())!
-        startRecording = !startRecording
-
-        // add a check to avoid short sound message
-        do {
-            soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
-
-        } catch {
-            print("cannot play")
-        }
-        if(soundPlayer != nil && soundPlayer.duration < 1.0){
-            return;
-        }
-        sendMessage(nil, date: NSDate(), picture: nil,sticker: nil, location: nil, snapImage : nil,audio: voiceData)
-    }
     
     func sendMessageButtonTapped() {
         sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
@@ -732,32 +711,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //    
 //        }
 
-    
-    func getFileURL() -> NSURL {
-        //record: change the default save file path from getCacheDirectory
-        let tempDir = NSTemporaryDirectory()
-        let filePath = tempDir + "/TempMemo.caf"
-        
-        return NSURL.fileURLWithPath(filePath)
-    }
-    
-    func preparePlayer(voiceMessage : NSData) {
-        do {
-            soundPlayer = try AVAudioPlayer(data: voiceMessage, fileTypeHint: nil)
-            soundPlayer.delegate = self
-            soundPlayer.prepareToPlay()
-            soundPlayer.volume = 1
-        } catch {
-            print("cannot play")
-        }
-    }
+//    
+//    func preparePlayer(voiceMessage : NSData) {
+//        do {
+//            soundPlayer = try AVAudioPlayer(data: voiceMessage, fileTypeHint: nil)
+//            soundPlayer.delegate = self
+//            soundPlayer.prepareToPlay()
+//            soundPlayer.volume = 1
+//        } catch {
+//            print("cannot play")
+//        }
+//    }
     
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.screenHeight - 271 - 150
+        let yPosition = self.screenHeight - 275 - 150
         UIView.setAnimationsEnabled(false)
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
@@ -858,6 +829,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         picker.dismissViewControllerAnimated(true, completion: nil)
         
+    }
+    
+    //MARK: - AudioRecorderViewDelegate
+    func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
+        self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
     }
     
 }
