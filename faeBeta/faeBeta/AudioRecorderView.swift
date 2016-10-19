@@ -12,7 +12,7 @@ protocol AudioRecorderViewDelegate {
     func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData)
 }
 
-class AudioRecorderView: UIView, AVAudioRecorderDelegate {
+class AudioRecorderView: UIView, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
 
 //MARK: - properties
     
@@ -34,7 +34,9 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
     var recordingSession: AVAudioSession!
     var voiceData = NSData()
     var startRecording = false
+    var isPlayingRecroding = false // true: is playing the audio
     
+
     var delegate : AudioRecorderViewDelegate!
     
     @IBOutlet weak var signalIconHeight: NSLayoutConstraint!
@@ -120,7 +122,10 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
     func mainButtonReleased(sender: UIButton){
         if(isRecordMode){
             isPressingMainButton = false
-            stopRecord()
+            let isValidAudio = stopRecord()
+            if(!isValidAudio){
+                showWarnMeesage()
+            }
             
             let view = UIView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
             view.layer.cornerRadius = 2.5
@@ -150,6 +155,15 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
                 view.removeFromSuperview()
                 self.mainButton.backgroundColor = UIColor.whiteColor()
             })
+        }else{
+            if(soundPlayer.playing){
+                signalImageView.image = UIImage(named: "playButton_red")
+                soundPlayer.pause()
+            }
+            else{
+                signalImageView.image = UIImage(named: "pauseButton_red_new")
+                soundPlayer.play()
+            }
         }
     }
     
@@ -160,6 +174,10 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
     }
     
     func rightButtonPressed(sender: UIButton){
+        if(!isRecordMode){
+            self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
+            switchToRecordMode()
+        }
     }
     
     private func startDisplayingFlow(){
@@ -214,6 +232,7 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
                               AVEncoderBitRateKey : 320000,
                               AVNumberOfChannelsKey : 2,
                               AVSampleRateKey : 44100.0 ]
+        soundRecorder = nil
         do {
             soundRecorder = try AVAudioRecorder(URL: getFileURL(), settings: recordSettings as! [String : AnyObject])
             soundRecorder.delegate = self
@@ -224,29 +243,31 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
     }
     
     func startRecord(){
-        if !startRecording {
-            print("recording")
-            soundRecorder.record()
-            startRecording = true
+        if(mainButton.enabled){
+            if !soundRecorder.recording {
+                print("recording")
+                soundRecorder.record()
+            }
+            currentTime = 0
+            self.updateTime()
+            timeTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
         }
-        currentTime = 0
-        self.updateTime()
-        timeTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
     }
     
     
     func stopRecord() -> Bool{
         soundRecorder.stop()
-        timeTimer.invalidate()
-        
+        if(timeTimer != nil){
+            timeTimer.invalidate()
+        }
         // send voice message to firebase
         voiceData = NSData(contentsOfURL: getFileURL())!
-        startRecording = !startRecording
         
         // add a check to avoid short sound message
+        soundPlayer = nil
         do {
             soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
-            
+            soundPlayer.delegate = self
         } catch {
             print("cannot play")
         }
@@ -295,11 +316,9 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
             let audioIsValid = self.stopRecord()
             if audioIsValid {
                 self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
-            }else{
-                
+                setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
             }
         }
-
     }
     
     func mainButtonTouchUpOutSide(sender: UIButton, withEvent event:UIEvent) {
@@ -313,9 +332,12 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
                 switchToPlayMode()
                 
             }else if (CGRectContainsPoint(rightButton.frame, loc)){
+                setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+
             }else{
                 if audioIsValid {
                     self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
+                    setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
                 }
             }
         }else{
@@ -332,6 +354,10 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
         rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), forState: .Normal)
         self.leftButton.alpha = 1
         self.rightButton.alpha = 1
+        
+        let secondString = soundPlayer.duration < 9 ? "0\(Int(ceil(soundPlayer.duration)))" : "\(Int(ceil(soundPlayer.duration)))"
+        setInfoLabel("0:\(secondString)", color: UIColor.blackColor())
+        
         self.setNeedsLayout()
     }
     
@@ -344,8 +370,29 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate {
         rightButton.alpha = 0
         leftButton.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), forState: .Normal)
         rightButton.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), forState: .Normal)
+        setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
         self.setNeedsLayout()
         
+    }
+    
+    func showWarnMeesage()
+    {
+        setInfoLabel("Too Short!", color: UIColor.faeAppRedColor())
+        mainButton.enabled = false
+        NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector: #selector(self.recoverRecordButton), userInfo: nil, repeats: false)
+    }
+    
+    func recoverRecordButton()
+    {
+        setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+        mainButton.enabled = true
+    }
+    
+    //MARK: - AVAudioPlayerDelegate
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        if(flag && !isRecordMode){
+            signalImageView.image = UIImage(named: "playButton_red")
+        }
     }
 }
 

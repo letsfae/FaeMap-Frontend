@@ -834,6 +834,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: - AudioRecorderViewDelegate
     func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
         self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
+
     }
     
 }
