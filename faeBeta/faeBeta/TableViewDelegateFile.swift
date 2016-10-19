@@ -61,9 +61,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         else if tableView == tableviewWindbell {
             return tableWindbellData.count
         }
-        else if tableView == tableCommentsForComment {
-            return numberOfCommentTableCells
-        }
         else{
             return 0
         }
@@ -74,42 +71,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         if tableView == self.tblSearchResults {
             let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
-            return cell
-        }
-        else if tableView == self.tableCommentsForComment {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CommentPinCommentsCell
-            let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
-            if let username = dictCell["user_id"].int {
-                cell.labelUsername.text = "\(username)"
-            }
-            if let date = dictCell["date"].string {
-                cell.labelTimestamp.text = date
-            }
-            if let content = dictCell["content"].string {
-                cell.textViewComment.text = content
-            }
-            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
-            
-            //            if indexPath.row == 0 {
-            //                cell.labelUsername.text = "The Kid"
-            //                cell.labelTimestamp.text = "September 23, 2015"
-            //                cell.textViewComment.text = "LOL what are you talking abouta???"
-            //                cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
-            //            }
-            //            else if indexPath.row == 1 {
-            //                cell.labelUsername.text = "Boogie Woogie Woogie"
-            //                cell.labelTimestamp.text = "September 23, 2015"
-            //                cell.textViewComment.text = "I understand perfectly @___@"
-            //                cell.imageViewAvatar.image = UIImage(named: "Ted Logan")
-            //            }
-            //            else if indexPath.row == 2 {
-            //                cell.labelUsername.text = "Boogie Woogie Woogie"
-            //                cell.labelTimestamp.text = "September 23, 2015"
-            //                cell.textViewComment.text = "HI HI HI"
-            //                cell.imageViewAvatar.image = UIImage(named: "Ted Logan")
-            //            }
             cell.separatorInset = UIEdgeInsetsZero
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
@@ -218,9 +179,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         }
         else if tableView == tableviewWindbell{
             return 82
-        }
-        else if tableView == self.tableCommentsForComment {
-            return 140
         }
         else{
             return 0

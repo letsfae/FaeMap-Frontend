@@ -342,9 +342,6 @@
 		B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
-		B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
-		B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
-		B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
 		B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
 		B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
 		B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
@@ -702,7 +699,6 @@
 		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
 		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
-		B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinPopupWindow.swift; sourceTree = "<group>"; };
 		B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinListCell.swift; sourceTree = "<group>"; };
 		B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitCommenPin.swift; sourceTree = "<group>"; };
 		B0BF35481D8DC7E200B0540B /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
@@ -945,7 +941,6 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */,
 				B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
@@ -1839,7 +1834,6 @@
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
-				B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
@@ -1998,7 +1992,6 @@
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
-				B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -2231,7 +2224,6 @@
 				B0BF35911D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EEEC1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B0714DFE1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
-				B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF5D1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,

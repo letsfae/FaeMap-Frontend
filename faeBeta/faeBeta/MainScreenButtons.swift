@@ -136,8 +136,6 @@ extension FaeMapViewController {
         uiviewCreateCommentPin.alpha = 0.0
         uiviewPinSelections.alpha = 1.0
         pinSelectionShowAnimation()
-        hideCommentPinDetail()
-        shrinkCommentList()
     }
     
     func submitPinsHideAnimation() {

@@ -23,8 +23,9 @@ extension CommentPinViewController {
         
         isUpVoting = true
         isDownVoting = false
-
+        
         animateHeart()
+        
         if commentIDCommentPinDetailView != "-999" {
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
         }
@@ -32,6 +33,10 @@ extension CommentPinViewController {
     
     // Upvote comment pin
     func actionUpvoteThisComment(sender: UIButton) {
+        if isUpVoting {
+            return
+        }
+        
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
@@ -50,13 +55,20 @@ extension CommentPinViewController {
     
     // Down vote comment pin
     func actionDownVoteThisComment(sender: UIButton) {
+        if isDownVoting {
+            return
+        }
+        
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-        animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+        
+        if animatingHeart != nil {
+            animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+        }
         
         isUpVoting = false
-        isDownVoting = true//test
+        isDownVoting = true
         
         if commentIDCommentPinDetailView != "-999" {
             unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
@@ -85,7 +97,7 @@ extension CommentPinViewController {
         saveThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
             print("DEBUG: Save This Pin")
-            saveThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+            saveThisPin.saveThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
                 if status == 201 {
                     print("Successfully save this comment pin!")
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
@@ -191,6 +203,56 @@ extension CommentPinViewController {
                     self.dictCommentsOnCommentDetail.append(dicCell)
                     print("===分割线===")
                 }
+            }
+        }
+    }
+    
+    func getCommentInfo() {
+        let getCommentById = FaeMap()
+        getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
+            print(message)
+            let commentInfoJSON = JSON(message!)
+            if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
+                print("is_liked: \(isLiked)")
+                if isLiked == false {
+                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+                    if self.animatingHeart != nil {
+                        self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+                    }
+                    self.isUpVoting = false
+                    self.isDownVoting = true
+                }
+                else {
+                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+                    if self.animatingHeart != nil {
+                        self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
+                    }
+                    self.isUpVoting = true
+                    self.isDownVoting = false
+                }
+            }
+            if let toGetUserName = commentInfoJSON["user_id"].int {
+                let getUserName = FaeUser()
+                getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
+                    let userProfile = JSON(message!)
+                    if let username = userProfile["user_name"].string {
+                        print(username)
+                        self.labelCommentPinUserName.text = username
+//                        cell.userID = username
+                    }
+                }
+            }
+            if let time = commentInfoJSON["created_at"].string {
+                self.labelCommentPinTimestamp.text = "\(time)"
+//                cell.time.text = "\(time)"
+            }
+            if let content = commentInfoJSON["content"].string {
+                self.textviewCommentPinDetail.text = "\(content)"
+//                cell.content.text = "\(content)"
             }
         }
     }

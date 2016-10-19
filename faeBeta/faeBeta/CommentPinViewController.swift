@@ -99,6 +99,11 @@ class CommentPinViewController: UIViewController {
         print(commentIdSentBySegue)
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
         getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
+        getCommentInfo()
+        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(subviewBackToMap)
+        self.view.sendSubviewToBack(subviewBackToMap)
+        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     
@@ -211,7 +216,7 @@ class CommentPinViewController: UIViewController {
             buttonFakeTransparentClosingView.layer.zPosition = 101
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
-                                                       action: #selector(FaeMapViewController.actionToCloseOtherViews(_:)),
+                                                       action: #selector(CommentPinViewController.actionToCloseOtherViews(_:)),
                                                        forControlEvents: UIControlEvents.TouchUpInside)
             
             moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 57, 0, 0))
@@ -226,7 +231,7 @@ class CommentPinViewController: UIViewController {
             buttonShareOnCommentDetail.clipsToBounds = true
             buttonShareOnCommentDetail.alpha = 0.0
             buttonShareOnCommentDetail.addTarget(self,
-                                                 action: #selector(FaeMapViewController.actionShareComment(_:)),
+                                                 action: #selector(CommentPinViewController.actionShareComment(_:)),
                                                  forControlEvents: UIControlEvents.TouchUpInside)
             
             buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
@@ -236,7 +241,7 @@ class CommentPinViewController: UIViewController {
             buttonSaveOnCommentDetail.clipsToBounds = true
             buttonSaveOnCommentDetail.alpha = 0.0
             buttonSaveOnCommentDetail.addTarget(self,
-                                                action: #selector(FaeMapViewController.actionSavedThisPin(_:)),
+                                                action: #selector(CommentPinViewController.actionSavedThisPin(_:)),
                                                 forControlEvents: UIControlEvents.TouchUpInside)
             
             buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
