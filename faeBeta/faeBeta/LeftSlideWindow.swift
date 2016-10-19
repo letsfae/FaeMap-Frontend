@@ -167,7 +167,6 @@ extension FaeMapViewController {
             self.dimBackgroundMoreButton.alpha = 0.7
             self.dimBackgroundMoreButton.layer.opacity = 0.7
         }))
-        self.navigationController?.navigationBar.hidden = true
     }
     
     func animationMoreHide(sender: UIButton!) {
@@ -176,7 +175,7 @@ extension FaeMapViewController {
             self.dimBackgroundMoreButton.alpha = 0.0
         }), completion: { (done: Bool) in
             if done {
-                self.navigationController?.navigationBar.hidden = false
+
             }
         })
     }

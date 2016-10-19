@@ -395,14 +395,11 @@ extension FaeMapViewController {
         
         isUpVoting = true
         isDownVoting = false
-        //        if let tempString = labelCommentPinVoteCount.text {
-        //            commentPinLikeCount = Int(tempString)!
-        //        }
-        animateHeart()
+
         if commentIDCommentPinDetailView != "-999" {
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
-            getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
         }
+        animateHeart()
     }
     
     // Upvote comment pin
@@ -410,6 +407,7 @@ extension FaeMapViewController {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
         }

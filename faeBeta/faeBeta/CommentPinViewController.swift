@@ -98,7 +98,7 @@ class CommentPinViewController: UIViewController {
         loadCommentPinDetailWindow()
         print(commentIdSentBySegue)
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
-        
+        getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
     }
     
     
