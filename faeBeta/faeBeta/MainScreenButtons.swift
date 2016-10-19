@@ -15,28 +15,28 @@ extension FaeMapViewController {
     func loadButton() {
         buttonLeftTop = UIButton()
         buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
-        navigationController!.navigationBar.addSubview(buttonLeftTop)
+        self.view.addSubview(buttonLeftTop)
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(30)]", options: [], views: buttonLeftTop)
+        self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
+        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
         print("bar height:")
         print(UIApplication.sharedApplication().statusBarFrame.size.height)
         
         buttonMainScreenSearch = UIButton()
         buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
-        navigationController!.navigationBar.addSubview(buttonMainScreenSearch)
+        self.view.addSubview(buttonMainScreenSearch)
         buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-4-[v0(32)]", options: [], views: buttonMainScreenSearch)
-        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: navigationController!.navigationBar, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
+        self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
+        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         
         buttonRightTop = UIButton()
         buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
-        navigationController!.navigationBar.addSubview(buttonRightTop)
+        self.view.addSubview(buttonRightTop)
         buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationController!.navigationBar.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
-        navigationController!.navigationBar.addConstraintsWithFormat("V:|-6-[v0(30)]", options: [], views: buttonRightTop)
+        self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
+        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
         
         
         buttonToNorth = UIButton()

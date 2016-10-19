@@ -47,7 +47,7 @@ extension FaeMapViewController {
         // Button 1: Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
         buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
-                buttonBackToCommentPinLists.addTarget(self, action: #selector(FaeMapViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonBackToCommentPinLists.addTarget(self, action: #selector(FaeMapViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentPinDetail.addSubview(buttonBackToCommentPinLists)
         uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
         uiviewCommentPinDetail.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: buttonBackToCommentPinLists)
@@ -114,8 +114,8 @@ extension FaeMapViewController {
         tableCommentsForComment.delaysContentTouches = false
         tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.scrollEnabled = false
-//        tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-//        tableCommentsForComment.layer.borderWidth = 1.0
+        //        tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
+        //        tableCommentsForComment.layer.borderWidth = 1.0
         commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
         
         // Three buttons bottom gray line
@@ -191,7 +191,7 @@ extension FaeMapViewController {
         // Button 3: Comment Pin DownVote
         buttonCommentPinDownVote = UIButton()
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-                buttonCommentPinDownVote.addTarget(self, action: #selector(FaeMapViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinDownVote.addTarget(self, action: #selector(FaeMapViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinDownVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonCommentPinDownVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinDownVote)
@@ -199,7 +199,7 @@ extension FaeMapViewController {
         // Button 4: Comment Pin UpVote
         buttonCommentPinUpVote = UIButton()
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinUpVote.addTarget(self, action: #selector(FaeMapViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
@@ -215,7 +215,7 @@ extension FaeMapViewController {
         // Button 6: Add Comment
         buttonCommentPinAddComment = UIButton()
         buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), forState: .Normal)
-                buttonCommentPinAddComment.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinAddComment.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinAddComment)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonCommentPinAddComment)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinAddComment)
@@ -392,12 +392,12 @@ extension FaeMapViewController {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
         buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-
+        
         isUpVoting = true
         isDownVoting = false
-//        if let tempString = labelCommentPinVoteCount.text {
-//            commentPinLikeCount = Int(tempString)!
-//        }
+        //        if let tempString = labelCommentPinVoteCount.text {
+        //            commentPinLikeCount = Int(tempString)!
+        //        }
         animateHeart()
         if commentIDCommentPinDetailView != "-999" {
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
@@ -552,8 +552,8 @@ extension FaeMapViewController {
             buttonSaveOnCommentDetail.clipsToBounds = true
             buttonSaveOnCommentDetail.alpha = 0.0
             buttonSaveOnCommentDetail.addTarget(self,
-                                                       action: #selector(FaeMapViewController.actionSavedThisPin(_:)),
-                                                       forControlEvents: UIControlEvents.TouchUpInside)
+                                                action: #selector(FaeMapViewController.actionSavedThisPin(_:)),
+                                                forControlEvents: UIControlEvents.TouchUpInside)
             
             buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
             buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
@@ -594,12 +594,12 @@ extension FaeMapViewController {
             self.imageViewSaved.alpha = 1.0
         }), completion: { (done: Bool) in
             if done {
-                UIView.animateWithDuration(0.5, delay: 1.0, options: [], animations: { 
+                UIView.animateWithDuration(0.5, delay: 1.0, options: [], animations: {
                     self.imageViewSaved.alpha = 0.0
                     }, completion: { (done: Bool) in
-                    if done {
-                    
-                    }
+                        if done {
+                            
+                        }
                 })
             }
         })
@@ -699,7 +699,7 @@ extension FaeMapViewController {
         
         print("DEBUG - DELETE: sender.tag: \(sender.tag)")
         
-//        print("Avoid Dic before deleting: \(commentPinAvoidDic)")
+        //        print("Avoid Dic before deleting: \(commentPinAvoidDic)")
         
         let commentID = commentPinCellArray[sender.tag].commentID
         let rowToDelete = sender.tag
@@ -711,7 +711,7 @@ extension FaeMapViewController {
             commentPinCellArray.first!.removeFromSuperview()
             commentPinCellArray.removeAll()
         }
-        
+            
         else if commentPinCellNumCount >= 2 {
             commentPinCellNumCount -= 1
             commentPinCellArray[rowToDelete].removeFromSuperview()
@@ -763,7 +763,7 @@ extension FaeMapViewController {
                     }
                 })
             }
-            if self.commentListShowed {
+            if commentListShowed {
                 UIView.animateWithDuration(0.25, animations: ({
                     self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
                 }), completion: { (done: Bool) in
@@ -940,10 +940,10 @@ extension FaeMapViewController {
                 
             }
             if let _ = mapInfoJSON["type"].string {
-            
+                
             }
             if let _ = mapInfoJSON["pin_id"].string {
-            
+                
             }
             if let comments = mapInfoJSON["comments"].int {
                 self.labelCommentPinCommentsCount.text = "\(comments)"

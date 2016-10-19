@@ -199,6 +199,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // New Comment Pin Popup Window
     
+    var commentIdToPassBySegue: Int = -999
+    
     var numberOfCommentTableCells: Int = 0
     var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
@@ -274,7 +276,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        }
 //        //我们需要在age属性发生变化后，更新一下nickName这个属性
 //        didSet {
-////            print("Old Value is \(oldValue)")
+////           print("Old Value is \(oldValue)")
 //        }
 //    }
     
@@ -343,7 +345,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.buttonMainScreenSearch.hidden = true
         self.buttonRightTop.hidden = true
         // Need a Comment Clearance??????
-        self.navigationController!.navigationBar.translucent = false
+        self.navigationController?.navigationBar.translucent = false
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "mapToCommentPinDetail" {
+            if let destinationVC = segue.destinationViewController as? CommentPinViewController {
+                destinationVC.commentIdSentBySegue = commentIdToPassBySegue
+            }
+        }
     }
     
     // MARK: -- 如何存到缓存中以备后面继续使用
@@ -430,10 +441,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Navigation Items
     func loadTransparentNavBarItems() {
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        self.navigationController!.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        self.navigationController!.navigationBar.translucent = true
+
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        self.navigationController?.navigationBar.translucent = true
     }
     
     // MARK: -- Load Map
@@ -580,6 +592,15 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 return true
             }
             if type == "comment" {
+                
+                var pinData = JSON(marker.userData!)
+                if let commentIDGet = pinData["comment_id"].int {
+                    commentIdToPassBySegue = commentIDGet
+                }
+                
+                self.performSegueWithIdentifier("mapToCommentPinDetail", sender: self)
+                
+                return true
                 if self.uiviewCommentPinDetail.center.y < 0 {
                     self.showCommentPinDetail()
                 }
@@ -587,7 +608,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
                     self.commentListShowed = false
                 }
-                let pinData = JSON(marker.userData!)
+                pinData = JSON(marker.userData!)
                 
                 let cell = CommentPinListCell()
                 self.commentPinCellArray.append(cell)

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -20,10 +20,35 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="3hl-Ah-tZA"/>
+                    <connections>
+                        <segue destination="8dT-b1-io2" kind="custom" identifier="mapToCommentPinDetail" customClass="MapToCommentPinDetailSegue" customModule="faeBeta" customModuleProvider="target" id="Ueh-Bb-k9G"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wkb-R8-4DH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1894.5" y="863"/>
+        </scene>
+        <!--Comment Pin View Controller-->
+        <scene sceneID="Ay1-hK-8ND">
+            <objects>
+                <viewController modalPresentationStyle="overCurrentContext" id="8dT-b1-io2" customClass="CommentPinViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="011-wW-3k2"/>
+                        <viewControllerLayoutGuide type="bottom" id="GKd-r4-deF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mpm-P1-K4R">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="view" destination="Mpm-P1-K4R" id="vbm-RL-ENE"/>
+                        <segue destination="fa6-qG-FBx" kind="custom" identifier="commentPinToMapDetail" customClass="CommentPinDetailToMapSegue" customModule="faeBeta" customModuleProvider="target" id="yor-r1-Yvv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aiY-FP-hMY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2638" y="862"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="hfB-fW-kDl">
@@ -553,4 +578,7 @@
         <image name="map_gray" width="34" height="29"/>
         <image name="map_red" width="32" height="27"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="yor-r1-Yvv"/>
+    </inferredMetricsTieBreakers>
 </document>

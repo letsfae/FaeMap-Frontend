@@ -1,0 +1,195 @@
+//
+//  CommentPinDetailAPIConnections.swift
+//  faeBeta
+//
+//  Created by Yue on 10/18/16.
+//  Copyright © 2016 fae. All rights reserved.
+//
+
+import UIKit
+import GoogleMaps
+import SwiftyJSON
+
+extension CommentPinViewController {
+    // Like comment pin
+    func actionLikeThisComment(sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        
+        isUpVoting = true
+        isDownVoting = false
+        //        if let tempString = labelCommentPinVoteCount.text {
+        //            commentPinLikeCount = Int(tempString)!
+        //        }
+        animateHeart()
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    // Upvote comment pin
+    func actionUpvoteThisComment(sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+        if animatingHeart != nil {
+            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        }
+        
+        isUpVoting = true
+        isDownVoting = false
+        
+        if commentIDCommentPinDetailView != "-999" {
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    // Down vote comment pin
+    func actionDownVoteThisComment(sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+        animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+        
+        isUpVoting = false
+        isDownVoting = true//test
+        
+        if commentIDCommentPinDetailView != "-999" {
+            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    func likeThisPin(type: String, pinID: String) {
+        let likeThisPin = FaePinAction()
+        likeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Like This Pin")
+            likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully like this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to like this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func saveThisPin(type: String, pinID: String) {
+        let saveThisPin = FaePinAction()
+        saveThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Save This Pin")
+            saveThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully save this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to save this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func unlikeThisPin(type: String, pinID: String) {
+        let unlikeThisPin = FaePinAction()
+        unlikeThisPin.whereKey("", value: "")
+        if commentIDCommentPinDetailView != "-999" {
+            print("DEBUG: Unlike This Pin")
+            unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: AnyObject?) in
+                if status/100 == 2 {
+                    print("Successfully unlike this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                }
+                else {
+                    print("Fail to unlike this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func getPinAttributeNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
+            
+            if let likes = mapInfoJSON["likes"].int {
+                self.labelCommentPinLikeCount.text = "\(likes)"
+                self.labelCommentPinVoteCount.text = "\(likes)"
+            }
+            if let _ = mapInfoJSON["saves"].int {
+                
+            }
+            if let _ = mapInfoJSON["type"].string {
+                
+            }
+            if let _ = mapInfoJSON["pin_id"].string {
+                
+            }
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+            }
+        }
+    }
+    
+    func getPinAttributeCommentsNum(type: String, pinID: String) {
+        let getPinAttr = FaePinAction()
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let mapInfoJSON = JSON(message!)
+            if let comments = mapInfoJSON["comments"].int {
+                self.labelCommentPinCommentsCount.text = "\(comments)"
+                self.numberOfCommentTableCells = comments
+                self.tableCommentsForComment.reloadData()
+            }
+        }
+    }
+    
+    func getPinCommentsDetail(type: String, pinID: String) {
+        dictCommentsOnCommentDetail.removeAll()
+        let getPinCommentsDetail = FaePinAction()
+        getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+            print(status)
+            print(message)
+            let commentsOfCommentJSON = JSON(message!)
+            if commentsOfCommentJSON.count > 0 {
+                for i in 0...(commentsOfCommentJSON.count-1) {
+                    var dicCell = [String: AnyObject]()
+                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
+                        print(pin_comment_id)
+                        dicCell["pin_comment_id"] = pin_comment_id
+                    }
+                    if let user_id = commentsOfCommentJSON[i]["user_id"].int {
+                        print(user_id)
+                        dicCell["user_id"] = user_id
+                    }
+                    if let content = commentsOfCommentJSON[i]["content"].string {
+                        print(content)
+                        dicCell["content"] = content
+                    }
+                    if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
+                        print(date)
+                        dicCell["date"] = date
+                    }
+                    if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
+                        print(timezone_type)
+                        dicCell["timezone_type"] = timezone_type
+                    }
+                    if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
+                        print(timezone)
+                        dicCell["timezone"] = timezone
+                    }
+                    self.dictCommentsOnCommentDetail.append(dicCell)
+                    print("===分割线===")
+                }
+            }
+        }
+    }
+}
