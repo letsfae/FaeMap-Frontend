@@ -99,6 +99,57 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         uiviewDialog.alpha = 0.0
         
+//        print("get name card")
+//        let user1 = FaeUser()
+//        user1.getNamecardOfSpecificUser(String(1)){(status:Int, message:AnyObject?) in
+//            print(status)
+//            print("gets name")
+//            if(status / 100 == 2){
+//                print(message)
+//            }
+//        }
+//        user1.getSelfNamecard{(status:Int, message:AnyObject?) in
+//            if(status / 100 == 2){
+//                print("gets self name")
+//                print(message)
+//            }
+//        }
+//        user1.getAllTags{(status:Int, message:AnyObject?) in
+//            if(status / 100 == 2){
+//                print("gets all tags")
+//                print(message)
+//            }
+//        }
+//        
+//        user1.getSelfProfile{(status:Int, message:AnyObject?) in
+//            if(status / 100 == 2){
+//                print("gets self profile")
+//                print(status)
+//                print(message)
+//            }
+//        }
+//        
+//        user1.getOthersProfile(String(1)){(status:Int, message:AnyObject?) in
+//            print(status)
+//            print("gets others profile")
+//            if(status / 100 == 2){
+//                print(message)
+//            }
+//        }
+//
+//        user1.whereKey("nick_name", value: "heheda")
+//        user1.whereKey("short_intro", value: "hansome boy")
+//        user1.whereKey("tag_ids", value: "4;5;6")
+//        user1.updateNameCard{(status:Int, message:AnyObject?) in
+//            if(status / 100 == 2){
+//                print("update name card")
+//                print(status)
+//                print(message)
+//            }
+//        }
+
+
+        
     }
     
     func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
@@ -283,6 +334,29 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         return cell
     }
+    
+    
+//    func loadUserPinInformation(userId: String){
+//        let user = FaeUser();
+//        user.getOthersProfile(userId){(status:Int?, message:AnyObject?) in
+//            if(status! / 100 == 2){
+//                // success
+//                if message != nil{
+//                    if message!["nick_name"] != nil{
+//                        labelNamecardName.text = message!["nick_name"]
+//                    }
+//                    
+//                    if message!["short_intro"] != nil{
+//                        
+//                    }
+//                }
+//            }
+//            else{
+//                // failure
+//            }
+//        }
+//        
+//    }
     
     
     

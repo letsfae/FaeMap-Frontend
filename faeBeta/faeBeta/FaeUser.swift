@@ -436,6 +436,7 @@ class FaeUser : NSObject {
         getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //print(self.keyValue)
             //self.clearKeyValue()
+            //print(message)
             completion(status,message);
         }
     }
@@ -449,7 +450,7 @@ class FaeUser : NSObject {
     
     func updateProfile(completion:(Int,AnyObject?)->Void){
         postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message)
         }
     }
@@ -460,12 +461,26 @@ class FaeUser : NSObject {
         }
     }
     
-    func getSelfNamecard(otherUser:String, completion:(Int,AnyObject?)->Void){
+    func getSelfNamecard(completion:(Int,AnyObject?)->Void){
         getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             completion(status,message);
         }
     }
 
+    func updateNameCard(completion:(Int,AnyObject?)->Void){
+        postToURL("/users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            //self.clearKeyValue()
+            completion(status,message)
+        }
+    }
+
+    
+    
+    func getAllTags(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/name_card/tags", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
 
     
     func getSelfStatus(completion:(Int,AnyObject?)->Void){//解包 //local storage
