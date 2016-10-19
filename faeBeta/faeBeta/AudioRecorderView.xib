@@ -21,17 +21,17 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AbQ-NI-Y1Y">
                     <constraints>
-                        <constraint firstAttribute="width" constant="60" id="1Ol-IK-dNe"/>
-                        <constraint firstAttribute="height" constant="60" id="aG3-MC-bd0"/>
+                        <constraint firstAttribute="width" constant="65" id="1Ol-IK-dNe"/>
+                        <constraint firstAttribute="height" constant="65" id="aG3-MC-bd0"/>
                     </constraints>
-                    <state key="normal" image="playButtonIcon"/>
+                    <state key="normal" backgroundImage="playButtonIcon_gray"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYw-KS-bva">
                     <constraints>
-                        <constraint firstAttribute="width" constant="60" id="3SA-p1-wP8"/>
-                        <constraint firstAttribute="height" constant="60" id="SkH-P1-z3c"/>
+                        <constraint firstAttribute="width" constant="65" id="3SA-p1-wP8"/>
+                        <constraint firstAttribute="height" constant="65" id="SkH-P1-z3c"/>
                     </constraints>
-                    <state key="normal" image="trashButtonIcon"/>
+                    <state key="normal" backgroundImage="trashButtonIcon_gray"/>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signalIcon_gray" translatesAutoresizingMaskIntoConstraints="NO" id="ggA-YV-wZf">
                     <constraints>
@@ -64,13 +64,15 @@
                 <outlet property="leftButton" destination="AbQ-NI-Y1Y" id="0g1-Oh-Vng"/>
                 <outlet property="mainButton" destination="NeC-Ib-E9U" id="0nG-Ii-B6c"/>
                 <outlet property="rightButton" destination="iYw-KS-bva" id="sme-n7-J7U"/>
+                <outlet property="signalIconHeight" destination="CDj-br-DqN" id="GnN-ai-E7S"/>
+                <outlet property="signalIconWidth" destination="VWA-y4-pFh" id="NEO-oA-0vy"/>
                 <outlet property="signalImageView" destination="ggA-YV-wZf" id="cUh-BC-e8o"/>
             </connections>
         </view>
     </objects>
     <resources>
-        <image name="playButtonIcon" width="74" height="74"/>
+        <image name="playButtonIcon_gray" width="74" height="74"/>
         <image name="signalIcon_gray" width="46" height="30"/>
-        <image name="trashButtonIcon" width="74" height="74"/>
+        <image name="trashButtonIcon_gray" width="74" height="74"/>
     </resources>
 </document>
