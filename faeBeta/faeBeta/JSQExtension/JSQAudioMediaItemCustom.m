@@ -178,6 +178,9 @@
         self.playButton.selected = NO;
         [self stopProgressTimer];
         [self.audioPlayer stop];
+        id error;
+        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+
     }
     else {
         // fade the button from play to pause
@@ -211,7 +214,10 @@
                         self.progressLabel.text = [self timestampString:self.audioPlayer.duration
                                                             forDuration:self.audioPlayer.duration];
                     }
-                    completion:nil];
+                    completion:^(BOOL finished) {
+                        id error;
+                        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+                    } ];
 }
 
 #pragma mark - JSQMessageMediaData protocol
