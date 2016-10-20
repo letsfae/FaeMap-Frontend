@@ -52,7 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         UIApplication.sharedApplication().registerForRemoteNotifications()
-//        backendless.messaging.registerForRemoteNotifications()
         /*
          let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
          print(notificationType?.types)
@@ -73,7 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        print(token)
         headerDeviceID = String(token)
         print(headerDeviceID)
-        registerDevice(deviceToken)
     }
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
         if identifier == "answerAction" {
@@ -215,15 +213,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-    //MARK: - backendless register
-    func registerDevice(deviceToken:NSData){
-        backendless.messagingService.registerDeviceToken(deviceToken,response: {(responseData: String!) -> Void in print("responseData: \(responseData)")
-            
-            },error :{(fault: Fault!) -> Void in
-                print("Backendless register device fault: \(fault)")
-        })
-    }
-    
 }
 

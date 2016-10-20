@@ -14,7 +14,7 @@ import SwiftyJSON
 public var isDraggingRecentTableViewCell = false
 public var avatarDic = [NSNumber:UIImage]()
 
-class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
+class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -90,7 +90,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func crossTapped() {
-        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
+//        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
     }
     
     func navigationLeftItemTapped() {
@@ -178,10 +178,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: - helpers
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "recentToChooseUserVC" {
-            let vc = segue.destinationViewController as! ChooseUserViewController
-            vc.delegate = self
-        }
+//        if segue.identifier == "recentToChooseUserVC" {
+//            let vc = segue.destinationViewController as! ChooseUserViewController
+//            vc.delegate = self
+//        }
         if segue.identifier == "recentToChatSeg" {
             let indexPath = sender as! NSIndexPath
             let chatVC = segue.destinationViewController as! ChatViewController
@@ -199,19 +199,19 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func createChatroom(withUser: BackendlessUser) {
-        
-        let chatVC = ChatViewController()
-        
-        chatVC.hidesBottomBarWhenPushed = true
-        // set chatVC recent to our recent.
-        
-//        chatVC.withUser = withUser
-        
-        chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
-        
-        navigationController?.pushViewController(chatVC, animated: true)
-    }
+//    func createChatroom(withUser: BackendlessUser) {
+//        
+//        let chatVC = ChatViewController()
+//        
+//        chatVC.hidesBottomBarWhenPushed = true
+//        // set chatVC recent to our recent.
+//        
+////        chatVC.withUser = withUser
+//        
+//        chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
+//        
+//        navigationController?.pushViewController(chatVC, animated: true)
+//    }
     
     func startCheckingRecent(){
         print("check")

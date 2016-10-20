@@ -694,36 +694,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             if collectionView != nil {
                 collectionView.reloadData()
             }
-
-            //download avatars
-            //            avatarImageFromBackendlessUser(backendless.userService.currentUser)
-            //            avatarImageFromBackendlessUser(withUser!)
-            
-            //create avatars
         }
     }
-    
-//        func getWithUserFromRecent(recent : NSDictionary, result : (withUser : BackendlessUser) -> Void ) {
-//    
-//            let withUserId = recent["withUserUserId"] as? String
-//    
-//            let whereClause = "objectId = '\(withUserId!)'"
-//            let dataQuery = BackendlessDataQuery()
-//            dataQuery.whereClause = whereClause
-//    
-//            let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-//    
-//            dataStore.find(dataQuery, response: { (users : BackendlessCollection!) -> Void in
-//    
-//                let withUser = users.data.first as! BackendlessUser
-//    
-//                result(withUser: withUser)
-//    
-//            }) { (fault : Fault!) -> Void in
-//                print("Server report an error : \(fault)")
-//            }
-//    
-//        }
     
         func createAvatars(avatars : NSMutableDictionary?) {
             let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(avatarDic[user_id] != nil ? avatarDic[user_id] : UIImage(named: "avatarPlaceholder") , diameter: 70)
@@ -731,40 +703,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
         }
-    
-//        func avatarImageFromBackendlessUser(user : BackendlessUser) {
-//    
-//            if let imageLink = user.getProperty("Avatar") {
-//    
-//                getImageFromURL(imageLink as! String, result: { (image) -> Void in
-//    
-//                    let imageData = UIImageJPEGRepresentation(image!, 1.0)
-//    
-//                    if self.avatarImageDictionary != nil {
-//    
-//                        self.avatarImageDictionary!.removeObjectForKey(user.objectId)
-//                        self.avatarImageDictionary!.setObject(imageData!, forKey: user.objectId!)
-//                    } else {
-//                        self.avatarImageDictionary = [user.objectId! : imageData!]
-//                    }
-//                    self.createAvatars(self.avatarImageDictionary)
-//    
-//                })
-//            }
-//    
-//        }
-
-//    
-//    func preparePlayer(voiceMessage : NSData) {
-//        do {
-//            soundPlayer = try AVAudioPlayer(data: voiceMessage, fileTypeHint: nil)
-//            soundPlayer.delegate = self
-//            soundPlayer.prepareToPlay()
-//            soundPlayer.volume = 1
-//        } catch {
-//            print("cannot play")
-//        }
-//    }
     
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
