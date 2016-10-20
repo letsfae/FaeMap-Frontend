@@ -133,6 +133,10 @@ extension FaeMapViewController {
     }
     
     func actionCreatePin(sender: UIButton!) {
+        let createPinVC = CreatePinViewController()
+        createPinVC.modalPresentationStyle = .OverCurrentContext
+        self.presentViewController(createPinVC, animated: false, completion: nil)
+        return
         uiviewCreateCommentPin.alpha = 0.0
         uiviewPinSelections.alpha = 1.0
         pinSelectionShowAnimation()

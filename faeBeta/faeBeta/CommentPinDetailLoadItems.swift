@@ -112,8 +112,8 @@ extension CommentPinViewController {
         tableCommentsForComment.delaysContentTouches = false
         tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.scrollEnabled = false
-                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-                tableCommentsForComment.layer.borderWidth = 1.0
+//                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
+//                tableCommentsForComment.layer.borderWidth = 1.0
         commentDetailFullBoardScrollView.addSubview(tableCommentsForComment)
         
         // Three buttons bottom gray line

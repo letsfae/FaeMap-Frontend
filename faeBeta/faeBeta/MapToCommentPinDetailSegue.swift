@@ -21,7 +21,7 @@ class MapToCommentPinDetailSegue: UIStoryboardSegue {
         let window = UIApplication.sharedApplication().keyWindow
         window?.insertSubview(secondVCView, aboveSubview: firstVCView)
         
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
             secondVCView.frame = CGRectOffset(secondVCView.frame, 0.0, screenHeight)
             
         }) { (Finished) -> Void in
