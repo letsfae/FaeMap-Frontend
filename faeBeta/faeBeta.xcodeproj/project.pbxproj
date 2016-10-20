@@ -494,12 +494,12 @@
 		B8C741111DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
 		B8C741121DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
 		B8C741131DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
+		B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8D5EEC71DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
 		B8E8195B1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
 		B8E8195C1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
 		B8E8195D1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
-		B8F1E17C1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F1E17B1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift */; };
-		B8F1E17D1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F1E17B1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift */; };
-		B8F1E17E1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F1E17B1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift */; };
 		B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		B8F98EDD1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
@@ -760,8 +760,8 @@
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailLoadItems.swift; sourceTree = "<group>"; };
 		B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailAPIConnections.swift; sourceTree = "<group>"; };
+		B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinViewController.swift; sourceTree = "<group>"; };
 		B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewControlFile.swift; sourceTree = "<group>"; };
-		B8F1E17B1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailToMapSegue.swift; sourceTree = "<group>"; };
 		B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentOnPinToolBar.swift; sourceTree = "<group>"; };
 		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
@@ -1112,7 +1112,8 @@
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0CFC9B51CED39CF00EC356A /* ViewController */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
-				B8E819541DB3248C00D418D1 /* CommentPin */,
+				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
+				B8D5EEC41DB840BC00C62628 /* CreatePin */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
@@ -1294,15 +1295,22 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
-		B8E819541DB3248C00D418D1 /* CommentPin */ = {
+		B8D5EEC41DB840BC00C62628 /* CreatePin */ = {
+			isa = PBXGroup;
+			children = (
+				B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */,
+			);
+			name = CreatePin;
+			sourceTree = "<group>";
+		};
+		B8E819541DB3248C00D418D1 /* CommentPinDetail */ = {
 			isa = PBXGroup;
 			children = (
 				B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */,
 				B8E819591DB3251C00D418D1 /* CommentPinExtension */,
 				B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */,
-				B8F1E17B1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift */,
 			);
-			name = CommentPin;
+			name = CommentPinDetail;
 			sourceTree = "<group>";
 		};
 		B8E819591DB3251C00D418D1 /* CommentPinExtension */ = {
@@ -1864,7 +1872,6 @@
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
-				B8F1E17C1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */,
 				B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
@@ -1938,6 +1945,7 @@
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -2019,7 +2027,6 @@
 				B064EEB11D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B842E51C1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
-				B8F1E17D1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
@@ -2086,6 +2093,7 @@
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
 				DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
+				B8D5EEC71DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				B064EEF81D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714D681D5E435200356705 /* OpenUserPinView.swift in Sources */,
@@ -2159,6 +2167,7 @@
 				DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
@@ -2194,7 +2203,6 @@
 				B0714E0A1D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B0D36BF01D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0BF35571D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
-				B8F1E17E1DB6CC2E00C790F6 /* CommentPinDetailToMapSegue.swift in Sources */,
 				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,

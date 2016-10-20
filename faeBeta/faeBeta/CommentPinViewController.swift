@@ -100,15 +100,25 @@ class CommentPinViewController: UIViewController {
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
         getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
         getCommentInfo()
+        getPinComments("comment", pinID: commentIDCommentPinDetailView)
         let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
         self.view.addSubview(subviewBackToMap)
         self.view.sendSubviewToBack(subviewBackToMap)
         subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "idFirstSegueUnwind" {
+            
+        }
     }
     
     // Animation of the red sliding line
@@ -425,7 +435,6 @@ class CommentPinViewController: UIViewController {
     func showCommentPinDetail() {
         if uiviewCommentPinDetail != nil {
             uiviewCommentPinDetail.frame = CGRectMake(0, -320, screenWidth, 320)
-            self.navigationController?.navigationBar.hidden = true
             UIView.animateWithDuration(0.25, animations: ({
                 self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
             }), completion: { (done: Bool) in
@@ -446,7 +455,6 @@ class CommentPinViewController: UIViewController {
                     
                 }), completion: { (done: Bool) in
                     if done {
-                        self.navigationController?.navigationBar.hidden = false
                         self.commentPinDetailShowed = false
                         self.commentListShowed = false
                     }
@@ -457,7 +465,6 @@ class CommentPinViewController: UIViewController {
                     self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
                 }), completion: { (done: Bool) in
                     if done {
-                        self.navigationController?.navigationBar.hidden = false
                         self.commentPinDetailShowed = false
                         self.commentListShowed = false
                         self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
@@ -475,7 +482,9 @@ class CommentPinViewController: UIViewController {
         }
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
+        self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
         let newHeight = CGFloat(140 * self.numberOfCommentTableCells)
+        
         textviewCommentPinDetail.scrollEnabled = false
         commentDetailFullBoardScrollView.scrollEnabled = true
         UIView.animateWithDuration(0.25, animations: ({
@@ -500,32 +509,17 @@ class CommentPinViewController: UIViewController {
             }
         }), completion: { (done: Bool) in
             if done {
-                
+                self.tableCommentsForComment.reloadData()
             }
         })
     }
     
     func actionBackToMap(sender: UIButton) {
-        self.performSegueWithIdentifier("commentPinToMapDetail", sender: self)
-        return
             UIView.animateWithDuration(0.25, animations: ({
                 self.uiviewCommentPinDetail.center.y -= self.screenHeight
-                self.buttonBackToCommentPinLists.alpha = 1.0
-                self.buttonCommentPinBackToMap.alpha = 0.0
             }), completion: { (done: Bool) in
                 if done {
-                    self.commentDetailFullBoardScrollView.contentSize.height = 228
-                    self.commentDetailFullBoardScrollView.frame.size.height = 228
-                    self.commentDetailFullBoardScrollView.scrollEnabled = false
-                    self.commentPinDetailShowed = false
-                    self.tableCommentsForComment.frame.origin.y = 281
-                    self.textviewCommentPinDetail.frame.size.height = 100
-                    self.textviewCommentPinDetail.scrollEnabled = true
-                    self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
-                    self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
-                    self.uiviewCommentPinDetail.frame.size.height = 320
-                    self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
-                    self.uiviewCommentPinUnderLine02.frame.origin.y = 292
+                    self.dismissViewControllerAnimated(false, completion: nil)
                 }
             })
     }

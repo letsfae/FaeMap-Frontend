@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 
 extension CommentPinViewController {
@@ -166,7 +165,7 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinCommentsDetail(type: String, pinID: String) {
+    func getPinComments(type: String, pinID: String) {
         dictCommentsOnCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
@@ -180,6 +179,7 @@ extension CommentPinViewController {
                         print(pin_comment_id)
                         dicCell["pin_comment_id"] = pin_comment_id
                     }
+                    
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
                         print(user_id)
                         dicCell["user_id"] = user_id

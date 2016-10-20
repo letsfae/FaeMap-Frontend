@@ -206,6 +206,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // System Functions
     
+    @IBAction func unwindToFaeMap(sender: UIStoryboardSegue) {}
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.hidden = true
@@ -508,7 +510,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     commentIdToPassBySegue = commentIDGet
                 }
                 
-                self.performSegueWithIdentifier("mapToCommentPinDetail", sender: self)
+                self.jumpToCommentPinDetail()
                 
                 return true
             }
@@ -608,6 +610,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //            }
         }
         return true
+    }
+    
+    func jumpToCommentPinDetail() {
+        self.performSegueWithIdentifier("mapToCommentPinDetail", sender: self)
     }
     
     // MARK: -- Animations

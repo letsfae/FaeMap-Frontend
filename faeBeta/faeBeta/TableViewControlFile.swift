@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 
 extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {

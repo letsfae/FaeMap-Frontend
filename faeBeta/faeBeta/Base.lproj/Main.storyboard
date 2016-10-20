@@ -41,10 +41,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <connections>
-                        <outlet property="view" destination="Mpm-P1-K4R" id="vbm-RL-ENE"/>
-                        <segue destination="fa6-qG-FBx" kind="custom" identifier="commentPinToMapDetail" customClass="CommentPinDetailToMapSegue" customModule="faeBeta" customModuleProvider="target" id="yor-r1-Yvv"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aiY-FP-hMY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -325,7 +321,7 @@
             <objects>
                 <navigationController storyboardIdentifier="NavigationWelcomeViewController" automaticallyAdjustsScrollViewInsets="NO" id="rAJ-5e-EZa" customClass="NavigationWelcomeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Owe-ie-wR5">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Owe-ie-wR5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -380,7 +376,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BTo-0x-BeF" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" image="map_gray" selectedImage="map_red" id="KaP-GL-FEn"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="q0C-nr-PUU">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="q0C-nr-PUU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -578,7 +574,4 @@
         <image name="map_gray" width="34" height="29"/>
         <image name="map_red" width="32" height="27"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="yor-r1-Yvv"/>
-    </inferredMetricsTieBreakers>
 </document>
