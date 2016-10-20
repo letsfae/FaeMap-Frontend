@@ -726,25 +726,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        }
     
         func createAvatars(avatars : NSMutableDictionary?) {
-            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-    
-//            if let avat = avatars {
-//                if let currentUserAvatarImage = avat.objectForKey(backendless.userService.currentUser.objectId) {
-//    
-//                    currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: currentUserAvatarImage as! NSData), diameter: 70)
-//                    self.collectionView?.reloadData()
-//                }
-//            }
-//    
-//            if let avat = avatars {
-//                if let withUserAvatarImage = avat.objectForKey(withUser!.objectId!) {
-//    
-//                    withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: withUserAvatarImage as! NSData), diameter: 70)
-//                    self.collectionView?.reloadData()
-//                }
-//            }
-    
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(avatarDic[user_id] != nil ? avatarDic[user_id] : UIImage(named: "avatarPlaceholder") , diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(avatarDic[NSNumber(integer:Int(withUser!.userId)!)] != nil ? avatarDic[NSNumber(integer:Int(withUser!.userId)!)] : UIImage(named: "avatarPlaceholder"), diameter: 70)
             avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
         }

@@ -29,6 +29,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
+        downloadCurrentUserAvatar()
         firebase.keepSynced(true)
 
         if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
@@ -215,6 +216,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func startCheckingRecent(){
         print("check")
         loadRecents(false, removeIndexPaths: nil)
+    }
+    
+    func downloadCurrentUserAvatar()
+    {
+        if(avatarDic[user_id] == nil){
+            getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+                if status / 100 == 2 {
+                    avatarDic[user_id] = image as? UIImage
+                }
+            })
+        }
     }
     //MARK: load recents form firebase
     
