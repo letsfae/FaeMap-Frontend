@@ -64,10 +64,10 @@ class AudioRecorderView: UIView {
         mainButton.layer.masksToBounds = false
         
         mainButton.addTarget(self, action: #selector(self.mainButtonPressing(_:)), forControlEvents: .TouchDown)
-        mainButton.addTarget(self, action: #selector(self.mainButtonTouchUpInSide(_:)), forControlEvents: .TouchUpInside)
+        mainButton.addTarget(self, action: #selector(self.mainButtonTouchUpInSide(_:withEvent:)), forControlEvents: .TouchUpInside)
         mainButton.addTarget(self, action: #selector(self.mainButtonTouchUpOutSide(_:withEvent:)), forControlEvents: .TouchUpOutside )
         mainButton.addTarget(self, action: #selector(self.mainButtonDragOutside(_:withEvent:)), forControlEvents: .TouchDragOutside)
-        
+        mainButton.addTarget(self, action: #selector(self.mainButtonDragInside(_:withEvent:)), forControlEvents: .TouchDragInside)
         leftButton.addTarget(self, action: #selector(self.leftButtonPressed(_:)), forControlEvents: .TouchUpInside)
         rightButton.addTarget(self, action: #selector(self.rightButtonPressed(_:)), forControlEvents: .TouchUpInside)
 
@@ -282,6 +282,25 @@ class AudioRecorderView: UIView {
         setInfoLabel("0:\(secondString)", color: UIColor.faeAppRedColor())
     }
     
+    func mainButtonDragInside(sender: UIButton, withEvent event:UIEvent)
+    {
+        if(isRecordMode){
+            let touch: UITouch = (event.allTouches()?.first)!
+            let loc = touch.locationInView(self)
+            if (CGRectContainsPoint(leftButton.frame, loc)){
+                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), forState: .Normal)
+            }
+            else if(CGRectContainsPoint(rightButton.frame, loc)){
+                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_red"), forState: .Normal)
+            }
+            else{
+                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_gray"), forState: .Normal)
+                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_gray"), forState: .Normal)
+            }
+        }
+    }
+
+    
     func mainButtonDragOutside(sender: UIButton, withEvent event:UIEvent)
     {
         if(isRecordMode){
@@ -311,14 +330,28 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func mainButtonTouchUpInSide(sender: UIButton)
+    func mainButtonTouchUpInSide(sender: UIButton, withEvent event: UIEvent)
     {
-        mainButtonReleased(sender)
         if(isRecordMode){
+            mainButtonReleased(sender)
             let audioIsValid = self.stopRecord()
-            if audioIsValid {
-                self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
+
+            let touch: UITouch = (event.allTouches()?.first)!
+            let loc = touch.locationInView(self)
+            if(CGRectContainsPoint(leftButton.frame, loc)){
+                if audioIsValid{
+                    switchToPlayMode()
+                }
+            }
+            else if (CGRectContainsPoint(rightButton.frame, loc)){
                 setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+                
+            }
+            else{
+                if audioIsValid {
+                    self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
+                    switchToRecordMode()
+                }
             }
         }
     }
@@ -343,8 +376,6 @@ class AudioRecorderView: UIView {
                     switchToRecordMode()
                 }
             }
-        }else{
-            
         }
     }
     
