@@ -12,7 +12,7 @@ protocol AudioRecorderViewDelegate {
     func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData)
 }
 
-class AudioRecorderView: UIView, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class AudioRecorderView: UIView {
 
 //MARK: - properties
     
@@ -43,7 +43,14 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
     @IBOutlet weak var signalIconWidth: NSLayoutConstraint!
     
     //MARK: - init
-
+    init(){
+        super.init(frame:CGRectZero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -388,6 +395,10 @@ class AudioRecorderView: UIView, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
         mainButton.enabled = true
     }
     
+
+}
+
+extension AudioRecorderView:  AVAudioRecorderDelegate, AVAudioPlayerDelegate{
     //MARK: - AVAudioPlayerDelegate
     func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         if(flag && !isRecordMode){

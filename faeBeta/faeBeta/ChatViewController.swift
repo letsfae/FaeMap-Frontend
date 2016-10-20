@@ -82,7 +82,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //record
     var recordShow = false
-    var audioRecorderView: AudioRecorderView!
+    var audioRecorderContentView: AudioRecorderView!
     
     //keyboard
     var keyboardHeight: CGFloat! = 0
@@ -156,6 +156,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //update recent
         closeQuickPhotoPanel()
         closeStickerPanel()
+        closeaudioRecorderContentView()
 //        clearRecentCounter(chatRoomId)// clear the unread message count
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
         
@@ -343,9 +344,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: voice helper function
     
     func setupRecorder() {
-        self.audioRecorderView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as? AudioRecorderView
-        self.audioRecorderView.frame = CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271)
-        self.audioRecorderView.delegate = self
+        self.audioRecorderContentView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
+        self.audioRecorderContentView.frame = CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271)
+        self.audioRecorderContentView.delegate = self
     }
     
     //MARK: - JSQMessages Delegate function
@@ -375,6 +376,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
             imageQuickPickerShow = false
         }
+        if recordShow {
+            audioRecorderContentView.removeFromSuperview()
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+            recordShow = false
+        }
         scrollToBottom(true)
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
@@ -384,6 +390,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.endEditing(true)
         closeStickerPanel()
         closeQuickPhotoPanel()
+        closeaudioRecorderContentView()
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
     }
@@ -404,14 +411,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
                 self.imageQuickPickerShow = false
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            } else if (keyboardShow){
+            }
+            else if (recordShow){
+                self.audioRecorderContentView.removeFromSuperview()
+                self.recordShow = false
+                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                self.stickerPicker.frame.origin.y = self.screenHeight - 271
+            }
+            else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.view.endEditing(true)
                 UIView.setAnimationsEnabled(true)
                 self.moveUpInputBar()
                 self.scrollToBottom(false)
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            }else{
+            }
+            else{
                 self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
@@ -448,7 +463,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
-            } else if (keyboardShow){
+            }
+            else if recordShow {
+                self.recordShow = false
+                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
+                self.quickSendImageButton.alpha = 1
+                self.moreImageButton.alpha = 1
+                self.audioRecorderContentView.removeFromSuperview()
+            }
+            else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.view.endEditing(true)
                 UIView.setAnimationsEnabled(true)
@@ -477,22 +501,45 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showRecord() {
         if !recordShow {
             
-            UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderView)
-            self.audioRecorderView.frame.origin.y = screenHeight
+            UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderContentView)
+            self.audioRecorderContentView.frame.origin.y = screenHeight
             buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
             buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
             buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
 
-            self.collectionView.scrollEnabled = false
-            UIView.animateWithDuration(0.3, animations: {
+            if stickerViewShow {
+                stickerPicker.removeFromSuperview()
+                buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+                stickerViewShow = false
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }else if imageQuickPickerShow{
+                self.photoQuickCollectionView.removeFromSuperview()
+                self.moreImageButton.removeFromSuperview()
+                self.quickSendImageButton.removeFromSuperview()
+                self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+                self.imageQuickPickerShow = false
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }else if keyboardShow {
+                UIView.setAnimationsEnabled(false)
+                self.view.endEditing(true)
+                UIView.setAnimationsEnabled(true)
                 self.moveUpInputBar()
-                self.audioRecorderView.frame.origin.y = self.screenHeight - 271
-                }, completion:{ (Bool) -> Void in
-                    self.collectionView.scrollEnabled = true
-            })
+                self.scrollToBottom(false)
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }
+            else{
+                self.collectionView.scrollEnabled = false
+                UIView.animateWithDuration(0.3, animations: {
+                    self.moveUpInputBar()
+                    self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
+                })
+            }
             recordShow = true
         }
+        
         scrollToBottom(true)
     }
     
@@ -556,7 +603,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow || recordShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
                 if(stickerViewShow){
                     self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }else if(imageQuickPickerShow){
@@ -564,6 +611,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     self.moreImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset), 271) / 271.0
                     self.quickSendImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset ), 271) / 271.0
                     
+                }else if recordShow {
+                    self.audioRecorderContentView.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
             }
@@ -610,6 +659,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.quickSendImageButton.removeFromSuperview()
                             self.isClosingStickerOrImagePicker = false
                             self.cleanUpSelectedPhotos()
+                    })
+                }else if recordShow{
+                    isClosingStickerOrImagePicker = true
+                    UIView.animateWithDuration(0.2, animations: {
+                        self.moveDownInputBar()
+                        self.audioRecorderContentView.frame.origin.y = self.screenHeight
+                        }, completion: {(Bool)->Void in
+                            self.recordShow = false
+                            self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                            self.audioRecorderContentView.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
                     })
                 }
             }
@@ -779,6 +839,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             scrollToBottom(true)
             imageQuickPickerShow = false
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        }
+    }
+    
+    func closeaudioRecorderContentView() {
+        if recordShow {
+            audioRecorderContentView.removeFromSuperview()
+            moveDownInputBar()
+            scrollToBottom(true)
+            recordShow = false
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
         }
     }
     
