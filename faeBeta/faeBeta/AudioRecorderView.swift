@@ -36,8 +36,9 @@ class AudioRecorderView: UIView {
     var startRecording = false
     var isPlayingRecroding = false // true: is playing the audio
     
-
     var delegate : AudioRecorderViewDelegate!
+    
+    let leftAndRightButtonResizingFactorMax: CGFloat = 1.3
     
     @IBOutlet weak var signalIconHeight: NSLayoutConstraint!
     @IBOutlet weak var signalIconWidth: NSLayoutConstraint!
@@ -287,6 +288,16 @@ class AudioRecorderView: UIView {
         if(isRecordMode){
             let touch: UITouch = (event.allTouches()?.first)!
             let loc = touch.locationInView(self)
+            
+            let disToLeftButton = sqrt( pow(loc.x - self.leftButton.center.x, 2) + pow(loc.y - self.leftButton.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
+            let disToRightButton = sqrt( pow(loc.x - self.rightButton.center.x, 2) + pow(loc.y - self.rightButton.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
+            let distanceThreshold = sqrt( pow(mainButton.center.x - self.leftButton.center.x, 2) + pow(mainButton.center.y - self.leftButton.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax - 67
+            let leftFactor = disToLeftButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToLeftButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax) : 1
+            let rightFactor = disToRightButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToRightButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax ) : 1
+            
+            self.leftButton.transform = CGAffineTransformMakeScale(leftFactor , leftFactor)
+            self.rightButton.transform = CGAffineTransformMakeScale(rightFactor , rightFactor)
+            
             if (CGRectContainsPoint(leftButton.frame, loc)){
                 leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), forState: .Normal)
             }
@@ -307,15 +318,14 @@ class AudioRecorderView: UIView {
             let touch: UITouch = (event.allTouches()?.first)!
             let loc = touch.locationInView(self)
             
-//            if(loc.x < (self.frame.width / 2 - 50)){
-//                let disToLeftButton = loc.x - self.leftButton.center.x
-//                let factor = 1.5 - (disToLeftButton / (self.frame.width / 2 - 50 - self.leftButton.center.x) * 0.5)
-//                self.leftButton.transform = CGAffineTransformMakeScale(factor , factor)
-//            }else if (loc.x > (self.frame.width / 2 + 50)){
-//                let disToRightButton = self.rightButton.center.x - loc.x
-//                let factor = 1.5 - (disToRightButton / (self.rightButton.center.x - self.frame.width / 2 - 50 ) * 0.5)
-//                self.rightButton.transform = CGAffineTransformMakeScale(factor , factor)
-//            }
+            let disToLeftButton = sqrt( pow(loc.x - self.leftButton.center.x, 2) + pow(loc.y - self.leftButton.center.y, 2)) - 33
+            let disToRightButton = sqrt( pow(loc.x - self.rightButton.center.x, 2) + pow(loc.y - self.rightButton.center.y, 2)) - 33
+            let distanceThreshold = sqrt( pow(mainButton.center.x - self.leftButton.center.x, 2) + pow(mainButton.center.y - self.leftButton.center.y, 2)) - 33 - 67
+            let leftFactor = disToLeftButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToLeftButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax) : 1
+            let rightFactor = disToRightButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToRightButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax ) : 1
+            
+            self.leftButton.transform = CGAffineTransformMakeScale(leftFactor , leftFactor)
+            self.rightButton.transform = CGAffineTransformMakeScale(rightFactor , rightFactor)
             
             if (CGRectContainsPoint(leftButton.frame, loc)){
                 leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), forState: .Normal)
@@ -332,8 +342,8 @@ class AudioRecorderView: UIView {
     
     func mainButtonTouchUpInSide(sender: UIButton, withEvent event: UIEvent)
     {
+        mainButtonReleased(sender)
         if(isRecordMode){
-            mainButtonReleased(sender)
             let audioIsValid = self.stopRecord()
 
             let touch: UITouch = (event.allTouches()?.first)!
@@ -344,8 +354,7 @@ class AudioRecorderView: UIView {
                 }
             }
             else if (CGRectContainsPoint(rightButton.frame, loc)){
-                setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
-                
+                switchToRecordMode()
             }
             else{
                 if audioIsValid {
@@ -353,6 +362,8 @@ class AudioRecorderView: UIView {
                     switchToRecordMode()
                 }
             }
+        }else{
+            
         }
     }
     
@@ -368,8 +379,7 @@ class AudioRecorderView: UIView {
                     switchToPlayMode()
                 }
             }else if (CGRectContainsPoint(rightButton.frame, loc)){
-                setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
-
+                switchToRecordMode()
             }else{
                 if audioIsValid {
                     self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
