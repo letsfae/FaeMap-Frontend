@@ -203,6 +203,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         getAvatar()
     }
     
+    
     func appWillEnterForeground(){
         self.collectionView.reloadData()
         photoPicker.getSmartAlbum()
@@ -219,7 +220,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.navigationBar.tintColor = colorFae
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
+        
+        //ATTENTION: Temporary comment it here because it's not used for now
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
         
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))

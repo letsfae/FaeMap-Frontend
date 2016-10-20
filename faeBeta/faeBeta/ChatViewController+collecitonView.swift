@@ -64,14 +64,16 @@ extension ChatViewController {
         }else if collectionView == self.photoQuickCollectionView {
             let cell = cell as! PhotoPickerCollectionViewCell
             //get image from PHFetchResult
-            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
-            cell.loadImage(asset, requestOption: requestOption)
-            
-            if photoPicker.assetIndexDict[asset] != nil {
-                cell.chosenFrameImageView.hidden = false
-                cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
-            }else{
-                cell.chosenFrameImageView.hidden = true
+            if(self.photoPicker.cameraRoll != nil){
+                let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+                cell.loadImage(asset, requestOption: requestOption)
+                
+                if photoPicker.assetIndexDict[asset] != nil {
+                    cell.chosenFrameImageView.hidden = false
+                    cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
+                }else{
+                    cell.chosenFrameImageView.hidden = true
+                }
             }
         }
     }
@@ -90,6 +92,9 @@ extension ChatViewController {
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        if(photoPicker.cameraRoll == nil){
+            photoPicker.getSmartAlbum()
+        }
         if collectionView == photoQuickCollectionView && photoPicker.cameraRoll != nil{
             return photoPicker.cameraRoll.albumCount
         }
@@ -163,7 +168,7 @@ extension ChatViewController {
     
     //photoes preview delegate
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if collectionView == photoQuickCollectionView {
+        if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
             let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             

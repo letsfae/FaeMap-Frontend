@@ -162,6 +162,7 @@ class AudioRecorderView: UIView {
     func leftButtonPressed(sender: UIButton){
         if(!isRecordMode){
             switchToRecordMode()
+            resumeBackGroundMusic()
         }
     }
     
@@ -169,6 +170,7 @@ class AudioRecorderView: UIView {
         if(!isRecordMode){
             self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
             switchToRecordMode()
+            resumeBackGroundMusic()
         }
     }
     
@@ -355,15 +357,15 @@ class AudioRecorderView: UIView {
             }
             else if (CGRectContainsPoint(rightButton.frame, loc)){
                 switchToRecordMode()
+                resumeBackGroundMusic()
             }
             else{
                 if audioIsValid {
                     self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
                     switchToRecordMode()
+                    resumeBackGroundMusic()
                 }
             }
-        }else{
-            
         }
     }
     
@@ -380,7 +382,9 @@ class AudioRecorderView: UIView {
                 }
             }else if (CGRectContainsPoint(rightButton.frame, loc)){
                 switchToRecordMode()
+                resumeBackGroundMusic()
             }else{
+                resumeBackGroundMusic()
                 if audioIsValid {
                     self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
                     switchToRecordMode()
@@ -441,6 +445,16 @@ class AudioRecorderView: UIView {
     {
         setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
         mainButton.enabled = true
+    }
+    
+    func resumeBackGroundMusic()
+    {
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
+        }
+        catch{
+            print("cannot resume music")
+        }
     }
     
 
