@@ -42,28 +42,28 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var startUpdatingLocation = false
     
     // MARK: -- Blur View Pin Buttons and Labels
-    var uiviewPinSelections: UIView!
-    var blurViewMap: UIVisualEffectView!
-    var buttonMedia: UIButton!
-    var buttonChats: UIButton!
-    var buttonComment: UIButton!
-    var buttonEvent: UIButton!
-    var buttonFaevor: UIButton!
-    var buttonNow: UIButton!
-    var buttonJoinMe: UIButton!
-    var buttonSell: UIButton!
-    var buttonLive: UIButton!
-    
-    var labelSubmitTitle: UILabel!
-    var labelSubmitMedia: UILabel!
-    var labelSubmitChats: UILabel!
-    var labelSubmitComment: UILabel!
-    var labelSubmitEvent: UILabel!
-    var labelSubmitFaevor: UILabel!
-    var labelSubmitNow: UILabel!
-    var labelSubmitJoinMe: UILabel!
-    var labelSubmitSell: UILabel!
-    var labelSubmitLive: UILabel!
+//    var uiviewPinSelections: UIView!
+//    var blurViewMap: UIVisualEffectView!
+//    var buttonMedia: UIButton!
+//    var buttonChats: UIButton!
+//    var buttonComment: UIButton!
+//    var buttonEvent: UIButton!
+//    var buttonFaevor: UIButton!
+//    var buttonNow: UIButton!
+//    var buttonJoinMe: UIButton!
+//    var buttonSell: UIButton!
+//    var buttonLive: UIButton!
+//    
+//    var labelSubmitTitle: UILabel!
+//    var labelSubmitMedia: UILabel!
+//    var labelSubmitChats: UILabel!
+//    var labelSubmitComment: UILabel!
+//    var labelSubmitEvent: UILabel!
+//    var labelSubmitFaevor: UILabel!
+//    var labelSubmitNow: UILabel!
+//    var labelSubmitJoinMe: UILabel!
+//    var labelSubmitSell: UILabel!
+//    var labelSubmitLive: UILabel!
     var labelUnreadMessages: UILabel!
     
     var buttonClosePinBlurView: UIButton!
@@ -222,12 +222,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
-        loadBlurAndPinSelection()
         loadMore()
         loadWindBell()
         loadMainScreenSearch()
-        loadTableView()
-        configureCustomSearchController()
         loadNamecard()
         
         //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
@@ -663,20 +660,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
             self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_3.alpha = 0.0
-        }), completion: nil)
-    }
-    
-    func searchBarTableHideAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 0)
-        }), completion: nil)
-    }
-    
-    func searchBarTableShowAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
         }), completion: nil)
     }
     

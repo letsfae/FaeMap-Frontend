@@ -290,4 +290,18 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             self.tblSearchResults.reloadData()
         }
     }
+    
+    func searchBarTableHideAnimation() {
+        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 0)
+            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 0)
+        }), completion: nil)
+    }
+    
+    func searchBarTableShowAnimation() {
+        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
+            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
+        }), completion: nil)
+    }
 }
