@@ -90,7 +90,7 @@ extension ChatViewController {
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if collectionView == photoQuickCollectionView{
+        if collectionView == photoQuickCollectionView && photoPicker.cameraRoll != nil{
             return photoPicker.cameraRoll.albumCount
         }
         return super.numberOfSectionsInCollectionView(collectionView)

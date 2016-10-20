@@ -67,7 +67,6 @@ class AudioRecorderView: UIView {
         mainButton.addTarget(self, action: #selector(self.mainButtonTouchUpInSide(_:)), forControlEvents: .TouchUpInside)
         mainButton.addTarget(self, action: #selector(self.mainButtonTouchUpOutSide(_:withEvent:)), forControlEvents: .TouchUpOutside )
         mainButton.addTarget(self, action: #selector(self.mainButtonDragOutside(_:withEvent:)), forControlEvents: .TouchDragOutside)
-
         
         leftButton.addTarget(self, action: #selector(self.leftButtonPressed(_:)), forControlEvents: .TouchUpInside)
         rightButton.addTarget(self, action: #selector(self.rightButtonPressed(_:)), forControlEvents: .TouchUpInside)
@@ -90,9 +89,8 @@ class AudioRecorderView: UIView {
         if(isRecordMode){
             isPressingMainButton = true
             
-            let view = UIView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
-            view.layer.cornerRadius = 2.5
-            view.backgroundColor = UIColor.faeAppRedColor()
+            let view = UIImageView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
+            view.image = UIImage(named: "Oval 3")
             self.addSubview(view)
             view.center = mainButton.center
             
@@ -100,13 +98,6 @@ class AudioRecorderView: UIView {
             
             startDisplayingFlow()
             setupRecorder()
-            
-            let animation = CABasicAnimation(keyPath: "cornerRadius")
-            animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-            animation.fromValue = view.layer.cornerRadius
-            animation.toValue = 50
-            animation.duration = 0.21
-            view.layer.addAnimation(animation, forKey: "cornerRadius")
             
             UIView.animateWithDuration(0.2, delay: 0, options:.CurveLinear ,animations: {
                 view.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
@@ -117,9 +108,9 @@ class AudioRecorderView: UIView {
                 self.leftButton.alpha = 1
                 self.rightButton.alpha = 1
                 }, completion: { (complete) in
+                    self.mainButton.backgroundColor = UIColor.faeAppRedColor()
                     view.hidden = true
                     view.removeFromSuperview()
-                    self.mainButton.backgroundColor = UIColor.faeAppRedColor()
                     self.generateFlow()
                     self.startRecord()
             })
@@ -134,20 +125,13 @@ class AudioRecorderView: UIView {
                 showWarnMeesage()
             }
             
-            let view = UIView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
-            view.layer.cornerRadius = 2.5
-            view.backgroundColor = UIColor.whiteColor()
+            let view = UIImageView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
+            view.image = UIImage(named: "Oval 2")
             view.center = self.mainButton.center
             self.addSubview(view)
+            self.bringSubviewToFront(view)
             self.signalImageView.image = UIImage(named: "signalIcon_gray")
             self.bringSubviewToFront(signalImageView)
-
-            let animation = CABasicAnimation(keyPath: "cornerRadius")
-            animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-            animation.fromValue = view.layer.cornerRadius
-            animation.toValue = 67
-            animation.duration = 0.21
-            view.layer.addAnimation(animation, forKey: "cornerRadius")
             
             UIView.animateWithDuration(0.2, delay: 0, options:.CurveLinear , animations: {
                 view.frame = CGRect(x: 0,y: 0,width: 133,height: 133)
@@ -303,6 +287,17 @@ class AudioRecorderView: UIView {
         if(isRecordMode){
             let touch: UITouch = (event.allTouches()?.first)!
             let loc = touch.locationInView(self)
+            
+//            if(loc.x < (self.frame.width / 2 - 50)){
+//                let disToLeftButton = loc.x - self.leftButton.center.x
+//                let factor = 1.5 - (disToLeftButton / (self.frame.width / 2 - 50 - self.leftButton.center.x) * 0.5)
+//                self.leftButton.transform = CGAffineTransformMakeScale(factor , factor)
+//            }else if (loc.x > (self.frame.width / 2 + 50)){
+//                let disToRightButton = self.rightButton.center.x - loc.x
+//                let factor = 1.5 - (disToRightButton / (self.rightButton.center.x - self.frame.width / 2 - 50 ) * 0.5)
+//                self.rightButton.transform = CGAffineTransformMakeScale(factor , factor)
+//            }
+            
             if (CGRectContainsPoint(leftButton.frame, loc)){
                 leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), forState: .Normal)
             }
@@ -336,15 +331,16 @@ class AudioRecorderView: UIView {
             let touch: UITouch = (event.allTouches()?.first)!
             let loc = touch.locationInView(self)
             if(CGRectContainsPoint(leftButton.frame, loc)){
-                switchToPlayMode()
-                
+                if audioIsValid{
+                    switchToPlayMode()
+                }
             }else if (CGRectContainsPoint(rightButton.frame, loc)){
                 setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
 
             }else{
                 if audioIsValid {
                     self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
-                    setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+                    switchToRecordMode()
                 }
             }
         }else{
@@ -353,33 +349,44 @@ class AudioRecorderView: UIView {
     }
     
     func switchToPlayMode(){
-        isRecordMode = false
-        signalImageView.image = UIImage(named: "playButton_red")
-        signalIconWidth.constant = 65
-        signalIconHeight.constant = 65
-        leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), forState: .Normal)
-        rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), forState: .Normal)
+        UIView.animateWithDuration(0.2, animations: {
+
+        self.isRecordMode = false
+        self.signalImageView.image = UIImage(named: "playButton_red")
+        self.signalIconWidth.constant = 65
+        self.signalIconHeight.constant = 65
+        self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), forState: .Normal)
+        self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), forState: .Normal)
+        self.leftButton.transform = CGAffineTransformMakeScale(1, 1)
+        self.rightButton.transform = CGAffineTransformMakeScale(1, 1)
+  
         self.leftButton.alpha = 1
         self.rightButton.alpha = 1
+
+        let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
+        self.setInfoLabel("0:\(secondString)", color: UIColor.blackColor())
         
-        let secondString = soundPlayer.duration < 9 ? "0\(Int(ceil(soundPlayer.duration)))" : "\(Int(ceil(soundPlayer.duration)))"
-        setInfoLabel("0:\(secondString)", color: UIColor.blackColor())
-        
-        self.setNeedsLayout()
+        }) { (completed) in
+        }
     }
     
     func switchToRecordMode(){
-        isRecordMode = true
-        signalImageView.image = UIImage(named: "signalIcon_gray")
-        signalIconWidth.constant = 50
-        signalIconHeight.constant = 30
-        leftButton.alpha = 0
-        rightButton.alpha = 0
-        leftButton.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), forState: .Normal)
-        rightButton.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), forState: .Normal)
-        setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
-        self.setNeedsLayout()
-        
+        UIView.animateWithDuration(0.2, animations: {
+            self.isRecordMode = true
+            self.signalImageView.image = UIImage(named: "signalIcon_gray")
+            self.signalIconWidth.constant = 50
+            self.signalIconHeight.constant = 30
+            self.leftButton.alpha = 0
+            self.rightButton.alpha = 0
+            self.leftButton.transform = CGAffineTransformMakeScale(1, 1)
+            self.rightButton.transform = CGAffineTransformMakeScale(1, 1)
+            
+            self.setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+            self.setNeedsLayout()
+        }) { (completed) in
+            self.leftButton.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), forState: .Normal)
+            self.rightButton.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), forState: .Normal)
+        }
     }
     
     func showWarnMeesage()
