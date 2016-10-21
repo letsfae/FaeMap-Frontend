@@ -160,8 +160,8 @@ class IncomingMessage {
             showFractionalSecodns:false,
             backgroundColor: isOutGoingMessage ? UIColor.faeAppRedColor() : UIColor.whiteColor(),
             tintColor: isOutGoingMessage ? UIColor.whiteColor() : UIColor.faeAppRedColor(),
-            controlInsets:UIEdgeInsetsMake(6, 6, 6, 18),
-            controlPadding:6,
+            controlInsets:UIEdgeInsetsMake(7, 12, 3, 14),
+            controlPadding:5,
             audioCategory:"AVAudioSessionCategoryPlayback",
             audioCategoryOptions: options)
         let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes : attribute)

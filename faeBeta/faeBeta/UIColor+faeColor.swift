@@ -51,6 +51,11 @@ extension UIColor
         return UIColor(red: 138/255, green: 138/255, blue: 138/255, alpha: 1)
     }
     
+    class func faeAppTimeTextBlackColor() -> UIColor
+    {
+        return UIColor(red: 107/255, green: 107/255, blue: 107/255, alpha: 1)
+    }
+    
     class func faeAppShadowGrayColor() -> UIColor
     {
         return UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1)

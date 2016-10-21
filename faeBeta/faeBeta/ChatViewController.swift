@@ -701,8 +701,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
         func createAvatars(avatars : NSMutableDictionary?) {
-            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(avatarDic[user_id] != nil ? avatarDic[user_id] : UIImage(named: "avatarPlaceholder") , diameter: 70)
-            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(avatarDic[NSNumber(integer:Int(withUser!.userId)!)] != nil ? avatarDic[NSNumber(integer:Int(withUser!.userId)!)] : UIImage(named: "avatarPlaceholder"), diameter: 70)
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[NSNumber(integer:Int(withUser!.userId)!)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
             avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
         }

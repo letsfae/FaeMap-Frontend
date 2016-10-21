@@ -30,7 +30,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         navigationBarSet()
         addGestureRecognizer()
         downloadCurrentUserAvatar()
-        firebase.keepSynced(true)
+//        firebase.keepSynced(true)
 
         if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)

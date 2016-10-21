@@ -183,7 +183,7 @@ class AudioRecorderView: UIView {
             let view = UIView(frame: CGRect(x: 0,y: 0,width: 100,height: 100))
             view.layer.cornerRadius = 50
             view.backgroundColor = UIColor.faeAppRedColor()
-            view.alpha = 0.7
+            view.alpha = 0.5
             view.center = self.mainButton.center
             self.addSubview(view)
             self.sendSubviewToBack(view)
@@ -409,7 +409,7 @@ class AudioRecorderView: UIView {
         self.rightButton.alpha = 1
 
         let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
-        self.setInfoLabel("0:\(secondString)", color: UIColor.blackColor())
+        self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
         
         }) { (completed) in
         }

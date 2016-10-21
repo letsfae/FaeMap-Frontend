@@ -250,7 +250,7 @@
         
         // create container view for the various controls
         CGSize size = [self mediaViewDisplaySize];
-        UIView * playView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+        UIView * playView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 2.0f, size.width - 4.0f, size.height)];
         playView.backgroundColor = self.audioViewAttributes.backgroundColor;
         playView.contentMode = UIViewContentModeCenter;
         playView.clipsToBounds = YES;
@@ -297,7 +297,7 @@
         // sizeToFit adjusts the frame's height to the font
         [self.progressLabel sizeToFit];
         labelFrame.origin.x = size.width - self.progressLabel.frame.size.width - rightInset;
-        labelFrame.origin.y =  ((size.height - self.progressLabel.frame.size.height) / 2);
+        labelFrame.origin.y =  ((size.height - self.progressLabel.frame.size.height) / 2 + 2);
         labelFrame.size.width = self.progressLabel.frame.size.width;
         labelFrame.size.height =  self.progressLabel.frame.size.height;
         self.progressLabel.frame = labelFrame;
@@ -308,7 +308,7 @@
         self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
         CGFloat xOffset = self.playButton.frame.origin.x + self.playButton.frame.size.width + self.audioViewAttributes.controlPadding;
         CGFloat width = labelFrame.origin.x - xOffset - self.audioViewAttributes.controlPadding;
-        self.progressView.frame = CGRectMake(xOffset, (size.height - self.progressView.frame.size.height) / 2,
+        self.progressView.frame = CGRectMake(xOffset, (size.height - self.progressView.frame.size.height) / 2 + 2,
                                              width, self.progressView.frame.size.height);
         self.progressView.tintColor = self.audioViewAttributes.tintColor;
         self.progressView.trackTintColor = [self.audioViewAttributes.tintColor colorWithAlphaComponent:0.35];
