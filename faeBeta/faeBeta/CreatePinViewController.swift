@@ -8,9 +8,16 @@
 
 import UIKit
 import SwiftyJSON
+import CoreLocation
+
+protocol CreatePinViewControllerDelegate {
+    func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+}
 
 class CreatePinViewController: UIViewController, UITextViewDelegate {
 
+    var delegate: CreatePinViewControllerDelegate?
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
@@ -58,6 +65,12 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     var selectedLatitude: String!
     var selectedLongitude: String!
     
+    // MARK: -- location manager
+    var currentLocation: CLLocation!
+    let locManager = CLLocationManager()
+    var currentLatitude: CLLocationDegrees = 34.0205378
+    var currentLongitude: CLLocationDegrees = -118.2854081
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
@@ -75,6 +88,12 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        currentLocation = locManager.location
+        currentLatitude = currentLocation.coordinate.latitude
+        currentLongitude = currentLocation.coordinate.longitude
     }
     
     func loadBlurAndPinSelection() {
@@ -323,7 +342,6 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
             }
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-        print(numLines)
         if numLines <= 8 {
             let fixedWidth = textView.frame.size.width
             textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
@@ -336,7 +354,6 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         else if numLines > 8 {
             textView.scrollEnabled = true
         }
-        print(textView.text)
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -357,6 +374,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         }), completion: nil)
         labelSelectLocationContent.text = "Current Location"
     }
+    ///////////////////////////////////////////
     
     func actionSubmitComment(sender: UIButton) {
         let postSingleComment = FaeMap()
@@ -366,7 +384,10 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         
         let commentContent = textViewForCommentPin.text
         
-        print(commentContent)
+        if labelSelectLocationContent.text == "Current Location" {
+            submitLatitude = "\(currentLatitude)"
+            submitLongitude = "\(currentLongitude)"
+        }
         
         if commentContent == "" {
             return
@@ -376,61 +397,22 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
         
-        /*
-        postSingleComment.postComment{(status:Int, message:AnyObject?) in
+        postSingleComment.postComment{(status: Int, message: AnyObject?) in
             if let getMessage = message {
+                print("Have Post Comment")
                 if let getMessageID = getMessage["comment_id"] {
-                    let commentMarker = GMSMarker()
-                    commentMarker.zIndex = 1
-                    var mapCenter = self.faeMapView.center
-                    // Attention: the actual location of this marker is 6 points different from the displayed one
-                    mapCenter.y = mapCenter.y + 6.0
-                    let mapCenterCoordinate = self.faeMapView.projection.coordinateForPoint(mapCenter)
-                    commentMarker.icon = UIImage(named: "comment_pin_marker")
-                    commentMarker.position = mapCenterCoordinate
-                    commentMarker.appearAnimation = kGMSMarkerAnimationPop
-                    commentMarker.map = self.faeMapView
-                    self.buttonToNorth.hidden = false
-                    self.buttonSelfPosition.hidden = false
-                    self.buttonChatOnMap.hidden = false
-                    self.buttonPinOnMap.hidden = false
-                    //                    buttonPinOnMapInside.hidden = false
-                    self.buttonSetLocationOnMap.hidden = true
-                    self.imagePinOnMap.hidden = true
-                    self.navigationController?.navigationBar.hidden = false
-                    
                     let getJustPostedComment = FaeMap()
-                    
-                    getJustPostedComment.getComment("\(getMessageID!)"){(status:Int,message:AnyObject?) in
-                        print("DEBUG: GETCOMMENT!!-----=-=-=-==================")
-                        
-                        print(status)
-                        
-                        let mapInfoJSON = JSON(message!)
-                        var pinData = [String: AnyObject]()
-                        
-                        pinData["comment_id"] = getMessageID!
-                        pinData["type"] = "comment"
-                        
-                        if let userIDInfo = mapInfoJSON["user_id"].int {
-                            pinData["user_id"] = userIDInfo
-                        }
-                        if let createdTimeInfo = mapInfoJSON["created_at"].string {
-                            pinData["created_at"] = createdTimeInfo
-                        }
-                        if let contentInfo = mapInfoJSON["content"].string {
-                            pinData["content"] = contentInfo
-                        }
-                        if let latitudeInfo = mapInfoJSON["geolocation"]["latitude"].double {
-                            pinData["latitude"] = latitudeInfo
-                        }
-                        if let longitudeInfo = mapInfoJSON["geolocation"]["longitude"].double {
-                            pinData["longitude"] = longitudeInfo
-                        }
-                        commentMarker.userData = pinData
+                    getJustPostedComment.getComment("\(getMessageID!)"){(status: Int, message: AnyObject?) in
+                        print("Have got comment_id of this posted comment")
+                        let latDouble = Double(submitLatitude)
+                        let longDouble = Double(submitLongitude)
+                        let lat = CLLocationDegrees(latDouble!)
+                        let long = CLLocationDegrees(longDouble!)
+                        print(latDouble)
+                        print(lat)
+                        self.delegate?.sendCommentGeoInfo("\(getMessageID!)", latitude: lat, longitude: long)
+                        self.dismissViewControllerAnimated(false, completion: nil)
                     }
-                    self.textViewForCommentPin.text = ""
-                    self.lableTextViewPlaceholder.hidden = false
                 }
                 else {
                     print("Cannot get comment_id of this posted comment")
@@ -440,6 +422,5 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
                 print("Post Comment Fail")
             }
         }
-    */
     }
 }

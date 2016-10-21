@@ -250,6 +250,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.buttonRightTop.hidden = false
         self.loadTransparentNavBarItems()
         self.loadMapChat()
+        print("Will appear loaded")
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -263,8 +264,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "mapToCommentPinDetail" {
-            if let destinationVC = segue.destinationViewController as? CommentPinViewController {
-                destinationVC.commentIdSentBySegue = commentIdToPassBySegue
+            if let commentPinDetailVC = segue.destinationViewController as? CommentPinViewController {
+                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
             }
         }
     }
@@ -408,8 +409,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
-        customSearchController.customSearchBar.endEditing(true)
-        
         if openUserPinActive {
             //            hideOpenUserPinAnimation()
             openUserPinActive = false

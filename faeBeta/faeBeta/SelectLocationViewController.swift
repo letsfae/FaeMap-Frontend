@@ -17,7 +17,7 @@ protocol SelectLocationViewControllerDelegate {
 
 class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    var delegate: SelectLocationViewControllerDelegate!
+    var delegate: SelectLocationViewControllerDelegate?
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -120,6 +120,10 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
         })
     }
     
+    func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+        customSearchController.customSearchBar.endEditing(true)
+    }
+    
     func loadButtons() {
         buttonCancelSelectLocation = UIButton(frame: CGRectMake(0, 0, 59, 59))
         buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
@@ -154,8 +158,10 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     
     func actionSetLocationForComment(sender: UIButton) {
         if let searchText = customSearchController.customSearchBar.text {
+            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+            let mapCenterCoordinate = mapSelectLocation.projection.coordinateForPoint(mapCenter)
             delegate?.sendAddress(searchText)
-            delegate?.sendGeoInfo("\(currentLatitude)", longitude: "\(currentLongitude)")
+            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)")
         }
         self.dismissViewControllerAnimated(false, completion: nil)
     }
