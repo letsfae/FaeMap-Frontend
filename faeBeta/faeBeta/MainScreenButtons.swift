@@ -130,10 +130,26 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         print(longitude)
         let camera = GMSCameraPosition.cameraWithLatitude(latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
-        loadCurrentRegionPins()
+        animatePinWhenItIsCreated(commentID)
     }
     
-    // Animation
+    // Animation for pin logo
+    func animatePinWhenItIsCreated(commentID: String) {
+        let pinLogo = UIImageView(frame: CGRectMake(0, 0, 167, 183))
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2-27)
+        pinLogo.center = mapCenter
+        pinLogo.image = UIImage(named: "commentMarkerWhenCreated")
+        self.view.addSubview(pinLogo)
+        UIView.animateWithDuration(0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+            pinLogo.frame.size.width = 50
+            pinLogo.frame.size.height = 54
+            pinLogo.center = mapCenter
+            }, completion: { (done: Bool) in
+                if done {
+                    self.loadMarkerWithCommentID(commentID, tempMaker: pinLogo)
+                }
+        })
+    }
 }
 
 extension UIView {

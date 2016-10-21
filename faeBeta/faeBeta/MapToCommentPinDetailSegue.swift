@@ -23,7 +23,6 @@ class MapToCommentPinDetailSegue: UIStoryboardSegue {
         
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             secondVCView.frame = CGRectOffset(secondVCView.frame, 0.0, screenHeight)
-            
         }) { (Finished) -> Void in
             self.sourceViewController.presentViewController(self.destinationViewController as UIViewController,
                                                             animated: false,

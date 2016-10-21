@@ -77,8 +77,8 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
         
-        imagePinOnMap = UIImageView(frame: CGRectMake(screenWidth/2-19, screenHeight/2-41, 46, 50))
-        imagePinOnMap.image = UIImage(named: "comment_pin_image")
+        imagePinOnMap = UIImageView(frame: CGRectMake(screenWidth/2-25, screenHeight/2-54, 50, 54))
+        imagePinOnMap.image = UIImage(named: "commentMarkerWhenCreated")
         self.view.addSubview(imagePinOnMap)
         // Default is true, if true, panGesture could not be detected
         self.mapSelectLocation.settings.consumesGesturesInView = false

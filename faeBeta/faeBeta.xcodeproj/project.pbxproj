@@ -486,6 +486,9 @@
 		B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
 		B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
 		B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
+		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
+		B8AC45891DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
+		B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
@@ -760,6 +763,7 @@
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCommentPinDetailSegue.swift; sourceTree = "<group>"; };
+		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailLoadItems.swift; sourceTree = "<group>"; };
@@ -1294,6 +1298,7 @@
 				B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */,
 				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
+				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1962,6 +1967,7 @@
 				B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
+				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
@@ -2074,6 +2080,7 @@
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B064EECF1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B0714D561D5E435200356705 /* MainScreenButtons.swift in Sources */,
+				B8AC45891DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EED51D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
@@ -2229,6 +2236,7 @@
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
+				B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EEA91D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714E221D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B842E51D1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
