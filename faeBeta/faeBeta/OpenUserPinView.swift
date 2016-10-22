@@ -14,9 +14,15 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func loadNamecard() {
         self.view.backgroundColor = UIColor.whiteColor()
         
-        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-maxLength)/2, y: 150,width: maxLength,height: 302))
+        uiviewDialog = UIView(frame: CGRect(x: (screenWidth-maxLength)/2, y: 140,width: maxLength,height: 302))
         uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_userpin_dialog")!)
         uiviewDialog.layer.zPosition = 20
+        
+        uiviewCard = UIView(frame: CGRect(x: 0, y: 0,width: maxLength,height: 200))
+        uiviewCard.backgroundColor = UIColor.clearColor()
+        uiviewCard.hidden = true
+        uiviewDialog.addSubview(uiviewCard)
+        
         
         
         //avatar
@@ -62,15 +68,21 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //line
         viewLine2 = UIView(frame: CGRect(x: (maxLength-268)/2, y: 80, width: 268, height: 1))
         viewLine2.backgroundColor = UIColor.lightGrayColor()
-        viewLine2.hidden = true
+        //viewLine2.hidden = true
         viewLine = UIView(frame: CGRect(x: (maxLength-252)/2, y: 210, width: 252, height: 1))
         viewLine.backgroundColor = UIColor.lightGrayColor()
         
         //gender
         imageViewGender = UIImageView(frame: CGRectMake(37, 40, 50, 19))
         imageViewGender.image = UIImage(named: "map_userpin_male")
-        imageViewGender.hidden = true
-        uiviewDialog.addSubview(imageViewGender)
+        //imageViewGender.hidden = true
+        uiviewCard.addSubview(imageViewGender)
+        
+        //age
+        labelNamecardAge = UILabel(frame: CGRect(x: 27, y: 1, width: 16, height: 18))
+        labelNamecardAge.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
+        labelNamecardAge.textColor = UIColor.whiteColor()
+        imageViewGender.addSubview(labelNamecardAge)
         
         //load button
         buttonChat = UIButton(frame: CGRect(x:(maxLength-190)/2, y: 230, width: 190, height: 39))
@@ -81,14 +93,14 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         buttonChat.addTarget(self, action: #selector(FaeMapViewController.buttonChatAction(_:)), forControlEvents: .TouchUpInside)
         
         loadTags()
-        uiviewTag.hidden = true
+        //uiviewTag.hidden = true
         
         
-        uiviewDialog.addSubview(buttonMore)
+        uiviewCard.addSubview(buttonMore)
         uiviewDialog.addSubview(labelNamecardName)
-        uiviewDialog.addSubview(labelNamecardDescription)
+        uiviewCard.addSubview(labelNamecardDescription)
+        uiviewCard.addSubview(viewLine2)
         uiviewDialog.addSubview(viewLine)
-        uiviewDialog.addSubview(viewLine2)
         
         uiviewDialog.addSubview(imageviewUserPinBackground)
         
@@ -100,14 +112,14 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewDialog.alpha = 0.0
         
 //        print("get name card")
-//        let user1 = FaeUser()
-//        user1.getNamecardOfSpecificUser(String(1)){(status:Int, message:AnyObject?) in
-//            print(status)
-//            print("gets name")
-//            if(status / 100 == 2){
-//                print(message)
-//            }
-//        }
+        let user1 = FaeUser()
+        user1.getNamecardOfSpecificUser(String(4)){(status:Int, message:AnyObject?) in
+            print(status)
+            print("gets name")
+            if(status / 100 == 2){
+                print(message)
+            }
+        }
 //        user1.getSelfNamecard{(status:Int, message:AnyObject?) in
 //            if(status / 100 == 2){
 //                print("gets self name")
@@ -121,14 +133,14 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //            }
 //        }
 //        
-//        user1.getSelfProfile{(status:Int, message:AnyObject?) in
-//            if(status / 100 == 2){
-//                print("gets self profile")
-//                print(status)
-//                print(message)
-//            }
-//        }
-//        
+        user1.getSelfProfile{(status:Int, message:AnyObject?) in
+            if(status / 100 == 2){
+                print("gets self profile")
+                print(status)
+                print(message)
+            }
+        }
+//
 //        user1.getOthersProfile(String(1)){(status:Int, message:AnyObject?) in
 //            print(status)
 //            print("gets others profile")
@@ -173,11 +185,8 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func loadTags(){
         uiviewTag = UIView(frame: CGRect(x: 0, y: 168, width: maxLength, height: tagHeight))
-        uiviewDialog.addSubview(uiviewTag)
+        uiviewCard.addSubview(uiviewTag)
         
-        tagColor.append(getColor(255, green: 114, blue: 169))
-        tagColor.append(getColor(178, green: 228, blue: 77))
-        tagColor.append(getColor(255, green: 126, blue: 126))
         
         let totalInterval = (CGFloat)(tagName.count - 1) * selectedInterval
         var totalTag : CGFloat = 0
@@ -215,16 +224,14 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             if(touch.view != uiviewFunction && touch.view != buttonMore){
                 hideFunctionview()
             }
-            if(touch.view == uiviewDialog){
+            if(touch.view == uiviewDialog || touch.view == uiviewCard){
                 imageviewUserPinBackground.hidden = true
                 imageviewNamecardAvatar.frame.origin.y = -10
-                viewLine2.hidden = false
+                //viewLine2.hidden = false
                 labelNamecardName.hidden = true
-                uiviewTag.hidden = false
-                imageViewGender.hidden = false
-            }
-            if(touch.view != uiviewDialog){
-                uiviewDialog.alpha = 0.0
+                uiviewCard.hidden = false
+                //uiviewTag.hidden = false
+                //imageViewGender.hidden = false
             }
         }
     }
@@ -234,7 +241,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         uiviewFunction = UIView(frame: CGRect(x: (maxLength - 288)/2,y: 116,width: 288,height: 70))
         uiviewFunction.backgroundColor = UIColor.clearColor()
-        uiviewDialog.addSubview(uiviewFunction)
+        uiviewCard.addSubview(uiviewFunction)
         
         let buttonWidth = 44.0
         let interval = 26.0
@@ -336,28 +343,97 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
-//    func loadUserPinInformation(userId: String){
-//        let user = FaeUser();
-//        user.getOthersProfile(userId){(status:Int?, message:AnyObject?) in
-//            if(status! / 100 == 2){
-//                // success
-//                if message != nil{
-//                    if message!["nick_name"] != nil{
-//                        labelNamecardName.text = message!["nick_name"]
-//                    }
-//                    
-//                    if message!["short_intro"] != nil{
-//                        
-//                    }
-//                }
-//            }
-//            else{
-//                // failure
-//            }
-//        }
-//        
-//    }
+    func loadUserPinInformation(userId: String){
+        let user = FaeUser();
+        imageviewUserPinBackground.hidden = false
+        imageviewNamecardAvatar.frame.origin.y = 90
+        labelNamecardName.hidden = false
+        uiviewCard.hidden = true
+
+        user.getNamecardOfSpecificUser(userId){(status:Int?, message:AnyObject?) in
+            print("kick")
+            print(message)
+            if(status! / 100 == 2){
+                // success
+                if message != nil{
+                    if message!["nick_name"] != nil{
+                        self.labelNamecardName.text = message!["nick_name"] as? String
+                    }
+                    if message!["short_intro"] != nil{
+                        self.labelNamecardDescription.text = message!["short_intro"] as? String
+                    }
+                    if message!["show_gender"] as! Bool == true{
+                        self.imageViewGender.alpha = 1.0
+                        if message!["show_age"] as! Bool == true{
+                            self.imageViewGender.frame.size.width = 50
+                            if message!["gender"] as? String == "male" {
+                                self.imageViewGender.image = UIImage(named: "map_userpin_male&age")
+                            }
+                            if message!["gender"] as? String == "female"{
+                                self.imageViewGender.image = UIImage(named: "map_userpin_female&age")
+                            }
+                            self.labelNamecardAge.hidden = false
+                            self.labelNamecardAge.text = message!["age"] as? String
+                        }
+                        else{
+                            self.imageViewGender.frame.size.width = 30
+                            if message!["gender"] as? String == "male" {
+                                self.imageViewGender.image = UIImage(named: "map_userpin_male")
+                            }
+                            if message!["gender"] as? String == "female"{
+                                self.imageViewGender.image = UIImage(named: "map_userpin_female")
+                            }
+                            self.labelNamecardAge.alpha = 0.0;
+                        }
+                    }
+                    else{
+                        self.imageViewGender.hidden = true
+                    }
+                    if message!["tags"] != nil{
+                        self.tagName.removeAll()
+                        self.tagColor.removeAll()
+                        let arr = message!["tags"] as! [[String : AnyObject]]
+                        for i in 0 ..< arr.count{
+                            self.tagName.append(arr[i]["title"] as! String)
+                            self.tagColor.append(self.colorWithHexString(String(arr[i]["color"]! as! String)))
+                        }
+                        self.uiviewTag.removeFromSuperview()
+                        self.loadTags()
+                    }
+
+                }
+            }
+            else{
+                // failure
+            }
+        }
+        
+    }
     
+    func colorWithHexString (hex:String) -> UIColor {
+        var cString:String = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercaseString
+        
+        if (cString.hasPrefix("#")) {
+            cString = (cString as NSString).substringFromIndex(1)
+        }
+        
+        if (cString.characters.count != 6) {
+            return UIColor.grayColor()
+        }
+        
+        let rString = (cString as NSString).substringToIndex(2)
+        let gString = ((cString as NSString).substringFromIndex(2) as NSString).substringToIndex(2)
+        let bString = ((cString as NSString).substringFromIndex(4) as NSString).substringToIndex(2)
+        
+        var r:CUnsignedInt = 0, g:CUnsignedInt = 0, b:CUnsignedInt = 0;
+        NSScanner(string: rString).scanHexInt(&r)
+        NSScanner(string: gString).scanHexInt(&g)
+        NSScanner(string: bString).scanHexInt(&b)
+        
+        return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(1))
+    }
+
+
     
     
     /*
