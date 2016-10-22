@@ -215,7 +215,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 //    }
     
     func startCheckingRecent(){
-        print("check")
         loadRecents(false, removeIndexPaths: nil)
     }
     

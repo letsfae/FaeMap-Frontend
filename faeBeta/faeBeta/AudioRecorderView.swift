@@ -152,7 +152,9 @@ class AudioRecorderView: UIView {
             if(soundPlayer.playing){
                 signalImageView.image = UIImage(named: "playButton_red_new")
                 soundPlayer.pause()
-                progressTimer.invalidate()
+                if progressTimer != nil{
+                    progressTimer.invalidate()
+                }
             }
             else{
                 signalImageView.image = UIImage(named: "pauseButton_red_new")
@@ -166,7 +168,9 @@ class AudioRecorderView: UIView {
         if(!isRecordMode){
             switchToRecordMode()
             resumeBackGroundMusic()
-            progressTimer.invalidate()
+            if progressTimer != nil {
+                progressTimer.invalidate()
+            }
         }
     }
     
@@ -175,7 +179,9 @@ class AudioRecorderView: UIView {
             self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
             switchToRecordMode()
             resumeBackGroundMusic()
-            progressTimer.invalidate()
+            if progressTimer != nil{
+                progressTimer.invalidate()
+            }
         }
     }
     
