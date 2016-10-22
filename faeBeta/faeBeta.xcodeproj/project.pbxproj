@@ -963,13 +963,13 @@
 			name = MapViewExtensions;
 			sourceTree = "<group>";
 		};
-		B0714D7D1D5E43DA00356705 /* MapSearchBar(Custom) */ = {
+		B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */ = {
 			isa = PBXGroup;
 			children = (
 				B0714D291D5E435200356705 /* CustomSearchController.swift */,
 				B0714D281D5E435200356705 /* CustomSearchBar.swift */,
 			);
-			name = "MapSearchBar(Custom)";
+			name = "SearchBar(Custom)";
 			sourceTree = "<group>";
 		};
 		B0714D7E1D5E440C00356705 /* MapCell */ = {
@@ -1118,9 +1118,6 @@
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0CFC9B51CED39CF00EC356A /* ViewController */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
-				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
-				B8D5EEC41DB840BC00C62628 /* CreatePin */,
-				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
@@ -1290,7 +1287,7 @@
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
-				B0714D7D1D5E43DA00356705 /* MapSearchBar(Custom) */,
+				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
 				B0714D7E1D5E440C00356705 /* MapCell */,
 				B0714D251D5E435200356705 /* CommentPinUIView.swift */,
 				B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */,
@@ -1299,6 +1296,8 @@
 				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+				B8D5EEC41DB840BC00C62628 /* CreatePin */,
+				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1317,6 +1316,7 @@
 			children = (
 				B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */,
 				B8744BE31DB877A1005809DA /* CreatePinExtension */,
+				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
 			);
 			name = CreatePin;
 			sourceTree = "<group>";

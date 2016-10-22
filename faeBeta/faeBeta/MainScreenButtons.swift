@@ -135,20 +135,95 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     
     // Animation for pin logo
     func animatePinWhenItIsCreated(commentID: String) {
-        let pinLogo = UIImageView(frame: CGRectMake(0, 0, 167, 183))
+        tempMarker = UIImageView(frame: CGRectMake(0, 0, 167, 183))
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2-27)
-        pinLogo.center = mapCenter
-        pinLogo.image = UIImage(named: "commentMarkerWhenCreated")
-        self.view.addSubview(pinLogo)
+        tempMarker.center = mapCenter
+        tempMarker.image = UIImage(named: "commentMarkerWhenCreated")
+        self.view.addSubview(tempMarker)
+        markerMask = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(markerMask)
         UIView.animateWithDuration(0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveLinear, animations: {
-            pinLogo.frame.size.width = 50
-            pinLogo.frame.size.height = 54
-            pinLogo.center = mapCenter
+            self.tempMarker.frame.size.width = 50
+            self.tempMarker.frame.size.height = 54
+            self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
-                    self.loadMarkerWithCommentID(commentID, tempMaker: pinLogo)
+                    self.loadMarkerWithCommentID(commentID, tempMaker: self.tempMarker)
                 }
         })
+    }
+    
+    func removeTempMarker() {
+        tempMarker.removeFromSuperview()
+        markerMask.removeFromSuperview()
+    }
+    
+    func loadMarkerWithCommentID(commentID: String, tempMaker: UIImageView) {
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+        let loadPinsByZoomLevel = FaeMap()
+        loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+        loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+        loadPinsByZoomLevel.whereKey("radius", value: "200")
+        loadPinsByZoomLevel.whereKey("type", value: "comment")
+        loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
+            let mapInfoJSON = JSON(message!)
+            if mapInfoJSON.count > 0 {
+                for i in 0...(mapInfoJSON.count-1) {
+                    let pinShowOnMap = GMSMarker()
+                    pinShowOnMap.zIndex = 1
+                    var pinData = [String: AnyObject]()
+                    if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
+                        if commentID != "\(commentIDInfo)" {
+                            continue
+                        }
+                        print("Just once here")
+                        print(mapInfoJSON.count)
+                        pinData["comment_id"] = commentIDInfo
+                    }
+                    if let typeInfo = mapInfoJSON[i]["type"].string {
+                        pinData["type"] = typeInfo
+                        if typeInfo == "comment" {
+                            pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                        }
+                    }
+                    if let userIDInfo = mapInfoJSON[i]["user_id"].int {
+                        pinData["user_id"] = userIDInfo
+                    }
+                    if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
+                        pinData["created_at"] = createdTimeInfo
+                    }
+                    if let contentInfo = mapInfoJSON[i]["content"].string {
+                        pinData["content"] = contentInfo
+                    }
+                    if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
+                        pinData["latitude"] = latitudeInfo
+                        pinShowOnMap.position.latitude = latitudeInfo
+                    }
+                    if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
+                        pinData["longitude"] = longitudeInfo
+                        pinShowOnMap.position.longitude = longitudeInfo
+                    }
+                    if let isLiked = mapInfoJSON[i]["user_pin_operations"]["is_liked"].bool {
+                        pinData["is_liked"] = isLiked
+                    }
+                    if let likedTimestamp = mapInfoJSON[i]["user_pin_operations"]["liked_timestamp"].string {
+                        pinData["liked_timestamp"] = likedTimestamp
+                    }
+                    if let isSaved = mapInfoJSON[i]["user_pin_operations"]["is_saved"].bool {
+                        pinData["is_saved"] = isSaved
+                    }
+                    if let savedTimestamp = mapInfoJSON[i]["user_pin_operations"]["saved_timestamp"].string {
+                        pinData["saved_timestamp"] = savedTimestamp
+                    }
+                    
+                    pinShowOnMap.userData = pinData
+                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
+                    pinShowOnMap.map = self.faeMapView
+                    NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
+                }
+            }
+        }
     }
 }
 
