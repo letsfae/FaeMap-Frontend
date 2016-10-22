@@ -88,7 +88,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         var font = UIFont(name: "AvenirNext-Bold", size: 16)
         
         lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        self.view.insertSubview(lookAroundButton, atIndex: 0)
+//        self.view.insertSubview(lookAroundButton, atIndex: 0)
         
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
