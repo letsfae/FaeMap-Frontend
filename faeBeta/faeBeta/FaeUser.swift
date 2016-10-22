@@ -429,8 +429,6 @@ class FaeUser : NSObject {
         }
     }
     
-    
-    
     func getSelfProfile(completion:(Int,AnyObject?)->Void){
         getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //print(self.keyValue)

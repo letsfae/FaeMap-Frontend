@@ -49,7 +49,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults){
+        if(tableView == self.tblSearchResults) {
             return placeholder.count
         }
         else if(tableView == self.mapChatTable) {
@@ -58,7 +58,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         else if tableView == tableviewMore {
             return 3
         }
-        else if tableView == tableviewWindbell{
+        else if tableView == tableviewWindbell {
             return tableWindbellData.count
         }
         else{
@@ -68,7 +68,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if(tableView == self.tblSearchResults){
+        if tableView == self.tblSearchResults {
             let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
             cell.separatorInset = UIEdgeInsetsZero

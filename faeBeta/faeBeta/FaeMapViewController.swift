@@ -42,28 +42,28 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var startUpdatingLocation = false
     
     // MARK: -- Blur View Pin Buttons and Labels
-    var uiviewPinSelections: UIView!
-    var blurViewMap: UIVisualEffectView!
-    var buttonMedia: UIButton!
-    var buttonChats: UIButton!
-    var buttonComment: UIButton!
-    var buttonEvent: UIButton!
-    var buttonFaevor: UIButton!
-    var buttonNow: UIButton!
-    var buttonJoinMe: UIButton!
-    var buttonSell: UIButton!
-    var buttonLive: UIButton!
-    
-    var labelSubmitTitle: UILabel!
-    var labelSubmitMedia: UILabel!
-    var labelSubmitChats: UILabel!
-    var labelSubmitComment: UILabel!
-    var labelSubmitEvent: UILabel!
-    var labelSubmitFaevor: UILabel!
-    var labelSubmitNow: UILabel!
-    var labelSubmitJoinMe: UILabel!
-    var labelSubmitSell: UILabel!
-    var labelSubmitLive: UILabel!
+//    var uiviewPinSelections: UIView!
+//    var blurViewMap: UIVisualEffectView!
+//    var buttonMedia: UIButton!
+//    var buttonChats: UIButton!
+//    var buttonComment: UIButton!
+//    var buttonEvent: UIButton!
+//    var buttonFaevor: UIButton!
+//    var buttonNow: UIButton!
+//    var buttonJoinMe: UIButton!
+//    var buttonSell: UIButton!
+//    var buttonLive: UIButton!
+//    
+//    var labelSubmitTitle: UILabel!
+//    var labelSubmitMedia: UILabel!
+//    var labelSubmitChats: UILabel!
+//    var labelSubmitComment: UILabel!
+//    var labelSubmitEvent: UILabel!
+//    var labelSubmitFaevor: UILabel!
+//    var labelSubmitNow: UILabel!
+//    var labelSubmitJoinMe: UILabel!
+//    var labelSubmitSell: UILabel!
+//    var labelSubmitLive: UILabel!
     var labelUnreadMessages: UILabel!
     
     var buttonClosePinBlurView: UIButton!
@@ -201,95 +201,18 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // New Comment Pin Popup Window
     
-    var numberOfCommentTableCells: Int = 0
-    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
-    var animatingHeart: UIImageView!
-    var boolCommentPinLiked = false
-    var buttonBackToCommentPinDetail: UIButton!
-    var buttonBackToCommentPinLists: UIButton!
-    var buttonCommentDetailViewActive: UIButton!
-    var buttonCommentDetailViewComments: UIButton!
-    var buttonCommentDetailViewPeople: UIButton!
-    var buttonCommentPinAddComment: UIButton!
-    var buttonCommentPinBackToMap: UIButton!
-    var buttonCommentPinDetailDragToLargeSize: UIButton!
-    var buttonCommentPinDownVote: UIButton!
-    var buttonCommentPinLike: UIButton!
-    var buttonCommentPinListClear: UIButton!
-    var buttonCommentPinListDragToLargeSize: UIButton!
-    var buttonCommentPinUpVote: UIButton!
-    var buttonMoreOnCommentCellExpanded = false
-    var buttonOptionOfCommentPin: UIButton!
-    var commentDetailFullBoardScrollView: UIScrollView!
-    var commentIDCommentPinDetailView: String = "-999"
-    var commentListExpand = false
-    var commentListScrollView: UIScrollView!
-    var commentListShowed = false
-    var commentPinCellArray = [CommentPinListCell]()
-    var commentPinDetailLiked = false
-    var commentPinDetailShowed = false
-    var imageCommentPinUserAvatar: UIImageView!
-    var imageViewSaved: UIImageView!
-    var labelCommentPinCommentsCount: UILabel!
-    var labelCommentPinLikeCount: UILabel!
-    var labelCommentPinListTitle: UILabel!
-    var labelCommentPinTimestamp: UILabel!
-    var labelCommentPinTitle: UILabel!
-    var labelCommentPinUserName: UILabel!
-    var labelCommentPinVoteCount: UILabel!
-    var moreButtonDetailSubview: UIImageView!
-    var tableCommentsForComment: UITableView!
-    var textviewCommentPinDetail: UITextView!
-    var uiviewCommentDetailThreeButtons: UIView!
-    var uiviewCommentPinDetail: UIView!
-    var uiviewCommentPinDetailGrayBlock: UIView!
-    var uiviewCommentPinDetailMainButtons: UIView!
-    var uiviewCommentPinListBlank: UIView!
-    var uiviewCommentPinListUnderLine01: UIView!
-    var uiviewCommentPinListUnderLine02: UIView!
-    var uiviewCommentPinUnderLine01: UIView!
-    var uiviewCommentPinUnderLine02: UIView!
-    var uiviewGrayBaseLine: UIView!
-    var uiviewRedSlidingLine: UIView!
-    
-    // For Dragging
-    var buttonCenter = CGPointZero
-    var commentPinSizeFrom: CGFloat = 0
-    var commentPinSizeTo: CGFloat = 0
-    
-    // Like Function
-    var commentPinLikeCount: Int = 0
-//    {
-//        //我们需要在age属性变化前做点什么
-//        willSet {
-////            print("New Value is \(newValue)")
-//            if isUpVoting && commentPinDetailLiked == false {
-//                commentPinDetailLiked = true
-//                labelCommentPinVoteCount.text = "\(newValue+1)"
-//                labelCommentPinLikeCount.text = "\(newValue+1)"
-//            }
-//            else if isDownVoting && commentPinDetailLiked {
-//                commentPinDetailLiked = false
-//                labelCommentPinVoteCount.text = "\(newValue-1)"
-//                labelCommentPinLikeCount.text = "\(newValue-1)"
-//            }
-//        }
-//        //我们需要在age属性发生变化后，更新一下nickName这个属性
-//        didSet {
-////            print("Old Value is \(oldValue)")
-//        }
-//    }
-    
-    var isUpVoting = false
-    var isDownVoting = false
-    
-    // Fake Transparent View For Closing
-    var buttonFakeTransparentClosingView: UIButton!
+    var commentIdToPassBySegue: Int = -999
     
     // Comment on pin input toolbar
-    var commentInputToolbar: JSQMessagesInputToolbarCustom!
+//    var commentInputToolbar: JSQMessagesInputToolbarCustom!
+    
+    var tempMarker: UIImageView! // temp marker, it is a UIImageView
+    var markerMask: UIView! // mask to prevent UI action
+    
     
     // System Functions
+    
+    @IBAction func unwindToFaeMap(sender: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -305,16 +228,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
-        loadBlurAndPinSelection()
         loadMore()
         loadWindBell()
         loadMainScreenSearch()
-        loadTableView()
-        configureCustomSearchController()
         loadNamecard()
-        loadCommentPinDetailWindow()
-        loadCommentPinList()
-        
         //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         
     }
@@ -338,6 +255,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.buttonRightTop.hidden = false
         self.loadTransparentNavBarItems()
         self.loadMapChat()
+        print("Will appear loaded")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -345,7 +267,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.buttonMainScreenSearch.hidden = true
         self.buttonRightTop.hidden = true
         // Need a Comment Clearance??????
-        self.navigationController!.navigationBar.translucent = false
+        self.navigationController?.navigationBar.translucent = false
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "mapToCommentPinDetail" {
+            if let commentPinDetailVC = segue.destinationViewController as? CommentPinViewController {
+                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
+            }
+        }
     }
     
     // MARK: -- 如何存到缓存中以备后面继续使用
@@ -371,6 +302,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
                         }
+                        print("pinShowOnMap.icon!.size")
+                        print(pinShowOnMap.icon!.size)
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
                         pinData["comment_id"] = commentIDInfo
@@ -432,10 +365,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Navigation Items
     func loadTransparentNavBarItems() {
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        self.navigationController!.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        self.navigationController!.navigationBar.translucent = true
+        self.navigationController?.navigationBar.hidden = true
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        self.navigationController?.navigationBar.translucent = true
     }
     
     // MARK: -- Load Map
@@ -486,11 +420,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
-        customSearchController.customSearchBar.endEditing(true)
-        if commentPinDetailShowed || commentListShowed{
-            hideCommentPinDetail()
-        }
-        
         if openUserPinActive {
                         hideOpenUserPinAnimation()
             openUserPinActive = false
@@ -584,102 +513,116 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 return true
             }
             if type == "comment" {
-                if self.uiviewCommentPinDetail.center.y < 0 {
-                    self.showCommentPinDetail()
-                }
-                if self.commentListShowed == true {
-                    actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
-                    self.commentListShowed = false
-                }
-                let pinData = JSON(marker.userData!)
                 
-                let cell = CommentPinListCell()
-                self.commentPinCellArray.append(cell)
-                cell.jumpToDetail.addTarget(self, action: #selector(FaeMapViewController.actionJumpToDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-                cell.deleteButton.addTarget(self, action: #selector(FaeMapViewController.deleteCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                if let toGetUserName = pinData["user_id"].int {
-                    let getUserName = FaeUser()
-                    getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
-                        let userProfile = JSON(message!)
-                        if let username = userProfile["user_name"].string {
-                            print(username)
-                            self.labelCommentPinUserName.text = username
-                            cell.userID = username
-                        }
-                    }
-                }
-                if let time = pinData["created_at"].string {
-                    labelCommentPinTimestamp.text = "\(time)"
-                    cell.time.text = "\(time)"
-                }
-                if let content = pinData["content"].string {
-                    textviewCommentPinDetail.text = "\(content)"
-                    cell.content.text = "\(content)"
-                }
-                
-                var commentID = -999
-                
+                var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
-                    commentIDCommentPinDetailView = "\(commentIDGet)"
-                    getPinAttributeNum("comment", pinID: "\(commentIDGet)")
-                    getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
-                    getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
-                    commentID = commentIDGet
-                    let getCommentById = FaeMap()
-                    getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
-                        print(message)
-                        let commentInfoJSON = JSON(message!)
-                        if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
-                            print("is_liked: \(isLiked)")
-                            if isLiked == false {
-                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-                                if self.animatingHeart != nil {
-                                    self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
-                                }
-                                self.isUpVoting = false
-                                self.isDownVoting = true
-                            }
-                            else {
-                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-                                if self.animatingHeart != nil {
-                                    self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
-                                }
-                                self.isUpVoting = true
-                                self.isDownVoting = false
-                            }
-                        }
-                    }
-                    if commentPinAvoidDic[commentID] != nil {
-                        print("Comment exists!")
-                        print(self.commentPinAvoidDic)
-                        return true
-                    }
+                    commentIdToPassBySegue = commentIDGet
                 }
                 
-                self.addTagCommentPinCell(cell, commentID: commentID)
+                self.jumpToCommentPinDetail()
                 
-                if commentPinCellNumCount == 0 {
-                    self.buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-                    self.buttonBackToCommentPinDetail.userInteractionEnabled = true
-                    self.commentListScrollView.addSubview(cell)
-                    self.commentListScrollView.contentSize.height = 76
-                }
-                    
-                else if commentPinCellNumCount >= 1 {
-                    self.commentListScrollView.addSubview(cell)
-                    let cellAtHeight = (CGFloat)(commentPinCellNumCount * 76)
-                    cell.center.y += cellAtHeight
-                    self.commentListScrollView.contentSize.height += 76
-                }
-                self.commentPinCellNumCount += 1
+                return true
             }
+//                if self.uiviewCommentPinDetail.center.y < 0 {
+//                    self.showCommentPinDetail()
+//                }
+//                if self.commentListShowed == true {
+//                    actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
+//                    self.commentListShowed = false
+//                }
+//                pinData = JSON(marker.userData!)
+//                
+//                let cell = CommentPinListCell()
+//                self.commentPinCellArray.append(cell)
+//                cell.jumpToDetail.addTarget(self, action: #selector(FaeMapViewController.actionJumpToDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//                cell.deleteButton.addTarget(self, action: #selector(FaeMapViewController.deleteCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//                
+//                if let toGetUserName = pinData["user_id"].int {
+//                    let getUserName = FaeUser()
+//                    getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
+//                        let userProfile = JSON(message!)
+//                        if let username = userProfile["user_name"].string {
+//                            print(username)
+//                            self.labelCommentPinUserName.text = username
+//                            cell.userID = username
+//                        }
+//                    }
+//                }
+//                if let time = pinData["created_at"].string {
+//                    labelCommentPinTimestamp.text = "\(time)"
+//                    cell.time.text = "\(time)"
+//                }
+//                if let content = pinData["content"].string {
+//                    textviewCommentPinDetail.text = "\(content)"
+//                    cell.content.text = "\(content)"
+//                }
+//                
+//                var commentID = -999
+//                
+//                if let commentIDGet = pinData["comment_id"].int {
+//                    commentIDCommentPinDetailView = "\(commentIDGet)"
+//                    getPinAttributeNum("comment", pinID: "\(commentIDGet)")
+//                    getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
+//                    getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
+//                    commentID = commentIDGet
+//                    let getCommentById = FaeMap()
+//                    getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
+//                        print(message)
+//                        let commentInfoJSON = JSON(message!)
+//                        if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
+//                            print("is_liked: \(isLiked)")
+//                            if isLiked == false {
+//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+//                                if self.animatingHeart != nil {
+//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+//                                }
+//                                self.isUpVoting = false
+//                                self.isDownVoting = true
+//                            }
+//                            else {
+//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
+//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+//                                if self.animatingHeart != nil {
+//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
+//                                }
+//                                self.isUpVoting = true
+//                                self.isDownVoting = false
+//                            }
+//                        }
+//                    }
+//                    if commentPinAvoidDic[commentID] != nil {
+//                        print("Comment exists!")
+//                        print(self.commentPinAvoidDic)
+//                        return true
+//                    }
+//                }
+//                
+//                self.addTagCommentPinCell(cell, commentID: commentID)
+//                
+//                if commentPinCellNumCount == 0 {
+//                    self.buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
+//                    self.buttonBackToCommentPinDetail.userInteractionEnabled = true
+//                    self.commentListScrollView.addSubview(cell)
+//                    self.commentListScrollView.contentSize.height = 76
+//                }
+//                    
+//                else if commentPinCellNumCount >= 1 {
+//                    self.commentListScrollView.addSubview(cell)
+//                    let cellAtHeight = (CGFloat)(commentPinCellNumCount * 76)
+//                    cell.center.y += cellAtHeight
+//                    self.commentListScrollView.contentSize.height += 76
+//                }
+//                self.commentPinCellNumCount += 1
+//            }
         }
         return true
+    }
+    
+    func jumpToCommentPinDetail() {
+        self.performSegueWithIdentifier("mapToCommentPinDetail", sender: self)
     }
     
     // MARK: -- Animations
@@ -729,20 +672,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
             self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_3.alpha = 0.0
-        }), completion: nil)
-    }
-    
-    func searchBarTableHideAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 0)
-        }), completion: nil)
-    }
-    
-    func searchBarTableShowAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
         }), completion: nil)
     }
     
