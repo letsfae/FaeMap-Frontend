@@ -56,7 +56,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             return 10
         }
         else if tableView == tableviewMore {
-            return 7
+            return 3
         }
         else if tableView == tableviewWindbell{
             return tableWindbellData.count
@@ -93,6 +93,9 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell1")
                 
             } else if indexPath.row == 2 {
+                cell.labelTitle.text = "Log out"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell2")
+            }/*else if indexPath.row == 2 {
                 cell.labelTitle.text = "My Pins"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell2")
             } else if indexPath.row == 3 {
@@ -107,7 +110,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             } else if indexPath.row == 6 {
                 cell.labelTitle.text = "Account Settings"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell6")
-            }
+            }*/
             return cell
             
         }
@@ -153,6 +156,18 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 jumpToMoodAvatar()
             }
             if indexPath.row == 2 {
+                let user = FaeUser()
+                user.logOut{ (status:Int?, message:AnyObject?) in
+                    if ( status! / 100 == 2 ){
+                        //success
+                    }
+                    else{
+                        //failure
+                    }
+                }
+            }
+            /*
+            if indexPath.row == 2 {
                 animationMoreHide(nil)
                 jumpToMyPins()
             }
@@ -163,7 +178,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             if indexPath.row == 6 {
                 animationMoreHide(nil)
                 jumpToAccount()
-            }
+            }*/
         }
     }
     

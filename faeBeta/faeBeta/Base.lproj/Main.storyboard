@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -367,6 +367,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XUR-K6-AaZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976.5" y="863"/>
+        </scene>
+        <!--My Fae Main Page View Controller-->
+        <scene sceneID="pwe-QJ-Q4a">
+            <objects>
+                <viewController storyboardIdentifier="MyFaeMainPageViewController" id="zyb-8r-Ckv" customClass="MyFaeMainPageViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="L0l-eZ-JkB"/>
+                        <viewControllerLayoutGuide type="bottom" id="et3-lM-fZr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="W9z-7k-q3K">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="diQ-aV-mRH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3586" y="834"/>
         </scene>
         <!--Fae Account View Controller-->
         <scene sceneID="rrc-Y1-bif">
