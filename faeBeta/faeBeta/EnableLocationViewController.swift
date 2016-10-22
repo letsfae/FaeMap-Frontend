@@ -17,17 +17,6 @@ class EnableLocationViewController: UIViewController {
     private var enableLocationButton: UIButton!
     private var timer: NSTimer!
     
-    var screenWidth : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.width
-        }
-    }
-    var screenHeight : CGFloat {
-        get{
-            return UIScreen.mainScreen().bounds.height
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -41,29 +30,30 @@ class EnableLocationViewController: UIViewController {
     
     private func setup()
     {
-        imageView = UIImageView(frame: CGRectMake(68, 159, 291, 255))
+        imageView = UIImageView(frame: CGRectMake(68 * screenWidthFactor, 159 * screenHeightFactor, 291 * screenWidthFactor, 255 * screenHeightFactor))
         imageView.image = UIImage(named: "EnableLocationImage")
         self.view.addSubview(imageView)
         
-        titleLabel = UILabel(frame: CGRectMake(15,469,screenWidth - 30,27))
+        titleLabel = UILabel(frame: CGRectMake(15,469 * screenHeightFactor,screenWidth - 30,27))
         titleLabel.attributedText = NSAttributedString(string:"Location Access", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         titleLabel.textAlignment = .Center
         view.addSubview(titleLabel)
         
-        descriptionLabel = UILabel(frame: CGRectMake(15,514,screenWidth - 30,44))
+        descriptionLabel = UILabel(frame: CGRectMake(15,514 * screenHeightFactor ,screenWidth - 30,44))
         descriptionLabel.numberOfLines = 2
         descriptionLabel.attributedText = NSAttributedString(string:"Fae Map is a Social Map Platform,\nit needs to use Location to work.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         descriptionLabel.textAlignment = .Center
         view.addSubview(descriptionLabel)
         
-        infoLabel = UILabel(frame: CGRectMake(15,610,screenWidth - 30,18))
+        infoLabel = UILabel(frame: CGRectMake(15,605 * screenHeightFactor,screenWidth - 30,18))
         infoLabel.attributedText = NSAttributedString(string:"Fae’s Ninja System always protects your location.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
         infoLabel.textAlignment = .Center
         self.view.addSubview(infoLabel)
         
-        enableLocationButton = UIButton(frame: CGRectMake(57, 650, 300, 50))
+        enableLocationButton = UIButton(frame: CGRectMake(0, screenHeight - 30 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        enableLocationButton.center.x = screenWidth / 2
         enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
-        enableLocationButton.layer.cornerRadius = 25
+        enableLocationButton.layer.cornerRadius = 25 * screenHeightFactor
         enableLocationButton.backgroundColor = UIColor.faeAppRedColor()
         enableLocationButton.addTarget(self, action: #selector(EnableLocationViewController.enableLocationButtonTapped), forControlEvents: .TouchUpInside)
         self.view.addSubview(enableLocationButton)

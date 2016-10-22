@@ -13,7 +13,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     // MARK: - Variables
     
-    var passwordTableViewCell: PasswordTableViewCell!
+    var passwordTableViewCell: RegisterTextfieldTableViewCell!
     var password: String?
     var faeUser: FaeUser!
     
@@ -23,10 +23,10 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        createTopView("ProgressBar4")
-        createTableView(view.frame.size.height - 175)
         createBottomView(getInfoView())
-        
+        createTableView(59 + 135 * screenHeightFactor)
+        createTopView("ProgressBar4")
+
         registerCell()
         
         tableView.delegate = self
@@ -42,7 +42,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {
@@ -54,14 +54,14 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     func jumpToRegisterInfo() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterInfoViewController") as! RegisterInfoViewController
         vc.faeUser = faeUser
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func getInfoView() -> UIView {
         
-        let infoView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 79))
+        let infoView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 85 * screenHeightFactor))
         
-        let imageView = UIImageView(frame: CGRectMake(view.frame.size.width/2.0 - 150, 0, 292, 79))
+        let imageView = UIImageView(frame: CGRectMake(view.frame.size.width/2.0 - 160 * screenWidthFactor, 0, 320 * screenWidthFactor , 85 * screenHeightFactor))
         imageView.image = UIImage(named: "InfoPassword")
         
         infoView.addSubview(imageView)
@@ -86,7 +86,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         
         tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
         tableView.registerNib(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "PasswordTableViewCell", bundle: nil), forCellReuseIdentifier: "PasswordTableViewCellIdentifier")
+        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
         
     }
     
@@ -118,10 +118,12 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
             return cell
         case 2:
             if passwordTableViewCell == nil {
-                passwordTableViewCell = tableView.dequeueReusableCellWithIdentifier("PasswordTableViewCellIdentifier") as! PasswordTableViewCell
+                passwordTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 
-                passwordTableViewCell.setPlaceholderLabelText(indexPath)
+                passwordTableViewCell.setPlaceholderLabelText("New Password",indexPath: indexPath)
+                passwordTableViewCell.setRightPlaceHolderDisplay(true)
                 passwordTableViewCell.delegate = self
+                passwordTableViewCell.setCharacterLimit(16)
             }
             return passwordTableViewCell
         default:
@@ -130,15 +132,28 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
             
         }
     }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 59
+        case 1:
+            return 60 * screenHeightFactor
+        case 2:
+            return 75 * screenHeightFactor
+        default:
+            return 0
+        }
+    }
 }
 
-extension RegisterPasswordViewController: PasswordCellProtocol {
+extension RegisterPasswordViewController: RegisterTextfieldProtocol {
     
-    func textViewDidBeginEditing(indexPath: NSIndexPath) {
+    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
         activeIndexPath = indexPath
     }
     
-    func textViewShouldReturn(indexPath: NSIndexPath) {
+    func textFieldShouldReturn(indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
             passwordTableViewCell.endAsResponder()
@@ -147,10 +162,11 @@ extension RegisterPasswordViewController: PasswordCellProtocol {
         }
     }
     
-    func textViewDidChange(text: String, indexPath: NSIndexPath) {
+    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
             password = text
+            passwordTableViewCell.updateTextColorAccordingToPassword(text)
             break
         default: break
         }

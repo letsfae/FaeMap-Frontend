@@ -64,7 +64,8 @@ class OutgoingMessage {
             if error != nil {
                 print("Error, couldn't send message: \(error)")
             }else{
-                postToURL("chats", parameter: ["receiver_id": user.userId, "message": item["message"] as! String, "type": item["type"] as! String], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                //WARNING : I changed item["type"] to "text" here to make backend work
+                postToURL("chats", parameter: ["receiver_id": user.userId, "message": item["message"] as! String, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
                         if let resultDic = result as? NSDictionary{
                             self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)

@@ -12,8 +12,9 @@ import FirebaseDatabase
 import SwiftyJSON
 
 public var isDraggingRecentTableViewCell = false
+public var avatarDic = [NSNumber:UIImage]()
 
-class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ChooseUserDelegate, SwipeableCellDelegate {
+class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -28,7 +29,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
-        firebase.keepSynced(true)
+        downloadCurrentUserAvatar()
+//        firebase.keepSynced(true)
 
         if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
@@ -77,7 +79,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .Plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))
         
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
+        //ATTENTION: Temporary comment it here because it's not used for now
+//        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
         
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 86 , bottom: 0, right: 0)
     }
@@ -88,7 +91,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func crossTapped() {
-        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
+//        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
     }
     
     func navigationLeftItemTapped() {
@@ -176,10 +179,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: - helpers
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "recentToChooseUserVC" {
-            let vc = segue.destinationViewController as! ChooseUserViewController
-            vc.delegate = self
-        }
+//        if segue.identifier == "recentToChooseUserVC" {
+//            let vc = segue.destinationViewController as! ChooseUserViewController
+//            vc.delegate = self
+//        }
         if segue.identifier == "recentToChatSeg" {
             let indexPath = sender as! NSIndexPath
             let chatVC = segue.destinationViewController as! ChatViewController
@@ -192,28 +195,39 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
-            let withUserName = "default"
+            let withUserName = recent["with_user_name"].string
             chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
         }
     }
     
-    func createChatroom(withUser: BackendlessUser) {
-        
-        let chatVC = ChatViewController()
-        
-        chatVC.hidesBottomBarWhenPushed = true
-        // set chatVC recent to our recent.
-        
-//        chatVC.withUser = withUser
-        
-        chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
-        
-        navigationController?.pushViewController(chatVC, animated: true)
-    }
+//    func createChatroom(withUser: BackendlessUser) {
+//        
+//        let chatVC = ChatViewController()
+//        
+//        chatVC.hidesBottomBarWhenPushed = true
+//        // set chatVC recent to our recent.
+//        
+////        chatVC.withUser = withUser
+//        
+//        chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
+//        
+//        navigationController?.pushViewController(chatVC, animated: true)
+//    }
     
     func startCheckingRecent(){
         print("check")
         loadRecents(false, removeIndexPaths: nil)
+    }
+    
+    func downloadCurrentUserAvatar()
+    {
+        if(avatarDic[user_id] == nil){
+            getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+                if status / 100 == 2 {
+                    avatarDic[user_id] = image as? UIImage
+                }
+            })
+        }
     }
     //MARK: load recents form firebase
     

@@ -105,7 +105,6 @@ class FaeUser : NSObject {
                             userPhoneNumber = message!["phone"] as? String
                             let shareAPI = LocalStorageManager()
                             shareAPI.getAccountStorage()
-                            self.loginBackendless{()->Void in} // Ren: backendless
                         }
                     }
                 }
@@ -493,55 +492,5 @@ class FaeUser : NSObject {
             completion(status,message)
         }
     }
-    
-    //MARK:- backendless
-    func loginBackendless(completion:()->Void){
-        backendless.userService.login(user_id.stringValue, password: "backendlessPassword", response: { (user : BackendlessUser!) in
-            completion()
-            backendless.userService.setStayLoggedIn(true)
-            // update the user's device_id for future message receive
-            backendless.userService.currentUser.updateProperties(["device_id":Backendless.sharedInstance().messagingService.currentDevice().deviceId])
-            backendless.userService.update(backendless.userService.currentUser, response: { (updatedUser) in
-                print("Updated current user avatar")
-                }, error: { (fault) in
-                    print("error couldn't save avatar image \(fault)")
-            })
-            print("log in backendless!")
-            
-        }) { (fault : Fault!) in
-            print("log in backendless failed, register!")
-            self.registerBackendless(user_id.stringValue,username: userFirstname, password: "backendlessPassword",avatarImage: nil)
-        }
-    }
-    
-    func registerBackendless(user_id : String, username : String?, password : String, avatarImage : UIImage?) {
-        let newUser = BackendlessUser()
-        if avatarImage == nil {
-            newUser.setProperty("Avatar", object: "")
-        } else {
-            
-            uploadAvatar(avatarImage!, result: { (imageLink) in
-                let properties = ["Avatar" : imageLink!]
-                
-                backendless.userService.currentUser!.updateProperties(properties)
-                
-                backendless.userService.update(backendless.userService.currentUser, response: { (updatedUser) in
-                    print("Updated current user avatar")
-                    }, error: { (fault) in
-                        print("error couldn't save avatar image \(fault)")
-                })
-            })
-        }
-        newUser.name = username
-        newUser.password = password
-        newUser.setProperty("user_id", object: user_id)
-        
-        backendless.userService.registering(newUser, response: { (registeredUser : BackendlessUser!) -> Void in
-            self.loginBackendless{()->Void in}
-        }) { (fault : Fault!) -> Void in
-            print("Server reported an error, couldn't register new user: \(fault)")
-        }
-    }
-    
-    
+  
 }

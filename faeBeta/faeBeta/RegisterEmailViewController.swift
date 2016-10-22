@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class RegisterEmailViewController: RegisterBaseViewController {
     
@@ -15,7 +17,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var emailTableViewCell: RegisterTextfieldTableViewCell!
     var email: String?
     var faeUser: FaeUser!
-    var emailExistButton: UIButton!
+    var emailExistLabel: UIView!
+    var errorImage: UIImageView!
     
     // MARK: - View Lifecycle
     
@@ -24,8 +27,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
         
         // Do any additional setup after loading the view.
         createTopView("ProgressBar2")
-        createTableView(view.frame.size.height - 175)
-        createBottomView(thisEmailIsAlreadyView())
+        createTableView(59 + 135 * screenHeightFactor)
+        emailExistLabel = thisEmailIsAlreadyView()
+        createBottomView(emailExistLabel)
         
         registerCell()
         
@@ -43,28 +47,24 @@ class RegisterEmailViewController: RegisterBaseViewController {
     func thisEmailIsAlreadyView() -> UIView {
         let thisEmailIsAlreadyView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
         
-        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 125, 0, 250, 25))
+        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 118, 0, 190, 25))
+        label.attributedText = NSAttributedString(string: "This email is already registered! ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
+        )
+        thisEmailIsAlreadyView.addSubview(label)
         
-        let titleString = "This email is already registered! Log In!"
-        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 + 73, 0, 45, 25))
+        let titleString = "Log In!"
+        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!,
+                          NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: NSRange(location: 0, length: 33))
         
-        
-        let myRange1 = NSRange(location: 33, length: 8)
-        
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: myRange1)
-        
-        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
-        
-        
-        //        button.setImage(UIImage(named: "ThisEmailIsAlready"), forState: .Normal)
         button.setAttributedTitle(myAttrString, forState: .Normal)
         button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
-        emailExistButton = button
-        button.hidden = true
-        thisEmailIsAlreadyView.addSubview(button)
         
+
+        thisEmailIsAlreadyView.addSubview(button)
+        thisEmailIsAlreadyView.hidden = true
         return thisEmailIsAlreadyView
     }
     
@@ -75,18 +75,17 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         checkForUniqueEmail()
     }
     
     func jumpToRegisterUsername() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterUsernameViewController")as! RegisterUsernameViewController
         vc.faeUser = faeUser!
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func validation() {
@@ -102,28 +101,47 @@ class RegisterEmailViewController: RegisterBaseViewController {
         faeUser.checkEmailExistence { (status, message) in
             dispatch_async(dispatch_get_main_queue(), {
                 
-                self.hideActivityIndicator()
                 if status/100 == 2 {
                     let value = message?.valueForKey("existence")
                     if (value != nil) {
                         if value! as! Int == 0 {
-                            self.emailExistButton.hidden = true
-                            self.jumpToRegisterUsername()
+                            self.emailExistLabel.hidden = true
+                            self.checkForValidEmail(self.email!, completion: self.jumpToRegisterUsername)
+//                            self.jumpToRegisterUsername()
                         } else {
-                            self.emailExistButton.hidden = false
+                            self.emailExistLabel.hidden = false
+                            self.hideActivityIndicator()
                         }
                     }
+                }else{
+                    self.hideActivityIndicator()
                 }
             })
             
         }
     }
     
+    func checkForValidEmail(email: String, completion: () -> Void){
+        let URL = "https://apilayer.net/api/check?access_key=6f981d91c2bc1196705ae37e32606c32&email=" + email + "&smtp=1&format=1"
+        Alamofire.request(.GET, URL, headers: nil)
+            .responseJSON{response in
+                self.hideActivityIndicator()
+                if response.response != nil{
+                    let json = JSON(response.result.value!)
+                    if(json["mx_found"].bool != nil && json["mx_found"].bool!){
+                        completion()
+                    }else{
+                        self.errorImage.hidden = false
+                    }
+                }
+        }
+    }
+    
     func isValidEmail(testStr:String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? true : false
+        return result
     }
     
     func registerCell() {
@@ -166,12 +184,31 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 emailTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 emailTableViewCell.setPlaceholderLabelText("Email Address", indexPath: indexPath)
                 emailTableViewCell.delegate = self
+                emailTableViewCell.textfield.keyboardType = .EmailAddress
+                errorImage = UIImageView(frame: CGRectMake(screenWidth - 30, 37 * screenHeightFactor - 9, 6, 17))
+                errorImage.image = UIImage(named:"exclamation_red_new")
+                errorImage.hidden = true
+                emailTableViewCell.contentView.addSubview(errorImage)
+                
             }
             return emailTableViewCell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 59
+        case 1:
+            return 60 * screenHeightFactor
+        case 2:
+            return 75 * screenHeightFactor
+        default:
+            return 0
         }
     }
 }
@@ -195,6 +232,8 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             email = text
+            emailExistLabel.hidden = true
+            errorImage.hidden = true
             break
         default: break
         }

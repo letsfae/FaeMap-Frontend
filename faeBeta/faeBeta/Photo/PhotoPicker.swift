@@ -40,7 +40,6 @@ class PhotoPicker {
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         smartAlbums.enumerateObjectsUsingBlock( {
             if let assetCollection = $0.0 as? PHAssetCollection {
-                print("album title: \(assetCollection.localizedTitle)")
                 let assetsFetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: allPhotosOptions)
                 let numberOfAssets = assetsFetchResult.count
                 if numberOfAssets != 0 && assetCollection.localizedTitle! != "Videos" {
@@ -50,8 +49,6 @@ class PhotoPicker {
                         self.currentAlbum = self.cameraRoll
                     }
                 }
-                let estimatedCount =  (assetCollection.estimatedAssetCount == NSNotFound) ? -1 : assetCollection.estimatedAssetCount
-                print("Assets count: \(numberOfAssets), estimate: \(estimatedCount)")
             }
         } )
     }

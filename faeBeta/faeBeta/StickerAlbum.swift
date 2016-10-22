@@ -74,7 +74,7 @@ class StickerAlbum {
     func calculatePos() {
         let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
         let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
-        var y = lineInterval
+        var y = lineInterval + 10
         for _ in 0..<(Int)(rowPerPage) {
             var x = inlineInterval
             for _ in 0..<(Int)(colPerPage) {

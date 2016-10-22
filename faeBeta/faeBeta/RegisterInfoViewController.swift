@@ -12,14 +12,14 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     // MARK: Variables
     
-    var textField: UITextField!
+    var textField: FAETextField!
     var dateOfBirth: String? = ""
     var numKeyPad: FAENumberKeyboard!
     var gender: String?
     var maleButton: UIButton!
     var femaleButton: UIButton!
     var faeUser: FaeUser!
-    
+    var exclamationMarkButton : UIImageView!
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -34,15 +34,22 @@ class RegisterInfoViewController: RegisterBaseViewController {
         //        addTapGesture()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        numKeyPad = FAENumberKeyboard(frame:CGRectMake(0,view.frame.size.height - 244 * screenHeightFactor, view.frame.size.width, 244 * screenHeightFactor))
+        self.view.addSubview(numKeyPad)
+        numKeyPad.delegate = self
+        self.bottomView.frame.origin.y = self.view.frame.height - 244 * screenHeightFactor - self.bottomView.frame.size.height + 15
+    }
+    
     // MARK: - Functions
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         setValueInUser()
         jumpToRegisterConfirm()
     }
@@ -53,26 +60,9 @@ class RegisterInfoViewController: RegisterBaseViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    override func handleTap(sender: UITapGestureRecognizer) {
-        //using sender, we can get the point in respect to the table view
-        let tapLocation = sender.locationInView(self.tableView)
-        
-        
-        if numKeyPad != nil && !numKeyPad.pointInside(tapLocation, withEvent: nil) {
-            hideNumKeyboard()
-            
-            UIView .animateWithDuration(0.3) {
-                var frame = self.numKeyPad!.frame
-                
-                frame.origin.y = self.view.frame.size.height
-                self.numKeyPad.frame = frame
-            }
-        }
-    }
-    
     func createDateOfBirthView() {
         
-        let dobView = UIView(frame: CGRectMake(0, 90, view.frame.size.width, 120))
+        let dobView = UIView(frame: CGRectMake(0, 90 * screenHeightFactor, view.frame.size.width, 120 * screenHeightFactor))
         
         let titleLabel = UILabel(frame: CGRectMake(0, 10, dobView.frame.size.width, 26))
         titleLabel.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
@@ -80,24 +70,24 @@ class RegisterInfoViewController: RegisterBaseViewController {
         titleLabel.textAlignment = .Center
         titleLabel.text = "Birthday"
         
-        textField = UITextField(frame: CGRectMake(0, 65, dobView.frame.size.width, 40))
-        textField.keyboardType = .NumberPad
-        
-        textField.font = UIFont(name: "AvenirNext-Regular", size: 25)
-        textField.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
-        textField.textAlignment = .Center
-        textField.attributedPlaceholder = NSAttributedString(string:"placeholder text", attributes: [NSForegroundColorAttributeName: UIColor.init(colorLiteralRed: 155/255.0, green: 155/255.0, blue: 155/255.0, alpha: 1.0)])
+        textField = FAETextField(frame: CGRectMake(15, 65 * screenHeightFactor, screenWidth - 30, 34))
         textField.placeholder = "MM/DD/YYYY"
+        textField.enabled = false
+        
+        exclamationMarkButton = UIImageView(frame: CGRectMake(screenWidth / 2 + 70, 72 * screenHeightFactor, 6, 17))
+        exclamationMarkButton.image = UIImage(named:"exclamation_red_new")
+        exclamationMarkButton.hidden = true
         
         dobView.addSubview(titleLabel)
         dobView.addSubview(textField)
+        dobView.addSubview(exclamationMarkButton)
         
         view.addSubview(dobView)
         
     }
     
     func createGenderView() {
-        let genderView = UIView(frame: CGRectMake(0, 240, view.frame.size.width, 130))
+        let genderView = UIView(frame: CGRectMake(0, 240 * screenHeightFactor, view.frame.size.width, 130 * screenHeightFactor))
         
         let titleLabel = UILabel(frame: CGRectMake(0, 10, genderView.frame.size.width, 26))
         titleLabel.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
@@ -105,13 +95,13 @@ class RegisterInfoViewController: RegisterBaseViewController {
         titleLabel.textAlignment = .Center
         titleLabel.text = "Gender"
         
-        maleButton = UIButton(frame: CGRectMake(genderView.frame.size.width/3.0 - 30, 60, 60, 60))
+        maleButton = UIButton(frame: CGRectMake(genderView.frame.size.width/3.0 - 30, 60 * screenHeightFactor, 60, 60))
         maleButton.setImage(UIImage(named: "male_unselected"), forState: .Normal)
         maleButton.setImage(UIImage(named: "male_selected"), forState: .Selected)
         maleButton.addTarget(self, action: #selector(self.maleButtonTapped), forControlEvents: .TouchUpInside)
         
         
-        femaleButton = UIButton(frame: CGRectMake(2 * genderView.frame.size.width/3.0 - 30, 60, 60, 60))
+        femaleButton = UIButton(frame: CGRectMake(2 * genderView.frame.size.width/3.0 - 30, 60 * screenHeightFactor, 60, 60))
         femaleButton.setImage(UIImage(named: "female_unselected"), forState: .Normal)
         femaleButton.setImage(UIImage(named: "female_selected"), forState: .Selected)
         femaleButton.addTarget(self, action: #selector(self.femaleButtonTapped), forControlEvents: .TouchUpInside)
@@ -149,12 +139,14 @@ class RegisterInfoViewController: RegisterBaseViewController {
         var isValid = false
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         
         let date = dateFormatter.dateFromString(dateOfBirth!)
-        print("dateOfBirth")
-        print(dateOfBirth)
         isValid = date != nil && dateOfBirth!.characters.count == 10
+        
+        if(date == nil && dateOfBirth!.characters.count == 10){
+            exclamationMarkButton.hidden = false
+        }
         
         if isValid {
             let calendar = NSCalendar.init(calendarIdentifier: NSCalendarIdentifierGregorian)
@@ -162,7 +154,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
             let currentYearInt = (calendar?.component(NSCalendarUnit.Year, fromDate: date!))!
             
             
-            isValid = isValid && currentYearInt > 1901
+            isValid = isValid && currentYearInt > 1901 && currentYearInt < (calendar?.component(NSCalendarUnit.Year, fromDate: NSDate()))!
+            exclamationMarkButton.hidden = isValid
         }
         
 
@@ -180,7 +173,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         faeUser.whereKey("gender", value: gender!)
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         
         let date = dateFormatter.dateFromString(dateOfBirth!)
         
@@ -223,6 +216,7 @@ extension RegisterInfoViewController: FAENumberKeyboardDelegate {
                     dateOfBirth = String(dateOfBirth!.characters.dropLast())
                 }
             }
+            exclamationMarkButton.hidden = true
         }
         
         validation()
@@ -233,22 +227,8 @@ extension RegisterInfoViewController: FAENumberKeyboardDelegate {
 
 
 extension RegisterInfoViewController {
-    
     override func keyboardWillShow(notification: NSNotification) {
         textField.resignFirstResponder()
-        if numKeyPad == nil {
-            numKeyPad = FAENumberKeyboard(frame:CGRectMake(57,view.frame.size.height, 300, 244))
-            self.view.addSubview(numKeyPad)
-            numKeyPad.delegate = self
-        }
-        
-        UIView .animateWithDuration(0.3) {
-            var frame = self.numKeyPad!.frame
-            
-            self.bottomView.frame.origin.y = self.view.frame.height - 244 - self.bottomView.frame.size.height
-            frame.origin.y = self.view.frame.size.height - 244
-            self.numKeyPad.frame = frame
-        }
     }
     
     func hideNumKeyboard() {

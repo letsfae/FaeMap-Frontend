@@ -17,39 +17,38 @@ import SwiftyJSON
 
 
 let firebase = FIRDatabase.database().reference()
-let backendless = Backendless.sharedInstance()
 //let currentUser = backendless.userService.currentUser
 
 //MARK : CREATE CHATROOM
 
 //given two BackendlessUser object, create a chat room for them.
 
-func startChat(user1 : BackendlessUser, user2 : BackendlessUser) -> String {
-    //user1 is current user
-    
-    //    let userId1 : String = user1.objectId
-    //    let userId2 : String = user2.objectId
-    
-    var chatRoomId : String = ""
-    
-    let value = user1.objectId.compare(user2.objectId).rawValue
-    
-    if value < 0 {
-        chatRoomId = user1.objectId.stringByAppendingString("-" + user2.objectId)
-    } else {
-        chatRoomId = user2.objectId.stringByAppendingString("-" + user1.objectId)
-    }
-    
-    let members = [user1.objectId as String, user2.objectId as String]
-    print("the chatRoom Id is \(chatRoomId)")
-    //create recent object on both end of user on firebase.
-    
-    //create recent
-    createdRecent(user1.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user2.name, withUserUserId: user2.objectId)
-//    createdRecent(user2.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user1.name, withUserUserId: user1.objectId)
-    
-    return chatRoomId
-}
+//func startChat(user1 : BackendlessUser, user2 : BackendlessUser) -> String {
+//    //user1 is current user
+//    
+//    //    let userId1 : String = user1.objectId
+//    //    let userId2 : String = user2.objectId
+//    
+//    var chatRoomId : String = ""
+//    
+//    let value = user1.objectId.compare(user2.objectId).rawValue
+//    
+//    if value < 0 {
+//        chatRoomId = user1.objectId.stringByAppendingString("-" + user2.objectId)
+//    } else {
+//        chatRoomId = user2.objectId.stringByAppendingString("-" + user1.objectId)
+//    }
+//    
+//    let members = [user1.objectId as String, user2.objectId as String]
+//    print("the chatRoom Id is \(chatRoomId)")
+//    //create recent object on both end of user on firebase.
+//    
+//    //create recent
+//    createdRecent(user1.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user2.name, withUserUserId: user2.objectId)
+////    createdRecent(user2.objectId, chatRoomId: chatRoomId, members: members, withUserUsername: user1.name, withUserUserId: user1.objectId)
+//    
+//    return chatRoomId
+//}
 
 //MARK : create recentItem
 
@@ -161,15 +160,6 @@ func restartRecentChat(recent : NSDictionary) {
     
     let localStorage = LocalStorageManager()
     localStorage.readLogInfo()
-    //    for userId in recent["members"] as! [String] {
-    
-    
-    //        if userId != backendless.userService.currentUser.objectId && userId != recent{
-    //            
-    //            createdRecent(userId, chatRoomId: (recent["chatRoomId"] as? String)!, members: recent["members"] as! [String], withUserUsername: backendless.userService.currentUser.name, withUserUserId: backendless.userService.currentUser.objectId)
-    //            
-    //        }
-    //    }
 }
 
 

@@ -56,7 +56,7 @@ class LogInViewController: UIViewController {
         usernameTextField = FAETextField(frame: CGRectMake(15, 174 * screenHeightFactor, screenWidth - 30, 34))
         usernameTextField.placeholder = "Username/Email"
         usernameTextField.adjustsFontSizeToFitWidth = true
-        usernameTextField.minimumFontSize = 18
+        usernameTextField.keyboardType = .EmailAddress
         self.view.addSubview(usernameTextField)
         
         // result label
@@ -68,13 +68,13 @@ class LogInViewController: UIViewController {
         loginResultLabel.center = self.view.center
         loginResultLabel.textAlignment = .Center
         loginResultLabel.hidden = true
+        
         self.view.addSubview(loginResultLabel)
         
         // password textField
         passwordTextField = FAETextField(frame: CGRectMake(15, 243 * screenHeightFactor, screenWidth - 30, 34))
         passwordTextField.placeholder = "Password"
         passwordTextField.secureTextEntry = true
-        passwordTextField.minimumFontSize = 18
         passwordTextField.delegate = self
         self.view.addSubview(passwordTextField)
         

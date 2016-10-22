@@ -16,7 +16,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: NSData!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate, AudioRecorderViewDelegate {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -53,11 +53,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //voice MARK: has bug here can record and upload but can't replay after download,
     var fileName = "audioFile.caf"
-    var soundRecorder : AVAudioRecorder!
-    var soundPlayer : AVAudioPlayer!
-    var recordingSession: AVAudioSession!
-    var voiceData = NSData()
-    var startRecording = false
+//    var soundPlayer : AVAudioPlayer!
+
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
@@ -82,6 +79,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //sticker
     var stickerViewShow = false//false : not open the stick view
     var stickerPicker : StickerPickView!
+    
+    //record
+    var recordShow = false
+    var audioRecorderContentView: AudioRecorderView!
     
     //keyboard
     var keyboardHeight: CGFloat! = 0
@@ -155,6 +156,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //update recent
         closeQuickPhotoPanel()
         closeStickerPanel()
+        closeaudioRecorderContentView()
 //        clearRecentCounter(chatRoomId)// clear the unread message count
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
         
@@ -171,7 +173,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = user_id.stringValue
-        self.senderDisplayName = username!
+        self.senderDisplayName = withUser!.userName
         self.inputToolbar.contentView.textView.delegate = self
         //load firebase messages
         loadMessage()
@@ -201,6 +203,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         getAvatar()
     }
     
+    
     func appWillEnterForeground(){
         self.collectionView.reloadData()
         photoPicker.getSmartAlbum()
@@ -217,7 +220,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.navigationBar.tintColor = colorFae
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
+        
+        //ATTENTION: Temporary comment it here because it's not used for now
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
         
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
@@ -285,36 +290,41 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let contentOffset = (screenWidth - 42 - 29 * 7) / 6 + 29
         buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
         buttonKeyBoard.addTarget(self, action: #selector(keyboardButtonClicked), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonKeyBoard)
         
         buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
         buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonSticker)
         
         buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
         contentView.addSubview(buttonImagePicker)
         
         buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
         
         let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
+        buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
         contentView.addSubview(buttonCamera)
         
         buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
         
         buttonVoiceRecorder = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Highlighted)
         //add a function
-        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.startRecord), forControlEvents: .TouchDown)
-        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.stopRecord), forControlEvents: .TouchUpInside)
+        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.showRecord), forControlEvents: .TouchUpInside)
         
         contentView.addSubview(buttonVoiceRecorder)
         
         let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Normal)
+        buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Highlighted)
         //add a function
         buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonLocation)
@@ -323,6 +333,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 
         buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
         contentView.addSubview(buttonSend)
         buttonSend.enabled = false
         buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
@@ -343,25 +354,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: voice helper function
     
     func setupRecorder() {
-        recordingSession = AVAudioSession.sharedInstance()
-        do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try recordingSession.overrideOutputAudioPort(.Speaker)
-        } catch let error as NSError {
-            print(error.description)
-        }
-        let recordSettings = [AVFormatIDKey : Int(kAudioFormatAppleLossless),
-                              AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
-                              AVEncoderBitRateKey : 320000,
-                              AVNumberOfChannelsKey : 2,
-                              AVSampleRateKey : 44100.0 ]
-        do {
-            soundRecorder = try AVAudioRecorder(URL: getFileURL(), settings: recordSettings as! [String : AnyObject])
-            soundRecorder.delegate = self
-            soundRecorder.prepareToRecord()
-        } catch {
-            print("cannot record")
-        }
+        self.audioRecorderContentView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
+        self.audioRecorderContentView.frame = CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271)
+        self.audioRecorderContentView.delegate = self
     }
     
     //MARK: - JSQMessages Delegate function
@@ -391,6 +386,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
             imageQuickPickerShow = false
         }
+        if recordShow {
+            audioRecorderContentView.removeFromSuperview()
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+            recordShow = false
+        }
         scrollToBottom(true)
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
@@ -400,6 +400,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.endEditing(true)
         closeStickerPanel()
         closeQuickPhotoPanel()
+        closeaudioRecorderContentView()
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
     }
@@ -420,14 +421,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
                 self.imageQuickPickerShow = false
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            } else if (keyboardShow){
+            }
+            else if (recordShow){
+                self.audioRecorderContentView.removeFromSuperview()
+                self.recordShow = false
+                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                self.stickerPicker.frame.origin.y = self.screenHeight - 271
+            }
+            else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.view.endEditing(true)
                 UIView.setAnimationsEnabled(true)
                 self.moveUpInputBar()
                 self.scrollToBottom(false)
                 self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            }else{
+            }
+            else{
                 self.collectionView.scrollEnabled = false
                 UIView.animateWithDuration(0.3, animations: {
                     self.moveUpInputBar()
@@ -464,7 +473,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
-            } else if (keyboardShow){
+            }
+            else if recordShow {
+                self.recordShow = false
+                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
+                self.quickSendImageButton.alpha = 1
+                self.moreImageButton.alpha = 1
+                self.audioRecorderContentView.removeFromSuperview()
+            }
+            else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.view.endEditing(true)
                 UIView.setAnimationsEnabled(true)
@@ -490,6 +508,52 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(true)
     }
     
+    func showRecord() {
+        if !recordShow {
+            audioRecorderContentView.requireForPermission(nil)
+            
+            UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderContentView)
+            self.audioRecorderContentView.frame.origin.y = screenHeight
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
+
+            if stickerViewShow {
+                stickerPicker.removeFromSuperview()
+                buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+                stickerViewShow = false
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }else if imageQuickPickerShow{
+                self.photoQuickCollectionView.removeFromSuperview()
+                self.moreImageButton.removeFromSuperview()
+                self.quickSendImageButton.removeFromSuperview()
+                self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+                self.imageQuickPickerShow = false
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }else if keyboardShow {
+                UIView.setAnimationsEnabled(false)
+                self.view.endEditing(true)
+                UIView.setAnimationsEnabled(true)
+                self.moveUpInputBar()
+                self.scrollToBottom(false)
+                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+            }
+            else{
+                self.collectionView.scrollEnabled = false
+                UIView.animateWithDuration(0.3, animations: {
+                    self.moveUpInputBar()
+                    self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
+                    }, completion:{ (Bool) -> Void in
+                        self.collectionView.scrollEnabled = true
+                })
+            }
+            recordShow = true
+        }
+        
+        scrollToBottom(true)
+    }
+    
     func sendLocation() {
         closeStickerPanel()
         let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewControllerWithIdentifier("ChatSendLocationController") as! ChatSendLocationController
@@ -497,33 +561,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func startRecord(){
-        if !startRecording {
-            print("recording")
-            soundRecorder.record()
-            startRecording = true
-        }
-            
-    }
-    
-    func stopRecord(){
-        soundRecorder.stop()
-     // send voice message to firebase
-        voiceData = NSData(contentsOfURL: getFileURL())!
-        startRecording = !startRecording
-
-        // add a check to avoid short sound message
-        do {
-            soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
-
-        } catch {
-            print("cannot play")
-        }
-        if(soundPlayer != nil && soundPlayer.duration < 1.0){
-            return;
-        }
-        sendMessage(nil, date: NSDate(), picture: nil,sticker: nil, location: nil, snapImage : nil,audio: voiceData)
-    }
     
     func sendMessageButtonTapped() {
         sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
@@ -577,7 +614,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow || recordShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
                 if(stickerViewShow){
                     self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }else if(imageQuickPickerShow){
@@ -585,6 +622,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     self.moreImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset), 271) / 271.0
                     self.quickSendImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset ), 271) / 271.0
                     
+                }else if recordShow {
+                    self.audioRecorderContentView.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
                 }
                 self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
             }
@@ -632,6 +671,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                             self.isClosingStickerOrImagePicker = false
                             self.cleanUpSelectedPhotos()
                     })
+                }else if recordShow{
+                    isClosingStickerOrImagePicker = true
+                    UIView.animateWithDuration(0.2, animations: {
+                        self.moveDownInputBar()
+                        self.audioRecorderContentView.frame.origin.y = self.screenHeight
+                        }, completion: {(Bool)->Void in
+                            self.recordShow = false
+                            self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+                            self.audioRecorderContentView.removeFromSuperview()
+                            self.isClosingStickerOrImagePicker = false
+                    })
                 }
             }
         }
@@ -655,109 +705,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             if collectionView != nil {
                 collectionView.reloadData()
             }
-
-            //download avatars
-            //            avatarImageFromBackendlessUser(backendless.userService.currentUser)
-            //            avatarImageFromBackendlessUser(withUser!)
-            
-            //create avatars
         }
     }
     
-//        func getWithUserFromRecent(recent : NSDictionary, result : (withUser : BackendlessUser) -> Void ) {
-//    
-//            let withUserId = recent["withUserUserId"] as? String
-//    
-//            let whereClause = "objectId = '\(withUserId!)'"
-//            let dataQuery = BackendlessDataQuery()
-//            dataQuery.whereClause = whereClause
-//    
-//            let dataStore = backendless.persistenceService.of(BackendlessUser.ofClass())
-//    
-//            dataStore.find(dataQuery, response: { (users : BackendlessCollection!) -> Void in
-//    
-//                let withUser = users.data.first as! BackendlessUser
-//    
-//                result(withUser: withUser)
-//    
-//            }) { (fault : Fault!) -> Void in
-//                print("Server report an error : \(fault)")
-//            }
-//    
-//        }
-    
         func createAvatars(avatars : NSMutableDictionary?) {
-            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "avatarPlaceholder"), diameter: 70)
-    
-//            if let avat = avatars {
-//                if let currentUserAvatarImage = avat.objectForKey(backendless.userService.currentUser.objectId) {
-//    
-//                    currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: currentUserAvatarImage as! NSData), diameter: 70)
-//                    self.collectionView?.reloadData()
-//                }
-//            }
-//    
-//            if let avat = avatars {
-//                if let withUserAvatarImage = avat.objectForKey(withUser!.objectId!) {
-//    
-//                    withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: withUserAvatarImage as! NSData), diameter: 70)
-//                    self.collectionView?.reloadData()
-//                }
-//            }
-    
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[NSNumber(integer:Int(withUser!.userId)!)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
             avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
             // need to check if collectionView exist before reload
         }
-    
-//        func avatarImageFromBackendlessUser(user : BackendlessUser) {
-//    
-//            if let imageLink = user.getProperty("Avatar") {
-//    
-//                getImageFromURL(imageLink as! String, result: { (image) -> Void in
-//    
-//                    let imageData = UIImageJPEGRepresentation(image!, 1.0)
-//    
-//                    if self.avatarImageDictionary != nil {
-//    
-//                        self.avatarImageDictionary!.removeObjectForKey(user.objectId)
-//                        self.avatarImageDictionary!.setObject(imageData!, forKey: user.objectId!)
-//                    } else {
-//                        self.avatarImageDictionary = [user.objectId! : imageData!]
-//                    }
-//                    self.createAvatars(self.avatarImageDictionary)
-//    
-//                })
-//            }
-//    
-//        }
-
-    
-    func getFileURL() -> NSURL {
-        //record: change the default save file path from getCacheDirectory
-        let tempDir = NSTemporaryDirectory()
-        let filePath = tempDir + "/TempMemo.caf"
-        
-        return NSURL.fileURLWithPath(filePath)
-    }
-    
-    func preparePlayer(voiceMessage : NSData) {
-        do {
-            soundPlayer = try AVAudioPlayer(data: voiceMessage, fileTypeHint: nil)
-            soundPlayer.delegate = self
-            soundPlayer.prepareToPlay()
-            soundPlayer.volume = 1
-        } catch {
-            print("cannot play")
-        }
-    }
     
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.screenHeight - 271 - 150
+        let yPosition = self.screenHeight - 275 - 150
         UIView.setAnimationsEnabled(false)
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
@@ -811,6 +774,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    func closeaudioRecorderContentView() {
+        if recordShow {
+            audioRecorderContentView.removeFromSuperview()
+            moveDownInputBar()
+            scrollToBottom(true)
+            recordShow = false
+            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+        }
+    }
+    
     func cleanUpSelectedPhotos(){
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
@@ -858,6 +831,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         picker.dismissViewControllerAnimated(true, completion: nil)
         
+    }
+    
+    //MARK: - AudioRecorderViewDelegate
+    func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
+        self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
+
     }
     
 }

@@ -8,6 +8,8 @@
 
 import UIKit
 
+public var navBarDefaultShadowImage: UIImage?
+
 class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     // MARK: - Interface
 
@@ -22,10 +24,12 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         super.viewDidLoad()
        
         UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        navBarDefaultShadowImage = UINavigationBar.appearance().shadowImage
         UINavigationBar.appearance().shadowImage = UIImage()
         setupViewFrame()
         setupImageContainerPageViewController()
         setupBottomPart()
+        addObservers()
         // Do any additional setup after loading the view.
     }
     
@@ -34,6 +38,12 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     // MARK: - Setup
+    private func addObservers()
+    {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: "resetPasswordSucceed", object: nil)
+
+    }
+    
     private func setupNavigationBar()
     {
         self.navigationController?.navigationBarHidden = true
@@ -78,7 +88,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         var font = UIFont(name: "AvenirNext-Bold", size: 16)
         
         lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        self.view.insertSubview(lookAroundButton, atIndex: 0)
+//        self.view.insertSubview(lookAroundButton, atIndex: 0)
         
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -109,7 +119,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         
         rightLabel = UILabel(frame: CGRectMake(0, screenHeight - 35, 300, 50))
         rightLabel.numberOfLines = 2
-        rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
+        rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae Maps ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
         rightLabel.textAlignment = .Center
         rightLabel.sizeToFit()
         rightLabel.center.x = screenWidth / 2

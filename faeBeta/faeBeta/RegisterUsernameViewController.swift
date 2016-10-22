@@ -24,8 +24,8 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         
         // Do any additional setup after loading the view.
         createTopView("ProgressBar3")
-        createTableView(view.frame.size.height - 175)
-        createBottomView(getSomeView())
+        createTableView(59 + 135 * screenHeightFactor)
+        createBottomView(getErrorView())
         
         registerCell()
         
@@ -42,49 +42,17 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         checkForUniqueUsername()
     }
     
     func jumpToRegisterPassword() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
         vc.faeUser = faeUser
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func getSomeView() -> UIView {
-        
-        let errorView = getErrorView()
-        
-        let thisEmailIsAlreadyView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 65 + errorView.frame.size.height + 20))
-        
-        let infoView = UIView(frame: CGRectMake(0, errorView.frame.size.height + 20, view.frame.size.width, 65))
-        
-        let titleLabel = UILabel(frame: CGRectMake(0, 0, view.frame.size.width, 20))
-        titleLabel.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
-        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        titleLabel.textAlignment = .Center
-        titleLabel.text = "Usernames can be used to:"
-        
-        let subtitleLabel = UILabel(frame: CGRectMake(0, 20, view.frame.size.width, 40))
-        subtitleLabel.textColor = UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0)
-        subtitleLabel.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.textAlignment = .Center
-        subtitleLabel.text = "-Log in, Find & Discover People, Add Contacts \n Start Chats, Tag Friends & much more..."
-        
-        
-        infoView.addSubview(titleLabel)
-        infoView.addSubview(subtitleLabel)
-        
-        thisEmailIsAlreadyView.addSubview(errorView)
-        thisEmailIsAlreadyView.addSubview(infoView)
-        
-        return thisEmailIsAlreadyView
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func getErrorView() -> UIView {
@@ -108,7 +76,11 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func validation() {
         var isValid = false
         
-        isValid = username != nil && username?.characters.count > 0
+        let userNameRegEx = ".*[^A-Za-z0-9_].*"
+        let range = username!.rangeOfString(userNameRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? false : true
+        
+        isValid = username != nil && username?.characters.count > 5 && result
         
         self.enableContinueButton(isValid)
         
@@ -168,21 +140,38 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
-            cell.setSubTitleLabelText("Letters & Numbers Only")
+            cell.setSubTitleLabelText("Letters & Numbers & Underscore Only")
             return cell
         case 2:
             if usernameTableViewCell == nil {
                 usernameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
-                usernameTableViewCell.setPlaceholderLabelText("@NewUsername", indexPath: indexPath)
+                usernameTableViewCell.setPlaceholderLabelText("NewUsername", indexPath: indexPath)
                 usernameTableViewCell.setTextFieldForUsernameConfiguration()
-                usernameTableViewCell.setCharacterLimit()
+                usernameTableViewCell.isUsernameField = true
+                usernameTableViewCell.setCharacterLimit(20)
+                usernameTableViewCell.setLeftPlaceHolderDisplay(true)
                 usernameTableViewCell.delegate = self
+                usernameTableViewCell.textfield.keyboardType = .NamePhonePad
+
             }
             return usernameTableViewCell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 59
+        case 1:
+            return 60 * screenHeightFactor
+        case 2:
+            return 75 * screenHeightFactor
+        default:
+            return 0
         }
     }
 }
@@ -205,11 +194,12 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
     func textFieldDidChange(text: String, indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
-            let index = text.startIndex.advancedBy(1)
-            username = text.substringFromIndex(index)
+            username = text
+            self.usernameExistLabel.hidden = true
             break
         default: break
         }
         validation()
     }
+
 }

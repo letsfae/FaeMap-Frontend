@@ -29,7 +29,7 @@ extension ChatViewController: OutgoingMessageProtocol{
             var imageData = UIImageJPEGRepresentation(pic,1)
             let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
             imageData = UIImageJPEGRepresentation(pic,factor)
-            outgoingMessage = OutgoingMessage(message: "Picture", picture: imageData!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             isContinuallySending = true
             NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
         }
@@ -37,7 +37,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "Sticker", picture: imageData!, senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Sticker]", picture: imageData!, senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         
@@ -46,12 +46,12 @@ extension ChatViewController: OutgoingMessageProtocol{
             let lat : NSNumber = NSNumber(double: loc.coordinate.latitude)
             let lon : NSNumber = NSNumber(double: loc.coordinate.longitude)
             
-            outgoingMessage = OutgoingMessage(message: "Location", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Location]", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         if audio != nil {
             //create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "This is a Voice Message", audio: audio!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
         

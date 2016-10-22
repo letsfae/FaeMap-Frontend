@@ -32,7 +32,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         
         
         let backButton = UIButton(frame: CGRectMake(10, 25, 40, 40))
-        backButton.setImage(UIImage(named: "BackArrow"), forState: .Normal)
+        backButton.setImage(UIImage(named: "NavigationBackNew"), forState: .Normal)
         backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         backButton.addTarget(self, action: #selector(self.backButtonPressed), forControlEvents: .TouchUpInside)
         
@@ -51,10 +51,11 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         titleLabel1.textAlignment = .Center
         titleLabel1.text = "Welcome to Fae!"
         
-        let finishButton = UIButton(frame: CGRectMake(viewWidth/2.0 - 150, viewHeight * 600/736.0, 300, 50))
+        let finishButton = UIButton(frame: CGRectMake(0, screenHeight - 131 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
         //        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
-        finishButton.layer.cornerRadius = 25
+        finishButton.layer.cornerRadius = 25 * screenHeightFactor
         finishButton.layer.masksToBounds = true
+        finishButton.center.x = screenWidth / 2
         
         finishButton.setTitle("Finish!", forState: .Normal)
         finishButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
@@ -63,7 +64,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         finishButton.addTarget(self, action: #selector(self.finishButtonPressed), forControlEvents: .TouchUpInside)
         
         
-        let termsOfServiceLabel = UILabel(frame: CGRectMake(50, view.frame.size.height - 60, 314, 50))
+        let termsOfServiceLabel = UILabel(frame: CGRectMake(0, screenHeight - 56, screenWidth, 50))
         termsOfServiceLabel.numberOfLines = 2
         termsOfServiceLabel.textAlignment = .Center
         
@@ -92,6 +93,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         view.addSubview(finishButton)
         view.addSubview(titleLabel1)
         view.addSubview(termsOfServiceLabel)
+        view.bringSubviewToFront(backButton)
         
     }
     
@@ -123,6 +125,11 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
                     print("login success")
+                    
+                    // WARNING: this code should be deleted afterward, it's here just to test chat function
+                    postToURL("chats", parameter: ["receiver_id": "2", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                    })
+                    
                     self.jumpToEnableLocation()
                 }
             })
@@ -130,8 +137,19 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     }
     
     func jumpToEnableLocation() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
-        self.navigationController?.pushViewController(vc, animated: true)
+        let authstate = CLLocationManager.authorizationStatus()
+        
+        if(authstate != CLAuthorizationStatus.AuthorizedAlways){
+            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+            if notificationType?.types == UIUserNotificationType.None {
+                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("EnableNotificationViewController") , animated: true)
+            }else{
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
     }
     
     // MARK: Memory Management

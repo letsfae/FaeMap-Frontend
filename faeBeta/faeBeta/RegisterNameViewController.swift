@@ -24,8 +24,8 @@ class RegisterNameViewController: RegisterBaseViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        createTableView(210 * screenHeightFactor + 59)
         createTopView("ProgressBar1")
-        createTableView(view.frame.size.height - 175)
         createBottomView(createAlreadyGotAnAccountView())
         
         registerCell()
@@ -36,7 +36,6 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        firstNameTableViewCell.makeFirstResponder()
     }
     
     // MARK: - Functions
@@ -53,25 +52,21 @@ class RegisterNameViewController: RegisterBaseViewController {
     func createAlreadyGotAnAccountView() -> UIView {
         let createAlreadyGotAnAccountView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
         
-        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 - 100, 0, 200, 25))
         
+        //Already got an Account? 
+        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 94, 0, 155, 25))
+        label.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor()]
+        )
+        createAlreadyGotAnAccountView.addSubview(label)
         
-        let titleString = "Already got an Account? Log In!"
-        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 + 54, 0, 45, 25))
+        let titleString = "Log In!"
+        let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!,
+                          NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0), range: NSRange(location: 0, length: 24))
-        
-        
-        let myRange1 = NSRange(location: 24, length: 7)
-        
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0), range: myRange1)
-        
-        
-        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
-        
         
         button.setAttributedTitle(myAttrString, forState: .Normal)
-        
         button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
         
         createAlreadyGotAnAccountView.addSubview(button)
@@ -93,7 +88,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     func jumpToRegisterEmail() {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
         vc.faeUser = faeUser
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func createUser() {
@@ -146,6 +141,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             if firstNameTableViewCell == nil {
                 firstNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 firstNameTableViewCell.setPlaceholderLabelText("First Name", indexPath: indexPath)
+                firstNameTableViewCell.textfield.autocapitalizationType = .Words
                 firstNameTableViewCell.delegate = self
             }
             return firstNameTableViewCell
@@ -153,6 +149,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             if lastNameTableViewCell == nil {
                 lastNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 lastNameTableViewCell.setPlaceholderLabelText("Last Name", indexPath: indexPath)
+                lastNameTableViewCell.textfield.autocapitalizationType = .Words
                 lastNameTableViewCell.delegate = self
             }
             return lastNameTableViewCell
@@ -160,6 +157,21 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+            case 0:
+                return 59
+            case 1:
+                return 60 * screenHeightFactor
+            case 2:
+                return 75 * screenHeightFactor
+            case 3:
+                return 75 * screenHeightFactor
+            default:
+                return 0
         }
     }
 }
@@ -173,14 +185,12 @@ extension RegisterNameViewController: RegisterTextfieldProtocol {
     func textFieldShouldReturn(indexPath: NSIndexPath) {
         switch indexPath.row {
         case 2:
-            firstNameTableViewCell.endAsResponder()
             lastNameTableViewCell.makeFirstResponder()
             break
         case 3:
             if continueButton.enabled {
                 lastNameTableViewCell.endAsResponder()
             } else {
-                lastNameTableViewCell.endAsResponder()
                 firstNameTableViewCell.makeFirstResponder()
             }
         default: break
