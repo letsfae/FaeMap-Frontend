@@ -8,6 +8,8 @@
 
 import UIKit
 
+public var navBarDefaultShadowImage: UIImage?
+
 class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     // MARK: - Interface
 
@@ -22,6 +24,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         super.viewDidLoad()
        
         UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        navBarDefaultShadowImage = UINavigationBar.appearance().shadowImage
         UINavigationBar.appearance().shadowImage = UIImage()
         setupViewFrame()
         setupImageContainerPageViewController()
