@@ -137,8 +137,19 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     }
     
     func jumpToEnableLocation() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
-        self.navigationController?.pushViewController(vc, animated: true)
+        let authstate = CLLocationManager.authorizationStatus()
+        
+        if(authstate != CLAuthorizationStatus.AuthorizedAlways){
+            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
+            if notificationType?.types == UIUserNotificationType.None {
+                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("EnableNotificationViewController") , animated: true)
+            }else{
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
     }
     
     // MARK: Memory Management
