@@ -18,7 +18,6 @@ import Foundation
  // NSString! returned (optional)
  */
 class FaeUser : NSObject {
-    //test line 1
     var keyValue = [String:AnyObject]()
     override init (){
         //local storage
@@ -435,29 +434,53 @@ class FaeUser : NSObject {
     func getSelfProfile(completion:(Int,AnyObject?)->Void){
         getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //print(self.keyValue)
-            self.clearKeyValue()
+            //self.clearKeyValue()
+            //print(message)
             completion(status,message);
         }
     }
     
     func getOthersProfile(otherUser:String, completion:(Int,AnyObject?)->Void){
         getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message);
         }
     }
     
     func updateProfile(completion:(Int,AnyObject?)->Void){
         postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            self.clearKeyValue()
+            //self.clearKeyValue()
             completion(status,message)
         }
     }
     
+    func getNamecardOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
+        getFromURL("users/"+otherUser+"/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
+    
+    func getSelfNamecard(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
+
+    func updateNameCard(completion:(Int,AnyObject?)->Void){
+        postToURL("/users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            //self.clearKeyValue()
+            completion(status,message)
+        }
+    }
+
     
     
-    
-    
+    func getAllTags(completion:(Int,AnyObject?)->Void){
+        getFromURL("users/name_card/tags", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status,message);
+        }
+    }
+
     
     func getSelfStatus(completion:(Int,AnyObject?)->Void){//解包 //local storage
         getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in

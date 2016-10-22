@@ -170,7 +170,7 @@ func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[
 
 
 func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
-    print(parameter)
+    //print(parameter)
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,

@@ -156,6 +156,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // Open User Pin View
     var uiviewDialog : UIView!
+    var uiviewCard : UIView!
     var uiviewFunction : UIView!
     var uiviewTag : UIView!
     var buttonFollow : UIButton!
@@ -173,13 +174,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var imageviewUserPinBackground : UIImageView!
     var labelNamecardName : UILabel!
     var labelNamecardDescription : UILabel!
+    var labelNamecardAge : UILabel!
     var viewLine : UIView!
     var viewLine2 : UIView!
     var collectionPhotos : UICollectionView!
     var buttonChat : UIButton!
     var buttonMore : UIButton!
     
-    let tagName = ["Single", "HMU", "I do Favors"]
+    var tagName = [String]()
     var tagButtonSet = [UIButton]()
     var selectedButtonSet = [UIButton]()
     var tagLength = [CGFloat]()
@@ -490,7 +492,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         
         if openUserPinActive {
-            //            hideOpenUserPinAnimation()
+                        hideOpenUserPinAnimation()
             openUserPinActive = false
         }
     }
@@ -573,10 +575,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
-//                showOpenUserPinAnimation(latitude, longi: longitude)
+                
                 if let userid = marker.userData!["user_id"] {
                     print(userid)
+                    loadUserPinInformation(String(4))
                 }
+                showOpenUserPinAnimation(latitude, longi: longitude)
                 return true
             }
             if type == "comment" {
