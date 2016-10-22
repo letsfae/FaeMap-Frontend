@@ -95,7 +95,6 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let str = tagName[indexPath.row]
         cellSize.labelTitle.text = tagName[indexPath.row]
         return cellSize.newContentSize()
     }
