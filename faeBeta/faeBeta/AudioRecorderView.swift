@@ -26,6 +26,7 @@ class AudioRecorderView: UIView {
     var isPressingMainButton = false
     var flowTimer: NSTimer! // the timer to display flow
     var timeTimer: NSTimer! // the timer to count the time
+    var progressTimer: NSTimer!
     
     var currentTime = 0
     
@@ -105,7 +106,7 @@ class AudioRecorderView: UIView {
 
                 view.center = self.mainButton.center
                 self.mainButton.transform = CGAffineTransformMakeScale(0.77, 0.77)
-                self.setInfoLabel("0:00", color: UIColor.faeAppRedColor())
+                self.setInfoLabel("1:00", color: UIColor.faeAppRedColor())
                 self.leftButton.alpha = 1
                 self.rightButton.alpha = 1
                 }, completion: { (complete) in
@@ -149,12 +150,14 @@ class AudioRecorderView: UIView {
             })
         }else{
             if(soundPlayer.playing){
-                signalImageView.image = UIImage(named: "playButton_red")
+                signalImageView.image = UIImage(named: "playButton_red_new")
                 soundPlayer.pause()
+                progressTimer.invalidate()
             }
             else{
                 signalImageView.image = UIImage(named: "pauseButton_red_new")
                 soundPlayer.play()
+                self.progressTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(updateProgressTimer), userInfo: nil, repeats: true)
             }
         }
     }
@@ -163,6 +166,7 @@ class AudioRecorderView: UIView {
         if(!isRecordMode){
             switchToRecordMode()
             resumeBackGroundMusic()
+            progressTimer.invalidate()
         }
     }
     
@@ -171,6 +175,7 @@ class AudioRecorderView: UIView {
             self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
             switchToRecordMode()
             resumeBackGroundMusic()
+            progressTimer.invalidate()
         }
     }
     
@@ -242,7 +247,7 @@ class AudioRecorderView: UIView {
                 print("recording")
                 soundRecorder.record()
             }
-            currentTime = 0
+            currentTime = 60
             self.updateTime()
             timeTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
         }
@@ -280,9 +285,14 @@ class AudioRecorderView: UIView {
     }
     
     func updateTime(){
-        currentTime += 1
+        currentTime -= 1
         let secondString = currentTime < 10 ? "0\(currentTime)" : "\(currentTime)"
         setInfoLabel("0:\(secondString)", color: UIColor.faeAppRedColor())
+        if(currentTime == 0){
+            timeTimer.invalidate()
+            self.stopRecord()
+            isPressingMainButton = false
+        }
     }
     
     func mainButtonDragInside(sender: UIButton, withEvent event:UIEvent)
@@ -397,11 +407,13 @@ class AudioRecorderView: UIView {
         UIView.animateWithDuration(0.2, animations: {
 
         self.isRecordMode = false
-        self.signalImageView.image = UIImage(named: "playButton_red")
-        self.signalIconWidth.constant = 65
-        self.signalIconHeight.constant = 65
+        self.signalImageView.image = UIImage(named: "playButton_red_new")
+        self.signalIconWidth.constant = 55
+        self.signalIconHeight.constant = 55
         self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), forState: .Normal)
+        self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon_red"), forState: .Highlighted)
         self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), forState: .Normal)
+        self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon_red"), forState: .Highlighted)
         self.leftButton.transform = CGAffineTransformMakeScale(1, 1)
         self.rightButton.transform = CGAffineTransformMakeScale(1, 1)
   
@@ -457,14 +469,31 @@ class AudioRecorderView: UIView {
         }
     }
     
-
+    func updateProgressTimer()
+    {
+        let secondString = self.soundPlayer.currentTime < 9 ? "0\(Int(ceil(self.soundPlayer.currentTime)))" : "\(Int(ceil(self.soundPlayer.currentTime)))"
+        self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
+    }
+    
+    func requireForPermission(completion: (Bool -> ())?)
+    {
+        // add this line to active microphone check
+        recordingSession = AVAudioSession.sharedInstance()
+        recordingSession.requestRecordPermission{
+            BOOL in
+            if completion != nil {
+                completion!(BOOL)
+            }
+        }
+    }
 }
 
 extension AudioRecorderView:  AVAudioRecorderDelegate, AVAudioPlayerDelegate{
     //MARK: - AVAudioPlayerDelegate
     func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         if(flag && !isRecordMode){
-            signalImageView.image = UIImage(named: "playButton_red")
+            signalImageView.image = UIImage(named: "playButton_red_new")
+            progressTimer.invalidate()
         }
     }
 }

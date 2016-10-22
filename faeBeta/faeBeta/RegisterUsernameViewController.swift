@@ -46,7 +46,6 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         checkForUniqueUsername()
     }
     

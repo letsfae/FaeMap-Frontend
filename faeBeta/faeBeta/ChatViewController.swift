@@ -290,28 +290,33 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let contentOffset = (screenWidth - 42 - 29 * 7) / 6 + 29
         buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
         buttonKeyBoard.addTarget(self, action: #selector(keyboardButtonClicked), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonKeyBoard)
         
         buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
         buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonSticker)
         
         buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
         contentView.addSubview(buttonImagePicker)
         
         buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
         
         let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
+        buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
         contentView.addSubview(buttonCamera)
         
         buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
         
         buttonVoiceRecorder = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Highlighted)
         //add a function
         buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.showRecord), forControlEvents: .TouchUpInside)
         
@@ -319,6 +324,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Normal)
+        buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Highlighted)
         //add a function
         buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonLocation)
@@ -327,6 +333,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 
         buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
         contentView.addSubview(buttonSend)
         buttonSend.enabled = false
         buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
@@ -503,6 +510,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showRecord() {
         if !recordShow {
+            audioRecorderContentView.requireForPermission(nil)
             
             UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderContentView)
             self.audioRecorderContentView.frame.origin.y = screenHeight

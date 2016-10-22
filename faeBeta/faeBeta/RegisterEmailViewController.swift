@@ -79,7 +79,6 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         checkForUniqueEmail()
     }
     

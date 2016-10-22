@@ -50,7 +50,6 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     override func continueButtonPressed() {
-        view.endEditing(true)
         setValueInUser()
         jumpToRegisterConfirm()
     }
