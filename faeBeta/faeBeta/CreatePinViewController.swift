@@ -408,8 +408,6 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
                         let longDouble = Double(submitLongitude)
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
-                        print(latDouble)
-                        print(lat)
                         self.delegate?.sendCommentGeoInfo("\(getMessageID!)", latitude: lat, longitude: long)
                         self.dismissViewControllerAnimated(false, completion: nil)
                     }

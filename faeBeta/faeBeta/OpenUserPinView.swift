@@ -110,14 +110,11 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         self.uiviewDialog.addSubview(imageviewNamecardAvatar)
         
         uiviewDialog.alpha = 0.0
-        
-//        print("get name card")
+
         let user1 = FaeUser()
         user1.getNamecardOfSpecificUser(String(4)){(status:Int, message:AnyObject?) in
-            print(status)
-            print("gets name")
             if(status / 100 == 2){
-                print(message)
+                print("Succesfully get namecard of user")
             }
         }
 //        user1.getSelfNamecard{(status:Int, message:AnyObject?) in
@@ -135,9 +132,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //        
         user1.getSelfProfile{(status:Int, message:AnyObject?) in
             if(status / 100 == 2){
-                print("gets self profile")
-                print(status)
-                print(message)
+                print("Successfully gets self profile")
             }
         }
 //

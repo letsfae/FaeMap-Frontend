@@ -20,8 +20,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
-        print("bar height:")
-        print(UIApplication.sharedApplication().statusBarFrame.size.height)
         
         // Open main map search
         buttonMainScreenSearch = UIButton()
@@ -124,10 +122,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     
     // Back from create pin view controller
     func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        print("Receive Data From Create Comment Pin:")
-        print(commentID)
-        print(latitude)
-        print(longitude)
         let camera = GMSCameraPosition.cameraWithLatitude(latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(commentID)
@@ -177,8 +171,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                         if commentID != "\(commentIDInfo)" {
                             continue
                         }
-                        print("Just once here")
-                        print(mapInfoJSON.count)
                         pinData["comment_id"] = commentIDInfo
                     }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
@@ -221,6 +213,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
                     NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
+//                    return
                 }
             }
         }

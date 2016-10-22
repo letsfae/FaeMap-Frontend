@@ -17,14 +17,11 @@ extension CreatePinViewController: SelectLocationViewControllerDelegate {
     }
     
     func sendAddress(value: String) {
-        print(value)
         labelSelectLocationContent.text = value
     }
     
     func sendGeoInfo(latitude: String, longitude: String) {
         selectedLatitude = latitude
         selectedLongitude = longitude
-        print(selectedLatitude)
-        print(selectedLongitude)
     }
 }

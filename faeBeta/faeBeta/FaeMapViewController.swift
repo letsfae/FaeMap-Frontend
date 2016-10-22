@@ -289,8 +289,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("radius", value: "5000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
-            print("获取地图数据：")
-            print(message)
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
@@ -302,8 +300,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
                         }
-                        print("pinShowOnMap.icon!.size")
-                        print(pinShowOnMap.icon!.size)
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
                         pinData["comment_id"] = commentIDInfo
@@ -419,9 +415,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
         if openUserPinActive {
-                        hideOpenUserPinAnimation()
+            hideOpenUserPinAnimation()
             openUserPinActive = false
         }
     }
@@ -506,8 +501,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             if type == "user" {
                 
                 if let userid = marker.userData!["user_id"] {
-                    print(userid)
-                    loadUserPinInformation(String(4))
+                    loadUserPinInformation("\(userid)")
                 }
                 showOpenUserPinAnimation(latitude, longi: longitude)
                 return true

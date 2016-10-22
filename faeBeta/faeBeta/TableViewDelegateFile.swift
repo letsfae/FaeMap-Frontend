@@ -144,7 +144,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             })
             self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             if mainScreenSearchActive {
                 animationMainScreenSearchHide(self.mainScreenSearchSubview)
@@ -267,7 +266,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             })
             self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
         }
         
     }
@@ -296,12 +294,10 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 }
             }
             if placeholder.count > 0 {
-                searchBarTableShowAnimation()
             }
         }
         else {
             self.placeholder.removeAll()
-            searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()
         }
     }

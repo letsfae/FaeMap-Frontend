@@ -78,7 +78,6 @@ extension CommentPinViewController {
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            print("DEBUG: Like This Pin")
             likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
                 if status == 201 {
                     print("Successfully like this comment pin!")
@@ -95,7 +94,6 @@ extension CommentPinViewController {
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            print("DEBUG: Save This Pin")
             saveThisPin.saveThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
                 if status == 201 {
                     print("Successfully save this comment pin!")
@@ -112,7 +110,6 @@ extension CommentPinViewController {
         let unlikeThisPin = FaePinAction()
         unlikeThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            print("DEBUG: Unlike This Pin")
             unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: AnyObject?) in
                 if status/100 == 2 {
                     print("Successfully unlike this comment pin!")
@@ -128,8 +125,6 @@ extension CommentPinViewController {
     func getPinAttributeNum(type: String, pinID: String) {
         let getPinAttr = FaePinAction()
         getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
-            print(status)
-            print(message)
             let mapInfoJSON = JSON(message!)
             
             if let likes = mapInfoJSON["likes"].int {
@@ -154,8 +149,6 @@ extension CommentPinViewController {
     func getPinAttributeCommentsNum(type: String, pinID: String) {
         let getPinAttr = FaePinAction()
         getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
-            print(status)
-            print(message)
             let mapInfoJSON = JSON(message!)
             if let comments = mapInfoJSON["comments"].int {
                 self.labelCommentPinCommentsCount.text = "\(comments)"
@@ -169,39 +162,30 @@ extension CommentPinViewController {
         dictCommentsOnCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
-            print(status)
-            print(message)
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
                     var dicCell = [String: AnyObject]()
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
-                        print(pin_comment_id)
                         dicCell["pin_comment_id"] = pin_comment_id
                     }
                     
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
-                        print(user_id)
                         dicCell["user_id"] = user_id
                     }
                     if let content = commentsOfCommentJSON[i]["content"].string {
-                        print(content)
                         dicCell["content"] = content
                     }
                     if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
-                        print(date)
                         dicCell["date"] = date
                     }
                     if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
-                        print(timezone_type)
                         dicCell["timezone_type"] = timezone_type
                     }
                     if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
-                        print(timezone)
                         dicCell["timezone"] = timezone
                     }
                     self.dictCommentsOnCommentDetail.append(dicCell)
-                    print("===分割线===")
                 }
             }
         }
@@ -210,10 +194,8 @@ extension CommentPinViewController {
     func getCommentInfo() {
         let getCommentById = FaeMap()
         getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
-            print(message)
             let commentInfoJSON = JSON(message!)
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
-                print("is_liked: \(isLiked)")
                 if isLiked == false {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
                     self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
@@ -240,7 +222,6 @@ extension CommentPinViewController {
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
                     if let username = userProfile["user_name"].string {
-                        print(username)
                         self.labelCommentPinUserName.text = username
 //                        cell.userID = username
                     }

@@ -96,7 +96,6 @@ class CommentPinViewController: UIViewController {
         self.view.backgroundColor = UIColor.clearColor()
         self.modalPresentationStyle = .OverCurrentContext
         loadCommentPinDetailWindow()
-        print(commentIdSentBySegue)
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
         getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
         getCommentInfo()
@@ -126,7 +125,6 @@ class CommentPinViewController: UIViewController {
         let tag = CGFloat(sender.tag)
         let centerAtOneThird = screenWidth / 6
         let targetCenter = CGFloat(tag * centerAtOneThird)
-        print("animated red line")
         UIView.animateWithDuration(0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
         }), completion: { (done: Bool) in
@@ -395,11 +393,6 @@ class CommentPinViewController: UIViewController {
     
     // Delete comment pin list cell, ### still has bug ###
     func deleteCommentPinCell(sender: UIButton!) {
-        
-        print("DEBUG - DELETE: sender.tag: \(sender.tag)")
-        
-        //        print("Avoid Dic before deleting: \(commentPinAvoidDic)")
-        
         let commentID = commentPinCellArray[sender.tag].commentID
         let rowToDelete = sender.tag
         
