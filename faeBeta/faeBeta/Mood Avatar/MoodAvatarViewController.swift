@@ -88,24 +88,24 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
                 userAvatarMap = maleImageName[currentAvatarIndex]
             }
             print("avatar change")
-            // Unsafe
-            let twoPartMiniAvatar = userAvatarMap.componentsSeparatedByString("_")
-            userMiniAvatar = Int(twoPartMiniAvatar[1])
-            print("DEBUG: User Avatar")
-            print(userMiniAvatar)
-            let updateMiniAvatar = FaeUser()
-            if let miniAvatar = userMiniAvatar {
-                print(miniAvatar)
-                updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
-            }
-            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: AnyObject?) in
-                if status / 100 == 2 {
-                    print("Successfully update miniavatar")
-                }
-                else {
-                    print("Fail to update miniavatar")
-                }
-            })
+//            // Unsafe
+//            let twoPartMiniAvatar = userAvatarMap.componentsSeparatedByString("_")
+//            userMiniAvatar = Int(twoPartMiniAvatar[1])
+//            print("DEBUG: User Avatar")
+//            print(userMiniAvatar)
+//            let updateMiniAvatar = FaeUser()
+//            if let miniAvatar = userMiniAvatar {
+//                print(miniAvatar)
+//                updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
+//            }
+//            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: AnyObject?) in
+//                if status / 100 == 2 {
+//                    print("Successfully update miniavatar")
+//                }
+//                else {
+//                    print("Fail to update miniavatar")
+//                }
+//            })
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier) as! MoodAvatarTableViewCell

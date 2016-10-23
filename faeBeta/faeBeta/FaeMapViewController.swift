@@ -234,7 +234,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadMainScreenSearch()
         loadNamecard()
         loadPositionAnimateImage()
-        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+//        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(animated: Bool) {
