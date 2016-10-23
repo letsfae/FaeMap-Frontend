@@ -214,9 +214,6 @@
 		B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
 		B0714D4A1D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
 		B0714D4B1D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
-		B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
-		B0714D4D1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
-		B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
 		B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D511D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
@@ -232,9 +229,6 @@
 		B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
 		B0714D5C1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
 		B0714D5D1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
-		B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
-		B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
-		B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
 		B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D621D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D631D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
@@ -650,13 +644,11 @@
 		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
 		B0714D281D5E435200356705 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
-		B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
 		B0714D2B1D5E435200356705 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D2D1D5E435200356705 /* MainScreenButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenButtons.swift; sourceTree = "<group>"; };
 		B0714D2E1D5E435200356705 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMainScreenSearch.swift; sourceTree = "<group>"; };
-		B0714D301D5E435200356705 /* MapUserPinButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapUserPinButton.swift; sourceTree = "<group>"; };
 		B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
 		B0714D331D5E435200356705 /* OpenUserPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUserPinView.swift; sourceTree = "<group>"; };
@@ -1277,19 +1269,25 @@
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
-				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
+				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B0714D7E1D5E440C00356705 /* MapCell */,
 				B0714D251D5E435200356705 /* CommentPinUIView.swift */,
 				B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */,
 				DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */,
-				B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */,
-				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
 				B8D5EEC41DB840BC00C62628 /* CreatePin */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
+				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = MainScreenSearch;
 			sourceTree = "<group>";
 		};
 		B8744BE31DB877A1005809DA /* CreatePinExtension */ = {
@@ -1708,7 +1706,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AA9320D8598EB8945F5792AF /* [CP] Embed Pods Frameworks */ = {
@@ -1738,7 +1736,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D94C04A7F846C96E72158E91 /* [CP] Check Pods Manifest.lock */ = {
@@ -1753,7 +1751,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1786,7 +1784,6 @@
 				B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
-				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
@@ -1862,7 +1859,6 @@
 				B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
-				B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
@@ -1936,10 +1932,8 @@
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				B8C7410E1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */,
-				B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
-				B0714D4D1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B064EED81D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
@@ -2104,12 +2098,10 @@
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
-				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
-				B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,

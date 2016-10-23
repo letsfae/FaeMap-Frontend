@@ -209,6 +209,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var markerMask: UIView! // mask to prevent UI action
     
+    var NSTimerDisplayMarkerArray = [NSTimer]()
     
     // System Functions
     
@@ -229,11 +230,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadTransparentNavBarItems()
         loadButton()
         loadMore()
-        loadWindBell()
+//        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadMainScreenSearch()
         loadNamecard()
-        //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
-        
+        loadPositionAnimateImage()
+        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -248,11 +249,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         
         willAppearFirstLoad = true
-        
-        loadPositionAnimateImage()
+        getSelfAccountInfo()
         self.buttonLeftTop.hidden = false
         self.buttonMainScreenSearch.hidden = false
-        self.buttonRightTop.hidden = false
+        // self.buttonRightTop.hidden = false // -> Not for 11.01 Dev
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         print("Will appear loaded")
@@ -265,7 +265,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     override func viewWillDisappear(animated: Bool) {
         self.buttonLeftTop.hidden = true
         self.buttonMainScreenSearch.hidden = true
-        self.buttonRightTop.hidden = true
+//        self.buttonRightTop.hidden = true // -> Not for 11.01 Dev
         // Need a Comment Clearance??????
         self.navigationController?.navigationBar.translucent = false
         
@@ -290,6 +290,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("type", value: "comment")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             let mapInfoJSON = JSON(message!)
+            for eachTimer in self.NSTimerDisplayMarkerArray {
+                eachTimer.invalidate()
+            }
+            self.NSTimerDisplayMarkerArray.removeAll()
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
                     let pinShowOnMap = GMSMarker()
@@ -335,10 +339,23 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     
                     pinShowOnMap.userData = pinData
-                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
-                    pinShowOnMap.map = self.faeMapView
+//                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
+//                    pinShowOnMap.map = self.faeMapView
+                    let delay: Double = Double(arc4random_uniform(50) + 25) / 100
+                    let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
+                    let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.functionHereWithArgument(_:)), userInfo: infoDict, repeats: false)
+                    self.NSTimerDisplayMarkerArray.append(timer)
                 }
             }
+        }
+    }
+    
+    func functionHereWithArgument(timer: NSTimer) {
+        if let userInfo = timer.userInfo as? Dictionary<String, AnyObject> {
+            let marker = userInfo["argumentInt"] as! GMSMarker
+            marker.appearAnimation = kGMSMarkerAnimationPop
+            marker.groundAnchor = CGPointMake(0.5, 1)
+            marker.map = self.faeMapView
         }
     }
     
@@ -495,7 +512,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(latitude+0.001, longitude: longitude, zoom: 17)
-        faeMapView.camera = camera
+        mapView.animateToCameraPosition (camera)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
@@ -632,22 +649,18 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             myPositionIcon.removeFromSuperview()
         }
         myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_1.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_1)
         myPositionOutsideMarker_1.layer.zPosition = 0
         myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_2.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_2)
         myPositionOutsideMarker_2.layer.zPosition = 0
         myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_3.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 35, 35))
-        myPositionIcon.setImage(UIImage(named: "\(userAvatarMap)"), forState: .Normal)
         //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
@@ -667,6 +680,40 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             self.myPositionOutsideMarker_3.alpha = 0.0
         }), completion: nil)
+    }
+    
+    func getSelfAccountInfo() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: AnyObject?) in
+            let selfUserInfoJSON = JSON(message!)
+            if let firstName = selfUserInfoJSON["first_name"].string {
+                userFirstname = firstName
+            }
+            if let lastName = selfUserInfoJSON["last_name"].string {
+                userLastname = lastName
+            }
+            if let birthday = selfUserInfoJSON["birthday"].string {
+                userBirthday = birthday
+            }
+            if let gender = selfUserInfoJSON["gender"].string {
+                userUserGender = gender
+            }
+            if let userName = selfUserInfoJSON["user_name"].string {
+                userUserName = userName
+            }
+            if let miniAvatar = selfUserInfoJSON["mini_avatar"].int {
+                userMiniAvatar = miniAvatar
+                self.myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
+                self.myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
+                self.myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
+                if let miniAvatar = userMiniAvatar {
+                    self.myPositionIcon.setImage(UIImage(named: "avatar_\(miniAvatar+1)"), forState: .Normal)
+                }
+                else {
+                    self.myPositionIcon.setImage(UIImage(named: "avatar_1"), forState: .Normal)
+                }
+            }
+        })
     }
     
     override func didReceiveMemoryWarning() {

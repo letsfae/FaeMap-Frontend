@@ -18,8 +18,8 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     let screenHeight = UIScreen.mainScreen().bounds.height
     
     let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Rigth Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
-    let maleImageName = ["maleHappy", "maleSad", "maleLOL", "maleBored", "maleARGHH", "maleFabulous", "maleLove", "maleDream", "maleHMU", "maleShy", "maleFeels", "maleMeditating", "maleNRN", "maleMWF", "maleSelling", "maleFaevors", "maleTourist", "maleMuch"]
-    let femaleImageName = ["femaleHappy", "femaleSad", "femaleLOL", "femaleBored", "femaleARGHH", "femaleFabulous", "femaleLove", "femaleDream", "femaleHMU", "femaleShy", "femaleFeels", "femaleMeditating", "femaleNRN", "femaleMWF", "femaleSelling", "femaleFaevor", "femaleTourist", "femaleMuch"]
+    let maleImageName = ["avatar_1", "avatar_2", "avatar_3", "avatar_4", "avatar_5", "avatar_6", "avatar_7", "avatar_8", "avatar_9", "avatar_10", "avatar_11", "avatar_12", "avatar_13", "avatar_14", "avatar_15", "avatar_16", "avatar_17", "avatar_18"]
+    let femaleImageName = ["avatar_19", "avatar_20", "avatar_21", "avatar_22", "avatar_23", "avatar_24", "avatar_25", "avatar_26", "avatar_27", "avatar_28", "avatar_29", "avatar_30", "avatar_31", "avatar_32", "avatar_33", "avatar_34", "avatar_35", "avatar_36"]
     
     var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
     
@@ -88,6 +88,21 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
                 userAvatarMap = maleImageName[currentAvatarIndex]
             }
             print("avatar change")
+            // Unsafe
+            let twoPartMiniAvatar = userAvatarMap.componentsSeparatedByString("_")
+            userMiniAvatar = Int(twoPartMiniAvatar[1])
+            let updateMiniAvatar = FaeUser()
+            if let miniAvatar = userMiniAvatar {
+                updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar)")
+            }
+            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: AnyObject?) in
+                if status / 100 == 2 {
+                    print("Successfully update miniavatar")
+                }
+                else {
+                    print("Fail to update miniavatar")
+                }
+            })
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier) as! MoodAvatarTableViewCell
