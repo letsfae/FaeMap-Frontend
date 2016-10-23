@@ -100,6 +100,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         faeMapView.camera = camera
         if isInPinLocationSelect == false {
             loadPositionAnimateImage()
+            getSelfAccountInfo()
         }
     }
     

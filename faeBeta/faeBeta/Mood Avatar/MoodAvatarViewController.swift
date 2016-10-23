@@ -91,9 +91,12 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
             // Unsafe
             let twoPartMiniAvatar = userAvatarMap.componentsSeparatedByString("_")
             userMiniAvatar = Int(twoPartMiniAvatar[1])
+            print("DEBUG: User Avatar")
+            print(userMiniAvatar)
             let updateMiniAvatar = FaeUser()
             if let miniAvatar = userMiniAvatar {
-                updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar)")
+                print(miniAvatar)
+                updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
             }
             updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: AnyObject?) in
                 if status / 100 == 2 {
