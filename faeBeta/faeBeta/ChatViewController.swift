@@ -828,9 +828,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
-        
+
+        UIImageWriteToSavedPhotosAlbum(picture, nil, nil, nil)
         picker.dismissViewControllerAnimated(true, completion: nil)
         
+    }
+    
+    func getDocumentsPathURL() -> NSURL?
+    {
+        do{
+            return try NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create :true)
+        }catch{
+            return nil
+        }
     }
     
     //MARK: - AudioRecorderViewDelegate

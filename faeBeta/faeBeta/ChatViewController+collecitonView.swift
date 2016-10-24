@@ -188,6 +188,7 @@ extension ChatViewController {
                     }
                     cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
                     cell.chosenFrameImageView.hidden = false
+                    self.photoQuickCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Left, animated: true)
                 }
             } else {
                 cell.chosenFrameImageView.hidden = true
