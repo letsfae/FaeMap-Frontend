@@ -256,6 +256,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         print("Will appear loaded")
+        actionSelfPosition(buttonSelfPosition)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -524,110 +525,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 return true
             }
             if type == "comment" {
-                
                 var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
                 }
-                
                 self.jumpToCommentPinDetail()
-                
                 return true
             }
-//                if self.uiviewCommentPinDetail.center.y < 0 {
-//                    self.showCommentPinDetail()
-//                }
-//                if self.commentListShowed == true {
-//                    actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
-//                    self.commentListShowed = false
-//                }
-//                pinData = JSON(marker.userData!)
-//                
-//                let cell = CommentPinListCell()
-//                self.commentPinCellArray.append(cell)
-//                cell.jumpToDetail.addTarget(self, action: #selector(FaeMapViewController.actionJumpToDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//                cell.deleteButton.addTarget(self, action: #selector(FaeMapViewController.deleteCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//                
-//                if let toGetUserName = pinData["user_id"].int {
-//                    let getUserName = FaeUser()
-//                    getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
-//                        let userProfile = JSON(message!)
-//                        if let username = userProfile["user_name"].string {
-//                            print(username)
-//                            self.labelCommentPinUserName.text = username
-//                            cell.userID = username
-//                        }
-//                    }
-//                }
-//                if let time = pinData["created_at"].string {
-//                    labelCommentPinTimestamp.text = "\(time)"
-//                    cell.time.text = "\(time)"
-//                }
-//                if let content = pinData["content"].string {
-//                    textviewCommentPinDetail.text = "\(content)"
-//                    cell.content.text = "\(content)"
-//                }
-//                
-//                var commentID = -999
-//                
-//                if let commentIDGet = pinData["comment_id"].int {
-//                    commentIDCommentPinDetailView = "\(commentIDGet)"
-//                    getPinAttributeNum("comment", pinID: "\(commentIDGet)")
-//                    getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
-//                    getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
-//                    commentID = commentIDGet
-//                    let getCommentById = FaeMap()
-//                    getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
-//                        print(message)
-//                        let commentInfoJSON = JSON(message!)
-//                        if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
-//                            print("is_liked: \(isLiked)")
-//                            if isLiked == false {
-//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-//                                if self.animatingHeart != nil {
-//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
-//                                }
-//                                self.isUpVoting = false
-//                                self.isDownVoting = true
-//                            }
-//                            else {
-//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-//                                if self.animatingHeart != nil {
-//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
-//                                }
-//                                self.isUpVoting = true
-//                                self.isDownVoting = false
-//                            }
-//                        }
-//                    }
-//                    if commentPinAvoidDic[commentID] != nil {
-//                        print("Comment exists!")
-//                        print(self.commentPinAvoidDic)
-//                        return true
-//                    }
-//                }
-//                
-//                self.addTagCommentPinCell(cell, commentID: commentID)
-//                
-//                if commentPinCellNumCount == 0 {
-//                    self.buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-//                    self.buttonBackToCommentPinDetail.userInteractionEnabled = true
-//                    self.commentListScrollView.addSubview(cell)
-//                    self.commentListScrollView.contentSize.height = 76
-//                }
-//                    
-//                else if commentPinCellNumCount >= 1 {
-//                    self.commentListScrollView.addSubview(cell)
-//                    let cellAtHeight = (CGFloat)(commentPinCellNumCount * 76)
-//                    cell.center.y += cellAtHeight
-//                    self.commentListScrollView.contentSize.height += 76
-//                }
-//                self.commentPinCellNumCount += 1
-//            }
         }
         return true
     }
@@ -664,21 +568,27 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
-        self.myPositionAnimation()
+        myPositionAnimation()
     }
     
     func myPositionAnimation() {
         UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_1.alpha = 0.0
+            if self.myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_1.alpha = 0.0
+            }
         }), completion: nil)
         UIView.animateWithDuration(3, delay: 0.8, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_2.alpha = 0.0
+            if self.myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_2.alpha = 0.0
+            }
         }), completion: nil)
         UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_3.alpha = 0.0
+            if self.myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_3.alpha = 0.0
+            }
         }), completion: nil)
     }
     
