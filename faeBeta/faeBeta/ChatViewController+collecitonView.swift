@@ -180,7 +180,7 @@ extension ChatViewController {
                     photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                     let count = self.photoPicker.indexImageDict.count
                     let highQRequestOption = PHImageRequestOptions()
-                    highQRequestOption.resizeMode = .Exact //resize time fast
+                    highQRequestOption.resizeMode = .None
                     requestOption.deliveryMode = .HighQualityFormat //high pixel
                     requestOption.synchronous = true
                     PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in

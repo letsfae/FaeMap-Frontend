@@ -121,7 +121,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                 photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                 
                 let highQRequestOption = PHImageRequestOptions()
-                highQRequestOption.resizeMode = .Exact //resize time fast
+                highQRequestOption.resizeMode = .None //resize time fast
                 requestOption.deliveryMode = .HighQualityFormat //high pixel
                 requestOption.synchronous = true
                 
