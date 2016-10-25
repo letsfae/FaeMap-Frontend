@@ -822,26 +822,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    //MARK: UIImagePickerController
+    //MARK: -  UIImagePickerController
     // this function is not use anymore
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
 
-        UIImageWriteToSavedPhotosAlbum(picture, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+        
         picker.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
-    func getDocumentsPathURL() -> NSURL?
+    func image(image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
     {
-        do{
-            return try NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create :true)
-        }catch{
-            return nil
-        }
+        self.appWillEnterForeground()
     }
+
     
     //MARK: - AudioRecorderViewDelegate
     func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
