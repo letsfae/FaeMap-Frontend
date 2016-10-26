@@ -235,7 +235,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
-        buttonKeyBoard.addTarget(self, action: #selector(keyboardButtonClicked), forControlEvents: .TouchUpInside)
+        buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonKeyBoard)
         
         buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
@@ -311,7 +311,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //MARK: - keyboard input bar tapped event
-    func keyboardButtonClicked() {
+    func showKeyboard() {
         
         resetToolbarButtonIcon()
         self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
@@ -398,7 +398,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func textViewDidBeginEditing(textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
-        self.keyboardButtonClicked()
+        self.showKeyboard()
     }
     
     func keyboardDidShow(notification: NSNotification){
@@ -407,7 +407,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func keyboardDidHide(notification: NSNotification){
-        toolbarContentView.keyboardShow = true
+        toolbarContentView.keyboardShow = false
     }
     
     

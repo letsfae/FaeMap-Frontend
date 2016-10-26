@@ -53,6 +53,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
+    
+    //MARK: - init & setup
     override init(frame: CGRect)
     {
         super.init(frame: frame)
@@ -383,13 +385,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         
     }
     
-    // MARK : - Sticker delegate
+    // MARK: - Sticker delegate
     func sendStickerWithImageName(name : String)
     {
         self.delegate.sendStickerWithImageName(name)
         self.stickerPicker.updateStickerHistory(name)
     }
     
+    // MARK: - Quick image picker delegate
     func sendImageFromQuickPicker()
     {
         var images = [UIImage]()
