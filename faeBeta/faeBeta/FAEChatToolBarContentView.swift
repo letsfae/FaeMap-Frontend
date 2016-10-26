@@ -15,6 +15,7 @@ import Photos
     func sendAudioData(data:NSData)
     func sendStickerWithImageName(name : String)
     func sendImages(images:[UIImage])
+    func getMoreImage()
     
     optional func scrollToBottom(animated: Bool)
     optional func endEdit()
@@ -90,7 +91,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             photoQuickCollectionView.dataSource = self
             quickSendImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
             quickSendImageButton.setImage(UIImage(named: "moreImage"), forState: .Normal)
-            quickSendImageButton.addTarget(self, action: #selector(ChatViewController.getMoreImage), forControlEvents: .TouchUpInside)
+            quickSendImageButton.addTarget(self, action: #selector(self.showFullAlbum), forControlEvents: .TouchUpInside)
             moreImageButton = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
             moreImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
             moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
@@ -213,6 +214,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             }
             imageQuickPickerShow = true
         }
+    }
+    
+    func showFullAlbum()
+    {
+        self.delegate.getMoreImage()
     }
     
     func showRecord() {
@@ -389,7 +395,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         var images = [UIImage]()
         for i in 0..<photoPicker.indexImageDict.count
         {
-            images[i] = photoPicker.indexImageDict[i]!
+            images.append(photoPicker.indexImageDict[i]!)
         }
         
         self.delegate.sendImages(images)
