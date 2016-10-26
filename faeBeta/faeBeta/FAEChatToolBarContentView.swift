@@ -12,11 +12,11 @@ import Photos
 @objc protocol FAEChatToolBarContentViewDelegate {
     func moveUpInputBar()
     func showAlertView()
-    func sendAudioData(data:NSData)
     func sendStickerWithImageName(name : String)
     func sendImages(images:[UIImage])
     func getMoreImage()
     
+    optional func sendAudioData(data:NSData)
     optional func scrollToBottom(animated: Bool)
     optional func endEdit()
 }
@@ -384,7 +384,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     //MARK: - AudioRecorderViewDelegate
 
     func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
-        self.delegate.sendAudioData(data)
+        self.delegate.sendAudioData?(data)
         
     }
     
