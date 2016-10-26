@@ -16,7 +16,8 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: NSData!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate{
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
+{
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -182,6 +183,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func appWillEnterForeground(){
         self.collectionView.reloadData()
+        self.toolbarContentView.reloadPhotoAlbum()
     }
     
     // MARK: - setup
@@ -447,6 +449,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                         self.toolbarContentView.closeAll()
                         self.resetToolbarButtonIcon()
                         self.isClosingToolbarContentView = false
+                        self.toolbarContentView.cleanUpSelectedPhotos()
                 })
             }
         }
@@ -576,7 +579,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //MARK: -  UIImagePickerController
-    // this function is not use anymore
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class CommentPinViewController: UIViewController {
+class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
     
     // Comment ID To Use In This Controller
     var commentIdSentBySegue: Int = -999
@@ -91,6 +91,18 @@ class CommentPinViewController: UIViewController {
     // Fake Transparent View For Closing
     var buttonFakeTransparentClosingView: UIButton!
     
+    // Toolbar
+    var inputToolbar: JSQMessagesInputToolbarCustom!
+    
+    //custom toolBar the bottom toolbar button
+    var buttonSet = [UIButton]()
+    var buttonSend : UIButton!
+    var buttonKeyBoard : UIButton!
+    var buttonSticker : UIButton!
+    var buttonImagePicker : UIButton!
+    
+    var toolbarContentView: FAEChatToolBarContentView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
@@ -104,7 +116,20 @@ class CommentPinViewController: UIViewController {
         self.view.addSubview(subviewBackToMap)
         self.view.sendSubviewToBack(subviewBackToMap)
         subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
+        addObservers()
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        setupInputToolbar()
+        setupToolbarContentView()
+    }
+    
+    override func viewWillDisappear(animated: Bool)
+    {
+        super.viewWillDisappear(animated)
+        closeToolbarContentView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -118,6 +143,76 @@ class CommentPinViewController: UIViewController {
         if segue.identifier == "idFirstSegueUnwind" {
             
         }
+    }
+    
+    private func addObservers(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+    }
+    
+    private func setupInputToolbar()
+    {
+        func loadInputBarComponent() {
+            
+            //        let camera = Camera(delegate_: self)
+            let contentView = self.inputToolbar.contentView
+            let contentOffset = (screenWidth - 42 - 29 * 5) / 4 + 29
+            buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
+            buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), forControlEvents: .TouchUpInside)
+            contentView.addSubview(buttonKeyBoard)
+            
+            buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
+            buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
+            contentView.addSubview(buttonSticker)
+            
+            buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
+            contentView.addSubview(buttonImagePicker)
+            
+            buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
+            
+            let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+            buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
+            buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
+            contentView.addSubview(buttonCamera)
+            
+            buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
+            
+            buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
+            contentView.addSubview(buttonSend)
+            buttonSend.enabled = false
+            buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
+            
+            buttonSet.append(buttonKeyBoard)
+            buttonSet.append(buttonSticker)
+            buttonSet.append(buttonImagePicker)
+            buttonSet.append(buttonCamera)
+            buttonSet.append(buttonSend)
+            
+            for button in buttonSet{
+                button.autoresizingMask = [.FlexibleTopMargin]
+            }
+        }
+
+        inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
+        loadInputBarComponent()
+        self.view.addSubview(inputToolbar)
+    }
+    
+    private func setupToolbarContentView()
+    {
+        toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
+        toolbarContentView.delegate = self
+        toolbarContentView.cleanUpSelectedPhotos()
+        UIApplication.sharedApplication().keyWindow?.addSubview(toolbarContentView)
     }
     
     // Animation of the red sliding line
@@ -548,5 +643,165 @@ class CommentPinViewController: UIViewController {
         animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
         animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+    }
+    
+    func appWillEnterForeground(){
+    }
+    
+    func keyboardDidShow(notification: NSNotification){
+        toolbarContentView.keyboardShow = true
+    }
+    
+    func keyboardDidHide(notification: NSNotification){
+        toolbarContentView.keyboardShow = false
+    }
+    
+    
+    //MARK: - keyboard input bar tapped event
+    func showKeyboard() {
+        
+        resetToolbarButtonIcon()
+        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+        self.toolbarContentView.showKeyboard()
+        self.inputToolbar.contentView.textView.becomeFirstResponder()
+    }
+    
+    func showCamera() {
+        view.endEditing(true)
+        UIView.animateWithDuration(0.3, animations: {
+            self.closeToolbarContentView()
+            }, completion:{ (Bool) -> Void in
+        })
+        let camera = Camera(delegate_: self)
+        camera.presentPhotoCamera(self, canEdit: false)
+    }
+    
+    
+    func showStikcer() {
+        resetToolbarButtonIcon()
+        buttonSticker.setImage(UIImage(named: "stickerChosen"), forState: .Normal)
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showStikcer()
+        moveUpInputBarContentView(animated)
+    }
+    
+    func showLibrary() {
+        resetToolbarButtonIcon()
+        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), forState: .Normal)
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showLibrary()
+        moveUpInputBarContentView(animated)
+    }
+    
+    func sendMessageButtonTapped() {
+        sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        buttonSend.enabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+    }
+    
+    private func resetToolbarButtonIcon()
+    {
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+    }
+    
+    private func closeToolbarContentView()
+    {
+        resetToolbarButtonIcon()
+        moveDownInputBar()
+        toolbarContentView.closeAll()
+        toolbarContentView.frame.origin.y = screenHeight
+    }
+    
+    func moveUpInputBar() {
+        //when keybord, stick, photoes preview show, move tool bar up
+        let height = self.inputToolbar.frame.height
+        let width = self.inputToolbar.frame.width
+        let xPosition = self.inputToolbar.frame.origin.x
+        let yPosition = self.screenHeight - 271 - 90
+//        UIView.setAnimationsEnabled(false)
+//        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
+//        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
+//        UIView.setAnimationsEnabled(true)
+        //        self.inputToolbar.frame.origin.y = yPosition
+        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+    }
+    
+    func moveDownInputBar() {
+        //
+        let height = self.inputToolbar.frame.height
+        let width = self.inputToolbar.frame.width
+        let xPosition = self.inputToolbar.frame.origin.x
+        let yPosition = screenHeight - 153
+//        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
+//        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
+        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+    }
+    
+    func moveUpInputBarContentView(animated: Bool)
+    {
+        if(animated){
+            self.toolbarContentView.frame.origin.y = self.screenHeight
+            UIView.animateWithDuration(0.3, animations: {
+                self.moveUpInputBar()
+                self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+                }, completion:{ (Bool) -> Void in
+            })
+        }else{
+            self.moveUpInputBar()
+            self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+        }
+    }
+    
+    // MARK: - send messages
+    func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
+    
+    }
+    
+    //MARK: -  UIImagePickerController
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        
+//        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+        
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    func image(image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
+    {
+        self.appWillEnterForeground()
+    }
+    
+    //MARK: - toolbar Content view delegate
+    
+    func showAlertView()
+    {
+        
+    }
+    func sendStickerWithImageName(name : String)
+    {
+        
+    }
+    func sendImages(images:[UIImage])
+    {
+        
+    }
+    func getMoreImage()
+    {
+        
+    }
+    
+    func endEdit()
+    {
+        self.view.endEditing(true)
+        self.inputToolbar.contentView.textView.resignFirstResponder()
     }
 }

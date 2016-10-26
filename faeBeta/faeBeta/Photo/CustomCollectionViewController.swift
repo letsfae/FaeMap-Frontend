@@ -299,7 +299,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         photoPicker.getSmartAlbum()
         self.collectionView?.reloadData()
         self.tableViewAlbum.reloadData()
-        
+
     }
     
     //MARK: table view delegate method
