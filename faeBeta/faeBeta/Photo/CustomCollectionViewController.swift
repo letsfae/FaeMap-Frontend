@@ -14,7 +14,7 @@ import Photos
 
 protocol SendMutipleImagesDelegate {
     
-    func sendImages()
+    func sendImages(images:[UIImage])
     
 }
 
@@ -232,7 +232,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func sendImages() {
         showProcessIndicator()
-        imageDelegate.sendImages()
+        var images = [UIImage]()
+        for i in 0..<photoPicker.indexImageDict.count
+        {
+            images[i] = photoPicker.indexImageDict[i]!
+        }
+        imageDelegate.sendImages(images)
         hideProcessIndicator()
         cancelSend()
     }
