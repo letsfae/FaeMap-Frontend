@@ -214,9 +214,6 @@
 		B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
 		B0714D4A1D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
 		B0714D4B1D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
-		B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
-		B0714D4D1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
-		B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */; };
 		B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D511D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
@@ -232,9 +229,6 @@
 		B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
 		B0714D5C1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
 		B0714D5D1D5E435200356705 /* MapMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */; };
-		B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
-		B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
-		B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D301D5E435200356705 /* MapUserPinButton.swift */; };
 		B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D621D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D631D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
@@ -441,18 +435,9 @@
 		B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
 		B0D8CC711D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
 		B0D8CC721D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
-		B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
-		B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
-		B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */; };
-		B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
-		B0D8CF131D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
-		B0D8CF141D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */; };
 		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF171D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
-		B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
-		B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
-		B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */; };
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
@@ -651,13 +636,11 @@
 		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
 		B0714D281D5E435200356705 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
-		B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIViewForScrollableTextField.swift; sourceTree = "<group>"; };
 		B0714D2B1D5E435200356705 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D2D1D5E435200356705 /* MainScreenButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenButtons.swift; sourceTree = "<group>"; };
 		B0714D2E1D5E435200356705 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMainScreenSearch.swift; sourceTree = "<group>"; };
-		B0714D301D5E435200356705 /* MapUserPinButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapUserPinButton.swift; sourceTree = "<group>"; };
 		B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
 		B0714D331D5E435200356705 /* OpenUserPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUserPinView.swift; sourceTree = "<group>"; };
@@ -751,10 +734,7 @@
 		B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeGeneralTableViewCell.swift; sourceTree = "<group>"; };
 		B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFaeGeneralTableViewCell.xib; sourceTree = "<group>"; };
 		B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMessage.swift; sourceTree = "<group>"; };
-		B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarHeaderTableViewCell.swift; sourceTree = "<group>"; };
-		B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoodAvatarHeaderTableViewCell.xib; sourceTree = "<group>"; };
 		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
-		B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoodAvatarTableViewCell.xib; sourceTree = "<group>"; };
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardViewController.swift; sourceTree = "<group>"; };
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -1266,11 +1246,8 @@
 		B0D8CC731D3D525C0030939E /* Mood Avatar */ = {
 			isa = PBXGroup;
 			children = (
-				B0D8CD391D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift */,
-				B0D8CD3A1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib */,
-				B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */,
-				B0D8CD3C1D3D525C0030939E /* MoodAvatarTableViewCell.xib */,
 				B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */,
+				B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */,
 			);
 			path = "Mood Avatar";
 			sourceTree = "<group>";
@@ -1280,19 +1257,25 @@
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
-				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
+				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B0714D7E1D5E440C00356705 /* MapCell */,
 				B0714D251D5E435200356705 /* CommentPinUIView.swift */,
 				B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */,
 				DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */,
-				B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */,
-				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
 				B8D5EEC41DB840BC00C62628 /* CreatePin */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
+				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = MainScreenSearch;
 			sourceTree = "<group>";
 		};
 		B8744BE31DB877A1005809DA /* CreatePinExtension */ = {
@@ -1505,13 +1488,11 @@
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
 				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
-				B0D8CF121D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EF521D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */,
 				B064EF581D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF461D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
-				B0D8CF181D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0714D791D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
 				B0C0CAA91D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 			);
@@ -1527,7 +1508,6 @@
 				B09E49BD1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
 				B09E49E21D96F77F0075EE45 /* LICENSE in Resources */,
 				B0C0CAA21D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
-				B0D8CF131D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF21D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0714D7A1D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D61D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
@@ -1537,7 +1517,6 @@
 				DC74CE281DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35851D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
-				B0D8CF191D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAA1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
@@ -1564,7 +1543,6 @@
 				B09E49BE1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
 				B09E49E31D96F77F0075EE45 /* LICENSE in Resources */,
 				B0C0CAA31D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
-				B0D8CF141D3D525C0030939E /* MoodAvatarHeaderTableViewCell.xib in Resources */,
 				B0D36BF31D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0714D7B1D5E435200356705 /* WindBellTableViewCell.xib in Resources */,
 				B00EC3D71D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
@@ -1574,7 +1552,6 @@
 				DC74CE291DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0BF35861D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
-				B0D8CF1A1D3D525C0030939E /* MoodAvatarTableViewCell.xib in Resources */,
 				B0C0CAAB1D422D2A00E2E251 /* NameCardAddCollectionViewCell.xib in Resources */,
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
@@ -1711,7 +1688,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AA9320D8598EB8945F5792AF /* [CP] Embed Pods Frameworks */ = {
@@ -1741,7 +1718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D94C04A7F846C96E72158E91 /* [CP] Check Pods Manifest.lock */ = {
@@ -1756,7 +1733,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1789,7 +1766,6 @@
 				B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
-				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
@@ -1865,7 +1841,6 @@
 				B0714D5B1D5E435200356705 /* MapMainScreenSearch.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
-				B0714D4C1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
@@ -1899,7 +1874,6 @@
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
-				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
@@ -1940,10 +1914,7 @@
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				B8C7410E1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */,
-				B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */,
-				B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
-				B0714D4D1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B064EED81D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
@@ -2108,12 +2079,10 @@
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
-				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
-				B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -2131,7 +2100,6 @@
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
-				B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,

@@ -33,16 +33,12 @@ extension FaeMapViewController {
                         var userID = -999
                         let pinShowOnMap = GMSMarker()
                         var pinData = [String: AnyObject]()
-                        if let typeInfo = mapUserInfoJSON[i]["type"].string {
-                            pinData["type"] = typeInfo
-                            if typeInfo == "user" {
-                                pinShowOnMap.icon = UIImage(named: "userHolmes")
-                            }
-                        }
                         if let userIDInfo = mapUserInfoJSON[i]["user_id"].int {
                             pinData["user_id"] = userIDInfo
                             userID = userIDInfo
-                            
+                        }
+                        if let typeInfo = mapUserInfoJSON[i]["type"].string {
+                            pinData["type"] = typeInfo
                         }
                         if let createdTimeInfo = mapUserInfoJSON[i]["created_at"].string {
                             pinData["created_at"] = createdTimeInfo
@@ -59,19 +55,34 @@ extension FaeMapViewController {
                                     pinData["longitude"] = longitudeInfo
                                     let point = CLLocationCoordinate2DMake(latitude, longitude)
                                     if let userMarker = self.mapUserPinsDic[userID] {
-                                        userMarker.map = nil
-                                        self.mapUserPinsDic[userID] = pinShowOnMap
-                                        pinShowOnMap.position = point
-                                        pinShowOnMap.userData = pinData
-                                        pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
-                                        pinShowOnMap.map = self.faeMapView
+                                        let getMiniAvatar = FaeUser()
+                                        getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
+                                            let userProfile = JSON(message!)
+                                            if let miniAvatar = userProfile["mini_avatar"].int {
+                                                userMarker.map = nil
+                                                self.mapUserPinsDic[userID] = pinShowOnMap
+                                                pinShowOnMap.position = point
+                                                pinShowOnMap.userData = pinData
+                                                pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
+                                                pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
+                                                pinShowOnMap.map = self.faeMapView
+                                            }
+                                        }
                                     }
                                     else {
-                                        self.mapUserPinsDic[userID] = pinShowOnMap
-                                        pinShowOnMap.position = point
-                                        pinShowOnMap.userData = pinData
-                                        pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
-                                        pinShowOnMap.map = self.faeMapView
+                                        let getMiniAvatar = FaeUser()
+                                        getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
+                                            let userProfile = JSON(message!)
+                                            if let miniAvatar = userProfile["mini_avatar"].int {
+                                                self.mapUserPinsDic[userID] = pinShowOnMap
+                                                pinShowOnMap.position = point
+                                                pinShowOnMap.userData = pinData
+                                                pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
+                                                pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
+                                                pinShowOnMap.map = self.faeMapView
+                                            }
+                                        }
+                                        
                                     }
                                 }
                             }

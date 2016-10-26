@@ -444,7 +444,7 @@ class CommentPinViewController: UIViewController {
         if uiviewCommentPinDetail != nil {
             if commentPinDetailShowed {
                 actionBackToMap(self.buttonCommentPinBackToMap)
-                UIView.animateWithDuration(0.25, animations: ({
+                UIView.animateWithDuration(0.583, animations: ({
                     
                 }), completion: { (done: Bool) in
                     if done {
@@ -454,16 +454,14 @@ class CommentPinViewController: UIViewController {
                 })
             }
             if commentListShowed {
-                UIView.animateWithDuration(0.25, animations: ({
+                UIView.animateWithDuration(0.583, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .CurveLinear, animations: {
                     self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
-                }), completion: { (done: Bool) in
-                    if done {
-                        self.commentPinDetailShowed = false
-                        self.commentListShowed = false
-                        self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
-                        self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
-                    }
-                })
+                }) { (Finished) -> Void in
+                    self.commentPinDetailShowed = false
+                    self.commentListShowed = false
+                    self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
+                    self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
+                }
             }
         }
     }

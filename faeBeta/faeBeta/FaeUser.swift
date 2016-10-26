@@ -297,7 +297,7 @@ class FaeUser : NSObject {
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
             print(status)
             print(message)
-            if(status/100==2){
+            if(status/100 == 2){
                 if let firstname = self.keyValue["first_name"]{
                     userFirstname = firstname as? String
                     //                    print("firstName")

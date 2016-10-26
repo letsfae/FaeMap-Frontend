@@ -154,9 +154,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //                print(message)
 //            }
 //        }
-
-
-        
     }
     
     func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {

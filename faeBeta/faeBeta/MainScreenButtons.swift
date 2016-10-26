@@ -30,6 +30,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
+        /* This is not for 11.01 Dev Version
         // Wind bell
         buttonRightTop = UIButton()
         buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
@@ -37,6 +38,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
+        */
         
         // Click to back to north
         buttonToNorth = UIButton()
@@ -98,6 +100,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         faeMapView.camera = camera
         if isInPinLocationSelect == false {
             loadPositionAnimateImage()
+            getSelfAccountInfo()
         }
     }
     
