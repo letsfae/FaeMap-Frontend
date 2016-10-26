@@ -257,8 +257,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         quickSendImageButton.hidden = true
         imageQuickPickerShow = false
         
+        cleanUpSelectedPhotos()
+        
         audioRecorderContentView.hidden = true
         recordShow = false
+        audioRecorderContentView.switchToRecordMode()
     }
     
     // MARK: - helper
