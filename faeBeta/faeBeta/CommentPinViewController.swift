@@ -203,6 +203,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         }
 
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
+        inputToolbar.contentView.textView.delegate = self
         loadInputBarComponent()
         self.view.addSubview(inputToolbar)
     }
@@ -803,5 +804,26 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     {
         self.view.endEditing(true)
         self.inputToolbar.contentView.textView.resignFirstResponder()
+    }
+    
+    //MARK: - TEXTVIEW delegate
+    func textViewDidChange(textView: UITextView) {
+        if textView.text.characters.count == 0 {
+            // when text has no char, cannot send message
+            buttonSend.enabled = false
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        } else {
+            buttonSend.enabled = true
+            buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+        self.showKeyboard()
     }
 }
