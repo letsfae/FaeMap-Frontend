@@ -23,7 +23,6 @@
 		86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */; };
 		86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */; };
 		86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */; };
-		86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */; };
 		86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5C1D8FB5EE006BDE27 /* pop.framework */; };
 		86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */; };
 		86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */; };
@@ -566,7 +565,6 @@
 		86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQMessagesViewController.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQMessagesViewController/JSQMessagesViewController.framework"; sourceTree = "<group>"; };
 		86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSQSystemSoundPlayer.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework"; sourceTree = "<group>"; };
 		86721A581D8FB5EE006BDE27 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/Kingfisher/Kingfisher.framework"; sourceTree = "<group>"; };
-		86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KTCenterFlowLayout.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/KTCenterFlowLayout/KTCenterFlowLayout.framework"; sourceTree = "<group>"; };
 		86721A5C1D8FB5EE006BDE27 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/pop/pop.framework"; sourceTree = "<group>"; };
 		86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SDWebImage/SDWebImage.framework"; sourceTree = "<group>"; };
 		86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
@@ -787,7 +785,6 @@
 				86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */,
 				86721A621D8FB5EE006BDE27 /* JSQMessagesViewController.framework in Frameworks */,
 				86721A631D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework in Frameworks */,
-				86721A651D8FB5EE006BDE27 /* KTCenterFlowLayout.framework in Frameworks */,
 				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
 				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
 				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
@@ -823,7 +820,6 @@
 				86721A561D8FB5EE006BDE27 /* JSQMessagesViewController.framework */,
 				86721A571D8FB5EE006BDE27 /* JSQSystemSoundPlayer.framework */,
 				86721A581D8FB5EE006BDE27 /* Kingfisher.framework */,
-				86721A591D8FB5EE006BDE27 /* KTCenterFlowLayout.framework */,
 				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
 				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
 				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
