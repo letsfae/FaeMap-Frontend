@@ -9,15 +9,38 @@
 import UIKit
 import Photos
 
+
+/// Delegate to react the action from toolbar contentView
 @objc protocol FAEChatToolBarContentViewDelegate {
+    
+    // move up the input bar
     func moveUpInputBar()
+    
+    // Show the alert to warn user only 10 images can be selected
     func showAlertView()
+    
+    /// send the sticker image with specific name
+    ///
+    /// - parameter name: the name of the sticker
     func sendStickerWithImageName(name : String)
+    
+    
+    /// send multiple images from quick image picker
+    ///
+    /// - parameter images: an array of selected images
     func sendImages(images:[UIImage])
+    
+    // present the complete photo album
+    // should present CustomCollectionViewController
     func getMoreImage()
     
+    
+    /// need to implement this method if sending audio is needed
+    ///
+    /// - parameter data: the audio data to send
     optional func sendAudioData(data:NSData)
-    optional func scrollToBottom(animated: Bool)
+    
+    // end any editing. Especially the input toolbar textView.
     optional func endEdit()
 }
 
@@ -60,17 +83,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         super.init(frame: frame)
         setup()
     }
-
+    
     required init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
     }
     
+    
+    /// setup UI and funcs
     private func setup()
     {
-        
         // sticker view
-        
         func initializeStickerView() {
             stickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
             stickerPicker.sendStickerDelegate = self
@@ -247,6 +270,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
 
+    /// close all content
     func closeAll()
     {
         stickerPicker.hidden = true
@@ -263,12 +287,15 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     // MARK: - helper
+    
+    // reload the photo album, called after take new photos
     func reloadPhotoAlbum()
     {
         photoPicker.getSmartAlbum()
         self.photoQuickCollectionView.reloadData()
     }
     
+    // remove all selected photos, clean up the select frames
     func cleanUpSelectedPhotos(){
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
