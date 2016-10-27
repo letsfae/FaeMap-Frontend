@@ -528,6 +528,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
+                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
                 }
                 self.jumpToCommentPinDetail()
                 return true
