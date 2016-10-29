@@ -9,7 +9,15 @@
 import UIKit
 import SwiftyJSON
 
+protocol CommentPinViewControllerDelegate {
+    // Cancel marker's shadow when back to Fae Map
+    func dismissMarkerShadow(dismiss: Bool)
+}
+
 class CommentPinViewController: UIViewController {
+    
+    // Delegate of this class
+    var delegate: CommentPinViewControllerDelegate?
     
     // Comment ID To Use In This Controller
     var commentIdSentBySegue: Int = -999
@@ -510,6 +518,7 @@ class CommentPinViewController: UIViewController {
                 self.uiviewCommentPinDetail.center.y -= self.screenHeight
             }), completion: { (done: Bool) in
                 if done {
+                    self.delegate?.dismissMarkerShadow(true)
                     self.dismissViewControllerAnimated(false, completion: nil)
                 }
             })

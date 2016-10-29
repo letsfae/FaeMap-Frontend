@@ -456,6 +456,9 @@
 		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
 		B842E51C1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
 		B842E51D1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
+		B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
+		B8490EF11DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
+		B8490EF21DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
 		B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
 		B85FE6D21DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
@@ -739,6 +742,7 @@
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
+		B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReturnFromTapAtMarker.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
@@ -918,6 +922,7 @@
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
 				B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */,
 				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
+				B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
@@ -1790,6 +1795,7 @@
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
+				B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
@@ -1952,6 +1958,7 @@
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
+				B8490EF11DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
@@ -2098,6 +2105,7 @@
 				B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B064EED91D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B8490EF21DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
 				B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714E0E1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714E161D62530E00356705 /* EnableNotificationViewController.swift in Sources */,

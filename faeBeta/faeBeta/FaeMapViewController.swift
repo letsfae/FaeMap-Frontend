@@ -211,6 +211,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     var NSTimerDisplayMarkerArray = [NSTimer]()
     
+    // Marker saved for back from comment pin detail view
+    var markerBackFromCommentDetail = GMSMarker()
+    
     // System Functions
     
     @IBAction func unwindToFaeMap(sender: UIStoryboardSegue) {}
@@ -276,6 +279,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if segue.identifier == "mapToCommentPinDetail" {
             if let commentPinDetailVC = segue.destinationViewController as? CommentPinViewController {
                 commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
+                commentPinDetailVC.delegate = self
             }
         }
     }
@@ -530,6 +534,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     commentIdToPassBySegue = commentIDGet
                     marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
                 }
+                self.markerBackFromCommentDetail = marker
                 self.jumpToCommentPinDetail()
                 return true
             }

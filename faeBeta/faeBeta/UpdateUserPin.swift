@@ -82,7 +82,6 @@ extension FaeMapViewController {
                                                 pinShowOnMap.map = self.faeMapView
                                             }
                                         }
-                                        
                                     }
                                 }
                             }
