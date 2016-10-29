@@ -93,7 +93,13 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
+    private var isObservingInputTextView = false
+    private var inputTextViewContext = 0
+    var inputTextViewMaximumHeight:CGFloat = 300
     
+//    var toolbarHeightConstraint: NSLayoutConstraint!
+//    var toolbarBottomLayoutGuide: NSLayoutConstraint!
+//    
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
@@ -116,20 +122,16 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         self.view.addSubview(subviewBackToMap)
         self.view.sendSubviewToBack(subviewBackToMap)
         subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        addObservers()
-    }
-    
-    override func viewWillAppear(animated: Bool)
-    {
-        super.viewWillAppear(animated)
         setupInputToolbar()
         setupToolbarContentView()
+        addObservers()
     }
     
     override func viewWillDisappear(animated: Bool)
     {
         super.viewWillDisappear(animated)
         closeToolbarContentView()
+        removeObservers()
     }
     
     override func didReceiveMemoryWarning() {
@@ -149,6 +151,25 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+        
+        if (self.isObservingInputTextView) {
+            return;
+        }
+        let scrollView = self.inputToolbar.contentView.textView as UIScrollView
+        scrollView.addObserver(self, forKeyPath: "contentSize", options: [.Old, .New], context: nil)
+        
+        self.isObservingInputTextView = true
+    }
+    
+    private func removeObservers()
+    {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        if (!self.isObservingInputTextView) {
+            return;
+        }
+//        let scrollView = self.inputToolbar.contentView.textView as UIScrollView
+//        scrollView.removeObserver(self, forKeyPath: "contentSize", context: &inputTextViewContext)
+        self.isObservingInputTextView = false
     }
     
     private func setupInputToolbar()
@@ -167,7 +188,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
             buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-            buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
+            buttonSticker.addTarget(self, action: #selector(self.showStikcer), forControlEvents: .TouchUpInside)
             contentView.addSubview(buttonSticker)
             
             buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
@@ -175,21 +196,21 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
             contentView.addSubview(buttonImagePicker)
             
-            buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
+            buttonImagePicker.addTarget(self, action: #selector(self.showLibrary), forControlEvents: .TouchUpInside)
             
             let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
             buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
             contentView.addSubview(buttonCamera)
             
-            buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
+            buttonCamera.addTarget(self, action: #selector(self.showCamera), forControlEvents: .TouchUpInside)
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
             contentView.addSubview(buttonSend)
             buttonSend.enabled = false
-            buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
+            buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
             
             buttonSet.append(buttonKeyBoard)
             buttonSet.append(buttonSticker)
@@ -204,6 +225,14 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
 
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
         inputToolbar.contentView.textView.delegate = self
+        
+        let views = ["superView": self.view, "inputToolbar": inputToolbar]
+        
+//        toolbarHeightConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[inputToolbar(90)]", options: [], metrics: nil, views: views)[0]
+//        inputToolbar.addConstraint(toolbarHeightConstraint)
+//        self.inputToolbar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[inputToolbar]-0-|", options: [], metrics: nil, views: views))
+        
+        
         loadInputBarComponent()
         self.view.addSubview(inputToolbar)
     }
@@ -826,4 +855,28 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
         self.showKeyboard()
     }
+    
+    //MARK: - observe key path
+    override func observeValueForKeyPath(keyPath: String?,
+                                         ofObject object: AnyObject?,
+                                                  change: [String : AnyObject]?,
+                                                  context: UnsafeMutablePointer<Void>)
+    {
+        let textView = object as! UITextView
+        if (textView == self.inputToolbar.contentView.textView && keyPath! == "contentSize") {
+            
+            let oldContentSize = change![NSKeyValueChangeOldKey]!.CGSizeValue
+                
+            let newContentSize = change![NSKeyValueChangeNewKey]!.CGSizeValue
+            
+            let dy = newContentSize().height - oldContentSize().height;
+            
+            self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
+//                self.updateCollectionViewInsets()
+//                if self.automaticallyScrollsToMostRecentMessage() {
+//                    [self scrollToBottomAnimated:NO];
+//                }
+        }
+    }
+
 }

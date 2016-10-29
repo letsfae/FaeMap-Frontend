@@ -94,13 +94,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
         }
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.camera = camera
-        if isInPinLocationSelect == false {
-            loadPositionAnimateImage()
-            getSelfAccountInfo()
+        if let currentLocation = currentLocation{
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.camera = camera
+            if isInPinLocationSelect == false {
+                loadPositionAnimateImage()
+                getSelfAccountInfo()
+            }
         }
     }
     
