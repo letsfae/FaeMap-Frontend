@@ -222,6 +222,7 @@ extension FaeAccountViewController {
         
         popUpView.addSubview(popUpDialogView)
         self.view.addSubview(popUpView)
+        
     }
     
     func logOut() {
