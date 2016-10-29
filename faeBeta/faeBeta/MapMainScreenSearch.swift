@@ -10,7 +10,7 @@ import UIKit
 
 //MARK: main screen search
 extension FaeMapViewController {
-    
+    /*
     func loadMainScreenSearch() {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
         blurViewMainScreenSearch = UIVisualEffectView(effect: blurEffect)
@@ -83,5 +83,5 @@ extension FaeMapViewController {
             }
         })
     }
-    
+    */
 }

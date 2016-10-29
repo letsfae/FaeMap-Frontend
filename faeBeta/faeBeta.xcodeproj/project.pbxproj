@@ -459,6 +459,9 @@
 		B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
 		B8490EF11DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
 		B8490EF21DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
+		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
+		B8490EF51DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
+		B8490EF61DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
 		B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
 		B85FE6D21DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
@@ -743,6 +746,7 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
 		B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReturnFromTapAtMarker.swift; sourceTree = "<group>"; };
+		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
@@ -1272,6 +1276,7 @@
 		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {
 			isa = PBXGroup;
 			children = (
+				B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */,
 			);
 			name = MainScreenSearch;
 			sourceTree = "<group>";
@@ -1781,6 +1786,7 @@
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
+				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				DC477A5F1DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
@@ -2029,6 +2035,7 @@
 				B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B85FE6D51DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B0714DFD1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
+				B8490EF51DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B064EEAE1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
@@ -2178,6 +2185,7 @@
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B8E8195D1DB3255000D418D1 /* TableViewControlFile.swift in Sources */,
 				B8C741131DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */,
+				B8490EF61DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,7 +25,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonMainScreenSearch = UIButton()
         buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
         self.view.addSubview(buttonMainScreenSearch)
-        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
@@ -94,13 +94,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
         }
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.camera = camera
-        if isInPinLocationSelect == false {
-            loadPositionAnimateImage()
-            getSelfAccountInfo()
+        if currentLocation != nil {
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.camera = camera
+            if isInPinLocationSelect == false {
+                loadPositionAnimateImage()
+                getSelfAccountInfo()
+            }
         }
     }
     
@@ -220,6 +222,12 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                 }
             }
         }
+    }
+    
+    func jumpToMainScreenSearch(sender: UIButton) {
+        let mainScreenSearchVC = MainScreenSearchViewController()
+        mainScreenSearchVC.modalPresentationStyle = .OverCurrentContext
+        self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
     }
 }
 

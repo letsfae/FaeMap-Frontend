@@ -95,7 +95,7 @@ class CommentPinViewController: UIViewController {
     var commentPinLikeCount: Int = 0
     var isUpVoting = false
     var isDownVoting = false
-    
+
     // Fake Transparent View For Closing
     var buttonFakeTransparentClosingView: UIButton!
     

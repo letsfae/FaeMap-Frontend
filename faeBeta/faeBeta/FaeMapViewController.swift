@@ -119,15 +119,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var uiviewWindBell: UIView!
     var dimBackgroundWindBell: UIButton!
     
-    // MARK: -- Main Screen Search
-    var mainScreenSearchBarSubview: UIView!
-    var mainSearchController: CustomSearchController!
-    var blurViewMainScreenSearch: UIVisualEffectView!
-    var mainScreenSearchActive = false
-    var mainScreenSearchSubview: UIButton!
-    var middleTopActive = false
-    var buttonClearMainSearch: UIButton!
-    
     // MARK: -- Map Chat
     var mapChatSubview: UIButton!
     var mapChatWindow: UIView!
@@ -234,7 +225,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadButton()
         loadMore()
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
-        loadMainScreenSearch()
+//        loadMainScreenSearch()
         loadNamecard()
         loadPositionAnimateImage()
 //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)

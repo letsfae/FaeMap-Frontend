@@ -1,30 +1,22 @@
 //
-//  SelectLocationViewController.swift
+//  MainScreenSearchViewController.swift
 //  faeBeta
 //
-//  Created by Yue on 10/19/16.
+//  Created by Yue on 10/29/16.
 //  Copyright © 2016 fae. All rights reserved.
 //
 
 import UIKit
 import GoogleMaps
-import CoreLocation
 
-protocol SelectLocationViewControllerDelegate {
-    func sendAddress(value: String)
-    func sendGeoInfo(latitude: String, longitude: String)
-}
+class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
-class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
-    
-    var delegate: SelectLocationViewControllerDelegate?
-    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     var mapSelectLocation: GMSMapView!
-
+    
     var imagePinOnMap: UIImageView!
     
     var currentLocation: CLLocation!
@@ -35,9 +27,9 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     var longitudeForPin: CLLocationDegrees = 0
     var willAppearFirstLoad = false
     
-    var buttonCancelSelectLocation: UIButton!
-    var buttonSelfPosition: UIButton!
-    var buttonSetLocationOnMap: UIButton!
+    var buttonClearSearchBar: UIButton!
+    
+    var blurViewMainScreenSearch: UIVisualEffectView!
     
     // MARK: -- Search Bar
     var uiviewTableSubview: UIView!
@@ -65,135 +57,57 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadMapView()
-        loadButtons()
+        loadBlurView()
+        loadFunctionButtons()
         loadTableView()
         loadCustomSearchController()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        customSearchController.customSearchBar.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        locManager.requestAlwaysAuthorization()        
-        willAppearFirstLoad = true
+    func loadBlurView() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        blurViewMainScreenSearch = UIVisualEffectView(effect: blurEffect)
+        blurViewMainScreenSearch.frame = CGRectMake(0, 0, screenWidth, screenHeight)
+        blurViewMainScreenSearch.alpha = 0.0
+        self.view.addSubview(blurViewMainScreenSearch)
     }
     
-    func loadMapView() {
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        self.mapSelectLocation = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        mapSelectLocation.myLocationEnabled = false
-        mapSelectLocation.delegate = self
-        self.view = mapSelectLocation
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
+    func loadFunctionButtons() {
+        let backSubviewButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(backSubviewButton)
+        backSubviewButton.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
+        backSubviewButton.layer.zPosition = 0
         
-        imagePinOnMap = UIImageView(frame: CGRectMake(screenWidth/2-25, screenHeight/2-54, 50, 54))
-        imagePinOnMap.image = UIImage(named: "commentMarkerWhenCreated")
-        self.view.addSubview(imagePinOnMap)
-        // Default is true, if true, panGesture could not be detected
-        self.mapSelectLocation.settings.consumesGesturesInView = false
-    }
-
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if willAppearFirstLoad {
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-            mapSelectLocation.camera = camera
-            willAppearFirstLoad = false
-        }
-    }
-    
-    func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
-        GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
-            (response, error) -> Void in
-            if let fullAddress = response?.firstResult()?.lines {
-                var addressToSearchBar = ""
-                for line in fullAddress {
-                    if line == "" {
-                        continue
-                    }
-                    else if fullAddress.indexOf(line) == fullAddress.count-1 {
-                        addressToSearchBar += line + ""
-                    }
-                    else {
-                        addressToSearchBar += line + ", "
-                    }
-                }
-                self.customSearchController.customSearchBar.text = addressToSearchBar
-            }
-            self.latitudeForPin = mapCenterCoordinate.latitude
-            self.longitudeForPin = mapCenterCoordinate.longitude
-        })
-    }
-    
-    func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-        customSearchController.customSearchBar.endEditing(true)
-    }
-    
-    func loadButtons() {
-        buttonCancelSelectLocation = UIButton(frame: CGRectMake(0, 0, 59, 59))
-        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
-        self.view.addSubview(buttonCancelSelectLocation)
-        buttonCancelSelectLocation.addTarget(self, action: #selector(SelectLocationViewController.actionCancelSelectLocation(_:)), forControlEvents: .TouchUpInside)
-        self.view.addConstraintsWithFormat("H:|-18-[v0(59)]", options: [], views: buttonCancelSelectLocation)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonCancelSelectLocation)
+        let viewToHideLeftSideSearchBar = UIView(frame: CGRectMake(0, 0, 50, 64))
+        viewToHideLeftSideSearchBar.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(viewToHideLeftSideSearchBar)
+        viewToHideLeftSideSearchBar.layer.zPosition = 2
         
-        buttonSelfPosition = UIButton()
-        self.view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
-        buttonSelfPosition.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), forControlEvents: .TouchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonSelfPosition)
-        
-        buttonSetLocationOnMap = UIButton()
-        buttonSetLocationOnMap.setTitle("Set Location", forState: .Normal)
-        buttonSetLocationOnMap.setTitle("Set Location", forState: .Highlighted)
-        buttonSetLocationOnMap.setTitleColor(colorFae, forState: .Normal)
-        buttonSetLocationOnMap.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
-        self.view.addSubview(buttonSetLocationOnMap)
-        buttonSetLocationOnMap.addTarget(self, action: #selector(SelectLocationViewController.actionSetLocationForComment(_:)), forControlEvents: .TouchUpInside)
-        self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonSetLocationOnMap)
-        self.view.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonSetLocationOnMap)
-    }
-    
-    func actionCancelSelectLocation(sender: UIButton) {
-        self.dismissViewControllerAnimated(false, completion: nil)
-    }
-    
-    func actionSetLocationForComment(sender: UIButton) {
-        if let searchText = customSearchController.customSearchBar.text {
-            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-            let mapCenterCoordinate = mapSelectLocation.projection.coordinateForPoint(mapCenter)
-            delegate?.sendAddress(searchText)
-            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)")
-        }
-        self.dismissViewControllerAnimated(false, completion: nil)
-    }
-    
-    func actionSelfPosition(sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
-            currentLocation = locManager.location
-        }
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        mapSelectLocation.camera = camera
+        let viewToHideRightSideSearchBar = UIView()
+        viewToHideRightSideSearchBar.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(viewToHideRightSideSearchBar)
+        viewToHideRightSideSearchBar.layer.zPosition = 2
+        self.view.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
+        self.view.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
     }
     
     func loadCustomSearchController() {
-        let searchBarSubview = UIView(frame: CGRectMake(8, 23, resultTableWidth, 48.0))
-        
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5, resultTableWidth, 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
-        customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
+        let searchBarSubview = UIView(frame: CGRectMake(0, 0, screenWidth, 64))
+        searchBarSubview.layer.zPosition = 1
+        customSearchController = CustomSearchController(searchResultsController: self,
+                                                        searchBarFrame: CGRectMake(18, 23, resultTableWidth, 36),
+                                                        searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
+                                                        searchBarTextColor: colorFae,
+                                                        searchBarTintColor: UIColor.whiteColor())
+        customSearchController.customSearchBar.placeholder = "Search Fae Map                                         "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
         customSearchController.customSearchBar.layer.borderColor = UIColor.whiteColor().CGColor
@@ -204,11 +118,33 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
         
         searchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
         searchBarSubview.layer.borderWidth = 1.0
-        searchBarSubview.layer.cornerRadius = 2.0
-        searchBarSubview.layer.shadowOpacity = 0.5
-        searchBarSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        searchBarSubview.layer.shadowRadius = 5.0
-        searchBarSubview.layer.shadowColor = UIColor.blackColor().CGColor
+        
+        let buttonBackToFaeMap = UIButton(frame: CGRectMake(0, 32, 40.5, 18))
+        buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), forState: .Normal)
+        self.view.addSubview(buttonBackToFaeMap)
+        buttonBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
+        buttonBackToFaeMap.layer.zPosition = 3
+        
+        buttonClearSearchBar = UIButton()
+        buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), forState: .Normal)
+        self.view.addSubview(buttonClearSearchBar)
+        buttonClearSearchBar.addTarget(self,
+                                       action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)),
+                                       forControlEvents: .TouchUpInside)
+        buttonClearSearchBar.layer.zPosition = 3
+        self.view.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
+        self.view.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonClearSearchBar)
+        buttonClearSearchBar.hidden = true
+        
+        let uiviewCommentPinUnderLine = UIView(frame: CGRectMake(0, 63, screenWidth, 1))
+        uiviewCommentPinUnderLine.layer.borderWidth = screenWidth
+        uiviewCommentPinUnderLine.layer.borderColor = UIColor(red: 196/255, green: 195/255, blue: 200/255, alpha: 1.0).CGColor
+        uiviewCommentPinUnderLine.layer.zPosition = 3
+        self.view.addSubview(uiviewCommentPinUnderLine)
+    }
+    
+    func actionDimissSearchBar(sender: UIButton) {
+        self.dismissViewControllerAnimated(false, completion: nil)
     }
     
     // MARK: UISearchResultsUpdating delegate function
@@ -255,6 +191,10 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     
     func didChangeSearchText(searchText: String) {
         if(searchText != "") {
+            UIView.animateWithDuration(0.25, animations: ({
+                self.blurViewMainScreenSearch.alpha = 1.0
+            }))
+            buttonClearSearchBar.hidden = false
             let placeClient = GMSPlacesClient()
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
                 (results, error : NSError?) -> Void in
@@ -276,6 +216,7 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
             }
         }
         else {
+            buttonClearSearchBar.hidden = true
             self.placeholder.removeAll()
             searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()
@@ -285,7 +226,7 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     func searchBarTableHideAnimation() {
         UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
             self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 0)
+            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, self.resultTableWidth, 0)
         }), completion: nil)
     }
     
@@ -299,7 +240,7 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     // MARK: TableView Initialize
     
     func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(8, 78, resultTableWidth, 0))
+        uiviewTableSubview = UIView(frame: CGRectMake(8, 76, resultTableWidth, 0))
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
