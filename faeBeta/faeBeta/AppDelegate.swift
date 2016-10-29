@@ -64,13 +64,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
-        let token = NSString(format: "%@", deviceToken)
+//        let token = NSString(format: "%@", deviceToken) -- 10.22 Mark
         //        print(token)
         //        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
         //        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
         //        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
         //        print(token)
-        headerDeviceID = String(token)
+//        headerDeviceID = String(token)
         print(headerDeviceID)
     }
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {

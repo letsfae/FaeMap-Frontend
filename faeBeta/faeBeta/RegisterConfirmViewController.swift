@@ -127,7 +127,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                     print("login success")
                     
                     // WARNING: this code should be deleted afterward, it's here just to test chat function
-                    postToURL("chats", parameter: ["receiver_id": "2", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                    postToURL("chats", parameter: ["receiver_id": "21", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     })
                     
                     self.jumpToEnableLocation()

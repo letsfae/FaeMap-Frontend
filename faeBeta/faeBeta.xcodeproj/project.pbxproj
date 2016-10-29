@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D57736EEEA42FF298B54BBE /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */; };
-		55BBEBBA2C0D5567577FBEE8 /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */; };
+		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
+		8541EC0C37887BAC4BB9CE30 /* Pods_faeBetaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F941D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
@@ -342,15 +342,12 @@
 		B0AA08931D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
-		B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
-		B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
-		B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */; };
+		B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
+		B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
+		B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
 		B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
 		B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
 		B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */; };
-		B0BF35451D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
-		B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
-		B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */; };
 		B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
 		B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
 		B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
@@ -469,20 +466,46 @@
 		B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0D95C341CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
-		B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
-		B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
-		B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */; };
-		B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
-		B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
-		B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1ED1D8F11C500E44FAE /* PinSelections.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
+		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
+		B842E51C1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
+		B842E51D1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
+		B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
+		B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
+		B85FE6D21DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
+		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
+		B85FE6D51DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
+		B85FE6D61DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B87E138A1D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B87E138B1D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
+		B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
+		B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
+		B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
+		B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
+		B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
+		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
+		B8AC45891DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
+		B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
 		B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */; };
+		B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
+		B8C4A9721DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
+		B8C4A9731DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
+		B8C7410D1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */; };
+		B8C7410E1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */; };
+		B8C7410F1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */; };
+		B8C741111DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
+		B8C741121DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
+		B8C741131DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */; };
+		B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8D5EEC71DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8E8195B1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
+		B8E8195C1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
+		B8E8195D1DB3255000D418D1 /* TableViewControlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */; };
 		B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		B8F98EDD1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
@@ -517,8 +540,7 @@
 		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
-		EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */; };
-		FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		F189B3187981D029B30267BF /* Pods_faeBetaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -539,8 +561,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		46C97AEA4C8FC73A227B084E /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
+		5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EB0AB1BF8CA20B4039D774D /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
 		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
@@ -560,10 +585,8 @@
 		86721A5C1D8FB5EE006BDE27 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/pop/pop.framework"; sourceTree = "<group>"; };
 		86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SDWebImage/SDWebImage.framework"; sourceTree = "<group>"; };
 		86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/faeBeta-flfszkhcxenvtwewokkihkvxednr/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
-		88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
-		8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
-		AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
+		9A027F04BED3E731BEC3F5D6 /* Pods-faeBetaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.release.xcconfig"; sourceTree = "<group>"; };
+		9C9A5F7E823C4BA44996022B /* Pods-faeBetaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
@@ -684,9 +707,8 @@
 		B0AA088D1D2303F800EE2B2D /* FaeAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountTableViewCell.swift; sourceTree = "<group>"; };
 		B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaeAccountTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABDF941CF77B30004890B0 /* VerificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationTest.swift; sourceTree = "<group>"; };
-		B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinPopupWindow.swift; sourceTree = "<group>"; };
+		B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeMainPageViewController.swift; sourceTree = "<group>"; };
 		B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinListCell.swift; sourceTree = "<group>"; };
-		B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitCommenPin.swift; sourceTree = "<group>"; };
 		B0BF35481D8DC7E200B0540B /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
@@ -737,13 +759,21 @@
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPin.swift; sourceTree = "<group>"; };
-		B837D1ED1D8F11C500E44FAE /* PinSelections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSelections.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
+		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
+		B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocation.swift; sourceTree = "<group>"; };
+		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
+		B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCommentPinDetailSegue.swift; sourceTree = "<group>"; };
+		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
+		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
+		B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailLoadItems.swift; sourceTree = "<group>"; };
+		B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinDetailAPIConnections.swift; sourceTree = "<group>"; };
+		B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinViewController.swift; sourceTree = "<group>"; };
+		B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewControlFile.swift; sourceTree = "<group>"; };
 		B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentOnPinToolBar.swift; sourceTree = "<group>"; };
-		C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
 		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
@@ -764,8 +794,7 @@
 		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
-		DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
+		F6A15D28833770A41D53F457 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -782,8 +811,7 @@
 				86721A681D8FB5EE006BDE27 /* pop.framework in Frameworks */,
 				86721A691D8FB5EE006BDE27 /* SDWebImage.framework in Frameworks */,
 				86721A6A1D8FB5EE006BDE27 /* SwiftyJSON.framework in Frameworks */,
-				FBFBDC2E826EA82B3DE5DA5A /* (null) in Frameworks */,
-				EA682795CA54DC0A56A85298 /* Pods_faeBeta.framework in Frameworks */,
+				221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,7 +819,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D57736EEEA42FF298B54BBE /* Pods_faeBetaTests.framework in Frameworks */,
+				8541EC0C37887BAC4BB9CE30 /* Pods_faeBetaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,7 +827,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55BBEBBA2C0D5567577FBEE8 /* Pods_faeBetaUITests.framework in Frameworks */,
+				F189B3187981D029B30267BF /* Pods_faeBetaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,24 +847,11 @@
 				86721A5C1D8FB5EE006BDE27 /* pop.framework */,
 				86721A5D1D8FB5EE006BDE27 /* SDWebImage.framework */,
 				86721A5E1D8FB5EE006BDE27 /* SwiftyJSON.framework */,
-				8AA5E4A4B2083DAFE9C262F2 /* Pods_faeBetaUITests.framework */,
-				234E9C9F980030C7B4EA9656 /* Pods_faeBeta.framework */,
-				C837406049B8B1D74F9E3A90 /* Pods_faeBetaTests.framework */,
+				5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */,
+				0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */,
+				7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		5AE2FD8B731260004DD7B6D4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */,
-				E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */,
-				88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */,
-				DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */,
-				636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */,
-				96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		B00EC3EC1D2F539000AD9673 /* FAE cell */ = {
@@ -923,15 +938,11 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF353C1D8DC19800B0540B /* CommentPinPopupWindow.swift */,
-				B837D1E91D8F0CD200E44FAE /* CreateCommentPin.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
 				B0714D2F1D5E435200356705 /* MapMainScreenSearch.swift */,
 				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
-				B837D1ED1D8F11C500E44FAE /* PinSelections.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
-				B0BF35441D8DC38800B0540B /* SubmitCommenPin.swift */,
 				B0714D351D5E435200356705 /* TableViewDelegateFile.swift */,
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
 				B0714D371D5E435200356705 /* UpdateUserPin.swift */,
@@ -940,13 +951,13 @@
 			name = MapViewExtensions;
 			sourceTree = "<group>";
 		};
-		B0714D7D1D5E43DA00356705 /* MapSearchBar(Custom) */ = {
+		B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */ = {
 			isa = PBXGroup;
 			children = (
 				B0714D291D5E435200356705 /* CustomSearchController.swift */,
 				B0714D281D5E435200356705 /* CustomSearchBar.swift */,
 			);
-			name = "MapSearchBar(Custom)";
+			name = "SearchBar(Custom)";
 			sourceTree = "<group>";
 		};
 		B0714D7E1D5E440C00356705 /* MapCell */ = {
@@ -1072,7 +1083,7 @@
 				B0A2ACBA1CE3A3C7002E0C9D /* faeBetaUITests */,
 				B0A2AC961CE3A3C6002E0C9D /* Products */,
 				011919C07ABA312DB42AF81B /* Frameworks */,
-				5AE2FD8B731260004DD7B6D4 /* Pods */,
+				D5475357A73CFA1EFAD8018A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1244,6 +1255,7 @@
 				B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */,
 				B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */,
 				B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */,
+				B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */,
 			);
 			name = MyFae;
 			sourceTree = "<group>";
@@ -1265,7 +1277,7 @@
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
-				B0714D7D1D5E43DA00356705 /* MapSearchBar(Custom) */,
+				B0714D7D1D5E43DA00356705 /* SearchBar(Custom) */,
 				B0714D7E1D5E440C00356705 /* MapCell */,
 				B0714D251D5E435200356705 /* CommentPinUIView.swift */,
 				B0BF35401D8DC1BE00B0540B /* CommentPinListCell.swift */,
@@ -1273,8 +1285,63 @@
 				B0714D2A1D5E435200356705 /* CustomUIViewForScrollableTextField.swift */,
 				B0714D301D5E435200356705 /* MapUserPinButton.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
+				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+				B8D5EEC41DB840BC00C62628 /* CreatePin */,
+				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		B8744BE31DB877A1005809DA /* CreatePinExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */,
+				B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */,
+			);
+			name = CreatePinExtension;
+			sourceTree = "<group>";
+		};
+		B8D5EEC41DB840BC00C62628 /* CreatePin */ = {
+			isa = PBXGroup;
+			children = (
+				B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */,
+				B8744BE31DB877A1005809DA /* CreatePinExtension */,
+				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
+			);
+			name = CreatePin;
+			sourceTree = "<group>";
+		};
+		B8E819541DB3248C00D418D1 /* CommentPinDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */,
+				B8E819591DB3251C00D418D1 /* CommentPinExtension */,
+				B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */,
+			);
+			name = CommentPinDetail;
+			sourceTree = "<group>";
+		};
+		B8E819591DB3251C00D418D1 /* CommentPinExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B8C7410C1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift */,
+				B8C741101DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift */,
+				B8E8195A1DB3255000D418D1 /* TableViewControlFile.swift */,
+			);
+			name = CommentPinExtension;
+			sourceTree = "<group>";
+		};
+		D5475357A73CFA1EFAD8018A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F6A15D28833770A41D53F457 /* Pods-faeBeta.debug.xcconfig */,
+				46C97AEA4C8FC73A227B084E /* Pods-faeBeta.release.xcconfig */,
+				9C9A5F7E823C4BA44996022B /* Pods-faeBetaTests.debug.xcconfig */,
+				9A027F04BED3E731BEC3F5D6 /* Pods-faeBetaTests.release.xcconfig */,
+				5EB0AB1BF8CA20B4039D774D /* Pods-faeBetaUITests.debug.xcconfig */,
+				CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		DCBE69091DB60EED00BFF46C /* Audio */ = {
@@ -1293,15 +1360,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC01CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBeta" */;
 			buildPhases = (
-				6B0C6BE49B5C42E3481DF435 /* [CP] Check Pods Manifest.lock */,
-				D3E1C75D329E9EC1147123FD /* [CP] Check Pods Manifest.lock */,
+				9E013B9AB4EDE356EAC8DAFE /* [CP] Check Pods Manifest.lock */,
 				B0A2AC911CE3A3C6002E0C9D /* Sources */,
 				B0A2AC921CE3A3C6002E0C9D /* Frameworks */,
 				B0A2AC931CE3A3C6002E0C9D /* Resources */,
-				369111F6CD17C8178AE024D4 /* [CP] Embed Pods Frameworks */,
-				442516213E15D551809BCE65 /* [CP] Copy Pods Resources */,
-				DC26E6193FD5C0FB320AFAAC /* 📦 Embed Pods Frameworks */,
-				0ED98CBCD218DE6B5EC2AEF1 /* 📦 Copy Pods Resources */,
+				61B62FAB0DFAF37484806F93 /* [CP] Embed Pods Frameworks */,
+				6A1F095EE025EF8EF9803912 /* [CP] Check Pods Manifest.lock */,
+				0D0F76EB5B00D33359D98B9D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1316,15 +1381,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC31CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaTests" */;
 			buildPhases = (
-				F6E5F5FC1F9D7FAB70D24F64 /* [CP] Check Pods Manifest.lock */,
-				E3167724F3EE89AA88CD622C /* [CP] Check Pods Manifest.lock */,
+				D94C04A7F846C96E72158E91 /* [CP] Check Pods Manifest.lock */,
 				B0A2ACA81CE3A3C7002E0C9D /* Sources */,
 				B0A2ACA91CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACAA1CE3A3C7002E0C9D /* Resources */,
-				81BE929218F0F100C60CDACD /* [CP] Embed Pods Frameworks */,
-				6E61B7C73FD6963D04FAAF3C /* [CP] Copy Pods Resources */,
-				11B9A1D7F7B8C17D45FD6CAD /* 📦 Embed Pods Frameworks */,
-				B7A875120DC433158CDF6B04 /* 📦 Copy Pods Resources */,
+				AA9320D8598EB8945F5792AF /* [CP] Embed Pods Frameworks */,
+				7DA34C3BBAB2A8FE6E64F11A /* [CP] Check Pods Manifest.lock */,
+				5C4E47A2B0694A7EA60CEB0F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1340,12 +1403,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B0A2ACC61CE3A3C7002E0C9D /* Build configuration list for PBXNativeTarget "faeBetaUITests" */;
 			buildPhases = (
-				39DA82E79469F2389A8C24D8 /* [CP] Check Pods Manifest.lock */,
-				8F9B5CF23CF5A63B3A6FEA93 /* [CP] Check Pods Manifest.lock */,
+				C9B07BDAD7147B08601FC25F /* [CP] Check Pods Manifest.lock */,
 				B0A2ACB31CE3A3C7002E0C9D /* Sources */,
 				B0A2ACB41CE3A3C7002E0C9D /* Frameworks */,
 				B0A2ACB51CE3A3C7002E0C9D /* Resources */,
-				097690AB2848DFBD4D204C46 /* [CP] Copy Pods Resources */,
+				8898C560864F3222F321B2DB /* [CP] Copy Pods Resources */,
+				44BC94571AF7C28FD25D3920 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1476,6 +1539,7 @@
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
+				B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */,
 				B064EF651D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED21D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1512,6 +1576,7 @@
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
+				B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */,
 				B064EF661D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED31D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1526,7 +1591,97 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		097690AB2848DFBD4D204C46 /* [CP] Copy Pods Resources */ = {
+		0D0F76EB5B00D33359D98B9D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44BC94571AF7C28FD25D3920 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5C4E47A2B0694A7EA60CEB0F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		61B62FAB0DFAF37484806F93 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6A1F095EE025EF8EF9803912 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7DA34C3BBAB2A8FE6E64F11A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8898C560864F3222F321B2DB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1541,52 +1696,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0ED98CBCD218DE6B5EC2AEF1 /* 📦 Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		11B9A1D7F7B8C17D45FD6CAD /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		369111F6CD17C8178AE024D4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		39DA82E79469F2389A8C24D8 /* [CP] Check Pods Manifest.lock */ = {
+		9E013B9AB4EDE356EAC8DAFE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1601,52 +1711,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		442516213E15D551809BCE65 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B0C6BE49B5C42E3481DF435 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		6E61B7C73FD6963D04FAAF3C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		81BE929218F0F100C60CDACD /* [CP] Embed Pods Frameworks */ = {
+		AA9320D8598EB8945F5792AF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1661,7 +1726,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F9B5CF23CF5A63B3A6FEA93 /* [CP] Check Pods Manifest.lock */ = {
+		C9B07BDAD7147B08601FC25F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1676,67 +1741,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B7A875120DC433158CDF6B04 /* 📦 Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBetaTests/Pods-faeBetaTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D3E1C75D329E9EC1147123FD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		DC26E6193FD5C0FB320AFAAC /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E3167724F3EE89AA88CD622C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		F6E5F5FC1F9D7FAB70D24F64 /* [CP] Check Pods Manifest.lock */ = {
+		D94C04A7F846C96E72158E91 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1770,7 +1775,6 @@
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
-				B837D1EA1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
@@ -1778,16 +1782,20 @@
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
+				B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
+				B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
+				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B0714D5E1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
+				B8C741111DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */,
+				B8E8195B1DB3255000D418D1 /* TableViewControlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
-				B0BF353D1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
@@ -1818,9 +1826,11 @@
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
+				B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B09E49E41D96F77F0075EE45 /* README.md in Sources */,
+				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
@@ -1844,7 +1854,6 @@
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
-				B0BF35451D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
@@ -1867,6 +1876,7 @@
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
+				B8C7410D1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
@@ -1879,7 +1889,6 @@
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
-				B837D1EE1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
@@ -1888,8 +1897,10 @@
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B0D8CF0F1D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
+				B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
+				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0BF35411D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
@@ -1899,6 +1910,7 @@
 				B064EEB01D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
+				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 			);
@@ -1923,11 +1935,13 @@
 				8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
+				B8C7410E1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */,
 				B0714D5F1D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B0D8CF101D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
 				B0714D4D1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B064EED81D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0714D771D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
@@ -1940,7 +1954,6 @@
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
-				B0BF353E1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1954,6 +1967,7 @@
 				B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D6E1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
 				B87E138A1D96755C004C9242 /* FaePinAction.swift in Sources */,
+				B8C4A9721DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
 				B064EF501D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0CFC9B31CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714E211D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
@@ -1967,14 +1981,14 @@
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B064EEB11D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
+				B842E51C1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				B064EEAB1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0714E011D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
-				B837D1EF1D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
-				B0BF35461D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
+				B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B064EF691D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B064EEEE1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1992,6 +2006,7 @@
 				B09E49C11D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B09E49BA1D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
+				B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B0714E0D1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
@@ -1999,11 +2014,14 @@
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B064EECF1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B0714D561D5E435200356705 /* MainScreenButtons.swift in Sources */,
+				B8AC45891DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EED51D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B00182661D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B0D95C331CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B064EF091D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B8C741121DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */,
+				B8E8195C1DB3255000D418D1 /* TableViewControlFile.swift in Sources */,
 				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0714E1D1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
@@ -2011,7 +2029,6 @@
 				B0BF35881D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B0714E151D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF35791D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
-				B837D1EB1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				B0714D3E1D5E435200356705 /* CommentPinUIView.swift in Sources */,
 				B0714D831D5E465900356705 /* Camera.swift in Sources */,
 				B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */,
@@ -2031,10 +2048,12 @@
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B8C2F6861D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
 				DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
+				B8D5EEC71DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				B064EEF81D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714D681D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
+				B85FE6D51DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B0714DFD1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B064EEAE1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
@@ -2078,21 +2097,23 @@
 				B064EEF51D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B0CFC9B01CED35D900EC356A /* Transaction.swift in Sources */,
 				B0A2ACBC1CE3A3C7002E0C9D /* faeBetaUITests.swift in Sources */,
+				B85FE6D21DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */,
 				B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				DC4EC36A1DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
-				B837D1F01D8F11C500E44FAE /* PinSelections.swift in Sources */,
 				B0714D601D5E435200356705 /* MapUserPinButton.swift in Sources */,
 				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
+				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B0714D4E1D5E435200356705 /* CustomUIViewForScrollableTextField.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
+				B8C4A9731DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
 				B0714D451D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B87E138B1D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B0714DFA1D62520900356705 /* RegisterNameViewController.swift in Sources */,
@@ -2104,6 +2125,7 @@
 				DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
+				B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B0D8CF111D3D525C0030939E /* MoodAvatarHeaderTableViewCell.swift in Sources */,
 				B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
@@ -2126,7 +2148,6 @@
 				B0C0CAA81D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
-				B837D1EC1D8F0CD200E44FAE /* CreateCommentPin.swift in Sources */,
 				DC477A611DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */,
 				DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
@@ -2141,15 +2162,18 @@
 				B0BF35571D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B0BF35431D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				B0714E1E1D62537300356705 /* SignInSupportViewController.swift in Sources */,
-				B0BF35471D8DC38800B0540B /* SubmitCommenPin.swift in Sources */,
+				B85FE6D61DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
+				B8C7410F1DB7100C0020E4E7 /* CommentPinDetailLoadItems.swift in Sources */,
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
+				B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EEA91D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714E221D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
+				B842E51D1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				B064EF1D1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B064EF451D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
@@ -2166,7 +2190,6 @@
 				B0BF35911D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B064EEEC1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B0714DFE1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
-				B0BF353F1D8DC19800B0540B /* CommentPinPopupWindow.swift in Sources */,
 				B064EF5D1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0BF35891D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
@@ -2177,9 +2200,12 @@
 				B064EF071D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				B0BF35771D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B09E49B61D9626140075EE45 /* AutoLayout.swift in Sources */,
+				B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B064EF0A1D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
+				B8E8195D1DB3255000D418D1 /* TableViewControlFile.swift in Sources */,
+				B8C741131DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2308,7 +2334,7 @@
 		};
 		B0A2ACC11CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AFBE42128D680DB40BD211E6 /* Pods-faeBeta.debug.xcconfig */;
+			baseConfigurationReference = F6A15D28833770A41D53F457 /* Pods-faeBeta.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2337,7 +2363,7 @@
 		};
 		B0A2ACC21CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E5964ED2CC035FBB50B7ED84 /* Pods-faeBeta.release.xcconfig */;
+			baseConfigurationReference = 46C97AEA4C8FC73A227B084E /* Pods-faeBeta.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2369,7 +2395,7 @@
 		};
 		B0A2ACC41CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 636AA0BED00A1DADD3ADF62C /* Pods-faeBetaTests.debug.xcconfig */;
+			baseConfigurationReference = 9C9A5F7E823C4BA44996022B /* Pods-faeBetaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2384,7 +2410,7 @@
 		};
 		B0A2ACC51CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88F12F8214B909C9F941355C /* Pods-faeBetaTests.release.xcconfig */;
+			baseConfigurationReference = 9A027F04BED3E731BEC3F5D6 /* Pods-faeBetaTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2399,7 +2425,7 @@
 		};
 		B0A2ACC71CE3A3C7002E0C9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD79CC948144651BB7E0FEAC /* Pods-faeBetaUITests.debug.xcconfig */;
+			baseConfigurationReference = 5EB0AB1BF8CA20B4039D774D /* Pods-faeBetaUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;
@@ -2413,7 +2439,7 @@
 		};
 		B0A2ACC81CE3A3C7002E0C9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96209C3092BC930D04AAF4D8 /* Pods-faeBetaUITests.release.xcconfig */;
+			baseConfigurationReference = CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = faeBetaUITests/Info.plist;

@@ -57,9 +57,16 @@ extension FaeMapViewController {
     }
     
     func jumpToNameCard() {
+        animationMoreHide(nil)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardViewController")as! NameCardViewController
         self.navigationController?.pushViewController(vc, animated: true)
         
+    }
+    
+    func jumpToMyFaeMainPage() {
+        animationMoreHide(nil)// new add
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MyFaeMainPageViewController")as! MyFaeMainPageViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToAccount(){
@@ -88,11 +95,12 @@ extension FaeMapViewController {
         //left button is mapboard button
         buttonMoreLeft = UIButton(frame: CGRectMake(15,27,29,29))
         buttonMoreLeft.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
-        viewHeaderForMore.addSubview(buttonMoreLeft)
+//        viewHeaderForMore.addSubview(buttonMoreLeft)
         
         //right button is my namecard button
         buttonMoreRight = UIButton(frame: CGRectMake((tableViewWeight - 29 - 15),26,29,29))
         buttonMoreRight.setImage(UIImage(named: "tableViewMoreLeftButton"), forState: .Normal)
+        buttonMoreRight.addTarget(self, action: #selector(FaeMapViewController.jumpToNameCard), forControlEvents: .TouchUpInside)
         viewHeaderForMore.addSubview(buttonMoreRight)
         
         
@@ -112,7 +120,8 @@ extension FaeMapViewController {
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
         buttonImagePicker = UIButton(frame: CGRectMake((tableViewWeight - 91) / 2, 36, 91, 91))
-        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
+//        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
+        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.jumpToMyFaeMainPage), forControlEvents: .TouchUpInside)
         viewHeaderForMore.addSubview(buttonImagePicker)
         
         labelMoreName = UILabel(frame: CGRectMake((tableViewWeight - 180) / 2,134,180,27))
@@ -167,7 +176,6 @@ extension FaeMapViewController {
             self.dimBackgroundMoreButton.alpha = 0.7
             self.dimBackgroundMoreButton.layer.opacity = 0.7
         }))
-        self.navigationController?.navigationBar.hidden = true
     }
     
     func animationMoreHide(sender: UIButton!) {
@@ -176,7 +184,7 @@ extension FaeMapViewController {
             self.dimBackgroundMoreButton.alpha = 0.0
         }), completion: { (done: Bool) in
             if done {
-                self.navigationController?.navigationBar.hidden = false
+
             }
         })
     }

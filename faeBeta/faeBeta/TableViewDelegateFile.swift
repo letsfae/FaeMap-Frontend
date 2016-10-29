@@ -49,16 +49,16 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults){
+        if(tableView == self.tblSearchResults) {
             return placeholder.count
         }
         else if(tableView == self.mapChatTable) {
             return 10
         }
         else if tableView == tableviewMore {
-            return 7
+            return 3
         }
-        else if tableView == tableviewWindbell{
+        else if tableView == tableviewWindbell {
             return tableWindbellData.count
         }
         else{
@@ -68,7 +68,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if(tableView == self.tblSearchResults){
+        if tableView == self.tblSearchResults {
             let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
             cell.separatorInset = UIEdgeInsetsZero
@@ -93,6 +93,9 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell1")
                 
             } else if indexPath.row == 2 {
+                cell.labelTitle.text = "Log out"
+                cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell2")
+            }/*else if indexPath.row == 2 {
                 cell.labelTitle.text = "My Pins"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell2")
             } else if indexPath.row == 3 {
@@ -107,7 +110,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             } else if indexPath.row == 6 {
                 cell.labelTitle.text = "Account Settings"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell6")
-            }
+            }*/
             return cell
             
         }
@@ -141,7 +144,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             })
             self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             if mainScreenSearchActive {
                 animationMainScreenSearchHide(self.mainScreenSearchSubview)
@@ -153,6 +155,18 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 jumpToMoodAvatar()
             }
             if indexPath.row == 2 {
+                let user = FaeUser()
+                user.logOut{ (status:Int?, message:AnyObject?) in
+                    if ( status! / 100 == 2 ){
+                        //success
+                    }
+                    else{
+                        //failure
+                    }
+                }
+            }
+            /*
+            if indexPath.row == 2 {
                 animationMoreHide(nil)
                 jumpToMyPins()
             }
@@ -163,7 +177,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             if indexPath.row == 6 {
                 animationMoreHide(nil)
                 jumpToAccount()
-            }
+            }*/
         }
     }
     
@@ -252,7 +266,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
             })
             self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
         }
         
     }
@@ -281,12 +294,10 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 }
             }
             if placeholder.count > 0 {
-                searchBarTableShowAnimation()
             }
         }
         else {
             self.placeholder.removeAll()
-            searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()
         }
     }

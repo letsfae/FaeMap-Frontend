@@ -38,7 +38,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
     if authentication != nil{
         for(key,value) in authentication! {
             headers[key] = value as? String
-            print(value)
+//            print(value)
         }
     }
     // Ren: delete do-catch here because no error thrown in do
@@ -49,22 +49,18 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
             //                MultipartFormData.appendBodyPart
             MultipartFormData.appendBodyPart(data: imageData, name: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
             }, encodingMemoryThreshold: 100, encodingCompletion: { encodingResult in
-                print(encodingResult)
                 switch encodingResult {
                 case .Success(let upload, _, _):
-                    print(encodingResult)
                     upload.responseJSON { response in
-                        print(response.response!.statusCode)
-                        print(response)
                         
                         if response.response != nil{
-                            if(response.response!.statusCode != 0){
-                                print("finished")
-                            }
-                            if let JSON = response.response?.allHeaderFields{
-                                print(JSON)
-                                
-                            }
+//                            if(response.response!.statusCode != 0){
+//                                print("finished")
+//                            }
+//                            if let JSON = response.response?.allHeaderFields{
+//                                print(JSON)
+//                                
+//                            }
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode,resMess)
                             }
@@ -111,7 +107,7 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
     //get function doesn't work
     manager.downloadImageWithURL(NSURL(string: URL), options: SDWebImageDownloaderOptions.AllowInvalidSSLCertificates,
                                  progress: {( receivedSize: Int, expectedSize: Int) in
-                                    print(receivedSize)
+//                                    print(receivedSize)
         }
         , completed: { (image:UIImage!, data:NSData!, error:NSError!, finished:Bool) -> Void in
             //            print(error)
@@ -170,7 +166,7 @@ func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[
 
 
 func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
-    print(parameter)
+    //print(parameter)
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -191,13 +187,13 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
-                    if(response.response!.statusCode != 0){
-                        print("finished")
-                    }
-                    if let JSON = response.response?.allHeaderFields{
-                        print(JSON)
-                        
-                    }
+//                    if(response.response!.statusCode != 0){
+//                        print("finished")
+//                    }
+//                    if let JSON = response.response?.allHeaderFields{
+//                        print(JSON)
+//                        
+//                    }
                     completion(response.response!.statusCode,response.result.value)
                 }
                 else{
@@ -210,13 +206,13 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
-                    if(response.response!.statusCode != 0){
-                        print("finished")
-                    }
-                    if let JSON = response.response?.allHeaderFields{
-                        print(JSON)
-                        
-                    }
+//                    if(response.response!.statusCode != 0){
+//                        print("finished")
+//                    }
+//                    if let JSON = response.response?.allHeaderFields{
+//                        print(JSON)
+//                        
+//                    }
                     completion(response.response!.statusCode,response.result.value)
                 }
                 else{
@@ -243,19 +239,19 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
             headers[key] = value as? String
         }
     }
-    print(headers)
+//    print(headers)
     // Ren: delete do-catch here because no error thrown in do
     Alamofire.request(.DELETE, URL,headers:headers)
         .responseJSON{response in
             //print(response.response!.statusCode)
             if response.response != nil{
-                if(response.response!.statusCode != 0){
-                    print("finished")
-                }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                    
-                }
+//                if(response.response!.statusCode != 0){
+//                    print("finished")
+//                }
+//                if let JSON = response.response?.allHeaderFields{
+//                    print(JSON)
+//                    
+//                }
                 completion(response.response!.statusCode,"nothing here")
             }
             else{
@@ -285,12 +281,12 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
         .responseJSON{response in
             //print(response.response!.statusCode)
             if response.response != nil{
-                if(response.response!.statusCode != 0){
-                    print("finished")
-                }
-                if let JSON = response.response?.allHeaderFields{
-                    print(JSON)
-                }
+//                if(response.response!.statusCode != 0){
+//                    print("finished")
+//                }
+//                if let JSON = response.response?.allHeaderFields{
+//                    print(JSON)
+//                }
                 if let resMess = response.result.value {
                     completion(response.response!.statusCode,resMess)
                 }

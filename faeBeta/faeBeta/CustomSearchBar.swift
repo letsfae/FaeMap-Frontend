@@ -60,8 +60,6 @@ class CustomSearchBar: UISearchBar {
     
     func indexOfSearchFieldInSubviews() -> Int! {
         // Uncomment the next line to see the search bar subviews.
-        // println(subviews[0].subviews)
-        
         var index: Int!
         let searchBarView = subviews[0]
         
