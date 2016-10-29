@@ -49,7 +49,58 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(animated: Bool) {
+        //super.viewWillAppear(animated)
+        let user = FaeUser()
 
+        user.getSelfNamecard { (status:Int, message:AnyObject?) in
+            print (status)
+
+            if status / 100 == 2 {
+
+                print(message!)
+                let mess = message!
+
+                if (mess["nick_name"]) != nil{
+                    nickname = mess["nick_name"] as! String
+                }
+                if (mess["short_intro"]) != nil{
+                    shortIntro = mess["short_intro"] as! String
+                }
+                if let genderNow = mess["show_gender"] as? Int {
+//                    print(mess["showGender"])
+                    if genderNow == 1 {
+                        showGender = true
+                    }
+                    else {
+                        showGender = false
+                    }
+                }
+                if let ageNow = mess["show_age"] as? Int {
+                    if ageNow == 1 {
+                        showAge = true
+                    } else {
+                        showAge = false
+                    }
+                }
+                if let ageNow = mess["age"] as? Int {
+                    userAge = ageNow
+                }
+
+                self.updateName()
+            }
+            else {
+                    
+            }
+        }
+//        updateName()
+    }
+
+    func updateName() {
+        labelNickname.text = nickname
+        labelIntro.text = shortIntro
+        self.tableViewNameCard.reloadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -112,9 +163,9 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {//nickname
-            
+            jumpToNickname()
         } else if indexPath.row == 1 {//short intro
-            
+            jumpToIntro()
         } else if indexPath.row == 2 {//choose tags
             jumpToTags()
         } else if indexPath.row == 3 {//change profile picture
@@ -126,6 +177,14 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     }
     func jumpToTags() {
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardTagsViewController")as! NameCardTagsViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func jumpToNickname() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameSettingViewController")as! NameSettingViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func jumpToIntro() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("IntroSettingViewController")as! IntroSettingViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -146,6 +205,11 @@ extension NameCardViewController {
         imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268, 120))
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
+        if user_id != nil {
+            let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/name_card_cover"
+            print(user_id)
+            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+        }
         viewNameCardTitle.addSubview(imageViewCover)
         
         imageViewTitleProfile = UIImageView(frame: CGRectMake((268 - 61) / 2, 190 - 119, 61, 61))
@@ -162,7 +226,11 @@ extension NameCardViewController {
         }
         
         labelNickname = UILabel(frame: CGRectMake(0,257-119,268,27))
-        labelNickname.text = "Anonymous"
+        if nickname == nil || nickname == "" {
+            labelNickname.text = "Anonymous"
+        } else {
+            labelNickname.text = nickname
+        }
         labelNickname.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
         labelNickname.textAlignment = .Center
         labelNickname.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
@@ -210,11 +278,11 @@ extension NameCardViewController {
         viewLine.backgroundColor = getColor(200, green: 199, blue: 204)
         viewNameCardDescr.addSubview(viewLine)
         
-        labelIntro = UILabel(frame: CGRectMake(97 - 90, 193 - 119,220, 40))
+        labelIntro = UILabel(frame: CGRectMake(97 - 73, 193 - 119,220, 45))
         labelIntro.textColor = getColor(155, green: 155, blue: 155)
-        labelIntro.numberOfLines = 0
+        labelIntro.numberOfLines = 2
         labelIntro.textAlignment = .Center
-        labelIntro.text = "wwwwwwwwwwwwjjjjjjjjjjj"
+        labelIntro.text = "nothing here"
         labelIntro.font = UIFont(name: "AvenirNext-Medium", size: 15)
         viewNameCardDescr.addSubview(labelIntro)
         
@@ -259,20 +327,32 @@ extension NameCardViewController {
 //        imageViewAvatarMore.image = image
         if imagePick == 0 {
             imageViewTitleProfile.image = image
+            let avatar = FaeImage()
+            avatar.image = image
+            avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
+                print(code)
+                print(message)
+                if code / 100 == 2 {
+                    //                self.imageViewAvatarMore.image = image
+                } else {
+                    //failure
+                }
+            }
         } else {
             imageViewCover.image = image
-        }
-        let avatar = FaeImage()
-        avatar.image = image
-        avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
-            print(code)
-            print(message)
-            if code / 100 == 2 {
-//                self.imageViewAvatarMore.image = image
-            } else {
-                //failure
+            let avatar = FaeImage()
+            avatar.image = image
+            avatar.faeUploadCoverImageInBackground { (code:Int, message:AnyObject?) in
+                print(code)
+                print(message)
+                if code / 100 == 2 {
+                    //                self.imageViewAvatarMore.image = image
+                } else {
+                    //failure
+                }
             }
         }
+
         self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
     }
     func showPhotoSelected(sender: Int) {

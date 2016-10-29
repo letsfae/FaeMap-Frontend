@@ -60,6 +60,12 @@
 		B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
+		B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
+		B030CC5E1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
+		B030CC5F1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
+		B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
+		B030CC621DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
+		B030CC631DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -598,6 +604,8 @@
 		B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationPhoneViewController.swift; sourceTree = "<group>"; };
 		B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountUsernameViewController.swift; sourceTree = "<group>"; };
 		B0301B121D4A886700A05996 /* FaeAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountViewController.swift; sourceTree = "<group>"; };
+		B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSettingViewController.swift; sourceTree = "<group>"; };
+		B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSettingViewController.swift; sourceTree = "<group>"; };
 		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
@@ -1256,6 +1264,8 @@
 				B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */,
 				B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */,
 				B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */,
+				B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */,
+				B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */,
 			);
 			name = MyFae;
 			sourceTree = "<group>";
@@ -1769,6 +1779,7 @@
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
+				B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0A2AC9B1CE3A3C7002E0C9D /* ViewController.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
@@ -1826,6 +1837,7 @@
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
+				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
@@ -1955,6 +1967,7 @@
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
+				B030CC5E1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				DC477A601DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */,
@@ -2005,6 +2018,7 @@
 				DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B09E49C11D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
+				B030CC621DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B09E49BA1D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
@@ -2079,6 +2093,7 @@
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
+				B030CC5F1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
@@ -2178,6 +2193,7 @@
 				B064EF451D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				B030CC631DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
 				86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0537B2E1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,

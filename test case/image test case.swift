@@ -2,10 +2,16 @@
 
 import UIKit
 
-// download self avatar
+// download self avatar // 头像
 let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
 print(user_id)
 headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+// download cover page
+if user_id != nil {
+    let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/name_card_cover"
+    print(user_id)
+    imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+}
 
 // upload self avatar
 let avatar = FaeImage()

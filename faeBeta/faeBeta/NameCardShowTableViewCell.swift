@@ -15,7 +15,35 @@ class NameCardShowTableViewCell: UITableViewCell {
     @IBOutlet weak var switchOutlet: UISwitch!
 
     @IBAction func switchAction(sender: AnyObject) {
-        
+        var value = true
+        if sender.on == true {
+            value = true
+        } else {
+            value = false
+        }
+        if labelShow.text == "Show Gender" {
+            let user = FaeUser()
+            user.whereKey("show_gender", value: String(value))
+            user.updateNameCard { (status:Int, objects:AnyObject?) in
+                print (status)
+                if status / 100 == 2 {
+                }
+                else {
+                        
+                }
+            }
+        } else {
+            let user = FaeUser()
+            user.whereKey("show_age", value: String(value))
+            user.updateNameCard { (status:Int, objects:AnyObject?) in
+                print (status)
+                if status / 100 == 2 {
+                }
+                else {
+
+                }
+            }
+        }
     }
 
     override func awakeFromNib() {

@@ -151,7 +151,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
         }
         else if tableView == tableviewMore {
             if indexPath.row == 1 {
-                animationMoreHide(nil)
+//                animationMoreHide(nil)
                 jumpToMoodAvatar()
             }
             if indexPath.row == 2 {

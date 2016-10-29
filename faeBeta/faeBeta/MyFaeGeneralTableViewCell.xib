@@ -39,7 +39,7 @@
                 </constraints>
             </tableViewCellContentView>
             <constraints>
-                <constraint firstItem="z5E-ya-oaz" firstAttribute="leading" secondItem="KGk-i7-Jjw" secondAttribute="leading" constant="110" id="gvS-TS-fyf"/>
+                <constraint firstItem="z5E-ya-oaz" firstAttribute="leading" secondItem="KGk-i7-Jjw" secondAttribute="leading" constant="115" id="gvS-TS-fyf"/>
             </constraints>
             <connections>
                 <outlet property="labelStatus" destination="z5E-ya-oaz" id="S6q-zk-Nfx"/>

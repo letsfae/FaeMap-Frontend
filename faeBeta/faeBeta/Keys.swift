@@ -30,6 +30,9 @@ var username : String?
 //new add global var
 var nickname : String?
 var shortIntro : String?
+var showGender = true
+var showAge = true
+var userAge : Int?
 
 var userStatus : Int?
 var userStatusMessage : String?

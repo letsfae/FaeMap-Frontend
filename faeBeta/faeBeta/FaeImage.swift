@@ -87,6 +87,23 @@ class FaeImage : NSObject{ // it is ok to upload
             })
         }
     }
+    func faeUploadCoverImageInBackground(completion:(Int,AnyObject?)->Void){
+        if image == nil {
+            completion(-400,"you need to save image first")
+        }
+        else{
+            let file = compressImage(image)
+            let seconds = 1.0
+            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+
+            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
+                    completion(code,message)
+                })
+            })
+        }
+    }
     
 }
 

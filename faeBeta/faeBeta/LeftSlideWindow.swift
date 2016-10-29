@@ -13,6 +13,7 @@ extension FaeMapViewController {
 //    UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate 
 //    var imagePicker : UIImagePickerController!
     func loadMore() {
+        self.navigationController?.navigationBarHidden = false
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         dimBackgroundMoreButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
@@ -52,6 +53,7 @@ extension FaeMapViewController {
     }
     
     func jumpToMoodAvatar() {
+        animationMoreHide(nil)
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MoodAvatarViewController")as! MoodAvatarViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }

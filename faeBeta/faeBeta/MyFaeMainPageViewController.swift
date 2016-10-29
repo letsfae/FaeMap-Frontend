@@ -31,7 +31,7 @@ class MyFaeMainPageViewController: UIViewController {
         loadBird()
     }
     func loadAvatar() {
-        imageViewAvatar = UIImageView(frame: CGRectMake((screenWidth - 125) / 2, 72, 125, 125))
+        imageViewAvatar = UIImageView(frame: CGRectMake((screenWidth - 125) / 2, 72 - 64, 125, 125))
         imageViewAvatar.layer.cornerRadius = 125 / 2
         imageViewAvatar.layer.masksToBounds = true
         imageViewAvatar.clipsToBounds = true
@@ -59,7 +59,7 @@ class MyFaeMainPageViewController: UIViewController {
         self.view.addSubview(label2)
 
         viewUnderline = UIView(frame: CGRectMake(20, 223, screenWidth - 40, 2))
-        viewUnderline.backgroundColor = UIColor.blackColor()
+        viewUnderline.backgroundColor = UIColor.grayColor()
         self.view.addSubview(viewUnderline)
 
         labelBird = UILabel(frame: CGRectMake((screenWidth - 162) / 2, 258, 162, 25))
@@ -70,16 +70,16 @@ class MyFaeMainPageViewController: UIViewController {
         self.view.addSubview(labelBird)
     }
     func loadBird() {
-        imageViewBird = UIImageView(frame: CGRectMake((screenWidth - 210) / 2, 347, 210, 199))
+        imageViewBird = UIImageView(frame: CGRectMake((screenWidth - 150) / 2, 283, 150, 140))
         imageViewBird.image = UIImage(named: "myFaeBird")
         self.view.addSubview(imageViewBird)
-        imageViewText1 = UIImageView(frame: CGRectMake((screenWidth - 311) / 2, 533, 311, 18))
+        imageViewText1 = UIImageView(frame: CGRectMake((screenWidth - 311) / 2, 533 - 75, 311, 18))
         imageViewText1.image = UIImage(named: "myFaeBirdText1")
         self.view.addSubview(imageViewText1)
-        imageViewText2 = UIImageView(frame: CGRectMake((screenWidth - 322) / 2, 570, 322, 18))
+        imageViewText2 = UIImageView(frame: CGRectMake((screenWidth - 322) / 2, 570 - 75, 322, 18))
         imageViewText2.image = UIImage(named: "myFaeBirdText2")
         self.view.addSubview(imageViewText2)
-        imageViewText3 = UIImageView(frame: CGRectMake((screenWidth - 323) / 2, 607, 323, 38))
+        imageViewText3 = UIImageView(frame: CGRectMake((screenWidth - 323) / 2, 607 - 75, 323, 38))
         imageViewText3.image = UIImage(named: "myFaeBirdText3")
         self.view.addSubview(imageViewText3)
     }

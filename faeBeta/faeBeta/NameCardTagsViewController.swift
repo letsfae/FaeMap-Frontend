@@ -19,6 +19,7 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     var buttonSuggest : UIButton!
     var buttonSave : UIBarButtonItem!
     var labelTitle : UILabel!
+    var arrIndex = [Int]()
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = KTCenterFlowLayout()
@@ -29,6 +30,7 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         collectionViewSelf.backgroundColor = UIColor.clearColor()
         collectionViewSelf.delegate = self
         collectionViewSelf.dataSource = self
+        collectionViewSelf.allowsMultipleSelection = true
 //        collectionViewSelf.registerNib(UINib(nibName: "TagsCollectionViewCell",bundle: nil), forCellWithReuseIdentifier: cellText)
         collectionViewSelf.registerClass(TagsCollectionViewCell.self, forCellWithReuseIdentifier: cellText)
         self.view.addSubview(collectionViewSelf)
@@ -59,6 +61,7 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         buttonSuggest.layer.cornerRadius = 15
         buttonSuggest.layer.borderWidth = 2.0
         buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).CGColor
+        buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.saveTags), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonSuggest)
         
 //        buttonSave = UIBarButtonItem(frame: CGRectMake(screenWidth - 44 - 14, 32 - 64, 44, 27))
@@ -67,7 +70,8 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
 //        buttonSave.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
 //        self.view.addSubview(buttonSave)
         self.navigationItem.rightBarButtonItem = buttonSave
-        
+//        self.navigationController?.toolbarHidden = false
+
         labelTitle = UILabel(frame: CGRectMake((screenWidth - 173) / 2, 0, 174, 64))
         labelTitle.text = "Choose some Tags that represent you!"
         labelTitle.numberOfLines = 0
@@ -80,7 +84,29 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
     func saveTags() {
-        
+        if arrIndex.count != 0 {
+            var str = ""
+            for i in 0 ..< arrIndex.count {
+                let num = arrIndex[i]
+                str += String(num)
+                if (i != arrIndex.count - 1) {
+                    str += ";"
+                }
+            }
+            print(str)
+            let user = FaeUser()
+            user.whereKey("tag_ids", value: str)// MARK: bug here sometime will happen why?
+            user.updateNameCard { (status:Int, objects:AnyObject?) in
+                print (status)
+                print (objects)
+                if status / 100 == 2 {
+                    self.navigationController?.popViewControllerAnimated(true)
+                }
+                else {
+
+                }
+            }
+        }
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tagName.count
@@ -93,7 +119,28 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         cell.labelTitle.text = tagName[indexPath.row]
         return cell
     }
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if arrIndex.count > 3 {
+            let index = arrIndex.last
+            arrIndex.removeLast()
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: NSIndexPath(forItem: index!, inSection: 0))as! TagsCollectionViewCell
+//            collectionView.selectItemAtIndexPath(<#T##indexPath: NSIndexPath?##NSIndexPath?#>, animated: <#T##Bool#>, scrollPosition: <#T##UICollectionViewScrollPosition#>)
+            cell.selected = false
+//            arrIndex.append(indexPath.row)
+        }
+        arrIndex.append(indexPath.row)
 
+    }
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        for i in 0 ..< arrIndex.count {
+            if arrIndex[i] == indexPath.row {
+                arrIndex.removeAtIndex(i)
+//                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: NSIndexPath(forItem: index!, inSection: 0))as! TagsCollectionViewCell
+
+                break;
+            }
+        }
+    }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let str = tagName[indexPath.row]
         cellSize.labelTitle.text = tagName[indexPath.row]

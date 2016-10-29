@@ -84,6 +84,64 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
 
 }
 
+func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        //        "Device-ID" : headerDeviceID,
+        "Accept": headerAccept,
+        //        "Content-Type" : "application/form-data"
+    ]
+    if authentication != nil{
+        for(key,value) in authentication! {
+            headers[key] = value as? String
+            //            print(value)
+        }
+    }
+    // Ren: delete do-catch here because no error thrown in do
+    if parameter != nil{
+        let imageData = parameter!["name_card_cover"]as! NSData
+
+        Alamofire.upload(.POST, URL, headers: headers, multipartFormData: { (MultipartFormData) in
+            //                MultipartFormData.appendBodyPart
+            MultipartFormData.appendBodyPart(data: imageData, name: "name_card_cover", fileName: "name_card_cover", mimeType: "image/jpeg")
+            }, encodingMemoryThreshold: 100, encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.responseJSON { response in
+
+                        if response.response != nil{
+                            //                            if(response.response!.statusCode != 0){
+                            //                                print("finished")
+                            //                            }
+                            //                            if let JSON = response.response?.allHeaderFields{
+                            //                                print(JSON)
+                            //
+                            //                            }
+                            if let resMess = response.result.value {
+                                completion(response.response!.statusCode,resMess)
+                            }
+                            else{
+                                //                            MARK: bug here
+                                completion(response.response!.statusCode,"no Json body")
+                            }
+                        }
+                        else{
+                            completion(-500,"Internet error")
+                        }
+
+                    }
+                case .Failure(let encodingError):
+                    completion(-400,"failure")
+                    print(encodingError)
+                }
+        })
+        
+    }
+    
+}
+
 func getImageFromURL(className:String, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
     let URL = baseURL + "/" + className
     var headers = [

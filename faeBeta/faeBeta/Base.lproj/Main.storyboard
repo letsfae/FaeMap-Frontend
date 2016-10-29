@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qi0-kD-PRv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -31,7 +31,7 @@
         <!--Create Pin View Controller-->
         <scene sceneID="YHh-jI-tmc">
             <objects>
-                <viewController modalPresentationStyle="overCurrentContext" id="A1A-Sr-lmM" customClass="CreatePinViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreatePinViewController" modalPresentationStyle="overCurrentContext" id="A1A-Sr-lmM" customClass="CreatePinViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="S6i-Wn-Ttn"/>
                         <viewControllerLayoutGuide type="bottom" id="HjL-cc-W0J"/>
@@ -46,10 +46,46 @@
             </objects>
             <point key="canvasLocation" x="3351" y="862"/>
         </scene>
+        <!--Name Setting View Controller-->
+        <scene sceneID="w9t-jD-sWN">
+            <objects>
+                <viewController storyboardIdentifier="NameSettingViewController" id="iDa-lM-yMM" customClass="NameSettingViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Esq-S6-A79"/>
+                        <viewControllerLayoutGuide type="bottom" id="zro-x2-Rwd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="exP-xr-dVs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SPb-4i-dJa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2631" y="144"/>
+        </scene>
+        <!--Intro Setting View Controller-->
+        <scene sceneID="UUI-Tq-lAh">
+            <objects>
+                <viewController storyboardIdentifier="IntroSettingViewController" id="7ix-WM-aex" customClass="IntroSettingViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fcB-1q-Vzz"/>
+                        <viewControllerLayoutGuide type="bottom" id="sfW-Ey-iOl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ijh-84-s0b">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gDN-cz-6md" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3356" y="142"/>
+        </scene>
         <!--Comment Pin View Controller-->
         <scene sceneID="Ay1-hK-8ND">
             <objects>
-                <viewController modalPresentationStyle="overCurrentContext" id="8dT-b1-io2" customClass="CommentPinViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CommentPinViewController" modalPresentationStyle="overCurrentContext" id="8dT-b1-io2" customClass="CommentPinViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="011-wW-3k2"/>
                         <viewControllerLayoutGuide type="bottom" id="GKd-r4-deF"/>
