@@ -421,7 +421,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (toolbarContentView.mediaContentShow) && !isClosingToolbarContentView && scrollView.scrollEnabled == true){
                 self.toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
 
-                self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
+                self.inputToolbar.frame.origin.y = min(screenHeight - 273 - CGRectGetHeight(self.inputToolbar.frame) - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - CGRectGetHeight(self.inputToolbar.frame) - 64)
             }
             if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
@@ -504,13 +504,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
+        let height = CGRectGetHeight(self.inputToolbar.frame)
+        let width = CGRectGetWidth(self.inputToolbar.frame)
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.screenHeight - 275 - 150
+        let yPosition = screenHeight - 271 - height - 64
         UIView.setAnimationsEnabled(false)
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
         UIView.setAnimationsEnabled(true)
         //        self.inputToolbar.frame.origin.y = yPosition
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
@@ -518,12 +518,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func moveDownInputBar() {
         //
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
+        let height = CGRectGetHeight(self.inputToolbar.frame)
+        let width = CGRectGetWidth(self.inputToolbar.frame)
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 153
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
+        let yPosition = screenHeight - height - 64
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
     }
     

@@ -53,12 +53,12 @@ extension CommentPinViewController{
         let dy = delta
         let proposedHeight = CGRectGetHeight(self.inputToolbar.frame) + dy
         var finalHeight = max(proposedHeight, self.inputToolbar.preferredDefaultHeight)
-        if self.inputToolbar.maximumHeight != UInt(NSNotFound) {
+        if(self.inputToolbar.maximumHeight != UInt(NSNotFound)){
             finalHeight = min(finalHeight, CGFloat(self.inputToolbar.maximumHeight))
         }
-        if CGRectGetHeight(self.inputToolbar.frame) != finalHeight {
-            self.inputToolbar.frame.size.height = finalHeight
-            self.inputToolbar.frame.origin.y = screenHeight - finalHeight
+        if self.toolbarHeightConstraint.constant != finalHeight {
+            self.toolbarHeightConstraint.constant = finalHeight;
+            self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
     }

@@ -97,8 +97,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     private var inputTextViewContext = 0
     var inputTextViewMaximumHeight:CGFloat = 300
     
-//    var toolbarHeightConstraint: NSLayoutConstraint!
-//    var toolbarBottomLayoutGuide: NSLayoutConstraint!
+    var toolbarHeightConstraint: NSLayoutConstraint!
+    var toolbarDistanceToBottom: NSLayoutConstraint!
 //    
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
@@ -127,6 +127,26 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         addObservers()
     }
     
+    override func viewDidAppear(animated:Bool)
+    {
+        for constraint in self.inputToolbar.constraints{
+            if constraint.constant == 90{
+                toolbarHeightConstraint = constraint
+            }
+        }
+        if toolbarHeightConstraint == nil{
+            toolbarHeightConstraint = NSLayoutConstraint(item:inputToolbar, attribute:.Height,relatedBy:.Equal,toItem:nil,attribute:.NotAnAttribute ,multiplier:1,constant:90)
+            self.inputToolbar.addConstraint(toolbarHeightConstraint)
+            
+            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.Width,relatedBy:.Equal,toItem:self.view,attribute:.Width ,multiplier:1,constant:0)
+            self.view.addConstraint(toolbarDistanceToBottom)
+            
+            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.Bottom,relatedBy:.Equal,toItem:self.view,attribute:.Bottom ,multiplier:1,constant:0)
+            self.view.addConstraint(toolbarDistanceToBottom)
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+    
     override func viewWillDisappear(animated: Bool)
     {
         super.viewWillDisappear(animated)
@@ -148,7 +168,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     private func addObservers(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow), name:UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide), name:UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
         
@@ -167,8 +189,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         if (!self.isObservingInputTextView) {
             return;
         }
-//        let scrollView = self.inputToolbar.contentView.textView as UIScrollView
-//        scrollView.removeObserver(self, forKeyPath: "contentSize", context: &inputTextViewContext)
+        
+        self.inputToolbar.contentView.textView.removeObserver(self, forKeyPath: "contentSize", context: nil)
         self.isObservingInputTextView = false
     }
     
@@ -222,19 +244,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
                 button.autoresizingMask = [.FlexibleTopMargin]
             }
         }
-
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
         inputToolbar.contentView.textView.delegate = self
-        
-        let views = ["superView": self.view, "inputToolbar": inputToolbar]
-        
-//        toolbarHeightConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[inputToolbar(90)]", options: [], metrics: nil, views: views)[0]
-//        inputToolbar.addConstraint(toolbarHeightConstraint)
-//        self.inputToolbar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[inputToolbar]-0-|", options: [], metrics: nil, views: views))
-        
-        
-        loadInputBarComponent()
+        inputToolbar.maximumHeight = 128
         self.view.addSubview(inputToolbar)
+        loadInputBarComponent()
     }
     
     private func setupToolbarContentView()
@@ -678,8 +692,28 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     func appWillEnterForeground(){
     }
     
+    func keyboardWillShow(notification: NSNotification){
+        let userInfo:NSDictionary = notification.userInfo!
+        let keyboardFrame:NSValue = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.CGRectValue()
+        let keyboardHeight = keyboardRectangle.height
+        UIView.animateWithDuration(0.3,delay: 0, options: .CurveLinear, animations:{
+            Void in
+            self.toolbarDistanceToBottom.constant = -keyboardHeight
+            self.view.setNeedsUpdateConstraints()
+        }, completion: nil)
+    }
+    
     func keyboardDidShow(notification: NSNotification){
         toolbarContentView.keyboardShow = true
+    }
+    
+    func keyboardWillHide(notification: NSNotification){
+        UIView.animateWithDuration(0.3,delay: 0, options: .CurveLinear, animations:{
+            Void in
+            self.toolbarDistanceToBottom.constant = 0
+            self.view.setNeedsUpdateConstraints()
+        }, completion: nil)
     }
     
     func keyboardDidHide(notification: NSNotification){
@@ -749,28 +783,13 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func moveUpInputBar() {
-        //when keybord, stick, photoes preview show, move tool bar up
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
-        let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.screenHeight - 271 - 90
-//        UIView.setAnimationsEnabled(false)
-//        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
-//        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
-//        UIView.setAnimationsEnabled(true)
-        //        self.inputToolbar.frame.origin.y = yPosition
-        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+        toolbarDistanceToBottom.constant = -271
+        self.view.setNeedsUpdateConstraints()
     }
     
     func moveDownInputBar() {
-        //
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
-        let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 153
-//        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
-//        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
-        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+        toolbarDistanceToBottom.constant = 0
+        self.view.setNeedsUpdateConstraints()
     }
     
     func moveUpInputBarContentView(animated: Bool)
@@ -871,11 +890,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             
             let dy = newContentSize().height - oldContentSize().height;
             
-            self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
-//                self.updateCollectionViewInsets()
-//                if self.automaticallyScrollsToMostRecentMessage() {
-//                    [self scrollToBottomAnimated:NO];
-//                }
+            if toolbarHeightConstraint != nil {
+                self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
+            }
         }
     }
 
