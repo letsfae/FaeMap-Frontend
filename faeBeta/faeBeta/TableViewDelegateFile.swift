@@ -159,6 +159,8 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
                 user.logOut{ (status:Int?, message:AnyObject?) in
                     if ( status! / 100 == 2 ){
                         //success
+                        self.animationMoreHide(UIButton())
+                        self.jumpToWelcomeView()
                     }
                     else{
                         //failure

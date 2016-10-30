@@ -14,7 +14,7 @@ import Photos
 
 protocol SendMutipleImagesDelegate {
     
-    func sendImages()
+    func sendImages(images:[UIImage])
     
 }
 
@@ -121,7 +121,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                 photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                 
                 let highQRequestOption = PHImageRequestOptions()
-                highQRequestOption.resizeMode = .Exact //resize time fast
+                highQRequestOption.resizeMode = .None //resize time fast
                 requestOption.deliveryMode = .HighQualityFormat //high pixel
                 requestOption.synchronous = true
                 
@@ -232,7 +232,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func sendImages() {
         showProcessIndicator()
-        imageDelegate.sendImages()
+        var images = [UIImage]()
+        for i in 0..<photoPicker.indexImageDict.count
+        {
+            images.append( photoPicker.indexImageDict[i]!)
+        }
+        imageDelegate.sendImages(images)
         hideProcessIndicator()
         cancelSend()
     }
@@ -294,7 +299,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         photoPicker.getSmartAlbum()
         self.collectionView?.reloadData()
         self.tableViewAlbum.reloadData()
-        
+
     }
     
     //MARK: table view delegate method

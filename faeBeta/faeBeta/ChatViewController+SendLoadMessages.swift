@@ -70,21 +70,20 @@ extension ChatViewController: OutgoingMessageProtocol{
     }
     
     //send image delegate function
-    func sendImages() {
-        sendImageFromQuickPicker()
+    func sendImages(images:[UIImage]) {
+        for i in 0 ..< images.count {
+            sendMessage(nil, date: NSDate(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil)
+        }
+        self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(name: String) {
         sendMessage(nil, date: NSDate(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil)
-        stickerPicker.updateStickerHistory(name)
         //        stickerPicker.reloadHistory()
     }
     
-    func sendImageFromQuickPicker() {
-        for i in 0..<photoPicker.indexImageDict.count{
-            self.sendMessage(nil, date: NSDate(), picture: photoPicker.indexImageDict[i], sticker : nil, location: nil, snapImage : nil, audio: nil)
-        }
-        cleanUpSelectedPhotos()
+    func sendAudioData(data: NSData) {
+        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
     }
     
     //MARK: locationSend Delegate

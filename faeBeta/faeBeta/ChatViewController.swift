@@ -16,7 +16,8 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: NSData!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, SendStickerDelegate, LocationSendDelegate, AudioRecorderViewDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
+{
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -63,33 +64,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var buttonImagePicker : UIButton!
     var buttonVoiceRecorder: UIButton!
     //album //a helper to send photo
-    var photoPicker : PhotoPicker!
-    var photoQuickCollectionView : UICollectionView!//preview of the photoes
-    let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
+
     var isContinuallySending = false
-    
-    var frameImageName = ["photoQuickSelection1", "photoQuickSelection2", "photoQuickSelection3", "photoQuickSelection4","photoQuickSelection5", "photoQuickSelection6", "photoQuickSelection7", "photoQuickSelection8", "photoQuickSelection9", "photoQuickSelection10"]
-    // show at most 10 images
-    let requestOption = PHImageRequestOptions()
-    var imageQuickPickerShow = false //false : not open the photo preview
-    
-    var quickSendImageButton : UIButton!//right
-    var moreImageButton : UIButton!//left
-    
-    //sticker
-    var stickerViewShow = false//false : not open the stick view
-    var stickerPicker : StickerPickView!
-    
-    //record
-    var recordShow = false
-    var audioRecorderContentView: AudioRecorderView!
-    
+
     //keyboard
     var keyboardHeight: CGFloat! = 0
-    var keyboardShow = false // false: keyboard is hide
+    
+    //toolbar content
+    var toolbarContentView : FAEChatToolBarContentView!
     
     //scroll view
-    var isClosingStickerOrImagePicker = false
+    var isClosingToolbarContentView = false
     var scrollViewOriginOffset: CGFloat! = 0
     
     //step by step loading
@@ -154,12 +139,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
         //update recent
-        closeQuickPhotoPanel()
-        closeStickerPanel()
-        closeaudioRecorderContentView()
-//        clearRecentCounter(chatRoomId)// clear the unread message count
+        closeToolbarContentView()
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
-        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -182,33 +163,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.whiteColor()
         self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
-        initializePhotoQuickPicker()
-        photoPicker = PhotoPicker.shared
         addObservers()
         // setup requestion option 
-        requestOption.resizeMode = .Fast //resize time fast
-        requestOption.deliveryMode = .HighQualityFormat //high pixel
-        requestOption.synchronous = false
-        cleanUpSelectedPhotos()
+//        requestOption.resizeMode = .Fast //resize time fast
+//        requestOption.deliveryMode = .HighQualityFormat //high pixel
+//        requestOption.synchronous = false
     }
     
     override func viewWillAppear(animated: Bool) {
         //check user default
         super.viewWillAppear(true)
-        setupRecorder()
-        initializeStickerView()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
+        setupToolbarContentView()
     }
     
     
     func appWillEnterForeground(){
         self.collectionView.reloadData()
-        photoPicker.getSmartAlbum()
-        self.photoQuickCollectionView.reloadData()
-
+        self.toolbarContentView.reloadPhotoAlbum()
     }
     
     // MARK: - setup
@@ -238,36 +213,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
     }
-    
-    // sticker view
-    
-    func initializeStickerView() {
-        stickerPicker = StickerPickView(frame: CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271))
-        stickerPicker.sendStickerDelegate = self
-    }
-    
-    //quick image picker and collection view delegate
-    
-    func initializePhotoQuickPicker() {
-        //photoes preview
-        let layout = UICollectionViewFlowLayout()
-        //        layout.itemSize = CGSizeMake(220, 235)
-        layout.scrollDirection = .Horizontal
-        layout.minimumLineSpacing = 1000.0
-        photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y:screenHeight - 271, width: screenWidth, height: screenHeight), collectionViewLayout: layout)
-        photoQuickCollectionView.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
-        photoQuickCollectionView.delegate = self
-        photoQuickCollectionView.dataSource = self
-        quickSendImageButton = UIButton(frame: CGRect(x: 10, y: screenHeight - 52, width: 42, height: 42))
-        quickSendImageButton.setImage(UIImage(named: "moreImage"), forState: .Normal)
-        quickSendImageButton.addTarget(self, action: #selector(ChatViewController.getMoreImage), forControlEvents: .TouchUpInside)
-        moreImageButton = UIButton(frame: CGRect(x: screenWidth - 52, y: screenHeight - 52, width: 42, height: 42))
-        moreImageButton.addTarget(self, action: #selector(ChatViewController.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
-        moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
-    
-        //        UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
-    }
-    
+
     //MARK: user default function
     func loadUserDefault() {
         firstLoad = userDefaults.boolForKey(kFIRSTRUN)
@@ -291,7 +237,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
-        buttonKeyBoard.addTarget(self, action: #selector(keyboardButtonClicked), forControlEvents: .TouchUpInside)
+        buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonKeyBoard)
         
         buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
@@ -329,8 +275,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), forControlEvents: .TouchUpInside)
         contentView.addSubview(buttonLocation)
         
-        buttonLocation.addTarget(self, action: #selector(ChatViewController.initializeStickerView), forControlEvents: .TouchUpInside)
-                
         buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
@@ -351,12 +295,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    //MARK: voice helper function
-    
-    func setupRecorder() {
-        self.audioRecorderContentView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
-        self.audioRecorderContentView.frame = CGRect(x: 0, y: screenHeight - 271, width: screenWidth, height: 271)
-        self.audioRecorderContentView.delegate = self
+    func setupToolbarContentView()
+    {
+        toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
+        toolbarContentView.delegate = self
+        toolbarContentView.cleanUpSelectedPhotos()
+        UIApplication.sharedApplication().keyWindow?.addSubview(toolbarContentView)
     }
     
     //MARK: - JSQMessages Delegate function
@@ -369,193 +313,53 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //MARK: - keyboard input bar tapped event
-    func keyboardButtonClicked() {
-        //show keyboard and dismiss all other view, like stick and photoes preview
-        //        isTyping = false
-        if stickerViewShow {
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-            stickerPicker.removeFromSuperview()
-            //            moveDownInputBar()
-            stickerViewShow = false
-        }
-        if imageQuickPickerShow {
-            photoQuickCollectionView.removeFromSuperview()
-            moreImageButton.removeFromSuperview()
-            quickSendImageButton.removeFromSuperview()
-            //            moveDownInputBar()
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-            imageQuickPickerShow = false
-        }
-        if recordShow {
-            audioRecorderContentView.removeFromSuperview()
-            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-            recordShow = false
-        }
+    func showKeyboard() {
+        
+        resetToolbarButtonIcon()
+        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+        self.toolbarContentView.showKeyboard()
         scrollToBottom(true)
-        buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
     }
     
     func showCamera() {
         view.endEditing(true)
-        closeStickerPanel()
-        closeQuickPhotoPanel()
-        closeaudioRecorderContentView()
+        UIView.animateWithDuration(0.3, animations: {
+             self.closeToolbarContentView()
+            }, completion:{ (Bool) -> Void in
+        })
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
     }
     
     
     func showStikcer() {
-        
-        //show stick view, and dismiss all other views, like keyboard and photoes preview
-        if !stickerViewShow {
-            UIApplication.sharedApplication().keyWindow?.addSubview(self.stickerPicker)
-            self.stickerPicker.frame.origin.y = screenHeight
-            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-            buttonSticker.setImage(UIImage(named: "stickerChosen"), forState: .Normal)
-            if self.imageQuickPickerShow {
-                self.photoQuickCollectionView.removeFromSuperview()
-                self.moreImageButton.removeFromSuperview()
-                self.quickSendImageButton.removeFromSuperview()
-                self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-                self.imageQuickPickerShow = false
-                self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            }
-            else if (recordShow){
-                self.audioRecorderContentView.removeFromSuperview()
-                self.recordShow = false
-                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-                self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            }
-            else if (keyboardShow){
-                UIView.setAnimationsEnabled(false)
-                self.view.endEditing(true)
-                UIView.setAnimationsEnabled(true)
-                self.moveUpInputBar()
-                self.scrollToBottom(false)
-                self.stickerPicker.frame.origin.y = self.screenHeight - 271
-            }
-            else{
-                self.collectionView.scrollEnabled = false
-                UIView.animateWithDuration(0.3, animations: {
-                    self.moveUpInputBar()
-                    self.stickerPicker.frame.origin.y = self.screenHeight - 271
-                    }, completion:{ (Bool) -> Void in
-                        self.collectionView.scrollEnabled = true
-                })
-            }
-            
-            self.stickerViewShow = true
-        }
-        self.scrollToBottom(true)
+        resetToolbarButtonIcon()
+        buttonSticker.setImage(UIImage(named: "stickerChosen"), forState: .Normal)
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showStikcer()
+        moveUpInputBarContentView(animated)
     }
     
     func showLibrary() {
-        if !imageQuickPickerShow {
-            self.photoQuickCollectionView?.reloadData()
-            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-            self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
-            UIApplication.sharedApplication().keyWindow?.addSubview(photoQuickCollectionView)
-            UIApplication.sharedApplication().keyWindow?.addSubview(quickSendImageButton)
-            UIApplication.sharedApplication().keyWindow?.addSubview(moreImageButton)
-            photoQuickCollectionView.frame.origin.y = screenHeight
-            quickSendImageButton.alpha = 0
-            moreImageButton.alpha = 0
-            
-            buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), forState: .Normal)
-            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-            
-            if stickerViewShow {
-                stickerPicker.removeFromSuperview()
-                buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-                stickerViewShow = false
-                self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
-                self.quickSendImageButton.alpha = 1
-                self.moreImageButton.alpha = 1
-            }
-            else if recordShow {
-                self.recordShow = false
-                self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-                self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
-                self.quickSendImageButton.alpha = 1
-                self.moreImageButton.alpha = 1
-                self.audioRecorderContentView.removeFromSuperview()
-            }
-            else if (keyboardShow){
-                UIView.setAnimationsEnabled(false)
-                self.view.endEditing(true)
-                UIView.setAnimationsEnabled(true)
-                moveUpInputBar()
-                scrollToBottom(false)
-                self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
-                self.quickSendImageButton.alpha = 1
-                self.moreImageButton.alpha = 1
-            }else{
-                self.collectionView.scrollEnabled = false
-                UIView.animateWithDuration(0.3, animations: {
-                    self.moveUpInputBar()
-                    self.photoQuickCollectionView.frame.origin.y = self.screenHeight - 271
-                    self.quickSendImageButton.alpha = 1
-                    self.moreImageButton.alpha = 1
-                    }, completion:{ (Bool) -> Void in
-                        self.collectionView.scrollEnabled = true
-                })
-            }
-            
-            imageQuickPickerShow = true
-        }
-        scrollToBottom(true)
+        resetToolbarButtonIcon()
+        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), forState: .Normal)
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showLibrary()
+        moveUpInputBarContentView(animated)
     }
     
     func showRecord() {
-        if !recordShow {
-            audioRecorderContentView.requireForPermission(nil)
-            
-            UIApplication.sharedApplication().keyWindow?.addSubview(self.audioRecorderContentView)
-            self.audioRecorderContentView.frame.origin.y = screenHeight
-            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
-
-            if stickerViewShow {
-                stickerPicker.removeFromSuperview()
-                buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-                stickerViewShow = false
-                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
-            }else if imageQuickPickerShow{
-                self.photoQuickCollectionView.removeFromSuperview()
-                self.moreImageButton.removeFromSuperview()
-                self.quickSendImageButton.removeFromSuperview()
-                self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-                self.imageQuickPickerShow = false
-                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
-            }else if keyboardShow {
-                UIView.setAnimationsEnabled(false)
-                self.view.endEditing(true)
-                UIView.setAnimationsEnabled(true)
-                self.moveUpInputBar()
-                self.scrollToBottom(false)
-                self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
-            }
-            else{
-                self.collectionView.scrollEnabled = false
-                UIView.animateWithDuration(0.3, animations: {
-                    self.moveUpInputBar()
-                    self.audioRecorderContentView.frame.origin.y = self.screenHeight - 271
-                    }, completion:{ (Bool) -> Void in
-                        self.collectionView.scrollEnabled = true
-                })
-            }
-            recordShow = true
-        }
-        
-        scrollToBottom(true)
+        resetToolbarButtonIcon()
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showRecord()
+        moveUpInputBarContentView(animated)
     }
     
     func sendLocation() {
-        closeStickerPanel()
+        resetToolbarButtonIcon()
+        closeToolbarContentView()
         let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewControllerWithIdentifier("ChatSendLocationController") as! ChatSendLocationController
         vc.locationDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
@@ -596,16 +400,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func textViewDidBeginEditing(textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
-        self.keyboardButtonClicked()
+        self.showKeyboard()
     }
     
     func keyboardDidShow(notification: NSNotification){
-        keyboardShow = true
+        toolbarContentView.keyboardShow = true
         scrollToBottom(true)
     }
     
     func keyboardDidHide(notification: NSNotification){
-        keyboardShow = false
+        toolbarContentView.keyboardShow = false
     }
     
     
@@ -614,18 +418,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (stickerViewShow || imageQuickPickerShow || recordShow) && !isClosingStickerOrImagePicker && scrollView.scrollEnabled == true){
-                if(stickerViewShow){
-                    self.stickerPicker.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
-                }else if(imageQuickPickerShow){
-                    self.photoQuickCollectionView.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
-                    self.moreImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset), 271) / 271.0
-                    self.quickSendImageButton.alpha = 1 - min( -(scrollViewCurrentOffset - scrollViewOriginOffset ), 271) / 271.0
-                    
-                }else if recordShow {
-                    self.audioRecorderContentView.frame.origin.y = min(screenHeight - 271 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
-                }
-                self.inputToolbar.frame.origin.y = min(screenHeight - 271 - 155 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - 155)
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (toolbarContentView.mediaContentShow) && !isClosingToolbarContentView && scrollView.scrollEnabled == true){
+                self.toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
+
+                self.inputToolbar.frame.origin.y = min(screenHeight - 273 - CGRectGetHeight(self.inputToolbar.frame) - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - CGRectGetHeight(self.inputToolbar.frame) - 64)
             }
             if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
@@ -644,45 +440,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
-                if(stickerViewShow){
-                    isClosingStickerOrImagePicker = true
-                    UIView.animateWithDuration(0.2, animations: {
-                        self.moveDownInputBar()
-                        self.stickerPicker.frame.origin.y = self.screenHeight
-                        }, completion: {(Bool)->Void in
-                            self.stickerViewShow = false
-                            self.buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-                            self.stickerPicker.removeFromSuperview()
-                            self.isClosingStickerOrImagePicker = false
-                    })
-                }else if (imageQuickPickerShow){
-                    isClosingStickerOrImagePicker = true
-                    UIView.animateWithDuration(0.2, animations: {
-                        self.moveDownInputBar()
-                        self.photoQuickCollectionView.frame.origin.y = self.screenHeight
-                        self.moreImageButton.alpha = 0
-                        self.quickSendImageButton.alpha = 0
-                        }, completion: {(Bool)->Void in
-                            self.imageQuickPickerShow = false
-                            self.buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-                            self.photoQuickCollectionView.removeFromSuperview()
-                            self.moreImageButton.removeFromSuperview()
-                            self.quickSendImageButton.removeFromSuperview()
-                            self.isClosingStickerOrImagePicker = false
-                            self.cleanUpSelectedPhotos()
-                    })
-                }else if recordShow{
-                    isClosingStickerOrImagePicker = true
-                    UIView.animateWithDuration(0.2, animations: {
-                        self.moveDownInputBar()
-                        self.audioRecorderContentView.frame.origin.y = self.screenHeight
-                        }, completion: {(Bool)->Void in
-                            self.recordShow = false
-                            self.buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-                            self.audioRecorderContentView.removeFromSuperview()
-                            self.isClosingStickerOrImagePicker = false
-                    })
-                }
+                
+                isClosingToolbarContentView = true
+                UIView.animateWithDuration(0.2, animations: {
+                    self.moveDownInputBar()
+                    self.toolbarContentView.frame.origin.y = self.screenHeight
+                    }, completion: {(Bool)->Void in
+                        self.toolbarContentView.closeAll()
+                        self.resetToolbarButtonIcon()
+                        self.isClosingToolbarContentView = false
+                        self.toolbarContentView.cleanUpSelectedPhotos()
+                })
             }
         }
     }
@@ -715,15 +483,34 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             // need to check if collectionView exist before reload
         }
     
+    func moveUpInputBarContentView(animated: Bool)
+    {
+        self.collectionView.scrollEnabled = false
+        if(animated){
+            self.toolbarContentView.frame.origin.y = self.screenHeight
+            UIView.animateWithDuration(0.3, animations: {
+                self.moveUpInputBar()
+                self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+                }, completion:{ (Bool) -> Void in
+                    self.collectionView.scrollEnabled = true
+            })
+        }else{
+            self.moveUpInputBar()
+            self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+            self.collectionView.scrollEnabled = true
+        }
+        scrollToBottom(animated)
+    }
+    
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
+        let height = CGRectGetHeight(self.inputToolbar.frame)
+        let width = CGRectGetWidth(self.inputToolbar.frame)
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = self.screenHeight - 275 - 150
+        let yPosition = screenHeight - 271 - height - 64
         UIView.setAnimationsEnabled(false)
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + 90, right: 0.0)
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
         UIView.setAnimationsEnabled(true)
         //        self.inputToolbar.frame.origin.y = yPosition
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
@@ -731,12 +518,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func moveDownInputBar() {
         //
-        let height = self.inputToolbar.frame.height
-        let width = self.inputToolbar.frame.width
+        let height = CGRectGetHeight(self.inputToolbar.frame)
+        let width = CGRectGetWidth(self.inputToolbar.frame)
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 153
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 90, right: 0.0)
+        let yPosition = screenHeight - height - 64
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
         self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
     }
     
@@ -750,63 +537,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    func closeStickerPanel() {
-        if stickerViewShow {
-            stickerPicker.hidden = true
-            stickerPicker.removeFromSuperview()
-            moveDownInputBar()
-            scrollToBottom(true)
-            stickerViewShow = false
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-        }
-    }
-    
-    func closeQuickPhotoPanel() {
-        
-        if imageQuickPickerShow {
-            photoQuickCollectionView.removeFromSuperview()
-            moreImageButton.removeFromSuperview()
-            quickSendImageButton.removeFromSuperview()
-            moveDownInputBar()
-            scrollToBottom(true)
-            imageQuickPickerShow = false
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-        }
-    }
-    
-    func closeaudioRecorderContentView() {
-        if recordShow {
-            audioRecorderContentView.removeFromSuperview()
-            moveDownInputBar()
-            scrollToBottom(true)
-            recordShow = false
-            buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-        }
-    }
-    
-    func cleanUpSelectedPhotos(){
-        photoPicker.indexAssetDict.removeAll()
-        photoPicker.assetIndexDict.removeAll()
-        photoPicker.indexImageDict.removeAll()
-        self.photoQuickCollectionView.reloadData()
-    }
-    
-    
-    func shiftChosenFrameFromIndex(index : Int) {
-        // when deselect one image in photoes preview, we need to reshuffule
-        if index > photoPicker.indexImageDict.count {
-            return
-        }
-        for i in index...photoPicker.indexImageDict.count {
-            let image = photoPicker.indexImageDict[i]
-            let asset = photoPicker.indexAssetDict[i]
-            photoPicker.assetIndexDict[asset!] = i - 1
-            photoPicker.indexImageDict[i-1] = image
-            photoPicker.indexAssetDict[i-1] = asset
-        }
-        photoPicker.indexAssetDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
-        photoPicker.indexImageDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
-        self.photoQuickCollectionView.reloadData()
+    func closeToolbarContentView()
+    {
+        resetToolbarButtonIcon()
+        moveDownInputBar()
+        scrollToBottom(true)
+        toolbarContentView.closeAll()
+        toolbarContentView.frame.origin.y = screenHeight
     }
     
     func showAlertView() {
@@ -815,28 +552,47 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func getMoreImage() {
+    func getMoreImage()
+    {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("CustomCollectionViewController")as! CustomCollectionViewController
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    //MARK: UIImagePickerController
-    // this function is not use anymore
+    private func resetToolbarButtonIcon()
+    {
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Highlighted)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+    }
+    
+    func endEdit()
+    {
+        self.view.endEditing(true)
+    }
+    
+    //MARK: -  UIImagePickerController
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
+
+        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         
         picker.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
-    //MARK: - AudioRecorderViewDelegate
-    func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
-        self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
-
+    func image(image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
+    {
+        self.appWillEnterForeground()
     }
     
 }

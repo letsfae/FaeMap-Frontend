@@ -17,11 +17,6 @@ extension ChatViewController {
     // JSQMessage delegate not only should handle chat bubble itself, it should handle photoQuickSelect cell
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        if collectionView == photoQuickCollectionView {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
-            return cell
-        }
-        
         let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCellCustom
         
         let data = messages[indexPath.row]
@@ -61,20 +56,6 @@ extension ChatViewController {
     override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if collectionView == self.collectionView && indexPath.row == messages.count - 1{
             clearRecentCounter(chat_id)
-        }else if collectionView == self.photoQuickCollectionView {
-            let cell = cell as! PhotoPickerCollectionViewCell
-            //get image from PHFetchResult
-            if(self.photoPicker.cameraRoll != nil){
-                let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
-                cell.loadImage(asset, requestOption: requestOption)
-                
-                if photoPicker.assetIndexDict[asset] != nil {
-                    cell.chosenFrameImageView.hidden = false
-                    cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
-                }else{
-                    cell.chosenFrameImageView.hidden = true
-                }
-            }
         }
     }
     
@@ -85,20 +66,7 @@ extension ChatViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == photoQuickCollectionView {
-            return 1
-        }
         return messages.count
-    }
-    
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if(photoPicker.cameraRoll == nil){
-            photoPicker.getSmartAlbum()
-        }
-        if collectionView == photoQuickCollectionView && photoPicker.cameraRoll != nil{
-            return photoPicker.cameraRoll.albumCount
-        }
-        return super.numberOfSectionsInCollectionView(collectionView)
     }
     
     //this delegate is used to tell which bubble image should be used on current message
@@ -165,57 +133,13 @@ extension ChatViewController {
         
         return avatar
     }
-    
-    //photoes preview delegate
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
-            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
-            
-            if cell.chosenFrameImageView.hidden {
-                if photoPicker.indexAssetDict.count == 10 {
-                    showAlertView()
-                } else {
-                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                    let count = self.photoPicker.indexImageDict.count
-                    let highQRequestOption = PHImageRequestOptions()
-                    highQRequestOption.resizeMode = .Exact //resize time fast
-                    requestOption.deliveryMode = .HighQualityFormat //high pixel
-                    requestOption.synchronous = true
-                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
-                        self.photoPicker.indexImageDict[count] = result
-                    }
-                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
-                    cell.chosenFrameImageView.hidden = false
-                }
-            } else {
-                cell.chosenFrameImageView.hidden = true
-                let deselectedIndex = photoPicker.assetIndexDict[asset]
-                photoPicker.assetIndexDict.removeValueForKey(asset)
-                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex!)
-                photoPicker.indexImageDict.removeValueForKey(deselectedIndex!)
-                shiftChosenFrameFromIndex(deselectedIndex! + 1)
-            }
-            //            print("imageDict has \(imageDict.count) images")
-            collectionView.deselectItemAtIndexPath(indexPath, animated: true)
-        }
-    }
-    //photoes preview layout
-    override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 10
-    }
-    
-    override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 10
-    }
+  
     
     //taped bubble
     // function when user tap the bubble, like image, location
     override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         
-        closeStickerPanel()
-        closeQuickPhotoPanel()
+        closeToolbarContentView()
         
         let object = objects[indexPath.row]
         

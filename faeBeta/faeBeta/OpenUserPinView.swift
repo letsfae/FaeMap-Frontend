@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMaps
+import SwiftyJSON
 
 extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -154,9 +155,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //                print(message)
 //            }
 //        }
-
-
-        
     }
     
     func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
@@ -277,7 +275,38 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     
     func buttonChatAction(sender: UIButton!){
-        print("chat")
+        let withUserId:NSNumber = 21 //WARNING: This place is temporarily set to 21. It should be a real with user id number
+        
+        //First get chatroom id
+        getFromURL("chats/users/\(user_id)/\(withUserId)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            let resultJson1 = JSON(result!)
+            
+            // then get with user name
+            getFromURL("users/\(withUserId)/profile", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+                if(status / 100 == 2){
+                    let resultJson2 = JSON(result!)
+                    var chat_id: String?
+                    
+                    if let id = resultJson1["chat_id"].number{
+                        chat_id = id.stringValue
+                    }
+                    if let withUserName = resultJson2["user_name"].string {
+                        self.startChat(chat_id ,withUserId: withUserId, withUserName: withUserName)
+                    }else{
+                        self.startChat(chat_id, withUserId: withUserId, withUserName: nil)
+                    }
+                }
+            }
+        }
+    }
+        func startChat(chat_id: String? ,withUserId: NSNumber, withUserName: String?){
+        let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("ChatViewController")as! ChatViewController
+
+        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId)" : "\(withUserId)-\(user_id)"
+        chatVC.chat_id = chat_id
+        let withUserName = withUserName ?? "Chat"
+        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func buttonMoreAction(sender: UIButton!){
