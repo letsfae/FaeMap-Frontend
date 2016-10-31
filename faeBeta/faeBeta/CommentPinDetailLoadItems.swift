@@ -156,15 +156,15 @@ extension CommentPinViewController {
         
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: buttonCommentDetailViewComments, buttonCommentDetailViewActive, buttonCommentDetailViewPeople)
         
-        // Label of Vote Count
-        labelCommentPinVoteCount = UILabel()
-        labelCommentPinVoteCount.text = "0"
-        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        labelCommentPinVoteCount.textAlignment = .Center
-        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
+//        // Label of Vote Count
+//        labelCommentPinVoteCount = UILabel()
+//        labelCommentPinVoteCount.text = "0"
+//        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+//        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+//        labelCommentPinVoteCount.textAlignment = .Center
+//        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
         
         // Label of Like Count
         labelCommentPinLikeCount = UILabel()
@@ -186,21 +186,21 @@ extension CommentPinViewController {
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelCommentPinCommentsCount)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinCommentsCount)
         
-        // Button 3: Comment Pin DownVote
-        buttonCommentPinDownVote = UIButton()
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-        buttonCommentPinDownVote.addTarget(self, action: #selector(CommentPinViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinDownVote)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonCommentPinDownVote)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinDownVote)
-        
-        // Button 4: Comment Pin UpVote
-        buttonCommentPinUpVote = UIButton()
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-        buttonCommentPinUpVote.addTarget(self, action: #selector(CommentPinViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
+//        // Button 3: Comment Pin DownVote
+//        buttonCommentPinDownVote = UIButton()
+//        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+//        buttonCommentPinDownVote.addTarget(self, action: #selector(CommentPinViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinDownVote)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonCommentPinDownVote)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinDownVote)
+//        
+//        // Button 4: Comment Pin UpVote
+//        buttonCommentPinUpVote = UIButton()
+//        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
+//        buttonCommentPinUpVote.addTarget(self, action: #selector(CommentPinViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
+//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
         
         // Button 5: Comment Pin Like
         buttonCommentPinLike = UIButton()
@@ -337,7 +337,7 @@ extension CommentPinViewController {
         // Button: Back to Comment Detail
         buttonBackToCommentPinDetail = UIButton()
         buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-        buttonBackToCommentPinDetail.addTarget(self, action: #selector(CommentPinViewController.actionBackToCommentDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonBackToCommentPinDetail.addTarget(self, action: #selector(CommentPinViewController.actionBackToCommentDetail(_:)), forControlEvents: .TouchUpInside)
         uiviewCommentPinListBlank.addSubview(buttonBackToCommentPinDetail)
         uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
         uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
@@ -345,7 +345,7 @@ extension CommentPinViewController {
         // Button: Clear Comment Pin List
         buttonCommentPinListClear = UIButton()
         buttonCommentPinListClear.setImage(UIImage(named: "commentPinListClear"), forState: .Normal)
-        buttonCommentPinListClear.addTarget(self, action: #selector(CommentPinViewController.actionClearCommentPinList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinListClear.addTarget(self, action: #selector(CommentPinViewController.actionClearCommentPinList(_:)), forControlEvents: .TouchUpInside)
         uiviewCommentPinListBlank.addSubview(buttonCommentPinListClear)
         uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
         uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
@@ -353,7 +353,7 @@ extension CommentPinViewController {
         // Button: Drag to larger
         buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 293, screenWidth, 27))
         buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(CommentPinViewController.actionListExpandShrink(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(CommentPinViewController.actionListExpandShrink(_:)), forControlEvents: .TouchUpInside)
         uiviewCommentPinListBlank.addSubview(buttonCommentPinListDragToLargeSize)
         let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(CommentPinViewController.panActionCommentPinListDrag(_:)))
         buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)

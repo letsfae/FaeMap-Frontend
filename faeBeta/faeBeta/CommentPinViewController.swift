@@ -14,7 +14,7 @@ protocol CommentPinViewControllerDelegate {
     func dismissMarkerShadow(dismiss: Bool)
 }
 
-class CommentPinViewController: UIViewController {
+class CommentPinViewController: UIViewController, EditCommentPinViewControllerDelegate {
     
     // Delegate of this class
     var delegate: CommentPinViewControllerDelegate?
@@ -31,7 +31,9 @@ class CommentPinViewController: UIViewController {
     var commentPinCellNumCount = 0
     
     var buttonShareOnCommentDetail: UIButton!
+    var buttonEditOnCommentDetail: UIButton!
     var buttonSaveOnCommentDetail: UIButton!
+    var buttonDeleteOnCommentDetail: UIButton!
     var buttonReportOnCommentDetail: UIButton!
     
     // New Comment Pin Popup Window
@@ -233,34 +235,68 @@ class CommentPinViewController: UIViewController {
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
                                                        action: #selector(CommentPinViewController.actionToCloseOtherViews(_:)),
-                                                       forControlEvents: UIControlEvents.TouchUpInside)
+                                                       forControlEvents: .TouchUpInside)
+            let subviewXBefore: CGFloat = 400 / 414 * screenWidth
+            let subviewYBefore: CGFloat = 57 / 414 * screenWidth
+            let subviewXAfter: CGFloat = 171 / 414 * screenWidth
+            let subviewYAfter: CGFloat = 57 / 414 * screenWidth
+            let subviewWidthAfter: CGFloat = 229 / 414 * screenWidth
+            let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
+            let firstButtonX: CGFloat = 192 / 414 * screenWidth
+            let secondButtonX: CGFloat = 262 / 414 * screenWidth
+            let thirdButtonX: CGFloat = 332 / 414 * screenWidth
+            let buttonY: CGFloat = 97 / 414 * screenWidth
+            let buttonWidth: CGFloat = 44 / 414 * screenWidth
+            let buttonHeight: CGFloat = 51 / 414 * screenWidth
             
-            moreButtonDetailSubview = UIImageView(frame: CGRectMake(400, 57, 0, 0))
+            moreButtonDetailSubview = UIImageView(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
             moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
             moreButtonDetailSubview.layer.zPosition = 102
             self.view.addSubview(moreButtonDetailSubview)
             
-            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
-            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
-            buttonShareOnCommentDetail.layer.zPosition = 103
-            self.view.addSubview(buttonShareOnCommentDetail)
-            buttonShareOnCommentDetail.clipsToBounds = true
-            buttonShareOnCommentDetail.alpha = 0.0
-            buttonShareOnCommentDetail.addTarget(self,
-                                                 action: #selector(CommentPinViewController.actionShareComment(_:)),
-                                                 forControlEvents: UIControlEvents.TouchUpInside)
+            // --> Not for 11.01 Dev
+//            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
+//            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
+//            buttonShareOnCommentDetail.layer.zPosition = 103
+//            self.view.addSubview(buttonShareOnCommentDetail)
+//            buttonShareOnCommentDetail.clipsToBounds = true
+//            buttonShareOnCommentDetail.alpha = 0.0
+//            buttonShareOnCommentDetail.addTarget(self,
+//                                                 action: #selector(CommentPinViewController.actionShareComment(_:)),
+//                                                 forControlEvents: .TouchUpInside)
             
-            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
-            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
-            buttonSaveOnCommentDetail.layer.zPosition = 103
-            self.view.addSubview(buttonSaveOnCommentDetail)
-            buttonSaveOnCommentDetail.clipsToBounds = true
-            buttonSaveOnCommentDetail.alpha = 0.0
-            buttonSaveOnCommentDetail.addTarget(self,
-                                                action: #selector(CommentPinViewController.actionSavedThisPin(_:)),
-                                                forControlEvents: UIControlEvents.TouchUpInside)
+            buttonEditOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
+            buttonEditOnCommentDetail.setImage(UIImage(named: "buttonEditOnCommentDetail"), forState: .Normal)
+            buttonEditOnCommentDetail.layer.zPosition = 103
+            self.view.addSubview(buttonEditOnCommentDetail)
+            buttonEditOnCommentDetail.clipsToBounds = true
+            buttonEditOnCommentDetail.alpha = 0.0
+            buttonEditOnCommentDetail.addTarget(self,
+                                                 action: #selector(CommentPinViewController.actionEditComment(_:)),
+                                                 forControlEvents: .TouchUpInside)
             
-            buttonReportOnCommentDetail = UIButton(frame: CGRectMake(400, 57, 0, 0))
+            // --> Not for 11.01 Dev
+//            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
+//            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
+//            buttonSaveOnCommentDetail.layer.zPosition = 103
+//            self.view.addSubview(buttonSaveOnCommentDetail)
+//            buttonSaveOnCommentDetail.clipsToBounds = true
+//            buttonSaveOnCommentDetail.alpha = 0.0
+//            buttonSaveOnCommentDetail.addTarget(self,
+//                                                action: #selector(CommentPinViewController.actionSavedThisPin(_:)),
+//                                                forControlEvents: .TouchUpInside)
+            
+            buttonDeleteOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
+            buttonDeleteOnCommentDetail.setImage(UIImage(named: "buttonDeleteOnCommentDetail"), forState: .Normal)
+            buttonDeleteOnCommentDetail.layer.zPosition = 103
+            self.view.addSubview(buttonDeleteOnCommentDetail)
+            buttonDeleteOnCommentDetail.clipsToBounds = true
+            buttonDeleteOnCommentDetail.alpha = 0.0
+            buttonDeleteOnCommentDetail.addTarget(self,
+                                                action: #selector(CommentPinViewController.actionDeleteThisPin(_:)),
+                                                forControlEvents: .TouchUpInside)
+            
+            buttonReportOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
             buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), forState: .Normal)
             buttonReportOnCommentDetail.layer.zPosition = 103
             self.view.addSubview(buttonReportOnCommentDetail)
@@ -269,12 +305,19 @@ class CommentPinViewController: UIViewController {
             
             
             UIView.animateWithDuration(0.25, animations: ({
-                self.moreButtonDetailSubview.frame = CGRectMake(171, 57, 229, 110)
-                self.buttonShareOnCommentDetail.frame = CGRectMake(192, 97, 44, 51)
-                self.buttonSaveOnCommentDetail.frame = CGRectMake(262, 97, 44, 51)
-                self.buttonReportOnCommentDetail.frame = CGRectMake(332, 97, 44, 51)
-                self.buttonShareOnCommentDetail.alpha = 1.0
-                self.buttonSaveOnCommentDetail.alpha = 1.0
+                self.moreButtonDetailSubview.frame = CGRectMake(subviewXAfter,
+                                                                subviewYAfter,
+                                                                subviewWidthAfter,
+                                                                subviewHeightAfter)
+//                self.buttonShareOnCommentDetail.frame = CGRectMake(firstButtonX, buttonY, buttonWidth, buttonHeight)
+                self.buttonEditOnCommentDetail.frame = CGRectMake(firstButtonX, buttonY, buttonWidth, buttonHeight)
+//                self.buttonSaveOnCommentDetail.frame = CGRectMake(secondButtonX, buttonY, buttonWidth, buttonHeight)
+                self.buttonDeleteOnCommentDetail.frame = CGRectMake(secondButtonX, buttonY, buttonWidth, buttonHeight)
+                self.buttonReportOnCommentDetail.frame = CGRectMake(thirdButtonX, buttonY, buttonWidth, buttonHeight)
+//                self.buttonShareOnCommentDetail.alpha = 1.0
+//                self.buttonSaveOnCommentDetail.alpha = 1.0
+                self.buttonEditOnCommentDetail.alpha = 1.0
+                self.buttonDeleteOnCommentDetail.alpha = 1.0
                 self.buttonReportOnCommentDetail.alpha = 1.0
             }))
             buttonMoreOnCommentCellExpanded = true
@@ -286,7 +329,38 @@ class CommentPinViewController: UIViewController {
     
     // When clicking share button in comment pin detail window's more options button
     func actionShareComment(sender: UIButton!) {
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
         print("Share Clicks!")
+    }
+    
+    func actionEditComment(sender: UIButton!) {
+        if commentIdSentBySegue == -999 {
+            return
+        }
+        let editCommentPinVC = EditCommentPinViewController()
+        editCommentPinVC.delegate = self
+        editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
+        editCommentPinVC.commentID = "\(commentIdSentBySegue)"
+        self.presentViewController(editCommentPinVC, animated: true, completion: nil)
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+    }
+    
+    func actionDeleteThisPin(sender: UIButton) {
+        let alertController = UIAlertController(title: "Confirm Deletion", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        let DestructiveAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive) { (result : UIAlertAction) -> Void in
+            print("Delete")
+        }
+        let okAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) { (result : UIAlertAction) -> Void in
+            print("Cancel")
+        }
+        alertController.addAction(DestructiveAction)
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+    }
+    
+    func reloadCommentContent() {
+        getCommentInfo()
     }
     
     // When clicking save button in comment pin detail window's more options button
@@ -370,13 +444,19 @@ class CommentPinViewController: UIViewController {
     // Hide comment pin more options' button
     func hideCommentPinMoreButtonDetails() {
         buttonMoreOnCommentCellExpanded = false
+        let subviewXBefore: CGFloat = 400 / 414 * screenWidth
+        let subviewYBefore: CGFloat = 57 / 414 * screenWidth
         UIView.animateWithDuration(0.25, animations: ({
-            self.moreButtonDetailSubview.frame = CGRectMake(400, 57, 0, 0)
-            self.buttonShareOnCommentDetail.frame = CGRectMake(400, 57, 0, 0)
-            self.buttonSaveOnCommentDetail.frame = CGRectMake(400, 57, 0, 0)
-            self.buttonReportOnCommentDetail.frame = CGRectMake(400, 57, 0, 0)
-            self.buttonShareOnCommentDetail.alpha = 0.0
-            self.buttonSaveOnCommentDetail.alpha = 0.0
+            self.moreButtonDetailSubview.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+//            self.buttonShareOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+//            self.buttonSaveOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+            self.buttonEditOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+            self.buttonDeleteOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+            self.buttonReportOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+//            self.buttonShareOnCommentDetail.alpha = 0.0
+//            self.buttonSaveOnCommentDetail.alpha = 0.0
+            self.buttonEditOnCommentDetail.alpha = 0.0
+            self.buttonDeleteOnCommentDetail.alpha = 0.0
             self.buttonReportOnCommentDetail.alpha = 0.0
         }))
         buttonFakeTransparentClosingView.removeFromSuperview()
@@ -514,7 +594,7 @@ class CommentPinViewController: UIViewController {
     }
     
     func actionBackToMap(sender: UIButton) {
-            UIView.animateWithDuration(0.25, animations: ({
+            UIView.animateWithDuration(0.583, animations: ({
                 self.uiviewCommentPinDetail.center.y -= self.screenHeight
             }), completion: { (done: Bool) in
                 if done {

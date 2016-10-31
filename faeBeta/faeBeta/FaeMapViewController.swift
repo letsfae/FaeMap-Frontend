@@ -87,17 +87,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var myPositionOutsideMarker_2: UIImageView!
     var myPositionOutsideMarker_3: UIImageView!
     
-    // MARK: -- Search Bar
-    var uiviewTableSubview: UIView!
-    var tblSearchResults = UITableView()
-    var dataArray = [String]()
-    var filteredArray = [String]()
-    var shouldShowSearchResults = false
-    var searchController: UISearchController!
-    var customSearchController: CustomSearchController!
-    var searchBarSubview: UIView!
-    var placeholder = [GMSAutocompletePrediction]()
-    
     var myPositionIconFirstLoaded = true
     
     // MARK: -- Drag map and refresh pins
@@ -225,7 +214,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadButton()
         loadMore()
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
-//        loadMainScreenSearch()
         loadNamecard()
         loadPositionAnimateImage()
 //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
@@ -482,7 +470,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                             addressToSearchBar += line + ", "
                         }
                     }
-                    self.customSearchController.customSearchBar.text = addressToSearchBar
                 }
                 self.latitudeForPin = mapCenterCoordinate.latitude
                 self.longitudeForPin = mapCenterCoordinate.longitude

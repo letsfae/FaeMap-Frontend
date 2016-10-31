@@ -13,8 +13,6 @@ extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -37,8 +35,6 @@ extension CommentPinViewController {
         }
         
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -59,8 +55,6 @@ extension CommentPinViewController {
         }
         
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeHollow")
@@ -129,7 +123,7 @@ extension CommentPinViewController {
             
             if let likes = mapInfoJSON["likes"].int {
                 self.labelCommentPinLikeCount.text = "\(likes)"
-                self.labelCommentPinVoteCount.text = "\(likes)"
+//                self.labelCommentPinVoteCount.text = "\(likes)"
             }
             if let _ = mapInfoJSON["saves"].int {
                 
@@ -198,8 +192,6 @@ extension CommentPinViewController {
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
                     }
@@ -208,8 +200,6 @@ extension CommentPinViewController {
                 }
                 else {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
                     }

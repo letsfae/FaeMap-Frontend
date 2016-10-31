@@ -24,19 +24,28 @@ class FaeMap: NSObject {
         }
     }
     
-    func getMapInformation(completion:(Int,AnyObject?)->Void){
-        getFromURL("map", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+    func getMapInformation(completion:(Int, AnyObject?)->Void) {
+        getFromURL("map", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: AnyObject?) in
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
 
     // Comments
     
-    func postComment(completion:(Int,AnyObject?)->Void){
-        postToURL("comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+    func postComment(completion:(Int, AnyObject?)->Void) {
+        postToURL("comments", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: AnyObject?) in
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
+        }
+    }
+    
+    func updateComment(commentId: String?, completion:(Int, AnyObject?) -> Void) {
+        if commentId != nil{
+            postToURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: AnyObject?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
         }
     }
     

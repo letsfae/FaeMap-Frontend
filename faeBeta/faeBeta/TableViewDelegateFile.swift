@@ -12,30 +12,6 @@ import SwiftyJSON
 
 extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     
-    // MARK: TableView Initialize
-    
-    func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(0, 0, 398, 0))
-        tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
-        tblSearchResults.delegate = self
-        tblSearchResults.dataSource = self
-        tblSearchResults.registerClass(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
-        tblSearchResults.scrollEnabled = false
-        tblSearchResults.layer.masksToBounds = true
-        tblSearchResults.separatorInset = UIEdgeInsetsZero
-        tblSearchResults.layoutMargins = UIEdgeInsetsZero
-        uiviewTableSubview.layer.borderColor = UIColor.whiteColor().CGColor
-        uiviewTableSubview.layer.borderWidth = 1.0
-        uiviewTableSubview.layer.cornerRadius = 2.0
-        uiviewTableSubview.layer.shadowOpacity = 0.5
-        uiviewTableSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        uiviewTableSubview.layer.shadowRadius = 5.0
-        uiviewTableSubview.layer.shadowColor = UIColor.blackColor().CGColor
-        uiviewTableSubview.addSubview(tblSearchResults)
-        UIApplication.sharedApplication().keyWindow?.addSubview(uiviewTableSubview)
-    }
-    
-    
     // MARK: UITableView Delegate and Datasource functions
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -49,10 +25,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults) {
-            return placeholder.count
-        }
-        else if(tableView == self.mapChatTable) {
+        if(tableView == self.mapChatTable) {
             return 10
         }
         else if tableView == tableviewMore {
@@ -68,14 +41,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
-            cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
-            return cell
-        }
-        else if tableView == self.mapChatTable {
+        if tableView == self.mapChatTable {
             let cell = tableView.dequeueReusableCellWithIdentifier("mapChatTableCell", forIndexPath: indexPath) as! MapChatTableCell
             cell.layoutMargins = UIEdgeInsetsMake(0, 84, 0, 0)
             return cell
@@ -129,24 +95,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if(tableView == self.tblSearchResults){
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-                (place, error) -> Void in
-                // Get place.coordinate
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animateToCameraPosition(camera)
-                    }
-                })
-            })
-            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        }
-        else if tableView == tableviewMore {
+        if tableView == tableviewMore {
             if indexPath.row == 1 {
                 animationMoreHide(nil)
                 jumpToMoodAvatar()
@@ -181,10 +130,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if(tableView == self.tblSearchResults){
-            return 48.0
-        }
-        else if tableView == self.mapChatTable {
+        if tableView == self.mapChatTable {
             return 75.0
         }
         else if tableView == tableviewMore {
