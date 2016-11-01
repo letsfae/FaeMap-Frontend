@@ -473,6 +473,12 @@
 		B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
 		B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
 		B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
+		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
+		B88A3E2D1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
+		B88A3E2E1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
+		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
+		B88A3E311DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
+		B88A3E321DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8AC45891DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
@@ -525,7 +531,6 @@
 		DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
-		DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
@@ -750,6 +755,8 @@
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCommentPinDetailSegue.swift; sourceTree = "<group>"; };
+		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
+		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8C2F6841D910FEF0042F847 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
@@ -775,7 +782,6 @@
 		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
-		DCEAE5441DB165A30047110B /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
@@ -1034,7 +1040,6 @@
 			isa = PBXGroup;
 			children = (
 				B064EF1E1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift */,
-				DCEAE5441DB165A30047110B /* ScreenFactor.swift */,
 				B064EF1A1D6E354A00C078F5 /* WelcomePageControl.swift */,
 				B064EF121D6E353E00C078F5 /* WelcomeContentContainerFace.swift */,
 				B064EF131D6E353E00C078F5 /* WelcomeContentContainerFace.xib */,
@@ -1044,6 +1049,7 @@
 				B0714DF11D62513300356705 /* EmailTextField.swift */,
 				B0714DF21D62513300356705 /* PasswordAgainTextField.swift */,
 				B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */,
+				B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -1303,6 +1309,7 @@
 			isa = PBXGroup;
 			children = (
 				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
+				B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */,
 				B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */,
 				B8E819591DB3251C00D418D1 /* CommentPinExtension */,
 			);
@@ -1798,6 +1805,7 @@
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
+				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
@@ -1836,6 +1844,7 @@
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
+				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
@@ -1855,7 +1864,6 @@
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
-				DCEAE5451DB165A30047110B /* ScreenFactor.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B0CFC9B21CED39BF00EC356A /* ContainerViewController.swift in Sources */,
@@ -1914,6 +1922,7 @@
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0714DCB1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
+				B88A3E2D1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
@@ -1923,6 +1932,7 @@
 				B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0714D771D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
+				B88A3E311DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
@@ -2073,6 +2083,7 @@
 				B064EF161D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B09E49E61D96F77F0075EE45 /* README.md in Sources */,
 				B064EEAF1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
+				B88A3E321DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B09E49BB1D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B064EEF51D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
@@ -2149,6 +2160,7 @@
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
+				B88A3E2E1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EEA91D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714E221D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,

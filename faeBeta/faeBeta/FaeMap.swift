@@ -68,12 +68,12 @@ class FaeMap: NSObject {
         }
     }
     
-    func deleteCommentById(commentId:String?, completion:(Int,AnyObject?)->Void){
+    func deleteCommentById(commentId: String?, completion:(Int, AnyObject?) -> Void) {
         if commentId != nil{
             deleteFromURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
                 //                print("delete comment by id")
                 self.clearKeyValue()
-                completion(status,message)
+                completion(status, message)
             }
         }
     }

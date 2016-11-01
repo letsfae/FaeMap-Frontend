@@ -189,6 +189,15 @@ extension CommentPinViewController {
         let getCommentById = FaeMap()
         getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
             let commentInfoJSON = JSON(message!)
+            if let userid = commentInfoJSON["user_id"].int {
+                print(user_id)
+                if userid == Int(user_id) {
+                    self.thisIsMyPin = true
+                }
+                else {
+                    self.thisIsMyPin = false
+                }
+            }
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)

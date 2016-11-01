@@ -101,6 +101,9 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     // Fake Transparent View For Closing
     var buttonFakeTransparentClosingView: UIButton!
     
+    // Check if this comment belongs to current user
+    var thisIsMyPin = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
@@ -238,9 +241,9 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
                                                        forControlEvents: .TouchUpInside)
             let subviewXBefore: CGFloat = 400 / 414 * screenWidth
             let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-            let subviewXAfter: CGFloat = 171 / 414 * screenWidth
+            var subviewXAfter: CGFloat = 171 / 414 * screenWidth
             let subviewYAfter: CGFloat = 57 / 414 * screenWidth
-            let subviewWidthAfter: CGFloat = 229 / 414 * screenWidth
+            var subviewWidthAfter: CGFloat = 229 / 414 * screenWidth
             let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
             let firstButtonX: CGFloat = 192 / 414 * screenWidth
             let secondButtonX: CGFloat = 262 / 414 * screenWidth
@@ -249,8 +252,16 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
             let buttonWidth: CGFloat = 44 / 414 * screenWidth
             let buttonHeight: CGFloat = 51 / 414 * screenWidth
             
+            var moreOptionBackgroundImage = "moreButtonDetailSubview"
+            
+            if thisIsMyPin == false {
+                subviewXAfter = 308 / 414 * screenWidth
+                subviewWidthAfter = 92 / 414 * screenWidth
+                moreOptionBackgroundImage = "moreButtonDetailSubviewNotMyPin"
+            }
+            
             moreButtonDetailSubview = UIImageView(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
-            moreButtonDetailSubview.image = UIImage(named: "moreButtonDetailSubview")
+            moreButtonDetailSubview.image = UIImage(named: moreOptionBackgroundImage)
             moreButtonDetailSubview.layer.zPosition = 102
             self.view.addSubview(moreButtonDetailSubview)
             
@@ -302,6 +313,9 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
             self.view.addSubview(buttonReportOnCommentDetail)
             buttonReportOnCommentDetail.clipsToBounds = true
             buttonReportOnCommentDetail.alpha = 0.0
+            buttonReportOnCommentDetail.addTarget(self,
+                                                  action: #selector(CommentPinViewController.actionReportThisPin(_:)),
+                                                  forControlEvents: .TouchUpInside)
             
             
             UIView.animateWithDuration(0.25, animations: ({
@@ -316,8 +330,10 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
                 self.buttonReportOnCommentDetail.frame = CGRectMake(thirdButtonX, buttonY, buttonWidth, buttonHeight)
 //                self.buttonShareOnCommentDetail.alpha = 1.0
 //                self.buttonSaveOnCommentDetail.alpha = 1.0
-                self.buttonEditOnCommentDetail.alpha = 1.0
-                self.buttonDeleteOnCommentDetail.alpha = 1.0
+                if self.thisIsMyPin == true {
+                    self.buttonEditOnCommentDetail.alpha = 1.0
+                    self.buttonDeleteOnCommentDetail.alpha = 1.0
+                }
                 self.buttonReportOnCommentDetail.alpha = 1.0
             }))
             buttonMoreOnCommentCellExpanded = true
@@ -345,16 +361,39 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
     
+    func actionReportThisPin(sender: UIButton!) {
+        let reportCommentPinVC = ReportCommentPinViewController()
+        self.presentViewController(reportCommentPinVC, animated: true, completion: nil)
+        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+    }
+    
     func actionDeleteThisPin(sender: UIButton) {
         let alertController = UIAlertController(title: "Confirm Deletion", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-        let DestructiveAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive) { (result : UIAlertAction) -> Void in
+        let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
+            let deleteCommentPin = FaeMap()
+            deleteCommentPin.deleteCommentById(self.commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
+                if status / 100 == 2 {
+                    print("Successfully delete comment")
+                    UIView.animateWithDuration(0.583, animations: ({
+                        self.uiviewCommentPinDetail.center.y -= self.screenHeight
+                    }), completion: { (done: Bool) in
+                        if done {
+                            self.delegate?.dismissMarkerShadow(false)
+                            self.dismissViewControllerAnimated(false, completion: nil)
+                        }
+                    })
+                }
+                else {
+                    print("Fail to delete comment")
+                }
+            }
         }
-        let okAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) { (result : UIAlertAction) -> Void in
-            print("Cancel")
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) { (result : UIAlertAction) -> Void in
+            print("Cancel Deleting")
         }
-        alertController.addAction(DestructiveAction)
-        alertController.addAction(okAction)
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
         self.presentViewController(alertController, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }

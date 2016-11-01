@@ -16,5 +16,8 @@ extension FaeMapViewController: CommentPinViewControllerDelegate {
         if dismiss {
             self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
         }
+        else {
+            self.markerBackFromCommentDetail.map = nil
+        }
     }
 }
