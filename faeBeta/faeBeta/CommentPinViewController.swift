@@ -14,7 +14,7 @@ protocol CommentPinViewControllerDelegate {
     func dismissMarkerShadow(dismiss: Bool)
 }
 
-class CommentPinViewController: UIViewController, EditCommentPinViewControllerDelegate {
+class CommentPinViewController: UIViewController, EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate {
     
     // Delegate of this class
     var delegate: CommentPinViewControllerDelegate?
@@ -30,6 +30,7 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     var commentPinAvoidDic = [Int: Int]()
     var commentPinCellNumCount = 0
     
+    // Pin options
     var buttonShareOnCommentDetail: UIButton!
     var buttonEditOnCommentDetail: UIButton!
     var buttonSaveOnCommentDetail: UIButton!
@@ -41,7 +42,6 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
     var boolCommentPinLiked = false
-    var buttonBackToCommentPinDetail: UIButton!
     var buttonBackToCommentPinLists: UIButton!
     var buttonCommentDetailViewActive: UIButton!
     var buttonCommentDetailViewComments: UIButton!
@@ -51,24 +51,17 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     var buttonCommentPinDetailDragToLargeSize: UIButton!
     var buttonCommentPinDownVote: UIButton!
     var buttonCommentPinLike: UIButton!
-    var buttonCommentPinListClear: UIButton!
-    var buttonCommentPinListDragToLargeSize: UIButton!
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
     var commentDetailFullBoardScrollView: UIScrollView!
     var commentIDCommentPinDetailView: String = "-999"
-    var commentListExpand = false
-    var commentListScrollView: UIScrollView!
-    var commentListShowed = false
-    var commentPinCellArray = [CommentPinListCell]()
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
     var imageCommentPinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelCommentPinCommentsCount: UILabel!
     var labelCommentPinLikeCount: UILabel!
-    var labelCommentPinListTitle: UILabel!
     var labelCommentPinTimestamp: UILabel!
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
@@ -80,13 +73,11 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     var uiviewCommentPinDetail: UIView!
     var uiviewCommentPinDetailGrayBlock: UIView!
     var uiviewCommentPinDetailMainButtons: UIView!
-    var uiviewCommentPinListBlank: UIView!
-    var uiviewCommentPinListUnderLine01: UIView!
-    var uiviewCommentPinListUnderLine02: UIView!
     var uiviewCommentPinUnderLine01: UIView!
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
+    var subviewWhite: UIView!
     
     // For Dragging
     var buttonCenter = CGPointZero
@@ -104,6 +95,9 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     // Check if this comment belongs to current user
     var thisIsMyPin = false
     
+    // Control the back to comment pin detail button, prevent the more than once action
+    var backJustOnce = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
@@ -117,20 +111,11 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         self.view.addSubview(subviewBackToMap)
         self.view.sendSubviewToBack(subviewBackToMap)
         subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
+        backJustOnce = true
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        if segue.identifier == "idFirstSegueUnwind" {
-            
-        }
     }
     
     // Animation of the red sliding line
@@ -147,56 +132,45 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         })
     }
     
-    // Pan gesture for dragging comment pin list dragging button
-    func panActionCommentPinListDrag(pan: UIPanGestureRecognizer) {
-        if pan.state == .Began {
-            if uiviewCommentPinListBlank.frame.size.height == 320 {
-                commentPinSizeFrom = 320
-                commentPinSizeTo = screenHeight
-            }
-            else {
-                commentPinSizeFrom = screenHeight
-                commentPinSizeTo = 320
-            }
-        } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
-            let location = pan.locationInView(view)
-            if abs(location.y - commentPinSizeFrom) >= 60 {
-                UIView.animateWithDuration(0.2, animations: {
-                    self.buttonCommentPinListDragToLargeSize.center.y = self.commentPinSizeTo - 13.5
-                    self.uiviewCommentPinListBlank.frame.size.height = self.commentPinSizeTo
-                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeTo - 27.5
-                    self.commentListScrollView.frame.size.height = self.commentPinSizeTo - 92
-                })
-            }
-            else {
-                UIView.animateWithDuration(0.1, animations: {
-                    self.buttonCommentPinListDragToLargeSize.center.y = self.commentPinSizeFrom - 13.5
-                    self.uiviewCommentPinListBlank.frame.size.height = self.commentPinSizeFrom
-                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeFrom - 27.5
-                    self.commentListScrollView.frame.size.height = self.commentPinSizeFrom - 92
-                })
-            }
-        } else {
-            let location = pan.locationInView(view)
-            if location.y >= 306.5 {
-                buttonCommentPinListDragToLargeSize.center.y = location.y
-                uiviewCommentPinListBlank.frame.size.height = location.y + 13.5
-                commentListScrollView.frame.size.height = location.y - 78.5
-            }
-        }
-    }
-    
-    // Reset comment pin list window and remove all saved data
-    func actionClearCommentPinList(sender: UIButton) {
-        for cell in commentPinCellArray {
-            cell.removeFromSuperview()
-        }
-        commentPinCellArray.removeAll()
-        commentPinAvoidDic.removeAll()
-        commentPinCellNumCount = 0
-        disableTheButton(buttonBackToCommentPinDetail)
-    }
-    
+//    // Pan gesture for dragging comment pin list dragging button
+//    func panActionCommentPinListDrag(pan: UIPanGestureRecognizer) {
+//        if pan.state == .Began {
+//            if uiviewCommentPinListBlank.frame.size.height == 320 {
+//                commentPinSizeFrom = 320
+//                commentPinSizeTo = screenHeight
+//            }
+//            else {
+//                commentPinSizeFrom = screenHeight
+//                commentPinSizeTo = 320
+//            }
+//        } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
+//            let location = pan.locationInView(view)
+//            if abs(location.y - commentPinSizeFrom) >= 60 {
+//                UIView.animateWithDuration(0.2, animations: {
+//                    self.buttonCommentPinListDragToLargeSize.center.y = self.commentPinSizeTo - 13.5
+//                    self.uiviewCommentPinListBlank.frame.size.height = self.commentPinSizeTo
+//                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeTo - 27.5
+//                    self.commentListScrollView.frame.size.height = self.commentPinSizeTo - 92
+//                })
+//            }
+//            else {
+//                UIView.animateWithDuration(0.1, animations: {
+//                    self.buttonCommentPinListDragToLargeSize.center.y = self.commentPinSizeFrom - 13.5
+//                    self.uiviewCommentPinListBlank.frame.size.height = self.commentPinSizeFrom
+//                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeFrom - 27.5
+//                    self.commentListScrollView.frame.size.height = self.commentPinSizeFrom - 92
+//                })
+//            }
+//        } else {
+//            let location = pan.locationInView(view)
+//            if location.y >= 306.5 {
+//                buttonCommentPinListDragToLargeSize.center.y = location.y
+//                uiviewCommentPinListBlank.frame.size.height = location.y + 13.5
+//                commentListScrollView.frame.size.height = location.y - 78.5
+//            }
+//        }
+//    }
+        
     // Close more options button when it is open, the subview is under it
     func actionToCloseOtherViews(sender: UIButton) {
         if buttonMoreOnCommentCellExpanded == true {
@@ -206,28 +180,21 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     
     // Back to comment pin list window when in detail window
     func actionBackToList(sender: UIButton!) {
-        UIView.animateWithDuration(0.25, animations:({
-            self.uiviewCommentPinListBlank.center.x += self.screenWidth
-            self.uiviewCommentPinDetail.center.x += self.screenWidth
-        }), completion: { (done: Bool) in
-            if done {
-                self.commentListShowed = true
-                self.commentPinDetailShowed = false
-            }
-        })
-    }
-    
-    // Back to comment pin detail window when in pin list window
-    func actionBackToCommentDetail(sender: UIButton!) {
-        UIView.animateWithDuration(0.25, animations:({
-            self.uiviewCommentPinListBlank.center.x -= self.screenWidth
-            self.uiviewCommentPinDetail.center.x -= self.screenWidth
-        }), completion: { (done: Bool) in
-            if done {
-                self.commentListShowed = false
-                self.commentPinDetailShowed = true
-            }
-        })
+        if backJustOnce == true {
+            backJustOnce = false
+            UIView.animateWithDuration(0.583, animations:({
+                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                self.uiviewCommentPinDetail.center.y -= self.screenHeight
+            }), completion: { (done: Bool) in
+                if done {
+                    
+                }
+            })
+            let openedPinListVC = OpenedPinListViewController()
+            openedPinListVC.delegate = self
+            openedPinListVC.modalPresentationStyle = .OverCurrentContext
+            self.presentViewController(openedPinListVC, animated: false, completion: nil)
+        }
     }
     
     // Show more options button in comment pin detail window
@@ -368,7 +335,7 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     }
     
     func actionDeleteThisPin(sender: UIButton) {
-        let alertController = UIAlertController(title: "Confirm Deletion", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted from both the Map and Mapboards, no one can find it anymore. All the comments and replies will also be removed.", preferredStyle: UIAlertControllerStyle.Alert)
         let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaeMap()
@@ -392,8 +359,8 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) { (result : UIAlertAction) -> Void in
             print("Cancel Deleting")
         }
-        alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
         self.presentViewController(alertController, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
@@ -421,63 +388,6 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
                 })
             }
         })
-    }
-    
-    // Expand or shrink comment pin list
-    func actionListExpandShrink(sender: UIButton!) {
-        if commentListExpand == false {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.buttonCommentPinListDragToLargeSize.center.y = self.screenHeight - 13.5
-                self.uiviewCommentPinListBlank.frame.size.height = self.screenHeight
-                self.uiviewCommentPinListUnderLine02.center.y = self.screenHeight - 27.5
-                self.commentListScrollView.frame.size.height = self.screenHeight - 91
-            }))
-            commentListExpand = true
-        }
-        else {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.uiviewCommentPinListBlank.frame.size.height = 320
-                self.buttonCommentPinListDragToLargeSize.center.y = 306.5
-                self.uiviewCommentPinListUnderLine02.center.y = 292.5
-                self.commentListScrollView.frame.size.height = 228
-            }))
-            commentListExpand = false
-        }
-    }
-    
-    // Shrink comment pin list
-    func shrinkCommentList() {
-        if commentListExpand {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.uiviewCommentPinListBlank.frame.size.height = 320
-                self.buttonCommentPinListDragToLargeSize.center.y = 306.5
-                self.uiviewCommentPinListUnderLine02.center.y = 292.5
-                self.commentListScrollView.frame.size.height = 228
-            }))
-            commentListExpand = false
-        }
-    }
-    
-    // Expand comment pin list
-    func expandCommentList() {
-        if commentListExpand == false {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.buttonCommentPinListDragToLargeSize.center.y = self.screenHeight - 13.5
-                self.uiviewCommentPinListBlank.frame.size.height = self.screenHeight
-                self.uiviewCommentPinListUnderLine02.center.y = self.screenHeight - 27.5
-                self.commentListScrollView.frame.size.height = self.screenHeight - 91
-            }))
-            commentListExpand = true
-        }
-    }
-    
-    // When clicking a cell in comment pin list, it jumps to its detail window
-    func actionJumpToDetail(sender: UIButton!) {
-        actionBackToCommentDetail(buttonBackToCommentPinDetail)
-        let row = sender.tag
-        labelCommentPinUserName.text = commentPinCellArray[row].userID
-        labelCommentPinTimestamp.text = commentPinCellArray[row].time.text
-        textviewCommentPinDetail.text = commentPinCellArray[row].content.text
     }
     
     // Hide comment pin more options' button
@@ -518,54 +428,6 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         button.userInteractionEnabled = false
     }
     
-    // Delete comment pin list cell, ### still has bug ###
-    func deleteCommentPinCell(sender: UIButton!) {
-        let commentID = commentPinCellArray[sender.tag].commentID
-        let rowToDelete = sender.tag
-        
-        if commentPinCellNumCount == 1 {
-            commentPinCellNumCount = 0
-            disableTheButton(buttonBackToCommentPinDetail)
-            commentListScrollView.contentSize.height -= 76
-            commentPinCellArray.first!.removeFromSuperview()
-            commentPinCellArray.removeAll()
-        }
-            
-        else if commentPinCellNumCount >= 2 {
-            commentPinCellNumCount -= 1
-            commentPinCellArray[rowToDelete].removeFromSuperview()
-            commentPinCellArray.removeAtIndex(rowToDelete)
-            commentListScrollView.contentSize.height -= 76
-            for (index, cell) in commentPinCellArray.enumerate() {
-                if index >= rowToDelete {
-                    cell.jumpToDetail.tag -= 1
-                    cell.deleteButton.tag -= 1
-                    cell.center.y -= 76
-                }
-            }
-        }
-        
-        if let aDictionaryIndex = commentPinAvoidDic.indexForKey(commentID) {
-            // This will remove the key/value pair from the dictionary and return it as a tuple pair.
-            let (_, _) = commentPinAvoidDic.removeAtIndex(aDictionaryIndex)
-        }
-    }
-    
-    // Show comment pin detail window
-    func showCommentPinDetail() {
-        if uiviewCommentPinDetail != nil {
-            uiviewCommentPinDetail.frame = CGRectMake(0, -320, screenWidth, 320)
-            UIView.animateWithDuration(0.25, animations: ({
-                self.uiviewCommentPinDetail.center.y += self.uiviewCommentPinDetail.frame.size.height
-            }), completion: { (done: Bool) in
-                if done {
-                    self.commentPinDetailShowed = true
-                    self.commentListShowed = false
-                }
-            })
-        }
-    }
-    
     // Hide comment pin detail window
     func hideCommentPinDetail() {
         if uiviewCommentPinDetail != nil {
@@ -575,20 +437,9 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
                     
                 }), completion: { (done: Bool) in
                     if done {
-                        self.commentPinDetailShowed = false
-                        self.commentListShowed = false
+                        
                     }
                 })
-            }
-            if commentListShowed {
-                UIView.animateWithDuration(0.583, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .CurveLinear, animations: {
-                    self.uiviewCommentPinListBlank.center.y -= self.uiviewCommentPinListBlank.frame.size.height
-                }) { (Finished) -> Void in
-                    self.commentPinDetailShowed = false
-                    self.commentListShowed = false
-                    self.uiviewCommentPinListBlank.frame = CGRectMake(-self.screenWidth, 0, self.screenWidth, 320)
-                    self.uiviewCommentPinDetail.frame = CGRectMake(0, -320, self.screenWidth, 320)
-                }
             }
         }
     }
@@ -634,6 +485,7 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
     
     func actionBackToMap(sender: UIButton) {
             UIView.animateWithDuration(0.583, animations: ({
+                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
                 self.uiviewCommentPinDetail.center.y -= self.screenHeight
             }), completion: { (done: Bool) in
                 if done {
@@ -676,5 +528,23 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
         animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
         animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+    }
+    
+    func backFromOpenedPinList(back: Bool) {
+        if back {
+            backJustOnce = true
+            subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
+            UIView.animateWithDuration(0.583, animations:({
+                self.uiviewCommentPinDetail.center.y += self.screenHeight
+            }), completion: { (done: Bool) in
+                if done {
+                    
+                }
+            })
+        }
+        if !back {
+            self.delegate?.dismissMarkerShadow(true)
+            self.dismissViewControllerAnimated(false, completion: nil)
+        }
     }
 }

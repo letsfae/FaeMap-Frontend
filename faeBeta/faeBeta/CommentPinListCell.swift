@@ -11,21 +11,13 @@ import UIKit
 class CommentPinListCell: UIView {
     
     var imageViewAvatar: UIImageView!
-    
     var content: UILabel!
     var time: UILabel!
-    
     var deleteButton: UIButton!
     var jumpToDetail: UIButton!
-    
     var underLine: UIView!
-    
     var cellY: CGFloat = 0
-    
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    
     var commentID: Int = -999
-    
     var userID: String = "NULL"
     
     init() {

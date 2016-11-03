@@ -9,14 +9,20 @@
 import UIKit
 import GoogleMaps
 
+protocol MainScreenSearchViewControllerDelegate {
+    // Cancel marker's shadow when back to Fae Map
+    func animateToCamera(coordinate: CLLocationCoordinate2D)
+}
+
 class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    var delegate: MainScreenSearchViewControllerDelegate?
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     var mapSelectLocation: GMSMapView!
-    
     var imagePinOnMap: UIImageView!
     
     var currentLocation: CLLocation!
@@ -66,6 +72,9 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         customSearchController.customSearchBar.becomeFirstResponder()
+        UIView.animateWithDuration(0.25, animations: ({
+            self.blurViewMainScreenSearch.alpha = 1.0
+        }))
     }
 
     override func didReceiveMemoryWarning() {
@@ -191,9 +200,6 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func didChangeSearchText(searchText: String) {
         if(searchText != "") {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.blurViewMainScreenSearch.alpha = 1.0
-            }))
             buttonClearSearchBar.hidden = false
             let placeClient = GMSPlacesClient()
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
@@ -226,7 +232,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     func searchBarTableHideAnimation() {
         UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
             self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, self.resultTableWidth, 0)
+            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 0)
         }), completion: nil)
     }
     
@@ -299,8 +305,8 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                 GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.mapSelectLocation.camera.zoom)
-                        self.mapSelectLocation.animateToCameraPosition(camera)
+                        self.delegate?.animateToCamera(selectedAddress)
+                        self.dismissViewControllerAnimated(false, completion: nil)
                     }
                 })
             })

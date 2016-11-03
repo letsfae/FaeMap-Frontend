@@ -11,7 +11,7 @@ import GoogleMaps
 import CoreLocation
 import SwiftyJSON
 
-class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
+class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MainScreenSearchViewControllerDelegate {
     
     // MARK: -- Common Used Vars and Constants
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -194,10 +194,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // Marker saved for back from comment pin detail view
     var markerBackFromCommentDetail = GMSMarker()
     
+    // Local Storage for storing opened pin id, for opened pin list use
+    private let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()
+    
+    // Prevent updating user on map more than once
+    var canDoNextUserUpdate = true
+    
     // System Functions
-    
-    @IBAction func unwindToFaeMap(sender: UIStoryboardSegue) {}
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.hidden = true
@@ -216,10 +219,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadNamecard()
         loadPositionAnimateImage()
-//        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+//        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        let emptyArrayList = [Int]()
+        self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined){
             print("Not Authorised")
@@ -242,7 +248,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -272,6 +278,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "5000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
+//        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             let mapInfoJSON = JSON(message!)
             for eachTimer in self.NSTimerDisplayMarkerArray {
@@ -327,14 +334,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //                    pinShowOnMap.map = self.faeMapView
                     let delay: Double = Double(arc4random_uniform(50) + 25) / 100
                     let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
-                    let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.functionHereWithArgument(_:)), userInfo: infoDict, repeats: false)
+                    let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
                     self.NSTimerDisplayMarkerArray.append(timer)
                 }
             }
         }
     }
     
-    func functionHereWithArgument(timer: NSTimer) {
+    func editTimerToDisplayMarker(timer: NSTimer) {
         if let userInfo = timer.userInfo as? Dictionary<String, AnyObject> {
             let marker = userInfo["argumentInt"] as! GMSMarker
             marker.appearAnimation = kGMSMarkerAnimationPop
@@ -420,6 +427,18 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             hideOpenUserPinAnimation()
             openUserPinActive = false
         }
+        // Testing user marker appear animation
+//        let point = CLLocationCoordinate2DMake(currentLatitude+0.001, currentLongitude)
+//        let pinShowOnMap = GMSMarker()
+//        pinShowOnMap.position = point
+//        pinShowOnMap.icon = UIImage(named: "avatar_\(4)")
+//        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+//        fadeAnimation.fromValue = 0.0
+//        fadeAnimation.toValue = 1.0
+//        fadeAnimation.duration = 1
+//        pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+//        pinShowOnMap.map = self.faeMapView
+        // End Testing Above Code
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -491,6 +510,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
     }
     
+    // To get opened pin list, but it is a general func
+    func readByKey(key: String) -> AnyObject? {
+        if let obj = self.storageForOpenedPinList.objectForKey(key) {
+            return obj
+        }
+        return nil
+    }
+    
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
@@ -499,7 +526,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
-                
                 if let userid = marker.userData!["user_id"] {
                     loadUserPinInformation("\(userid)")
                 }
@@ -510,9 +536,25 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
+                    var openedPinListArray = [Int]()
+                    openedPinListArray.append(commentIDGet)
                     marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                    if let listArray = readByKey("openedPinList") {
+                        openedPinListArray.removeAll()
+                        openedPinListArray = listArray as! [Int]
+                        if openedPinListArray.contains(commentIDGet) == false {
+                            openedPinListArray.append(commentIDGet)
+                        }
+                        self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
+                        print("DEBUG: listArray")
+                        print(listArray)
+                    }
+                    self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
+                    print("DEBUG: openedPinListArray")
+                    print(openedPinListArray)
                 }
                 self.markerBackFromCommentDetail = marker
+                
                 self.jumpToCommentPinDetail()
                 return true
             }
@@ -608,6 +650,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 }
             }
         })
+    }
+    
+    func animateToCamera(coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: self.faeMapView.camera.zoom)
+        self.faeMapView.animateToCameraPosition(camera)
     }
     
     override func didReceiveMemoryWarning() {

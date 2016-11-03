@@ -13,7 +13,7 @@ extension CommentPinViewController {
     // Load comment pin detail window
     func loadCommentPinDetailWindow() {
         // Header
-        uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 0, screenWidth, 320))
+        uiviewCommentPinDetail = UIView(frame: CGRectMake(0, 65, screenWidth, 255))
         uiviewCommentPinDetail.backgroundColor = UIColor.whiteColor()
         uiviewCommentPinDetail.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
         uiviewCommentPinDetail.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
@@ -22,14 +22,20 @@ extension CommentPinViewController {
         uiviewCommentPinDetail.layer.zPosition = 100
         self.view.addSubview(uiviewCommentPinDetail)
         
+        
+        subviewWhite = UIView(frame: CGRectMake(0, 0, screenWidth, 65))
+        subviewWhite.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(subviewWhite)
+        subviewWhite.layer.zPosition = 101
+        
         // Line at y = 64
         uiviewCommentPinUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))
         uiviewCommentPinUnderLine01.layer.borderWidth = screenWidth
         uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine01)
+        subviewWhite.addSubview(uiviewCommentPinUnderLine01)
         
         // Line at y = 292
-        uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 292, screenWidth, 1))
+        uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 227, screenWidth, 1))
         uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
         uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine02)
         
@@ -37,29 +43,29 @@ extension CommentPinViewController {
         buttonCommentPinBackToMap = UIButton()
         buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), forState: .Normal)
         buttonCommentPinBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetail.addSubview(buttonCommentPinBackToMap)
-        uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
-        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(26)]", options: [], views: buttonCommentPinBackToMap)
+        subviewWhite.addSubview(buttonCommentPinBackToMap)
+        subviewWhite.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
+        subviewWhite.addConstraintsWithFormat("V:|-28-[v0(26)]", options: [], views: buttonCommentPinBackToMap)
         buttonCommentPinBackToMap.alpha = 0.0
         
         // Button 1: Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
         buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
         buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetail.addSubview(buttonBackToCommentPinLists)
-        uiviewCommentPinDetail.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
-        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: buttonBackToCommentPinLists)
+        subviewWhite.addSubview(buttonBackToCommentPinLists)
+        subviewWhite.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
+        subviewWhite.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: buttonBackToCommentPinLists)
         
         // Button 2: Comment Pin Option
         buttonOptionOfCommentPin = UIButton()
         buttonOptionOfCommentPin.setImage(UIImage(named: "commentPinOption"), forState: .Normal)
         buttonOptionOfCommentPin.addTarget(self, action: #selector(CommentPinViewController.showCommentPinMoreButtonDetails(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetail.addSubview(buttonOptionOfCommentPin)
-        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(27)]-15-|", options: [], views: buttonOptionOfCommentPin)
-        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfCommentPin)
+        subviewWhite.addSubview(buttonOptionOfCommentPin)
+        subviewWhite.addConstraintsWithFormat("H:[v0(27)]-15-|", options: [], views: buttonOptionOfCommentPin)
+        subviewWhite.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfCommentPin)
         
         // ScrollView at 65
-        commentDetailFullBoardScrollView = UIScrollView(frame: CGRectMake(0, 65, screenWidth, 228))
+        commentDetailFullBoardScrollView = UIScrollView(frame: CGRectMake(0, 0, screenWidth, 228))
         uiviewCommentPinDetail.addSubview(commentDetailFullBoardScrollView)
         commentDetailFullBoardScrollView.scrollEnabled = false
         commentDetailFullBoardScrollView.contentSize.height = 228
@@ -234,9 +240,9 @@ extension CommentPinViewController {
         labelCommentPinTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelCommentPinTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         labelCommentPinTitle.textAlignment = .Center
-        uiviewCommentPinDetail.addSubview(labelCommentPinTitle)
-        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
-        uiviewCommentPinDetail.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
+        subviewWhite.addSubview(labelCommentPinTitle)
+        subviewWhite.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
+        subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
         NSLayoutConstraint(item: labelCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
         // Comment Pin User Avatar
@@ -283,90 +289,5 @@ extension CommentPinViewController {
         NSLayoutConstraint(item: imageViewSaved, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         imageViewSaved.layer.zPosition = 104
         imageViewSaved.alpha = 0.0
-    }
-    
-    // Load comment pin list
-    func loadCommentPinList() {
-        uiviewCommentPinListBlank = UIView(frame: CGRectMake(0, 0, screenWidth, 320))
-        uiviewCommentPinListBlank.layer.zPosition = 100
-        uiviewCommentPinListBlank.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(uiviewCommentPinListBlank)
-        uiviewCommentPinListBlank.layer.shadowOpacity = 0.3
-        uiviewCommentPinListBlank.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        uiviewCommentPinListBlank.layer.shadowRadius = 10.0
-        uiviewCommentPinListBlank.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
-        uiviewCommentPinListBlank.center.x -= screenWidth
-        
-        let leftSwipe = UISwipeGestureRecognizer(target: self,
-                                                 action: #selector(CommentPinViewController.actionBackToCommentDetail(_:)))
-        let rightSwipe = UISwipeGestureRecognizer(target: self,
-                                                  action: #selector(CommentPinViewController.actionBackToList(_:)))
-        let upSwipe = UISwipeGestureRecognizer(target: self,
-                                               action: #selector(CommentPinViewController.shrinkCommentList))
-        let downSwipe = UISwipeGestureRecognizer(target: self,
-                                                 action: #selector(CommentPinViewController.expandCommentList))
-        
-        leftSwipe.direction = .Left
-        rightSwipe.direction = .Right
-        upSwipe.direction = .Up
-        downSwipe.direction = .Down
-        
-        uiviewCommentPinListBlank.addGestureRecognizer(leftSwipe)
-        uiviewCommentPinListBlank.addGestureRecognizer(upSwipe)
-        uiviewCommentPinListBlank.addGestureRecognizer(downSwipe)
-        uiviewCommentPinDetail.addGestureRecognizer(rightSwipe)
-        
-        // Scrollview
-        commentListScrollView = UIScrollView(frame: CGRectMake(0, 65, screenWidth, 228))
-        uiviewCommentPinListBlank.addSubview(commentListScrollView)
-        
-        // Line at y = 64
-        uiviewCommentPinListUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))
-        uiviewCommentPinListUnderLine01.layer.borderWidth = screenWidth
-        uiviewCommentPinListUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine01)
-        
-        // Line at y = 292
-        uiviewCommentPinListUnderLine02 = UIView(frame: CGRectMake(0, 292, screenWidth, 1))
-        uiviewCommentPinListUnderLine02.layer.borderWidth = screenWidth
-        uiviewCommentPinListUnderLine02.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
-        uiviewCommentPinListBlank.addSubview(uiviewCommentPinListUnderLine02)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewCommentPinListUnderLine02)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("V:[v0(1)]-27-|", options: [], views: uiviewCommentPinListUnderLine02)
-        
-        // Button: Back to Comment Detail
-        buttonBackToCommentPinDetail = UIButton()
-        buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-        buttonBackToCommentPinDetail.addTarget(self, action: #selector(CommentPinViewController.actionBackToCommentDetail(_:)), forControlEvents: .TouchUpInside)
-        uiviewCommentPinListBlank.addSubview(buttonBackToCommentPinDetail)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
-        
-        // Button: Clear Comment Pin List
-        buttonCommentPinListClear = UIButton()
-        buttonCommentPinListClear.setImage(UIImage(named: "commentPinListClear"), forState: .Normal)
-        buttonCommentPinListClear.addTarget(self, action: #selector(CommentPinViewController.actionClearCommentPinList(_:)), forControlEvents: .TouchUpInside)
-        uiviewCommentPinListBlank.addSubview(buttonCommentPinListClear)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
-        
-        // Button: Drag to larger
-        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 293, screenWidth, 27))
-        buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(CommentPinViewController.actionListExpandShrink(_:)), forControlEvents: .TouchUpInside)
-        uiviewCommentPinListBlank.addSubview(buttonCommentPinListDragToLargeSize)
-        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(CommentPinViewController.panActionCommentPinListDrag(_:)))
-        buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)
-        
-        // Label of Title
-        labelCommentPinListTitle = UILabel()
-        labelCommentPinListTitle.text = "Opened Pins"
-        labelCommentPinListTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        labelCommentPinListTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        labelCommentPinListTitle.textAlignment = .Center
-        uiviewCommentPinListBlank.addSubview(labelCommentPinListTitle)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
-        uiviewCommentPinListBlank.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
-        NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinListBlank, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
     }
 }

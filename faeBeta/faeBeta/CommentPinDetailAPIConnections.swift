@@ -222,17 +222,14 @@ extension CommentPinViewController {
                     let userProfile = JSON(message!)
                     if let username = userProfile["user_name"].string {
                         self.labelCommentPinUserName.text = username
-//                        cell.userID = username
                     }
                 }
             }
             if let time = commentInfoJSON["created_at"].string {
-                self.labelCommentPinTimestamp.text = "\(time)"
-//                cell.time.text = "\(time)"
+                self.labelCommentPinTimestamp.text = time.formatFaeDate()
             }
             if let content = commentInfoJSON["content"].string {
                 self.textviewCommentPinDetail.text = "\(content)"
-//                cell.content.text = "\(content)"
             }
         }
     }

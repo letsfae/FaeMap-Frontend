@@ -230,15 +230,3 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
     }
 }
-
-extension UIView {
-    func addConstraintsWithFormat(format: String, options: NSLayoutFormatOptions, views: UIView...) {
-        var viewDictionary = [String: UIView]()
-        for (index, view) in views.enumerate() {
-            let key = "v\(index)"
-            view.translatesAutoresizingMaskIntoConstraints = false
-            viewDictionary[key] = view
-        }
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(format, options: options, metrics: nil, views: viewDictionary))
-    }
-}
