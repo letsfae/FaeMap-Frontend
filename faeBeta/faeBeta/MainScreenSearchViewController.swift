@@ -71,10 +71,14 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        customSearchController.customSearchBar.becomeFirstResponder()
         UIView.animateWithDuration(0.25, animations: ({
+            self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
             self.blurViewMainScreenSearch.alpha = 1.0
-        }))
+        }), completion: { (done: Bool) in
+            if done {
+                self.customSearchController.customSearchBar.becomeFirstResponder()
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -90,27 +94,29 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func loadFunctionButtons() {
+        searchBarSubview = UIView(frame: CGRectMake(0, 0, screenWidth, 64))
+        searchBarSubview.layer.zPosition = 1
+        self.view.addSubview(searchBarSubview)
+        self.searchBarSubview.center.y -= self.searchBarSubview.frame.size.height
         let backSubviewButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        self.view.addSubview(backSubviewButton)
+        self.searchBarSubview.addSubview(backSubviewButton)
         backSubviewButton.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
         backSubviewButton.layer.zPosition = 0
         
         let viewToHideLeftSideSearchBar = UIView(frame: CGRectMake(0, 0, 50, 64))
         viewToHideLeftSideSearchBar.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(viewToHideLeftSideSearchBar)
+        self.searchBarSubview.addSubview(viewToHideLeftSideSearchBar)
         viewToHideLeftSideSearchBar.layer.zPosition = 2
         
         let viewToHideRightSideSearchBar = UIView()
         viewToHideRightSideSearchBar.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(viewToHideRightSideSearchBar)
+        self.searchBarSubview.addSubview(viewToHideRightSideSearchBar)
         viewToHideRightSideSearchBar.layer.zPosition = 2
-        self.view.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
-        self.view.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
+        self.searchBarSubview.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
+        self.searchBarSubview.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
     }
     
     func loadCustomSearchController() {
-        let searchBarSubview = UIView(frame: CGRectMake(0, 0, screenWidth, 64))
-        searchBarSubview.layer.zPosition = 1
         customSearchController = CustomSearchController(searchResultsController: self,
                                                         searchBarFrame: CGRectMake(18, 23, resultTableWidth, 36),
                                                         searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
@@ -123,33 +129,32 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         
         searchBarSubview.addSubview(customSearchController.customSearchBar)
         searchBarSubview.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(searchBarSubview)
         
         searchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
         searchBarSubview.layer.borderWidth = 1.0
         
         let buttonBackToFaeMap = UIButton(frame: CGRectMake(0, 32, 40.5, 18))
         buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), forState: .Normal)
-        self.view.addSubview(buttonBackToFaeMap)
+        self.searchBarSubview.addSubview(buttonBackToFaeMap)
         buttonBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
         buttonBackToFaeMap.layer.zPosition = 3
         
         buttonClearSearchBar = UIButton()
         buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), forState: .Normal)
-        self.view.addSubview(buttonClearSearchBar)
+        self.searchBarSubview.addSubview(buttonClearSearchBar)
         buttonClearSearchBar.addTarget(self,
                                        action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)),
                                        forControlEvents: .TouchUpInside)
         buttonClearSearchBar.layer.zPosition = 3
-        self.view.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
-        self.view.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonClearSearchBar)
+        self.searchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
+        self.searchBarSubview.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonClearSearchBar)
         buttonClearSearchBar.hidden = true
         
         let uiviewCommentPinUnderLine = UIView(frame: CGRectMake(0, 63, screenWidth, 1))
         uiviewCommentPinUnderLine.layer.borderWidth = screenWidth
         uiviewCommentPinUnderLine.layer.borderColor = UIColor(red: 196/255, green: 195/255, blue: 200/255, alpha: 1.0).CGColor
         uiviewCommentPinUnderLine.layer.zPosition = 3
-        self.view.addSubview(uiviewCommentPinUnderLine)
+        self.searchBarSubview.addSubview(uiviewCommentPinUnderLine)
     }
     
     func actionDimissSearchBar(sender: UIButton) {
@@ -305,6 +310,8 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                 GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
+                        print("DEBUG Main Screen Search")
+                        print(selectedAddress)
                         self.delegate?.animateToCamera(selectedAddress)
                         self.dismissViewControllerAnimated(false, completion: nil)
                     }

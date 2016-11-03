@@ -653,6 +653,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func animateToCamera(coordinate: CLLocationCoordinate2D) {
+        print(coordinate)
         let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: self.faeMapView.camera.zoom)
         self.faeMapView.animateToCameraPosition(camera)
     }

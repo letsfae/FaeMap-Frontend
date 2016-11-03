@@ -218,7 +218,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
                     NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
-//                    return
                 }
             }
         }
@@ -227,6 +226,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     func jumpToMainScreenSearch(sender: UIButton) {
         let mainScreenSearchVC = MainScreenSearchViewController()
         mainScreenSearchVC.modalPresentationStyle = .OverCurrentContext
+        mainScreenSearchVC.delegate = self
         self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
     }
 }
