@@ -94,7 +94,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
         }
-        if let currentLocation = currentLocation{
+        if currentLocation != nil {
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)

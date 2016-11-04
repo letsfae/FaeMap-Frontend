@@ -51,7 +51,6 @@
 		B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */; };
 		B00EC3E31D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E01D2C485000AD9673 /* CountryCodePickerViewController.swift */; };
 		B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
-		B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
 		B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
 		B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
 		B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
@@ -542,7 +541,6 @@
 		DC3D10511DC2AE8E0011C772 /* OutgoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */; };
 		DC3D10521DC2AE8E0011C772 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA61D6E0CA100C078F5 /* Recent.swift */; };
 		DC3D10531DC2AE8F0011C772 /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
-		DC3D10541DC2AE8F0011C772 /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DC3D10551DC2AE9E0011C772 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DC3D10561DC2AE9E0011C772 /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DC3D10571DC2AE9E0011C772 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
@@ -1790,7 +1788,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AA9320D8598EB8945F5792AF /* [CP] Embed Pods Frameworks */ = {
@@ -1820,7 +1818,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D94C04A7F846C96E72158E91 /* [CP] Check Pods Manifest.lock */ = {
@@ -1835,7 +1833,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2038,6 +2036,8 @@
 				B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */,
 				B0714D771D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				DC3D10501DC2AE8E0011C772 /* IncomingMessage.swift in Sources */,
+				B88A3E311DC86B1200351A2A /* ScreenFactor.swift in Sources */,
+				B84E1A5A1DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
 				B064EF561D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				B0BF35821D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0BF35701D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
@@ -2062,6 +2062,7 @@
 				B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D6E1D5E435200356705 /* TableViewDelegateFile.swift in Sources */,
 				DC3D10491DC2AE800011C772 /* ChatViewController+collecitonView.swift in Sources */,
+				B84E1A631DCBE322000E29B9 /* OpenedPinListActionControl.swift in Sources */,
 				B87E138A1D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B8C4A9721DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
 				DC3D104D1DC2AE8E0011C772 /* Avatar.swift in Sources */,
@@ -2124,9 +2125,10 @@
 				B84E1A5F1DCBE279000E29B9 /* OpenedPinTableViewControl.swift in Sources */,
 				B0D36BEF1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B8C741121DB710C60020E4E7 /* CommentPinDetailAPIConnections.swift in Sources */,
-				B8E8195C1DB3255000D418D1 /* TableViewControlFile.swift in Sources */,
+				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
+				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
 				DC3D10511DC2AE8E0011C772 /* OutgoingMessage.swift in Sources */,
-				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
+				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
 				B0714E1D1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B839AA201DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,

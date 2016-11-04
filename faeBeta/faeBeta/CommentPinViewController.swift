@@ -10,7 +10,17 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
+protocol CommentPinViewControllerDelegate {
+    // Cancel marker's shadow when back to Fae Map
+    func dismissMarkerShadow(dismiss: Bool)
+    // Pass location data to fae map view
+    func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int)
+}
+
+class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate,EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate {
+    
+    // Delegate of this class
+    var delegate: CommentPinViewControllerDelegate?
     
     // Comment ID To Use In This Controller
     var commentIdSentBySegue: Int = -999
@@ -85,23 +95,26 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     // Fake Transparent View For Closing
     var buttonFakeTransparentClosingView: UIButton!
     
+    // Check if this comment belongs to current user
+    var thisIsMyPin = false
+    
+    // Control the back to comment pin detail button, prevent the more than once action
+    var backJustOnce = true
+    
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     private var isObservingInputTextView = false
     private var inputTextViewContext = 0
     var inputTextViewMaximumHeight:CGFloat = 300
-    
-    var toolbarHeightConstraint: NSLayoutConstraint!
     var toolbarDistanceToBottom: NSLayoutConstraint!
-//    
+    var toolbarHeightConstraint: NSLayoutConstraint!
+
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
     var buttonImagePicker : UIButton!
-    
-    var toolbarContentView: FAEChatToolBarContentView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,15 +163,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        if segue.identifier == "idFirstSegueUnwind" {
-            
-        }
     }
     
     private func addObservers(){
@@ -635,7 +639,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         animatingHeart.image = UIImage(named: "commentPinLikeFull")
         uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
         
-        //创建用于转移坐标的Transform，这样我们不用按照实际显示做坐标计算
+        //
         let randomX = CGFloat(arc4random_uniform(150))
         let randomY = CGFloat(arc4random_uniform(50) + 100)
         let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
@@ -663,6 +667,24 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
         animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+    }
+    
+    func backFromOpenedPinList(back: Bool) {
+        if back {
+            backJustOnce = true
+            subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
+            UIView.animateWithDuration(0.583, animations:({
+                self.uiviewCommentPinDetail.center.y += self.screenHeight
+            }), completion: { (done: Bool) in
+                if done {
+                    
+                }
+            })
+        }
+        if !back {
+            self.delegate?.dismissMarkerShadow(true)
+            self.dismissViewControllerAnimated(false, completion: nil)
+        }
     }
     
     func appWillEnterForeground(){
@@ -840,6 +862,15 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             buttonSend.enabled = true
             buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
         }
+    }
+    
+    func animateToCameraFromOpenedPinListView(coordinate: CLLocationCoordinate2D, commentID: Int) {
+        self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
+        self.backJustOnce = true
+        self.subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
+        self.uiviewCommentPinDetail.center.y += self.screenHeight
+        self.commentIDCommentPinDetailView = "\(commentID)"
+        self.getCommentInfo()
     }
     
     func textViewDidEndEditing(textView: UITextView) {
