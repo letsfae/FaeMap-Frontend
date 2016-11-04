@@ -2,7 +2,7 @@
 //  WindBellTableViewCell.swift
 //  faeBeta
 //
-//  Created by 王彦翔 on 16/7/25.
+//  Created by Yanxiang Wang on 16/7/25.
 //  Copyright © 2016年 fae. All rights reserved.
 //
 

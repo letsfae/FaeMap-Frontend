@@ -25,7 +25,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonMainScreenSearch = UIButton()
         buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
         self.view.addSubview(buttonMainScreenSearch)
-        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
@@ -218,21 +218,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
                     NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
-//                    return
                 }
             }
         }
     }
-}
-
-extension UIView {
-    func addConstraintsWithFormat(format: String, options: NSLayoutFormatOptions, views: UIView...) {
-        var viewDictionary = [String: UIView]()
-        for (index, view) in views.enumerate() {
-            let key = "v\(index)"
-            view.translatesAutoresizingMaskIntoConstraints = false
-            viewDictionary[key] = view
-        }
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(format, options: options, metrics: nil, views: viewDictionary))
+    
+    func jumpToMainScreenSearch(sender: UIButton) {
+        let mainScreenSearchVC = MainScreenSearchViewController()
+        mainScreenSearchVC.modalPresentationStyle = .OverCurrentContext
+        mainScreenSearchVC.delegate = self
+        self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
     }
 }

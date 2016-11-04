@@ -10,31 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate {
-    
-    // MARK: TableView Initialize
-    
-    func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(0, 0, 398, 0))
-        tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
-        tblSearchResults.delegate = self
-        tblSearchResults.dataSource = self
-        tblSearchResults.registerClass(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
-        tblSearchResults.scrollEnabled = false
-        tblSearchResults.layer.masksToBounds = true
-        tblSearchResults.separatorInset = UIEdgeInsetsZero
-        tblSearchResults.layoutMargins = UIEdgeInsetsZero
-        uiviewTableSubview.layer.borderColor = UIColor.whiteColor().CGColor
-        uiviewTableSubview.layer.borderWidth = 1.0
-        uiviewTableSubview.layer.cornerRadius = 2.0
-        uiviewTableSubview.layer.shadowOpacity = 0.5
-        uiviewTableSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        uiviewTableSubview.layer.shadowRadius = 5.0
-        uiviewTableSubview.layer.shadowColor = UIColor.blackColor().CGColor
-        uiviewTableSubview.addSubview(tblSearchResults)
-        UIApplication.sharedApplication().keyWindow?.addSubview(uiviewTableSubview)
-    }
-    
+extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
     
@@ -49,10 +25,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults) {
-            return placeholder.count
-        }
-        else if(tableView == self.mapChatTable) {
+        if(tableView == self.mapChatTable) {
             return 10
         }
         else if tableView == tableviewMore {
@@ -68,14 +41,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
-            cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
-            return cell
-        }
-        else if tableView == self.mapChatTable {
+        if tableView == self.mapChatTable {
             let cell = tableView.dequeueReusableCellWithIdentifier("mapChatTableCell", forIndexPath: indexPath) as! MapChatTableCell
             cell.layoutMargins = UIEdgeInsetsMake(0, 84, 0, 0)
             return cell
@@ -129,27 +95,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if(tableView == self.tblSearchResults){
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-                (place, error) -> Void in
-                // Get place.coordinate
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animateToCameraPosition(camera)
-                    }
-                })
-            })
-            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            if mainScreenSearchActive {
-                animationMainScreenSearchHide(self.mainScreenSearchSubview)
-            }
-        }
-        else if tableView == tableviewMore {
+        if tableView == tableviewMore {
             if indexPath.row == 1 {
 //                animationMoreHide(nil)
                 jumpToMoodAvatar()
@@ -184,10 +130,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if(tableView == self.tblSearchResults){
-            return 48.0
-        }
-        else if tableView == self.mapChatTable {
+        if tableView == self.mapChatTable {
             return 75.0
         }
         else if tableView == tableviewMore {
@@ -202,105 +145,5 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource, UISe
     }
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         
-    }
-    
-    func configureCustomSearchController() {
-        searchBarSubview = UIView(frame: CGRectMake(8, 23, 398, 48.0))
-        
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5, 398, 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
-        customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
-        customSearchController.customDelegate = self
-        customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.whiteColor().CGColor
-        
-        searchBarSubview.addSubview(customSearchController.customSearchBar)
-        searchBarSubview.backgroundColor = UIColor.whiteColor()
-        UIApplication.sharedApplication().keyWindow?.addSubview(searchBarSubview)
-        
-        searchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
-        searchBarSubview.layer.borderWidth = 1.0
-        searchBarSubview.layer.cornerRadius = 2.0
-        searchBarSubview.layer.shadowOpacity = 0.5
-        searchBarSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        searchBarSubview.layer.shadowRadius = 5.0
-        searchBarSubview.layer.shadowColor = UIColor.blackColor().CGColor
-        
-        searchBarSubview.hidden = true
-        tblSearchResults.hidden = true
-        uiviewTableSubview.hidden = true
-    }
-    
-    // MARK: UISearchResultsUpdating delegate function
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        tblSearchResults.reloadData()
-    }
-    
-    // MARK: CustomSearchControllerDelegate functions
-    func didStartSearching() {
-        shouldShowSearchResults = true
-        tblSearchResults.reloadData()
-        customSearchController.customSearchBar.becomeFirstResponder()
-        if middleTopActive {
-            UIView.animateWithDuration(0.25, animations: ({
-                self.blurViewMainScreenSearch.alpha = 1.0
-            }))
-            middleTopActive = false
-        }
-    }
-    
-    func didTapOnSearchButton() {
-        if !shouldShowSearchResults {
-            shouldShowSearchResults = true
-            tblSearchResults.reloadData()
-        }
-        
-        if placeholder.count > 0 {
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[0].placeID!, callback: {
-                (place, error) -> Void in
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animateToCameraPosition(camera)
-                    }
-                })
-            })
-            self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
-        }
-        
-    }
-    
-    func didTapOnCancelButton() {
-        shouldShowSearchResults = false
-        tblSearchResults.reloadData()
-    }
-    
-    func didChangeSearchText(searchText: String) {
-        if(searchText != "") {
-            let placeClient = GMSPlacesClient()
-            placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
-                (results, error : NSError?) -> Void in
-                if(error != nil) {
-                    print(error)
-                }
-                self.placeholder.removeAll()
-                if results == nil {
-                    return
-                } else {
-                    for result in results! {
-                        self.placeholder.append(result)
-                    }
-                    self.tblSearchResults.reloadData()
-                }
-            }
-            if placeholder.count > 0 {
-            }
-        }
-        else {
-            self.placeholder.removeAll()
-            self.tblSearchResults.reloadData()
-        }
     }
 }

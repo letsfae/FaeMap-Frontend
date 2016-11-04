@@ -7,27 +7,28 @@
 //
 
 import Foundation
+import UIKit
 
 var screenWidth : CGFloat {
-    get{
-        return UIScreen.mainScreen().bounds.width
-    }
+get{
+    return UIScreen.mainScreen().bounds.width
+}
 }
 
 var screenHeight : CGFloat {
-    get{
-        return UIScreen.mainScreen().bounds.height
-    }
+get{
+    return UIScreen.mainScreen().bounds.height
+}
 }
 
 var screenWidthFactor : CGFloat {
-    get{
-        return UIScreen.mainScreen().bounds.width / 414
-    }
+get{
+    return UIScreen.mainScreen().bounds.width / 414
+}
 }
 
 var screenHeightFactor : CGFloat {
-    get{
-        return UIScreen.mainScreen().bounds.height / 736
-    }
+get{
+    return UIScreen.mainScreen().bounds.height / 736
+}
 }

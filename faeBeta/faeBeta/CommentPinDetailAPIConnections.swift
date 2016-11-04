@@ -13,8 +13,6 @@ extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -37,8 +35,6 @@ extension CommentPinViewController {
         }
         
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -59,8 +55,6 @@ extension CommentPinViewController {
         }
         
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeHollow")
@@ -129,7 +123,7 @@ extension CommentPinViewController {
             
             if let likes = mapInfoJSON["likes"].int {
                 self.labelCommentPinLikeCount.text = "\(likes)"
-                self.labelCommentPinVoteCount.text = "\(likes)"
+//                self.labelCommentPinVoteCount.text = "\(likes)"
             }
             if let _ = mapInfoJSON["saves"].int {
                 
@@ -195,11 +189,18 @@ extension CommentPinViewController {
         let getCommentById = FaeMap()
         getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
             let commentInfoJSON = JSON(message!)
+            if let userid = commentInfoJSON["user_id"].int {
+                print(user_id)
+                if userid == Int(user_id) {
+                    self.thisIsMyPin = true
+                }
+                else {
+                    self.thisIsMyPin = false
+                }
+            }
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
                     }
@@ -208,8 +209,6 @@ extension CommentPinViewController {
                 }
                 else {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
                     }
@@ -223,17 +222,14 @@ extension CommentPinViewController {
                     let userProfile = JSON(message!)
                     if let username = userProfile["user_name"].string {
                         self.labelCommentPinUserName.text = username
-//                        cell.userID = username
                     }
                 }
             }
             if let time = commentInfoJSON["created_at"].string {
-                self.labelCommentPinTimestamp.text = "\(time)"
-//                cell.time.text = "\(time)"
+                self.labelCommentPinTimestamp.text = time.formatFaeDate()
             }
             if let content = commentInfoJSON["content"].string {
                 self.textviewCommentPinDetail.text = "\(content)"
-//                cell.content.text = "\(content)"
             }
         }
     }

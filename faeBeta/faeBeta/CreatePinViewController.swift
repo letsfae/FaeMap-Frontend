@@ -15,7 +15,7 @@ protocol CreatePinViewControllerDelegate {
 }
 
 class CreatePinViewController: UIViewController, UITextViewDelegate {
-
+    
     var delegate: CreatePinViewControllerDelegate?
     
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -84,6 +84,10 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
             self.blurViewMap.alpha = 1.0
             }, completion: nil)
         actionCreateCommentPin(buttonComment)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
 
     override func didReceiveMemoryWarning() {
@@ -401,6 +405,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
+        postSingleComment.whereKey("duration", value: "180")
         
         postSingleComment.postComment{(status: Int, message: AnyObject?) in
             if let getMessage = message {

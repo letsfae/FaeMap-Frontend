@@ -30,7 +30,6 @@ class CommentPinCommentsCell: UITableViewCell {
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     
-    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadCellContent()
