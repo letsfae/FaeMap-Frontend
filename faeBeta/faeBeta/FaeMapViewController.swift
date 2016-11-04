@@ -1,6 +1,6 @@
 //
 //  FaeMapViewController.swift
-//  GoogleMapsSample
+//  Using GoogleMaps
 //
 //  Created by Yue on 5/31/16.
 //  Copyright © 2016 Yue. All rights reserved.
@@ -41,29 +41,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var willAppearFirstLoad = false
     var startUpdatingLocation = false
     
-    // MARK: -- Blur View Pin Buttons and Labels
-//    var uiviewPinSelections: UIView!
-//    var blurViewMap: UIVisualEffectView!
-//    var buttonMedia: UIButton!
-//    var buttonChats: UIButton!
-//    var buttonComment: UIButton!
-//    var buttonEvent: UIButton!
-//    var buttonFaevor: UIButton!
-//    var buttonNow: UIButton!
-//    var buttonJoinMe: UIButton!
-//    var buttonSell: UIButton!
-//    var buttonLive: UIButton!
-//    
-//    var labelSubmitTitle: UILabel!
-//    var labelSubmitMedia: UILabel!
-//    var labelSubmitChats: UILabel!
-//    var labelSubmitComment: UILabel!
-//    var labelSubmitEvent: UILabel!
-//    var labelSubmitFaevor: UILabel!
-//    var labelSubmitNow: UILabel!
-//    var labelSubmitJoinMe: UILabel!
-//    var labelSubmitSell: UILabel!
-//    var labelSubmitLive: UILabel!
+    // Unread Messages Label
     var labelUnreadMessages: UILabel!
     
     var buttonClosePinBlurView: UIButton!
@@ -179,6 +157,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // Map User Pin
     var mapUserPinsDic = [Int: GMSMarker]()
     
+    // Map Comment Pin
+    var mapCommentPinsDic = [Int: GMSMarker]()
+    
     // New Comment Pin Popup Window
     
     var commentIdToPassBySegue: Int = -999
@@ -199,6 +180,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // Prevent updating user on map more than once
     var canDoNextUserUpdate = true
+    
+    // Determine if this pinID should change to heavy shadow style
+    var commentIDFromOpenedPinCell = -999
     
     // System Functions
     override func viewDidLoad() {
@@ -269,7 +253,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
     }
     
-    // MARK: -- 如何存到缓存中以备后面继续使用
+    // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
@@ -285,6 +269,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 eachTimer.invalidate()
             }
             self.NSTimerDisplayMarkerArray.removeAll()
+            self.mapCommentPinsDic.removeAll()
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
                     let pinShowOnMap = GMSMarker()
@@ -298,6 +283,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
                         pinData["comment_id"] = commentIDInfo
+                        self.mapCommentPinsDic[commentIDInfo] = pinShowOnMap
+                        if self.commentIDFromOpenedPinCell == commentIDInfo {
+                            print("TESTing far away from")
+                            self.markerBackFromCommentDetail = pinShowOnMap
+                            pinShowOnMap.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                        }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo
@@ -330,8 +321,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     
                     pinShowOnMap.userData = pinData
-//                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
-//                    pinShowOnMap.map = self.faeMapView
                     let delay: Double = Double(arc4random_uniform(50) + 25) / 100
                     let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
                     let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
@@ -652,9 +641,25 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         })
     }
     
-    func animateToCamera(coordinate: CLLocationCoordinate2D) {
-        print(coordinate)
-        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: self.faeMapView.camera.zoom)
+    func animateToCameraFromMainScreenSearch(coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
+        self.faeMapView.animateToCameraPosition(camera)
+    }
+    
+    func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int) {
+        print("DEBUG: Delegate pass commentID")
+        print(commentID)
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
+        self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
+        if let marker = self.mapCommentPinsDic[commentID] {
+            self.markerBackFromCommentDetail = marker
+            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+            self.commentIDFromOpenedPinCell = -999
+        }
+        else {
+            self.commentIDFromOpenedPinCell = commentID
+            self.loadCurrentRegionPins()
+        }
         self.faeMapView.animateToCameraPosition(camera)
     }
     

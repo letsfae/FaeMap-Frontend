@@ -8,13 +8,16 @@
 
 import UIKit
 import SwiftyJSON
+import CoreLocation
 
 protocol OpenedPinListViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
     func backFromOpenedPinList(back: Bool)
+    // Pass location to fae map view via CommentPinDetailViewController
+    func animateToCameraFromOpenedPinListView(coordinate: CLLocationCoordinate2D, commentID: Int)
 }
 
-class OpenedPinListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OpenedPinListViewController: UIViewController {
     
     var delegate: OpenedPinListViewControllerDelegate?
 
@@ -36,7 +39,7 @@ class OpenedPinListViewController: UIViewController, UITableViewDelegate, UITabl
     var backJustOnce = true
     
     // Local Storage for storing opened pin id, for opened pin list use
-    private let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()
+    let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,19 +63,6 @@ class OpenedPinListViewController: UIViewController, UITableViewDelegate, UITabl
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    func actionBackToMap(sender: UIButton) {
-        UIView.animateWithDuration(0.583, animations: ({
-            self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-            self.subviewTable.center.y -= screenHeight
-        }), completion: { (done: Bool) in
-            if done {
-                self.dismissViewControllerAnimated(false, completion: {
-                    self.delegate?.backFromOpenedPinList(false)
-                })
-            }
-        })
     }
     
     // To get opened pin list, but it is a general func
@@ -105,14 +95,14 @@ class OpenedPinListViewController: UIViewController, UITableViewDelegate, UITabl
 //        uiviewCommentPinDetail.addGestureRecognizer(rightSwipe)
         
         var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
-        if tableHeight > screenHeight - 65 {
-            tableHeight = screenHeight - 65
-        }
-        
         var subviewTableHeight = tableHeight + 28
         if openedPinListArray.count <= 3 {
             subviewTableHeight = CGFloat(256)
         }
+        else {
+            tableHeight = CGFloat(228)
+        }
+        subviewTableHeight = CGFloat(256)
         
         subviewWhite = UIView(frame: CGRectMake(0, 0, screenWidth, 65))
         subviewWhite.backgroundColor = UIColor.whiteColor()
@@ -184,91 +174,5 @@ class OpenedPinListViewController: UIViewController, UITableViewDelegate, UITabl
         subviewWhite.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
         subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
         NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.subviewWhite, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-    }
-    
-    // Back to comment pin detail window when in pin list window
-    func actionBackToCommentDetail(sender: UIButton!) {
-        if backJustOnce == true {
-            backJustOnce = false
-            self.delegate?.backFromOpenedPinList(true)
-            UIView.animateWithDuration(0.583, animations: ({
-                self.subviewTable.center.y -= screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    self.dismissViewControllerAnimated(false, completion: nil)
-                }
-            })
-        }
-    }
-    
-    // Reset comment pin list window and remove all saved data
-    func actionClearCommentPinList(sender: UIButton) {
-//        for cell in commentPinCellArray {
-//            cell.removeFromSuperview()
-//        }
-//        commentPinCellArray.removeAll()
-//        commentPinAvoidDic.removeAll()
-//        commentPinCellNumCount = 0
-//        disableTheButton(buttonBackToCommentPinDetail)
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == tableOpenedPin {
-            return self.openedPinListArray.count
-        }
-        else{
-            return 0
-        }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if tableView == self.tableOpenedPin {
-            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OpenedPinTableViewCell
-            let commentID = openedPinListArray[indexPath.row]
-            let getCommentById = FaeMap()
-            getCommentById.getComment("\(commentID)") {(status: Int, message: AnyObject?) in
-                let commentInfoJSON = JSON(message!)
-                //                if let userid = commentInfoJSON["user_id"].int {
-                //                    print(userid)
-                // Next, to get user avatar
-                //                }
-                if let time = commentInfoJSON["created_at"].string {
-                    cell.time.text = time.formatFaeDate()
-                }
-                if let content = commentInfoJSON["content"].string {
-                    cell.content.text = "\(content)"
-                }
-            }
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
-            return cell
-        }
-        else {
-            return UITableViewCell()
-        }
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.alpha = 0
-        UIView.animateWithDuration(0.583, animations: ({
-            cell.alpha = 1
-        }))
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if tableView == self.tableOpenedPin {
-            return 76
-        }
-        else{
-            return 0
-        }
     }
 }

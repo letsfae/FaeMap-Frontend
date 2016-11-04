@@ -8,10 +8,13 @@
 
 import UIKit
 import SwiftyJSON
+import CoreLocation
 
 protocol CommentPinViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
     func dismissMarkerShadow(dismiss: Bool)
+    // Pass location data to fae map view
+    func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int)
 }
 
 class CommentPinViewController: UIViewController, EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate {
@@ -546,5 +549,14 @@ class CommentPinViewController: UIViewController, EditCommentPinViewControllerDe
             self.delegate?.dismissMarkerShadow(true)
             self.dismissViewControllerAnimated(false, completion: nil)
         }
+    }
+    
+    func animateToCameraFromOpenedPinListView(coordinate: CLLocationCoordinate2D, commentID: Int) {
+        self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
+        self.backJustOnce = true
+        self.subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
+        self.uiviewCommentPinDetail.center.y += self.screenHeight
+        self.commentIDCommentPinDetailView = "\(commentID)"
+        self.getCommentInfo()
     }
 }

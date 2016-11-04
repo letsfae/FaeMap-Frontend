@@ -1,8 +1,8 @@
 //
-//  TestViewController.swift
+//  OpenUserPinView.swift
 //  faeBeta
 //
-//  Created by 王彦翔 on 16/7/26.
+//  Created by Yanxiang Wang on 16/7/26.
 //  Copyright © 2016年 fae. All rights reserved.
 //
 
@@ -22,8 +22,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewCard.backgroundColor = UIColor.clearColor()
         uiviewCard.hidden = true
         uiviewDialog.addSubview(uiviewCard)
-        
-        
         
         //avatar
         imageviewNamecardAvatar = UIImageView(frame: CGRect(x: (maxLength-70)/2, y: 90, width: 70, height: 70))
@@ -424,19 +422,5 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(1))
     }
-
-
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 

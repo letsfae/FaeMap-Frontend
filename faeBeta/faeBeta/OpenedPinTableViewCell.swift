@@ -7,9 +7,17 @@
 //
 
 import UIKit
+import CoreLocation
+
+protocol OpenedPinTableViewCellDelegate {
+    // Pass CL2D location to OpenedPinTableViewController
+    func passCL2DLocationToOpenedPinList(coordinate: CLLocationCoordinate2D, commentID: Int)
+}
 
 class OpenedPinTableViewCell: UITableViewCell {
  
+    var delegate: OpenedPinTableViewCellDelegate?
+    
     var imageViewAvatar: UIImageView!
     var content: UILabel!
     var time: UILabel!
@@ -19,6 +27,7 @@ class OpenedPinTableViewCell: UITableViewCell {
     var cellY: CGFloat = 0
     var commentID: Int = -999
     var userID: String = "NULL"
+    var location: CLLocationCoordinate2D!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -63,11 +72,14 @@ class OpenedPinTableViewCell: UITableViewCell {
         self.addSubview(deleteButton)
         self.addConstraintsWithFormat("H:[v0(100)]-(-27)-|", options: [], views: deleteButton)
         self.addConstraintsWithFormat("V:|-14-[v0(48)]", options: [], views: deleteButton)
+        deleteButton.enabled = false
         
         jumpToDetail = UIButton(frame: CGRect(x: 0, y: 3, width: 341, height: 70))
         self.addSubview(jumpToDetail)
         self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth-73))]", options: [], views: jumpToDetail)
         self.addConstraintsWithFormat("V:|-3-[v0(70)]", options: [], views: jumpToDetail)
+        jumpToDetail.addTarget(self, action: #selector(OpenedPinTableViewCell.jumpToDetailAndAnimate(_:)), forControlEvents: .TouchUpInside)
+        jumpToDetail.enabled = false
     }
     
     func loadUnderLine() {
@@ -79,6 +91,12 @@ class OpenedPinTableViewCell: UITableViewCell {
     
     func loadBackground() {
         self.backgroundColor = UIColor.clearColor()
+    }
+    
+    func jumpToDetailAndAnimate(sender: UIButton) {
+        print("TESTing Cell Button")
+        print(location)
+        self.delegate?.passCL2DLocationToOpenedPinList(location, commentID: commentID)
     }
     
     required init?(coder aDecoder: NSCoder) {
