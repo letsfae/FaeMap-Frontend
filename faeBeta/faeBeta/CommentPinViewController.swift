@@ -116,6 +116,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var buttonSticker : UIButton!
     var buttonImagePicker : UIButton!
     
+    var toolbarContentView: FAEChatToolBarContentView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
