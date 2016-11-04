@@ -133,13 +133,13 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //            }
         //        }
         //
-        user1.getSelfProfile{(status:Int, message:AnyObject?) in
-            if(status / 100 == 2){
-                print("gets self profile")
-                print(status)
-                print(message)
-            }
-        }
+//        user1.getSelfProfile{(status:Int, message:AnyObject?) in
+//            if(status / 100 == 2){
+//                print("gets self profile")
+//                print(status)
+//                print(message)
+//            }
+//        }
         //
         //        user1.getOthersProfile(String(1)){(status:Int, message:AnyObject?) in
         //            print(status)
