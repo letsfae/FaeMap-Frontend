@@ -59,12 +59,13 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
             if status / 100 == 2 {
 
                 print(message!)
+                
                 let mess = message!
-
-                if (mess["nick_name"]) != nil{
+                print(mess["nick_name"]!)
+                if !(mess["nick_name"] is NSNull){
                     nickname = mess["nick_name"] as! String
                 }
-                if (mess["short_intro"]) != nil{
+                if !(mess["short_intro"] is NSNull){
                     shortIntro = mess["short_intro"] as! String
                 }
                 if let genderNow = mess["show_gender"] as? Int {

@@ -246,18 +246,18 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let buttonWidth = 44.0
         let interval = 26.0
         
-        buttonShare = UIButton(frame: CGRect(x: (298-3*buttonWidth-3*interval)/2,y: 10,width: buttonWidth,height: 51))
+        buttonShare = UIButton(frame: CGRect(x: (288-3*buttonWidth-3*interval)/2,y: 10,width: buttonWidth,height: 51))
         buttonShare.setImage(UIImage(named: "map_userpin_share"), forState: .Normal)
         buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), forControlEvents: .TouchUpInside)
         //uiviewFunction.addSubview(buttonShare)
         
-        buttonKeep = UIButton(frame: CGRect(x: (298-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
+        buttonKeep = UIButton(frame: CGRect(x: (288-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
         buttonKeep.setImage(UIImage(named: "map_userpin_keep"), forState: .Normal)
         buttonKeep.addTarget(self, action: #selector(buttonKeepAction(_:)), forControlEvents: .TouchUpInside)
         //uiviewFunction.addSubview(buttonKeep)
         
         //buttonReport = UIButton(frame: CGRect(x: (298-3*buttonWidth-2*interval)/2+2*interval+2*buttonWidth,y: 10,width: buttonWidth,height: 51))
-        buttonReport = UIButton(frame: CGRect(x: (298-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
+        buttonReport = UIButton(frame: CGRect(x: (288-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
         buttonReport.setImage(UIImage(named: "map_userpin_report"), forState: .Normal)
         buttonReport.addTarget(self, action: #selector(buttonReportAction(_:)), forControlEvents: .TouchUpInside)
         
@@ -383,6 +383,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
                         self.labelNamecardDescription.text = message!["short_intro"] as? String
                     }
                     if message!["show_gender"] as! Bool == true{
+                        print("get in")
                         self.imageViewGender.alpha = 1.0
                         if message!["show_age"] as! Bool == true{
                             self.imageViewGender.frame.size.width = 50
@@ -393,7 +394,9 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
                                 self.imageViewGender.image = UIImage(named: "map_userpin_female&age")
                             }
                             self.labelNamecardAge.hidden = false
-                            self.labelNamecardAge.text = message!["age"] as? String
+                            if !(message!["age"] is NSNull){
+                                self.labelNamecardAge.text = String(message!["age"] as! Int)
+                            }
                         }
                         else{
                             self.imageViewGender.frame.size.width = 30
