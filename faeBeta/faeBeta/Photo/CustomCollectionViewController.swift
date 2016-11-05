@@ -235,7 +235,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         var images = [UIImage]()
         for i in 0..<photoPicker.indexImageDict.count
         {
-            images.append( photoPicker.indexImageDict[i]!)
+            images.append( photoPicker.indexImageDict[i]! as! UIImage)
         }
         imageDelegate.sendImages(images)
         hideProcessIndicator()

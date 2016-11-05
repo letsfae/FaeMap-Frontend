@@ -46,6 +46,10 @@ class IncomingMessage {
             message = createStickerMessage(dictionary)
         }
         
+        if type == "video" {
+            message = createVideoMessage(dictionary)
+        }
+        
         if let mes = message {
             return mes
         } else {
@@ -172,7 +176,23 @@ class IncomingMessage {
         }
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
-    
+
+    func createVideoMessage(item : NSDictionary) -> JSQMessage {
+        let name = item["senderName"] as? String
+        let userId = item["senderId"] as? String
+        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+      
+        
+        let mediaItem = JSQVideoMediaItem(fileURL:NSURL(), isReadyToPlay:true)
+
+        videoFromData(item) { (videoURL) in
+            mediaItem.fileURL = videoURL!
+            mediaItem.isReadyToPlay = true
+            self.collectionView.reloadData()
+        }
+        return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
+    }
+
     func createStickerMessage(item : NSDictionary) -> JSQMessage {
         
         let name = item["senderName"] as? String
@@ -206,6 +226,25 @@ class IncomingMessage {
         let decodedData = NSData(base64EncodedString: (item["audio"] as? String)!, options: NSDataBase64DecodingOptions(rawValue : 0))
         
         result(voiceData: decodedData)
+    }
+    
+    func videoFromData(item : NSDictionary, result : (videoData : NSURL?) -> Void) {
+        let str = item["video"] as? String
+        if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
+        
+            let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(Range(start: str!.startIndex, end: str!.startIndex.advancedBy(12)))).mov")
+            decodedData.writeToFile(filePath, atomically:true)
+            
+            let videoFileURL = NSURL(fileURLWithPath: filePath)
+            
+            result(videoData: videoFileURL)
+        }
+    }
+    
+    func documentsPathForFileName(name: String) -> String {
+        
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        return documentsPath.stringByAppendingString(name)
     }
     
     func snapShotFromData(item : NSDictionary, result : (image : UIImage?) -> Void) {

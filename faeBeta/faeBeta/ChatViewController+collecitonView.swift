@@ -47,6 +47,8 @@ extension ChatViewController {
             case "audio":
                 cell.contentType = Audio
                 break
+            case "video":
+                cell.contentType = Video
             default:
                 break
         }

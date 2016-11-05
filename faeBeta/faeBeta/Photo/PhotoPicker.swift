@@ -29,6 +29,8 @@ class PhotoPicker {
     var indexAssetDict = [Int : PHAsset]()
     var indexImageDict = [Int: UIImage]()
     
+    var videoAsset: AVAsset? = nil
+    
     private init() {
         getSmartAlbum()
     }

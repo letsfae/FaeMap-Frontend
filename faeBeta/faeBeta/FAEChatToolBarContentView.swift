@@ -34,7 +34,6 @@ import Photos
     // should present CustomCollectionViewController
     func getMoreImage()
     
-    
     /// need to implement this method if sending audio is needed
     ///
     /// - parameter data: the audio data to send
@@ -42,6 +41,8 @@ import Photos
     
     // end any editing. Especially the input toolbar textView.
     optional func endEdit()
+    
+    optional func sendVideoData(video: NSData)
 }
 
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
@@ -300,6 +301,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
         photoPicker.indexImageDict.removeAll()
+        photoPicker.videoAsset = nil
         self.photoQuickCollectionView.reloadData()
     }
 
@@ -367,14 +369,23 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                     photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                     photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                     let count = self.photoPicker.indexImageDict.count
-                    let highQRequestOption = PHImageRequestOptions()
-                    highQRequestOption.resizeMode = .None
-                    requestOption.deliveryMode = .HighQualityFormat //high pixel
-                    requestOption.synchronous = true
-                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
-                        self.photoPicker.indexImageDict[count] = result
+                    
+                    if(asset.mediaType == .Image){
+                        let highQRequestOption = PHImageRequestOptions()
+                        highQRequestOption.resizeMode = .None
+                        highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
+                        highQRequestOption.synchronous = true
+                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                            self.photoPicker.indexImageDict[count] = result
+                        }
+                    }else{
+                        let highQRequestOption = PHVideoRequestOptions()
+                        highQRequestOption.deliveryMode = .FastFormat //high pixel
+                        PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: highQRequestOption) { (asset, audioMix, info) in
+                            self.photoPicker.videoAsset = asset
+                        }
                     }
-                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
+                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[max(photoPicker.indexImageDict.count - 1, 0)])
                     cell.chosenFrameImageView.hidden = false
                     self.photoQuickCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Left, animated: true)
                 }
@@ -423,12 +434,50 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // MARK: - Quick image picker delegate
     func sendImageFromQuickPicker()
     {
+        if(photoPicker.videoAsset != nil){
+            sendVideoFromQuickPicker()
+            return
+        }
         var images = [UIImage]()
+
         for i in 0..<photoPicker.indexImageDict.count
         {
             images.append(photoPicker.indexImageDict[i]!)
         }
-        
         self.delegate.sendImages(images)
+    }
+    
+    func sendVideoFromQuickPicker()
+    {
+        // asset is you AVAsset object
+        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetLowQuality)
+        let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
+
+        exportSession!.outputURL = NSURL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
+
+        let fileUrl = exportSession!.outputURL
+        // e.g .mov type
+        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
+        
+        exportSession!.exportAsynchronouslyWithCompletionHandler{
+            Void in
+            switch exportSession!.status {
+            case  AVAssetExportSessionStatus.Failed:
+                print("failed import video: \(exportSession!.error)")
+            case AVAssetExportSessionStatus.Cancelled:
+                print("cancelled import video: \(exportSession!.error)")
+            default:
+                print("completed import video")
+                if let data = NSData(contentsOfURL:fileUrl!){
+                    self.delegate.sendVideoData?(data)
+                }
+            }
+        }
+    }
+    
+    func documentsPathForFileName(name: String) -> String {
+        
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        return documentsPath.stringByAppendingString(name)
     }
 }

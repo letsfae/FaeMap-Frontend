@@ -13,7 +13,7 @@ import FirebaseDatabase
 
 extension ChatViewController: OutgoingMessageProtocol{
     //MARK: - send message
-    func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
+    func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?, video : NSData?) {
         
         var outgoingMessage = OutgoingMessage?()
         let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300 && !isContinuallySending
@@ -52,7 +52,10 @@ extension ChatViewController: OutgoingMessageProtocol{
         if audio != nil {
             //create outgoing-message object
             outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-            
+        }
+        
+        if video != nil {
+            outgoingMessage = OutgoingMessage(message: "[Video]", video: video!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         //play message sent sound
@@ -72,23 +75,28 @@ extension ChatViewController: OutgoingMessageProtocol{
     //send image delegate function
     func sendImages(images:[UIImage]) {
         for i in 0 ..< images.count {
-            sendMessage(nil, date: NSDate(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil)
+            sendMessage(nil, date: NSDate(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil)
         }
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(name: String) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil)
+        sendMessage(nil, date: NSDate(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil, video: nil)
         //        stickerPicker.reloadHistory()
     }
     
     func sendAudioData(data: NSData) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data)
+        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil)
     }
     
     //MARK: locationSend Delegate
     func sendPickedLocation(lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: NSData) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil)
+        sendMessage(nil, date: NSDate(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil)
+    }
+    
+    func sendVideoData(video: NSData){
+        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: video)
+        self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     //MARK: Load Message
