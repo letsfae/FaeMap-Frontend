@@ -23,9 +23,7 @@ extension CommentPinViewController {
         
         animateHeart()
         
-        if commentIDCommentPinDetailView != "-999" {
-            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
-        }
+        likeThisPin("comment", pinID: commentIDCommentPinDetailView)
     }
     
     // Upvote comment pin
@@ -65,6 +63,23 @@ extension CommentPinViewController {
         
         if commentIDCommentPinDetailView != "-999" {
             unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    func commentThisPin(type: String, pinID: String, text: String) {
+        let commentThisPin = FaePinAction()
+        commentThisPin.whereKey("content", value: text)
+        if commentIDCommentPinDetailView != "-999" {
+            commentThisPin.commentThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully comment this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                    self.getPinComments("comment", pinID: self.commentIDCommentPinDetailView, sendMessageFlag: true)
+                }
+                else {
+                    print("Fail to comment this comment pin!")
+                }
+            }
         }
     }
     
@@ -152,7 +167,7 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinComments(type: String, pinID: String) {
+    func getPinComments(type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
@@ -160,6 +175,7 @@ extension CommentPinViewController {
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
                     var dicCell = [String: AnyObject]()
+                    print(commentsOfCommentJSON[i])
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
                         dicCell["pin_comment_id"] = pin_comment_id
                     }
@@ -170,8 +186,8 @@ extension CommentPinViewController {
                     if let content = commentsOfCommentJSON[i]["content"].string {
                         dicCell["content"] = content
                     }
-                    if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
-                        dicCell["date"] = date
+                    if let date = commentsOfCommentJSON[i]["created_at"].string {
+                        dicCell["date"] = date.formatFaeDate()
                     }
                     if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
                         dicCell["timezone_type"] = timezone_type
@@ -179,8 +195,19 @@ extension CommentPinViewController {
                     if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
                         dicCell["timezone"] = timezone
                     }
-                    self.dictCommentsOnCommentDetail.append(dicCell)
+                    self.dictCommentsOnCommentDetail.insert(dicCell, atIndex: 0)
                 }
+            }
+            print("DEBUG RELOAD DATA")
+            print(self.dictCommentsOnCommentDetail.count)
+            self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
+            self.tableCommentsForComment.frame.size.height += 140
+            self.commentDetailFullBoardScrollView.contentSize.height += 140
+            self.tableCommentsForComment.reloadData()
+            if sendMessageFlag {
+                var offset = self.commentDetailFullBoardScrollView.contentOffset
+                offset.y = self.commentDetailFullBoardScrollView.contentSize.height + self.commentDetailFullBoardScrollView.contentInset.bottom - self.commentDetailFullBoardScrollView.bounds.size.height
+                self.commentDetailFullBoardScrollView.setContentOffset(offset, animated: true)
             }
         }
     }

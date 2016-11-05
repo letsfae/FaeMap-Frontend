@@ -26,7 +26,6 @@ class OpenedPinListViewController: UIViewController {
     var buttonCommentPinListDragToLargeSize: UIButton!
     var commentListExpand = false
     var commentListShowed = false
-    var commentPinCellArray = [CommentPinListCell]()
     var labelCommentPinListTitle: UILabel!
     var uiviewCommentPinListUnderLine01: UIView!
     var uiviewCommentPinListUnderLine02: UIView!

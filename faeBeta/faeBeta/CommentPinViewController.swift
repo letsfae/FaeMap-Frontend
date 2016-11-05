@@ -17,21 +17,15 @@ protocol CommentPinViewControllerDelegate {
     func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int)
 }
 
-class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate,EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate {
+class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate,EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, UIScrollViewDelegate {
+    
+    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     // Delegate of this class
     var delegate: CommentPinViewControllerDelegate?
     
     // Comment ID To Use In This Controller
     var commentIdSentBySegue: Int = -999
-    
-    // MARK: -- Common Used Vars and Constants
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
-    
-    // Comment Pin List
-    var commentPinAvoidDic = [Int: Int]()
-    var commentPinCellNumCount = 0
     
     // Pin options
     var buttonShareOnCommentDetail: UIButton!
@@ -80,7 +74,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
+    var anotherRedSlidingLine: UIView!
     var subviewWhite: UIView!
+    var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
     var buttonCenter = CGPointZero
@@ -101,6 +97,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     // Control the back to comment pin detail button, prevent the more than once action
     var backJustOnce = true
     
+    // A duplicate ControlBoard to hold
+    var controlBoard: UIView!
+    
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     private var isObservingInputTextView = false
@@ -118,19 +117,19 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     var toolbarContentView: FAEChatToolBarContentView!
     
+    // FullboardScrollView and TableViewCommentsOnComments control
+    var switchedToFullboard = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
         self.modalPresentationStyle = .OverCurrentContext
         loadCommentPinDetailWindow()
+        loadTransparentButtonBackToMap()
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
-        getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
-        getCommentInfo()
-        getPinComments("comment", pinID: commentIDCommentPinDetailView)
-        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        self.view.addSubview(subviewBackToMap)
-        self.view.sendSubviewToBack(subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        if commentIDCommentPinDetailView != "-999" {
+            getSeveralInfo()
+        }
         setupInputToolbar()
         setupToolbarContentView()
         addObservers()
@@ -165,6 +164,19 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func getSeveralInfo() {
+        getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
+        getCommentInfo()
+        getPinComments("comment", pinID: commentIDCommentPinDetailView, sendMessageFlag: false)
+    }
+    
+    func loadTransparentButtonBackToMap() {
+        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(subviewBackToMap)
+        self.view.sendSubviewToBack(subviewBackToMap)
+        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     private func addObservers(){
@@ -246,9 +258,18 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         }
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
         inputToolbar.contentView.textView.delegate = self
+        inputToolbar.contentView.textView.tintColor = colorFae
+        inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lableTextViewPlaceholder = UILabel(frame: CGRectMake(7, 3, 200, 27))
+        lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lableTextViewPlaceholder.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1.0)
+        lableTextViewPlaceholder.text = "Write a Comment..."
+        inputToolbar.contentView.textView.addSubview(lableTextViewPlaceholder)
+        
         inputToolbar.maximumHeight = 128
-        self.view.addSubview(inputToolbar)
+        self.uiviewCommentPinDetail.addSubview(inputToolbar)
         loadInputBarComponent()
+        inputToolbar.hidden = true
     }
     
     private func setupToolbarContentView()
@@ -262,10 +283,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     // Animation of the red sliding line
     func animationRedSlidingLine(sender: UIButton) {
         let tag = CGFloat(sender.tag)
-        let centerAtOneThird = screenWidth / 6
+        let centerAtOneThird = screenWidth / 4
         let targetCenter = CGFloat(tag * centerAtOneThird)
         UIView.animateWithDuration(0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
+            self.anotherRedSlidingLine.center.x = targetCenter
         }), completion: { (done: Bool) in
             if done {
                 
@@ -325,7 +347,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             backJustOnce = false
             UIView.animateWithDuration(0.583, animations:({
                 self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-                self.uiviewCommentPinDetail.center.y -= self.screenHeight
+                self.uiviewCommentPinDetail.center.y -= screenHeight
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -484,7 +506,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
                 if status / 100 == 2 {
                     print("Successfully delete comment")
                     UIView.animateWithDuration(0.583, animations: ({
-                        self.uiviewCommentPinDetail.center.y -= self.screenHeight
+                        self.uiviewCommentPinDetail.center.y -= screenHeight
                     }), completion: { (done: Bool) in
                         if done {
                             self.delegate?.dismissMarkerShadow(false)
@@ -507,7 +529,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func reloadCommentContent() {
-        getCommentInfo()
+        if commentIDCommentPinDetailView != "-999" {
+            getSeveralInfo()
+        }
     }
     
     // When clicking save button in comment pin detail window's more options button
@@ -552,14 +576,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         buttonFakeTransparentClosingView.removeFromSuperview()
     }
     
-    // Add line number to comment pin list cell, make it trackable when deleting a cell
-    func addTagCommentPinCell(cell: CommentPinListCell, commentID: Int) {
-        cell.jumpToDetail.tag = commentPinCellNumCount
-        cell.deleteButton.tag = commentPinCellNumCount
-        cell.commentID = commentID
-        commentPinAvoidDic[commentID] = commentPinCellNumCount
-    }
-    
     // Disable a button, make it unclickable
     func disableTheButton(button: UIButton) {
         let origImage = button.imageView?.image
@@ -587,9 +603,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // When clicking reply button in comment pin detail window
     func actionReplyToThisComment(sender: UIButton) {
-        if commentIDCommentPinDetailView != "-999" {
-            getPinAttributeCommentsNum("comment", pinID: commentIDCommentPinDetailView)
-        }
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
         self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
@@ -597,13 +610,12 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         
         textviewCommentPinDetail.scrollEnabled = false
         commentDetailFullBoardScrollView.scrollEnabled = true
-        UIView.animateWithDuration(0.25, animations: ({
+        UIView.animateWithDuration(0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0
-            self.uiviewCommentPinDetail.frame.size.height = self.screenHeight + 26
-            self.uiviewCommentPinUnderLine02.frame.origin.y = self.screenHeight
-            self.commentDetailFullBoardScrollView.frame.size.height = self.screenHeight - 155
-            self.tableCommentsForComment.frame = CGRectMake(0, 281, self.screenWidth, newHeight)
+            self.uiviewCommentPinDetail.frame.size.height = screenHeight + 26
+            self.uiviewCommentPinUnderLine02.frame.origin.y = screenHeight
+            self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 155
             if numLines > 4 {
                 // 420 is table height, 281 is fixed
                 self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281 + diffHeight
@@ -620,20 +632,23 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         }), completion: { (done: Bool) in
             if done {
                 self.tableCommentsForComment.reloadData()
+                self.tableCommentsForComment.frame.size.height = newHeight
+                self.inputToolbar.hidden = false
             }
         })
     }
     
     func actionBackToMap(sender: UIButton) {
-            UIView.animateWithDuration(0.583, animations: ({
-                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-                self.uiviewCommentPinDetail.center.y -= self.screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    self.delegate?.dismissMarkerShadow(true)
-                    self.dismissViewControllerAnimated(false, completion: nil)
-                }
-            })
+        inputToolbar.hidden = true
+        UIView.animateWithDuration(0.583, animations: ({
+            self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+            self.uiviewCommentPinDetail.center.y -= screenHeight+150
+        }), completion: { (done: Bool) in
+            if done {
+                self.delegate?.dismissMarkerShadow(true)
+                self.dismissViewControllerAnimated(false, completion: nil)
+            }
+        })
     }
     
     func animateHeart() {
@@ -676,7 +691,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             backJustOnce = true
             subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
             UIView.animateWithDuration(0.583, animations:({
-                self.uiviewCommentPinDetail.center.y += self.screenHeight
+                self.uiviewCommentPinDetail.center.y += screenHeight
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -795,21 +810,26 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     func moveUpInputBarContentView(animated: Bool)
     {
         if(animated){
-            self.toolbarContentView.frame.origin.y = self.screenHeight
+            self.toolbarContentView.frame.origin.y = screenHeight
             UIView.animateWithDuration(0.3, animations: {
                 self.moveUpInputBar()
-                self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+                self.toolbarContentView.frame.origin.y = screenHeight - 271
                 }, completion:{ (Bool) -> Void in
             })
         }else{
             self.moveUpInputBar()
-            self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+            self.toolbarContentView.frame.origin.y = screenHeight - 271
         }
     }
     
     // MARK: - send messages
     func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
-    
+        if let realText = text {
+            commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: realText)
+        }
+        self.inputToolbar.contentView.textView.text = ""
+        self.lableTextViewPlaceholder.hidden = false
+        self.inputToolbar.contentView.textView.resignFirstResponder()
     }
     
     //MARK: -  UIImagePickerController
@@ -856,13 +876,23 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     //MARK: - TEXTVIEW delegate
     func textViewDidChange(textView: UITextView) {
-        if textView.text.characters.count == 0 {
-            // when text has no char, cannot send message
-            buttonSend.enabled = false
-            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
-        } else {
-            buttonSend.enabled = true
-            buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
+        if textView == self.inputToolbar.contentView.textView {
+            let spacing = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            
+            if self.inputToolbar.contentView.textView.text.stringByTrimmingCharactersInSet(spacing).isEmpty == false {
+                self.lableTextViewPlaceholder.hidden = true
+            }
+            else {
+                self.lableTextViewPlaceholder.hidden = false
+            }
+            if textView.text.characters.count == 0 {
+                // when text has no char, cannot send message
+                buttonSend.enabled = false
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+            } else {
+                buttonSend.enabled = true
+                buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
+            }
         }
     }
     
@@ -870,9 +900,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
         self.backJustOnce = true
         self.subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
-        self.uiviewCommentPinDetail.center.y += self.screenHeight
+        self.uiviewCommentPinDetail.center.y += screenHeight
         self.commentIDCommentPinDetailView = "\(commentID)"
-        self.getCommentInfo()
+        if commentIDCommentPinDetailView != "-999" {
+            getSeveralInfo()
+        }
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -902,6 +934,16 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             if toolbarHeightConstraint != nil {
                 self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
             }
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.inputToolbar.contentView.textView.resignFirstResponder()
+        if commentDetailFullBoardScrollView.contentOffset.y >= 226 {
+            self.controlBoard.hidden = false
+        }
+        if commentDetailFullBoardScrollView.contentOffset.y < 226 {
+            self.controlBoard.hidden = true
         }
     }
 

@@ -12,7 +12,6 @@ import SwiftyJSON
 extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -30,8 +29,14 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView == self.tableCommentsForComment {
             let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CommentPinCommentsCell
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
-            if let username = dictCell["user_id"].int {
-                cell.labelUsername.text = "\(username)"
+            if let userID = dictCell["user_id"].int {
+                let getUserName = FaeUser()
+                getUserName.getOthersProfile("\(userID)") {(status, message) in
+                    let userProfile = JSON(message!)
+                    if let username = userProfile["user_name"].string {
+                        cell.labelUsername.text = "\(username)"
+                    }
+                }
             }
             if let date = dictCell["date"].string {
                 cell.labelTimestamp.text = date
@@ -47,13 +52,6 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
         else {
             return UITableViewCell()
         }
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.alpha = 0
-        UIView.animateWithDuration(1.0, animations: ({
-            cell.alpha = 1
-        }))
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -28,11 +28,17 @@ class FaePinAction : NSObject {
         self.keyValue = [String:AnyObject]()
     }
     
+    // Comment this pin
+    func commentThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
+        postToURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     // Like this pin
     func likeThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
         postToURL("pins/"+type!+"/"+commentId!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            print(type!)
-            print(commentId!)
             self.clearKeyValue()
             completion(status, message)
         }
@@ -51,8 +57,6 @@ class FaePinAction : NSObject {
     // Save this pin
     func saveThisPin(type: String?, commentId: String?, completion:(Int, AnyObject?) -> Void) {
         postToURL("pins/"+type!+"/"+commentId!+"/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            print(type!)
-            print(commentId!)
             self.clearKeyValue()
             completion(status, message)
         }
