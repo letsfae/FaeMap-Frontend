@@ -831,7 +831,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     //MARK: - toolbar Content view delegate
     
-    func showAlertView()
+    func showAlertView(withWarning text:String)
     {
         
     }

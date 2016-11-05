@@ -546,8 +546,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.frame.origin.y = screenHeight
     }
     
-    func showAlertView() {
-        let alert = UIAlertController(title: "You can send up to 10 photos at once", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+    func showAlertView(withWarning text: String) {
+        let alert = UIAlertController(title:text, message: "", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }

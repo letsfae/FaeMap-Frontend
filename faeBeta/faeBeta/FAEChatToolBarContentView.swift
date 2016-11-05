@@ -17,7 +17,7 @@ import Photos
     func moveUpInputBar()
     
     // Show the alert to warn user only 10 images can be selected
-    func showAlertView()
+    func showAlertView(withWarning text: String)
     
     /// send the sticker image with specific name
     ///
@@ -298,12 +298,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     // remove all selected photos, clean up the select frames
     func cleanUpSelectedPhotos(){
+        photoPicker.videoAsset = nil
+        photoPicker.videoImage = nil
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
         photoPicker.indexImageDict.removeAll()
-        photoPicker.videoAsset = nil
-        photoPicker.videoImage = nil
-        self.photoQuickCollectionView.reloadData()
+        dispatch_async(dispatch_get_main_queue(), {
+            self.photoQuickCollectionView.reloadData()
+        });
     }
 
     private func shiftChosenFrameFromIndex(index : Int)
@@ -365,13 +367,19 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             
             if cell.chosenFrameImageView.hidden {
                 if photoPicker.indexAssetDict.count == 10 {
-                    self.delegate.showAlertView()
+                    self.delegate.showAlertView(withWarning: "You can only select up to 10 images at the same time")
                 } else {
-                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                    let count = self.photoPicker.indexImageDict.count
+
                     
                     if(asset.mediaType == .Image){
+                        if(photoPicker.videoAsset != nil){
+                            self.delegate.showAlertView(withWarning: "You can't select photo with video")
+                            return
+                        }
+                        photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                        photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                        let count = self.photoPicker.indexImageDict.count
+                        
                         let highQRequestOption = PHImageRequestOptions()
                         highQRequestOption.resizeMode = .None
                         highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
@@ -380,6 +388,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                             self.photoPicker.indexImageDict[count] = result
                         }
                     }else{
+                        if(self.photoPicker.indexImageDict.count != 0){
+                        self.delegate.showAlertView(withWarning: "You can't select video while selecting photos")
+                        return
+                        }
+                        photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                         let lowQRequestOption = PHVideoRequestOptions()
                         lowQRequestOption.deliveryMode = .FastFormat //high pixel
                         PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
@@ -400,11 +413,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 }
             } else {
                 cell.chosenFrameImageView.hidden = true
-                let deselectedIndex = photoPicker.assetIndexDict[asset]
+                if let deselectedIndex = photoPicker.assetIndexDict[asset]{
                 photoPicker.assetIndexDict.removeValueForKey(asset)
-                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex!)
-                photoPicker.indexImageDict.removeValueForKey(deselectedIndex!)
-                shiftChosenFrameFromIndex(deselectedIndex! + 1)
+                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex)
+                photoPicker.indexImageDict.removeValueForKey(deselectedIndex)
+                shiftChosenFrameFromIndex(deselectedIndex + 1)
+                }
+                photoPicker.videoAsset = nil
+                photoPicker.videoImage = nil
             }
             //            print("imageDict has \(imageDict.count) images")
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
