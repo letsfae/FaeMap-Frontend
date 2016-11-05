@@ -38,6 +38,8 @@
  */
 @property (nonatomic, assign) BOOL isReadyToPlay;
 
+@property (nonatomic) UIImage *snapImage;
+
 /**
  *  Initializes and returns a video media item having the given fileURL.
  *
@@ -51,6 +53,6 @@
  *  isReadyToPlay. Once the video has been saved to disk, or is ready to stream, you can
  *  set the fileURL property or isReadyToPlay property, respectively.
  */
-- (instancetype)initWithFileURL:(NSURL *)fileURL isReadyToPlay:(BOOL)isReadyToPlay;
+- (instancetype)initWithFileURL:(NSURL *)fileURL snapImage:(UIImage *)image isReadyToPlay:(BOOL)isReadyToPlay;
 
 @end

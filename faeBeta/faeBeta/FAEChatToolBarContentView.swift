@@ -42,7 +42,7 @@ import Photos
     // end any editing. Especially the input toolbar textView.
     optional func endEdit()
     
-    optional func sendVideoData(video: NSData)
+    optional func sendVideoData(video: NSData, snapImage: UIImage)
 }
 
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
@@ -302,6 +302,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         photoPicker.assetIndexDict.removeAll()
         photoPicker.indexImageDict.removeAll()
         photoPicker.videoAsset = nil
+        photoPicker.videoImage = nil
         self.photoQuickCollectionView.reloadData()
     }
 
@@ -379,10 +380,18 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                             self.photoPicker.indexImageDict[count] = result
                         }
                     }else{
-                        let highQRequestOption = PHVideoRequestOptions()
-                        highQRequestOption.deliveryMode = .FastFormat //high pixel
-                        PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: highQRequestOption) { (asset, audioMix, info) in
+                        let lowQRequestOption = PHVideoRequestOptions()
+                        lowQRequestOption.deliveryMode = .FastFormat //high pixel
+                        PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
                             self.photoPicker.videoAsset = asset
+                        }
+                        
+                        let highQRequestOption = PHImageRequestOptions()
+                        highQRequestOption.resizeMode = .Exact
+                        highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
+                        highQRequestOption.synchronous = true
+                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(210,150), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                            self.photoPicker.videoImage = result
                         }
                     }
                     cell.chosenFrameImageView.image = UIImage(named: frameImageName[max(photoPicker.indexImageDict.count - 1, 0)])
@@ -473,7 +482,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
-                    self.delegate.sendVideoData?(data)
+                    self.delegate.sendVideoData?(data, snapImage: self.photoPicker.videoImage!)
                 }
             }
         }

@@ -113,6 +113,10 @@ class FaeUser : NSObject {
             }
             self.clearKeyValue()
             completion(status,message)
+            
+            // WARNING: this code should be deleted afterward, it's here just to test chat function
+            postToURL("chats", parameter: ["receiver_id": "1", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            })
         }
     }
     

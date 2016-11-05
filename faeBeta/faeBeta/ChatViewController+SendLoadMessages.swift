@@ -55,7 +55,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
         
         if video != nil {
-            outgoingMessage = OutgoingMessage(message: "[Video]", video: video!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Video]", video: video!,snapImage: snapImage! ,senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         //play message sent sound
@@ -94,8 +94,11 @@ extension ChatViewController: OutgoingMessageProtocol{
         sendMessage(nil, date: NSDate(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil)
     }
     
-    func sendVideoData(video: NSData){
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: video)
+    func sendVideoData(video: NSData, snapImage: UIImage){
+        var imageData = UIImageJPEGRepresentation(snapImage,1)
+        let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+        imageData = UIImageJPEGRepresentation(snapImage,factor)
+        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

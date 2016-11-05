@@ -30,6 +30,7 @@ class PhotoPicker {
     var indexImageDict = [Int: UIImage]()
     
     var videoAsset: AVAsset? = nil
+    var videoImage: UIImage? = nil
     
     private init() {
         getSmartAlbum()

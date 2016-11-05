@@ -35,13 +35,14 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithFileURL:(NSURL *)fileURL isReadyToPlay:(BOOL)isReadyToPlay
+- (instancetype)initWithFileURL:(NSURL *)fileURL snapImage: (UIImage *)image isReadyToPlay:(BOOL)isReadyToPlay
 {
     self = [super init];
     if (self) {
         _fileURL = [fileURL copy];
         _isReadyToPlay = isReadyToPlay;
         _cachedVideoImageView = nil;
+        _snapImage = image;
     }
     return self;
 }
@@ -83,9 +84,26 @@
     if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
         UIImage *playIcon = [[UIImage jsq_defaultPlayImage] jsq_imageMaskedWithColor:[UIColor lightGrayColor]];
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:playIcon];
-        imageView.backgroundColor = [UIColor blackColor];
+        UIImageView *imageView ;
+        if(self.snapImage != nil){
+            UIGraphicsBeginImageContext(size);
+            
+            [self.snapImage drawInRect:CGRectMake(0,0,size.width, size.height)];
+            [playIcon drawInRect:CGRectMake(size.width / 2 - playIcon.size.width / 2, size.height / 2 - playIcon.size.height / 2,playIcon.size.width,playIcon.size.height)];
+            
+            UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+            
+            UIGraphicsEndImageContext();
+
+            
+            imageView = [[UIImageView alloc] initWithImage:finalImage];
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+        }
+        else{
+            imageView = [[UIImageView alloc] initWithImage:playIcon];
+            imageView.backgroundColor = [UIColor blackColor];
+        }
+
         imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
         imageView.contentMode = UIViewContentModeCenter;
         imageView.clipsToBounds = YES;
@@ -149,8 +167,8 @@
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    JSQVideoMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithFileURL:self.fileURL
-                                                                   isReadyToPlay:self.isReadyToPlay];
+    JSQVideoMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithFileURL:self.fileURL snapImage: self.snapImage
+                                                                         isReadyToPlay:self.isReadyToPlay];
     copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
     return copy;
 }

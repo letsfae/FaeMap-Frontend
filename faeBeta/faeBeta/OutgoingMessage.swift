@@ -54,10 +54,11 @@ class OutgoingMessage {
     }
     
     // outgoing message for video
-    init (message : String, video : NSData, senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
+    init (message : String, video : NSData, snapImage : NSData,senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         
         let video = video.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, video, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "video","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
+        let snap = snapImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
+        messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "video","snapImage","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
     }
     
     func sendMessage(chatRoomId : String, item : NSMutableDictionary, withUser user: FaeWithUser) {

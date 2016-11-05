@@ -125,11 +125,6 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
                     print("login success")
-                    
-                    // WARNING: this code should be deleted afterward, it's here just to test chat function
-                    postToURL("chats", parameter: ["receiver_id": "21", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                    })
-                    
                     self.jumpToEnableLocation()
                 }
             })
