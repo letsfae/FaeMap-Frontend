@@ -102,11 +102,11 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             }
             if indexPath.row == 2 {
                 let user = FaeUser()
-                user.logOut{ (status:Int?, message:AnyObject?) in
+                user.logOut{ (status:Int?, message: AnyObject?) in
                     if ( status! / 100 == 2 ){
                         //success
                         self.animationMoreHide(UIButton())
-                        self.jumpToWelcomeView()
+                        self.jumpToWelcomeView(true)
                     }
                     else{
                         //failure

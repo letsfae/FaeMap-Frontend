@@ -191,7 +191,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         if is_Login == 0 {
-            self.jumpToWelcomeView()
+            self.jumpToWelcomeView(true)
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
         myPositionIconFirstLoaded = true
@@ -349,11 +349,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
-    func jumpToWelcomeView(){
+    func jumpToWelcomeView(animated: Bool){
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
         //        self.navigationController?.pushViewController(vc, animated: true)
         //        let vc = ViewController(nibName: "WelcomeViewController", bundle: nil)
-        self.presentViewController(vc, animated: true, completion: nil)
+        self.presentViewController(vc, animated: animated, completion: nil)
     }
     
     // MARK: -- Load Navigation Items
