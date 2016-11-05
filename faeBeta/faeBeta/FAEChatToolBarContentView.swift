@@ -452,7 +452,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetLowQuality)
         let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
-
+        do{
+            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+        }catch{
+            
+        }
         exportSession!.outputURL = NSURL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
 
         let fileUrl = exportSession!.outputURL

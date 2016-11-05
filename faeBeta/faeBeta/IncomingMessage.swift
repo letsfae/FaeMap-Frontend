@@ -183,11 +183,10 @@ class IncomingMessage {
         let date = dateFormatter().dateFromString((item["date"] as? String)!)
       
         
-        let mediaItem = JSQVideoMediaItem(fileURL:NSURL(), isReadyToPlay:true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL:NSURL(), isReadyToPlay:true)
 
         videoFromData(item) { (videoURL) in
             mediaItem.fileURL = videoURL!
-            mediaItem.isReadyToPlay = true
             self.collectionView.reloadData()
         }
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
@@ -232,7 +231,7 @@ class IncomingMessage {
         let str = item["video"] as? String
         if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
         
-            let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(Range(start: str!.startIndex, end: str!.startIndex.advancedBy(12)))).mov")
+            let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(str!.startIndex ..< str!.startIndex.advancedBy(12)))).mov")
             decodedData.writeToFile(filePath, atomically:true)
             
             let videoFileURL = NSURL(fileURLWithPath: filePath)

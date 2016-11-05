@@ -525,6 +525,9 @@
 		DC3D10571DC2AE9E0011C772 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DC3D10581DC2AE9E0011C772 /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DC3D105A1DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3D10591DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift */; };
+		DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
+		DC4334141DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
+		DC4334151DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
 		DC477A5F1DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */; };
 		DC477A601DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */; };
 		DC477A611DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */; };
@@ -789,6 +792,8 @@
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
 		DC3D10591DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CommentPinViewController+InputToolbar.swift"; sourceTree = "<group>"; };
+		DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQVideoMediaItemCustom.h; sourceTree = "<group>"; };
+		DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQVideoMediaItemCustom.m; sourceTree = "<group>"; };
 		DC477A5E1DB2A8EE008A2041 /* CommentPinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinCommentsCell.swift; sourceTree = "<group>"; };
 		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
 		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
@@ -1222,6 +1227,8 @@
 				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
 				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
 				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
+				DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */,
+				DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */,
 			);
 			path = JSQExtension;
 			sourceTree = "<group>";
@@ -1783,6 +1790,7 @@
 			files = (
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
+				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
@@ -2003,6 +2011,7 @@
 				DC74CE231DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B04BB9E61CEDB796009B9531 /* FaeUser.swift in Sources */,
 				DC2D6BCC1DC86CBA0092E3D0 /* WelcomeViewController.swift in Sources */,
+				DC4334141DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
@@ -2158,6 +2167,7 @@
 				B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
+				DC4334151DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B0BF357A1D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
