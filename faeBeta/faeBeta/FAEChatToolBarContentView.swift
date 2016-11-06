@@ -389,8 +389,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         }
                     }else{
                         if(self.photoPicker.indexImageDict.count != 0){
-                        self.delegate.showAlertView(withWarning: "You can't select video while selecting photos")
-                        return
+                            self.delegate.showAlertView(withWarning: "You can't select video while selecting photos")
+                            return
+                        }else if(self.photoPicker.videoAsset != nil){
+                            self.delegate.showAlertView(withWarning: "You can only send one video at one time")
+                            return
                         }
                         photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                         let lowQRequestOption = PHVideoRequestOptions()
@@ -475,7 +478,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func sendVideoFromQuickPicker()
     {
         // asset is you AVAsset object
-        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetLowQuality)
+        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
         let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
         do{
             try NSFileManager.defaultManager().removeItemAtPath(filePath)
