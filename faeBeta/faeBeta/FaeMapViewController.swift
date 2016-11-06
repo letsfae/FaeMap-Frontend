@@ -518,7 +518,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if let type = pinLoc["type"].string {
             if type == "user" {
                 
-                if let userid = marker.userData!["user_id"] {
+                if let userid = pinLoc["user_id"].int {
                     loadUserPinInformation("\(userid)")
                 }
                 showOpenUserPinAnimation(latitude, longi: longitude)
