@@ -12,10 +12,10 @@ import Photos
 
 // delegate to send mutiple image in ChatVC
 
-protocol SendMutipleImagesDelegate {
+@objc protocol SendMutipleImagesDelegate {
     
     func sendImages(images:[UIImage])
-    
+    optional func sendVideoData(video: NSData, snapImage: UIImage)
 }
 
 // this view controller is used to show image from one album, it has a table view for you to switch albums
@@ -109,40 +109,70 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     //MARK: collectionViewController Delegate
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
-        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
+        let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.row] as! PHAsset
         
         if cell.chosenFrameImageView.hidden {
             if photoPicker.indexAssetDict.count == 10 {
-                showAlertView()
+                showAlertView(withWarning: "You can only select up to 10 images at the same time")
             } else {
-                
-                photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                
-                let highQRequestOption = PHImageRequestOptions()
-                highQRequestOption.resizeMode = .None //resize time fast
-                requestOption.deliveryMode = .HighQualityFormat //high pixel
-                requestOption.synchronous = true
-                
-                let count = self.photoPicker.indexImageDict.count
-                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
-                    self.photoPicker.indexImageDict[count] = result
+                if(asset.mediaType == .Image){
+                    if(photoPicker.videoAsset != nil){
+                        showAlertView(withWarning: "You can't select photo with video")
+                        return
+                    }
+                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                    let count = self.photoPicker.indexImageDict.count
+                    
+                    let highQRequestOption = PHImageRequestOptions()
+                    highQRequestOption.resizeMode = .None
+                    highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
+                    highQRequestOption.synchronous = true
+                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                        self.photoPicker.indexImageDict[count] = result
+                    }
+                }else{
+                    if(self.photoPicker.indexImageDict.count != 0){
+                        showAlertView(withWarning: "You can't select video while selecting photos")
+                        return
+                    }else if(self.photoPicker.videoAsset != nil){
+                        showAlertView(withWarning: "You can only send one video at one time")
+                        return
+                    }
+                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                    let lowQRequestOption = PHVideoRequestOptions()
+                    lowQRequestOption.deliveryMode = .FastFormat //high pixel
+                    PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
+                        self.photoPicker.videoAsset = asset
+                    }
+                    
+                    let highQRequestOption = PHImageRequestOptions()
+                    highQRequestOption.resizeMode = .Exact
+                    highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
+                    highQRequestOption.synchronous = true
+                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(210,150), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                        self.photoPicker.videoImage = result
+                    }
                 }
-                
-                cell.chosenFrameImageView.image = UIImage(named: frameImageName[photoPicker.indexImageDict.count - 1])
+                cell.chosenFrameImageView.image = UIImage(named: frameImageName[max(photoPicker.indexImageDict.count - 1, 0)])
                 cell.chosenFrameImageView.hidden = false
             }
         } else {
             cell.chosenFrameImageView.hidden = true
-            let deselectedIndex = photoPicker.assetIndexDict[asset]
-            photoPicker.assetIndexDict.removeValueForKey(asset)
-            photoPicker.indexAssetDict.removeValueForKey(deselectedIndex!)
-            photoPicker.indexImageDict.removeValueForKey(deselectedIndex!)
-            shiftChosenFrameFromIndex(deselectedIndex! + 1)
+            if let deselectedIndex = photoPicker.assetIndexDict[asset]{
+                photoPicker.assetIndexDict.removeValueForKey(asset)
+                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex)
+                photoPicker.indexImageDict.removeValueForKey(deselectedIndex)
+                shiftChosenFrameFromIndex(deselectedIndex + 1)
+            }
+            photoPicker.videoAsset = nil
+            photoPicker.videoImage = nil
         }
         //            print("imageDict has \(imageDict.count) images")
-        collectionView.deselectItemAtIndexPath(indexPath, animated: true)    }
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+    }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoPicker.currentAlbum.albumContent.count
@@ -232,14 +262,50 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func sendImages() {
         showProcessIndicator()
-        var images = [UIImage]()
-        for i in 0..<photoPicker.indexImageDict.count
-        {
-            images.append( photoPicker.indexImageDict[i]! as! UIImage)
+        if(photoPicker.videoAsset != nil){
+            sendVideoFromQuickPicker()
+        }else{
+            var images = [UIImage]()
+            for i in 0..<photoPicker.indexImageDict.count
+            {
+                images.append( photoPicker.indexImageDict[i]! )
+            }
+            imageDelegate.sendImages(images)
         }
-        imageDelegate.sendImages(images)
         hideProcessIndicator()
         cancelSend()
+    }
+    
+    private func sendVideoFromQuickPicker()
+    {
+        // asset is you AVAsset object
+        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
+        let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
+        do{
+            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+        }catch{
+            
+        }
+        exportSession!.outputURL = NSURL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
+        
+        let fileUrl = exportSession!.outputURL
+        // e.g .mov type
+        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
+        
+        exportSession!.exportAsynchronouslyWithCompletionHandler{
+            Void in
+            switch exportSession!.status {
+            case  AVAssetExportSessionStatus.Failed:
+                print("failed import video: \(exportSession!.error)")
+            case AVAssetExportSessionStatus.Cancelled:
+                print("cancelled import video: \(exportSession!.error)")
+            default:
+                print("completed import video")
+                if let data = NSData(contentsOfURL:fileUrl!){
+                    self.imageDelegate.sendVideoData?(data, snapImage: self.photoPicker.videoImage!)
+                }
+            }
+        }
     }
     
     func cancelSend() {
@@ -255,8 +321,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         tableViewAlbum.removeFromSuperview()
     }
     
-    func showAlertView() {
-        let alert = UIAlertController(title: "You can send up to 10 photos at once", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+    func showAlertView(withWarning text:String) {
+        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }

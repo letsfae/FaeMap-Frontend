@@ -21,7 +21,7 @@
 #import <JSQMessagesViewController/JSQMessagesMediaPlaceholderView.h>
 #import "JSQMessagesMediaViewBubbleImageMaskerCustom.h"
 
-#import "UIImage+JSQMessages.h"
+#import <JSQMessagesViewController/UIImage+JSQMessages.h>
 
 
 @interface JSQVideoMediaItemCustom ()

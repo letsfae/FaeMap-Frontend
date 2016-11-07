@@ -475,7 +475,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         self.delegate.sendImages(images)
     }
     
-    func sendVideoFromQuickPicker()
+    private func sendVideoFromQuickPicker()
     {
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)

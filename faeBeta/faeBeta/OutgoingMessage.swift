@@ -30,6 +30,7 @@ class OutgoingMessage {
     //location
     init(message : String, latitude: NSNumber, longitude : NSNumber, snapImage : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let snap = snapImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
+        
         messageDictionary = NSMutableDictionary(objects: [message, latitude, longitude, snap, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "latitude", "longitude", "snapImage", "senderId", "senderName", "date", "status", "type", "index","hasTimeStamp"])
     }
     //picture
