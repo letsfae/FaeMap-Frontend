@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension OpenedPinListViewController {
+extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
     // Back to main map from opened pin list
     func actionBackToMap(sender: UIButton) {
         UIView.animateWithDuration(0.583, animations: ({
@@ -58,5 +58,21 @@ extension OpenedPinListViewController {
         self.dismissViewControllerAnimated(false, completion: {
             self.delegate?.animateToCameraFromOpenedPinListView(coordinate, commentID: commentID)
         })
+    }
+    
+    func deleteThisCellCalledFromDelegate(indexPath: NSIndexPath) {
+        self.openedPinListArray.removeAtIndex(indexPath.row)
+        self.tableOpenedPin.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
+        var subviewTableHeight = tableHeight + 28
+        if openedPinListArray.count <= 3 {
+            subviewTableHeight = CGFloat(256)
+        }
+        else {
+            tableHeight = CGFloat(228)
+        }
+        subviewTableHeight = CGFloat(256)
+        self.tableOpenedPin.frame.size.height = tableHeight
+        self.subviewTable.frame.size.height = subviewTableHeight
     }
 }

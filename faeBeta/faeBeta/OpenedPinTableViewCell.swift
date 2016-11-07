@@ -12,6 +12,7 @@ import CoreLocation
 protocol OpenedPinTableViewCellDelegate {
     // Pass CL2D location to OpenedPinTableViewController
     func passCL2DLocationToOpenedPinList(coordinate: CLLocationCoordinate2D, commentID: Int)
+    func deleteThisCellCalledFromDelegate(indexPath: NSIndexPath)
 }
 
 class OpenedPinTableViewCell: UITableViewCell {
@@ -28,6 +29,7 @@ class OpenedPinTableViewCell: UITableViewCell {
     var commentID: Int = -999
     var userID: String = "NULL"
     var location: CLLocationCoordinate2D!
+    var indexPathInCell: NSIndexPath!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -72,6 +74,7 @@ class OpenedPinTableViewCell: UITableViewCell {
         self.addSubview(deleteButton)
         self.addConstraintsWithFormat("H:[v0(100)]-(-27)-|", options: [], views: deleteButton)
         self.addConstraintsWithFormat("V:|-14-[v0(48)]", options: [], views: deleteButton)
+        deleteButton.addTarget(self, action: #selector(OpenedPinTableViewCell.deleteThisCell(_:)), forControlEvents: .TouchUpInside)
         deleteButton.enabled = false
         
         jumpToDetail = UIButton(frame: CGRect(x: 0, y: 3, width: 341, height: 70))
@@ -94,9 +97,11 @@ class OpenedPinTableViewCell: UITableViewCell {
     }
     
     func jumpToDetailAndAnimate(sender: UIButton) {
-        print("TESTing Cell Button")
-        print(location)
         self.delegate?.passCL2DLocationToOpenedPinList(location, commentID: commentID)
+    }
+    
+    func deleteThisCell(sender: UIButton) {
+        self.delegate?.deleteThisCellCalledFromDelegate(indexPathInCell)
     }
     
     required init?(coder aDecoder: NSCoder) {

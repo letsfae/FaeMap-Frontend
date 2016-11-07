@@ -198,17 +198,23 @@ extension CommentPinViewController {
                     self.dictCommentsOnCommentDetail.insert(dicCell, atIndex: 0)
                 }
             }
-            print("DEBUG RELOAD DATA")
-            print(self.dictCommentsOnCommentDetail.count)
-            self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
-            self.tableCommentsForComment.frame.size.height += 140
-            self.commentDetailFullBoardScrollView.contentSize.height += 140
-            self.tableCommentsForComment.reloadData()
             if sendMessageFlag {
+                print("DEBUG RELOAD DATA")
+                print(self.dictCommentsOnCommentDetail.count)
+                self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
+                self.tableCommentsForComment.frame.size.height += 140
+                self.commentDetailFullBoardScrollView.contentSize.height += 140
+                //// Will figure out the UI presentation later
+                /**
                 var offset = self.commentDetailFullBoardScrollView.contentOffset
                 offset.y = self.commentDetailFullBoardScrollView.contentSize.height + self.commentDetailFullBoardScrollView.contentInset.bottom - self.commentDetailFullBoardScrollView.bounds.size.height
                 self.commentDetailFullBoardScrollView.setContentOffset(offset, animated: true)
+                **/
             }
+            let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
+            self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
+            self.tableCommentsForComment.frame.size.height = newHeight
+            self.tableCommentsForComment.reloadData()
         }
     }
     

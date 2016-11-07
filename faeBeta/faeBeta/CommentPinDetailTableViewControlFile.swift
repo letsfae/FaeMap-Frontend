@@ -18,7 +18,7 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tableCommentsForComment {
-            return numberOfCommentTableCells
+            return dictCommentsOnCommentDetail.count
         }
         else{
             return 0

@@ -83,7 +83,7 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     func loadMapView() {
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         self.mapSelectLocation = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        mapSelectLocation.myLocationEnabled = false
+        mapSelectLocation.myLocationEnabled = true
         mapSelectLocation.delegate = self
         self.view = mapSelectLocation
         locManager.delegate = self

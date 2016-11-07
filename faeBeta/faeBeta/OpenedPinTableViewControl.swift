@@ -11,7 +11,7 @@ import GoogleMaps
 import SwiftyJSON
 import CoreLocation
 
-extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource, OpenedPinTableViewCellDelegate {
+extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -31,6 +31,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             cell.delegate = self
             let commentID = openedPinListArray[indexPath.row]
             cell.commentID = commentID
+            cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
             getCommentById.getComment("\(commentID)") {(status: Int, message: AnyObject?) in
                 let commentInfoJSON = JSON(message!)

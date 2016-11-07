@@ -230,6 +230,7 @@ extension FaeAccountViewController {
 
         user.logOut{(status: Int, message: AnyObject?) in
         }
+        
         jumpTowelcomeVC()
     }
 }

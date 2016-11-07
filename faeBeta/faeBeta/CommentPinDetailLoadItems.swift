@@ -34,11 +34,6 @@ extension CommentPinViewController {
         uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
         subviewWhite.addSubview(uiviewCommentPinUnderLine01)
         
-        // Line at y = 292
-        uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 227, screenWidth, 1))
-        uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
-        uiviewCommentPinDetail.addSubview(uiviewCommentPinUnderLine02)
-        
         // Button 0: Back to Map
         buttonCommentPinBackToMap = UIButton()
         buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), forState: .Normal)
@@ -223,19 +218,33 @@ extension CommentPinViewController {
         buttonCommentPinAddComment = UIButton()
         buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), forState: .Normal)
         buttonCommentPinAddComment.addTarget(self, action: #selector(CommentPinViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCommentPinAddComment.tag = 0
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinAddComment)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonCommentPinAddComment)
         uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinAddComment)
         
+        draggingButtonSubview = UIView(frame: CGRectMake(0, 227, screenWidth, 28))
+        draggingButtonSubview.backgroundColor = UIColor.whiteColor()
+        self.uiviewCommentPinDetail.addSubview(draggingButtonSubview)
+        draggingButtonSubview.layer.zPosition = 109
+        
+        // Line at y = 292
+        uiviewCommentPinUnderLine02 = UIView(frame: CGRectMake(0, 0, screenWidth, 1))
+        uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        self.draggingButtonSubview.addSubview(uiviewCommentPinUnderLine02)
+//        uiviewCommentPinUnderLine02.layer.zPosition = 109
+        
         // Button 7: Drag to larger
-        buttonCommentPinDetailDragToLargeSize = UIButton()
+        buttonCommentPinDetailDragToLargeSize = UIButton(frame: CGRectMake(0, 1, screenWidth, 27))
         buttonCommentPinDetailDragToLargeSize.backgroundColor = UIColor.whiteColor()
         buttonCommentPinDetailDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-        //        buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentPinDetail.addSubview(buttonCommentPinDetailDragToLargeSize)
-        uiviewCommentPinDetail.addConstraintsWithFormat("H:[v0(\(screenWidth))]", options: [], views: buttonCommentPinDetailDragToLargeSize)
-        uiviewCommentPinDetail.addConstraintsWithFormat("V:[v0(26)]-0-|", options: [], views: buttonCommentPinDetailDragToLargeSize)
-        NSLayoutConstraint(item: buttonCommentPinDetailDragToLargeSize, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCommentPinDetail, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+                buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(CommentPinViewController.actionDraggingThisComment(_:)), forControlEvents: .TouchUpInside)
+        self.draggingButtonSubview.addSubview(buttonCommentPinDetailDragToLargeSize)
+        buttonCommentPinDetailDragToLargeSize.center.x = screenWidth/2
+//        buttonCommentPinDetailDragToLargeSize.layer.zPosition = 109
+        buttonCommentPinDetailDragToLargeSize.tag = 0
+        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(CommentPinViewController.panActionCommentPinListDrag(_:)))
+        buttonCommentPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
         
         // Label of Title
         labelCommentPinTitle = UILabel()
@@ -276,7 +285,7 @@ extension CommentPinViewController {
         commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-40-[v0(27)]", options: [], views: labelCommentPinTimestamp)
         
         // Cancel all the touch down delays for uibutton caused by tableview's subviews
-        for view in tableCommentsForComment.subviews {
+        for view in self.tableCommentsForComment.subviews {
             if view is UIScrollView {
                 (view as? UIScrollView)!.delaysContentTouches = false
                 break

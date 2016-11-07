@@ -74,25 +74,6 @@ class OpenedPinListViewController: UIViewController {
     
     // Load comment pin list
     func loadCommentPinList() {
-//        let leftSwipe = UISwipeGestureRecognizer(target: self,
-//                                                 action: #selector(CommentPinViewController.actionBackToCommentDetail(_:)))
-//        let rightSwipe = UISwipeGestureRecognizer(target: self,
-//                                                  action: #selector(CommentPinViewController.actionBackToList(_:)))
-//        let upSwipe = UISwipeGestureRecognizer(target: self,
-//                                               action: #selector(CommentPinViewController.shrinkCommentList))
-//        let downSwipe = UISwipeGestureRecognizer(target: self,
-//                                                 action: #selector(CommentPinViewController.expandCommentList))
-//        
-//        leftSwipe.direction = .Left
-//        rightSwipe.direction = .Right
-//        upSwipe.direction = .Up
-//        downSwipe.direction = .Down
-        
-//        uiviewCommentPinListBlank.addGestureRecognizer(leftSwipe)
-//        uiviewCommentPinListBlank.addGestureRecognizer(upSwipe)
-//        uiviewCommentPinListBlank.addGestureRecognizer(downSwipe)
-//        uiviewCommentPinDetail.addGestureRecognizer(rightSwipe)
-        
         var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
         var subviewTableHeight = tableHeight + 28
         if openedPinListArray.count <= 3 {
