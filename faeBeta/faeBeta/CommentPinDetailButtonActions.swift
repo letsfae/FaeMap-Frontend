@@ -58,18 +58,10 @@ extension CommentPinViewController {
             if uiviewCommentPinDetail.frame.size.height == 255 {
                 commentPinSizeFrom = 255
                 commentPinSizeTo = screenHeight - 65
-                textviewCommentPinDetail.scrollEnabled = false
-                commentDetailFullBoardScrollView.scrollEnabled = true
-                buttonCommentPinDetailDragToLargeSize.tag = 1
-                commentDetailFullBoardScrollView.contentSize.height = commentPinSizeTo
             }
             else {
                 commentPinSizeFrom = screenHeight - 65
                 commentPinSizeTo = 255
-                textviewCommentPinDetail.scrollEnabled = true
-                commentDetailFullBoardScrollView.scrollEnabled = false
-                buttonCommentPinDetailDragToLargeSize.tag = 0
-                commentDetailFullBoardScrollView.contentSize.height = commentPinSizeTo
             }
         } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
             let location = pan.locationInView(view)
@@ -86,6 +78,20 @@ extension CommentPinViewController {
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeFrom
                     self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeFrom
                 })
+            }
+            if uiviewCommentPinDetail.frame.size.height == 255 {
+                textviewCommentPinDetail.scrollEnabled = true
+                commentDetailFullBoardScrollView.scrollEnabled = false
+                buttonCommentPinDetailDragToLargeSize.tag = 0
+                commentDetailFullBoardScrollView.contentSize.height = 255
+            }
+            if uiviewCommentPinDetail.frame.size.height == screenHeight - 65 {
+                textviewCommentPinDetail.scrollEnabled = false
+                commentDetailFullBoardScrollView.scrollEnabled = true
+                buttonCommentPinDetailDragToLargeSize.tag = 1
+                let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
+                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
+                self.tableCommentsForComment.frame.size.height = newHeight
             }
             
         } else {
