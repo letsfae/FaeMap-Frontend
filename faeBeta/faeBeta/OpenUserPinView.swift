@@ -1,5 +1,5 @@
 //
-//  TestViewController.swift
+//  OpenUserPinView.swift
 //  faeBeta
 //
 //  Created by Yanxiang Wang on 16/7/26.
@@ -22,8 +22,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewCard.backgroundColor = UIColor.clearColor()
         uiviewCard.hidden = true
         uiviewDialog.addSubview(uiviewCard)
-        
-        
         
         //avatar
         imageviewNamecardAvatar = UIImageView(frame: CGRect(x: (maxLength-70)/2, y: 90, width: 70, height: 70))

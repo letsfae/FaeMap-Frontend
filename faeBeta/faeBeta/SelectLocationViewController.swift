@@ -50,6 +50,19 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
     
+    var resultTableWidth: CGFloat {
+        if UIScreen.mainScreen().bounds.width == 414 { // 5.5
+            return 398
+        }
+        else if UIScreen.mainScreen().bounds.width == 320 { // 4.0
+            return 308
+        }
+        else if UIScreen.mainScreen().bounds.width == 375 { // 4.7
+            return 360.5
+        }
+        return 308
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadMapView()
@@ -70,7 +83,7 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     func loadMapView() {
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         self.mapSelectLocation = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        mapSelectLocation.myLocationEnabled = false
+        mapSelectLocation.myLocationEnabled = true
         mapSelectLocation.delegate = self
         self.view = mapSelectLocation
         locManager.delegate = self
@@ -177,9 +190,9 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     }
     
     func loadCustomSearchController() {
-        let searchBarSubview = UIView(frame: CGRectMake(8, 23, 398, 48.0))
+        let searchBarSubview = UIView(frame: CGRectMake(8, 23, resultTableWidth, 48.0))
         
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5, 398, 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
+        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5, resultTableWidth, 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
         customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
@@ -257,9 +270,9 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
                     }
                     self.tblSearchResults.reloadData()
                 }
-            }
-            if placeholder.count > 0 {
-                searchBarTableShowAnimation()
+                if self.placeholder.count > 0 {
+                    self.searchBarTableShowAnimation()
+                }
             }
         }
         else {
@@ -271,22 +284,22 @@ class SelectLocationViewController: UIViewController, GMSMapViewDelegate, CLLoca
     
     func searchBarTableHideAnimation() {
         UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 0)
+            self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 0)
+            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 0)
         }), completion: nil)
     }
     
     func searchBarTableShowAnimation() {
         UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398, 240)
-            self.uiviewTableSubview.frame = CGRectMake(8, 23+53, 398, 240)
+            self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 240)
+            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 240)
         }), completion: nil)
     }
     
     // MARK: TableView Initialize
     
     func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(0, 0, 398, 0))
+        uiviewTableSubview = UIView(frame: CGRectMake(8, 78, resultTableWidth, 0))
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
