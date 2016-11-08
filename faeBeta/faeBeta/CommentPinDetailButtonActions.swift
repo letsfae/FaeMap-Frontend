@@ -13,47 +13,9 @@ import SwiftyJSON
 
 extension CommentPinViewController {
     
-    //    // Pan gesture for dragging comment pin list dragging button
-    //    func panActionCommentPinListDrag(pan: UIPanGestureRecognizer) {
-    //        if pan.state == .Began {
-    //            if uiviewCommentPinDetail.frame.size.height == 320 {
-    //                commentPinSizeFrom = 320
-    //                commentPinSizeTo = screenHeight
-    //            }
-    //            else {
-    //                commentPinSizeFrom = screenHeight
-    //                commentPinSizeTo = 320
-    //            }
-    //        } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
-    //            let location = pan.locationInView(view)
-    //            if abs(location.y - commentPinSizeFrom) >= 60 {
-    //                UIView.animateWithDuration(0.2, animations: {
-    //                    self.buttonCommentPinDetailDragToLargeSize.center.y = self.commentPinSizeTo - 13.5
-    //                    self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeTo
-    ////                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeTo - 27.5
-    ////                    self.commentListScrollView.frame.size.height = self.commentPinSizeTo - 92
-    //                })
-    //            }
-    //            else {
-    //                UIView.animateWithDuration(0.1, animations: {
-    //                    self.buttonCommentPinDetailDragToLargeSize.center.y = self.commentPinSizeFrom - 13.5
-    //                    self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeFrom
-    ////                    self.uiviewCommentPinListUnderLine02.center.y = self.commentPinSizeFrom - 27.5
-    ////                    self.commentListScrollView.frame.size.height = self.commentPinSizeFrom - 92
-    //                })
-    //            }
-    //        } else {
-    //            let location = pan.locationInView(view)
-    //            if location.y >= 306.5 {
-    //                buttonCommentPinDetailDragToLargeSize.center.y = location.y
-    //                uiviewCommentPinDetail.frame.size.height = location.y + 13.5
-    ////                commentListScrollView.frame.size.height = location.y - 78.5
-    //            }
-    //        }
-    //    }
-    
-    // Pan gesture for dragging comment pin list dragging button
-    func panActionCommentPinListDrag(pan: UIPanGestureRecognizer) {
+    // Pan gesture for dragging comment pin detail dragging button
+    func panActionCommentPinDetailDrag(pan: UIPanGestureRecognizer) {
+        var resumeTime:Double = 0.583
         if pan.state == .Began {
             if uiviewCommentPinDetail.frame.size.height == 255 {
                 commentPinSizeFrom = 255
@@ -65,18 +27,28 @@ extension CommentPinViewController {
             }
         } else if pan.state == .Ended || pan.state == .Failed || pan.state == .Cancelled {
             let location = pan.locationInView(view)
-            if abs(location.y - commentPinSizeFrom) >= 60 {
-                UIView.animateWithDuration(0.583, animations: {
+            let velocity = pan.velocityInView(view)
+            resumeTime = abs(Double(CGFloat(screenHeight - 256) / velocity.y))
+            print("DEBUG: Velocity TESTing")
+            print("Velocity in CGPoint.y")
+            print(velocity.y)
+            print("Resume Time")
+            print(resumeTime)
+            if resumeTime >= 0.583 {
+                resumeTime = 0.583
+            }
+            if abs(location.y - commentPinSizeFrom) >= 80 {
+                UIView.animateWithDuration(resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeTo - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeTo
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeTo
+                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeTo - 28
                 })
             }
             else {
-                UIView.animateWithDuration(0.583, animations: {
+                UIView.animateWithDuration(resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeFrom - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeFrom
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeFrom
+                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeFrom - 28
                 })
             }
             if uiviewCommentPinDetail.frame.size.height == 255 {
@@ -368,9 +340,11 @@ extension CommentPinViewController {
         }
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
-        let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-        self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
-        self.tableCommentsForComment.frame.size.height = newHeight
+        let newHeightComments = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
+        let newHeightPeople = CGFloat(76 * self.dictPeopleOfCommentDetail.count)
+        self.commentDetailFullBoardScrollView.contentSize.height = newHeightComments + 281
+        self.tableCommentsForComment.frame.size.height = newHeightComments
+        self.tableViewPeople.frame.size.height = newHeightPeople
         textviewCommentPinDetail.scrollEnabled = false
         commentDetailFullBoardScrollView.scrollEnabled = true
         UIView.animateWithDuration(0.583, animations: ({
@@ -398,7 +372,7 @@ extension CommentPinViewController {
         })
     }
     
-    // When clicking reply button in comment pin detail window
+    // When clicking dragging button in comment pin detail window
     func actionDraggingThisComment(sender: UIButton) {
         if sender.tag == 1 {
             sender.tag = 0
@@ -423,9 +397,11 @@ extension CommentPinViewController {
         sender.tag = 1
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
-        let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-        self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
-        self.tableCommentsForComment.frame.size.height = newHeight
+        let newHeightComments = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
+        let newHeightPeople = CGFloat(76 * self.dictPeopleOfCommentDetail.count)
+        self.commentDetailFullBoardScrollView.contentSize.height = newHeightComments + 281
+        self.tableCommentsForComment.frame.size.height = newHeightComments
+        self.tableViewPeople.frame.size.height = newHeightPeople
         textviewCommentPinDetail.scrollEnabled = false
         commentDetailFullBoardScrollView.scrollEnabled = true
         UIView.animateWithDuration(0.583, animations: ({

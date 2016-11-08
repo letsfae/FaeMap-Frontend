@@ -441,26 +441,26 @@ class FaeUser : NSObject {
     func getOthersProfile(otherUser:String, completion:(Int,AnyObject?)->Void){
         getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //self.clearKeyValue()
-            completion(status,message);
+            completion(status, message);
         }
     }
     
-    func updateProfile(completion:(Int,AnyObject?)->Void){
+    func updateProfile(completion:(Int, AnyObject?) -> Void){
         postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
             //self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     
-    func getNamecardOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
-        getFromURL("users/"+otherUser+"/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            completion(status,message);
+    func getNamecardOfSpecificUser(otherUser: String, completion:(Int, AnyObject?) -> Void){
+        getFromURL("users/"+otherUser+"/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status, message);
         }
     }
     
-    func getSelfNamecard(completion:(Int,AnyObject?)->Void){
+    func getSelfNamecard(completion:(Int, AnyObject?) -> Void){
         getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            completion(status,message);
+            completion(status, message);
         }
     }
 

@@ -79,7 +79,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
-    var buttonCenter = CGPointZero
     var commentPinSizeFrom: CGFloat = 0
     var commentPinSizeTo: CGFloat = 0
     
@@ -99,6 +98,10 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
+    
+    // People table
+    var tableViewPeople: UITableView!
+    var dictPeopleOfCommentDetail = [Int: String]()
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
@@ -122,6 +125,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // Another dragging button for UI effect
     var draggingButtonSubview: UIView!
+    
+    // Timer for animating heart
+    var animatingHeartTimer: NSTimer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -286,6 +292,16 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // Animation of the red sliding line
     func animationRedSlidingLine(sender: UIButton) {
+        if sender.tag == 1 {
+            tableViewPeople.hidden = true
+            tableCommentsForComment.hidden = false
+            commentDetailFullBoardScrollView.contentSize.height = tableCommentsForComment.frame.size.height + 281
+        }
+        else if sender.tag == 3 {
+            tableViewPeople.hidden = false
+            tableCommentsForComment.hidden = true
+            commentDetailFullBoardScrollView.contentSize.height = tableViewPeople.frame.size.height + 281
+        }
         let tag = CGFloat(sender.tag)
         let centerAtOneThird = screenWidth / 4
         let targetCenter = CGFloat(tag * centerAtOneThird)
@@ -298,8 +314,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             }
         })
     }
-    
-    
     
     // Hide comment pin more options' button
     func hideCommentPinMoreButtonDetails() {
@@ -350,6 +364,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     func animateHeart() {
         animatingHeart = UIImageView(frame: CGRectMake(0, 0, 26, 22))
         animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        animatingHeart.layer.zPosition = 108
         uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
         
         //

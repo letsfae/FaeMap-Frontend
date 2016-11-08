@@ -27,12 +27,17 @@ class OpenedPinListViewController: UIViewController {
     var commentListExpand = false
     var commentListShowed = false
     var labelCommentPinListTitle: UILabel!
+    var openedPinListArray = [Int]()
+    var subviewTable: UIView!
+    var subviewWhite: UIView!
+    var tableOpenedPin: UITableView!
     var uiviewCommentPinListUnderLine01: UIView!
     var uiviewCommentPinListUnderLine02: UIView!
-    var subviewWhite: UIView!
-    var subviewTable: UIView!
-    var tableOpenedPin: UITableView!
-    var openedPinListArray = [Int]()
+    var draggingButtonSubview: UIView!
+    
+    // For Dragging
+    var commentPinSizeFrom: CGFloat = 0
+    var commentPinSizeTo: CGFloat = 0
     
     // Control the back to comment pin detail button, prevent the more than once action
     var backJustOnce = true
@@ -111,13 +116,6 @@ class OpenedPinListViewController: UIViewController {
         uiviewCommentPinListUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
         subviewWhite.addSubview(uiviewCommentPinListUnderLine01)
         
-        // Line at y = 292
-        uiviewCommentPinListUnderLine02 = UIView(frame: CGRectMake(0, 227, screenWidth, 1))
-        uiviewCommentPinListUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
-        subviewTable.addSubview(uiviewCommentPinListUnderLine02)
-        subviewTable.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewCommentPinListUnderLine02)
-        subviewTable.addConstraintsWithFormat("V:[v0(1)]-28-|", options: [], views: uiviewCommentPinListUnderLine02)
-        
         // Button: Back to Comment Detail
         buttonBackToCommentPinDetail = UIButton()
         buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
@@ -134,14 +132,22 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
         subviewWhite.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
         
+        draggingButtonSubview = UIView(frame: CGRectMake(0, 228, screenWidth, 28))
+        draggingButtonSubview.backgroundColor = UIColor.whiteColor()
+        self.subviewTable.addSubview(draggingButtonSubview)
+        draggingButtonSubview.layer.zPosition = 109
+        
+        // Line at y = 227
+        uiviewCommentPinListUnderLine02 = UIView(frame: CGRectMake(0, 0, screenWidth, 1))
+        uiviewCommentPinListUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        draggingButtonSubview.addSubview(uiviewCommentPinListUnderLine02)
+        
         // Button: Drag to larger
-        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 228, screenWidth, 27))
+        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRectMake(0, 1, screenWidth, 27))
         buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), forState: .Normal)
-//        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(CommentPinViewController.actionListExpandShrink(_:)), forControlEvents: .TouchUpInside)
-        subviewTable.addSubview(buttonCommentPinListDragToLargeSize)
-        subviewTable.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: buttonCommentPinListDragToLargeSize)
-        subviewTable.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: buttonCommentPinListDragToLargeSize)
-//        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(CommentPinViewController.panActionCommentPinListDrag(_:)))
+        buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(OpenedPinListViewController.actionDraggingThisList(_:)), forControlEvents: .TouchUpInside)
+        draggingButtonSubview.addSubview(buttonCommentPinListDragToLargeSize)
+//        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(OpenedPinListViewController.panActionCommentPinListDrag(_:)))
 //        buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)
         
         // Label of Title

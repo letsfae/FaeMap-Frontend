@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLocation
 
-extension CommentPinViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate {
+extension CommentPinViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, CommentPinCommentsCellDelegate {
     
     func reloadCommentContent() {
         if commentIDCommentPinDetailView != "-999" {
@@ -45,5 +45,26 @@ extension CommentPinViewController: EditCommentPinViewControllerDelegate, Opened
             self.delegate?.dismissMarkerShadow(true)
             self.dismissViewControllerAnimated(false, completion: nil)
         }
+    }
+    
+    func showActionSheetFromCommentPinCell(username: String) {
+        let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .ActionSheet)
+        menu.view.tintColor = colorFae
+        let writeReply = UIAlertAction(title: "Write a Reply", style: .Default) { (alert: UIAlertAction) in
+            self.inputToolbar.hidden = false
+            self.inputToolbar.contentView.textView.text = "@\(username) "
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+            self.lableTextViewPlaceholder.hidden = true
+        }
+        let report = UIAlertAction(title: "Report", style: .Default) { (alert: UIAlertAction) in
+            self.actionReportThisPin(self.buttonReportOnCommentDetail)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction) in
+            
+        }
+        menu.addAction(writeReply)
+        menu.addAction(report)
+        menu.addAction(cancel)
+        self.presentViewController(menu, animated: true, completion: nil)
     }
 }

@@ -20,6 +20,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
+        buttonLeftTop.layer.zPosition = 500
         
         // Open main map search
         buttonMainScreenSearch = UIButton()
@@ -29,6 +30,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        buttonMainScreenSearch.layer.zPosition = 500
         
         /* This is not for 11.01 Dev Version
         // Wind bell
@@ -47,6 +49,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
+        buttonToNorth.layer.zPosition = 500
         
         // Click to locate the current location
         buttonSelfPosition = UIButton()
@@ -55,6 +58,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
+        buttonSelfPosition.layer.zPosition = 500
         
         // Open chat view
         buttonChatOnMap = UIButton()
@@ -63,6 +67,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         view.addSubview(buttonChatOnMap)
         view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
+        buttonChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
         labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 23, 20))
@@ -87,6 +92,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
 //        buttonPinOnMapInside.setImage(UIImage(named: "set_pin_on_map_inside"), forState: .Normal)
 //        buttonPinOnMapInside.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 //        view.addSubview(buttonPinOnMapInside)
+        buttonPinOnMap.layer.zPosition = 500
     }
     
     //MARK: Actions for these buttons
