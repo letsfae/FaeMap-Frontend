@@ -234,14 +234,20 @@ class IncomingMessage {
     
     func videoFromData(item : NSDictionary, result : (videoData : NSURL?) -> Void) {
         let str = item["video"] as? String
-        if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
-            if(str!.characters.count > 50){
-                let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(str!.endIndex.advancedBy(-33) ..< str!.endIndex.advancedBy(-1)))).mov")
-                decodedData.writeToFile(filePath, atomically:true)
-                
-                let videoFileURL = NSURL(fileURLWithPath: filePath)
-                
-                result(videoData: videoFileURL)
+        let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(str!.endIndex.advancedBy(-33) ..< str!.endIndex.advancedBy(-1)))).mov")
+
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(filePath) {
+            let videoFileURL = NSURL(fileURLWithPath: filePath)
+            result(videoData: videoFileURL)
+        } else {
+            if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
+                if(str!.characters.count > 50){
+                    decodedData.writeToFile(filePath, atomically:true)
+                    
+                    let videoFileURL = NSURL(fileURLWithPath: filePath)
+                    result(videoData: videoFileURL)
+                }
             }
         }
     }

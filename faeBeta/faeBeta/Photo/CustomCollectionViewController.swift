@@ -279,6 +279,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     private func sendVideoFromQuickPicker()
     {
+        
+        let snapImage = self.photoPicker.videoImage!
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
         let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
@@ -303,7 +305,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
-                    self.imageDelegate.sendVideoData?(data, snapImage: self.photoPicker.videoImage!)
+                    self.imageDelegate.sendVideoData?(data, snapImage: snapImage)
                 }
             }
         }
