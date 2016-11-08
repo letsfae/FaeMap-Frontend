@@ -61,14 +61,18 @@ class PhotoPicker {
     }
     
     private func calculateVideoDuration(){
-        for i in 0 ..< self.cameraRoll.albumCount {
-            let asset = self.cameraRoll.albumContent[i] as! PHAsset
-            if asset.mediaType == .Video && assetDurationDict[asset] == nil {
-            let lowQRequestOption = PHVideoRequestOptions()
-            lowQRequestOption.deliveryMode = .FastFormat //high pixel
-                PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
-                    let duration = Int(Int(assetTwo!.duration.value) / Int(assetTwo!.duration.timescale))
-                    self.assetDurationDict[asset] =  duration
+        if(cameraRoll != nil){
+            for i in 0 ..< self.cameraRoll.albumCount {
+                let asset = self.cameraRoll.albumContent[i] as! PHAsset
+                if asset.mediaType == .Video && assetDurationDict[asset] == nil {
+                    let lowQRequestOption = PHVideoRequestOptions()
+                    lowQRequestOption.deliveryMode = .FastFormat //high pixel
+                    PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
+                        if(assetTwo != nil){
+                            let duration = Int(Int(assetTwo!.duration.value) / Int(assetTwo!.duration.timescale))
+                            self.assetDurationDict[asset] =  duration
+                        }
+                    }
                 }
             }
         }
