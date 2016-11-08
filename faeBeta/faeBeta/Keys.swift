@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-var baseURL = "https://api.letsfae.com"
+//var baseURL = "https://api.letsfae.com"
+var baseURL = "https://dev.letsfae.com"
 var version = "x.faeapp.v1"
 var headerAccept = "application/x.faeapp.v1+json"
 var headerContentType = "application/x-www-form-urlencoded"

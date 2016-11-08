@@ -59,7 +59,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
         collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        collectionView?.registerNib(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
         requestOption.synchronous = false
         requestOption.resizeMode = .Fast
         requestOption.deliveryMode = .HighQualityFormat
@@ -113,7 +113,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
         let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.row] as! PHAsset
         
-        if cell.chosenFrameImageView.hidden {
+        if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == 10 {
                 showAlertView(withWarning: "You can only select up to 10 images at the same time")
             } else {
@@ -156,11 +156,10 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                         self.photoPicker.videoImage = result
                     }
                 }
-                cell.chosenFrameImageView.image = UIImage(named: frameImageName[max(photoPicker.indexImageDict.count - 1, 0)])
-                cell.chosenFrameImageView.hidden = false
+                cell.selectCell(max(photoPicker.indexImageDict.count - 1, 0))
             }
         } else {
-            cell.chosenFrameImageView.hidden = true
+            cell.deselectCell()
             if let deselectedIndex = photoPicker.assetIndexDict[asset]{
                 photoPicker.assetIndexDict.removeValueForKey(asset)
                 photoPicker.indexAssetDict.removeValueForKey(deselectedIndex)
@@ -201,18 +200,17 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         cell.loadImage(asset, requestOption: requestOption)
         if photoPicker.assetIndexDict[asset] != nil {
-            cell.chosenFrameImageView.hidden = false
-            cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
+            cell.selectCell(photoPicker.assetIndexDict[asset]!)
         }else{
-            cell.chosenFrameImageView.hidden = true
+            cell.deselectCell()
         }
     }
-    
-    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let mycell = cell as! PhotoPickerCollectionViewCell
-        mycell.photoImageView.image = nil
-    }
-    
+//    
+//    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+//        let mycell = cell as! PhotoPickerCollectionViewCell
+//        mycell.photoImageView.image = nil
+//    }
+//    
     
     //MARK: support method
     

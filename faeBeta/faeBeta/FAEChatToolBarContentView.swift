@@ -58,8 +58,6 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     private var photoPicker : PhotoPicker!
     private var photoQuickCollectionView : UICollectionView!//preview of the photoes
     private let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
-    
-    private var frameImageName = ["photoQuickSelection1", "photoQuickSelection2", "photoQuickSelection3", "photoQuickSelection4","photoQuickSelection5", "photoQuickSelection6", "photoQuickSelection7", "photoQuickSelection8", "photoQuickSelection9", "photoQuickSelection10"]// show at most 10 images
 
     private let requestOption = PHImageRequestOptions()
     private var imageQuickPickerShow = false //false : not open the photo preview
@@ -112,7 +110,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             layout.minimumLineSpacing = 1000.0
             layout.itemSize = CGSizeMake(220, 271)
             photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
-            photoQuickCollectionView.registerNib(UINib(nibName: "PhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+            photoQuickCollectionView.registerNib(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
             photoQuickCollectionView.delegate = self
             photoQuickCollectionView.dataSource = self
             quickSendImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
@@ -350,10 +348,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 cell.loadImage(asset, requestOption: requestOption)
                 
                 if photoPicker.assetIndexDict[asset] != nil {
-                    cell.chosenFrameImageView.hidden = false
-                    cell.chosenFrameImageView.image = UIImage(named: self.frameImageName[photoPicker.assetIndexDict[asset]!])
+                    cell.selectCell(photoPicker.assetIndexDict[asset]!)
                 }else{
-                    cell.chosenFrameImageView.hidden = true
+                    cell.deselectCell()
                 }
             }
         }
@@ -365,7 +362,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
             let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             
-            if cell.chosenFrameImageView.hidden {
+            if !cell.photoSelected {
                 if photoPicker.indexAssetDict.count == 10 {
                     self.delegate.showAlertView(withWarning: "You can only select up to 10 images at the same time")
                 } else {
@@ -410,12 +407,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                             self.photoPicker.videoImage = result
                         }
                     }
-                    cell.chosenFrameImageView.image = UIImage(named: frameImageName[max(photoPicker.indexImageDict.count - 1, 0)])
-                    cell.chosenFrameImageView.hidden = false
+                    cell.selectCell(max(photoPicker.indexImageDict.count - 1, 0))
                     self.photoQuickCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Left, animated: true)
                 }
             } else {
-                cell.chosenFrameImageView.hidden = true
+                cell.deselectCell()
                 if let deselectedIndex = photoPicker.assetIndexDict[asset]{
                 photoPicker.assetIndexDict.removeValueForKey(asset)
                 photoPicker.indexAssetDict.removeValueForKey(deselectedIndex)

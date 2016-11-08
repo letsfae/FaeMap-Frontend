@@ -89,9 +89,9 @@
 		B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
 		B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
 		B064EEC11D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
-		B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
-		B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
-		B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */; };
+		B064EEC21D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
+		B064EEC31D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
+		B064EEC41D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
@@ -507,6 +507,7 @@
 		DC2D6BE21DC86CD70092E3D0 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		DC2D6BE31DC86CD70092E3D0 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
+		DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */; };
 		DC3D10451DC2AE790011C772 /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3D10461DC2AE7A0011C772 /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3D10471DC2AE7D0011C772 /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
@@ -628,7 +629,7 @@
 		B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutgoingMessage.swift; sourceTree = "<group>"; };
 		B064EEA61D6E0CA100C078F5 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
-		B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
+		B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FullPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumTableViewCell.xib; sourceTree = "<group>"; };
@@ -791,6 +792,7 @@
 		B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentOnPinToolBar.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
+		DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		DC3D10591DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CommentPinViewController+InputToolbar.swift"; sourceTree = "<group>"; };
 		DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQVideoMediaItemCustom.h; sourceTree = "<group>"; };
 		DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQVideoMediaItemCustom.m; sourceTree = "<group>"; };
@@ -912,7 +914,8 @@
 			isa = PBXGroup;
 			children = (
 				B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */,
-				B064EEB61D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib */,
+				B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */,
+				DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */,
 			);
 			path = CustomCollectionViewCell;
 			sourceTree = "<group>";
@@ -1510,6 +1513,7 @@
 				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */,
 				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
@@ -1519,7 +1523,7 @@
 				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B09E49BC1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
 				B09E49E11D96F77F0075EE45 /* LICENSE in Resources */,
-				B064EEC21D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
+				B064EEC21D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */,
 				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1572,7 +1576,7 @@
 				DC3D10561DC2AE9E0011C772 /* AudioRecorderView.xib in Resources */,
 				B064EF591D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF5F1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EEC31D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
+				B064EEC31D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF181D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1608,7 +1612,7 @@
 				DC3D10581DC2AE9E0011C772 /* AudioRecorderView.xib in Resources */,
 				B064EF5A1D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
 				B064EF601D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
-				B064EEC41D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.xib in Resources */,
+				B064EEC41D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */,
 				B064EF191D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,21 +13,40 @@ import Photos
 
 class PhotoPickerCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var photoImageView: UIImageView!
+
+
+    private(set) var photoSelected = false
     
-    @IBOutlet weak var chosenFrameImageView: UIImageView!
+    @IBOutlet weak private var photoImageView: UIImageView!
+    
+    @IBOutlet weak private var chosenIndicatorImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        photoImageView.layer.zPosition = 1
-        photoImageView.contentMode = .ScaleAspectFill
-        chosenFrameImageView.layer.zPosition = 10
-        chosenFrameImageView.hidden = true
+        self.photoImageView.contentMode = .ScaleAspectFill
+        self.photoImageView.layer.zPosition = 1
+        self.chosenIndicatorImageView.layer.zPosition = 2
+
+        deselectCell()
     }
     
-    func setImage(thumbnailImage : UIImage) {
-        photoImageView.image = thumbnailImage
+    func selectCell(indicatorNum: Int)
+    {
+        assert(indicatorNum >= 0 && indicatorNum <= 9, "Invalid indicator number! The number should be between 0 - 9")
+        let imageName = "chosenIndicatorIcon_selected\(indicatorNum+1)"
+        self.chosenIndicatorImageView.image = UIImage(named:imageName)
+        self.photoSelected = true
+    }
+    
+    func deselectCell()
+    {
+        self.chosenIndicatorImageView.image = UIImage(named:"chosenIndicatorIcon_unselected")
+        self.photoSelected = false
+    }
+    
+    private func setImage(thumbnailImage : UIImage) {
+        self.photoImageView.image = thumbnailImage
     }
     func loadImage(asset: PHAsset,requestOption option: PHImageRequestOptions){
 
@@ -38,6 +57,6 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         photoImageView.image = nil
-        chosenFrameImageView.hidden = true
+        deselectCell()
     }
 }
