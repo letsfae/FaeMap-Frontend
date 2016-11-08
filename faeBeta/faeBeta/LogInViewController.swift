@@ -129,7 +129,11 @@ class LogInViewController: UIViewController {
         self.loginResultLabel.hidden = true
 
         let user = FaeUser()
-        user.whereKey("email", value: usernameTextField.text!)
+        if usernameTextField.text!.rangeOfString("@") != nil {
+            user.whereKey("email", value: usernameTextField.text!)
+        }else{
+            user.whereKey("user_name", value: usernameTextField.text!)
+        }
         user.whereKey("password", value: passwordTextField.text!)
 //        user.whereKey("user_name", value: "heheda")
         // for iphone: device_id is required and is_mobile should set to true
