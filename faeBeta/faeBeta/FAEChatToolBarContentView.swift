@@ -203,8 +203,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         if !imageQuickPickerShow {
             self.photoQuickCollectionView?.reloadData()
             let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-            self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
-            
+            if(photoPicker.currentAlbum != nil){
+                self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
+            }
             photoQuickCollectionView.hidden = false
             quickSendImageButton.hidden = false
             moreImageButton.hidden = false
@@ -481,6 +482,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     private func sendVideoFromQuickPicker()
     {
+        self.userInteractionEnabled = false
         let image = self.photoPicker.videoImage!
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
@@ -509,6 +511,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 if let data = NSData(contentsOfURL:fileUrl!){
                     self.delegate.sendVideoData?(data, snapImage:image ,duration:duration)
                 }
+                self.userInteractionEnabled = false
             }
         }
     }
