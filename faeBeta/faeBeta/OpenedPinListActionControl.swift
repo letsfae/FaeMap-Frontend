@@ -69,7 +69,7 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
             sender.tag = 0
             UIView.animateWithDuration(0.583, animations: ({
                 self.draggingButtonSubview.frame.origin.y = 228
-                self.subviewTable.frame.size.height = 228
+                self.subviewTable.frame.size.height = 256
                 self.tableOpenedPin.scrollToTop()
             }), completion: { (done: Bool) in
                 if done {
@@ -81,8 +81,7 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
         sender.tag = 1
         UIView.animateWithDuration(0.583, animations: ({
             self.draggingButtonSubview.frame.origin.y = screenHeight - 93
-            // -65 for header, -27 for dragging button
-            self.subviewTable.frame.size.height = screenHeight - 93
+            self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
                 
