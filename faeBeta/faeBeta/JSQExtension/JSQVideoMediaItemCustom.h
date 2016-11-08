@@ -53,6 +53,6 @@
  *  isReadyToPlay. Once the video has been saved to disk, or is ready to stream, you can
  *  set the fileURL property or isReadyToPlay property, respectively.
  */
-- (instancetype)initWithFileURL:(NSURL *)fileURL snapImage:(UIImage *)image isReadyToPlay:(BOOL)isReadyToPlay;
+- (instancetype)initWithFileURL:(NSURL *)fileURL snapImage: (UIImage *)image duration:(int)duration isReadyToPlay:(BOOL)isReadyToPlay;
 
 @end

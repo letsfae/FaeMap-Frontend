@@ -182,9 +182,11 @@ class IncomingMessage {
         let userId = item["senderId"] as? String
         let date = dateFormatter().dateFromString((item["date"] as? String)!)
         let image = item["snapImage"] as? UIImage
-      
-        
-        let mediaItem = JSQVideoMediaItemCustom(fileURL:NSURL(),snapImage:image, isReadyToPlay:true)
+        var duration = 0
+        if item["videoDuration"] != nil {
+            duration = item["videoDuration"] as! Int
+        }
+        let mediaItem = JSQVideoMediaItemCustom(fileURL:NSURL(),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
 
         videoFromData(item) { (videoURL) in
             self.snapShotFromData(item) { (image) in

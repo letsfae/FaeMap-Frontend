@@ -308,7 +308,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         if text != "" {
             //send message
-            sendMessage(text, date: date, picture: nil, sticker : nil, location: nil, snapImage : nil, audio : nil, video: nil)
+            sendMessage(text, date: date, picture: nil, sticker : nil, location: nil, snapImage : nil, audio : nil, video: nil, videoDuration: 0)
         }
     }
     
@@ -367,7 +367,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     func sendMessageButtonTapped() {
-        sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil)
+        sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
         buttonSend.enabled = false
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
     }
@@ -582,7 +582,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-        self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil)
+        self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
 
         UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         

@@ -42,7 +42,7 @@ import Photos
     // end any editing. Especially the input toolbar textView.
     optional func endEdit()
     
-    optional func sendVideoData(video: NSData, snapImage: UIImage)
+    optional func sendVideoData(video: NSData, snapImage: UIImage, duration: Int)
 }
 
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
@@ -400,6 +400,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                             return
                         }
                         photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                        photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                         let lowQRequestOption = PHVideoRequestOptions()
                         lowQRequestOption.deliveryMode = .FastFormat //high pixel
                         PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
@@ -480,6 +481,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     private func sendVideoFromQuickPicker()
     {
+        let image = self.photoPicker.videoImage!
+        let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
         let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
@@ -504,7 +507,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
-                    self.delegate.sendVideoData?(data, snapImage: self.photoPicker.videoImage!)
+                    self.delegate.sendVideoData?(data, snapImage:image ,duration:duration)
                 }
             }
         }

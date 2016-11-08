@@ -15,7 +15,7 @@ import Photos
 @objc protocol SendMutipleImagesDelegate {
     
     func sendImages(images:[UIImage])
-    optional func sendVideoData(video: NSData, snapImage: UIImage)
+    optional func sendVideoData(video: NSData, snapImage: UIImage, duration: Int)
 }
 
 // this view controller is used to show image from one album, it has a table view for you to switch albums
@@ -138,10 +138,11 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                         showAlertView(withWarning: "You can't select video while selecting photos")
                         return
                     }else if(self.photoPicker.videoAsset != nil){
-                        showAlertView(withWarning: "You can only send one video at one time")
+                        showAlertView(withWarning: "You can only send one video at the same time")
                         return
                     }
                     photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                     let lowQRequestOption = PHVideoRequestOptions()
                     lowQRequestOption.deliveryMode = .FastFormat //high pixel
                     PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
@@ -281,6 +282,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     {
         
         let snapImage = self.photoPicker.videoImage!
+        let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
         let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
@@ -305,7 +307,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
-                    self.imageDelegate.sendVideoData?(data, snapImage: snapImage)
+                    self.imageDelegate.sendVideoData?(data, snapImage: snapImage, duration: duration)
                 }
             }
         }
