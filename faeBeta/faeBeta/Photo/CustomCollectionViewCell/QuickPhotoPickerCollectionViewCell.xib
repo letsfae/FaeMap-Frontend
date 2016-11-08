@@ -81,6 +81,7 @@
             <connections>
                 <outlet property="chosenIndicatorImageView" destination="Pnv-C7-Ghb" id="qWT-b3-NGK"/>
                 <outlet property="photoImageView" destination="TNM-ls-4zQ" id="7Vf-Ti-Ynv"/>
+                <outlet property="videoDurationLabel" destination="u4i-yG-HBV" id="iZR-eL-TbC"/>
                 <outlet property="videoDurationLabelDistanceToLeft" destination="qRS-bg-bGj" id="8u0-uj-3MM"/>
                 <outlet property="videoDurationLabelLength" destination="teN-Wz-pd1" id="dKj-aT-qeM"/>
                 <outlet property="videoIndicatorView" destination="V7f-6a-1nz" id="CMr-0R-meQ"/>

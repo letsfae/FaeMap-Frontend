@@ -19,6 +19,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak private var photoImageView: UIImageView!
     @IBOutlet weak private var chosenIndicatorImageView: UIImageView!
     
+    @IBOutlet weak var videoDurationLabel: UILabel!
     @IBOutlet weak private var videoIndicatorView: UIView!
     @IBOutlet weak private var videoDurationLabelLength: NSLayoutConstraint!
     @IBOutlet weak private var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
@@ -28,14 +29,13 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         self.photoImageView.contentMode = .ScaleAspectFill
         deselectCell()
-//        if videoIndicatorView != nil{
-//            videoIndicatorView.layer.cornerRadius = CGRectGetHeight(videoIndicatorView.frame) / 2
-//        }
+        videoIndicatorView.alpha = 0
     }
     
     override func prepareForReuse() {
         photoImageView.image = nil
         deselectCell()
+        self.videoIndicatorView.alpha = 0
     }
     
     //MARK: - select & deselect cell
@@ -63,8 +63,22 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     private func setImage(thumbnailImage : UIImage) {
         self.photoImageView.image = thumbnailImage
     }
+    
+    func setVideoDurationLabel(withDuration duration: Int)
+    {
+        let secondString = (duration % 60) < 9 ? "0\(duration % 60)" : "\(duration % 60)"
+        let minString = duration / 60
+        self.videoIndicatorView.alpha = 1
+        self.videoDurationLabel.text =  "\(minString):\(secondString)"
+        if(minString / 10 == 0){
+            videoDurationLabelLength.constant = 35
+        }else{
+            videoDurationLabelLength.constant = 40
+        }
+        self.layoutSubviews()
+    }
+    
     func loadImage(asset: PHAsset,requestOption option: PHImageRequestOptions){
-
         PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.frame.width - 1 / 3, self.frame.width - 1 / 3), contentMode: .AspectFill, options: option) { (result, info) in
             self.setImage(result!)
         }

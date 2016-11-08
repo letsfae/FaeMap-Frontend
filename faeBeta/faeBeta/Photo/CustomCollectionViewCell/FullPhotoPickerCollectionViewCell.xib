@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="136" height="136"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fwS-hj-HM2">
-                        <rect key="frame" x="97" y="8" width="31" height="31"/>
+                        <rect key="frame" x="100" y="5" width="31" height="31"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="31" id="4MJ-Bz-9nB"/>
                             <constraint firstAttribute="height" constant="31" id="g83-WK-Hm1"/>
@@ -62,11 +62,11 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="fwS-hj-HM2" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="0sH-Gk-UVr"/>
+                <constraint firstItem="fwS-hj-HM2" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="0sH-Gk-UVr"/>
                 <constraint firstAttribute="bottom" secondItem="o9w-qM-Ju0" secondAttribute="bottom" id="QNh-Gs-Wox"/>
                 <constraint firstItem="o9w-qM-Ju0" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Ttb-l9-eCp"/>
                 <constraint firstAttribute="trailing" secondItem="o9w-qM-Ju0" secondAttribute="trailing" id="dpX-54-19v"/>
-                <constraint firstAttribute="trailing" secondItem="fwS-hj-HM2" secondAttribute="trailing" constant="8" id="gXG-9o-AmS"/>
+                <constraint firstAttribute="trailing" secondItem="fwS-hj-HM2" secondAttribute="trailing" constant="5" id="gXG-9o-AmS"/>
                 <constraint firstAttribute="trailing" secondItem="Pyt-63-mo2" secondAttribute="trailing" id="iZA-fp-TE6"/>
                 <constraint firstAttribute="bottom" secondItem="Pyt-63-mo2" secondAttribute="bottom" id="igN-tE-3jO"/>
                 <constraint firstItem="o9w-qM-Ju0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ksz-Rd-LXO"/>
@@ -76,6 +76,7 @@
             <connections>
                 <outlet property="chosenIndicatorImageView" destination="fwS-hj-HM2" id="rOS-ZI-Pf6"/>
                 <outlet property="photoImageView" destination="o9w-qM-Ju0" id="ECR-lp-xR8"/>
+                <outlet property="videoDurationLabel" destination="kq5-Tg-9ms" id="Zbz-ow-FM9"/>
                 <outlet property="videoDurationLabelDistanceToLeft" destination="F4T-RM-ja1" id="eW8-N5-i9o"/>
                 <outlet property="videoDurationLabelLength" destination="e1x-fo-MyT" id="TID-J4-9ie"/>
                 <outlet property="videoIndicatorView" destination="Pyt-63-mo2" id="Eqm-h5-fcs"/>

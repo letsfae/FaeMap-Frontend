@@ -198,6 +198,9 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let cell = cell as! PhotoPickerCollectionViewCell
         //get image from PHFetchResult
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
+        if let duration = photoPicker.assetDurationDict[asset]{
+            cell.setVideoDurationLabel(withDuration: duration)
+        }
         cell.loadImage(asset, requestOption: requestOption)
         if photoPicker.assetIndexDict[asset] != nil {
             cell.selectCell(photoPicker.assetIndexDict[asset]!)

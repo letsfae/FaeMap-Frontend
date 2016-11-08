@@ -350,8 +350,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             //get image from PHFetchResult
             if(self.photoPicker.cameraRoll != nil){
                 let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+                if let duration = photoPicker.assetDurationDict[asset]{
+                    cell.setVideoDurationLabel(withDuration: duration)
+                }
                 cell.loadImage(asset, requestOption: requestOption)
-                
                 if photoPicker.assetIndexDict[asset] != nil {
                     cell.selectCell(photoPicker.assetIndexDict[asset]!)
                 }else{
