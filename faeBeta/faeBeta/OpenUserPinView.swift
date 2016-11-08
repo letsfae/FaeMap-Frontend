@@ -287,8 +287,10 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         //First get chatroom id
         getFromURL("chats/users/\(user_id)/\(withUserId)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
-            let resultJson1 = JSON(result!)
-            
+            var resultJson1 = JSON([])
+            if(status / 100 == 2){
+                resultJson1 = JSON(result!)
+            }
             // then get with user name
             getFromURL("users/\(withUserId)/profile", parameter: nil, authentication: headerAuthentication()) { (status, result) in
                 if(status / 100 == 2){
