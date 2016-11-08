@@ -113,6 +113,10 @@ class FaeUser : NSObject {
             }
             self.clearKeyValue()
             completion(status,message)
+            
+            // WARNING: this code should be deleted afterward, it's here just to test chat function
+            postToURL("chats", parameter: ["receiver_id": "1", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            })
         }
     }
     
@@ -134,7 +138,7 @@ class FaeUser : NSObject {
         userToken = str
         userTokenEncode = encode
         is_Login = 1
-        userEmail = keyValue["email"] as! String
+        userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
         userPassword = keyValue["password"] as! String
         
         let shareAPI = LocalStorageManager()

@@ -153,6 +153,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     let tagHeight : CGFloat = 18
     
     var openUserPinActive = false
+    var currentViewingUserId = 1
     
     // Map User Pin
     var mapUserPinsDic = [Int: GMSMarker]()
@@ -517,6 +518,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             if type == "user" {
                 
                 if let userid = pinLoc["user_id"].int {
+                    self.currentViewingUserId = userid
                     loadUserPinInformation("\(userid)")
                 }
                 showOpenUserPinAnimation(latitude, longi: longitude)

@@ -30,6 +30,7 @@ class OutgoingMessage {
     //location
     init(message : String, latitude: NSNumber, longitude : NSNumber, snapImage : NSData, senderId : String, senderName : String, date: NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let snap = snapImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
+        
         messageDictionary = NSMutableDictionary(objects: [message, latitude, longitude, snap, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "latitude", "longitude", "snapImage", "senderId", "senderName", "date", "status", "type", "index","hasTimeStamp"])
     }
     //picture
@@ -51,6 +52,14 @@ class OutgoingMessage {
         
         let voice = audio.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
         messageDictionary = NSMutableDictionary(objects: [message, voice, senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp], forKeys: ["message", "audio","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp"])
+    }
+    
+    // outgoing message for video
+    init (message : String, video : NSData, snapImage : NSData,senderId : String, senderName : String, date : NSDate, status : String, type : String, index : Int, hasTimeStamp: Bool, videoDuration duration: Int) {
+        
+        let video = video.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
+        let snap = snapImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue : 0))
+        messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().stringFromDate(date), status, type, index, hasTimeStamp, duration], forKeys: ["message", "video","snapImage","senderId", "senderName", "date", "status", "type", "index", "hasTimeStamp","videoDuration"])
     }
     
     func sendMessage(chatRoomId : String, item : NSMutableDictionary, withUser user: FaeWithUser) {

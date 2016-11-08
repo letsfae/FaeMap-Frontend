@@ -46,6 +46,10 @@ class IncomingMessage {
             message = createStickerMessage(dictionary)
         }
         
+        if type == "video" {
+            message = createVideoMessage(dictionary)
+        }
+        
         if let mes = message {
             return mes
         } else {
@@ -172,7 +176,29 @@ class IncomingMessage {
         }
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
-    
+
+    func createVideoMessage(item : NSDictionary) -> JSQMessage {
+        let name = item["senderName"] as? String
+        let userId = item["senderId"] as? String
+        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let image = item["snapImage"] as? UIImage
+        var duration = 0
+        if item["videoDuration"] != nil {
+            duration = item["videoDuration"] as! Int
+        }
+        let mediaItem = JSQVideoMediaItemCustom(fileURL:NSURL(),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
+
+        videoFromData(item) { (videoURL) in
+            self.snapShotFromData(item) { (image) in
+                mediaItem.fileURL = videoURL!
+                mediaItem.snapImage = image
+                self.collectionView.reloadData()
+            }
+
+        }
+        return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
+    }
+
     func createStickerMessage(item : NSDictionary) -> JSQMessage {
         
         let name = item["senderName"] as? String
@@ -206,6 +232,32 @@ class IncomingMessage {
         let decodedData = NSData(base64EncodedString: (item["audio"] as? String)!, options: NSDataBase64DecodingOptions(rawValue : 0))
         
         result(voiceData: decodedData)
+    }
+    
+    func videoFromData(item : NSDictionary, result : (videoData : NSURL?) -> Void) {
+        let str = item["video"] as? String
+        let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(str!.endIndex.advancedBy(-33) ..< str!.endIndex.advancedBy(-1)))).mov")
+
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(filePath) {
+            let videoFileURL = NSURL(fileURLWithPath: filePath)
+            result(videoData: videoFileURL)
+        } else {
+            if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
+                if(str!.characters.count > 50){
+                    decodedData.writeToFile(filePath, atomically:true)
+                    
+                    let videoFileURL = NSURL(fileURLWithPath: filePath)
+                    result(videoData: videoFileURL)
+                }
+            }
+        }
+    }
+    
+    func documentsPathForFileName(name: String) -> String {
+        
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        return documentsPath.stringByAppendingString(name)
     }
     
     func snapShotFromData(item : NSDictionary, result : (image : UIImage?) -> Void) {

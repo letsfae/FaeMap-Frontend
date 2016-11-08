@@ -10,6 +10,8 @@ import UIKit
 import JSQMessagesViewController
 import IDMPhotoBrowser
 import Photos
+import AVKit
+import AVFoundation
 
 extension ChatViewController {
     // MARK: - collection view delegate
@@ -47,6 +49,8 @@ extension ChatViewController {
             case "audio":
                 cell.contentType = Audio
                 break
+            case "video":
+                cell.contentType = Video
             default:
                 break
         }
@@ -169,17 +173,20 @@ extension ChatViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-//        if object["type"] as! String == "audio" {
-//            let message = messages[indexPath.row]
-//            
-//            let mediaItem = message.media as! JSQAudioMediaItemCustom
-//            
-//            let data = mediaItem.audioData
-//            
-//            preparePlayer(data!)
-//            
-//            soundPlayer.play()
-//        }
+        if object["type"] as! String == "video" {
+            let message = messages[indexPath.row]
+            
+            let mediaItem = message.media as! JSQVideoMediaItemCustom
+            
+            let dataUrl = mediaItem.fileURL
+            
+            let player = AVPlayer(URL:dataUrl)
+            let playerController = AVPlayerViewController()
+            playerController.player = player
+            self.presentViewController(playerController, animated: true) {
+                player.play()
+            }
+        }
     }
     
     override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {

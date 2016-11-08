@@ -16,6 +16,7 @@
 #import "JSQAudioMediaItemCustom.h"
 #import "JSQAudioMediaViewAttributesCustom.h"
 #import "JSQMessagesInputToolbarCustom.h"
+#import "JSQVideoMediaItemCustom.h"
 #import "KTCenterFlowLayout/KTCenterFlowLayout.h"
 //#import "KTCenterFlowLayout.h"
 
