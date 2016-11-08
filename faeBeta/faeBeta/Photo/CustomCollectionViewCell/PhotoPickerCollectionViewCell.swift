@@ -13,24 +13,37 @@ import Photos
 
 class PhotoPickerCollectionViewCell: UICollectionViewCell {
 
-
-
+    //MARK: - properties
     private(set) var photoSelected = false
     
     @IBOutlet weak private var photoImageView: UIImageView!
-    
     @IBOutlet weak private var chosenIndicatorImageView: UIImageView!
     
+    @IBOutlet weak private var videoIndicatorView: UIView!
+    @IBOutlet weak private var videoDurationLabelLength: NSLayoutConstraint!
+    @IBOutlet weak private var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
+    
+    //MARK: - life cycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         self.photoImageView.contentMode = .ScaleAspectFill
-        self.photoImageView.layer.zPosition = 1
-        self.chosenIndicatorImageView.layer.zPosition = 2
-
+        deselectCell()
+//        if videoIndicatorView != nil{
+//            videoIndicatorView.layer.cornerRadius = CGRectGetHeight(videoIndicatorView.frame) / 2
+//        }
+    }
+    
+    override func prepareForReuse() {
+        photoImageView.image = nil
         deselectCell()
     }
     
+    //MARK: - select & deselect cell
+    
+    
+    /// Select this cell
+    ///
+    /// - Parameter indicatorNum: the number that appear's on the top right minus 1 (0 - 9)
     func selectCell(indicatorNum: Int)
     {
         assert(indicatorNum >= 0 && indicatorNum <= 9, "Invalid indicator number! The number should be between 0 - 9")
@@ -39,12 +52,14 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         self.photoSelected = true
     }
     
+    /// hide the indicator number and
     func deselectCell()
     {
         self.chosenIndicatorImageView.image = UIImage(named:"chosenIndicatorIcon_unselected")
         self.photoSelected = false
     }
     
+    //MARK: - image related
     private func setImage(thumbnailImage : UIImage) {
         self.photoImageView.image = thumbnailImage
     }
@@ -55,8 +70,4 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    override func prepareForReuse() {
-        photoImageView.image = nil
-        deselectCell()
-    }
 }

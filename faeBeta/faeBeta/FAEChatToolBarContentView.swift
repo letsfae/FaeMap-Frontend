@@ -107,10 +107,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             let layout = UICollectionViewFlowLayout()
             //        layout.itemSize = CGSizeMake(220, 235)
             layout.scrollDirection = .Horizontal
-            layout.minimumLineSpacing = 1000.0
             layout.itemSize = CGSizeMake(220, 271)
+            layout.sectionInset = UIEdgeInsetsMake(0, 1, 0, 1)
             photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
             photoQuickCollectionView.registerNib(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+            photoQuickCollectionView.backgroundColor = UIColor.whiteColor()
             photoQuickCollectionView.delegate = self
             photoQuickCollectionView.dataSource = self
             quickSendImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
@@ -333,7 +334,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
-    
+//    
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> CGFloat {
+//        return 3
+//    }
+//    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
         return cell

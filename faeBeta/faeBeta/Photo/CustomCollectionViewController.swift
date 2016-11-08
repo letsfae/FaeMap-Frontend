@@ -24,7 +24,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     var photoPicker : PhotoPicker!
     
-    let photoPickerCellIdentifier = "photoPickerCellIdentifier"
+    let photoPickerCellIdentifier = "FullPhotoPickerCollectionViewCell"
     
     let layOut = UICollectionViewFlowLayout()
     
@@ -59,7 +59,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
         collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.registerNib(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        collectionView?.registerNib(UINib(nibName: "FullPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
         requestOption.synchronous = false
         requestOption.resizeMode = .Fast
         requestOption.deliveryMode = .HighQualityFormat
