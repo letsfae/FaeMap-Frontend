@@ -104,7 +104,7 @@ class FAETextField: UITextField {
     private func setupPasswordTextField()
     {
         self.textColor = UIColor.faeAppRedColor()
-        rightButton = UIButton(frame: CGRectMake(contentInset - 20, 5, 20, 20))
+        rightButton = UIButton(frame: CGRectMake(contentInset - 25, 0, 30, 30))
         rightButton.setImage(UIImage(named: "check_eye_close_red_new")!, forState: UIControlState.Normal)
         rightPlaceHolderView.addSubview(rightButton)
 
@@ -115,7 +115,7 @@ class FAETextField: UITextField {
     private func setupUsernameTextField()
     {
         leftButton = UILabel(frame: CGRectMake(contentInset - 20, 5, 20, 20))
-        leftButton.attributedText = NSAttributedString(string: "@", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
+        leftButton.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
         leftPlaceHolderView.addSubview(leftButton)
     }
     
