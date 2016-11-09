@@ -12,6 +12,12 @@ if user_id != nil {
     print(user_id)
     imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL))
 }
+// with default image
+if user_id != nil {
+    let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
+    print(user_id)
+    imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+}
 
 // upload self avatar
 let avatar = FaeImage()

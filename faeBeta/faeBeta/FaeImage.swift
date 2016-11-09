@@ -69,6 +69,7 @@ class FaeImage : NSObject{ // it is ok to upload
 //    var keyValue = [String:AnyObject]()
     var image : UIImage!
 //    var imageView: UIImageView!
+    
 
     func faeUploadImageInBackground(completion:(Int,AnyObject?)->Void){
         if image == nil {

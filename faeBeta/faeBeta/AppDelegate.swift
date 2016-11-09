@@ -50,6 +50,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController!.presentViewController(vc, animated: true, completion:nil)
         
     }
+    func popUpWelcomeView() {
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController") as! NavigationWelcomeViewController
+
+        self.window?.makeKeyAndVisible()
+        self.window?.rootViewController!.presentViewController(vc, animated: true, completion:nil)
+        
+    }
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         UIApplication.sharedApplication().registerForRemoteNotifications()
         /*
@@ -105,12 +112,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(application: UIApplication) {
         NSNotificationCenter.defaultCenter().postNotificationName("appWillEnterForeground", object: nil)
     }
-    
+    func runSync() {
+        if is_Login == 0 {
+            print("not log in, sync fail")
+        } else {
+            let push = FaePush()
+            push.getSync({ (status:Int!, message:AnyObject?) in
+                print(status)
+                if status / 100 == 2 {
+                    //success
+                } else {
+                    self.popUpWelcomeView()
+                }
+            })
+        }
+    }
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
+        
+        var timer = NSTimer()
+        timer = NSTimer.scheduledTimerWithTimeInterval(10,target:self,selector:Selector("runSync"),userInfo:nil,repeats:true)
+        
+        self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()
         print(isFirstLaunch)
         //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
