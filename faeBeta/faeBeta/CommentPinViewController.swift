@@ -142,12 +142,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         setupInputToolbar()
         setupToolbarContentView()
         addObservers()
-    }
-    
-    override func viewDidAppear(animated:Bool)
-    {
         for constraint in self.inputToolbar.constraints{
-            if constraint.constant == 90{
+            if constraint.constant == 90 {
                 toolbarHeightConstraint = constraint
             }
         }
@@ -162,6 +158,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             self.view.addConstraint(toolbarDistanceToBottom)
             self.view.setNeedsUpdateConstraints()
         }
+    }
+    
+    override func viewDidAppear(animated:Bool)
+    {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool)

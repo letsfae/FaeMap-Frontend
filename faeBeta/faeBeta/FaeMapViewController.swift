@@ -185,6 +185,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // Determine if this pinID should change to heavy shadow style
     var commentIDFromOpenedPinCell = -999
     
+    // A boolean var to control if user can open another pin, basically,
+    // user cannot open if one pin is under opening process
+    var canOpenAnotherPin = true
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -525,6 +529,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 return true
             }
             if type == "comment" {
+                if self.canOpenAnotherPin == false {
+                    return true
+                }
+                self.canOpenAnotherPin = false
                 var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
@@ -665,7 +673,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         self.faeMapView.animateToCameraPosition(camera)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
