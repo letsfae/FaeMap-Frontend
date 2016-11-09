@@ -13,6 +13,8 @@ class MapToCommentPinDetailSegue: UIStoryboardSegue {
         let firstVCView = self.sourceViewController.view as UIView!
         let secondVCView = self.destinationViewController.view as UIView!
         
+        let firstController = self.sourceViewController as! FaeMapViewController
+        
         let screenWidth = UIScreen.mainScreen().bounds.size.width
         let screenHeight = UIScreen.mainScreen().bounds.size.height
         
@@ -27,6 +29,7 @@ class MapToCommentPinDetailSegue: UIStoryboardSegue {
             self.sourceViewController.presentViewController(self.destinationViewController as UIViewController,
                                                             animated: false,
                                                             completion: nil)
+            firstController.canOpenAnotherPin = true
         }
     }
 }
