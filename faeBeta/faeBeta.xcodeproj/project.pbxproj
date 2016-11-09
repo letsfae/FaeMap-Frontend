@@ -112,8 +112,6 @@
 		B064EED81D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBE1D6E0CEA00C078F5 /* SmartAlbum.swift */; };
 		B064EED91D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBE1D6E0CEA00C078F5 /* SmartAlbum.swift */; };
 		B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */; };
-		B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */; };
-		B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */; };
 		B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDE1D6E0D1000C078F5 /* JSQStickerMediaItem.swift */; };
 		B064EEE51D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDE1D6E0D1000C078F5 /* JSQStickerMediaItem.swift */; };
 		B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDE1D6E0D1000C078F5 /* JSQStickerMediaItem.swift */; };
@@ -258,8 +256,6 @@
 		B0714D831D5E465900356705 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D811D5E465900356705 /* Camera.swift */; };
 		B0714D841D5E465900356705 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D811D5E465900356705 /* Camera.swift */; };
 		B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
-		B0714DCB1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
-		B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DF41D62513300356705 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
 		B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF71D62520900356705 /* RegisterNameViewController.swift */; };
@@ -330,8 +326,6 @@
 		B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
 		B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
 		B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
-		B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
-		B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
 		B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
 		B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
 		B0BF35571D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
@@ -2058,7 +2052,6 @@
 				B0714D471D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0D8CC711D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B001825E1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
-				B0714DCB1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B8F6336C1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B0C0CA9F1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B88A3E2D1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
@@ -2100,7 +2093,6 @@
 				B8A3BF571DD0672F00288C3B /* CommentPinDetailButtonActions.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
 				B0BF35761D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
-				B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D6E1D5E435200356705 /* MapTableDelegate.swift in Sources */,
 				DC3D10491DC2AE800011C772 /* ChatViewController+collecitonView.swift in Sources */,
 				B84E1A631DCBE322000E29B9 /* OpenedPinListActionControl.swift in Sources */,
@@ -2195,7 +2187,6 @@
 				B064EEF11D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B09E49DF1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				DC3D10461DC2AE7A0011C772 /* FAEChatToolBarContentView.swift in Sources */,
-				B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B8A3BF5B1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				DC2D6BDA1DC86CBA0092E3D0 /* SignInSupportCodeViewController.swift in Sources */,
@@ -2234,7 +2225,6 @@
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B030CC5F1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
-				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D781D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
@@ -2267,7 +2257,6 @@
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
-				B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				DC2D6BDD1DC86CBA0092E3D0 /* FinishViewController.swift in Sources */,
 				B8C4A9731DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
@@ -2295,7 +2284,6 @@
 				B8F6336D1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B8490EF21DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
 				B05E2DC11DD24FEE00D6745A /* Key.swift in Sources */,
-				B0BF35531D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714E0E1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714E161D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0714D511D5E435200356705 /* FaeMapViewController.swift in Sources */,

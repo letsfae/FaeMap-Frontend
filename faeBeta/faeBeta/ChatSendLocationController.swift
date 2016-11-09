@@ -98,8 +98,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func loadPin() {
-        let pinImage = UIImageView(frame: CGRectMake(186 * widthFactor, 326 * heightFactor, 42 * widthFactor, 47 * heightFactor))
-        pinImage.image = UIImage(named: "pinSendInChat")
+        let pinImage = UIImageView(frame: CGRectMake(186 * widthFactor, 326 * heightFactor, 45 * widthFactor, 47 * heightFactor))
+        pinImage.image = UIImage(named: "chat_map_currentLoc")
         self.view.addSubview(pinImage)
     }
     
@@ -128,7 +128,6 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
             self.latitudeForPin = mapCenterCoordinate.latitude
             self.longitudeForPin = mapCenterCoordinate.longitude
         })
-        
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

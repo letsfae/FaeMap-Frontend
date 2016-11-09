@@ -66,7 +66,10 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     
     override func viewWillAppear(animated: Bool) {
         willAppearFirstLoad = true
-
+    }
+    
+    override func viewDidAppear(animated: Bool){
+        buttonBottomLeftAction(UIButton())
     }
 
     override func didReceiveMemoryWarning() {
@@ -191,13 +194,15 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func loadButton(){
-        buttonTopLeft = UIButton(frame: CGRect(x:15, y: 26, width: 31, height: 31))
-        buttonTopLeft.backgroundColor = UIColor(patternImage: UIImage(named: "chat_map_topLeft")!)
+        buttonTopLeft = UIButton(frame: CGRect(x:15, y: 26, width: 30, height: 30))
+        buttonTopLeft.setImage(UIImage(named: "chat_map_topLeft")!, forState:.Normal)
+        buttonTopLeft.setImage(UIImage(named: "chat_map_topLeft")!, forState:.Highlighted)
         buttonTopLeft.addTarget(self, action: #selector(buttonTopLeftAction(_:)), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonTopLeft)
         
         buttonTopRight = UIButton(frame: CGRect(x:screenWidth-15-31, y: 26, width: 30, height: 30))
-        buttonTopRight.backgroundColor = UIColor(patternImage: UIImage(named: "chat_map_topRight")!)
+        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, forState:.Normal)
+        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, forState:.Highlighted)
         buttonTopRight.addTarget(self, action: #selector(buttonTopRightAction(_:)), forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonTopRight)
         
