@@ -189,6 +189,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // user cannot open if one pin is under opening process
     var canOpenAnotherPin = true
     
+    // button to close user pin view
+    var buttonCloseUserPinSubview: UIButton!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

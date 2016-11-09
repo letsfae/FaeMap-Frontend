@@ -302,9 +302,6 @@
 		B09E49E11D96F77F0075EE45 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B09E49DC1D96F77F0075EE45 /* LICENSE */; };
 		B09E49E21D96F77F0075EE45 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B09E49DC1D96F77F0075EE45 /* LICENSE */; };
 		B09E49E31D96F77F0075EE45 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B09E49DC1D96F77F0075EE45 /* LICENSE */; };
-		B09E49E41D96F77F0075EE45 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DD1D96F77F0075EE45 /* README.md */; };
-		B09E49E51D96F77F0075EE45 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DD1D96F77F0075EE45 /* README.md */; };
-		B09E49E61D96F77F0075EE45 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DD1D96F77F0075EE45 /* README.md */; };
 		B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */; };
 		B09E49E91D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */; };
 		B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */; };
@@ -540,10 +537,10 @@
 		DC2D6BDB1DC86CBA0092E3D0 /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF221D7207DB00C078F5 /* FinishViewController.swift */; };
 		DC2D6BDC1DC86CBA0092E3D0 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		DC2D6BDD1DC86CBA0092E3D0 /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF221D7207DB00C078F5 /* FinishViewController.swift */; };
-		DC2D6BDE1DC86CD60092E3D0 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
+		DC2D6BDE1DC86CD60092E3D0 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		DC2D6BDF1DC86CD60092E3D0 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		DC2D6BE01DC86CD60092E3D0 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
-		DC2D6BE11DC86CD70092E3D0 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAE5441DB165A30047110B /* ScreenFactor.swift */; };
+		DC2D6BE11DC86CD70092E3D0 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		DC2D6BE21DC86CD70092E3D0 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
 		DC2D6BE31DC86CD70092E3D0 /* PasswordAgainTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF21D62513300356705 /* PasswordAgainTextField.swift */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
@@ -746,7 +743,6 @@
 		B09E49DA1D96F77F0075EE45 /* KTCenterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCenterFlowLayout.h; sourceTree = "<group>"; };
 		B09E49DB1D96F77F0075EE45 /* KTCenterFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCenterFlowLayout.m; sourceTree = "<group>"; };
 		B09E49DC1D96F77F0075EE45 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		B09E49DD1D96F77F0075EE45 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsCollectionViewCell.swift; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1145,7 +1141,6 @@
 				B09E49DA1D96F77F0075EE45 /* KTCenterFlowLayout.h */,
 				B09E49DB1D96F77F0075EE45 /* KTCenterFlowLayout.m */,
 				B09E49DC1D96F77F0075EE45 /* LICENSE */,
-				B09E49DD1D96F77F0075EE45 /* README.md */,
 			);
 			path = KTCenterFlowLayout;
 			sourceTree = "<group>";
@@ -1958,7 +1953,6 @@
 				B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
-				B09E49E41D96F77F0075EE45 /* README.md in Sources */,
 				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
@@ -2056,7 +2050,6 @@
 				B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B84BB9FC1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
-				B064EF261D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B0C0CAAF1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0714D471D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0D8CC711D3D4CED0030939E /* FaeMessage.swift in Sources */,
@@ -2087,7 +2080,6 @@
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				DC2D6BD31DC86CBA0092E3D0 /* RegisterInfoViewController.swift in Sources */,
 				B05E2DC01DD24FEE00D6745A /* Key.swift in Sources */,
-				B0BF35421D8DC1BE00B0540B /* CommentPinListCell.swift in Sources */,
 				DC2D6BD41DC86CBA0092E3D0 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
@@ -2103,7 +2095,6 @@
 				B064EF061D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				B8A3BF571DD0672F00288C3B /* CommentPinDetailButtonActions.swift in Sources */,
 				B0A2ACB11CE3A3C7002E0C9D /* faeBetaTests.swift in Sources */,
-				B09E49E51D96F77F0075EE45 /* README.md in Sources */,
 				B0BF35761D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B064EEDC1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D6E1D5E435200356705 /* MapTableDelegate.swift in Sources */,
@@ -2132,7 +2123,6 @@
 				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				DC2D6BDF1DC86CD60092E3D0 /* EmailTextField.swift in Sources */,
 				B8490EF11DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
-				B0714E091D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B8F065471DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
@@ -2176,9 +2166,7 @@
 				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
 				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
 				DC3D10511DC2AE8E0011C772 /* OutgoingMessage.swift in Sources */,
-				B00EC3E61D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B8E8195C1DB3255000D418D1 /* CommentPinDetailTableViewControlFile.swift in Sources */,
-				B0714E1D1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B0C0CAA71D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B839AA201DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
 				B064EEF41D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
@@ -2192,7 +2180,7 @@
 				B064EF151D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B0BF358D1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B09E49B51D9626140075EE45 /* AutoLayout.swift in Sources */,
-				DC2D6BDE1DC86CD60092E3D0 /* ScreenFactor.swift in Sources */,
+				DC2D6BDE1DC86CD60092E3D0 /* (null) in Sources */,
 				DC2D6BD51DC86CBA0092E3D0 /* EnableLocationViewController.swift in Sources */,
 				B064EF1C1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B0714D741D5E435200356705 /* UpdateUserPin.swift in Sources */,
@@ -2216,7 +2204,6 @@
 				B0D8CF161D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B85FE6D51DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				DC2D6BD11DC86CBA0092E3D0 /* RegisterUsernameViewController.swift in Sources */,
-				B0714DFD1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B8490EF51DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				B0537B2D1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B00EC3D31D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
@@ -2255,7 +2242,6 @@
 				B84E1A641DCBE322000E29B9 /* OpenedPinListActionControl.swift in Sources */,
 				B064EF161D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B839AA211DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
-				B09E49E61D96F77F0075EE45 /* README.md in Sources */,
 				B064EEAF1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B88A3E321DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B00EC3DF1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
@@ -2346,7 +2332,7 @@
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B84E1A5B1DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
 				B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
-				DC2D6BE11DC86CD70092E3D0 /* ScreenFactor.swift in Sources */,
+				DC2D6BE11DC86CD70092E3D0 /* (null) in Sources */,
 				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2E1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */,
