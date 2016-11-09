@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import Foundation
 
 class LogInViewController: UIViewController {
@@ -129,25 +130,36 @@ class LogInViewController: UIViewController {
         self.loginResultLabel.hidden = true
 
         let user = FaeUser()
-        user.whereKey("email", value: usernameTextField.text!)
+        if usernameTextField.text!.rangeOfString("@") != nil {
+            user.whereKey("email", value: usernameTextField.text!)
+        }else{
+            user.whereKey("user_name", value: usernameTextField.text!)
+        }
         user.whereKey("password", value: passwordTextField.text!)
 //        user.whereKey("user_name", value: "heheda")
         // for iphone: device_id is required and is_mobile should set to true
         user.whereKey("device_id", value: headerDeviceID)
         user.whereKey("is_mobile", value: "true")
-        user.logInBackground { (status:Int?, message:AnyObject?) in
+        user.logInBackground { (status: Int?, message: AnyObject?) in
             if ( status! / 100 == 2 ){
                 //success
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
             else{
-                if (message!["message"] as! String).containsString("such"){
-                    self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
-                }else if(message!["message"] as! String).containsString("verify"){
-                    self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
+                let loginJSONInfo = JSON(message!)
+                if let info = loginJSONInfo["message"].string {
+                    if info.containsString("such") {
+                        self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
+                    }
+                    else if info.containsString("verify") {
+                        self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
+                    }
+                    else {
+                        self.setLoginResult("Internet Error!")
+                    }
                 }
-            }
             self.activityIndicator.stopAnimating()
+            }
         }
     }
 

@@ -8,71 +8,70 @@
 
 import UIKit
 
-protocol MoodAvatarDelegate {
-    func changeCurrentAvatar(index : Int)
-}
-
 class MoodAvatarTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var maleButton: UIButton!
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
     
-    @IBOutlet weak var maleImage: UIImageView!
+    var maleImage: UIImageView!
+    var femaleImage: UIImageView!
+    var maleRedBtn: UIImageView!
+    var femaleRedBtn: UIImageView!
+    var buttonLeft: UIButton!
+    var buttonRight: UIButton!
+    var labelAvatarDes: UILabel!
     
-    @IBOutlet weak var moodLabel: UILabel!
-    
-    @IBOutlet weak var femaleImage: UIImageView!
-    
-    @IBOutlet weak var femaleButton: UIButton!
-
-    @IBOutlet weak var maleIdicateImage: UIImageView!
-    
-    @IBOutlet weak var femaleIdicateImage: UIImageView!
-    
-    var cellIndex : NSInteger!
-    
-    var maleIndex : Int = 0
-    var femaleIndex : Int = 0
-    
-    var isMaleSelect = false
-    
-    var isFemaleSelect = false
-    
-    var moodDelegate : MoodAvatarDelegate!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-        moodLabel.textAlignment = .Center
-        moodLabel.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        moodLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        moodLabel.adjustsFontSizeToFitWidth = true
-        maleButton.setTitle("", forState: .Normal)
-        femaleButton.setTitle("", forState: .Normal)
-        maleButton.addTarget(self, action: #selector(MoodAvatarTableViewCell.clickMale), forControlEvents: .TouchUpInside)
-        femaleButton.addTarget(self, action: #selector(MoodAvatarTableViewCell.clickFemale), forControlEvents: .TouchUpInside)
-        maleButton.layer.zPosition = 10
-        femaleButton.layer.zPosition = 10
-        maleIdicateImage.layer.zPosition = 1
-        femaleIdicateImage.layer.zPosition = 1
-        maleImage.contentMode = .ScaleAspectFit
-        femaleImage.contentMode = .ScaleAspectFit
-    
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadAvatarItems()
     }
     
-    func clickMale() {
-        print("male is clicked")
-        moodDelegate.changeCurrentAvatar(maleIndex)
+    func loadAvatarItems() {
+        maleRedBtn = UIImageView()
+        maleRedBtn.image = UIImage(named: "unselectedMoodButton")
+        self.addSubview(maleRedBtn)
+        self.addConstraintsWithFormat("H:|-15-[v0(20)]", options: [], views: maleRedBtn)
+        self.addConstraintsWithFormat("V:[v0(20)]-20-|", options: [], views: maleRedBtn)
+        
+        femaleRedBtn = UIImageView()
+        femaleRedBtn.image = UIImage(named: "unselectedMoodButton")
+        self.addSubview(femaleRedBtn)
+        self.addConstraintsWithFormat("H:[v0(20)]-15-|", options: [], views: femaleRedBtn)
+        self.addConstraintsWithFormat("V:[v0(20)]-20-|", options: [], views: femaleRedBtn)
+        
+        maleImage = UIImageView()
+        maleImage.image = UIImage(named: "")
+        self.addSubview(maleImage)
+        self.addConstraintsWithFormat("H:|-50-[v0(50)]", options: [], views: maleImage)
+        self.addConstraintsWithFormat("V:[v0(45)]-5-|", options: [], views: maleImage)
+        
+        femaleImage = UIImageView()
+        femaleImage.image = UIImage(named: "")
+        self.addSubview(femaleImage)
+        self.addConstraintsWithFormat("H:[v0(50)]-50-|", options: [], views: femaleImage)
+        self.addConstraintsWithFormat("V:[v0(45)]-5-|", options: [], views: femaleImage)
+        
+        labelAvatarDes = UILabel()
+        labelAvatarDes.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelAvatarDes.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelAvatarDes.textAlignment = .Center
+        self.addSubview(labelAvatarDes)
+        self.addConstraintsWithFormat("H:[v0(140)]", options: [], views: labelAvatarDes)
+        self.addConstraintsWithFormat("V:[v0(25)]-17-|", options: [], views: labelAvatarDes)
+        NSLayoutConstraint(item: labelAvatarDes, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        
+        buttonLeft = UIButton()
+        self.addSubview(buttonLeft)
+        self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth/2))]", options: [], views: buttonLeft)
+        self.addConstraintsWithFormat("V:[v0(60)]-0-|", options: [], views: buttonLeft)
+        
+        buttonRight = UIButton()
+        self.addSubview(buttonRight)
+        self.addConstraintsWithFormat("H:[v0(\(screenWidth/2))]-0-|", options: [], views: buttonRight)
+        self.addConstraintsWithFormat("V:[v0(60)]-0-|", options: [], views: buttonRight)
     }
     
-    func clickFemale() {
-        print("female is clicked")
-        moodDelegate.changeCurrentAvatar(femaleIndex)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
 }

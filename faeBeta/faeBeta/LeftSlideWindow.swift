@@ -20,7 +20,7 @@ extension FaeMapViewController {
         dimBackgroundMoreButton.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
         dimBackgroundMoreButton.alpha = 0.0
         self.view.addSubview(dimBackgroundMoreButton)
-        dimBackgroundMoreButton.layer.zPosition = 99
+        dimBackgroundMoreButton.layer.zPosition = 599
         dimBackgroundMoreButton.addTarget(self, action: #selector(FaeMapViewController.animationMoreHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         let leftSwipe = UISwipeGestureRecognizer(target: self,
@@ -29,7 +29,7 @@ extension FaeMapViewController {
         
         uiviewMoreButton = UIView(frame: CGRectMake(-tableViewWeight, 0, tableViewWeight, screenHeight))
         uiviewMoreButton.backgroundColor = UIColor.whiteColor()
-        uiviewMoreButton.layer.zPosition = 100
+        uiviewMoreButton.layer.zPosition = 600
         uiviewMoreButton.addGestureRecognizer(leftSwipe)
         self.view.addSubview(uiviewMoreButton)
         
@@ -82,6 +82,12 @@ extension FaeMapViewController {
         self.navigationController?.pushViewController(vc, animated: true)
 
     }
+    func jumpTowelcomeVC() {
+        //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
+        //        self.presentViewController(vc, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
     
     func addHeaderViewForMore(){
         viewHeaderForMore = UIView(frame: CGRectMake(0,0,tableViewWeight,268))
@@ -117,7 +123,7 @@ extension FaeMapViewController {
         if user_id != nil {
         let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
         }
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
@@ -133,7 +139,12 @@ extension FaeMapViewController {
         if userFirstname != nil {
             labelMoreName.text = userFirstname! + " " + userLastname!
         }
-        labelMoreName.text = "Anynomous"
+
+        if nickname != nil {
+            labelMoreName.text = nickname
+        } else {
+            labelMoreName.text = "Anonymous"
+        }
         viewHeaderForMore.addSubview(labelMoreName)
     }
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {

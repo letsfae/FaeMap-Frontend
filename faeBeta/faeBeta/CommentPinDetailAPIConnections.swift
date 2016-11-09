@@ -12,21 +12,31 @@ import SwiftyJSON
 extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-        
-        if animatingHeart != nil {
-            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        if animatingHeartTimer != nil {
+            animatingHeartTimer.invalidate()
+        }
+        if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
+            sender.tag = 1
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            return
         }
         
-        isUpVoting = true
-        isDownVoting = false
-        
-        animateHeart()
-        
-        if commentIDCommentPinDetailView != "-999" {
+        if sender.tag == 1 && commentIDCommentPinDetailView != "-999" {
+            sender.tag = 0
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    func actionHoldingLikeButton(sender: UIButton) {
+        if buttonCommentPinLike.tag == 0 {
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+            animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+        else if buttonCommentPinLike.tag == 1 {
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
         }
     }
     
@@ -37,15 +47,10 @@ extension CommentPinViewController {
         }
         
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
         }
-        
-        isUpVoting = true
-        isDownVoting = false
         
         if commentIDCommentPinDetailView != "-999" {
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
@@ -54,23 +59,29 @@ extension CommentPinViewController {
     
     // Down vote comment pin
     func actionDownVoteThisComment(sender: UIButton) {
-        if isDownVoting {
-            return
-        }
-        
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-        
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeHollow")
         }
-        
-        isUpVoting = false
-        isDownVoting = true
-        
         if commentIDCommentPinDetailView != "-999" {
             unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        }
+    }
+    
+    func commentThisPin(type: String, pinID: String, text: String) {
+        let commentThisPin = FaePinAction()
+        commentThisPin.whereKey("content", value: text)
+        if commentIDCommentPinDetailView != "-999" {
+            commentThisPin.commentThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+                if status == 201 {
+                    print("Successfully comment this comment pin!")
+                    self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
+                    self.getPinComments("comment", pinID: self.commentIDCommentPinDetailView, sendMessageFlag: true)
+                }
+                else {
+                    print("Fail to comment this comment pin!")
+                }
+            }
         }
     }
     
@@ -129,7 +140,7 @@ extension CommentPinViewController {
             
             if let likes = mapInfoJSON["likes"].int {
                 self.labelCommentPinLikeCount.text = "\(likes)"
-                self.labelCommentPinVoteCount.text = "\(likes)"
+//                self.labelCommentPinVoteCount.text = "\(likes)"
             }
             if let _ = mapInfoJSON["saves"].int {
                 
@@ -158,26 +169,33 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinComments(type: String, pinID: String) {
+    func getPinComments(type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnCommentDetail.removeAll()
+        dictPeopleOfCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
                     var dicCell = [String: AnyObject]()
+                    var userID = -999
+                    var latestDate = "NULL"
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
                         dicCell["pin_comment_id"] = pin_comment_id
                     }
                     
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
                         dicCell["user_id"] = user_id
+                        if !self.dictPeopleOfCommentDetail.keys.contains(user_id) {
+                            userID = user_id
+                        }
                     }
                     if let content = commentsOfCommentJSON[i]["content"].string {
                         dicCell["content"] = content
                     }
-                    if let date = commentsOfCommentJSON[i]["created_at"]["date"].string {
-                        dicCell["date"] = date
+                    if let date = commentsOfCommentJSON[i]["created_at"].string {
+                        dicCell["date"] = date.formatFaeDate()
+                        latestDate = date.formatFaeDate()
                     }
                     if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
                         dicCell["timezone_type"] = timezone_type
@@ -185,9 +203,30 @@ extension CommentPinViewController {
                     if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
                         dicCell["timezone"] = timezone
                     }
-                    self.dictCommentsOnCommentDetail.append(dicCell)
+                    self.dictCommentsOnCommentDetail.insert(dicCell, atIndex: 0)
+                    if userID != -999 {
+                        self.dictPeopleOfCommentDetail[userID] = latestDate
+                    }
                 }
             }
+            if sendMessageFlag {
+                print("DEBUG RELOAD DATA")
+                print(self.dictCommentsOnCommentDetail.count)
+                self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
+                self.tableCommentsForComment.frame.size.height += 140
+                self.commentDetailFullBoardScrollView.contentSize.height += 140
+                //// Will figure out the UI presentation later
+                /**
+                var offset = self.commentDetailFullBoardScrollView.contentOffset
+                offset.y = self.commentDetailFullBoardScrollView.contentSize.height + self.commentDetailFullBoardScrollView.contentInset.bottom - self.commentDetailFullBoardScrollView.bounds.size.height
+                self.commentDetailFullBoardScrollView.setContentOffset(offset, animated: true)
+                **/
+            }
+            let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
+            self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
+            self.tableCommentsForComment.frame.size.height = newHeight
+            self.tableCommentsForComment.reloadData()
+            self.tableViewPeople.reloadData()
         }
     }
     
@@ -195,26 +234,29 @@ extension CommentPinViewController {
         let getCommentById = FaeMap()
         getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
             let commentInfoJSON = JSON(message!)
+            if let userid = commentInfoJSON["user_id"].int {
+                print(user_id)
+                if userid == Int(user_id) {
+                    self.thisIsMyPin = true
+                }
+                else {
+                    self.thisIsMyPin = false
+                }
+            }
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
+                    self.buttonCommentPinLike.tag = 0
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
                     }
-                    self.isUpVoting = false
-                    self.isDownVoting = true
                 }
                 else {
                     self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-                    self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-                    self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
+                    self.buttonCommentPinLike.tag = 1
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
                     }
-                    self.isUpVoting = true
-                    self.isDownVoting = false
                 }
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
@@ -223,17 +265,14 @@ extension CommentPinViewController {
                     let userProfile = JSON(message!)
                     if let username = userProfile["user_name"].string {
                         self.labelCommentPinUserName.text = username
-//                        cell.userID = username
                     }
                 }
             }
             if let time = commentInfoJSON["created_at"].string {
-                self.labelCommentPinTimestamp.text = "\(time)"
-//                cell.time.text = "\(time)"
+                self.labelCommentPinTimestamp.text = time.formatFaeDate()
             }
             if let content = commentInfoJSON["content"].string {
                 self.textviewCommentPinDetail.text = "\(content)"
-//                cell.content.text = "\(content)"
             }
         }
     }

@@ -15,7 +15,7 @@ protocol CreatePinViewControllerDelegate {
 }
 
 class CreatePinViewController: UIViewController, UITextViewDelegate {
-
+    
     var delegate: CreatePinViewControllerDelegate?
     
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -84,6 +84,10 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
             self.blurViewMap.alpha = 1.0
             }, completion: nil)
         actionCreateCommentPin(buttonComment)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
 
     override func didReceiveMemoryWarning() {
@@ -246,22 +250,27 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         labelCreateCommentPinTitle.textAlignment = .Center
         labelCreateCommentPinTitle.textColor = UIColor.whiteColor()
         uiviewCreateCommentPin.addSubview(labelCreateCommentPinTitle)
-        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(83)][v1(196)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
+//        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(83)][v1(196)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-41-[v0(90)]-8-[v1(27)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
         NSLayoutConstraint(item: imageCreateCommentPin, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
         
-        let buttonBackToPinSelection = UIButton(frame: CGRectMake(15, 36, 18, 18))
+        /*
+        // Hide this button for 11.01 Dev
+        let buttonBackToPinSelection = UIButton()
         buttonBackToPinSelection.setImage(UIImage(named: "comment_main_back"), forState: .Normal)
         uiviewCreateCommentPin.addSubview(buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-15-[v0(18)]", options: [], views: buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(18)]", options: [], views: buttonBackToPinSelection)
-        
-        let buttonBackToPinSelectionLargerCover = UIButton(frame: CGRectMake(15, 36, 54, 54))
+        let buttonBackToPinSelectionLargerCover = UIButton()
         uiviewCreateCommentPin.addSubview(buttonBackToPinSelectionLargerCover)
 //        buttonBackToPinSelectionLargerCover.addTarget(self, action: #selector(FaeMapViewController.actionBackToPinSelections(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(54)]", options: [], views: buttonBackToPinSelection)
+        buttonBackToPinSelection.hidden = true            // --> delete if want to see the Waze menu style animation
+        buttonBackToPinSelectionLargerCover.hidden = true // --> delete if want to see the Waze menu style animation
+        /////////////////////////////////
+        */
         
         let buttonCloseCreateComment = UIButton(frame: CGRectMake(381, 36, 18, 18))
         buttonCloseCreateComment.setImage(UIImage(named: "comment_main_close"), forState: .Normal)
@@ -396,6 +405,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
+        postSingleComment.whereKey("duration", value: "180")
         
         postSingleComment.postComment{(status: Int, message: AnyObject?) in
             if let getMessage = message {

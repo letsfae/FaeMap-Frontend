@@ -20,16 +20,19 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
+        buttonLeftTop.layer.zPosition = 500
         
         // Open main map search
         buttonMainScreenSearch = UIButton()
         buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
         self.view.addSubview(buttonMainScreenSearch)
-        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.animationMainScreenSearchShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        buttonMainScreenSearch.layer.zPosition = 500
         
+        /* This is not for 11.01 Dev Version
         // Wind bell
         buttonRightTop = UIButton()
         buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
@@ -37,6 +40,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
+        */
         
         // Click to back to north
         buttonToNorth = UIButton()
@@ -45,6 +49,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
+        buttonToNorth.layer.zPosition = 500
         
         // Click to locate the current location
         buttonSelfPosition = UIButton()
@@ -53,6 +58,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
+        buttonSelfPosition.layer.zPosition = 500
         
         // Open chat view
         buttonChatOnMap = UIButton()
@@ -61,6 +67,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         view.addSubview(buttonChatOnMap)
         view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
+        buttonChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
         labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 23, 20))
@@ -85,6 +92,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
 //        buttonPinOnMapInside.setImage(UIImage(named: "set_pin_on_map_inside"), forState: .Normal)
 //        buttonPinOnMapInside.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 //        view.addSubview(buttonPinOnMapInside)
+        buttonPinOnMap.layer.zPosition = 500
     }
     
     //MARK: Actions for these buttons
@@ -92,12 +100,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
             currentLocation = locManager.location
         }
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.camera = camera
-        if isInPinLocationSelect == false {
-            loadPositionAnimateImage()
+        if currentLocation != nil {
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.camera = camera
+            if isInPinLocationSelect == false {
+                loadPositionAnimateImage()
+                getSelfAccountInfo()
+            }
         }
     }
     
@@ -213,21 +224,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
                     NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
-//                    return
                 }
             }
         }
     }
-}
-
-extension UIView {
-    func addConstraintsWithFormat(format: String, options: NSLayoutFormatOptions, views: UIView...) {
-        var viewDictionary = [String: UIView]()
-        for (index, view) in views.enumerate() {
-            let key = "v\(index)"
-            view.translatesAutoresizingMaskIntoConstraints = false
-            viewDictionary[key] = view
-        }
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(format, options: options, metrics: nil, views: viewDictionary))
+    
+    func jumpToMainScreenSearch(sender: UIButton) {
+        let mainScreenSearchVC = MainScreenSearchViewController()
+        mainScreenSearchVC.modalPresentationStyle = .OverCurrentContext
+        mainScreenSearchVC.delegate = self
+        self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
     }
 }

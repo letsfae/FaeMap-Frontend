@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-var baseURL = "https://api.letsfae.com"
+//var baseURL = "https://api.letsfae.com"
+var baseURL = "https://dev.letsfae.com"
 var version = "x.faeapp.v1"
 var headerAccept = "application/x.faeapp.v1+json"
 var headerContentType = "application/x-www-form-urlencoded"
@@ -41,12 +42,16 @@ var userFirstname : String?
 var userLastname : String?
 var userBirthday : String? // yyyy-MM-dd
 var userGender : Int? // 0 means male 1 means female
+var userUserGender : String?
+var userUserName : String?
+var userMiniAvatar : Int?
+
 var userPhoneNumber : String?
 
 var userEmailVerified : Bool = false
 var userPhoneVerified : Bool = false
 
-var userAvatarMap = "maleHappy" // new var by Yue Shen
+var userAvatarMap = "avatar_1" // new var by Yue Shen
 
 var arrayNameCard = [Int:UIImage]()
 //var arrayNameCard : [Int: UIImage]!

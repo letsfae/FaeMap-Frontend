@@ -43,6 +43,7 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.title = "Your NameCards"
         initialTableview()
         imagePicker = UIImagePickerController()
@@ -59,13 +60,14 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
             if status / 100 == 2 {
 
                 print(message!)
+                
                 let mess = message!
 
-                if (mess["nick_name"]) != nil{
-                    nickname = mess["nick_name"] as! String
+                if let str = mess["nick_name"] as? String{
+                    nickname = str
                 }
-                if (mess["short_intro"]) != nil{
-                    shortIntro = mess["short_intro"] as! String
+                if let str = mess["short_intro"] as? String{
+                    shortIntro = str
                 }
                 if let genderNow = mess["show_gender"] as? Int {
 //                    print(mess["showGender"])
@@ -195,7 +197,7 @@ extension NameCardViewController {
         tableViewNameCard.tableHeaderView = viewHeaderBackground
         tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
         
-        viewNameCardTitle = UIView(frame: CGRectMake(73,119,268,180))
+        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth - 268) / 2,119,268,180))
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 10
@@ -208,7 +210,7 @@ extension NameCardViewController {
         if user_id != nil {
             let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/name_card_cover"
             print(user_id)
-            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -222,7 +224,7 @@ extension NameCardViewController {
         if user_id != nil {
             let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
         }
         
         labelNickname = UILabel(frame: CGRectMake(0,257-119,268,27))
@@ -244,7 +246,7 @@ extension NameCardViewController {
         viewNameCardDescr.layer.cornerRadius = 10
         viewHeaderBackground.addSubview(viewNameCardDescr)
         
-        imageViewDescrProfile = UIImageView(frame: CGRectMake((screenWidth - 61) / 2, 96 - 119, 61, 61))
+        imageViewDescrProfile = UIImageView(frame: CGRectMake((268 - 61) / 2, 96 - 119, 61, 61))
         imageViewDescrProfile.layer.cornerRadius = 61 / 2
         imageViewDescrProfile.layer.masksToBounds = true
         imageViewDescrProfile.clipsToBounds = true
@@ -254,7 +256,7 @@ extension NameCardViewController {
         if user_id != nil {
             let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+            imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
         }
         viewGender = UIView(frame: CGRectMake(90 - 73, 139 - 119, 50, 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)

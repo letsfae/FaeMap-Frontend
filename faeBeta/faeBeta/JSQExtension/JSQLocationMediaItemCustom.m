@@ -17,7 +17,7 @@
 //
 
 #import "JSQLocationMediaItemCustom.h"
-#import "JSQMessagesMediaPlaceholderView.h"
+#import <JSQMessagesViewController/JSQMessagesMediaPlaceholderView.h>
 #import "JSQMessagesMediaViewBubbleImageMaskerCustom.h"
 
 

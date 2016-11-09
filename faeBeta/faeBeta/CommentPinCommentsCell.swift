@@ -8,7 +8,14 @@
 
 import UIKit
 
+protocol CommentPinCommentsCellDelegate {
+    // Reply to this user
+    func showActionSheetFromCommentPinCell(username: String)
+}
+
 class CommentPinCommentsCell: UITableViewCell {
+    
+    var delegate: CommentPinCommentsCellDelegate?
     
     var imageViewAvatar: UIImageView!
     
@@ -23,18 +30,22 @@ class CommentPinCommentsCell: UITableViewCell {
     
     var textViewComment: UITextView!
     
-    var buttonUpVote: UIButton!
-    var buttonDownVote: UIButton!
-    var buttonLike: UIButton!
+//    var buttonUpVote: UIButton!
+//    var buttonDownVote: UIButton!
+//    var buttonLike: UIButton!
     var buttonShare: UIButton!
     
     let screenWidth = UIScreen.mainScreen().bounds.width
-    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadCellContent()
     }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func loadCellContent() {
         self.imageViewAvatar = UIImageView()
         self.addSubview(self.imageViewAvatar)
@@ -73,6 +84,18 @@ class CommentPinCommentsCell: UITableViewCell {
         self.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentActionButtons)
         self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: uiviewCommentActionButtons)
         
+        /*
+        // Label of Share Count
+        self.labelShareCount = UILabel()
+        self.labelShareCount.text = "0"
+        self.labelShareCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        self.labelShareCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        self.labelShareCount.textAlignment = .Right
+        self.uiviewCommentActionButtons.addSubview(labelShareCount)
+        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelShareCount)
+        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelShareCount)
+        
+        
         // Label of Vote Count
         self.labelVoteCount = UILabel()
         self.labelVoteCount.text = "0"
@@ -92,16 +115,6 @@ class CommentPinCommentsCell: UITableViewCell {
         self.uiviewCommentActionButtons.addSubview(labelLikeCount)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelLikeCount)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelLikeCount)
-        
-        // Label of Share Count
-        self.labelShareCount = UILabel()
-        self.labelShareCount.text = "0"
-        self.labelShareCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        self.labelShareCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelShareCount.textAlignment = .Right
-        self.uiviewCommentActionButtons.addSubview(labelShareCount)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelShareCount)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelShareCount)
         
         // Button 3: Comment Pin DownVote
         self.buttonDownVote = UIButton()
@@ -126,17 +139,20 @@ class CommentPinCommentsCell: UITableViewCell {
         self.uiviewCommentActionButtons.addSubview(buttonLike)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonLike)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonLike)
-        
+        */
         // Button 6: Add Comment
         self.buttonShare = UIButton()
         self.buttonShare.setImage(UIImage(named: "commentPinForwardHollow"), forState: .Normal)
 //        self.buttonShare.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonShare.addTarget(self, action: #selector(CommentPinCommentsCell.showActionSheet(_:)), forControlEvents: .TouchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonShare)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonShare)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonShare)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func showActionSheet(sender: UIButton) {
+        if let username = labelUsername.text {
+            self.delegate?.showActionSheetFromCommentPinCell(username)
+        }
     }
 }

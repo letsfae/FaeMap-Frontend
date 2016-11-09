@@ -29,6 +29,11 @@ class PhotoPicker {
     var indexAssetDict = [Int : PHAsset]()
     var indexImageDict = [Int: UIImage]()
     
+    var assetDurationDict = [PHAsset : Int]()
+    
+    var videoAsset: AVAsset? = nil
+    var videoImage: UIImage? = nil
+    
     private init() {
         getSmartAlbum()
     }
@@ -42,7 +47,7 @@ class PhotoPicker {
             if let assetCollection = $0.0 as? PHAssetCollection {
                 let assetsFetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: allPhotosOptions)
                 let numberOfAssets = assetsFetchResult.count
-                if numberOfAssets != 0 && assetCollection.localizedTitle! != "Videos" {
+                if numberOfAssets != 0 {
                     self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
                     if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
                         self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
@@ -50,6 +55,26 @@ class PhotoPicker {
                     }
                 }
             }
-        } )
+        })
+        calculateVideoDuration()
+
+    }
+    
+    private func calculateVideoDuration(){
+        if(cameraRoll != nil){
+            for i in 0 ..< self.cameraRoll.albumCount {
+                let asset = self.cameraRoll.albumContent[i] as! PHAsset
+                if asset.mediaType == .Video && assetDurationDict[asset] == nil {
+                    let lowQRequestOption = PHVideoRequestOptions()
+                    lowQRequestOption.deliveryMode = .FastFormat //high pixel
+                    PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
+                        if(assetTwo != nil){
+                            let duration = Int(Int(assetTwo!.duration.value) / Int(assetTwo!.duration.timescale))
+                            self.assetDurationDict[asset] =  duration
+                        }
+                    }
+                }
+            }
+        }
     }
 }

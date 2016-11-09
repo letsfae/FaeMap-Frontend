@@ -113,6 +113,10 @@ class FaeUser : NSObject {
             }
             self.clearKeyValue()
             completion(status,message)
+            
+            // WARNING: this code should be deleted afterward, it's here just to test chat function
+            postToURL("chats", parameter: ["receiver_id": "1", "message": "Hi there, I just registered. Let's chat!", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            })
         }
     }
     
@@ -134,7 +138,7 @@ class FaeUser : NSObject {
         userToken = str
         userTokenEncode = encode
         is_Login = 1
-        userEmail = keyValue["email"] as! String
+        userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
         userPassword = keyValue["password"] as! String
         
         let shareAPI = LocalStorageManager()
@@ -297,7 +301,7 @@ class FaeUser : NSObject {
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
             print(status)
             print(message)
-            if(status/100==2){
+            if(status/100 == 2){
                 if let firstname = self.keyValue["first_name"]{
                     userFirstname = firstname as? String
                     //                    print("firstName")
@@ -441,26 +445,26 @@ class FaeUser : NSObject {
     func getOthersProfile(otherUser:String, completion:(Int,AnyObject?)->Void){
         getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
             //self.clearKeyValue()
-            completion(status,message);
+            completion(status, message);
         }
     }
     
-    func updateProfile(completion:(Int,AnyObject?)->Void){
+    func updateProfile(completion:(Int, AnyObject?) -> Void){
         postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
             //self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     
-    func getNamecardOfSpecificUser(otherUser:String, completion:(Int,AnyObject?)->Void){
-        getFromURL("users/"+otherUser+"/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            completion(status,message);
+    func getNamecardOfSpecificUser(otherUser: String, completion:(Int, AnyObject?) -> Void){
+        getFromURL("users/"+otherUser+"/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
+            completion(status, message);
         }
     }
     
-    func getSelfNamecard(completion:(Int,AnyObject?)->Void){
+    func getSelfNamecard(completion:(Int, AnyObject?) -> Void){
         getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-            completion(status,message);
+            completion(status, message);
         }
     }
 

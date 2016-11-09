@@ -1,6 +1,6 @@
 //
 //  FaeMapViewController.swift
-//  GoogleMapsSample
+//  Using GoogleMaps
 //
 //  Created by Yue on 5/31/16.
 //  Copyright © 2016 Yue. All rights reserved.
@@ -11,7 +11,7 @@ import GoogleMaps
 import CoreLocation
 import SwiftyJSON
 
-class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
+class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MainScreenSearchViewControllerDelegate {
     
     // MARK: -- Common Used Vars and Constants
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -41,29 +41,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var willAppearFirstLoad = false
     var startUpdatingLocation = false
     
-    // MARK: -- Blur View Pin Buttons and Labels
-//    var uiviewPinSelections: UIView!
-//    var blurViewMap: UIVisualEffectView!
-//    var buttonMedia: UIButton!
-//    var buttonChats: UIButton!
-//    var buttonComment: UIButton!
-//    var buttonEvent: UIButton!
-//    var buttonFaevor: UIButton!
-//    var buttonNow: UIButton!
-//    var buttonJoinMe: UIButton!
-//    var buttonSell: UIButton!
-//    var buttonLive: UIButton!
-//    
-//    var labelSubmitTitle: UILabel!
-//    var labelSubmitMedia: UILabel!
-//    var labelSubmitChats: UILabel!
-//    var labelSubmitComment: UILabel!
-//    var labelSubmitEvent: UILabel!
-//    var labelSubmitFaevor: UILabel!
-//    var labelSubmitNow: UILabel!
-//    var labelSubmitJoinMe: UILabel!
-//    var labelSubmitSell: UILabel!
-//    var labelSubmitLive: UILabel!
+    // Unread Messages Label
     var labelUnreadMessages: UILabel!
     
     var buttonClosePinBlurView: UIButton!
@@ -87,17 +65,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var myPositionOutsideMarker_2: UIImageView!
     var myPositionOutsideMarker_3: UIImageView!
     
-    // MARK: -- Search Bar
-    var uiviewTableSubview: UIView!
-    var tblSearchResults = UITableView()
-    var dataArray = [String]()
-    var filteredArray = [String]()
-    var shouldShowSearchResults = false
-    var searchController: UISearchController!
-    var customSearchController: CustomSearchController!
-    var searchBarSubview: UIView!
-    var placeholder = [GMSAutocompletePrediction]()
-    
     var myPositionIconFirstLoaded = true
     
     // MARK: -- Drag map and refresh pins
@@ -118,15 +85,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // MARK: -- WindBell Vars
     var uiviewWindBell: UIView!
     var dimBackgroundWindBell: UIButton!
-    
-    // MARK: -- Main Screen Search
-    var mainScreenSearchBarSubview: UIView!
-    var mainSearchController: CustomSearchController!
-    var blurViewMainScreenSearch: UIVisualEffectView!
-    var mainScreenSearchActive = false
-    var mainScreenSearchSubview: UIButton!
-    var middleTopActive = false
-    var buttonClearMainSearch: UIButton!
     
     // MARK: -- Map Chat
     var mapChatSubview: UIButton!
@@ -195,9 +153,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     let tagHeight : CGFloat = 18
     
     var openUserPinActive = false
+    var currentViewingUserId = 1
     
     // Map User Pin
     var mapUserPinsDic = [Int: GMSMarker]()
+    
+    // Map Comment Pin
+    var mapCommentPinsDic = [Int: GMSMarker]()
     
     // New Comment Pin Popup Window
     
@@ -209,18 +171,35 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var markerMask: UIView! // mask to prevent UI action
     
+    var NSTimerDisplayMarkerArray = [NSTimer]()
+    
+    // Marker saved for back from comment pin detail view
+    var markerBackFromCommentDetail = GMSMarker()
+    
+    // Local Storage for storing opened pin id, for opened pin list use
+    private let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()
+    
+    // Prevent updating user on map more than once
+    var canDoNextUserUpdate = true
+    
+    // Determine if this pinID should change to heavy shadow style
+    var commentIDFromOpenedPinCell = -999
+    
+    // A boolean var to control if user can open another pin, basically,
+    // user cannot open if one pin is under opening process
+    var canOpenAnotherPin = true
+    
+    // button to close user pin view
+    var buttonCloseUserPinSubview: UIButton!
     
     // System Functions
-    
-    @IBAction func unwindToFaeMap(sender: UIStoryboardSegue) {}
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.hidden = true
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         if is_Login == 0 {
-            self.jumpToWelcomeView()
+            self.jumpToWelcomeView(false)
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
         myPositionIconFirstLoaded = true
@@ -229,14 +208,16 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadTransparentNavBarItems()
         loadButton()
         loadMore()
-        loadWindBell()
-        loadMainScreenSearch()
+//        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadNamecard()
-        //        NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
-        
+        loadPositionAnimateImage()
+//        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        let emptyArrayList = [Int]()
+        self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined){
             print("Not Authorised")
@@ -248,24 +229,24 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         
         willAppearFirstLoad = true
-        
-        loadPositionAnimateImage()
+        getSelfAccountInfo()
         self.buttonLeftTop.hidden = false
         self.buttonMainScreenSearch.hidden = false
-        self.buttonRightTop.hidden = false
+        // self.buttonRightTop.hidden = false // -> Not for 11.01 Dev
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         print("Will appear loaded")
+        actionSelfPosition(buttonSelfPosition)
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
         self.buttonLeftTop.hidden = true
         self.buttonMainScreenSearch.hidden = true
-        self.buttonRightTop.hidden = true
+//        self.buttonRightTop.hidden = true // -> Not for 11.01 Dev
         // Need a Comment Clearance??????
         self.navigationController?.navigationBar.translucent = false
         
@@ -275,11 +256,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if segue.identifier == "mapToCommentPinDetail" {
             if let commentPinDetailVC = segue.destinationViewController as? CommentPinViewController {
                 commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
+                commentPinDetailVC.delegate = self
             }
         }
     }
     
-    // MARK: -- 如何存到缓存中以备后面继续使用
+    // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
@@ -288,8 +270,14 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "5000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
+//        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             let mapInfoJSON = JSON(message!)
+            for eachTimer in self.NSTimerDisplayMarkerArray {
+                eachTimer.invalidate()
+            }
+            self.NSTimerDisplayMarkerArray.removeAll()
+            self.mapCommentPinsDic.removeAll()
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
                     let pinShowOnMap = GMSMarker()
@@ -303,6 +291,12 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
                         pinData["comment_id"] = commentIDInfo
+                        self.mapCommentPinsDic[commentIDInfo] = pinShowOnMap
+                        if self.commentIDFromOpenedPinCell == commentIDInfo {
+                            print("TESTing far away from")
+                            self.markerBackFromCommentDetail = pinShowOnMap
+                            pinShowOnMap.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                        }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo
@@ -335,10 +329,21 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     }
                     
                     pinShowOnMap.userData = pinData
-                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationPop
-                    pinShowOnMap.map = self.faeMapView
+                    let delay: Double = Double(arc4random_uniform(50) + 25) / 100
+                    let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
+                    let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
+                    self.NSTimerDisplayMarkerArray.append(timer)
                 }
             }
+        }
+    }
+    
+    func editTimerToDisplayMarker(timer: NSTimer) {
+        if let userInfo = timer.userInfo as? Dictionary<String, AnyObject> {
+            let marker = userInfo["argumentInt"] as! GMSMarker
+            marker.appearAnimation = kGMSMarkerAnimationPop
+            marker.groundAnchor = CGPointMake(0.5, 1)
+            marker.map = self.faeMapView
         }
     }
     
@@ -352,11 +357,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
-    func jumpToWelcomeView(){
+    func jumpToWelcomeView(animated: Bool){
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
         //        self.navigationController?.pushViewController(vc, animated: true)
         //        let vc = ViewController(nibName: "WelcomeViewController", bundle: nil)
-        self.presentViewController(vc, animated: true, completion: nil)
+        self.presentViewController(vc, animated: animated, completion: nil)
     }
     
     // MARK: -- Load Navigation Items
@@ -419,6 +424,18 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             hideOpenUserPinAnimation()
             openUserPinActive = false
         }
+        // Testing user marker appear animation
+//        let point = CLLocationCoordinate2DMake(currentLatitude+0.001, currentLongitude)
+//        let pinShowOnMap = GMSMarker()
+//        pinShowOnMap.position = point
+//        pinShowOnMap.icon = UIImage(named: "avatar_\(4)")
+//        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+//        fadeAnimation.fromValue = 0.0
+//        fadeAnimation.toValue = 1.0
+//        fadeAnimation.duration = 1
+//        pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+//        pinShowOnMap.map = self.faeMapView
+        // End Testing Above Code
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -469,7 +486,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                             addressToSearchBar += line + ", "
                         }
                     }
-                    self.customSearchController.customSearchBar.text = addressToSearchBar
                 }
                 self.latitudeForPin = mapCenterCoordinate.latitude
                 self.longitudeForPin = mapCenterCoordinate.longitude
@@ -491,126 +507,60 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
     }
     
+    // To get opened pin list, but it is a general func
+    func readByKey(key: String) -> AnyObject? {
+        if let obj = self.storageForOpenedPinList.objectForKey(key) {
+            return obj
+        }
+        return nil
+    }
+    
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(latitude+0.001, longitude: longitude, zoom: 17)
-        faeMapView.camera = camera
+        mapView.animateToCameraPosition (camera)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
                 
-                if let userid = marker.userData!["user_id"] {
+                if let userid = pinLoc["user_id"].int {
+                    self.currentViewingUserId = userid
                     loadUserPinInformation("\(userid)")
                 }
                 showOpenUserPinAnimation(latitude, longi: longitude)
                 return true
             }
             if type == "comment" {
-                
+                if self.canOpenAnotherPin == false {
+                    return true
+                }
+                self.canOpenAnotherPin = false
                 var pinData = JSON(marker.userData!)
                 if let commentIDGet = pinData["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
+                    var openedPinListArray = [Int]()
+                    openedPinListArray.append(commentIDGet)
+                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                    if let listArray = readByKey("openedPinList") {
+                        openedPinListArray.removeAll()
+                        openedPinListArray = listArray as! [Int]
+                        if openedPinListArray.contains(commentIDGet) == false {
+                            openedPinListArray.append(commentIDGet)
+                        }
+                        self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
+                        print("DEBUG: listArray")
+                        print(listArray)
+                    }
+                    self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
+                    print("DEBUG: openedPinListArray")
+                    print(openedPinListArray)
                 }
+                self.markerBackFromCommentDetail = marker
                 
                 self.jumpToCommentPinDetail()
-                
                 return true
             }
-//                if self.uiviewCommentPinDetail.center.y < 0 {
-//                    self.showCommentPinDetail()
-//                }
-//                if self.commentListShowed == true {
-//                    actionBackToCommentDetail(self.buttonBackToCommentPinDetail)
-//                    self.commentListShowed = false
-//                }
-//                pinData = JSON(marker.userData!)
-//                
-//                let cell = CommentPinListCell()
-//                self.commentPinCellArray.append(cell)
-//                cell.jumpToDetail.addTarget(self, action: #selector(FaeMapViewController.actionJumpToDetail(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//                cell.deleteButton.addTarget(self, action: #selector(FaeMapViewController.deleteCommentPinCell(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//                
-//                if let toGetUserName = pinData["user_id"].int {
-//                    let getUserName = FaeUser()
-//                    getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
-//                        let userProfile = JSON(message!)
-//                        if let username = userProfile["user_name"].string {
-//                            print(username)
-//                            self.labelCommentPinUserName.text = username
-//                            cell.userID = username
-//                        }
-//                    }
-//                }
-//                if let time = pinData["created_at"].string {
-//                    labelCommentPinTimestamp.text = "\(time)"
-//                    cell.time.text = "\(time)"
-//                }
-//                if let content = pinData["content"].string {
-//                    textviewCommentPinDetail.text = "\(content)"
-//                    cell.content.text = "\(content)"
-//                }
-//                
-//                var commentID = -999
-//                
-//                if let commentIDGet = pinData["comment_id"].int {
-//                    commentIDCommentPinDetailView = "\(commentIDGet)"
-//                    getPinAttributeNum("comment", pinID: "\(commentIDGet)")
-//                    getPinAttributeCommentsNum("comment", pinID: "\(commentIDGet)")
-//                    getPinCommentsDetail("comment", pinID: "\(commentIDGet)")
-//                    commentID = commentIDGet
-//                    let getCommentById = FaeMap()
-//                    getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
-//                        print(message)
-//                        let commentInfoJSON = JSON(message!)
-//                        if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
-//                            print("is_liked: \(isLiked)")
-//                            if isLiked == false {
-//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteRed"), forState: .Normal)
-//                                if self.animatingHeart != nil {
-//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
-//                                }
-//                                self.isUpVoting = false
-//                                self.isDownVoting = true
-//                            }
-//                            else {
-//                                self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-//                                self.buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteRed"), forState: .Normal)
-//                                self.buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-//                                if self.animatingHeart != nil {
-//                                    self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
-//                                }
-//                                self.isUpVoting = true
-//                                self.isDownVoting = false
-//                            }
-//                        }
-//                    }
-//                    if commentPinAvoidDic[commentID] != nil {
-//                        print("Comment exists!")
-//                        print(self.commentPinAvoidDic)
-//                        return true
-//                    }
-//                }
-//                
-//                self.addTagCommentPinCell(cell, commentID: commentID)
-//                
-//                if commentPinCellNumCount == 0 {
-//                    self.buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-//                    self.buttonBackToCommentPinDetail.userInteractionEnabled = true
-//                    self.commentListScrollView.addSubview(cell)
-//                    self.commentListScrollView.contentSize.height = 76
-//                }
-//                    
-//                else if commentPinCellNumCount >= 1 {
-//                    self.commentListScrollView.addSubview(cell)
-//                    let cellAtHeight = (CGFloat)(commentPinCellNumCount * 76)
-//                    cell.center.y += cellAtHeight
-//                    self.commentListScrollView.contentSize.height += 76
-//                }
-//                self.commentPinCellNumCount += 1
-//            }
         }
         return true
     }
@@ -632,43 +582,101 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             myPositionIcon.removeFromSuperview()
         }
         myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_1.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_1)
         myPositionOutsideMarker_1.layer.zPosition = 0
         myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_2.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_2)
         myPositionOutsideMarker_2.layer.zPosition = 0
         myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
         self.myPositionOutsideMarker_3.alpha = 1.0
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 35, 35))
-        myPositionIcon.setImage(UIImage(named: "\(userAvatarMap)"), forState: .Normal)
         //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
-        self.myPositionAnimation()
+        myPositionAnimation()
     }
     
     func myPositionAnimation() {
         UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_1.alpha = 0.0
+            if self.myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_1.alpha = 0.0
+            }
         }), completion: nil)
         UIView.animateWithDuration(3, delay: 0.8, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_2.alpha = 0.0
+            if self.myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_2.alpha = 0.0
+            }
         }), completion: nil)
         UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
-            self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
-            self.myPositionOutsideMarker_3.alpha = 0.0
+            if self.myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+                self.myPositionOutsideMarker_3.alpha = 0.0
+            }
         }), completion: nil)
     }
     
+    func getSelfAccountInfo() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: AnyObject?) in
+            let selfUserInfoJSON = JSON(message!)
+            if let firstName = selfUserInfoJSON["first_name"].string {
+                userFirstname = firstName
+            }
+            if let lastName = selfUserInfoJSON["last_name"].string {
+                userLastname = lastName
+            }
+            if let birthday = selfUserInfoJSON["birthday"].string {
+                userBirthday = birthday
+            }
+            if let gender = selfUserInfoJSON["gender"].string {
+                userUserGender = gender
+            }
+            if let userName = selfUserInfoJSON["user_name"].string {
+                userUserName = userName
+            }
+            if let miniAvatar = selfUserInfoJSON["mini_avatar"].int {
+                userMiniAvatar = miniAvatar
+                self.myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
+                self.myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
+                self.myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
+                if let miniAvatar = userMiniAvatar {
+                    self.myPositionIcon.setImage(UIImage(named: "avatar_\(miniAvatar+1)"), forState: .Normal)
+                }
+                else {
+                    self.myPositionIcon.setImage(UIImage(named: "avatar_1"), forState: .Normal)
+                }
+            }
+        })
+    }
+    
+    func animateToCameraFromMainScreenSearch(coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
+        self.faeMapView.animateToCameraPosition(camera)
+    }
+    
+    func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int) {
+        print("DEBUG: Delegate pass commentID")
+        print(commentID)
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
+        self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
+        if let marker = self.mapCommentPinsDic[commentID] {
+            self.markerBackFromCommentDetail = marker
+            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+            self.commentIDFromOpenedPinCell = -999
+        }
+        else {
+            self.commentIDFromOpenedPinCell = commentID
+            self.loadCurrentRegionPins()
+        }
+        self.faeMapView.animateToCameraPosition(camera)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
