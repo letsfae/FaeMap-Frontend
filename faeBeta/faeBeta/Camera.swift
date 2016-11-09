@@ -13,7 +13,7 @@ import MobileCoreServices
 // this is a class to present imagePicker, pick image from camera and library
 class Camera {
     
-    var delegate : protocol<UINavigationControllerDelegate,UIImagePickerControllerDelegate>?
+    weak var delegate : protocol<UINavigationControllerDelegate,UIImagePickerControllerDelegate>?
     
     init(delegate_: protocol<UINavigationControllerDelegate,UIImagePickerControllerDelegate>?) {
         delegate = delegate_
@@ -59,12 +59,13 @@ class Camera {
             return
         }
         let type1 = kUTTypeImage as String
+        let type2 = kUTTypeMovie as String
         let imagePicker = UIImagePickerController()
         
         if UIImagePickerController.isSourceTypeAvailable(.Camera) {
             if let availableTypes = UIImagePickerController.availableMediaTypesForSourceType(.Camera) {
-                if (availableTypes as NSArray).containsObject(type1) {
-                    imagePicker.mediaTypes = [type1]
+                if (availableTypes as NSArray).containsObject(type1) && (availableTypes as NSArray).containsObject(type2) {
+                    imagePicker.mediaTypes = [type1, type2]
                     imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
                 }
             }

@@ -26,10 +26,10 @@ extension FaeMapViewController {
                     let totalUnread = (cacheRecent["chat"] as! NSNumber).intValue + (cacheRecent["chat_room"] as! NSNumber).intValue
                     if(totalUnread / 10 >= 1){
                         self.labelUnreadMessages.text = "\(totalUnread)"
-                        self.labelUnreadMessages.frame.size.width = 23
+                        self.labelUnreadMessages.frame.size.width = 28 //San ge dian dao 30
                     }else{
                         self.labelUnreadMessages.text = "\(totalUnread)"
-                        self.labelUnreadMessages.frame.size.width = 20
+                        self.labelUnreadMessages.frame.size.width = 22
                     }
                     
                     self.labelUnreadMessages.hidden = totalUnread == 0

@@ -224,12 +224,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         showTableButton.titleLabel?.text = ""
         showTableButton.addTarget(self, action: #selector(CustomCollectionViewController.showAlbumTable), forControlEvents: .TouchUpInside)
         
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
         self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.translucent = false
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = "All photos"
+        titleLabel.text = "All Photos"
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)

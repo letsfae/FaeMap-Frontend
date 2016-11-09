@@ -63,16 +63,16 @@ class RecentTableViewCell: UITableViewCell {
         }
         lastMessageLabel.text = recent["last_message"].string
         counterLabel.text = ""
-        counterLabel.layer.cornerRadius = 10
+        counterLabel.layer.cornerRadius = 11
         counterLabel.layer.masksToBounds = true
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
         if (recent["unread_count"].number)!.intValue != 0 {
             counterLabel.hidden = false
             counterLabel.text = "\(recent["unread_count"].number!.intValue)"
             if(counterLabel.text?.characters.count == 2){
-                countLabelLength.constant = 23
+                countLabelLength.constant = 25
             }else{
-                countLabelLength.constant = 20
+                countLabelLength.constant = 22
             }
         }else{
             counterLabel.hidden = true

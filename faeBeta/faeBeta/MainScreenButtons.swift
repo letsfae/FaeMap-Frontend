@@ -70,15 +70,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
-        labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 23, 20))
+        labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 25, 22))
         labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
-        labelUnreadMessages.layer.cornerRadius = 10
+        labelUnreadMessages.layer.cornerRadius = 11
         labelUnreadMessages.layer.masksToBounds = true
         labelUnreadMessages.layer.opacity = 0.9
         labelUnreadMessages.text = "1"
         labelUnreadMessages.textAlignment = .Center
         labelUnreadMessages.textColor = UIColor.whiteColor()
-        labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 11)
+        labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         buttonChatOnMap.addSubview(labelUnreadMessages)
         
         // Create pin on main map

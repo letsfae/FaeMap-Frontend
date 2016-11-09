@@ -10,7 +10,11 @@ import UIKit
 import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
-import Photos
+//import Photos
+import MobileCoreServices
+import CoreMedia
+import AVFoundation
+
 
 public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
@@ -580,12 +584,48 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //MARK: -  UIImagePickerController
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
-        
-        self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+        let type = info[UIImagePickerControllerMediaType] as! String
+        switch type {
+        case (kUTTypeImage as String as String):
+            let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
+            
+            self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+            
+            UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+        case (kUTTypeMovie as String as String):
+            let movieURL = info[UIImagePickerControllerMediaURL] as! NSURL
 
-        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+            //get duration of the video
+            let asset = AVURLAsset(URL: movieURL)
+            let duration = CMTimeGetSeconds(asset.duration);
+            let seconds = Int(ceil(duration))
+            
+            let imageGenerator = AVAssetImageGenerator(asset: asset)
+            var time = asset.duration
+            time.value = 0
+            
+            //get snapImage
+            var snapImage = UIImage()
+            do{
+                let imageRef = try imageGenerator.copyCGImageAtTime(time, actualTime:nil)
+                snapImage = UIImage(CGImage: imageRef)
+            }
+            catch{
+                //Handle failure
+            }
+            
+            var imageData = UIImageJPEGRepresentation(snapImage,1)
+            let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+            imageData = UIImageJPEGRepresentation(snapImage,factor)
         
+            let path = movieURL.path
+            let data = NSFileManager.defaultManager().contentsAtPath(path!)
+            self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: data, videoDuration: seconds)
+            break
+        default:
+            break
+        }
+
         picker.dismissViewControllerAnimated(true, completion: nil)
         
     }

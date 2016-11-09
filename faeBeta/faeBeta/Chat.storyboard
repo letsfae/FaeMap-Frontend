@@ -31,7 +31,7 @@
                                         <rect key="frame" x="0.0" y="28" width="383" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fBo-Z9-0jx" id="gxo-pM-EUv">
-                                            <rect key="frame" x="0.0" y="0.0" width="383" height="74.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCU-7W-ZiY">
@@ -77,13 +77,13 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tqv-um-nvH">
-                                                            <rect key="frame" x="50" y="7" width="20" height="20"/>
+                                                            <rect key="frame" x="50" y="7" width="20" height="22"/>
                                                             <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="20" id="wZB-EG-vkd"/>
+                                                                <constraint firstAttribute="height" constant="22" id="wZB-EG-vkd"/>
                                                                 <constraint firstAttribute="width" constant="20" id="yVr-pN-6lv"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="11"/>
+                                                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="13"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -235,7 +235,7 @@
         <scene sceneID="LRW-mA-PzX">
             <objects>
                 <collectionViewController storyboardIdentifier="CustomCollectionViewController" id="oIf-UI-O3w" customClass="CustomCollectionViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="kLt-3H-cXF">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="kLt-3H-cXF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="KcW-wk-zr4">
@@ -343,7 +343,7 @@
                 <navigationController id="Qli-qE-doA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="recents" id="hdX-BZ-Ts3"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1rD-5g-lCQ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="1rD-5g-lCQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -411,11 +411,11 @@
                                         <rect key="frame" x="0.0" y="28" width="383" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FxJ-fg-4Ae" id="sJt-oa-TPC">
-                                            <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Un8-fH-rnV">
-                                                    <rect key="frame" x="15" y="0.0" width="353" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="353" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
