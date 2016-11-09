@@ -482,7 +482,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     private func sendVideoFromQuickPicker()
     {
-        UIScreenSerivce.showActivityIndicator()
+        UIScreenService.showActivityIndicator()
 
         let image = self.photoPicker.videoImage!
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
@@ -515,7 +515,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                     self.delegate.sendVideoData?(data, snapImage:image ,duration:duration)
                 }
             }
-            UIScreenSerivce.hideActivityIndicator()
+            UIScreenService.hideActivityIndicator()
         }
     }
     

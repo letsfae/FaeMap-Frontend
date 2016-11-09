@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class UIScreenSerivce{
+class UIScreenService{
     private class var activityIndicator : UIActivityIndicatorView{
         struct Element
         {
@@ -27,19 +27,19 @@ class UIScreenSerivce{
     class func showActivityIndicator()
     {
         dispatch_async(dispatch_get_main_queue()) {
-            UIScreenSerivce.activityIndicator.startAnimating()
+            UIScreenService.activityIndicator.startAnimating()
             UIApplication.sharedApplication().keyWindow!.userInteractionEnabled = false
-            UIApplication.sharedApplication().keyWindow!.addSubview(UIScreenSerivce.activityIndicator)
+            UIApplication.sharedApplication().keyWindow!.addSubview(UIScreenService.activityIndicator)
         }
     }
     
     class func hideActivityIndicator()
     {
         dispatch_async(dispatch_get_main_queue()) {
-            UIScreenSerivce.activityIndicator.color = UIColor.clearColor()
-            UIScreenSerivce.activityIndicator.stopAnimating()
-            UIScreenSerivce.activityIndicator.hidden = true
-            UIScreenSerivce.activityIndicator.removeFromSuperview()
+            UIScreenService.activityIndicator.color = UIColor.clearColor()
+            UIScreenService.activityIndicator.stopAnimating()
+            UIScreenService.activityIndicator.hidden = true
+            UIScreenService.activityIndicator.removeFromSuperview()
 
             UIApplication.sharedApplication().keyWindow!.userInteractionEnabled = true
         }

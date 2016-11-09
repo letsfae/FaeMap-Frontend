@@ -49,12 +49,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     //send image delegate
     
     var imageDelegate : SendMutipleImagesDelegate!
-    
-    var frameImageName = ["photoSelection1", "photoSelection2", "photoSelection3", "photoSelection4","photoSelection5", "photoSelection6", "photoSelection7", "photoSelection8", "photoSelection9", "photoSelection10"]
-    
-    
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
@@ -263,7 +258,6 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     }
     
     func sendImages() {
-        showProcessIndicator()
         if(photoPicker.videoAsset != nil){
             sendVideoFromQuickPicker()
         }else{
@@ -274,13 +268,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             }
             imageDelegate.sendImages(images)
         }
-        hideProcessIndicator()
         cancelSend()
     }
     
     private func sendVideoFromQuickPicker()
     {
-        
+        UIScreenService.showActivityIndicator()
         let snapImage = self.photoPicker.videoImage!
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
@@ -302,14 +295,17 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.Failed:
                 print("failed import video: \(exportSession!.error)")
+                break
             case AVAssetExportSessionStatus.Cancelled:
                 print("cancelled import video: \(exportSession!.error)")
+                break
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
                     self.imageDelegate.sendVideoData?(data, snapImage: snapImage, duration: duration)
                 }
             }
+            UIScreenService.hideActivityIndicator()
         }
     }
     
@@ -331,20 +327,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
-    
-    func showProcessIndicator() {
-        activityIndicator.center = self.view.center
-        activityIndicator.startAnimating()
-        activityIndicator.layer.zPosition = 10
-        self.view.userInteractionEnabled = false
-        self.view.addSubview(activityIndicator)
-    }
-    
-    func hideProcessIndicator() {
-        activityIndicator.stopAnimating()
-        activityIndicator.removeFromSuperview()
-        self.view.userInteractionEnabled = true
-    }
+
     
     func shiftChosenFrameFromIndex(index : Int) {
         // when deselect one image in photoes preview, we need to reshuffule
