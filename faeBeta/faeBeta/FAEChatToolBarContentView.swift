@@ -482,7 +482,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     private func sendVideoFromQuickPicker()
     {
-        self.userInteractionEnabled = false
+        UIScreenSerivce.showActivityIndicator()
+
         let image = self.photoPicker.videoImage!
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
@@ -504,15 +505,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.Failed:
                 print("failed import video: \(exportSession!.error)")
+                break
             case AVAssetExportSessionStatus.Cancelled:
                 print("cancelled import video: \(exportSession!.error)")
+                break
             default:
                 print("completed import video")
                 if let data = NSData(contentsOfURL:fileUrl!){
                     self.delegate.sendVideoData?(data, snapImage:image ,duration:duration)
                 }
-                self.userInteractionEnabled = false
             }
+            UIScreenSerivce.hideActivityIndicator()
         }
     }
     
