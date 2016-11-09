@@ -84,21 +84,16 @@ extension CommentPinViewController {
     }
     
     // Back to comment pin list window when in detail window
-    func actionBackToList(sender: UIButton!) {
+    func actionGoToList(sender: UIButton!) {
         if backJustOnce == true {
             backJustOnce = false
-            UIView.animateWithDuration(0.583, animations:({
-                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-                self.uiviewCommentPinDetail.center.y -= screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
             let openedPinListVC = OpenedPinListViewController()
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .OverCurrentContext
-            self.presentViewController(openedPinListVC, animated: false, completion: nil)
+            self.presentViewController(openedPinListVC, animated: false, completion: {
+                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                self.uiviewCommentPinDetail.center.y -= screenHeight
+            })
         }
     }
     

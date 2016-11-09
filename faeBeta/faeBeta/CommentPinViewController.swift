@@ -129,6 +129,9 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     // Timer for animating heart
     var animatingHeartTimer: NSTimer!
     
+    // Is holding like button or not
+    var likeButtonIsHolding = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()
@@ -363,6 +366,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func animateHeart() {
+        buttonCommentPinLike.tag = 0
         animatingHeart = UIImageView(frame: CGRectMake(0, 0, 26, 22))
         animatingHeart.image = UIImage(named: "commentPinLikeFull")
         animatingHeart.layer.zPosition = 108

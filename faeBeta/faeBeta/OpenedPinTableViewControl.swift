@@ -63,13 +63,6 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.alpha = 0
-        UIView.animateWithDuration(0.583, animations: ({
-            cell.alpha = 1
-        }))
-    }
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
     }

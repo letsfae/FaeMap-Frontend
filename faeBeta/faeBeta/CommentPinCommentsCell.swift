@@ -54,7 +54,7 @@ class CommentPinCommentsCell: UITableViewCell {
         
         self.textViewComment = UITextView()
         self.addSubview(self.textViewComment)
-        self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
         self.textViewComment.editable = false
         self.textViewComment.textContainerInset = UIEdgeInsetsZero
         self.textViewComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
@@ -64,7 +64,7 @@ class CommentPinCommentsCell: UITableViewCell {
         
         self.labelUsername = UILabel()
         self.addSubview(self.labelUsername)
-        self.labelUsername.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        self.labelUsername.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.labelUsername.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         self.labelUsername.textAlignment = .Left
         self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelUsername)

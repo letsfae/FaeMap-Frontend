@@ -22,6 +22,7 @@ class OpenedPinListViewController: UIViewController {
     var delegate: OpenedPinListViewControllerDelegate?
 
     var buttonBackToCommentPinDetail: UIButton!
+    var buttonSubviewBackToMap: UIButton!
     var buttonCommentPinListClear: UIButton!
     var buttonCommentPinListDragToLargeSize: UIButton!
     var commentListExpand = false
@@ -50,19 +51,16 @@ class OpenedPinListViewController: UIViewController {
         if let listArray = readByKey("openedPinList") {
             self.openedPinListArray = listArray as! [Int]
         }
-        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        self.view.addSubview(subviewBackToMap)
-        self.view.sendSubviewToBack(subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSubviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(buttonSubviewBackToMap)
+        self.view.sendSubviewToBack(buttonSubviewBackToMap)
+        buttonSubviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         loadCommentPinList()
         backJustOnce = true
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animateWithDuration(0.583, animations: ({
-            self.subviewTable.center.y += screenHeight
-        }))
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,7 +96,6 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
-        subviewTable.center.y -= screenHeight
         subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
         subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         subviewTable.layer.shadowOpacity = 0.3
@@ -119,7 +116,7 @@ class OpenedPinListViewController: UIViewController {
         // Button: Back to Comment Detail
         buttonBackToCommentPinDetail = UIButton()
         buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-        buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToCommentDetail(_:)), forControlEvents: .TouchUpInside)
+        buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: .TouchUpInside)
         subviewWhite.addSubview(buttonBackToCommentPinDetail)
         subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
         subviewWhite.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)

@@ -15,6 +15,7 @@ extension CommentPinViewController {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
         }
+        
         if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
             sender.tag = 1
             buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
@@ -30,14 +31,9 @@ extension CommentPinViewController {
     }
     
     func actionHoldingLikeButton(sender: UIButton) {
-        if buttonCommentPinLike.tag == 0 {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-            animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
-            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
-        }
-        else if buttonCommentPinLike.tag == 1 {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        }
+        likeButtonIsHolding = true
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Upvote comment pin

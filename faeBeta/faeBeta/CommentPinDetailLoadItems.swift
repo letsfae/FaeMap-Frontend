@@ -46,7 +46,7 @@ extension CommentPinViewController {
         // Button 1: Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
         buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
-        buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinViewController.actionGoToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         subviewWhite.addSubview(buttonBackToCommentPinLists)
         subviewWhite.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
         subviewWhite.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToCommentPinLists)

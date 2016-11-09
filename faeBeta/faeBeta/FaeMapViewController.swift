@@ -343,6 +343,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let marker = userInfo["argumentInt"] as! GMSMarker
             marker.appearAnimation = kGMSMarkerAnimationPop
             marker.groundAnchor = CGPointMake(0.5, 1)
+            marker.zIndex = 0
             marker.map = self.faeMapView
         }
     }
@@ -581,16 +582,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             myPositionOutsideMarker_3.removeFromSuperview()
             myPositionIcon.removeFromSuperview()
         }
-        myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_1.alpha = 1.0
+        myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_1)
         myPositionOutsideMarker_1.layer.zPosition = 0
-        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_2.alpha = 1.0
+        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_2)
         myPositionOutsideMarker_2.layer.zPosition = 0
-        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_3.alpha = 1.0
+        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 35, 35))
@@ -601,22 +599,42 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func myPositionAnimation() {
-        UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
+        UIView.animateWithDuration(2.4, delay: 0, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_1 != nil {
-                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_1.alpha = 0.0
+                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             }
         }), completion: nil)
-        UIView.animateWithDuration(3, delay: 0.8, options: .Repeat, animations: ({
+        
+        UIView.animateWithDuration(1.5, delay: 1.5, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_1 != nil {
+                
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(2.4, delay: 0.8, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_2 != nil {
-                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_2.alpha = 0.0
+                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             }
         }), completion: nil)
-        UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
+
+        UIView.animateWithDuration(1.5, delay: 2.3, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_2 != nil {
+                
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(2.4, delay: 1.6, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_3 != nil {
-                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_3.alpha = 0.0
+                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(1.5, delay: 3.1, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_3 != nil {
+                
             }
         }), completion: nil)
     }

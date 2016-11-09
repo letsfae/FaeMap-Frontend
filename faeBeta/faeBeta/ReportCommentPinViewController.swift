@@ -12,7 +12,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
 
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+    let colorPlaceHolder = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
     
     var buttonBackToCommentDetail: UIButton!
     var imageDescription: UIImageView!

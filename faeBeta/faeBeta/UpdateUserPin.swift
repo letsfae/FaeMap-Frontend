@@ -75,6 +75,7 @@ extension FaeMapViewController {
                                                 fadeAnimation.toValue = 1.0
                                                 fadeAnimation.duration = 1
                                                 pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                                pinShowOnMap.zIndex = 1
                                                 pinShowOnMap.map = self.faeMapView
                                                 self.canDoNextUserUpdate = true
                                             }
@@ -94,6 +95,7 @@ extension FaeMapViewController {
                                                 fadeAnimation.toValue = 1.0
                                                 fadeAnimation.duration = 1
                                                 pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                                pinShowOnMap.zIndex = 1
                                                 pinShowOnMap.map = self.faeMapView
                                                 self.canDoNextUserUpdate = true
                                             }
