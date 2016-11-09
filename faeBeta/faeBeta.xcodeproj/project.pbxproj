@@ -2083,6 +2083,7 @@
 				B064EF201D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B0CFC9AF1CED35D900EC356A /* Transaction.swift in Sources */,
 				DC2D6BD31DC86CBA0092E3D0 /* RegisterInfoViewController.swift in Sources */,
+				B05E2DC01DD24FEE00D6745A /* Key.swift in Sources */,
 				DC2D6BD41DC86CBA0092E3D0 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D531D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,

@@ -68,9 +68,9 @@ class RecentTableViewCell: UITableViewCell {
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
         if (recent["unread_count"].number)!.intValue != 0 {
             counterLabel.hidden = false
-            counterLabel.text = "\(recent["unread_count"].number!.intValue)"
-            if(counterLabel.text?.characters.count == 2){
-                countLabelLength.constant = 25
+            counterLabel.text = recent["unread_count"].number!.intValue > 99 ? "•••" : "\(recent["unread_count"].number!.intValue)"
+            if(counterLabel.text?.characters.count >= 2){
+                countLabelLength.constant = 28
             }else{
                 countLabelLength.constant = 22
             }
@@ -91,6 +91,7 @@ class RecentTableViewCell: UITableViewCell {
         let seconds = NSDate().timeIntervalSinceDate(date!)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
         dateLabel.textColor = counterLabel.hidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+        dateLabel.font = counterLabel.hidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
         if(avatarDic[recent["with_user_id"].number!] == nil){
             getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in

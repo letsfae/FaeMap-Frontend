@@ -24,11 +24,11 @@ extension FaeMapViewController {
             if(status / 100 == 2){
                 if let cacheRecent = result as? NSDictionary {
                     let totalUnread = (cacheRecent["chat"] as! NSNumber).intValue + (cacheRecent["chat_room"] as! NSNumber).intValue
+                    self.labelUnreadMessages.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
+                    
                     if(totalUnread / 10 >= 1){
-                        self.labelUnreadMessages.text = "\(totalUnread)"
                         self.labelUnreadMessages.frame.size.width = 28 //San ge dian dao 30
                     }else{
-                        self.labelUnreadMessages.text = "\(totalUnread)"
                         self.labelUnreadMessages.frame.size.width = 22
                     }
                     
