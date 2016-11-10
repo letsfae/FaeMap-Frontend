@@ -8,10 +8,12 @@
 
 import UIKit
 import SwiftyJSON
+import SDWebImage
 
 extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
+        endEdit()
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
         }
@@ -31,6 +33,7 @@ extension CommentPinViewController {
     }
     
     func actionHoldingLikeButton(sender: UIButton) {
+        endEdit()
         likeButtonIsHolding = true
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
@@ -256,6 +259,7 @@ extension CommentPinViewController {
                 }
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
+                self.getAndSetUserAvatar(self.imageCommentPinUserAvatar, userID: toGetUserName)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
@@ -271,5 +275,17 @@ extension CommentPinViewController {
                 self.textviewCommentPinDetail.text = "\(content)"
             }
         }
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
     }
 }

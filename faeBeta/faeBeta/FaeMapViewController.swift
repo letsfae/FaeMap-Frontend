@@ -287,6 +287,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                         pinData["type"] = typeInfo
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.zIndex = 0
                         }
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
@@ -296,6 +297,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                             print("TESTing far away from")
                             self.markerBackFromCommentDetail = pinShowOnMap
                             pinShowOnMap.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                            pinShowOnMap.zIndex = 2
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
@@ -330,7 +332,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     
                     pinShowOnMap.userData = pinData
                     let delay: Double = Double(arc4random_uniform(50) + 25) / 100
-                    let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
+                    let infoDict: [String: AnyObject] = ["argumentInt": pinShowOnMap]
                     let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
                     self.NSTimerDisplayMarkerArray.append(timer)
                 }
@@ -343,7 +345,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let marker = userInfo["argumentInt"] as! GMSMarker
             marker.appearAnimation = kGMSMarkerAnimationPop
             marker.groundAnchor = CGPointMake(0.5, 1)
-            marker.zIndex = 0
             marker.map = self.faeMapView
         }
     }
@@ -543,6 +544,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     var openedPinListArray = [Int]()
                     openedPinListArray.append(commentIDGet)
                     marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                    marker.zIndex = 2
                     if let listArray = readByKey("openedPinList") {
                         openedPinListArray.removeAll()
                         openedPinListArray = listArray as! [Int]
@@ -683,9 +685,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         print(commentID)
         let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
         self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
+        self.markerBackFromCommentDetail.zIndex = 0
         if let marker = self.mapCommentPinsDic[commentID] {
             self.markerBackFromCommentDetail = marker
             marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+            marker.zIndex = 2
             self.commentIDFromOpenedPinCell = -999
         }
         else {

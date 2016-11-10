@@ -35,10 +35,9 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             let getCommentById = FaeMap()
             getCommentById.getComment("\(commentID)") {(status: Int, message: AnyObject?) in
                 let commentInfoJSON = JSON(message!)
-                //                if let userid = commentInfoJSON["user_id"].int {
-                //                    print(userid)
-                // Next, to get user avatar
-                //                }
+                if let userid = commentInfoJSON["user_id"].int {
+                    self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userid)
+                }
                 print(commentInfoJSON)
                 if let time = commentInfoJSON["created_at"].string {
                     cell.time.text = time.formatFaeDate()

@@ -154,4 +154,13 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
         self.tableOpenedPin.frame.size.height = tableHeight
         self.subviewTable.frame.size.height = subviewTableHeight
     }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+        // Set default based on his or her gender
+        if userAvatar.image == nil{
+            userAvatar.image = UIImage(named: "myAvatorLin")
+        }
+    }
 }

@@ -333,6 +333,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     
     func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
         textViewForCommentPin.endEditing(true)
+        textViewForCommentPin.resignFirstResponder()
     }
     
     func textViewDidChange(textView: UITextView) {

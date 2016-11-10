@@ -106,6 +106,15 @@ class OpenedPinListViewController: UIViewController {
         tableOpenedPin.delegate = self
         tableOpenedPin.dataSource = self
         subviewTable.addSubview(tableOpenedPin)
+        tableOpenedPin.scrollEnabled = false
+        
+        print("DEBUG: opened pin list height")
+        print(tableHeight)
+        print(subviewTableHeight)
+        
+        if tableHeight >= subviewTableHeight {
+            
+        }
         
         // Line at y = 64
         uiviewCommentPinListUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))

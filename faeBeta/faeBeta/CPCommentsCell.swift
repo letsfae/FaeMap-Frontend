@@ -8,14 +8,16 @@
 
 import UIKit
 
-protocol CommentPinCommentsCellDelegate {
+protocol CPCommentsCellDelegate {
     // Reply to this user
     func showActionSheetFromCommentPinCell(username: String)
+    // CancelTimerForTouchingCell
+    func cancelTouchToReplyTimerFromCommentPinCell(cancel: Bool)
 }
 
-class CommentPinCommentsCell: UITableViewCell {
+class CPCommentsCell: UITableViewCell {
     
-    var delegate: CommentPinCommentsCellDelegate?
+    var delegate: CPCommentsCellDelegate?
     
     var imageViewAvatar: UIImageView!
     
@@ -27,6 +29,8 @@ class CommentPinCommentsCell: UITableViewCell {
     var labelVoteCount: UILabel!
     var labelLikeCount: UILabel!
     var labelShareCount: UILabel!
+    
+    var buttonForWholeCell: UIButton!
     
     var textViewComment: UITextView!
     
@@ -56,6 +60,7 @@ class CommentPinCommentsCell: UITableViewCell {
         self.addSubview(self.textViewComment)
         self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
         self.textViewComment.editable = false
+        self.textViewComment.userInteractionEnabled = false
         self.textViewComment.textContainerInset = UIEdgeInsetsZero
         self.textViewComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         self.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: textViewComment)
@@ -78,13 +83,13 @@ class CommentPinCommentsCell: UITableViewCell {
         self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelTimestamp)
         self.addConstraintsWithFormat("V:|-36-[v0(20)]", options: [], views: labelTimestamp)
         
+        /*
         // Main buttons container of comment pin detail
         self.uiviewCommentActionButtons = UIView()
         self.addSubview(uiviewCommentActionButtons)
         self.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentActionButtons)
         self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: uiviewCommentActionButtons)
         
-        /*
         // Label of Share Count
         self.labelShareCount = UILabel()
         self.labelShareCount.text = "0"
@@ -140,19 +145,31 @@ class CommentPinCommentsCell: UITableViewCell {
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonLike)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonLike)
         */
+        
+        self.buttonForWholeCell = UIButton()
+        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), forControlEvents: .TouchDown)
+        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.cancelTouchToReplyTimer(_:)), forControlEvents: [.TouchUpInside, .TouchUpOutside])
+        self.addSubview(buttonForWholeCell)
+        self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
+        self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
+        
         // Button 6: Add Comment
         self.buttonShare = UIButton()
         self.buttonShare.setImage(UIImage(named: "commentPinForwardHollow"), forState: .Normal)
 //        self.buttonShare.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonShare.addTarget(self, action: #selector(CommentPinCommentsCell.showActionSheet(_:)), forControlEvents: .TouchUpInside)
-        self.uiviewCommentActionButtons.addSubview(buttonShare)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonShare)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonShare)
+        self.buttonShare.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), forControlEvents: .TouchUpInside)
+        self.addSubview(buttonShare)
+        self.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonShare)
+        self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: buttonShare)
     }
     
     func showActionSheet(sender: UIButton) {
         if let username = labelUsername.text {
             self.delegate?.showActionSheetFromCommentPinCell(username)
         }
+    }
+    
+    func cancelTouchToReplyTimer(sender: UIButton) {
+        self.delegate?.cancelTouchToReplyTimerFromCommentPinCell(true)
     }
 }
