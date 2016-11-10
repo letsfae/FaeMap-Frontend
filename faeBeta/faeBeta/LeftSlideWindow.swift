@@ -202,4 +202,90 @@ extension FaeMapViewController {
         })
     }
     
+    func switchToInvisibleOrOnline(sender: UISwitch) {
+        let switchToInvisible = FaeUser()
+        if (sender.on == true){
+            print("sender.on")
+            switchToInvisible.whereKey("status", value: "5")
+            switchToInvisible.setSelfStatus({ (status, message) in
+                if status / 100 == 2 {
+                    userStatus = 5
+                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
+                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    print("Successfully switch to invisible")
+                    if userStatus == 5 {
+                        self.faeMapView.myLocationEnabled = true
+                        if self.myPositionOutsideMarker_1 != nil {
+                            self.myPositionOutsideMarker_1.hidden = true
+                        }
+                        if self.myPositionOutsideMarker_2 != nil {
+                            self.myPositionOutsideMarker_2.hidden = true
+                        }
+                        if self.myPositionOutsideMarker_3 != nil {
+                            self.myPositionOutsideMarker_3.hidden = true
+                        }
+                        if self.myPositionIcon != nil {
+                            self.myPositionIcon.hidden = true
+                        }
+                    }
+                }
+                else {
+                    print("Fail to switch to invisible")
+                }
+            })
+        }
+        else{
+            print("sender.off")
+            switchToInvisible.whereKey("status", value: "1")
+            switchToInvisible.setSelfStatus({ (status, message) in
+                if status / 100 == 2 {
+                    userStatus = 1
+                    self.actionSelfPosition(self.buttonSelfPosition)
+                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
+                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    print("Successfully switch to online")
+                }
+                else {
+                    print("Fail to switch to online")
+                }
+            })
+        }
+    }
+    
+    func userIsInactive() {
+        let userIsInactive = FaeUser()
+        userIsInactive.whereKey("status", value: "0")
+        userIsInactive.setSelfStatus({ (status, message) in
+            if status / 100 == 2 {
+                print("Successfully set user to offline")
+            }
+            else {
+                print("Fail to switch to offline")
+            }
+        })
+    }
+    
+    func userIsActive(status: Int) {
+        let userIsInactive = FaeUser()
+        userIsInactive.whereKey("status", value: "\(status)")
+        userIsInactive.setSelfStatus({ (status, message) in
+            if status / 100 == 2 {
+                print("Successfully set user to offline")
+            }
+            else {
+                print("Fail to switch to offline")
+            }
+        })
+    }
+    
+    func getUserStatus() -> Int {
+        let storageForUserStatus = LocalStorageManager()
+        if let user_status = storageForUserStatus.readByKey("userStatus") {
+            userStatus = user_status as! Int
+            self.userIsActive(userStatus)
+            return userStatus
+        }
+        return -999
+    }
+    
 }

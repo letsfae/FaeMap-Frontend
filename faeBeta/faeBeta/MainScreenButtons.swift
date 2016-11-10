@@ -88,10 +88,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonPinOnMap)
-//        buttonPinOnMapInside = UIButton(frame: CGRectMake(344, 666, 38, 40))
-//        buttonPinOnMapInside.setImage(UIImage(named: "set_pin_on_map_inside"), forState: .Normal)
-//        buttonPinOnMapInside.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(buttonPinOnMapInside)
         buttonPinOnMap.layer.zPosition = 500
     }
     
@@ -105,7 +101,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
             currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
-            if isInPinLocationSelect == false {
+            if userStatus != 5  {
                 loadPositionAnimateImage()
                 getSelfAccountInfo()
             }

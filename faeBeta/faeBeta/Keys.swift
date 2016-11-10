@@ -35,7 +35,7 @@ var showGender = true
 var showAge = true
 var userAge : Int?
 
-var userStatus : Int?
+var userStatus: Int = -999
 var userStatusMessage : String?
 
 var userFirstname : String?

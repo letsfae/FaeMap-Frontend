@@ -138,7 +138,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     var collectionPhotos : UICollectionView!
     var buttonChat : UIButton!
     var buttonMore : UIButton!
-    
     var tagName = [String]()
     var tagButtonSet = [UIButton]()
     var selectedButtonSet = [UIButton]()
@@ -151,46 +150,22 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     let lineInterval : CGFloat = 25.7
     let intervalInLine : CGFloat = 13.8
     let tagHeight : CGFloat = 18
-    
     var openUserPinActive = false
     var currentViewingUserId = 1
-    
-    // Map User Pin
-    var mapUserPinsDic = [Int: GMSMarker]()
-    
-    // Map Comment Pin
-    var mapCommentPinsDic = [Int: GMSMarker]()
-    
-    // New Comment Pin Popup Window
-    
-    var commentIdToPassBySegue: Int = -999
-    
-    // Comment on pin input toolbar
-//    var commentInputToolbar: JSQMessagesInputToolbarCustom!
-    
+    var mapUserPinsDic = [Int: GMSMarker]() // Map User Pin
+    var mapCommentPinsDic = [Int: GMSMarker]() // Map Comment Pin
+    var commentIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var markerMask: UIView! // mask to prevent UI action
-    
     var NSTimerDisplayMarkerArray = [NSTimer]()
+    var markerBackFromCommentDetail = GMSMarker() // Marker saved for back from comment pin detail view
+    private let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()// Local Storage for storing opened pin id, for opened pin list use
+    var canDoNextUserUpdate = true // Prevent updating user on map more than once
+    var commentIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
+    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    var buttonCloseUserPinSubview: UIButton! // button to close user pin view
     
-    // Marker saved for back from comment pin detail view
-    var markerBackFromCommentDetail = GMSMarker()
     
-    // Local Storage for storing opened pin id, for opened pin list use
-    private let storageForOpenedPinList = NSUserDefaults.standardUserDefaults()
-    
-    // Prevent updating user on map more than once
-    var canDoNextUserUpdate = true
-    
-    // Determine if this pinID should change to heavy shadow style
-    var commentIDFromOpenedPinCell = -999
-    
-    // A boolean var to control if user can open another pin, basically,
-    // user cannot open if one pin is under opening process
-    var canOpenAnotherPin = true
-    
-    // button to close user pin view
-    var buttonCloseUserPinSubview: UIButton!
     
     // System Functions
     override func viewDidLoad() {
@@ -203,6 +178,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
         myPositionIconFirstLoaded = true
+        getUserStatus()
         
         loadMapView()
         loadTransparentNavBarItems()
@@ -214,6 +190,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         let emptyArrayList = [Int]()
         self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
+        
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -236,7 +216,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         print("Will appear loaded")
-        actionSelfPosition(buttonSelfPosition)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -249,7 +228,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        self.buttonRightTop.hidden = true // -> Not for 11.01 Dev
         // Need a Comment Clearance??????
         self.navigationController?.navigationBar.translucent = false
-        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -261,6 +239,30 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
     }
     
+    // Testing back from background
+    func appBackFromBackground() {
+        self.actionSelfPosition(buttonSelfPosition)
+        print("App back from background!")
+    }
+    
+    // Testing move to background, with timer
+    func testingJumpToBackground() {
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        dispatch_async(backgroundQueue, {
+            print("This is run on the background queue")
+            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(FaeMapViewController.printsth), userInfo: nil, repeats: false)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                print("This is run on the main queue, after the previous code in outer block")
+            })
+        })
+    }
+    
+    func printsth() {
+        print("timer awake!")
+    }
+    ////////////////////////////////
+    
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
@@ -270,7 +272,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "5000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
-//        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
+        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
             let mapInfoJSON = JSON(message!)
             for eachTimer in self.NSTimerDisplayMarkerArray {
@@ -380,7 +382,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func loadMapView() {
         let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        faeMapView.myLocationEnabled = false
         faeMapView.delegate = self
         self.view = faeMapView
         locManager.delegate = self
@@ -409,6 +410,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             updateSelfLocation()
         }
         
+        if userStatus == 5 {
+            return
+        }
+        
         if let location = locations.last {
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
@@ -426,18 +431,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             hideOpenUserPinAnimation()
             openUserPinActive = false
         }
-        // Testing user marker appear animation
-//        let point = CLLocationCoordinate2DMake(currentLatitude+0.001, currentLongitude)
-//        let pinShowOnMap = GMSMarker()
-//        pinShowOnMap.position = point
-//        pinShowOnMap.icon = UIImage(named: "avatar_\(4)")
-//        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-//        fadeAnimation.fromValue = 0.0
-//        fadeAnimation.toValue = 1.0
-//        fadeAnimation.duration = 1
-//        pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
-//        pinShowOnMap.map = self.faeMapView
-        // End Testing Above Code
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
@@ -445,7 +438,34 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let direction: CGFloat = CGFloat(directionMap)
         let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransformMakeRotation(angle)
-        
+        if userStatus == 5 {
+            self.faeMapView.myLocationEnabled = true
+            if myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.hidden = true
+            }
+            if myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.hidden = true
+            }
+            if myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.hidden = true
+            }
+            if myPositionIcon != nil {
+                self.myPositionIcon.hidden = true
+            }
+            return
+        }
+        if self.myPositionOutsideMarker_1 != nil {
+            self.myPositionOutsideMarker_1.hidden = false
+        }
+        if self.myPositionOutsideMarker_2 != nil {
+            self.myPositionOutsideMarker_2.hidden = false
+        }
+        if self.myPositionOutsideMarker_3 != nil {
+            self.myPositionOutsideMarker_3.hidden = false
+        }
+        if self.myPositionIcon != nil {
+            self.myPositionIcon.hidden = false
+        }
         if startUpdatingLocation {
             currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
@@ -579,18 +599,57 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             myPositionIconFirstLoaded = false
         }
         else {
-            myPositionOutsideMarker_1.removeFromSuperview()
-            myPositionOutsideMarker_2.removeFromSuperview()
-            myPositionOutsideMarker_3.removeFromSuperview()
-            myPositionIcon.removeFromSuperview()
+            if myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.removeFromSuperview()
+            }
+            if myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.removeFromSuperview()
+            }
+            if myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.removeFromSuperview()
+            }
+            if myPositionIcon != nil {
+                self.myPositionIcon.removeFromSuperview()
+            }
+        }
+        if userStatus == 5 {
+            self.faeMapView.myLocationEnabled = true
+            if myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.hidden = true
+            }
+            if myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.hidden = true
+            }
+            if myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.hidden = true
+            }
+            if myPositionIcon != nil {
+                self.myPositionIcon.hidden = true
+            }
+            return
+        }
+        else {
+            self.faeMapView.myLocationEnabled = false
+            if self.myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.hidden = false
+            }
+            if self.myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.hidden = false
+            }
+            if self.myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.hidden = false
+            }
+            if self.myPositionIcon != nil {
+                self.myPositionIcon.hidden = false
+            }
         }
         myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
+        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
+        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_1)
         myPositionOutsideMarker_1.layer.zPosition = 0
-        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_2)
         myPositionOutsideMarker_2.layer.zPosition = 0
-        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 35, 35))
@@ -661,6 +720,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 userUserName = userName
             }
             if let miniAvatar = selfUserInfoJSON["mini_avatar"].int {
+                if userStatus == 5 {
+                    return 
+                }
                 userMiniAvatar = miniAvatar
                 self.myPositionOutsideMarker_1.image = UIImage(named: "myPosition_outside")
                 self.myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")

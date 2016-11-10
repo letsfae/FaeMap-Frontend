@@ -43,6 +43,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.mapChatTable {
             let cell = tableView.dequeueReusableCellWithIdentifier("mapChatTableCell", forIndexPath: indexPath) as! MapChatTableCell
+            cell.selectionStyle = .None
             cell.layoutMargins = UIEdgeInsetsMake(0, 84, 0, 0)
             return cell
         }
@@ -51,9 +52,15 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .None
             if indexPath.row == 0 {
                 cell.switchInvisible.hidden = false
+                let checkUserStatus = self.getUserStatus()
+                print("DEBUG getUserStatus")
+                print(checkUserStatus)
+                if checkUserStatus == 5 {
+                    cell.switchInvisible.setOn(true, animated: false)
+                }
                 cell.labelTitle.text = "Go Invisible"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell0")
-                
+                cell.switchInvisible.addTarget(self, action: #selector(self.switchToInvisibleOrOnline(_:)), forControlEvents: .ValueChanged)
             } else if indexPath.row == 1 {
                 cell.labelTitle.text = "Mood Avatar"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell1")
@@ -144,7 +151,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             return 0
         }
     }
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        
-    }
+    
+    
 }

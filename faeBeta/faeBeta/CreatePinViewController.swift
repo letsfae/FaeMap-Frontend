@@ -407,7 +407,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
         postSingleComment.whereKey("content", value: commentContent)
-        postSingleComment.whereKey("duration", value: "180")
+        postSingleComment.whereKey("duration", value: "5")
         
         postSingleComment.postComment{(status: Int, message: AnyObject?) in
             if let getMessage = message {
