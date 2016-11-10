@@ -211,7 +211,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadNamecard()
         loadPositionAnimateImage()
-//        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         let emptyArrayList = [Int]()
         self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
     }

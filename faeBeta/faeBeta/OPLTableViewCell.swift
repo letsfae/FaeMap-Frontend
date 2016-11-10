@@ -15,7 +15,7 @@ protocol OpenedPinTableViewCellDelegate {
     func deleteThisCellCalledFromDelegate(indexPath: NSIndexPath)
 }
 
-class OpenedPinTableViewCell: UITableViewCell {
+class OPLTableViewCell: UITableViewCell {
  
     var delegate: OpenedPinTableViewCellDelegate?
     
@@ -42,7 +42,8 @@ class OpenedPinTableViewCell: UITableViewCell {
     
     func loadAvatar() {
         imageViewAvatar = UIImageView(frame: CGRect(x: 14, y: 13, width: 50, height: 50))
-        imageViewAvatar.image = UIImage(named: "avatar_expand_no")
+        imageViewAvatar.layer.cornerRadius = 25
+        imageViewAvatar.clipsToBounds = true
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true
         self.addConstraintsWithFormat("H:|-14-[v0(50)]", options: [], views: imageViewAvatar)
@@ -74,14 +75,14 @@ class OpenedPinTableViewCell: UITableViewCell {
         self.addSubview(deleteButton)
         self.addConstraintsWithFormat("H:[v0(100)]-(-27)-|", options: [], views: deleteButton)
         self.addConstraintsWithFormat("V:|-14-[v0(48)]", options: [], views: deleteButton)
-        deleteButton.addTarget(self, action: #selector(OpenedPinTableViewCell.deleteThisCell(_:)), forControlEvents: .TouchUpInside)
+        deleteButton.addTarget(self, action: #selector(OPLTableViewCell.deleteThisCell(_:)), forControlEvents: .TouchUpInside)
         deleteButton.enabled = false
         
         jumpToDetail = UIButton(frame: CGRect(x: 0, y: 3, width: 341, height: 70))
         self.addSubview(jumpToDetail)
         self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth-73))]", options: [], views: jumpToDetail)
         self.addConstraintsWithFormat("V:|-3-[v0(70)]", options: [], views: jumpToDetail)
-        jumpToDetail.addTarget(self, action: #selector(OpenedPinTableViewCell.jumpToDetailAndAnimate(_:)), forControlEvents: .TouchUpInside)
+        jumpToDetail.addTarget(self, action: #selector(OPLTableViewCell.jumpToDetailAndAnimate(_:)), forControlEvents: .TouchUpInside)
         jumpToDetail.enabled = false
     }
     

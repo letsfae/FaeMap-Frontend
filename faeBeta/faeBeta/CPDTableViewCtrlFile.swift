@@ -49,13 +49,12 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
             if let content = dictCell["content"].string {
                 cell.textViewComment.text = content
             }
-            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
             cell.separatorInset = UIEdgeInsetsZero
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
         }
         else if tableView == self.tableViewPeople {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinPeopleCell", forIndexPath: indexPath) as! OpenedPinTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinPeopleCell", forIndexPath: indexPath) as! OPLTableViewCell
             let userID = Array(dictPeopleOfCommentDetail.keys)[indexPath.row]
             let latestDate = dictPeopleOfCommentDetail[userID]
             let getUserName = FaeUser()

@@ -372,6 +372,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
                 textViewForCommentPin.resignFirstResponder()
                 return false
             }
+            return textView.text.characters.count + (text.characters.count - range.length) <= 200
         }
         return true
     }

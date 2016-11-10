@@ -83,7 +83,7 @@ extension CommentPinViewController {
         
         // Textview of comment pin detail
         textviewCommentPinDetail = UITextView(frame: CGRectMake(27, 75, textViewWidth, 100))
-        textviewCommentPinDetail.text = "Content"
+        textviewCommentPinDetail.text = ""
         textviewCommentPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewCommentPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewCommentPinDetail.userInteractionEnabled = true
@@ -265,7 +265,9 @@ extension CommentPinViewController {
         
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
-        imageCommentPinUserAvatar.image = UIImage(named: "commentPinSampleAvatar")
+        imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
+        imageCommentPinUserAvatar.layer.cornerRadius = 25
+        imageCommentPinUserAvatar.clipsToBounds = true
         commentDetailFullBoardScrollView.addSubview(imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
@@ -282,7 +284,7 @@ extension CommentPinViewController {
         
         // Timestamp of comment pin detail
         labelCommentPinTimestamp = UILabel()
-        labelCommentPinTimestamp.text = "Time"
+        labelCommentPinTimestamp.text = ""
         labelCommentPinTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelCommentPinTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         labelCommentPinTimestamp.textAlignment = .Left
@@ -318,7 +320,7 @@ extension CommentPinViewController {
         tableViewPeople.dataSource = self
         tableViewPeople.allowsSelection = false
         tableViewPeople.delaysContentTouches = false
-        tableViewPeople.registerClass(OpenedPinTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
+        tableViewPeople.registerClass(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
         tableViewPeople.scrollEnabled = false
         //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
         //                tableCommentsForComment.layer.borderWidth = 1.0

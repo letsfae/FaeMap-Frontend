@@ -27,7 +27,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.tableOpenedPin {
-            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OpenedPinTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OPLTableViewCell
             cell.delegate = self
             let commentID = openedPinListArray[indexPath.row]
             cell.commentID = commentID

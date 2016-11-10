@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
+import SDWebImage
 
 protocol OpenedPinListViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
@@ -102,7 +103,7 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.layer.shadowRadius = 10.0
         
         tableOpenedPin = UITableView(frame: CGRectMake(0, 0, screenWidth, tableHeight))
-        tableOpenedPin.registerClass(OpenedPinTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
+        tableOpenedPin.registerClass(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
         tableOpenedPin.delegate = self
         tableOpenedPin.dataSource = self
         subviewTable.addSubview(tableOpenedPin)
@@ -166,5 +167,56 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
         subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
         NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.subviewWhite, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
+    }
+    
+    func cropToBounds(image: UIImage) -> UIImage {
+        
+        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
+        
+        let contextSize: CGSize = contextImage.size
+        
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(contextSize.width)
+        var cgheight: CGFloat = CGFloat(contextSize.height)
+        
+        print("DEBUG: cgwidth cgheight")
+        print(cgwidth)
+        print(cgheight)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
+        
+        // Create bitmap image from context using the rect
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage!, rect)!
+        
+        // Create a new image based on the imageRef and rotate back to the original orientation
+        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        
+        return image
     }
 }

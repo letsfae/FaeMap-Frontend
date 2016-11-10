@@ -53,6 +53,8 @@ class CPCommentsCell: UITableViewCell {
     func loadCellContent() {
         self.imageViewAvatar = UIImageView()
         self.addSubview(self.imageViewAvatar)
+        self.imageViewAvatar.layer.cornerRadius = 19.5
+        self.imageViewAvatar.clipsToBounds = true
         self.addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imageViewAvatar)
 //        self.addConstraintsWithFormat("V:|-15-[v0(39)]", options: [], views: imageViewAvatar)
         

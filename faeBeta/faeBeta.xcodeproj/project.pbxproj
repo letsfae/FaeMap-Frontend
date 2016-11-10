@@ -444,9 +444,7 @@
 		B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
-		B839AA231DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OpenedPinTableViewCell.swift */; };
-		B839AA241DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OpenedPinTableViewCell.swift */; };
-		B839AA251DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OpenedPinTableViewCell.swift */; };
+		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
 		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
 		B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
 		B8490EF11DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
@@ -504,8 +502,6 @@
 		B8C4A9721DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
 		B8C4A9731DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
 		B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
-		B8C7410E1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
-		B8C7410F1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
 		B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
 		B8C741121DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
 		B8C741131DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
@@ -572,8 +568,6 @@
 		DC4334141DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
 		DC4334151DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
 		DC477A5F1DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */; };
-		DC477A601DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */; };
-		DC477A611DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */; };
 		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
 		DC4EC3641DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
 		DC4EC3651DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
@@ -817,7 +811,7 @@
 		B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingFunctions.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
-		B839AA221DC95B2D00E315DF /* OpenedPinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinTableViewCell.swift; sourceTree = "<group>"; };
+		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
 		B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReturnFromTapAtMarker.swift; sourceTree = "<group>"; };
 		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
@@ -1373,7 +1367,7 @@
 			children = (
 				B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */,
 				B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */,
-				B839AA221DC95B2D00E315DF /* OpenedPinTableViewCell.swift */,
+				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
 			name = OpenedPinListExtension;
 			sourceTree = "<group>";
@@ -1911,7 +1905,7 @@
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
 				B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */,
-				B839AA231DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */,
+				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
 				B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
@@ -2071,7 +2065,6 @@
 				8660BBF11D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B00EC3DA1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B064EF2D1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
-				B8C7410E1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */,
 				DC2D6BD61DC86CBA0092E3D0 /* EnableNotificationViewController.swift in Sources */,
 				DC2D6BE01DC86CD60092E3D0 /* PasswordAgainTextField.swift in Sources */,
 				B0CFC9BF1CED42A800EC356A /* Verification.swift in Sources */,
@@ -2099,7 +2092,6 @@
 				B030CC5E1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
-				DC477A601DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */,
 				B8F98EDD1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				DC2D6BD21DC86CBA0092E3D0 /* RegisterPasswordViewController.swift in Sources */,
 				B0714D621D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
@@ -2148,7 +2140,6 @@
 				B0CFC99F1CED342000EC356A /* Keys.swift in Sources */,
 				B817495D1DD3C5C2006C44DF /* CPDInputToolbar.swift in Sources */,
 				B064EF5C1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
-				B839AA241DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */,
 				B0BF35731D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				DC2D6BD91DC86CBA0092E3D0 /* SignInSupportNewPassViewController.swift in Sources */,
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
@@ -2270,7 +2261,6 @@
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
-				B839AA251DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
@@ -2321,7 +2311,6 @@
 				B817495A1DD3C4CB006C44DF /* ViewController.swift in Sources */,
 				B0714D6C1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				DC2D6BDC1DC86CBA0092E3D0 /* WelcomeViewController.swift in Sources */,
-				DC477A611DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */,
 				DC74CE1A1DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B817495B1DD3C53D006C44DF /* chatHTTPClient.swift in Sources */,
 				B0714D481D5E435200356705 /* CustomSearchBar.swift in Sources */,
@@ -2340,7 +2329,6 @@
 				B064EF511D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0714D691D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B064EF341D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
-				B8C7410F1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */,
 				B8A3BF5C1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				B0714D571D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B84E1A5B1DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
