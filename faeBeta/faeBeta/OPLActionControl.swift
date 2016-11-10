@@ -126,10 +126,10 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
     // Reset comment pin list window and remove all saved data
     func actionClearCommentPinList(sender: UIButton) {
         self.openedPinListArray.removeAll()
-        let emptyArrayList = [Int]()
-        self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
+        self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
         self.tableOpenedPin.frame.size.height = 0
         self.tableOpenedPin.reloadData()
+        actionBackToMap(buttonSubviewBackToMap)
     }
     
     func passCL2DLocationToOpenedPinList(coordinate: CLLocationCoordinate2D, commentID: Int) {
@@ -140,6 +140,7 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
     
     func deleteThisCellCalledFromDelegate(indexPath: NSIndexPath) {
         self.openedPinListArray.removeAtIndex(indexPath.row)
+        self.storageForOpenedPinList.setObject(openedPinListArray, forKey: "openedPinList")
         self.tableOpenedPin.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
         var subviewTableHeight = tableHeight + 28
@@ -153,4 +154,6 @@ extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
         self.tableOpenedPin.frame.size.height = tableHeight
         self.subviewTable.frame.size.height = subviewTableHeight
     }
+    
+    
 }

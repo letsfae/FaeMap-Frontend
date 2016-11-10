@@ -27,7 +27,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.tableOpenedPin {
-            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OpenedPinTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OPLTableViewCell
             cell.delegate = self
             let commentID = openedPinListArray[indexPath.row]
             cell.commentID = commentID
@@ -35,10 +35,9 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             let getCommentById = FaeMap()
             getCommentById.getComment("\(commentID)") {(status: Int, message: AnyObject?) in
                 let commentInfoJSON = JSON(message!)
-                //                if let userid = commentInfoJSON["user_id"].int {
-                //                    print(userid)
-                // Next, to get user avatar
-                //                }
+                if let userid = commentInfoJSON["user_id"].int {
+                    self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userid)
+                }
                 print(commentInfoJSON)
                 if let time = commentInfoJSON["created_at"].string {
                     cell.time.text = time.formatFaeDate()
@@ -61,13 +60,6 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         else {
             return UITableViewCell()
         }
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.alpha = 0
-        UIView.animateWithDuration(0.583, animations: ({
-            cell.alpha = 1
-        }))
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -211,7 +211,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadNamecard()
         loadPositionAnimateImage()
-//        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         let emptyArrayList = [Int]()
         self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
     }
@@ -287,6 +287,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                         pinData["type"] = typeInfo
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.zIndex = 0
                         }
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
@@ -296,6 +297,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                             print("TESTing far away from")
                             self.markerBackFromCommentDetail = pinShowOnMap
                             pinShowOnMap.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                            pinShowOnMap.zIndex = 2
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
@@ -330,7 +332,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     
                     pinShowOnMap.userData = pinData
                     let delay: Double = Double(arc4random_uniform(50) + 25) / 100
-                    let infoDict : [String : AnyObject] = ["argumentInt": pinShowOnMap]
+                    let infoDict: [String: AnyObject] = ["argumentInt": pinShowOnMap]
                     let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
                     self.NSTimerDisplayMarkerArray.append(timer)
                 }
@@ -542,6 +544,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     var openedPinListArray = [Int]()
                     openedPinListArray.append(commentIDGet)
                     marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                    marker.zIndex = 2
                     if let listArray = readByKey("openedPinList") {
                         openedPinListArray.removeAll()
                         openedPinListArray = listArray as! [Int]
@@ -581,16 +584,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             myPositionOutsideMarker_3.removeFromSuperview()
             myPositionIcon.removeFromSuperview()
         }
-        myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_1.alpha = 1.0
+        myPositionOutsideMarker_1 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_1)
         myPositionOutsideMarker_1.layer.zPosition = 0
-        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_2.alpha = 1.0
+        myPositionOutsideMarker_2 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_2)
         myPositionOutsideMarker_2.layer.zPosition = 0
-        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2, screenHeight/2, 0, 0))
-        self.myPositionOutsideMarker_3.alpha = 1.0
+        myPositionOutsideMarker_3 = UIImageView(frame: CGRectMake(screenWidth/2-12, screenHeight/2-12, 24, 24))
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
         myPositionIcon = UIButton(frame: CGRectMake(screenWidth/2-12, screenHeight/2-20, 35, 35))
@@ -601,22 +601,42 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func myPositionAnimation() {
-        UIView.animateWithDuration(3, delay: 0, options: .Repeat, animations: ({
+        UIView.animateWithDuration(2.4, delay: 0, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_1 != nil {
-                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_1.alpha = 0.0
+                self.myPositionOutsideMarker_1.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             }
         }), completion: nil)
-        UIView.animateWithDuration(3, delay: 0.8, options: .Repeat, animations: ({
+        
+        UIView.animateWithDuration(1.5, delay: 1.5, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_1 != nil {
+                
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(2.4, delay: 0.8, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_2 != nil {
-                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_2.alpha = 0.0
+                self.myPositionOutsideMarker_2.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
             }
         }), completion: nil)
-        UIView.animateWithDuration(3, delay: 1.6, options: .Repeat, animations: ({
+
+        UIView.animateWithDuration(1.5, delay: 2.3, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_2 != nil {
+                
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(2.4, delay: 1.6, options: [.Repeat, .CurveEaseIn], animations: ({
             if self.myPositionOutsideMarker_3 != nil {
-                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
                 self.myPositionOutsideMarker_3.alpha = 0.0
+                self.myPositionOutsideMarker_3.frame = CGRectMake(self.screenWidth/2-60, self.screenHeight/2-60, 120, 120)
+            }
+        }), completion: nil)
+
+        UIView.animateWithDuration(1.5, delay: 3.1, options: [.Repeat, .CurveEaseIn], animations: ({
+            if self.myPositionOutsideMarker_3 != nil {
+                
             }
         }), completion: nil)
     }
@@ -665,9 +685,11 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         print(commentID)
         let camera = GMSCameraPosition.cameraWithTarget(coordinate, zoom: 17)
         self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
+        self.markerBackFromCommentDetail.zIndex = 0
         if let marker = self.mapCommentPinsDic[commentID] {
             self.markerBackFromCommentDetail = marker
             marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+            marker.zIndex = 2
             self.commentIDFromOpenedPinCell = -999
         }
         else {

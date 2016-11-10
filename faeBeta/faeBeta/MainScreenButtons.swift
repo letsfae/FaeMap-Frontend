@@ -188,6 +188,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                         pinData["type"] = typeInfo
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.zIndex = 0
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {

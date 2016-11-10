@@ -84,26 +84,23 @@ extension CommentPinViewController {
     }
     
     // Back to comment pin list window when in detail window
-    func actionBackToList(sender: UIButton!) {
+    func actionGoToList(sender: UIButton!) {
+        endEdit()
         if backJustOnce == true {
             backJustOnce = false
-            UIView.animateWithDuration(0.583, animations:({
-                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-                self.uiviewCommentPinDetail.center.y -= screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
             let openedPinListVC = OpenedPinListViewController()
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .OverCurrentContext
-            self.presentViewController(openedPinListVC, animated: false, completion: nil)
+            self.presentViewController(openedPinListVC, animated: false, completion: {
+                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                self.uiviewCommentPinDetail.center.y -= screenHeight
+            })
         }
     }
     
     // Show more options button in comment pin detail window
     func showCommentPinMoreButtonDetails(sender: UIButton!) {
+        endEdit()
         if buttonMoreOnCommentCellExpanded == false {
             buttonFakeTransparentClosingView = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
             buttonFakeTransparentClosingView.layer.zPosition = 101
@@ -292,6 +289,7 @@ extension CommentPinViewController {
     }
     
     func actionBackToMap(sender: UIButton) {
+        endEdit()
         inputToolbar.hidden = true
         controlBoard.removeFromSuperview()
         UIView.animateWithDuration(0.583, animations: ({
@@ -308,6 +306,7 @@ extension CommentPinViewController {
     // When clicking reply button in comment pin detail window
     func actionReplyToThisComment(sender: UIButton) {
         if sender.tag == 1 {
+            endEdit()
             sender.tag = 0
             buttonCommentPinDetailDragToLargeSize.tag = 0
             self.inputToolbar.hidden = true
@@ -425,5 +424,30 @@ extension CommentPinViewController {
                 
             }
         })
+    }
+    
+    func actionShowActionSheet(username: String) {
+        let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .ActionSheet)
+        menu.view.tintColor = colorFae
+        let writeReply = UIAlertAction(title: "Write a Reply", style: .Default) { (alert: UIAlertAction) in
+            self.inputToolbar.hidden = false
+            self.inputToolbar.contentView.textView.text = "@\(username) "
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+            self.lableTextViewPlaceholder.hidden = true
+        }
+        let report = UIAlertAction(title: "Report", style: .Default) { (alert: UIAlertAction) in
+            self.actionReportThisPin(self.buttonReportOnCommentDetail)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction) in
+            
+        }
+        menu.addAction(writeReply)
+        menu.addAction(report)
+        menu.addAction(cancel)
+        self.presentViewController(menu, animated: true, completion: nil)
+    }
+    
+    func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
+        endEdit()
     }
 }

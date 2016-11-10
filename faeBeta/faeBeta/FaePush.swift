@@ -26,12 +26,11 @@ class FaePush: NSObject {
     }
 
     func getSync(completion:(Int,AnyObject?)->Void){
-        print(headerAuthentication())
-        getFromURL("sync", parameter:nil, authentication: headerAuthentication()){ (status:Int, message:AnyObject?) in
-
-            print(message)
+//        print(headerAuthentication())
+        getFromURL("sync", parameter: nil, authentication: headerAuthentication()) {(status: Int, message: AnyObject?) in
+//            print(message)
             //self.clearKeyValue()
-            completion(status,message);
+            completion(status, message);
         }
     }
 }

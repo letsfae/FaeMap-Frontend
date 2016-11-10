@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
+import SDWebImage
 
 protocol OpenedPinListViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
@@ -22,6 +23,7 @@ class OpenedPinListViewController: UIViewController {
     var delegate: OpenedPinListViewControllerDelegate?
 
     var buttonBackToCommentPinDetail: UIButton!
+    var buttonSubviewBackToMap: UIButton!
     var buttonCommentPinListClear: UIButton!
     var buttonCommentPinListDragToLargeSize: UIButton!
     var commentListExpand = false
@@ -50,19 +52,16 @@ class OpenedPinListViewController: UIViewController {
         if let listArray = readByKey("openedPinList") {
             self.openedPinListArray = listArray as! [Int]
         }
-        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        self.view.addSubview(subviewBackToMap)
-        self.view.sendSubviewToBack(subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSubviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        self.view.addSubview(buttonSubviewBackToMap)
+        self.view.sendSubviewToBack(buttonSubviewBackToMap)
+        buttonSubviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         loadCommentPinList()
         backJustOnce = true
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animateWithDuration(0.583, animations: ({
-            self.subviewTable.center.y += screenHeight
-        }))
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,17 +97,25 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
-        subviewTable.center.y -= screenHeight
         subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
         subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         subviewTable.layer.shadowOpacity = 0.3
         subviewTable.layer.shadowRadius = 10.0
         
         tableOpenedPin = UITableView(frame: CGRectMake(0, 0, screenWidth, tableHeight))
-        tableOpenedPin.registerClass(OpenedPinTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
+        tableOpenedPin.registerClass(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
         tableOpenedPin.delegate = self
         tableOpenedPin.dataSource = self
         subviewTable.addSubview(tableOpenedPin)
+        tableOpenedPin.scrollEnabled = false
+        
+        print("DEBUG: opened pin list height")
+        print(tableHeight)
+        print(subviewTableHeight)
+        
+        if tableHeight >= subviewTableHeight {
+            
+        }
         
         // Line at y = 64
         uiviewCommentPinListUnderLine01 = UIView(frame: CGRectMake(0, 64, screenWidth, 1))
@@ -119,7 +126,7 @@ class OpenedPinListViewController: UIViewController {
         // Button: Back to Comment Detail
         buttonBackToCommentPinDetail = UIButton()
         buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), forState: .Normal)
-        buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToCommentDetail(_:)), forControlEvents: .TouchUpInside)
+        buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), forControlEvents: .TouchUpInside)
         subviewWhite.addSubview(buttonBackToCommentPinDetail)
         subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
         subviewWhite.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
@@ -160,5 +167,56 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
         subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
         NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .CenterX, relatedBy: .Equal, toItem: self.subviewWhite, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
+    }
+    
+    func cropToBounds(image: UIImage) -> UIImage {
+        
+        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
+        
+        let contextSize: CGSize = contextImage.size
+        
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(contextSize.width)
+        var cgheight: CGFloat = CGFloat(contextSize.height)
+        
+        print("DEBUG: cgwidth cgheight")
+        print(cgwidth)
+        print(cgheight)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
+        
+        // Create bitmap image from context using the rect
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage!, rect)!
+        
+        // Create a new image based on the imageRef and rotate back to the original orientation
+        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        
+        return image
     }
 }

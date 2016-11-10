@@ -30,10 +30,11 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.tableCommentsForComment {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CommentPinCommentsCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CPCommentsCell
             cell.delegate = self
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
             if let userID = dictCell["user_id"].int {
+                self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userID)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(userID)") {(status, message) in
                     let userProfile = JSON(message!)
@@ -48,16 +49,16 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
             if let content = dictCell["content"].string {
                 cell.textViewComment.text = content
             }
-            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
             cell.separatorInset = UIEdgeInsetsZero
             cell.layoutMargins = UIEdgeInsetsZero
             return cell
         }
         else if tableView == self.tableViewPeople {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinPeopleCell", forIndexPath: indexPath) as! OpenedPinTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinPeopleCell", forIndexPath: indexPath) as! OPLTableViewCell
             let userID = Array(dictPeopleOfCommentDetail.keys)[indexPath.row]
             let latestDate = dictPeopleOfCommentDetail[userID]
             let getUserName = FaeUser()
+            
             getUserName.getOthersProfile("\(userID)") {(status, message) in
                 let userProfile = JSON(message!)
                 if let username = userProfile["user_name"].string {
@@ -65,7 +66,9 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
                     cell.time.text = latestDate
                 }
             }
-            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
+            
+//            getAndSetUserAvatar(cell.imageViewAvatar, userID: userID)
+//            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
             cell.deleteButton.hidden = true
             cell.jumpToDetail.hidden = true
             cell.separatorInset = UIEdgeInsetsZero
@@ -89,6 +92,18 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
         }
         else{
             return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView == self.tableCommentsForComment {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! CPCommentsCell
+            if let usernameInCell = cell.labelUsername.text {
+                self.actionShowActionSheet(usernameInCell)
+            }
+        }
+        if tableView == self.tableViewPeople {
+            
         }
     }
 }

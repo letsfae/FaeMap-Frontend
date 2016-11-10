@@ -133,8 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         
-        var timer = NSTimer()
-        timer = NSTimer.scheduledTimerWithTimeInterval(10,target:self,selector:Selector("runSync"),userInfo:nil,repeats:true)
+        NSTimer.scheduledTimerWithTimeInterval(10, target:self, selector: #selector(AppDelegate.runSync), userInfo:nil, repeats: true)
         
         self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()

@@ -8,13 +8,16 @@
 
 import UIKit
 import SwiftyJSON
+import SDWebImage
 
 extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
+        endEdit()
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
         }
+        
         if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
             sender.tag = 1
             buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
@@ -30,14 +33,10 @@ extension CommentPinViewController {
     }
     
     func actionHoldingLikeButton(sender: UIButton) {
-        if buttonCommentPinLike.tag == 0 {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-            animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
-            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
-        }
-        else if buttonCommentPinLike.tag == 1 {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-        }
+        endEdit()
+        likeButtonIsHolding = true
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Upvote comment pin
@@ -260,6 +259,7 @@ extension CommentPinViewController {
                 }
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
+                self.getAndSetUserAvatar(self.imageCommentPinUserAvatar, userID: toGetUserName)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
@@ -275,5 +275,17 @@ extension CommentPinViewController {
                 self.textviewCommentPinDetail.text = "\(content)"
             }
         }
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
     }
 }

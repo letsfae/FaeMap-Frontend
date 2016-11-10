@@ -19,8 +19,7 @@ extension FaeMapViewController {
             selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
             selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
             selfLocation.renewCoordinate {(status: Int, message: AnyObject?) in
-                print("Update Self Location Status Code:")
-                print(status)
+                print("Successfully renew self position")
             }
             let getMapUserInfo = FaeMap()
             getMapUserInfo.whereKey("geo_latitude", value: "\(currentLatitude)")
@@ -29,8 +28,6 @@ extension FaeMapViewController {
             getMapUserInfo.whereKey("type", value: "user")
             getMapUserInfo.getMapInformation {(status: Int, message: AnyObject?) in
                 let mapUserInfoJSON = JSON(message!)
-                print("Get User DEBUG:")
-                print(mapUserInfoJSON)
                 if mapUserInfoJSON.count > 0 {
                     for i in 0...(mapUserInfoJSON.count-1) {
                         var userID = -999
@@ -75,6 +72,7 @@ extension FaeMapViewController {
                                                 fadeAnimation.toValue = 1.0
                                                 fadeAnimation.duration = 1
                                                 pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                                pinShowOnMap.zIndex = 1
                                                 pinShowOnMap.map = self.faeMapView
                                                 self.canDoNextUserUpdate = true
                                             }
@@ -94,6 +92,7 @@ extension FaeMapViewController {
                                                 fadeAnimation.toValue = 1.0
                                                 fadeAnimation.duration = 1
                                                 pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                                pinShowOnMap.zIndex = 1
                                                 pinShowOnMap.map = self.faeMapView
                                                 self.canDoNextUserUpdate = true
                                             }

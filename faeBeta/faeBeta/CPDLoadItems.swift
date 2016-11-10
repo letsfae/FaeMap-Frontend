@@ -21,7 +21,8 @@ extension CommentPinViewController {
         uiviewCommentPinDetail.layer.shadowRadius = 10.0
         uiviewCommentPinDetail.layer.zPosition = 100
         self.view.addSubview(uiviewCommentPinDetail)
-        
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CommentPinViewController.tapOutsideToDismissKeyboard(_:)))
+        uiviewCommentPinDetail.addGestureRecognizer(tapToDismissKeyboard)
         
         subviewWhite = UIView(frame: CGRectMake(0, 0, screenWidth, 65))
         subviewWhite.backgroundColor = UIColor.whiteColor()
@@ -46,7 +47,7 @@ extension CommentPinViewController {
         // Button 1: Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
         buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), forState: .Normal)
-        buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinViewController.actionBackToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinViewController.actionGoToList(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         subviewWhite.addSubview(buttonBackToCommentPinLists)
         subviewWhite.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
         subviewWhite.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToCommentPinLists)
@@ -82,7 +83,7 @@ extension CommentPinViewController {
         
         // Textview of comment pin detail
         textviewCommentPinDetail = UITextView(frame: CGRectMake(27, 75, textViewWidth, 100))
-        textviewCommentPinDetail.text = "Content"
+        textviewCommentPinDetail.text = ""
         textviewCommentPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewCommentPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewCommentPinDetail.userInteractionEnabled = true
@@ -109,8 +110,8 @@ extension CommentPinViewController {
         tableCommentsForComment.delegate = self
         tableCommentsForComment.dataSource = self
         tableCommentsForComment.allowsSelection = false
-        tableCommentsForComment.delaysContentTouches = false
-        tableCommentsForComment.registerClass(CommentPinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
+        tableCommentsForComment.delaysContentTouches = true
+        tableCommentsForComment.registerClass(CPCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.scrollEnabled = false
 //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
 //                tableCommentsForComment.layer.borderWidth = 1.0
@@ -152,27 +153,29 @@ extension CommentPinViewController {
         
         // "People" of this uiview
         buttonCommentDetailViewPeople = UIButton()
-        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
-        buttonCommentDetailViewPeople.addTarget(self, action: #selector(CommentPinViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
+//        buttonCommentDetailViewPeople.addTarget(self, action: #selector(CommentPinViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewPeople)
         buttonCommentDetailViewPeople.tag = 3
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewPeople)
         
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: buttonCommentDetailViewComments, buttonCommentDetailViewPeople)
         
-//        // Label of Vote Count
-//        labelCommentPinVoteCount = UILabel()
-//        labelCommentPinVoteCount.text = "0"
-//        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-//        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-//        labelCommentPinVoteCount.textAlignment = .Center
-//        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
+        /*
+        // Label of Vote Count
+        labelCommentPinVoteCount = UILabel()
+        labelCommentPinVoteCount.text = ""
+        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        labelCommentPinVoteCount.textAlignment = .Center
+        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
+        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
+        */
         
         // Label of Like Count
         labelCommentPinLikeCount = UILabel()
-        labelCommentPinLikeCount.text = "0"
+        labelCommentPinLikeCount.text = ""
         labelCommentPinLikeCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
         labelCommentPinLikeCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         labelCommentPinLikeCount.textAlignment = .Right
@@ -182,7 +185,7 @@ extension CommentPinViewController {
         
         // Label of Comments of Coment Pin Count
         labelCommentPinCommentsCount = UILabel()
-        labelCommentPinCommentsCount.text = "3"
+        labelCommentPinCommentsCount.text = ""
         labelCommentPinCommentsCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
         labelCommentPinCommentsCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         labelCommentPinCommentsCount.textAlignment = .Right
@@ -262,7 +265,9 @@ extension CommentPinViewController {
         
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
-        imageCommentPinUserAvatar.image = UIImage(named: "commentPinSampleAvatar")
+        imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
+        imageCommentPinUserAvatar.layer.cornerRadius = 25
+        imageCommentPinUserAvatar.clipsToBounds = true
         commentDetailFullBoardScrollView.addSubview(imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
@@ -279,7 +284,7 @@ extension CommentPinViewController {
         
         // Timestamp of comment pin detail
         labelCommentPinTimestamp = UILabel()
-        labelCommentPinTimestamp.text = "Time"
+        labelCommentPinTimestamp.text = ""
         labelCommentPinTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelCommentPinTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         labelCommentPinTimestamp.textAlignment = .Left
@@ -288,12 +293,12 @@ extension CommentPinViewController {
         commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-40-[v0(27)]", options: [], views: labelCommentPinTimestamp)
         
         // Cancel all the touch down delays for uibutton caused by tableview's subviews
-        for view in self.tableCommentsForComment.subviews {
-            if view is UIScrollView {
-                (view as? UIScrollView)!.delaysContentTouches = false
-                break
-            }
-        }
+//        for view in self.tableCommentsForComment.subviews {
+//            if view is UIScrollView {
+//                (view as? UIScrollView)!.delaysContentTouches = false
+//                break
+//            }
+//        }
         
         // image view appears when saved pin button pressed
         imageViewSaved = UIImageView()
@@ -315,7 +320,7 @@ extension CommentPinViewController {
         tableViewPeople.dataSource = self
         tableViewPeople.allowsSelection = false
         tableViewPeople.delaysContentTouches = false
-        tableViewPeople.registerClass(OpenedPinTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
+        tableViewPeople.registerClass(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
         tableViewPeople.scrollEnabled = false
         //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
         //                tableCommentsForComment.layer.borderWidth = 1.0
@@ -363,14 +368,16 @@ extension CommentPinViewController {
         comments.tag = 1
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: comments)
         
+        
         // "People" of this uiview
         let people = UIButton()
-        people.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
-        people.addTarget(self, action: #selector(CommentPinViewController.animationRedSlidingLine(_:)), forControlEvents: .TouchUpInside)
+//        people.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
+//        people.addTarget(self, action: #selector(CommentPinViewController.animationRedSlidingLine(_:)), forControlEvents: .TouchUpInside)
         threeButtonsContainer.addSubview(people)
         people.tag = 3
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: people)
         
         threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: comments, people)
+        
     }
 }
