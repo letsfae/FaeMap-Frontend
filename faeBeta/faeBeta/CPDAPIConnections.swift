@@ -278,7 +278,7 @@ extension CommentPinViewController {
     }
     
     func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "https://dev.letsfae.com/files/users/\(userID)/avatar"
+        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
         let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
             // completion code here
             if userAvatar.image != nil {
