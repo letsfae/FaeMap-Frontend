@@ -144,8 +144,8 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         markerMask = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
         self.view.addSubview(markerMask)
         UIView.animateWithDuration(0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveLinear, animations: {
-            self.tempMarker.frame.size.width = 50
-            self.tempMarker.frame.size.height = 54
+            self.tempMarker.frame.size.width = 44
+            self.tempMarker.frame.size.height = 48
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
