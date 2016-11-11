@@ -49,8 +49,9 @@ class NameCardShowTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        switchOutlet.on = false
-        switchOutlet.tintColor = UIColor.redColor()
+        //switchOutlet.tintColor = UIColor.redColor()
         switchOutlet.onTintColor = UIColor.redColor()
+        labelShow.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         // Initialization code
     }
 

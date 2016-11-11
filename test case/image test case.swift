@@ -8,15 +8,15 @@ print(user_id)
 headerImageView.sd_setImageWithURL(NSURL(string: stringHeaderURL))
 // download cover page
 if user_id != nil {
-    let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/name_card_cover"
-    print(user_id)
-    imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+    let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/name_card_cover"
+    print(stringHeaderURL)
+    imageViewAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
 }
 // with default image
 if user_id != nil {
-    let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
-    print(user_id)
-    imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+    let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+    print(stringHeaderURL)
+    imageViewAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
 }
 
 // upload self avatar

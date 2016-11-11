@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
              print(notificationType?.types)
              }*/
-            let seconds = 1.0
+            let seconds = 30.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             

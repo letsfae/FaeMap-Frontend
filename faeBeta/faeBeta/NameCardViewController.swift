@@ -17,6 +17,9 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     var tableViewNameCard : UITableView!
     let cellGeneral = "cellGenral"
     let cellSwitch = "cellSwitch"
+    //underline
+    var viewUpUnderline : UIView!
+    var viewDownUnderline : UIView!
     //header view
     var viewHeaderBackground : UIView!
     //header view 1
@@ -44,7 +47,6 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "Your NameCards"
         initialTableview()
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -53,7 +55,11 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     override func viewWillAppear(animated: Bool) {
         //super.viewWillAppear(animated)
         let user = FaeUser()
-
+        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.translucent = false
+        setupNavigationBar()
         user.getSelfNamecard { (status:Int, message:AnyObject?) in
             print (status)
 
@@ -136,7 +142,7 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
         if indexPath.row <= 4 {
             let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneral, forIndexPath: indexPath) as! MyFaeGeneralTableViewCell
             if indexPath.row == 0 {
-                cell.labelTitle.text = "Nickname"
+                cell.labelTitle.text = "Display Name"
                 cell.labelStatus.text = nickname
             } else if indexPath.row == 1 {
                 cell.labelTitle.text = "Short Intro"
@@ -189,15 +195,35 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("IntroSettingViewController")as! IntroSettingViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    private func setupNavigationBar()
+    {
+        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.navigationBarHidden = false
+        let label = UILabel(frame: CGRectMake(0,0,147,27))
+        label.text = "Your NameCard"
+        label.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        self.navigationItem.titleView = label
+    }
+    func navBarLeftButtonTapped()
+    {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
 }
 //add Header view
 extension NameCardViewController {
     func initialHeaderView() {
         viewHeaderBackground = UIView(frame: CGRectMake(0,0,screenWidth,316))
         tableViewNameCard.tableHeaderView = viewHeaderBackground
-        tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
-        
-        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth - 268) / 2,119,268,180))
+        //tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
+        viewUpUnderline = UIView(frame: CGRectMake(0,0,screenWidth,1))
+        viewDownUnderline = UIView(frame: CGRectMake(17,316,screenWidth - 34,1))
+        viewUpUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
+        viewDownUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
+        viewHeaderBackground.addSubview(viewUpUnderline)
+        viewHeaderBackground.addSubview(viewDownUnderline)
+        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth - 268) / 2,119-64,268,180))
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 10
@@ -208,9 +234,9 @@ extension NameCardViewController {
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
         if user_id != nil {
-            let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/name_card_cover"
-            print(user_id)
-            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover)
+            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/name_card_cover"
+            print(stringHeaderURL)
+            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -220,11 +246,17 @@ extension NameCardViewController {
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
         imageViewTitleProfile.layer.borderColor = UIColor.whiteColor().CGColor
+        /*
+        imageViewTitleProfile.layer.shadowOpacity = 0.5
+        imageViewTitleProfile.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        imageViewTitleProfile.layer.shadowRadius = 61 / 2
+        imageViewTitleProfile.layer.shadowColor = UIColor.grayColor().CGColor
+         */
         viewNameCardTitle.addSubview(imageViewTitleProfile)
         if user_id != nil {
-            let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
-            print(user_id)
-            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+            print(stringHeaderURL)
+            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
         
         labelNickname = UILabel(frame: CGRectMake(0,257-119,268,27))
@@ -240,7 +272,7 @@ extension NameCardViewController {
         
         //the second header view
         
-        viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119,268,180))
+        viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119 - 64,268,180))
         viewNameCardDescr.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardDescr.layer.borderWidth = 1.0
         viewNameCardDescr.layer.cornerRadius = 10
@@ -254,9 +286,9 @@ extension NameCardViewController {
         imageViewDescrProfile.layer.borderColor = UIColor.whiteColor().CGColor
         viewNameCardDescr.addSubview(imageViewDescrProfile)
         if user_id != nil {
-            let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
+            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+            imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
         viewGender = UIView(frame: CGRectMake(90 - 73, 139 - 119, 50, 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)
