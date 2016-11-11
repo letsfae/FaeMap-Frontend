@@ -133,8 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         
-        var timer = NSTimer()
-        timer = NSTimer.scheduledTimerWithTimeInterval(10,target:self,selector:Selector("runSync"),userInfo:nil,repeats:true)
+        NSTimer.scheduledTimerWithTimeInterval(10, target:self, selector: #selector(AppDelegate.runSync), userInfo:nil, repeats: true)
         
         self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()
@@ -149,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
              print(notificationType?.types)
              }*/
-            let seconds = 1.0
+            let seconds = 30.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             

@@ -88,10 +88,6 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonPinOnMap)
-//        buttonPinOnMapInside = UIButton(frame: CGRectMake(344, 666, 38, 40))
-//        buttonPinOnMapInside.setImage(UIImage(named: "set_pin_on_map_inside"), forState: .Normal)
-//        buttonPinOnMapInside.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(buttonPinOnMapInside)
         buttonPinOnMap.layer.zPosition = 500
     }
     
@@ -105,7 +101,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
             currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
-            if isInPinLocationSelect == false {
+            if userStatus != 5  {
                 loadPositionAnimateImage()
                 getSelfAccountInfo()
             }
@@ -140,16 +136,16 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     
     // Animation for pin logo
     func animatePinWhenItIsCreated(commentID: String) {
-        tempMarker = UIImageView(frame: CGRectMake(0, 0, 167, 183))
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2-27)
+        tempMarker = UIImageView(frame: CGRectMake(0, 0, 167, 178))
+        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2-25.5)
         tempMarker.center = mapCenter
         tempMarker.image = UIImage(named: "commentMarkerWhenCreated")
         self.view.addSubview(tempMarker)
         markerMask = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
         self.view.addSubview(markerMask)
         UIView.animateWithDuration(0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveLinear, animations: {
-            self.tempMarker.frame.size.width = 50
-            self.tempMarker.frame.size.height = 54
+            self.tempMarker.frame.size.width = 48
+            self.tempMarker.frame.size.height = 51
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
@@ -188,6 +184,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                         pinData["type"] = typeInfo
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.zIndex = 0
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {

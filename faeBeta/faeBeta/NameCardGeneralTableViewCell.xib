@@ -21,7 +21,7 @@
                             <constraint firstAttribute="width" constant="110" id="Jp7-kA-WOm"/>
                             <constraint firstAttribute="height" constant="21" id="zjs-EO-LGc"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>

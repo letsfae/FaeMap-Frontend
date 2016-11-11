@@ -411,8 +411,8 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         imageviewNamecardAvatar.frame.origin.y = 90
         labelNamecardName.hidden = false
         uiviewCard.hidden = true
-        //let stringHeaderURL = "https://api.letsfae.com/files/users/29/avatar"
-        let stringHeaderURL = "https://api.letsfae.com/files/users/" + userId + "/avatar"
+        //let stringHeaderURL = "baseURL + "/files/users/"29/avatar"
+        let stringHeaderURL = baseURL + "/files/users/" + userId + "/avatar"
         imageviewNamecardAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL))
         if imageviewNamecardAvatar.image == nil{
             imageviewNamecardAvatar.image = UIImage(named: "myAvatorLin")

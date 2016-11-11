@@ -25,26 +25,31 @@ extension String {
             if localTimeZone != nil {
                 dateFormatter.timeZone = NSTimeZone(abbreviation: "\(localTimeZone!)")
                 let normalFormat = dateFormatter.stringFromDate(myDate!)
+                dateFormatter.dateFormat = "EEEE, HH:mm"
+                let dayFormat = dateFormatter.stringFromDate(myDate!)
                 // Greater than or equal to one day
-                if elapsed >= 172800 {
+                if elapsed >= 604800 {
                     return "\(normalFormat)"
+                }
+                else if elapsed >= 172800 {
+                    return "\(dayFormat)"
                 }
                 else if elapsed >= 86400 {
                     return "Yesterday"
                 }
                 else if elapsed >= 7200 {
                     let hoursPast = Int(elapsed/3600)
-                    return "\(hoursPast) hours"
+                    return "\(hoursPast) hours ago"
                 }
                 else if elapsed >= 3600 {
-                    return "1 hour"
+                    return "1 hour ago"
                 }
                 else if elapsed >= 120 {
                     let minsPast = Int(elapsed/60)
-                    return "\(minsPast) mins"
+                    return "\(minsPast) mins ago"
                 }
                 else if elapsed >= 60 {
-                    return "1 min"
+                    return "1 min ago"
                 }
                 else {
                     return "Just Now"

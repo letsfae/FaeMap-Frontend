@@ -13,7 +13,7 @@ extension FaeMapViewController {
 //    UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate 
 //    var imagePicker : UIImagePickerController!
     func loadMore() {
-        self.navigationController?.navigationBarHidden = false
+        //self.navigationController?.navigationBarHidden = false
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         dimBackgroundMoreButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
@@ -62,7 +62,6 @@ extension FaeMapViewController {
         animationMoreHide(nil)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardViewController")as! NameCardViewController
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     func jumpToMyFaeMainPage() {
@@ -121,9 +120,9 @@ extension FaeMapViewController {
         imageViewAvatarMore.layer.borderColor = UIColor.whiteColor().CGColor
 //        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         if user_id != nil {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
+        let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
@@ -143,7 +142,7 @@ extension FaeMapViewController {
         if nickname != nil {
             labelMoreName.text = nickname
         } else {
-            labelMoreName.text = "Anonymous"
+            labelMoreName.text = "someone"
         }
         viewHeaderForMore.addSubview(labelMoreName)
     }
@@ -184,6 +183,11 @@ extension FaeMapViewController {
         self.presentViewController(menu,animated:true,completion: nil)
     }
     func animationMoreShow(sender: UIButton!) {
+        if user_id != nil {
+            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+            print(user_id)
+            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+        }
         UIView.animateWithDuration(0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
             self.dimBackgroundMoreButton.alpha = 0.7
@@ -200,6 +204,92 @@ extension FaeMapViewController {
 
             }
         })
+    }
+    
+    func switchToInvisibleOrOnline(sender: UISwitch) {
+        let switchToInvisible = FaeUser()
+        if (sender.on == true){
+            print("sender.on")
+            switchToInvisible.whereKey("status", value: "5")
+            switchToInvisible.setSelfStatus({ (status, message) in
+                if status / 100 == 2 {
+                    userStatus = 5
+                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
+                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    print("Successfully switch to invisible")
+                    if userStatus == 5 {
+                        self.faeMapView.myLocationEnabled = true
+                        if self.myPositionOutsideMarker_1 != nil {
+                            self.myPositionOutsideMarker_1.hidden = true
+                        }
+                        if self.myPositionOutsideMarker_2 != nil {
+                            self.myPositionOutsideMarker_2.hidden = true
+                        }
+                        if self.myPositionOutsideMarker_3 != nil {
+                            self.myPositionOutsideMarker_3.hidden = true
+                        }
+                        if self.myPositionIcon != nil {
+                            self.myPositionIcon.hidden = true
+                        }
+                    }
+                }
+                else {
+                    print("Fail to switch to invisible")
+                }
+            })
+        }
+        else{
+            print("sender.off")
+            switchToInvisible.whereKey("status", value: "1")
+            switchToInvisible.setSelfStatus({ (status, message) in
+                if status / 100 == 2 {
+                    userStatus = 1
+                    self.actionSelfPosition(self.buttonSelfPosition)
+                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
+                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    print("Successfully switch to online")
+                }
+                else {
+                    print("Fail to switch to online")
+                }
+            })
+        }
+    }
+    
+    func userIsInactive() {
+        let userIsInactive = FaeUser()
+        userIsInactive.whereKey("status", value: "0")
+        userIsInactive.setSelfStatus({ (status, message) in
+            if status / 100 == 2 {
+                print("Successfully set user to offline")
+            }
+            else {
+                print("Fail to switch to offline")
+            }
+        })
+    }
+    
+    func userIsActive(status: Int) {
+        let userIsInactive = FaeUser()
+        userIsInactive.whereKey("status", value: "\(status)")
+        userIsInactive.setSelfStatus({ (status, message) in
+            if status / 100 == 2 {
+                print("Successfully set user to offline")
+            }
+            else {
+                print("Fail to switch to offline")
+            }
+        })
+    }
+    
+    func getUserStatus() -> Int {
+        let storageForUserStatus = LocalStorageManager()
+        if let user_status = storageForUserStatus.readByKey("userStatus") {
+            userStatus = user_status as! Int
+            self.userIsActive(userStatus)
+            return userStatus
+        }
+        return -999
     }
     
 }

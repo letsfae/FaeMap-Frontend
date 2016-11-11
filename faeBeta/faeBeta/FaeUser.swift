@@ -486,6 +486,7 @@ class FaeUser : NSObject {
     
     func getSelfStatus(completion:(Int,AnyObject?)->Void){//解包 //local storage
         getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            print("TESTing getSelfStatus")
             print(status)
             print(message)//error need to uppack the json
             
@@ -493,18 +494,32 @@ class FaeUser : NSObject {
         }
     }
     
-    func setSelfStatus(completion:(Int,AnyObject?)->Void){
+    /*
+     * status: 0:offline
+     *         1:online
+     *         2:no distrub
+     *         3:busy
+     *         4:away
+     *         5:invisible
+     */
+    func setSelfStatus(completion: (Int, AnyObject?) -> Void) {
+        /*
+         * not working for the commented codes
         if keyValue["status"] != nil {
             userStatus = keyValue["status"] as? Int
-        }else {
-            completion(-400,"no status number found")
+            print("DEBUG: user status")
+            print(userStatus)
+        } else {
+            completion(-400, "no status number found")
         }
         if keyValue["message"] != nil {
             userStatusMessage = keyValue["message"] as? String
-        }else {
-            completion(-400,"no message found")
+        } else {
+            completion(-400, "no message found")
         }
+        */
         postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+            print("TESTing setSelfStatus")
             print(status)
             print(message)
             completion(status,message)

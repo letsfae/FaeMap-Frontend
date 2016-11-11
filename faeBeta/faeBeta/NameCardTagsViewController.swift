@@ -18,15 +18,17 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     let cellSize = TagsCollectionViewCell()
     var buttonSuggest : UIButton!
     var buttonSave : UIBarButtonItem!
+    //var buttonSave : UIButton!
     var labelTitle : UILabel!
     var arrIndex = [Int]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         let layout = KTCenterFlowLayout()
 //        let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 15.0
         layout.minimumLineSpacing = 33.0
-        collectionViewSelf = UICollectionView(frame: CGRectMake(0, 132 - 64, screenWidth, screenHeight - 100), collectionViewLayout: layout)
+        collectionViewSelf = UICollectionView(frame: CGRectMake(0, 132 - 64, screenWidth, screenHeight - 120), collectionViewLayout: layout)
         collectionViewSelf.backgroundColor = UIColor.clearColor()
         collectionViewSelf.delegate = self
         collectionViewSelf.dataSource = self
@@ -52,13 +54,13 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         colorSelf.append(colors(102, green: 160, blue: 228))
         colorSelf.append(colors(122, green: 212, blue: 134))
         
-        buttonSuggest = UIButton(frame: CGRectMake((screenWidth - 300)/2, screenHeight - 80 - 64, 300, 50))
+        buttonSuggest = UIButton(frame: CGRectMake((screenWidth - 300)/2, screenHeight - 80, 300, 50))
 //        buttonSuggest.titleLabel?.text = "+ Suggest New Tags"
         buttonSuggest.setTitle("+ Suggest New Tags", forState: .Normal)
         buttonSuggest.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
         buttonSuggest.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
 //        buttonSuggest.titleLabel?.textColor = colors(249, green: 90, blue: 90)
-        buttonSuggest.layer.cornerRadius = 15
+        buttonSuggest.layer.cornerRadius = 25
         buttonSuggest.layer.borderWidth = 2.0
         buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).CGColor
         buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.saveTags), forControlEvents: UIControlEvents.TouchUpInside)
@@ -66,22 +68,40 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         
 //        buttonSave = UIBarButtonItem(frame: CGRectMake(screenWidth - 44 - 14, 32 - 64, 44, 27))
         buttonSave = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NameCardTagsViewController.saveTags))
+        
+        //buttonSave = UIButton(frame: CGRectMake(0,0,44,27))
+        //buttonSave.addTarget(self, action: "saveTags", forControlEvents: .TouchUpInside)
 //        buttonSave.setTitle("Save", forState: .Normal)
 //        buttonSave.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
 //        self.view.addSubview(buttonSave)
         self.navigationItem.rightBarButtonItem = buttonSave
-//        self.navigationController?.toolbarHidden = false
 
-        labelTitle = UILabel(frame: CGRectMake((screenWidth - 173) / 2, 0, 174, 64))
-        labelTitle.text = "Choose some Tags that represent you!"
+        labelTitle = UILabel(frame: CGRectMake((screenWidth - 173) / 2, 39, 174, 64))
+        labelTitle.text = "Choose three Tags that represent you!"
         labelTitle.numberOfLines = 0
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        labelTitle.textColor = getColor( 89,green: 89, blue: 89)
         self.view.addSubview(labelTitle)
     }
-
+    func getColor(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
+        return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    private func setupNavigationBar()
+    {
+        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.navigationBarHidden = false
+        //self.navigationController?.navigationBar.backgroundColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.translucent = true//the navigationvar will disapear
+    }
+    func navBarLeftButtonTapped()
+    {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     func saveTags() {
         if arrIndex.count != 0 {
@@ -120,11 +140,12 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if arrIndex.count > 3 {
+        print(arrIndex)
+        if arrIndex.count >= 3 {
             let index = arrIndex.last
             arrIndex.removeLast()
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: NSIndexPath(forItem: index!, inSection: 0))as! TagsCollectionViewCell
-//            collectionView.selectItemAtIndexPath(<#T##indexPath: NSIndexPath?##NSIndexPath?#>, animated: <#T##Bool#>, scrollPosition: <#T##UICollectionViewScrollPosition#>)
+            collectionView.deselectItemAtIndexPath(NSIndexPath(forItem: index!, inSection: 0), animated: true)
             cell.selected = false
 //            arrIndex.append(indexPath.row)
         }

@@ -333,6 +333,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     
     func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
         textViewForCommentPin.endEditing(true)
+        textViewForCommentPin.resignFirstResponder()
     }
     
     func textViewDidChange(textView: UITextView) {
@@ -371,6 +372,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
                 textViewForCommentPin.resignFirstResponder()
                 return false
             }
+            return textView.text.characters.count + (text.characters.count - range.length) <= 200
         }
         return true
     }
@@ -401,6 +403,8 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         if commentContent == "" {
             return
         }
+        
+        
         
         postSingleComment.whereKey("geo_latitude", value: submitLatitude)
         postSingleComment.whereKey("geo_longitude", value: submitLongitude)
