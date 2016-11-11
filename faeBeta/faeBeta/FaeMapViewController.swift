@@ -188,6 +188,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         loadNamecard()
         loadPositionAnimateImage()
         NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        
         let emptyArrayList = [Int]()
         self.storageForOpenedPinList.setObject(emptyArrayList, forKey: "openedPinList")
         

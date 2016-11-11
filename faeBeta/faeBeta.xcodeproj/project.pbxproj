@@ -212,6 +212,7 @@
 		DC3D10571DC2AE9E0011C772 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DC3D10581DC2AE9E0011C772 /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DC3D105A1DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3D10591DC2B1AC0011C772 /* CommentPinViewController+InputToolbar.swift */; };
+		DC3D105A1DC2B1AC0011C772 /* CPDInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */; };
 		DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
 		DC477A5F1DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */; };
 		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
@@ -1528,6 +1529,7 @@
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
+				B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B064EEEE1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B09E49E91D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B0714D4A1D5E435200356705 /* CustomSearchController.swift in Sources */,
@@ -1587,6 +1589,8 @@
 				DC2D6BD71DC86CBA0092E3D0 /* LogInViewController.swift in Sources */,
 				B064EEF11D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B09E49DF1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
+				DC3D10461DC2AE7A0011C772 /* FAEChatToolBarContentView.swift in Sources */,
+				B0BF35521D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B8A3BF5B1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				DC2D6BDA1DC86CBA0092E3D0 /* SignInSupportCodeViewController.swift in Sources */,

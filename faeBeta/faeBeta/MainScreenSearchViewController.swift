@@ -192,8 +192,8 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                 GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.mapSelectLocation.camera.zoom)
-                        self.mapSelectLocation.animateToCameraPosition(camera)
+                        self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
+                        self.dismissViewControllerAnimated(false, completion: nil)
                     }
                 })
             })
