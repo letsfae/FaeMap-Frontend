@@ -109,31 +109,33 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
     }
     func loadName() {
-        label1 = UILabel(frame: CGRectMake((screenWidth - 280) / 2, 138, 280, 38))
+        label1 = UILabel(frame: CGRectMake((screenWidth - 280) / 2, 154, 280, 38))
         if nickname != nil {
             label1.text = nickname
         } else {
             label1.text = "someone"
         }
         label1.textAlignment = .Center
-        label1.font = UIFont(name: "AvenirNext-Medium", size: 28)
+        label1.font = UIFont(name: "AvenirNext-Medium", size: 23)
+        label1.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         self.view.addSubview(label1)
 
         label2 = UILabel(frame: CGRectMake((screenWidth - 280) / 2, 190, 280, 25))
         label2.text = username
         label2.textAlignment = .Center
         label2.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        label2.textColor = UIColor.grayColor()
+        label2.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         self.view.addSubview(label2)
 
         viewUnderline = UIView(frame: CGRectMake(20, 228, screenWidth - 40, 2))
-        viewUnderline.backgroundColor = UIColor.grayColor()
+        viewUnderline.backgroundColor = UIColor(colorLiteralRed: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         self.view.addSubview(viewUnderline)
 
         labelBird = UILabel(frame: CGRectMake((screenWidth - 162) / 2, 244, 162, 25))
         labelBird.text = "You're an Early Bird"
+        labelBird.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelBird.textAlignment = .Center
-        labelBird.textColor = UIColor.grayColor()
+        labelBird.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         
         self.view.addSubview(labelBird)
     }
@@ -159,33 +161,36 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         viewRed1.layer.cornerRadius = 6
         viewRed1.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         viewBackground.addSubview(viewRed1)
-        labelDesc1 = UILabel(frame: CGRectMake(24,0 - 6,wid, 45))
-        labelDesc1.font = UIFont(name: "AvenirNext-Next", size: 13)
+        labelDesc1 = UILabel(frame: CGRectMake(24,0 - 2,wid, 36))
+        labelDesc1.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelDesc1.text = "Congrats! You’re among the first to use Fae Map"
         labelDesc1.textColor = UIColor(colorLiteralRed: 115/255, green: 115/255, blue: 115/255, alpha: 1)
         labelDesc1.numberOfLines = 0
+        labelDesc1.sizeToFit()
         viewBackground.addSubview(labelDesc1)
 
         viewRed2 = UIView(frame: CGRectMake(0,50,12,12))
         viewRed2.layer.cornerRadius = 6
         viewRed2.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         viewBackground.addSubview(viewRed2)
-        labelDesc2 = UILabel(frame: CGRectMake(24,50 - 6,wid, 45))
-        labelDesc2.font = UIFont(name: "AvenirNext-Next", size: 13)
+        labelDesc2 = UILabel(frame: CGRectMake(24,50 - 2,wid, 36))
+        labelDesc2.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelDesc2.text = "No Levels for Early Birds; Full access to everything"
         labelDesc2.textColor = UIColor(colorLiteralRed: 115/255, green: 115/255, blue: 115/255, alpha: 1)
         labelDesc2.numberOfLines = 0
+        labelDesc2.sizeToFit()
         viewBackground.addSubview(labelDesc2)
 
         viewRed3 = UIView(frame: CGRectMake(0,100,12,12))
         viewRed3.layer.cornerRadius = 6
         viewRed3.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         viewBackground.addSubview(viewRed3)
-        labelDesc3 = UILabel(frame: CGRectMake(24,100 - 6,wid, 70))
-        labelDesc3.font = UIFont(name: "AvenirNext-Next", size: 13)
+        labelDesc3 = UILabel(frame: CGRectMake(24,100 - 2,wid, 54))
+        labelDesc3.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelDesc3.text = "We value your opinion, chat with us for feedbacks and let’s make Fae Map better together!"
         labelDesc3.textColor = UIColor(colorLiteralRed: 115/255, green: 115/255, blue: 115/255, alpha: 1)
         labelDesc3.numberOfLines = 0
+        labelDesc3.sizeToFit()
         viewBackground.addSubview(labelDesc3)
 
 
