@@ -13,7 +13,7 @@ extension FaeMapViewController {
 //    UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate 
 //    var imagePicker : UIImagePickerController!
     func loadMore() {
-        self.navigationController?.navigationBarHidden = false
+        //self.navigationController?.navigationBarHidden = false
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         dimBackgroundMoreButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
@@ -62,7 +62,6 @@ extension FaeMapViewController {
         animationMoreHide(nil)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardViewController")as! NameCardViewController
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     func jumpToMyFaeMainPage() {
@@ -121,9 +120,9 @@ extension FaeMapViewController {
         imageViewAvatarMore.layer.borderColor = UIColor.whiteColor().CGColor
 //        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         if user_id != nil {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/" + user_id.stringValue + "/avatar"
+        let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale)
+            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
@@ -143,7 +142,7 @@ extension FaeMapViewController {
         if nickname != nil {
             labelMoreName.text = nickname
         } else {
-            labelMoreName.text = "Anonymous"
+            labelMoreName.text = "someone"
         }
         viewHeaderForMore.addSubview(labelMoreName)
     }
@@ -184,6 +183,11 @@ extension FaeMapViewController {
         self.presentViewController(menu,animated:true,completion: nil)
     }
     func animationMoreShow(sender: UIButton!) {
+        if user_id != nil {
+            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+            print(user_id)
+            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+        }
         UIView.animateWithDuration(0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
             self.dimBackgroundMoreButton.alpha = 0.7

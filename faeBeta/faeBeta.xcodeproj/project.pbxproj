@@ -53,17 +53,11 @@
 		B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
 		B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E41D2C49DF00AD9673 /* VerificationPhoneViewController.swift */; };
 		B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
-		B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
-		B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00EC3E81D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift */; };
 		B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B0301B141D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B0301B151D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
-		B030CC5E1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
-		B030CC5F1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
 		B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
-		B030CC621DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
-		B030CC631DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
 		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DE1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9DF1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
@@ -294,8 +288,6 @@
 		B09E49BD1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09E49B81D9630E20075EE45 /* NameCardShowTableViewCell.xib */; };
 		B09E49BE1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09E49B81D9630E20075EE45 /* NameCardShowTableViewCell.xib */; };
 		B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */; };
-		B09E49C11D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */; };
-		B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */; };
 		B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DB1D96F77F0075EE45 /* KTCenterFlowLayout.m */; };
 		B09E49DF1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DB1D96F77F0075EE45 /* KTCenterFlowLayout.m */; };
 		B09E49E01D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B09E49DB1D96F77F0075EE45 /* KTCenterFlowLayout.m */; };
@@ -321,8 +313,6 @@
 		B0AA08941D2303F800EE2B2D /* FaeAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0AA088E1D2303F800EE2B2D /* FaeAccountTableViewCell.xib */; };
 		B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABDF941CF77B30004890B0 /* VerificationTest.swift */; };
 		B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
-		B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
-		B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
 		B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
 		B0BF354B1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
 		B0BF354C1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
@@ -393,8 +383,6 @@
 		B0CFC99F1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A01CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
-		B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
-		B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
 		B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
 		B0CFC9AB1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
 		B0CFC9AC1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
@@ -423,8 +411,6 @@
 		B0D8CF1C1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1D1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
-		B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
-		B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C2F1CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C301CFE8164002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
@@ -473,8 +459,6 @@
 		B8840E1C1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
 		B8840E1D1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
 		B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift */; };
-		B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
-		B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E2D1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E2E1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
@@ -1650,7 +1634,6 @@
 				B064EF301D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D651D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				DC74CE2B1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
-				B8840E1F1DB6C8CC009CFF00 /* Main.storyboard in Resources */,
 				B064EF651D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED21D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354E1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -1686,7 +1669,6 @@
 				B064EF311D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B0714D661D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				DC74CE2C1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
-				B8840E201DB6C8CD009CFF00 /* Main.storyboard in Resources */,
 				B064EF661D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EED31D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				B0BF354F1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
@@ -2048,7 +2030,6 @@
 				B064EF441D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				DC74CE201DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0BF35901D8DC96300B0540B /* RecentViewController.swift in Sources */,
-				B0D8CF201D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B84BB9FC1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B0C0CAAF1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B0714D471D5E435200356705 /* CustomSearchBar.swift in Sources */,
@@ -2085,7 +2066,6 @@
 				DC4EC3691DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714D6B1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B064EEC01D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
-				B030CC5E1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0714D711D5E435200356705 /* UnreadChatTableView.swift in Sources */,
 				B0714D501D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				DC477A601DB2A8EE008A2041 /* CommentPinCommentsCell.swift in Sources */,
@@ -2117,7 +2097,6 @@
 				DC2D6BCC1DC86CBA0092E3D0 /* WelcomeViewController.swift in Sources */,
 				DC4334141DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B00EC3E21D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
-				B0CFC9A71CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0714D441D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B842E51C1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				86242F931D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
@@ -2126,7 +2105,6 @@
 				B8F065471DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
-				B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B064EEEE1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B09E49E91D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
@@ -2142,13 +2120,10 @@
 				B0ABDF951CF77B30004890B0 /* VerificationTest.swift in Sources */,
 				B064EF4A1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				DC74CE191DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
-				B09E49C11D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B0BF357C1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
-				B030CC621DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B09E49BA1D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B85FE6D11DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
 				DC3D10521DC2AE8E0011C772 /* Recent.swift in Sources */,
-				B00EC3EA1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B837D1F31D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B00EC3DE1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				DC3D10471DC2AE7D0011C772 /* ChatViewController+SendLoadMessages.swift in Sources */,
@@ -2229,7 +2204,6 @@
 				B00EC3D41D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B064EEF91D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B837D1F41D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
-				B030CC5F1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B064EEDD1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0714D751D5E435200356705 /* UpdateUserPin.swift in Sources */,
 				B0BF35831D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
@@ -2258,10 +2232,8 @@
 				B064EF6A1D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B0714E061D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B8F98EDE1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
-				B0D8CF211D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B839AA251DC95B2D00E315DF /* OpenedPinTableViewCell.swift in Sources */,
 				B064EEE61D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
-				B0B95B4E1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B0CFC9B41CED39BF00EC356A /* ContainerViewController.swift in Sources */,
 				B0714DCC1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B00182631D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
@@ -2278,10 +2250,8 @@
 				B00182671D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				DC74CE241DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B064EEB21D6E0CA100C078F5 /* Recent.swift in Sources */,
-				B0CFC9A81CED344200EC356A /* HTTPClient.swift in Sources */,
 				B8D5EEC81DB8422600C62628 /* CreatePinViewController.swift in Sources */,
 				8660BBF21D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
-				B09E49C21D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				DC4334151DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B0714E021D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B064EEEF1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -2333,7 +2303,6 @@
 				B84E1A5B1DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
 				B09E49EA1D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				DC2D6BE11DC86CD70092E3D0 /* (null) in Sources */,
-				B00EC3EB1D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2E1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B8AC458A1DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B064EEA91D6E0CA100C078F5 /* Avatar.swift in Sources */,
@@ -2343,7 +2312,6 @@
 				B064EF451D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B00EC3E71D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B0BF35741D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
-				B030CC631DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B8C2F6871D910FEF0042F847 /* CommentPinCommentsCell.swift in Sources */,
 				B05E2DBD1DCE357700D6745A /* FaePush.swift in Sources */,
 				86242F991D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,

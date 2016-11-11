@@ -52,7 +52,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
                 switch encodingResult {
                 case .Success(let upload, _, _):
                     upload.responseJSON { response in
-                        
+                        print(response.response.debugDescription)
                         if response.response != nil{
 //                            if(response.response!.statusCode != 0){
 //                                print("finished")
@@ -110,7 +110,7 @@ func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authen
                 switch encodingResult {
                 case .Success(let upload, _, _):
                     upload.responseJSON { response in
-
+                        print(response.response)
                         if response.response != nil{
                             //                            if(response.response!.statusCode != 0){
                             //                                print("finished")
