@@ -120,7 +120,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             moreImageButton = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
             moreImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
             moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
-            
+            moreImageButton.setImage(UIImage(named: "imageQuickSend_disabled"), forState: .Disabled)
             photoPicker = PhotoPicker.shared
             
             self.addSubview(photoQuickCollectionView)
@@ -131,6 +131,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             quickSendImageButton.hidden = true
             moreImageButton.hidden = true
 
+            updateSendButtonStatus()
         }
         
         //MARK: voice helper function
@@ -326,6 +327,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         self.photoQuickCollectionView.reloadData()
     }
     
+    private func updateSendButtonStatus()
+    {
+        moreImageButton.enabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
+    }
+    
     //MARK: - photoPicker Collection View Delegate
     //photoes preview layout
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -432,6 +438,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             }
             //            print("imageDict has \(imageDict.count) images")
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+            updateSendButtonStatus()
         }
     }
     

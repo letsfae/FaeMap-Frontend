@@ -97,8 +97,6 @@
 		B064EEC31D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
 		B064EEC41D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
-		B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
-		B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
 		B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */; };
 		B064EECF1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */; };
 		B064EED01D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */; };
@@ -540,8 +538,6 @@
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */; };
 		DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3982091DD2BC88000CB51F /* UIScreenService.swift */; };
-		DC3D10451DC2AE790011C772 /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
-		DC3D10461DC2AE7A0011C772 /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3D10471DC2AE7D0011C772 /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 		DC3D10481DC2AE7E0011C772 /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 		DC3D10491DC2AE800011C772 /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
@@ -2123,7 +2119,6 @@
 				B064EF621D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B0BF35561D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B0B95B4D1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
-				B064EECC1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B064EEEE1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B09E49E91D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B0714D4A1D5E435200356705 /* CustomSearchController.swift in Sources */,
@@ -2186,7 +2181,6 @@
 				DC2D6BD71DC86CBA0092E3D0 /* LogInViewController.swift in Sources */,
 				B064EEF11D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B09E49DF1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
-				DC3D10461DC2AE7A0011C772 /* FAEChatToolBarContentView.swift in Sources */,
 				B8A3BF5B1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				B00182621D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				DC2D6BDA1DC86CBA0092E3D0 /* SignInSupportCodeViewController.swift in Sources */,
@@ -2289,7 +2283,6 @@
 				B0714D511D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				DC3D104A1DC2AE810011C772 /* ChatViewController+collecitonView.swift in Sources */,
 				B064EF271D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
-				B064EECD1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
 				B0CFC9A01CED342000EC356A /* Keys.swift in Sources */,
 				DC2D6BE31DC86CD70092E3D0 /* PasswordAgainTextField.swift in Sources */,
 				B064EF4B1D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
@@ -2363,7 +2356,6 @@
 				B0BF35771D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B09E49B61D9626140075EE45 /* AutoLayout.swift in Sources */,
 				B8840E1E1DB6A8C6009CFF00 /* MapToCommentPinDetailSegue.swift in Sources */,
-				DC3D10451DC2AE790011C772 /* FAEChatToolBarContentView.swift in Sources */,
 				B064EF0A1D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0C0CAA01D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B00EC3DB1D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,

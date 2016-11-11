@@ -31,6 +31,9 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
+    var cancelButton : UIButton!
+    var sendButton: UIButton!
+    
     var quitButton : UIButton!
     var showTableButton : UIButton!
     
@@ -165,8 +168,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             photoPicker.videoAsset = nil
             photoPicker.videoImage = nil
         }
-        //            print("imageDict has \(imageDict.count) images")
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+        updateSendButtonStatus()
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -237,9 +240,25 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         centerView.addSubview(showTableButton)
         self.navigationItem.titleView = centerView
         
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(title: "Send", style: .Plain, target: self, action: #selector(CustomCollectionViewController.sendImages))]
+        sendButton = UIButton(frame: CGRectMake(0,0,50,30))
+        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        sendButton.setAttributedTitle(attributedText, forState: .Normal)
+        sendButton.contentHorizontalAlignment = .Right
+        sendButton.addTarget(self, action: #selector(self.sendImages), forControlEvents: .TouchUpInside)
+        sendButton.enabled = false
+        let offsetItem = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+        offsetItem.width = -10
+        self.navigationItem.rightBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: sendButton)]
         
-        self.navigationItem.leftBarButtonItems = [UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: #selector(CustomCollectionViewController.cancelSend))]
+        
+        cancelButton = UIButton(frame: CGRectMake(0,0,60,30))
+        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        cancelButton.setAttributedTitle(attributedText2, forState: .Normal)
+        cancelButton.contentHorizontalAlignment = .Left
+        cancelButton.addTarget(self, action: #selector(self.cancelSend), forControlEvents: .TouchUpInside)
+        self.navigationItem.leftBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: cancelButton)]
+
+        updateSendButtonStatus()
         
     }
     
@@ -349,11 +368,19 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
 
     }
     
-    func appWillEnterForeground(){
+    func appWillEnterForeground()
+    {
         photoPicker.getSmartAlbum()
         self.collectionView?.reloadData()
         self.tableViewAlbum.reloadData()
 
+    }
+    
+    private func updateSendButtonStatus()
+    {
+        sendButton.enabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
+        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName:sendButton.enabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        sendButton.setAttributedTitle(attributedText, forState: .Normal)
     }
     
     //MARK: table view delegate method
@@ -375,7 +402,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let asset : PHAsset = self.photoPicker.selectedAlbum[indexPath.row].albumContent[0] as! PHAsset
         
         PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(view.frame.width - 1 / 10, view.frame.width - 1 / 10), contentMode: .AspectFill, options: nil) { (result, info) in
-            cell.titleImageView.image = result!
+            cell.titleImageView.image = result
         }
         
         return cell
