@@ -566,6 +566,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                     openedPinListArray.append(commentIDGet)
                     marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
                     marker.zIndex = 2
+                    print("marker size debug")
+                    print(marker.icon?.size)
                     if let listArray = readByKey("openedPinList") {
                         openedPinListArray.removeAll()
                         openedPinListArray = listArray as! [Int]
