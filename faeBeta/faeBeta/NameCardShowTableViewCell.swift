@@ -21,6 +21,7 @@ class NameCardShowTableViewCell: UITableViewCell {
         } else {
             value = false
         }
+        labelShow.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         if labelShow.text == "Show Gender" {
             let user = FaeUser()
             user.whereKey("show_gender", value: String(value))

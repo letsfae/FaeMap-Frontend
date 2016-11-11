@@ -185,6 +185,8 @@
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
 		B8A3BF5E1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF5D1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
+		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
+		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
 		B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
 		B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
 		B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
@@ -419,6 +421,8 @@
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
 		B8A3BF5D1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDHandleDelegateFuncs.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
+		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
+		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDLoadItems.swift; sourceTree = "<group>"; };
 		B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDAPIConnections.swift; sourceTree = "<group>"; };
@@ -513,6 +517,8 @@
 				B09E49B71D9630E20075EE45 /* NameCardShowTableViewCell.swift */,
 				B09E49B81D9630E20075EE45 /* NameCardShowTableViewCell.xib */,
 				B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */,
+				B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */,
+				B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */,
 			);
 			name = "FAE cell";
 			sourceTree = "<group>";
@@ -1250,6 +1256,7 @@
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
+				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
 				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
@@ -1288,6 +1295,7 @@
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
+				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,

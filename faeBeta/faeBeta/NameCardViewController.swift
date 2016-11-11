@@ -122,15 +122,15 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
 // MARK: tableview
 extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     func initialTableview() {
-        tableViewNameCard = UITableView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        tableViewNameCard = UITableView(frame: CGRectMake(0, 0, screenWidth, 736))
         tableViewNameCard.delegate = self
         tableViewNameCard.dataSource = self
         tableViewNameCard.backgroundColor = UIColor.clearColor()
         tableViewNameCard.separatorStyle = .None
-        tableViewNameCard.rowHeight = 60
+        tableViewNameCard.rowHeight = 55
         
-        tableViewNameCard.registerNib(UINib(nibName: "MyFaeGeneralTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneral)
-        tableViewNameCard.registerNib(UINib(nibName: "NameCardShowTableViewCell", bundle: nil), forCellReuseIdentifier: cellSwitch)
+        tableViewNameCard.registerClass(NameCardFirstFiveCell.self, forCellReuseIdentifier: cellGeneral)
+        tableViewNameCard.registerClass(NameCardWithSwitchCell.self, forCellReuseIdentifier: cellSwitch)
         
         self.view.addSubview(tableViewNameCard)
         initialHeaderView()
@@ -140,31 +140,30 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row <= 4 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneral, forIndexPath: indexPath) as! MyFaeGeneralTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneral, forIndexPath: indexPath) as! NameCardFirstFiveCell
             if indexPath.row == 0 {
-                cell.labelTitle.text = "Display Name"
-                cell.labelStatus.text = nickname
+                cell.labelDes.text = "Display Name"
+                cell.labelUserSet.text = nickname
             } else if indexPath.row == 1 {
-                cell.labelTitle.text = "Short Intro"
-                cell.labelStatus.text = shortIntro
+                cell.labelDes.text = "Short Intro"
+                cell.labelUserSet.text = shortIntro
             } else if indexPath.row == 2 {
-                cell.labelTitle.text = "Choose Tags"
-                cell.labelStatus.text = ""
-                
+                cell.labelDes.text = "Choose Tags"
+                cell.labelUserSet.text = ""
             } else if indexPath.row == 3 {
-                cell.labelTitle.text = "Change Profile Picture"
-                cell.labelStatus.text = ""
+                cell.labelDes.text = "Change Profile Picture"
+                cell.labelUserSet.text = ""
             } else if indexPath.row == 4 {
-                cell.labelTitle.text = "Change Cover Photo"
-                cell.labelStatus.text = ""
+                cell.labelDes.text = "Change Cover Photo"
+                cell.labelUserSet.text = ""
             }
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellSwitch, forIndexPath: indexPath) as! NameCardShowTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(cellSwitch, forIndexPath: indexPath) as! NameCardWithSwitchCell
             if indexPath.row == 5 {
-                cell.labelShow.text = "Show Gender"
+                cell.labelDes.text = "Show Gender"
             } else {
-                cell.labelShow.text = "Show Age"
+                cell.labelDes.text = "Show Age"
             }
         }
         return UITableViewCell()
@@ -199,7 +198,7 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     {
         self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "navigationBack"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
         self.navigationController?.navigationBarHidden = false
         let label = UILabel(frame: CGRectMake(0,0,147,27))
         label.text = "Your NameCard"
@@ -214,16 +213,16 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
 //add Header view
 extension NameCardViewController {
     func initialHeaderView() {
-        viewHeaderBackground = UIView(frame: CGRectMake(0,0,screenWidth,316))
+        viewHeaderBackground = UIView(frame: CGRectMake(0, 0, screenWidth, 274*screenHeightFactor))
         tableViewNameCard.tableHeaderView = viewHeaderBackground
         //tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
-        viewUpUnderline = UIView(frame: CGRectMake(0,0,screenWidth,1))
-        viewDownUnderline = UIView(frame: CGRectMake(17,316,screenWidth - 34,1))
+        viewUpUnderline = UIView(frame: CGRectMake(0, 0, screenWidth, 1))
+        viewDownUnderline = UIView(frame: CGRectMake(17,274*screenHeightFactor,screenWidth - 34,1))
         viewUpUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
         viewDownUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
-        viewHeaderBackground.addSubview(viewUpUnderline)
+        self.view.addSubview(viewUpUnderline)
         viewHeaderBackground.addSubview(viewDownUnderline)
-        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth - 268) / 2,119-64,268,180))
+        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51, 268, 180))
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 10
