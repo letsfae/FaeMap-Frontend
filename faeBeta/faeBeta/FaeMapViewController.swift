@@ -245,6 +245,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     // Testing back from background
     func appBackFromBackground() {
         self.actionSelfPosition(buttonSelfPosition)
+        loadCurrentRegionPins()
         print("App back from background!")
     }
     
@@ -268,6 +269,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
+        self.faeMapView.clear()
+        self.updateSelfLocation()
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -489,7 +492,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             originPointForRefresh = mapCenterCoordinate
             originPointForRefreshFirstLoad = false
             loadCurrentRegionPins()
-            updateSelfLocation()
         }
         
         if isInPinLocationSelect {
@@ -520,10 +522,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if mapView.camera.zoom >= 13 {
             let radius = sqrt(pow(mapCenterCoordinate.latitude-originPointForRefresh.latitude, 2.0)+pow(mapCenterCoordinate.longitude-originPointForRefresh.longitude, 2.0))
             if radius > 0.04 {
-                mapView.clear()
                 originPointForRefresh = mapCenterCoordinate
                 loadCurrentRegionPins()
-                updateSelfLocation()
             }
         }
         else {
