@@ -216,6 +216,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         print("Will appear loaded")
+        self.actionSelfPosition(self.buttonSelfPosition)
     }
     
     override func viewDidAppear(animated: Bool) {
