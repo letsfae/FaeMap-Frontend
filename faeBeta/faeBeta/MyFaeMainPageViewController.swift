@@ -12,6 +12,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeigh = UIScreen.mainScreen().bounds.height
     //7 : 736 5 : 
+    var scroll : UIScrollView!
     var imageViewAvatar : UIImageView!
     var imagePicker : UIImagePickerController!
     var buttonImage : UIButton!
@@ -29,7 +30,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     var labelDesc1 : UILabel!
     var labelDesc2 : UILabel!
     var labelDesc3 : UILabel!
-
+    var buttonFeedback : UIButton!
     
     //no use
     /*
@@ -46,6 +47,17 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         self.navigationController?.navigationBar.translucent = false
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
+        scroll = UIScrollView(frame: CGRectMake(0,0 - 64,screenWidth,screenHeight + 64))
+        scroll.contentSize = CGSizeMake(screenWidth, 650)
+        scroll.pagingEnabled = true
+        print(screenHeigh + 64)
+        if 650 > screenHeigh + 64 {
+            scroll.scrollEnabled = true
+        } else {
+            scroll.scrollEnabled = false
+        }
+
+        self.view.addSubview(scroll)
         setupNavigationBar()
         loadAvatar()
         loadName()
@@ -65,11 +77,11 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
             print(stringHeaderURL)
             imageViewAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
-        self.view.addSubview(imageViewAvatar)
+        self.scroll.addSubview(imageViewAvatar)
         buttonImage = UIButton(frame: CGRectMake(0,44,100,100))
         buttonImage.center.x = screenWidth / 2
         buttonImage.addTarget(self, action: #selector(MyFaeMainPageViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
-        self.view.addSubview(buttonImage)
+        self.scroll.addSubview(buttonImage)
     }
     func showPhotoSelected() {
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
@@ -119,18 +131,18 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         label1.textAlignment = .Center
         label1.font = UIFont(name: "AvenirNext-Medium", size: 23)
         label1.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
-        self.view.addSubview(label1)
+        self.scroll.addSubview(label1)
 
         label2 = UILabel(frame: CGRectMake((screenWidth - 280) / 2, 190, 280, 25))
         label2.text = username
         label2.textAlignment = .Center
         label2.font = UIFont(name: "AvenirNext-Regular", size: 18)
         label2.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
-        self.view.addSubview(label2)
+        self.scroll.addSubview(label2)
 
         viewUnderline = UIView(frame: CGRectMake(20, 228, screenWidth - 40, 2))
         viewUnderline.backgroundColor = UIColor(colorLiteralRed: 155/255, green: 155/255, blue: 155/255, alpha: 1)
-        self.view.addSubview(viewUnderline)
+        self.scroll.addSubview(viewUnderline)
 
         labelBird = UILabel(frame: CGRectMake((screenWidth - 162) / 2, 244, 162, 25))
         labelBird.text = "You're an Early Bird"
@@ -138,25 +150,25 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         labelBird.textAlignment = .Center
         labelBird.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         
-        self.view.addSubview(labelBird)
+        self.scroll.addSubview(labelBird)
     }
     func loadBird() {
         imageViewBird = UIImageView(frame: CGRectMake(0, 274, 110, 110))
         imageViewBird.center.x = screenWidth / 2
         imageViewBird.image = UIImage(named: "myFaeBird")
-        self.view.addSubview(imageViewBird)
+        self.scroll.addSubview(imageViewBird)
         /*
         imageViewText1 = UIImageView(frame: CGRectMake((screenWidth - 311) / 2, 533 - 75, 311, 18))
         imageViewText1.image = UIImage(named: "myFaeBirdText1")
-        self.view.addSubview(imageViewText1)
+        self.scroll.addSubview(imageViewText1)
         imageViewText2 = UIImageView(frame: CGRectMake((screenWidth - 322) / 2, 570 - 75, 322, 18))
         imageViewText2.image = UIImage(named: "myFaeBirdText2")
-        self.view.addSubview(imageViewText2)
+        self.scroll.addSubview(imageViewText2)
         imageViewText3 = UIImageView(frame: CGRectMake((screenWidth - 323) / 2, 607 - 75, 323, 38))
         imageViewText3.image = UIImage(named: "myFaeBirdText3")
-        self.view.addSubview(imageViewText3)*/
+        self.scroll.addSubview(imageViewText3)*/
         viewBackground = UIView(frame: CGRectMake(22,393, screenWidth - 44, 151))
-        self.view.addSubview(viewBackground)
+        self.scroll.addSubview(viewBackground)
         let wid = screenWidth - 44 - 24
         viewRed1 = UIView(frame: CGRectMake(0,0,12,12))
         viewRed1.layer.cornerRadius = 6
@@ -194,7 +206,14 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         labelDesc3.sizeToFit()
         viewBackground.addSubview(labelDesc3)
 
-
+        buttonFeedback = UIButton(frame: CGRectMake(0,544 + 30, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        buttonFeedback.center.x = screenWidth / 2
+        buttonFeedback.backgroundColor = UIColor.faeAppRedColor()
+        buttonFeedback.setTitle("Give Feedback", forState: .Normal)
+        buttonFeedback.layer.cornerRadius = 25 * screenHeightFactor
+        buttonFeedback.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        buttonFeedback.addTarget(self, action: "jumpToFeedback", forControlEvents: .TouchUpInside)
+        scroll.addSubview(buttonFeedback)
     }
     private func setupNavigationBar()
     {
@@ -207,6 +226,10 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     func navBarLeftButtonTapped()
     {
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    func jumpToFeedback() {//MARK: add jump to feedback report view
+
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
