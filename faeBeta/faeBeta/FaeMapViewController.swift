@@ -247,7 +247,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.actionSelfPosition(buttonSelfPosition)
         loadCurrentRegionPins()
         print("App back from background!")
-        renewSelfLocation()
+        self.renewSelfLocation()
     }
     
     // Testing move to background, with timer

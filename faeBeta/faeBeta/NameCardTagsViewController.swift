@@ -169,6 +169,11 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     func colors(red: Float, green: Float, blue: Float) -> UIColor {
         return UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
     }
+    func actionSuggestNewTags(sender: UIButton!) {
+        let suggestNewTagsVC = ReportCommentPinViewController()
+        suggestNewTagsVC.reportType = 2
+        self.presentViewController(suggestNewTagsVC, animated: true, completion: nil)
+    }
     /*
     // MARK: - Navigation
 

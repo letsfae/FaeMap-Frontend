@@ -232,6 +232,7 @@ extension CommentPinViewController {
     
     func actionReportThisPin(sender: UIButton!) {
         let reportCommentPinVC = ReportCommentPinViewController()
+        reportCommentPinVC.reportType = 0
         self.presentViewController(reportCommentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }

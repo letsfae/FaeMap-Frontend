@@ -10,6 +10,13 @@ import UIKit
 
 class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
 
+    /*  Report type
+     *  0 == report pin
+     *  1 == feedback
+     *  2 == tag
+     */
+    var reportType: Int = 0
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let colorPlaceHolder = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
@@ -47,7 +54,6 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
                                forControlEvents: .TouchUpInside)
         
         imageDescription = UIImageView(frame: CGRectMake(0, 72, 279, 50))
-        imageDescription.image = UIImage(named: "reportViewDescription")
         imageDescription.center.x = screenWidth/2
         self.view.addSubview(imageDescription)
         
@@ -78,7 +84,19 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         lableTextViewPlaceholder = UILabel(frame: CGRectMake(5, 8, 294, 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lableTextViewPlaceholder.textColor = colorPlaceHolder
-        lableTextViewPlaceholder.text = "Describe to us the case..."
+        if reportType == 0 {
+            lableTextViewPlaceholder.text = "Describe to us the case..."
+            imageDescription.image = UIImage(named: "reportViewDescription")
+        }
+        else if reportType == 1 {
+            lableTextViewPlaceholder.text = "Your Feedback..."
+            imageDescription.image = UIImage(named: "reportYourFeedback")
+        }
+        else if reportType == 2 {
+            lableTextViewPlaceholder.text = "New Tag(s)..."
+            imageDescription.image = UIImage(named: "reportNewTags")
+        }
+        
         textViewReportContent.addSubview(lableTextViewPlaceholder)
     }
     
