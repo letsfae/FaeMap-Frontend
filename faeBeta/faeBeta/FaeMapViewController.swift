@@ -542,6 +542,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+        renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
         let camera = GMSCameraPosition.cameraWithLatitude(latitude+0.001, longitude: longitude, zoom: 17)
