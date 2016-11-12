@@ -274,6 +274,10 @@ extension NameCardViewController {
         imageViewDescrProfile.clipsToBounds = true
         imageViewDescrProfile.layer.borderWidth = 5
         imageViewDescrProfile.layer.borderColor = UIColor.whiteColor().CGColor
+        imageViewDescrProfile.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
+        imageViewDescrProfile.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        imageViewDescrProfile.layer.shadowOpacity = 0.3
+        imageViewDescrProfile.layer.shadowRadius = 5.0
         viewNameCardDescr.addSubview(imageViewDescrProfile)
         if user_id != nil {
             let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"

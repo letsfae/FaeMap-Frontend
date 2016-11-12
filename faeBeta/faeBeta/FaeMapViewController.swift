@@ -187,7 +187,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
 //        loadWindBell()  // <-- This one isn't used for 11.01 Dev Version
         loadNamecard()
         loadPositionAnimateImage()
-        NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         NSTimer.scheduledTimerWithTimeInterval(600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
         
         let emptyArrayList = [Int]()
@@ -268,6 +268,9 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
+        if faeMapView.camera.zoom >= 13 {
+            return
+        }
         self.faeMapView.clear()
         self.updateSelfLocation()
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)

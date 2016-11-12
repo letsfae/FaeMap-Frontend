@@ -13,6 +13,10 @@ import SwiftyJSON
 extension FaeMapViewController {
     // Timer to update location (send self location to server)
     func updateSelfLocation() {
+        if faeMapView.camera.zoom >= 13 {
+            return
+        }
+        
         if startUpdatingLocation && canDoNextUserUpdate {
             for everyUser in self.mapUserPinsDic {
                 everyUser.map = nil
@@ -53,6 +57,8 @@ extension FaeMapViewController {
                             var latitude: CLLocationDegrees = -999.9
                             var longitude: CLLocationDegrees = -999.9
                             let random = Int(arc4random_uniform(5))
+                            print("debug random")
+                            print(random)
                             if let latitudeInfo = mapUserInfoJSON[i]["geolocation"][random]["latitude"].double {
                                 latitude = latitudeInfo
                                 pinData["latitude"] = latitudeInfo
