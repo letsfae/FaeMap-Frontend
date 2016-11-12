@@ -143,7 +143,7 @@ extension FaeMapViewController {
         if nickname != nil {
             labelMoreName.text = nickname
         } else {
-            labelMoreName.text = userUserName
+            labelMoreName.text = "someone"
         }
         viewHeaderForMore.addSubview(labelMoreName)
     }
