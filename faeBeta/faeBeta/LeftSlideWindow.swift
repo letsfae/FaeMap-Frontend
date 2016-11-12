@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import SDWebImage
 
 //MARK: show left slide window
@@ -184,6 +185,7 @@ extension FaeMapViewController {
         self.presentViewController(menu,animated:true,completion: nil)
     }
     func animationMoreShow(sender: UIButton!) {
+        updateName()
         if user_id != nil {
             self.getAndSetUserAvatar(self.imageViewAvatarMore, userID: Int(user_id))
         }
@@ -303,4 +305,16 @@ extension FaeMapViewController {
         userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
     }
     
+    func updateName() {
+        let updateNickName = FaeUser()
+        updateNickName.getSelfNamecard(){(status:Int, message:AnyObject?) in
+            if(status / 100 == 2){
+                let nickNameInfo = JSON(message!)
+                if let str = nickNameInfo["nick_name"].string{
+                    nickname = str
+                }
+                self.labelMoreName.text = nickname
+            }
+        }
+    }
 }

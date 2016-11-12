@@ -56,6 +56,7 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         
         buttonSuggest = UIButton(frame: CGRectMake((screenWidth - 300)/2, screenHeight - 80, 300, 50))
 //        buttonSuggest.titleLabel?.text = "+ Suggest New Tags"
+        buttonSuggest.backgroundColor = UIColor.whiteColor()
         buttonSuggest.setTitle("+ Suggest New Tags", forState: .Normal)
         buttonSuggest.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
         buttonSuggest.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -63,8 +64,9 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         buttonSuggest.layer.cornerRadius = 25
         buttonSuggest.layer.borderWidth = 2.0
         buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).CGColor
-        buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.saveTags), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.actionSuggestNewTags(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonSuggest)
+        self.view.bringSubviewToFront(buttonSuggest)
         
 //        buttonSave = UIBarButtonItem(frame: CGRectMake(screenWidth - 44 - 14, 32 - 64, 44, 27))
         buttonSave = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NameCardTagsViewController.saveTags))
@@ -169,7 +171,7 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
     func colors(red: Float, green: Float, blue: Float) -> UIColor {
         return UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
     }
-    func actionSuggestNewTags(sender: UIButton!) {
+    func actionSuggestNewTags(sender: UIButton) {
         let suggestNewTagsVC = ReportCommentPinViewController()
         suggestNewTagsVC.reportType = 2
         self.presentViewController(suggestNewTagsVC, animated: true, completion: nil)

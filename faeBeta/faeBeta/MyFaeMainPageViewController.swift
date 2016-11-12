@@ -212,7 +212,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         buttonFeedback.setTitle("Give Feedback", forState: .Normal)
         buttonFeedback.layer.cornerRadius = 25 * screenHeightFactor
         buttonFeedback.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        buttonFeedback.addTarget(self, action: "jumpToFeedback", forControlEvents: .TouchUpInside)
+        buttonFeedback.addTarget(self, action: #selector(MyFaeMainPageViewController.jumpToFeedback), forControlEvents: .TouchUpInside)
         scroll.addSubview(buttonFeedback)
     }
     private func setupNavigationBar()
@@ -228,8 +228,9 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         self.navigationController?.popViewControllerAnimated(true)
     }
     func jumpToFeedback() {//MARK: add jump to feedback report view
-
-
+        let reportCommentPinVC = ReportCommentPinViewController()
+        reportCommentPinVC.reportType = 1
+        self.presentViewController(reportCommentPinVC, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

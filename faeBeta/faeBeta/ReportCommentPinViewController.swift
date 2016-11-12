@@ -53,8 +53,9 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
                                action: #selector(ReportCommentPinViewController.actionBackToCommentPinDetail(_:)),
                                forControlEvents: .TouchUpInside)
         
-        imageDescription = UIImageView(frame: CGRectMake(0, 72, 279, 50))
+        imageDescription = UIImageView(frame: CGRectMake(0, 72, 361*screenWidthFactor, 54*screenHeightFactor))
         imageDescription.center.x = screenWidth/2
+        imageDescription.contentMode = .ScaleAspectFit
         self.view.addSubview(imageDescription)
         
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreatePinViewController.tapOutsideToDismissKeyboard(_:)))
