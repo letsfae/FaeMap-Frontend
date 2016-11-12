@@ -405,7 +405,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         }else if(self.photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can only send one video at one time")
                             return
+                        }else if(self.photoPicker.assetDurationDict[asset] > 60){
+                            self.delegate.showAlertView(withWarning: "Sorry, for now you can only send video below 1 minute")
+                            return
                         }
+                        
                         photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                         photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                         let lowQRequestOption = PHVideoRequestOptions()
