@@ -232,7 +232,7 @@ extension NameCardViewController {
         viewNameCardTitle.addSubview(imageViewCover)
         
         imageViewTitleProfile = UIImageView(frame: CGRectMake(103.5*screenWidthFactor, 71*screenHeightFactor, 61*screenWidthFactor, 61*screenHeightFactor))
-        imageViewTitleProfile.layer.cornerRadius = 61 / 2
+        imageViewTitleProfile.layer.cornerRadius = 30.5 * screenWidthFactor
         imageViewTitleProfile.layer.masksToBounds = true
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
@@ -250,7 +250,7 @@ extension NameCardViewController {
             self.getAndSetUserAvatar(self.imageViewTitleProfile, userID: Int(user_id))
         }
         
-        labelNickname = UILabel(frame: CGRectMake(0, 138, 268, 27))
+        labelNickname = UILabel(frame: CGRectMake(0, 138*screenHeightFactor, 268*screenWidthFactor, 27*screenHeightFactor))
         if nickname == nil || nickname == "" {
             labelNickname.text = "Anonymous"
         } else {
@@ -265,7 +265,7 @@ extension NameCardViewController {
         viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119 - 64,268,180))
         viewNameCardDescr.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardDescr.layer.borderWidth = 1.0
-        viewNameCardDescr.layer.cornerRadius = 10
+        viewNameCardDescr.layer.cornerRadius = 15
         viewHeaderBackground.addSubview(viewNameCardDescr)
         
         imageViewDescrProfile = UIImageView(frame: CGRectMake((268 - 61) / 2, 96 - 119, 61, 61))
