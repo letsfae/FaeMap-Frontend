@@ -13,21 +13,12 @@ import SwiftyJSON
 extension FaeMapViewController {
     // Timer to update location (send self location to server)
     func updateSelfLocation() {
-        if faeMapView.camera.zoom >= 13 {
-            return
-        }
-        
         if startUpdatingLocation && canDoNextUserUpdate {
             for everyUser in self.mapUserPinsDic {
                 everyUser.map = nil
             }
             canDoNextUserUpdate = false
-            let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
-            selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
-            selfLocation.renewCoordinate {(status: Int, message: AnyObject?) in
-                print("Successfully renew self position")
-            }
+            self.renewSelfLocation()
             let getMapUserInfo = FaeMap()
             getMapUserInfo.whereKey("geo_latitude", value: "\(currentLatitude)")
             getMapUserInfo.whereKey("geo_longitude", value: "\(currentLongitude)")

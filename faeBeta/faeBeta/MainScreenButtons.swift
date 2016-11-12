@@ -99,6 +99,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         if currentLocation != nil {
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
+            self.renewSelfLocation()
             let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
             if userStatus != 5  {
@@ -109,6 +110,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     }
     
     func actionTrueNorth(sender: UIButton!) {
+        self.renewSelfLocation()
         faeMapView.animateToBearing(0)
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)

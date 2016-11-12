@@ -222,6 +222,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        renewSelfLocation()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -246,6 +247,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.actionSelfPosition(buttonSelfPosition)
         loadCurrentRegionPins()
         print("App back from background!")
+        renewSelfLocation()
     }
     
     // Testing move to background, with timer
@@ -268,9 +270,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        if faeMapView.camera.zoom >= 13 {
-            return
-        }
         self.faeMapView.clear()
         self.updateSelfLocation()
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
@@ -767,6 +766,22 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             self.loadCurrentRegionPins()
         }
         self.faeMapView.animateToCameraPosition(camera)
+    }
+    
+    func renewSelfLocation() {
+        if currentLocation != nil {
+            let selfLocation = FaeMap()
+            selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
+            selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
+            selfLocation.renewCoordinate {(status: Int, message: AnyObject?) in
+                if status/100 == 2 {
+                    print("Successfully renew self position")
+                }
+                else {
+                    print("fail to renew self position")
+                }
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
