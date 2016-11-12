@@ -80,7 +80,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         let range = username!.rangeOfString(userNameRegEx, options:.RegularExpressionSearch)
         let result = range != nil ? false : true
         
-        isValid = username != nil && username?.characters.count > 5 && result
+        isValid = username != nil && username?.characters.count > 2 && result
         
         self.enableContinueButton(isValid)
         
