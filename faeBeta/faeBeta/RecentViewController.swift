@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseDatabase
 import SwiftyJSON
 
 public var isDraggingRecentTableViewCell = false
@@ -40,7 +38,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillDisappear(animated: Bool) {
-        firebase.removeAllObservers()
+//        firebase.removeValue()
         loadingRecentTimer.invalidate()
     }
     
