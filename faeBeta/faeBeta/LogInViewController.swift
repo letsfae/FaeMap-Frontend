@@ -148,10 +148,10 @@ class LogInViewController: UIViewController {
             else{
                 let loginJSONInfo = JSON(message!)
                 if let info = loginJSONInfo["message"].string {
-                    if info.containsString("such") {
+                    if info.containsString("such") || info.containsString("non") {
                         self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
                     }
-                    else if info.containsString("verify") {
+                    else if info.containsString("incorrect") {
                         self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
                     }
                     else {
