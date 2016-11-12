@@ -14,7 +14,7 @@ extension CommentPinViewController{
     
     func inputToolbarHasReachedMaximumHeight() -> Bool
     {
-        return CGRectGetHeight(self.inputToolbar.frame) >= inputTextViewMaximumHeight // temp
+        return self.inputToolbar.frame.minY <= inputTextViewMaximumHeight 
     }
     
     func adjustInputToolbarForComposerTextViewContentSizeChange(dy:CGFloat)

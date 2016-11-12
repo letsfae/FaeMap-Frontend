@@ -107,7 +107,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var inputToolbar: JSQMessagesInputToolbarCustom!
     private var isObservingInputTextView = false
     private var inputTextViewContext = 0
-    var inputTextViewMaximumHeight:CGFloat = 300
+    var inputTextViewMaximumHeight:CGFloat = 250 // the distance from the top of toolbar to top of screen
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
 
@@ -167,6 +167,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     override func viewDidAppear(animated:Bool) {
+        adjustInputToolbarHeightConstraint(byDelta: -90)// A tricky way to set the toolbarHeight to default
         super.viewDidAppear(animated)
     }
     
@@ -599,6 +600,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         self.showKeyboard()
     }
     
+    
+    
     //MARK: - observe key path
     override func observeValueForKeyPath(keyPath: String?,
                                          ofObject object: AnyObject?,
@@ -621,7 +624,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        self.inputToolbar.contentView.textView.resignFirstResponder()
+//        self.inputToolbar.contentView.textView.resignFirstResponder()
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
