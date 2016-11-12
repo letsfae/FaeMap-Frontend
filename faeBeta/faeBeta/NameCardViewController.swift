@@ -111,12 +111,12 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
 // MARK: tableview
 extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     func initialTableview() {
-        tableViewNameCard = UITableView(frame: CGRectMake(0, 0, screenWidth, 736))
+        tableViewNameCard = UITableView(frame: CGRectMake(0, 0, screenWidth, 736*screenHeightFactor))
         tableViewNameCard.delegate = self
         tableViewNameCard.dataSource = self
         tableViewNameCard.backgroundColor = UIColor.clearColor()
         tableViewNameCard.separatorStyle = .None
-        tableViewNameCard.rowHeight = 55
+        tableViewNameCard.rowHeight = 55 * screenHeightFactor
         
         tableViewNameCard.registerClass(NameCardFirstFiveCell.self, forCellReuseIdentifier: cellGeneral)
         tableViewNameCard.registerClass(NameCardWithSwitchCell.self, forCellReuseIdentifier: cellSwitch)
@@ -215,14 +215,14 @@ extension NameCardViewController {
         viewDownUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
         self.view.addSubview(viewUpUnderline)
         viewHeaderBackground.addSubview(viewDownUnderline)
-        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51, 268, 180))
+        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51, 268*screenWidthFactor, 180*screenHeightFactor))
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 10
         viewNameCardTitle.clipsToBounds = true
         viewHeaderBackground.addSubview(viewNameCardTitle)
         
-        imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268, 120))
+        imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268*screenWidthFactor, 120*screenHeightFactor))
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
         imageViewCover.contentMode = UIViewContentMode.ScaleAspectFill
@@ -231,7 +231,7 @@ extension NameCardViewController {
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
-        imageViewTitleProfile = UIImageView(frame: CGRectMake((268 - 61) / 2, 190 - 119, 61, 61))
+        imageViewTitleProfile = UIImageView(frame: CGRectMake(103.5*screenWidthFactor, 71*screenHeightFactor, 61*screenWidthFactor, 61*screenHeightFactor))
         imageViewTitleProfile.layer.cornerRadius = 61 / 2
         imageViewTitleProfile.layer.masksToBounds = true
         imageViewTitleProfile.clipsToBounds = true
