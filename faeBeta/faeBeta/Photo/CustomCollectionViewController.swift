@@ -138,6 +138,9 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                     }else if(self.photoPicker.videoAsset != nil){
                         showAlertView(withWarning: "You can only send one video at the same time")
                         return
+                    }else if(self.photoPicker.assetDurationDict[asset] > 60){
+                        showAlertView(withWarning: "Sorry, for now you can only send video below 1 minute")
+                        return
                     }
                     photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                     photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset

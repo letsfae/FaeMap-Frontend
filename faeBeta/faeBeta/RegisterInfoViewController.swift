@@ -154,7 +154,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
             let currentYearInt = (calendar?.component(NSCalendarUnit.Year, fromDate: date!))!
             
             
-            isValid = isValid && currentYearInt > 1901 && currentYearInt < (calendar?.component(NSCalendarUnit.Year, fromDate: NSDate()))!
+            isValid = isValid && currentYearInt > (calendar?.component(NSCalendarUnit.Year, fromDate: NSDate()))! - 99 && currentYearInt < (calendar?.component(NSCalendarUnit.Year, fromDate: NSDate()))!
             exclamationMarkButton.hidden = isValid
         }
         
