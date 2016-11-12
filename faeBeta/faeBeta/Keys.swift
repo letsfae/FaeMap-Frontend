@@ -31,8 +31,8 @@ var username : String?
 //new add global var
 var nickname : String?
 var shortIntro : String?
-var showGender = true
-var showAge = true
+var showGender = false
+var showAge = false
 var userAge : Int?
 
 var userStatus: Int = -999

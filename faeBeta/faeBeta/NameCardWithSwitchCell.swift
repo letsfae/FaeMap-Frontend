@@ -54,7 +54,7 @@ class NameCardWithSwitchCell: UITableViewCell {
             user.updateNameCard { (status:Int, objects:AnyObject?) in
                 print (status)
                 if status / 100 == 2 {
-                
+                    showGender = value
                 }
                 else {
     
@@ -66,7 +66,7 @@ class NameCardWithSwitchCell: UITableViewCell {
             user.updateNameCard { (status:Int, objects:AnyObject?) in
                 print (status)
                 if status / 100 == 2 {
-                
+                    showAge = value
                 }
                 else {
     

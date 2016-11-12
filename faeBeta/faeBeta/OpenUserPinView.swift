@@ -124,6 +124,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewDialog.alpha = 0.0
         
         //        print("get name card")
+        /*
         let user1 = FaeUser()
         user1.getNamecardOfSpecificUser(String(4)){(status:Int, message:AnyObject?) in
             print(status)
@@ -132,6 +133,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 print(message)
             }
         }
+         */
         //        user1.getSelfNamecard{(status:Int, message:AnyObject?) in
         //            if(status / 100 == 2){
         //                print("gets self name")

@@ -187,6 +187,7 @@
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
 		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
+		B8B86D6B1DD68243001273F6 /* MapGetImageFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */; };
 		B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
 		B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
 		B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
@@ -423,6 +424,7 @@
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
 		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
+		B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapGetImageFunc.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDLoadItems.swift; sourceTree = "<group>"; };
 		B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDAPIConnections.swift; sourceTree = "<group>"; };
@@ -595,6 +597,7 @@
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
 				B0714D371D5E435200356705 /* UpdateUserPin.swift */,
 				B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */,
+				B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1291,6 +1294,7 @@
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
+				B8B86D6B1DD68243001273F6 /* MapGetImageFunc.swift in Sources */,
 				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,

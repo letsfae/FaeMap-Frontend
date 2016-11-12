@@ -14,6 +14,9 @@ extension FaeMapViewController {
     // Timer to update location (send self location to server)
     func updateSelfLocation() {
         if startUpdatingLocation && canDoNextUserUpdate {
+            for everyUser in self.mapUserPinsDic {
+                everyUser.map = nil
+            }
             canDoNextUserUpdate = false
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
@@ -57,45 +60,22 @@ extension FaeMapViewController {
                                     longitude = longitudeInfo
                                     pinData["longitude"] = longitudeInfo
                                     let point = CLLocationCoordinate2DMake(latitude, longitude)
-                                    if let userMarker = self.mapUserPinsDic[userID] {
-                                        let getMiniAvatar = FaeUser()
-                                        getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
-                                            let userProfile = JSON(message!)
-                                            if let miniAvatar = userProfile["mini_avatar"].int {
-                                                userMarker.map = nil
-                                                self.mapUserPinsDic[userID] = pinShowOnMap
-                                                pinShowOnMap.position = point
-                                                pinShowOnMap.userData = pinData
-                                                pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
-                                                let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-                                                fadeAnimation.fromValue = 0.0
-                                                fadeAnimation.toValue = 1.0
-                                                fadeAnimation.duration = 1
-                                                pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
-                                                pinShowOnMap.zIndex = 1
-                                                pinShowOnMap.map = self.faeMapView
-                                                self.canDoNextUserUpdate = true
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        let getMiniAvatar = FaeUser()
-                                        getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
-                                            let userProfile = JSON(message!)
-                                            if let miniAvatar = userProfile["mini_avatar"].int {
-                                                self.mapUserPinsDic[userID] = pinShowOnMap
-                                                pinShowOnMap.position = point
-                                                pinShowOnMap.userData = pinData
-                                                pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
-                                                let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-                                                fadeAnimation.fromValue = 0.0
-                                                fadeAnimation.toValue = 1.0
-                                                fadeAnimation.duration = 1
-                                                pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
-                                                pinShowOnMap.zIndex = 1
-                                                pinShowOnMap.map = self.faeMapView
-                                                self.canDoNextUserUpdate = true
-                                            }
+                                    let getMiniAvatar = FaeUser()
+                                    getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
+                                        let userProfile = JSON(message!)
+                                        if let miniAvatar = userProfile["mini_avatar"].int {
+                                            self.mapUserPinsDic.append(pinShowOnMap)
+                                            pinShowOnMap.position = point
+                                            pinShowOnMap.userData = pinData
+                                            pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
+                                            let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+                                            fadeAnimation.fromValue = 0.0
+                                            fadeAnimation.toValue = 1.0
+                                            fadeAnimation.duration = 1
+                                            pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                            pinShowOnMap.zIndex = 1
+                                            pinShowOnMap.map = self.faeMapView
+                                            self.canDoNextUserUpdate = true
                                         }
                                     }
                                 }

@@ -113,6 +113,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
         originPointForRefresh = mapCenterCoordinate
+        updateSelfLocation()
     }
     
     // Jump to create pin view controller

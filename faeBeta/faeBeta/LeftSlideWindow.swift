@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 //MARK: show left slide window
 extension FaeMapViewController {
@@ -142,7 +143,7 @@ extension FaeMapViewController {
         if nickname != nil {
             labelMoreName.text = nickname
         } else {
-            labelMoreName.text = username
+            labelMoreName.text = userUserName
         }
         viewHeaderForMore.addSubview(labelMoreName)
     }
@@ -184,9 +185,7 @@ extension FaeMapViewController {
     }
     func animationMoreShow(sender: UIButton!) {
         if user_id != nil {
-            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
-            print(user_id)
-            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+            self.getAndSetUserAvatar(self.imageViewAvatarMore, userID: Int(user_id))
         }
         UIView.animateWithDuration(0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
@@ -290,6 +289,18 @@ extension FaeMapViewController {
             return userStatus
         }
         return -999
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
     }
     
 }

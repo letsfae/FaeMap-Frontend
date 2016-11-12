@@ -152,7 +152,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     let tagHeight : CGFloat = 18
     var openUserPinActive = false
     var currentViewingUserId = 1
-    var mapUserPinsDic = [Int: GMSMarker]() // Map User Pin
+    var mapUserPinsDic = [GMSMarker]() // Map User Pin
     var mapCommentPinsDic = [Int: GMSMarker]() // Map Comment Pin
     var commentIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
@@ -195,7 +195,6 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        
     }
     
     override func viewWillAppear(animated: Bool) {

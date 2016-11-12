@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import SwiftyJSON
+import SDWebImage
 
 class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
@@ -44,6 +47,10 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     var imagePicker : UIImagePickerController!
     var imagePick : Int!
     
+    //Cache cover image and avatar
+    var imageCachedAvatar: UIImage!
+    var imageCachedCover: UIImage!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -54,51 +61,33 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     }
     override func viewWillAppear(animated: Bool) {
         //super.viewWillAppear(animated)
-        let user = FaeUser()
         self.navigationController?.navigationBarHidden = false
         self.navigationController?.navigationBarHidden = false
         self.navigationController?.navigationBar.hidden = false
         self.navigationController?.navigationBar.translucent = false
         setupNavigationBar()
-        user.getSelfNamecard { (status:Int, message:AnyObject?) in
-            print (status)
-
-            if status / 100 == 2 {
-
-                print(message!)
-                
-                let mess = message!
-
-                if let str = mess["nick_name"] as? String{
+        let showGenderAge = FaeUser()
+        showGenderAge.getSelfNamecard(){(status:Int, message:AnyObject?) in
+            print("DEBUG showgender")
+            if(status / 100 == 2){
+                print(message)
+                let genderAgeInfo = JSON(message!)
+                if let genderInfo = genderAgeInfo["show_gender"].bool {
+                    showGender = genderInfo
+                }
+                if let ageInfo = genderAgeInfo["show_age"].bool {
+                    showAge = ageInfo
+                }
+                if let str = genderAgeInfo["nick_name"].string{
                     nickname = str
                 }
-                if let str = mess["short_intro"] as? String{
+                if let str = genderAgeInfo["short_intro"].string{
                     shortIntro = str
                 }
-                if let genderNow = mess["show_gender"] as? Int {
-//                    print(mess["showGender"])
-                    if genderNow == 1 {
-                        showGender = true
-                    }
-                    else {
-                        showGender = false
-                    }
-                }
-                if let ageNow = mess["show_age"] as? Int {
-                    if ageNow == 1 {
-                        showAge = true
-                    } else {
-                        showAge = false
-                    }
-                }
-                if let ageNow = mess["age"] as? Int {
+                if let ageNow = genderAgeInfo["age"].int {
                     userAge = ageNow
                 }
-
                 self.updateName()
-            }
-            else {
-                    
             }
         }
 //        updateName()
@@ -141,6 +130,7 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row <= 4 {
             let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneral, forIndexPath: indexPath) as! NameCardFirstFiveCell
+            cell.selectionStyle = .None
             if indexPath.row == 0 {
                 cell.labelDes.text = "Display Name"
                 cell.labelUserSet.text = nickname
@@ -160,10 +150,13 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier(cellSwitch, forIndexPath: indexPath) as! NameCardWithSwitchCell
+            cell.selectionStyle = .None
             if indexPath.row == 5 {
                 cell.labelDes.text = "Show Gender"
+                cell.cellSwitch.setOn(showGender, animated: false)
             } else {
                 cell.labelDes.text = "Show Age"
+                cell.cellSwitch.setOn(showAge, animated: false)
             }
         }
         return UITableViewCell()
@@ -232,10 +225,9 @@ extension NameCardViewController {
         imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268, 120))
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
+        imageViewCover.contentMode = UIViewContentMode.ScaleAspectFill
         if user_id != nil {
-            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/name_card_cover"
-            print(stringHeaderURL)
-            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
+            self.getAndSetCoverImage(imageViewCover, userID: Int(user_id))
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -245,20 +237,20 @@ extension NameCardViewController {
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
         imageViewTitleProfile.layer.borderColor = UIColor.whiteColor().CGColor
+        
         /*
         imageViewTitleProfile.layer.shadowOpacity = 0.5
         imageViewTitleProfile.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         imageViewTitleProfile.layer.shadowRadius = 61 / 2
         imageViewTitleProfile.layer.shadowColor = UIColor.grayColor().CGColor
          */
+        
         viewNameCardTitle.addSubview(imageViewTitleProfile)
         if user_id != nil {
-            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
-            print(stringHeaderURL)
-            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+            self.getAndSetUserAvatar(self.imageViewTitleProfile, userID: Int(user_id))
         }
         
-        labelNickname = UILabel(frame: CGRectMake(0,257-119,268,27))
+        labelNickname = UILabel(frame: CGRectMake(0, 138, 268, 27))
         if nickname == nil || nickname == "" {
             labelNickname.text = "Anonymous"
         } else {
@@ -270,7 +262,6 @@ extension NameCardViewController {
         viewNameCardTitle.addSubview(labelNickname)
         
         //the second header view
-        
         viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119 - 64,268,180))
         viewNameCardDescr.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardDescr.layer.borderWidth = 1.0
@@ -355,11 +346,11 @@ extension NameCardViewController {
             self.viewNameCardDescr.center.x = self.view.center.x
         }))
     }
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        //        arrayNameCard[imageIndex] = image
-//        imageViewAvatarMore.image = image
+
         if imagePick == 0 {
-            imageViewTitleProfile.image = image
+            imageCachedAvatar = image
             let avatar = FaeImage()
             avatar.image = image
             avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
@@ -372,10 +363,11 @@ extension NameCardViewController {
                 }
             }
         } else {
-            imageViewCover.image = image
-            let avatar = FaeImage()
-            avatar.image = image
-            avatar.faeUploadCoverImageInBackground { (code:Int, message:AnyObject?) in
+            imageCachedCover = image
+            let coverImage = FaeImage()
+            coverImage.image = image
+            
+            coverImage.faeUploadCoverImageInBackground { (code:Int, message:AnyObject?) in
                 print(code)
                 print(message)
                 if code / 100 == 2 {
@@ -386,12 +378,20 @@ extension NameCardViewController {
             }
         }
 
-        self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
+        self.imagePicker.dismissViewControllerAnimated(true, completion: {
+            if self.imagePick == 0 {
+                self.imageViewTitleProfile.image = self.cropToBounds(self.imageCachedAvatar)
+            }
+            else {
+                self.imageViewCover.image = self.cropToBounds(self.imageCachedCover)
+            }
+        })
     }
     func showPhotoSelected(sender: Int) {
         //if sender = 0 show profile
         self.imagePick = sender
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
+        menu.view.tintColor = colorFae
         let showLibrary = UIAlertAction(title: "Choose from library", style: .Default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .PhotoLibrary
             menu.removeFromParentViewController()
@@ -409,6 +409,69 @@ extension NameCardViewController {
         menu.addAction(showCamera)
         menu.addAction(cancel)
         self.presentViewController(menu,animated:true,completion: nil)
+    }
+    
+    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
+    }
+    
+    func getAndSetCoverImage(userAvatar: UIImageView, userID: Int) {
+        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/name_card_cover"
+        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+            // completion code here
+            if userAvatar.image != nil {
+                let croppedImage = self.cropToBounds(userAvatar.image!)
+                userAvatar.image = croppedImage
+            }
+        }
+        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "map_userpin_background"), completed: block)
+    }
+    
+    func cropToBounds(image: UIImage) -> UIImage {
+        
+        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
+        
+        let contextSize: CGSize = contextImage.size
+        
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(contextSize.width)
+        var cgheight: CGFloat = CGFloat(contextSize.height)
+        
+        print("DEBUG: cgwidth cgheight")
+        print(cgwidth)
+        print(cgheight)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
+        
+        // Create bitmap image from context using the rect
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage!, rect)!
+        
+        // Create a new image based on the imageRef and rotate back to the original orientation
+        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        
+        return image
     }
 }
 extension NSAttributedString {
