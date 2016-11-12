@@ -34,7 +34,6 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
             if let userID = dictCell["user_id"].int {
-                self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userID)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(userID)") {(status, message) in
                     let userProfile = JSON(message!)
@@ -42,6 +41,8 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
                         cell.labelUsername.text = "\(username)"
                     }
                 }
+                let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+                cell.imageViewAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
             }
             if let date = dictCell["date"].string {
                 cell.labelTimestamp.text = date

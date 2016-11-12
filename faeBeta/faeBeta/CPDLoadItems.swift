@@ -268,6 +268,7 @@ extension CommentPinViewController {
         imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
         imageCommentPinUserAvatar.layer.cornerRadius = 25
         imageCommentPinUserAvatar.clipsToBounds = true
+        imageCommentPinUserAvatar.contentMode = .ScaleAspectFill
         commentDetailFullBoardScrollView.addSubview(imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)
         commentDetailFullBoardScrollView.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imageCommentPinUserAvatar)

@@ -47,10 +47,6 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
     var imagePicker : UIImagePickerController!
     var imagePick : Int!
     
-    //Cache cover image and avatar
-    var imageCachedAvatar: UIImage!
-    var imageCachedCover: UIImage!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -207,6 +203,7 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
 extension NameCardViewController {
     func initialHeaderView() {
         viewHeaderBackground = UIView(frame: CGRectMake(0, 0, screenWidth, 274*screenHeightFactor))
+        viewHeaderBackground.center.x = screenWidth/2
         tableViewNameCard.tableHeaderView = viewHeaderBackground
         //tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
         viewUpUnderline = UIView(frame: CGRectMake(0, 0, screenWidth, 1))
@@ -215,19 +212,21 @@ extension NameCardViewController {
         viewDownUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
         self.view.addSubview(viewUpUnderline)
         viewHeaderBackground.addSubview(viewDownUnderline)
-        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51, 268*screenWidthFactor, 180*screenHeightFactor))
+        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51*screenHeightFactor, 268*screenWidthFactor, 180*screenHeightFactor))
+        viewNameCardTitle.center.x = screenWidth / 2
         viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
         viewNameCardTitle.layer.borderWidth = 1.0
-        viewNameCardTitle.layer.cornerRadius = 10
+        viewNameCardTitle.layer.cornerRadius = 15
         viewNameCardTitle.clipsToBounds = true
         viewHeaderBackground.addSubview(viewNameCardTitle)
         
         imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268*screenWidthFactor, 120*screenHeightFactor))
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
-        imageViewCover.contentMode = UIViewContentMode.ScaleAspectFill
+        imageViewCover.contentMode = .ScaleAspectFill
         if user_id != nil {
-            self.getAndSetCoverImage(imageViewCover, userID: Int(user_id))
+            let stringHeaderURL = "https://api.letsfae.com/files/users/\(user_id)/name_card_cover"
+            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -237,6 +236,7 @@ extension NameCardViewController {
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
         imageViewTitleProfile.layer.borderColor = UIColor.whiteColor().CGColor
+        imageViewTitleProfile.contentMode = .ScaleAspectFill
         
         /*
         imageViewTitleProfile.layer.shadowOpacity = 0.5
@@ -246,9 +246,6 @@ extension NameCardViewController {
          */
         
         viewNameCardTitle.addSubview(imageViewTitleProfile)
-        if user_id != nil {
-            self.getAndSetUserAvatar(self.imageViewTitleProfile, userID: Int(user_id))
-        }
         
         labelNickname = UILabel(frame: CGRectMake(0, 138*screenHeightFactor, 268*screenWidthFactor, 27*screenHeightFactor))
         if nickname == nil || nickname == "" {
@@ -278,11 +275,12 @@ extension NameCardViewController {
         imageViewDescrProfile.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         imageViewDescrProfile.layer.shadowOpacity = 0.3
         imageViewDescrProfile.layer.shadowRadius = 5.0
+        imageViewDescrProfile.contentMode = .ScaleAspectFill
         viewNameCardDescr.addSubview(imageViewDescrProfile)
         if user_id != nil {
             let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewDescrProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
         }
         viewGender = UIView(frame: CGRectMake(90 - 73, 139 - 119, 50, 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)
@@ -354,7 +352,7 @@ extension NameCardViewController {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
 
         if imagePick == 0 {
-            imageCachedAvatar = image
+            self.imageViewTitleProfile.image = image
             let avatar = FaeImage()
             avatar.image = image
             avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
@@ -367,7 +365,7 @@ extension NameCardViewController {
                 }
             }
         } else {
-            imageCachedCover = image
+            self.imageViewCover.image = image
             let coverImage = FaeImage()
             coverImage.image = image
             
@@ -382,14 +380,7 @@ extension NameCardViewController {
             }
         }
 
-        self.imagePicker.dismissViewControllerAnimated(true, completion: {
-            if self.imagePick == 0 {
-                self.imageViewTitleProfile.image = self.cropToBounds(self.imageCachedAvatar)
-            }
-            else {
-                self.imageViewCover.image = self.cropToBounds(self.imageCachedCover)
-            }
-        })
+        self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
     }
     func showPhotoSelected(sender: Int) {
         //if sender = 0 show profile
@@ -413,69 +404,6 @@ extension NameCardViewController {
         menu.addAction(showCamera)
         menu.addAction(cancel)
         self.presentViewController(menu,animated:true,completion: nil)
-    }
-    
-    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
-        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
-            // completion code here
-            if userAvatar.image != nil {
-                let croppedImage = self.cropToBounds(userAvatar.image!)
-                userAvatar.image = croppedImage
-            }
-        }
-        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
-    }
-    
-    func getAndSetCoverImage(userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/name_card_cover"
-        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
-            // completion code here
-            if userAvatar.image != nil {
-                let croppedImage = self.cropToBounds(userAvatar.image!)
-                userAvatar.image = croppedImage
-            }
-        }
-        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "map_userpin_background"), completed: block)
-    }
-    
-    func cropToBounds(image: UIImage) -> UIImage {
-        
-        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
-        
-        let contextSize: CGSize = contextImage.size
-        
-        var posX: CGFloat = 0.0
-        var posY: CGFloat = 0.0
-        var cgwidth: CGFloat = CGFloat(contextSize.width)
-        var cgheight: CGFloat = CGFloat(contextSize.height)
-        
-        print("DEBUG: cgwidth cgheight")
-        print(cgwidth)
-        print(cgheight)
-        
-        // See what size is longer and create the center off of that
-        if contextSize.width > contextSize.height {
-            posX = ((contextSize.width - contextSize.height) / 2)
-            posY = 0
-            cgwidth = contextSize.height
-            cgheight = contextSize.height
-        } else {
-            posX = 0
-            posY = ((contextSize.height - contextSize.width) / 2)
-            cgwidth = contextSize.width
-            cgheight = contextSize.width
-        }
-        
-        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
-        
-        // Create bitmap image from context using the rect
-        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage!, rect)!
-        
-        // Create a new image based on the imageRef and rotate back to the original orientation
-        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
-        
-        return image
     }
 }
 extension NSAttributedString {

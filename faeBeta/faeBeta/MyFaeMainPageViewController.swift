@@ -57,6 +57,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imageViewAvatar.layer.cornerRadius = 100 / 2
         imageViewAvatar.layer.masksToBounds = true
         imageViewAvatar.clipsToBounds = true
+        imageViewAvatar.contentMode = UIViewContentMode.ScaleAspectFill
 //        imageViewAvatar.layer.borderWidth = 5
 //        imageViewAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         if user_id != nil {

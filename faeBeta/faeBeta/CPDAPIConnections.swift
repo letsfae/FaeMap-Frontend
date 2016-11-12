@@ -94,6 +94,7 @@ extension CommentPinViewController {
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
                 }
                 else {
+                    print(status)
                     print("Fail to like this comment pin!")
                 }
             }
@@ -259,7 +260,8 @@ extension CommentPinViewController {
                 }
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
-                self.getAndSetUserAvatar(self.imageCommentPinUserAvatar, userID: toGetUserName)
+                let stringHeaderURL = "https://api.letsfae.com/files/users/\(toGetUserName)/avatar"
+                self.imageCommentPinUserAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)

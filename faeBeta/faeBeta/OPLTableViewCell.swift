@@ -46,6 +46,7 @@ class OPLTableViewCell: UITableViewCell {
         imageViewAvatar.clipsToBounds = true
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true
+        imageViewAvatar.contentMode = .ScaleAspectFill
         self.addConstraintsWithFormat("H:|-14-[v0(50)]", options: [], views: imageViewAvatar)
         self.addConstraintsWithFormat("V:|-13-[v0(50)]", options: [], views: imageViewAvatar)
     }
