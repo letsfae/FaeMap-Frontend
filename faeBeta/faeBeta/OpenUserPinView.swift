@@ -12,20 +12,7 @@ import SwiftyJSON
 
 extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    func hideOpenUserPin(sender: UIButton) {
-        if openUserPinActive {
-            hideOpenUserPinAnimation()
-            openUserPinActive = false
-        }
-    }
-    
     func loadNamecard() {
-        buttonCloseUserPinSubview = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
-        self.view.addSubview(buttonCloseUserPinSubview)
-        buttonCloseUserPinSubview.layer.zPosition = 19
-        buttonCloseUserPinSubview.addTarget(self, action: #selector(FaeMapViewController.hideOpenUserPin(_:)), forControlEvents: .TouchUpInside)
-        buttonCloseUserPinSubview.hidden = true
-        
         self.view.backgroundColor = UIColor.whiteColor()
         
         uiviewDialog = UIView(frame: CGRect(x: (screenWidth-maxLength)/2, y: 140*screenWidthFactor, width: maxLength,height: 302))
@@ -44,12 +31,13 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         imageviewNamecardAvatar.clipsToBounds = true
         imageviewNamecardAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         imageviewNamecardAvatar.layer.borderWidth = 5
+        imageviewNamecardAvatar.contentMode = .ScaleAspectFill
         
         //background
         imageviewUserPinBackground = UIImageView(frame: CGRect(x: (maxLength - 268)/2, y: 20, width: 268, height: 126))
         imageviewUserPinBackground.image = UIImage(named: "map_userpin_background")
         imageviewUserPinBackground.clipsToBounds = false
-        
+        imageviewUserPinBackground.contentMode = .ScaleAspectFill
         
         //button more
         buttonMore = UIButton(frame: CGRect(x: (maxLength-72), y: 40/736*screenHeight, width: 37, height: 17))
@@ -179,7 +167,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
-        buttonCloseUserPinSubview.hidden = false
         UIView.animateWithDuration(0.2, animations: ({
             self.uiviewDialog.alpha = 1.0
         }))
@@ -189,7 +176,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func hideOpenUserPinAnimation() {
-        buttonCloseUserPinSubview.hidden = true
         UIView.animateWithDuration(0.2, animations: ({
             self.uiviewDialog.alpha = 0.0
         }))
@@ -206,8 +192,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         let totalInterval = (CGFloat)(tagName.count - 1) * selectedInterval
         var totalTag : CGFloat = 0
-        
-        
         
         for tag in tagName {
             

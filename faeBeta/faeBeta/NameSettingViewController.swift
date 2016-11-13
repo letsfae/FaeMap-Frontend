@@ -23,18 +23,20 @@ class NameSettingViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     func loadTitle() {
-        labelTitle = UILabel(frame: CGRectMake((screenWidth - 140) / 2, 99 - 64, 140, 27))
-        labelTitle.text = "Your Nickname"
-        labelTitle.font = UIFont(name:"AvenirNext-Medium", size: 20)
+        labelTitle = UILabel(frame: CGRectMake(0, 35, screenWidth, 27))
+        labelTitle.center.x = screenWidth/2
+        labelTitle.text = "Your Display Name"
+        labelTitle.textAlignment = .Center
+        labelTitle.font = UIFont(name:"AvenirNext-Medium", size: 25)
         labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         self.view.addSubview(labelTitle)
 
-        textInput = UITextField(frame: CGRectMake((screenWidth - 244) / 2, 174 - 64, 244, 102))
+        textInput = UITextField(frame: CGRectMake((screenWidth - 270) / 2, 110, 270, 102))
         textInput.textAlignment = .Center
         textInput.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         textInput.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         textInput.font = UIFont(name: "AvenirNext-Regular", size: 25)
-        textInput.placeholder = "Write a Nick name"
+        textInput.placeholder = "Write a Display Name"
         self.view.addSubview(textInput)
 
         //buttonSave = UIButton(frame: CGRectMake((screenWidth - 300) / 2,screenHeigh - 336, 300, 50))
@@ -44,6 +46,7 @@ class NameSettingViewController: UIViewController {
         buttonSave.setTitle("Save", forState: .Normal)
         buttonSave.layer.cornerRadius = 25
         buttonSave.titleLabel?.textColor = UIColor.whiteColor()
+        buttonSave.titleLabel?.font = UIFont(name: "AvenirNext-Demibold", size: 20)
         buttonSave.addTarget(self, action: #selector(NameSettingViewController.actionSave), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonSave)
         labelDesc = UILabel(frame: CGRectMake(0, buttonSave.frame.minY - 19 - 36, 242, 36))

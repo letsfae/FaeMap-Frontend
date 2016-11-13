@@ -95,7 +95,7 @@
 		B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D341D5E435200356705 /* RightSlideWindow.swift */; };
 		B0714D6D1D5E435200356705 /* MapTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D351D5E435200356705 /* MapTableDelegate.swift */; };
 		B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* UnreadChatTableView.swift */; };
-		B0714D731D5E435200356705 /* UpdateUserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* UpdateUserPin.swift */; };
+		B0714D731D5E435200356705 /* UpdateMapPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* UpdateMapPins.swift */; };
 		B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D381D5E435200356705 /* WindBellTableViewCell.swift */; };
 		B0714D791D5E435200356705 /* WindBellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0714D391D5E435200356705 /* WindBellTableViewCell.xib */; };
 		B0714D821D5E465900356705 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D811D5E465900356705 /* Camera.swift */; };
@@ -319,7 +319,7 @@
 		B0714D341D5E435200356705 /* RightSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D351D5E435200356705 /* MapTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTableDelegate.swift; sourceTree = "<group>"; };
 		B0714D361D5E435200356705 /* UnreadChatTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnreadChatTableView.swift; sourceTree = "<group>"; };
-		B0714D371D5E435200356705 /* UpdateUserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateUserPin.swift; sourceTree = "<group>"; };
+		B0714D371D5E435200356705 /* UpdateMapPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateMapPins.swift; sourceTree = "<group>"; };
 		B0714D381D5E435200356705 /* WindBellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindBellTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D391D5E435200356705 /* WindBellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindBellTableViewCell.xib; sourceTree = "<group>"; };
 		B0714D811D5E465900356705 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
@@ -595,7 +595,7 @@
 				B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
 				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
-				B0714D371D5E435200356705 /* UpdateUserPin.swift */,
+				B0714D371D5E435200356705 /* UpdateMapPins.swift */,
 				B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */,
 				B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */,
 			);
@@ -1272,7 +1272,7 @@
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
-				B0714D731D5E435200356705 /* UpdateUserPin.swift in Sources */,
+				B0714D731D5E435200356705 /* UpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,

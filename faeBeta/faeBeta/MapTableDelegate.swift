@@ -32,7 +32,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             return 3
         }
         else if tableView == tableviewWindbell {
-            return tableWindbellData.count
+            return 0
         }
         else{
             return 0
@@ -87,15 +87,6 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         }
-        else if tableView == self.tableviewWindbell{
-            let cell = tableView.dequeueReusableCellWithIdentifier("windbelltablecell", forIndexPath: indexPath)as! WindBellTableViewCell
-            cell.selectionStyle = .None
-            cell.labelTitle.text = tableWindbellData[indexPath.row]["Title"]
-            cell.labelContent.text = tableWindbellData[indexPath.row]["Content"]
-            cell.labelTime.text = tableWindbellData[indexPath.row]["Time"]
-            return cell
-            
-        }
         else {
             return UITableViewCell()
         }
@@ -144,10 +135,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
         else if tableView == tableviewMore {
             return 60
         }
-        else if tableView == tableviewWindbell{
-            return 82
-        }
-        else{
+        else {
             return 0
         }
     }

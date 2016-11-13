@@ -132,9 +132,6 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     // Timer for touching pin comment cell
     var touchToReplyTimer: NSTimer!
     
-    // Is holding like button or not
-    var likeButtonIsHolding = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clearColor()

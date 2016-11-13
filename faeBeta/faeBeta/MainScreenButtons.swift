@@ -111,11 +111,8 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     
     func actionTrueNorth(sender: UIButton!) {
         self.renewSelfLocation()
-        faeMapView.animateToBearing(0)
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
-        originPointForRefresh = mapCenterCoordinate
-        updateSelfLocation()
+        self.updateTimerForSelfLoc()
+        self.faeMapView.animateToBearing(0)
     }
     
     // Jump to create pin view controller

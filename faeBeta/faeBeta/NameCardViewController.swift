@@ -392,7 +392,7 @@ extension NameCardViewController {
             menu.removeFromParentViewController()
             self.presentViewController(self.imagePicker,animated:true,completion:nil)
         }
-        let showCamera = UIAlertAction(title: "Take photoes", style: .Default) { (alert: UIAlertAction) in
+        let showCamera = UIAlertAction(title: "Take photos", style: .Default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .Camera
             menu.removeFromParentViewController()
             self.presentViewController(self.imagePicker,animated:true,completion:nil)

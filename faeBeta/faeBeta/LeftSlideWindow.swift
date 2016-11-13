@@ -12,10 +12,7 @@ import SDWebImage
 
 //MARK: show left slide window
 extension FaeMapViewController {
-//    UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate 
-//    var imagePicker : UIImagePickerController!
     func loadMore() {
-        //self.navigationController?.navigationBarHidden = false
         let shareAPI = LocalStorageManager()
         shareAPI.readLogInfo()
         dimBackgroundMoreButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
@@ -262,7 +259,7 @@ extension FaeMapViewController {
         userIsInactive.whereKey("status", value: "0")
         userIsInactive.setSelfStatus({ (status, message) in
             if status / 100 == 2 {
-                print("Successfully set user to offline")
+                
             }
             else {
                 print("Fail to switch to offline")
@@ -271,14 +268,14 @@ extension FaeMapViewController {
     }
     
     func userIsActive(status: Int) {
-        let userIsInactive = FaeUser()
-        userIsInactive.whereKey("status", value: "\(status)")
-        userIsInactive.setSelfStatus({ (status, message) in
+        let userIsActive = FaeUser()
+        userIsActive.whereKey("status", value: "\(status)")
+        userIsActive.setSelfStatus({ (status, message) in
             if status / 100 == 2 {
-                print("Successfully set user to offline")
+                
             }
             else {
-                print("Fail to switch to offline")
+                print("Fail to switch to online")
             }
         })
     }

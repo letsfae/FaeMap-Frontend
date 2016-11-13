@@ -201,11 +201,11 @@ func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[
                 //print(response.response!.statusCode)
                 //print(response)
                 if response.response != nil{
-                    if(response.response!.statusCode != 0){
-                        print("finished")
+                    if(response.response!.statusCode != 0) {
+                        
                     }
-                    if let JSON = response.response?.allHeaderFields{
-                        print(JSON)
+                    if let _ = response.response?.allHeaderFields {
+                        
                     }
                     if let resMess = response.result.value {
                         completion(response.response!.statusCode, resMess)

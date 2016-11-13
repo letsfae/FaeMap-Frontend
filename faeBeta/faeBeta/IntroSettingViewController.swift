@@ -51,13 +51,12 @@ class IntroSettingViewController: UIViewController , UITextViewDelegate{
         textInput.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         textInput.delegate = self
         self.view.addSubview(textInput)
-        labelPlaceholder = UILabel(frame: CGRectMake(0,174 - 64,244,34))
-        labelPlaceholder.center.x = screenWidth / 2
+        labelPlaceholder = UILabel(frame: CGRectMake(-5, 10, 244, 34))
         labelPlaceholder.textAlignment = .Center
         labelPlaceholder.text = "Write a Short Intro"
         labelPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 25)
         labelPlaceholder.textColor = UIColor(colorLiteralRed: 155/255, green: 155/255, blue: 155/255, alpha: 1)
-        self.view.addSubview(labelPlaceholder)
+        self.textInput.addSubview(labelPlaceholder)
 
         buttonSave = UIButton(frame: CGRectMake(0, screenHeight - 64 - 30 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
         buttonSave.center.x = screenWidth / 2

@@ -173,8 +173,6 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
             if (textFieldUsername.text != nil) && (textFieldUsername.text != ""){
                 user.whereKey("username", value: textFieldUsername.text!)
                 user.checkUserExistence{(status:Int?, message:AnyObject?) in
-                    print(status)
-                    print(message)
                     if ( status! / 100 == 2 ){
                         if message != nil{
                             if let didexist = message!["existence"]{

@@ -118,7 +118,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             let push = FaePush()
             push.getSync({ (status:Int!, message:AnyObject?) in
-                print(status)
                 if status / 100 == 2 {
                     //success
                 } else {
@@ -137,7 +136,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()
-        print(isFirstLaunch)
         //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
         //        print(notificationType?.types)
         if isFirstLaunch == true {

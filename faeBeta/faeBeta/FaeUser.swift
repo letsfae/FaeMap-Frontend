@@ -40,10 +40,6 @@ class FaeUser : NSObject {
      */
     func signUpInBackground(completion:(Int,AnyObject?)->Void){
         postToURL("users", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
-            print("status")
-            print(status)
-            print("message")
-            print(message)
             if(status / 100 == 2 ) {
                 //success
                 self.saveUserSignUpInfo()
@@ -85,13 +81,9 @@ class FaeUser : NSObject {
     
     func logInBackground(completion:(Int,AnyObject?)->Void){
         postToURL("authentication", parameter: keyValue, authentication: nil) { (status:Int, message:AnyObject?) in
-            print(status)
-            print(message)
             if(status / 100 == 2 ){//success
                 self.processToken(message!)
                 self.getSelfProfile{(status:Int, message:AnyObject?) in
-                    print("status")
-                    print(status)
                     if message != nil{
                         if (message!["email"]) != nil{
                             //userEmail
@@ -299,8 +291,6 @@ class FaeUser : NSObject {
      */
     func updateAccountBasicInfo(completion:(Int,AnyObject?)->Void){// update local storage
         postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:AnyObject?) in
-            print(status)
-            print(message)
             if(status/100 == 2){
                 if let firstname = self.keyValue["first_name"]{
                     userFirstname = firstname as? String
@@ -486,10 +476,6 @@ class FaeUser : NSObject {
     
     func getSelfStatus(completion:(Int,AnyObject?)->Void){//解包 //local storage
         getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            print("TESTing getSelfStatus")
-            print(status)
-            print(message)//error need to uppack the json
-            
             completion(status,message)
         }
     }
@@ -519,9 +505,6 @@ class FaeUser : NSObject {
         }
         */
         postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
-            print("TESTing setSelfStatus")
-            print(status)
-            print(message)
             completion(status,message)
         }
     }

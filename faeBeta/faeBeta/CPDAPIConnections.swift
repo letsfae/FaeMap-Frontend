@@ -1,5 +1,5 @@
 //
-//  CommentPinDetailAPIConnections.swift
+//  CPDAPIConnections.swift
 //  faeBeta
 //
 //  Created by Yue on 10/18/16.
@@ -14,27 +14,35 @@ extension CommentPinViewController {
     // Like comment pin
     func actionLikeThisComment(sender: UIButton) {
         endEdit()
+        
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
         }
         
-        if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
-            sender.tag = 1
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        if sender.tag == 1 && commentIDCommentPinDetailView != "-999" {
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+            if animatingHeart != nil {
+                animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+            }
+            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            print("debug animating sender.tag 1")
+            print(sender.tag)
+            sender.tag = 0
             return
         }
         
-        if sender.tag == 1 && commentIDCommentPinDetailView != "-999" {
-            sender.tag = 0
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
-            unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
+        if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+            self.animateHeart()
+            likeThisPin("comment", pinID: commentIDCommentPinDetailView)
+            print("debug animating sender.tag 0")
+            print(sender.tag)
+            sender.tag = 1
         }
     }
     
     func actionHoldingLikeButton(sender: UIButton) {
         endEdit()
-        likeButtonIsHolding = true
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
         animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
     }
@@ -94,7 +102,6 @@ extension CommentPinViewController {
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
                 }
                 else {
-                    print(status)
                     print("Fail to like this comment pin!")
                 }
             }
@@ -140,7 +147,6 @@ extension CommentPinViewController {
             
             if let likes = mapInfoJSON["likes"].int {
                 self.labelCommentPinLikeCount.text = "\(likes)"
-//                self.labelCommentPinVoteCount.text = "\(likes)"
             }
             if let _ = mapInfoJSON["saves"].int {
                 
