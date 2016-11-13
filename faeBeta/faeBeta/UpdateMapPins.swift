@@ -36,7 +36,7 @@ extension FaeMapViewController {
         let loadPinsByZoomLevel = FaeMap()
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        loadPinsByZoomLevel.whereKey("radius", value: "5000")
+        loadPinsByZoomLevel.whereKey("radius", value: "500000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
@@ -109,9 +109,11 @@ extension FaeMapViewController {
             }
             canDoNextUserUpdate = false
             self.renewSelfLocation()
+            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
+            let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
             let getMapUserInfo = FaeMap()
-            getMapUserInfo.whereKey("geo_latitude", value: "\(currentLatitude)")
-            getMapUserInfo.whereKey("geo_longitude", value: "\(currentLongitude)")
+            getMapUserInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+            getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
             getMapUserInfo.whereKey("radius", value: "500000")
             getMapUserInfo.whereKey("type", value: "user")
             getMapUserInfo.getMapInformation {(status: Int, message: AnyObject?) in

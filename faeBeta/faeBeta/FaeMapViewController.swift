@@ -323,8 +323,8 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     }
     
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
-        print("Cur-Zoom Level: \(mapView.camera.zoom)")
-        print("Pre-Zoom Level: \(previousZoomLevel)")
+//        print("Cur-Zoom Level: \(mapView.camera.zoom)")
+//        print("Pre-Zoom Level: \(previousZoomLevel)")
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
         let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
@@ -372,6 +372,13 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         if mapView.camera.zoom < 13 {
             mapView.clear()
         }
+        
+//        let mapTop = CGPointMake(0, 0)
+//        let mapTopCoor = faeMapView.projection.coordinateForPoint(mapTop)
+//        let mapBottom = CGPointMake(screenWidth, screenHeight)
+//        let mapBottomCoor = faeMapView.projection.coordinateForPoint(mapBottom)
+//        let coorWidth = abs(mapBottomCoor.latitude - mapTopCoor.latitude)
+//        print("DEBUG Coordinate Width: \(coorWidth)")
     }
     
     func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
@@ -387,22 +394,29 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         
         if currentZoomLevel >= 13 {
             if abs(currentZoomLevel-preZoomLevel) > 1 {
-                print("DEBUG: Zoom level diff > 1")
+//                print("DEBUG: Zoom level diff > 1")
                 self.updateTimerForLoadRegionPin()
                 self.updateTimerForSelfLoc()
                 return
             }
             if curPosition != nil {
-                if abs(currentPosition.latitude-curPosition.latitude) <= 0.03 {
+                let powFactor: Double = Double(21 - currentZoomLevel)
+                let coorDistance: Double = 0.0004*pow(2.0, powFactor)
+                let latitudeExceed = abs(currentPosition.latitude-curPosition.latitude) > coorDistance
+                let longitudeExceed = abs(currentPosition.longitude-curPosition.longitude) > coorDistance
+                if latitudeExceed {
+//                    print("DEBUG: Position diff > \(coorDistance)")
+                    mapView.clear()
+                    self.updateTimerForLoadRegionPin()
+                    self.updateTimerForSelfLoc()
                     return
                 }
-                if abs(currentPosition.longitude-curPosition.longitude) <= 0.03 {
-                    return
+                if longitudeExceed {
+//                    print("DEBUG: Position diff > \(coorDistance)")
+                    mapView.clear()
+                    self.updateTimerForLoadRegionPin()
+                    self.updateTimerForSelfLoc()
                 }
-                print("DEBUG: Position diff > 0.03")
-                mapView.clear()
-                self.updateTimerForLoadRegionPin()
-                self.updateTimerForSelfLoc()
             }
         }
         else {
