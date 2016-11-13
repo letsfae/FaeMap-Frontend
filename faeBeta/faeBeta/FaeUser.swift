@@ -189,8 +189,6 @@ class FaeUser : NSObject {
     func checkUserExistence(completion:(Int,AnyObject?)->Void){
         if let username = keyValue["user_name"] as? String{
             getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:AnyObject?) in
-
-                print(message)
                 //self.clearKeyValue()
                 completion(status,message);
             }
