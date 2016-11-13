@@ -107,7 +107,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var inputToolbar: JSQMessagesInputToolbarCustom!
     private var isObservingInputTextView = false
     private var inputTextViewContext = 0
-    var inputTextViewMaximumHeight:CGFloat = 250 * screenHeightFactor // the distance from the top of toolbar to top of screen
+    var inputTextViewMaximumHeight:CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
 
