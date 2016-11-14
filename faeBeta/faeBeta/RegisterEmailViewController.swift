@@ -126,9 +126,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
             DispatchQueue.main.async(execute: {
                 
                 if status/100 == 2 {
-                    let value = (message as AnyObject).value(forKey: "existence")
+                    let value = (message as! NSDictionary).value(forKey: "existence")
                     if (value != nil) {
-                        if value! as! Int == 0 {
+                        if value as! NSNumber == 0 {
                             self.emailExistLabel.isHidden = true
                             self.checkForValidEmail(self.email!, completion: self.jumpToRegisterUsername)
 //                            self.jumpToRegisterUsername()

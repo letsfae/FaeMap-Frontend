@@ -119,7 +119,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                 if status/100 == 2 {
                     let value = (message as AnyObject).value(forKey: "existence")
                     if (value != nil) {
-                        if value! as! Int == 0 {
+                        if value! as! NSNumber == 0 {
                             self.jumpToRegisterPassword()
                             self.usernameExistLabel.isHidden = true
                         } else {
