@@ -15,13 +15,13 @@ class WelcomeImageContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.containerView = WelcomeContentContainerFace()
-        self.view.insertSubview(containerView, atIndex: 0)
+        self.view.insertSubview(containerView, at: 0)
         self.containerView.frame = self.view.bounds
         
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         setupContentContainer()
     }
 

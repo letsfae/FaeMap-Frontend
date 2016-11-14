@@ -16,7 +16,7 @@ class StickerScrollView : UIScrollView {
     override init(frame : CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)
-        self.pagingEnabled = true
+        self.isPagingEnabled = true
         self.showsHorizontalScrollIndicator = false
         stickerAlbum = StickerAlbum()
     }
@@ -25,12 +25,12 @@ class StickerScrollView : UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func appendNewImage(name : String) {
+    func appendNewImage(_ name : String) {
         stickerAlbum.appendNewImage(name)
     }
     
     func attachButton() {
-        self.contentSize = CGSizeMake(self.frame.size.width * CGFloat(stickerAlbum.pageNumber), self.frame.size.height)
+        self.contentSize = CGSize(width: self.frame.size.width * CGFloat(stickerAlbum.pageNumber), height: self.frame.size.height)
         stickerAlbum.attachStickerButton(self)
     }
     

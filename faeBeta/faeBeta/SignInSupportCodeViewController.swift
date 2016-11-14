@@ -34,7 +34,7 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
         tableView.dataSource = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         enterCodeTableViewCell.makeFirstResponder()
     }
@@ -42,10 +42,10 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     // MARK: - Functions
     
     func resendCodeView() -> UIView {
-        let resendCodeView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
+        let resendCodeView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
         
-        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 125, 0, 250, 25))
-        label.textAlignment = .Center
+        let label = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 125, y: 0, width: 250, height: 25))
+        label.textAlignment = .center
         label.font = UIFont(name: "AvenirNext-Medium", size: 13)
         label.textColor = UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
         label.text = "Resend Code."
@@ -61,7 +61,7 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func continueButtonPressed() {
@@ -70,7 +70,7 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterUsername() {
-        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterUsernameViewController")as! RegisterUsernameViewController
+        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -84,9 +84,9 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     
     func registerCell() {
         
-        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "SpacerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpacerTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "EnterCodeTableViewCell", bundle: nil), forCellReuseIdentifier: "EnterCodeTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "SpacerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpacerTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "EnterCodeTableViewCell", bundle: nil), forCellReuseIdentifier: "EnterCodeTableViewCellIdentifier")
         
     }
     
@@ -101,27 +101,27 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
 
 extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Enter the Code we just \nsent to your Email to continue")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SpacerTableViewCellIdentifier") as! SpacerTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SpacerTableViewCellIdentifier") as! SpacerTableViewCell
             return cell
         case 2:
             if enterCodeTableViewCell == nil {
-                enterCodeTableViewCell = tableView.dequeueReusableCellWithIdentifier("EnterCodeTableViewCellIdentifier") as! EnterCodeTableViewCell
+                enterCodeTableViewCell = tableView.dequeueReusableCell(withIdentifier: "EnterCodeTableViewCellIdentifier") as! EnterCodeTableViewCell
             }
             return enterCodeTableViewCell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
         }
@@ -129,7 +129,7 @@ extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataS
 }
 
 extension SignInSupportCodeViewController: FAENumberKeyboardDelegate {
-    func keyboardButtonTapped(num: Int) {
+    func keyboardButtonTapped(_ num: Int) {
         if num != -1 {
             if code.characters.count < 6 {
                 code = "\(code)\(num)"
@@ -146,28 +146,28 @@ extension SignInSupportCodeViewController: FAENumberKeyboardDelegate {
 
 extension SignInSupportCodeViewController {
     
-    override func keyboardWillShow(notification: NSNotification) {
+    override func keyboardWillShow(_ notification: Notification) {
         view.endEditing(true)
         if numKeyPad == nil {
-            numKeyPad = FAENumberKeyboard(frame:CGRectMake(57,view.frame.size.height, 300, 244))
+            numKeyPad = FAENumberKeyboard(frame:CGRect(x: 57,y: view.frame.size.height, width: 300, height: 244))
             self.view.addSubview(numKeyPad)
             numKeyPad.delegate = self
         }
         
-        UIView .animateWithDuration(0.3) {
+        UIView .animate(withDuration: 0.3, animations: {
             var frame = self.numKeyPad!.frame
             
             self.bottomView.frame.origin.y = self.view.frame.height - 244 - self.bottomView.frame.size.height
             frame.origin.y = self.view.frame.size.height - 244
             self.numKeyPad.frame = frame
-        }
+        }) 
     }
     
     func hideNumKeyboard() {
         var bottomViewFrame = bottomView.frame
         bottomViewFrame.origin.y = view.frame.height - bottomViewFrame.size.height
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.bottomView.frame = bottomViewFrame
         })
         

@@ -21,9 +21,9 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
         if self.cachedImageView == nil {
             let imageSize = self.mediaViewDisplaySize()
             let imageView = UIImageView(image: self.image)
-            imageView.frame = CGRectMake(0, 0, imageSize.width, imageSize.height)
-            imageView.contentMode = .ScaleAspectFit
-            JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMaskToMediaView(imageView, isOutgoing: self.appliesMediaViewMaskAsOutgoing)
+            imageView.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+            imageView.contentMode = .scaleAspectFit
+            JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMask(toMediaView: imageView, isOutgoing: self.appliesMediaViewMaskAsOutgoing)
             self.cachedImageView = imageView
         }
         return cachedImageView

@@ -11,7 +11,7 @@ import Foundation
 // this delegate is used to tell chatVC the name of sticker being send.
 
 protocol SendStickerDelegate {
-    func sendStickerWithImageName(name : String)
+    func sendStickerWithImageName(_ name : String)
 }
 
 // this class is used to show all content in sticker part. It has tab view to switch set of sticker,
@@ -77,7 +77,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.pageControl.pageIndicatorTintColor = UIColor(red: 182 / 255, green: 182 / 255, blue: 182 / 255, alpha: 1.0)
         self.pageControl.currentPageIndicatorTintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         self.pageControl.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)
-        self.pageControl.addTarget(self, action: #selector(StickerPickView.changePage(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        self.pageControl.addTarget(self, action: #selector(StickerPickView.changePage(_:)), for: UIControlEvents.valueChanged)
         self.addSubview(pageControl)
     }
     
@@ -86,7 +86,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.addSubview(stickerTabView)
     }
     
-    func prepareAlbum(view : StickerScrollView, name : String) {
+    func prepareAlbum(_ view : StickerScrollView, name : String) {
         if let images = stickerDictionary[name] {
             for image in images {
                 view.appendNewImage(image)
@@ -94,17 +94,17 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         }
     }
     
-    func attachButton(view : StickerScrollView) {
+    func attachButton(_ view : StickerScrollView) {
         view.attachButton()
     }
     
     // MARK : TO CHANGE WHILE CLICKING ON PAGE CONTROL
-    func changePage(sender: AnyObject) -> () {
+    func changePage(_ sender: AnyObject) -> () {
         let x = CGFloat(pageControl.currentPage) * currentScrollView.frame.size.width
-        currentScrollView.setContentOffset(CGPointMake(x, 0), animated: true)
+        currentScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
     }
     
-    func switchSticker(index: Int) {
+    func switchSticker(_ index: Int) {
         currentScrollView.removeFromSuperview()
         currentScrollView = stickerScrollViews[index]
         self.addSubview(currentScrollView)
@@ -114,7 +114,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
     }
     
-    func switchToHeader(index: Int) {
+    func switchToHeader(_ index: Int) {
         currentScrollView.removeFromSuperview()
         currentScrollView = stickerFixView[index]
         self.addSubview(currentScrollView)
@@ -124,7 +124,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
     }
@@ -139,7 +139,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         return ""
     }
     
-    func findStickerName(index : Int) {
+    func findStickerName(_ index : Int) {
         let albumName = findAlbumName()
         if let albumSet = stickerDictionary[albumName] {
             print("the name of sticker is : \(albumSet[index])")
@@ -152,24 +152,24 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     //make local storage to record history in map, to count the frequency.
     
     func loadHistoryFromStorage() {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.objectForKey("stickerHistory") == nil {
-            defaults.setObject([String : Int](), forKey: "stickerHistory")
+        let defaults = UserDefaults.standard
+        if defaults.object(forKey: "stickerHistory") == nil {
+            defaults.set([String : Int](), forKey: "stickerHistory")
             print("set a empty dictionary")
         }
-        let stickerHistory = defaults.dictionaryForKey("stickerHistory") as! [String : Int]
+        let stickerHistory = defaults.dictionary(forKey: "stickerHistory") as! [String : Int]
         historyDict = stickerHistory
         stickerDictionary["stickerHistory"] = historyDict.keysSortedByValue(>)
     }
     
-    func updateStickerHistory(imageName : String) {
+    func updateStickerHistory(_ imageName : String) {
         if (historyDict[imageName] != nil) {
             historyDict[imageName] = historyDict[imageName]! + 1
         } else {
             historyDict[imageName] = 1
         }
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(historyDict, forKey: "stickerHistory")
+        let defaults = UserDefaults.standard
+        defaults.set(historyDict, forKey: "stickerHistory")
         stickerDictionary["stickerHistory"] = historyDict.keysSortedByValue(>)
         reloadHistory()
     }
@@ -185,13 +185,13 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
 
 //this extention is used to sort key value pair by value
 extension Dictionary {
-    func sortedKeys(isOrderedBefore:(Key,Key) -> Bool) -> [Key] {
-        return Array(self.keys).sort(isOrderedBefore)
+    func sortedKeys(_ isOrderedBefore:(Key,Key) -> Bool) -> [Key] {
+        return Array(self.keys).sorted(by: isOrderedBefore)
     }
     // Faster because of no lookups, may take more memory because of duplicating contents
-    func keysSortedByValue(isOrderedBefore:(Value, Value) -> Bool) -> [Key] {
+    func keysSortedByValue(_ isOrderedBefore:(Value, Value) -> Bool) -> [Key] {
         return Array(self)
-            .sort() {
+            .sorted() {
                 let (_, lv) = $0
                 let (_, rv) = $1
                 return isOrderedBefore(lv, rv)

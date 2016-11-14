@@ -9,17 +9,41 @@
 import UIKit
 import SwiftyJSON
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class LogInViewController: UIViewController {
     //MARK: - Interface
     
-    private var iconImageView: UIImageView!
-    private var supportButton: UIButton!
-    private var loginButton: UIButton!
-    private var loginResultLabel: UILabel!
-    private var usernameTextField: FAETextField!
-    private var passwordTextField: FAETextField!
-    private var activityIndicator: UIActivityIndicatorView!
+    fileprivate var iconImageView: UIImageView!
+    fileprivate var supportButton: UIButton!
+    fileprivate var loginButton: UIButton!
+    fileprivate var loginResultLabel: UILabel!
+    fileprivate var usernameTextField: FAETextField!
+    fileprivate var passwordTextField: FAETextField!
+    fileprivate var activityIndicator: UIActivityIndicatorView!
 
     // Mark: - View did/will ..
     override func viewDidLoad() {
@@ -37,100 +61,100 @@ class LogInViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.isNavigationBarHidden = false
     }
     
-    private func setupInterface()
+    fileprivate func setupInterface()
     {
         //icon
         iconImageView = UIImageView(image:UIImage(named: "faeWingIcon"))
-        iconImageView.frame = CGRectMake(screenWidth/2-30, 70 * screenHeightFactor, 60 * screenHeightFactor, 60 * screenHeightFactor)
+        iconImageView.frame = CGRect(x: screenWidth/2-30, y: 70 * screenHeightFactor, width: 60 * screenHeightFactor, height: 60 * screenHeightFactor)
         self.view.addSubview(iconImageView)
         
         
         // username textField
-        usernameTextField = FAETextField(frame: CGRectMake(15, 174 * screenHeightFactor, screenWidth - 30, 34))
+        usernameTextField = FAETextField(frame: CGRect(x: 15, y: 174 * screenHeightFactor, width: screenWidth - 30, height: 34))
         usernameTextField.placeholder = "Username/Email"
         usernameTextField.adjustsFontSizeToFitWidth = true
-        usernameTextField.keyboardType = .EmailAddress
+        usernameTextField.keyboardType = .emailAddress
         self.view.addSubview(usernameTextField)
         
         // result label
-        loginResultLabel = UILabel(frame:CGRectMake(0,0,screenWidth,36))
+        loginResultLabel = UILabel(frame:CGRect(x: 0,y: 0,width: screenWidth,height: 36))
         loginResultLabel.font = UIFont(name: "AvenirNext-Medium", size: 13)
         loginResultLabel.text = "Oops… Can’t find any Accounts\nwith this Username/Email!"
         loginResultLabel.textColor = UIColor.faeAppRedColor()
         loginResultLabel.numberOfLines = 2
         loginResultLabel.center = self.view.center
-        loginResultLabel.textAlignment = .Center
-        loginResultLabel.hidden = true
+        loginResultLabel.textAlignment = .center
+        loginResultLabel.isHidden = true
         
         self.view.addSubview(loginResultLabel)
         
         // password textField
-        passwordTextField = FAETextField(frame: CGRectMake(15, 243 * screenHeightFactor, screenWidth - 30, 34))
+        passwordTextField = FAETextField(frame: CGRect(x: 15, y: 243 * screenHeightFactor, width: screenWidth - 30, height: 34))
         passwordTextField.placeholder = "Password"
-        passwordTextField.secureTextEntry = true
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         self.view.addSubview(passwordTextField)
         
         //support button
-        supportButton = UIButton(frame: CGRectMake((screenWidth - 150)/2, screenHeight - 50 * screenHeightFactor - 71 ,150,22))
+        supportButton = UIButton(frame: CGRect(x: (screenWidth - 150)/2, y: screenHeight - 50 * screenHeightFactor - 71 ,width: 150,height: 22))
         supportButton.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 13)
         
-        supportButton.setAttributedTitle(NSAttributedString(string: "Sign In Support", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        supportButton.contentHorizontalAlignment = .Center
-        supportButton.addTarget(self, action: #selector(LogInViewController.supportButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(supportButton, atIndex: 0)
+        supportButton.setAttributedTitle(NSAttributedString(string: "Sign In Support", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
+        supportButton.contentHorizontalAlignment = .center
+        supportButton.addTarget(self, action: #selector(LogInViewController.supportButtonTapped), for: .touchUpInside)
+        self.view.insertSubview(supportButton, at: 0)
         
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
-        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 30 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        loginButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         loginButton.center.x = screenWidth / 2
-        loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: font! ]), forState: .Normal)
+        loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         loginButton.layer.cornerRadius = 25*screenHeightFactor
-        loginButton.addTarget(self, action: #selector(LogInViewController.loginButtonTapped), forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(LogInViewController.loginButtonTapped), for: .touchUpInside)
         loginButton.backgroundColor = UIColor.faeAppDisabledRedColor()
-        loginButton.enabled = false
-        self.view.insertSubview(loginButton, atIndex: 0)
+        loginButton.isEnabled = false
+        self.view.insertSubview(loginButton, at: 0)
     }
     
     func addObservers(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         self.view.addGestureRecognizer(tapGesture)
-        usernameTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), forControlEvents:.EditingChanged )
-        passwordTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), forControlEvents:.EditingChanged)
+        usernameTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), for:.editingChanged )
+        passwordTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), for:.editingChanged)
 
     }
     
     func createActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor.faeAppRedColor()
         
         view.addSubview(activityIndicator)
-        view.bringSubviewToFront(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     func loginButtonTapped()
     {
         activityIndicator.startAnimating()
         self.view.endEditing(true)
-        self.loginResultLabel.hidden = true
+        self.loginResultLabel.isHidden = true
 
         let user = FaeUser()
-        if usernameTextField.text!.rangeOfString("@") != nil {
+        if usernameTextField.text!.range(of: "@") != nil {
             user.whereKey("email", value: usernameTextField.text!)
         }else{
             user.whereKey("user_name", value: usernameTextField.text!)
@@ -140,18 +164,18 @@ class LogInViewController: UIViewController {
         // for iphone: device_id is required and is_mobile should set to true
         user.whereKey("device_id", value: headerDeviceID)
         user.whereKey("is_mobile", value: "true")
-        user.logInBackground { (status: Int?, message: AnyObject?) in
+        user.logInBackground { (status: Int?, message: Any?) in
             if ( status! / 100 == 2 ){
                 //success
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             }
             else{
                 let loginJSONInfo = JSON(message!)
                 if let info = loginJSONInfo["message"].string {
-                    if info.containsString("such") || info.containsString("non") {
+                    if info.contains("such") || info.contains("non") {
                         self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
                     }
-                    else if info.containsString("incorrect") {
+                    else if info.contains("incorrect") {
                         self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
                     }
                     else {
@@ -163,31 +187,31 @@ class LogInViewController: UIViewController {
         }
     }
 
-    func setLoginResult(result:String){
+    func setLoginResult(_ result:String){
         self.loginResultLabel.text = result
-        self.loginResultLabel.hidden = false
+        self.loginResultLabel.isHidden = false
     }
     
     func supportButtonTapped()
     {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SignInSupportViewController") as! SignInSupportViewController
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SignInSupportViewController") as! SignInSupportViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Navigation
     func navBarLeftButtonTapped()
     {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
     // MARK: - keyboard 
     
     // This is just a temporary method to make the login button clickable
-    func keyboardWillShow(notification:NSNotification){
+    func keyboardWillShow(_ notification:Notification){
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.loginButton.frame.origin.y += (screenHeight - keyboardFrame.height) - self.loginButton.frame.origin.y - 50 * screenHeightFactor - 14
             
             self.supportButton.frame.origin.y += (screenHeight - keyboardFrame.height) - self.supportButton.frame.origin.y - 50 * screenHeightFactor - 14 - 22 - 19
@@ -196,8 +220,8 @@ class LogInViewController: UIViewController {
         })
     }
     
-    func keyboardWillHide(notification:NSNotification){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+    func keyboardWillHide(_ notification:Notification){
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.loginButton.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
             self.supportButton.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71
             self.loginResultLabel.alpha = 1
@@ -209,26 +233,26 @@ class LogInViewController: UIViewController {
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
     
     //MARK: - textfield
-    func textfieldDidChange(textfield: UITextField){
+    func textfieldDidChange(_ textfield: UITextField){
         if(usernameTextField.text!.characters.count > 0 && passwordTextField.text?.characters.count >= 8){
             loginButton.backgroundColor = UIColor.faeAppRedColor()
-            loginButton.enabled = true
+            loginButton.isEnabled = true
         }else{
             loginButton.backgroundColor = UIColor.faeAppDisabledRedColor()
-            loginButton.enabled = false
+            loginButton.isEnabled = false
         }
     }
 
 }
 
 extension LogInViewController :UITextFieldDelegate{
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let currentCharacterCount = textField.text?.characters.count ?? 0
         if (range.length + range.location > currentCharacterCount){

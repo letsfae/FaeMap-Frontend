@@ -47,10 +47,10 @@ if (formatted_datas > self.max_image_bytes){
     }
 }*/
 
-func compressImage(image:UIImage)->NSData{
+func compressImage(_ image:UIImage)->Data{
     let max_image_bytes = 1024    // 0.1 MB for the image
     let dates = UIImageJPEGRepresentation(image, 1)
-    let formatted_datas = Int((dates?.length)!)//4752033
+    let formatted_datas = Int((dates?.count)!)//4752033
     if formatted_datas > max_image_bytes {
         let image_before_compression = image
         let compress_ratio = CGFloat(max_image_bytes / formatted_datas)
@@ -58,7 +58,7 @@ func compressImage(image:UIImage)->NSData{
         let compressed_img = UIImageJPEGRepresentation(image_before_compression, compress_ratio)
         
 //        print("\(Int(compressed_img.!length))")
-        print(compressed_img?.length)//245357
+//        print(compressed_img?.count)//245357
         return compressed_img!
     }
     else{
@@ -71,35 +71,35 @@ class FaeImage : NSObject{ // it is ok to upload
 //    var imageView: UIImageView!
     
 
-    func faeUploadImageInBackground(completion:(Int,AnyObject?)->Void){
+    func faeUploadImageInBackground(_ completion:@escaping (Int,Any?)->Void){
         if image == nil {
-            completion(-400,"you need to save image first")
+            completion(-400,"you need to save image first" as AnyObject?)
         }
         else{
             let file = compressImage(image)
             let seconds = 1.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
-            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                postImageToURL("files/users/avatar", parameter: ["avatar":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                postImageToURL("files/users/avatar", parameter: ["avatar":file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
                     completion(code,message)
                 })
             })
         }
     }
-    func faeUploadCoverImageInBackground(completion:(Int,AnyObject?)->Void){
+    func faeUploadCoverImageInBackground(_ completion:@escaping (Int,Any?)->Void){
         if image == nil {
-            completion(-400,"you need to save image first")
+            completion(-400,"you need to save image first" as AnyObject?)
         }
         else{
             let file = compressImage(image)
             let seconds = 1.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
 
-            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover":file], authentication: headerAuthentication(), completion: { (code:Int, message:AnyObject?) in
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover":file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
                     completion(code,message)
                 })
             })
@@ -109,11 +109,11 @@ class FaeImage : NSObject{ // it is ok to upload
 }
 
 extension UIImageView {
-    func faeSetSelfAvatar(placeHolder:UIImage)->Void{
+    func faeSetSelfAvatar(_ placeHolder:UIImage)->Void{
         self.image = placeHolder
 //        self.sd_setImageWithURL(NSURL(string: "https://api.letsfae.com/files/avatar/23"))
  
-        getImageFromURL("files/users/21/avatar/", authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+        getImageFromURL("files/users/21/avatar/", authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
             if status / 100 == 2 {
 //                self.image = image as! UIImage
 //                self.image = UIImage(data: image as! NSData)
@@ -124,7 +124,7 @@ extension UIImageView {
 //        [manager setValue:username forHTTPHeaderField:@"X-Oauth-Username"];
         
     }
-    func faeSetImage(url:NSURL,placeHolder:UIImage)->Void{
+    func faeSetImage(_ url:URL,placeHolder:UIImage)->Void{
     }
 }
 

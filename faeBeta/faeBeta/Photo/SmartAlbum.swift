@@ -12,8 +12,8 @@ import Photos
 class SmartAlbum {
     var albumName : String!
     var albumCount : Int!
-    var albumContent : PHFetchResult!
-    init(albumName : String, albumCount: Int, albumContent : PHFetchResult) {
+    var albumContent : PHFetchResult<AnyObject>!
+    init(albumName : String, albumCount: Int, albumContent : PHFetchResult<AnyObject>) {
         self.albumName = albumName
         self.albumCount = albumCount
         self.albumContent = albumContent
@@ -27,7 +27,7 @@ class SmartAlbum {
         return albumName
     }
     
-    func getAlbumContent() -> PHFetchResult {
+    func getAlbumContent() -> PHFetchResult<AnyObject> {
         return albumContent
     }
 }

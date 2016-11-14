@@ -10,9 +10,9 @@ import UIKit
 
 protocol CPCommentsCellDelegate {
     // Reply to this user
-    func showActionSheetFromCommentPinCell(username: String)
+    func showActionSheetFromCommentPinCell(_ username: String)
     // CancelTimerForTouchingCell
-    func cancelTouchToReplyTimerFromCommentPinCell(cancel: Bool)
+    func cancelTouchToReplyTimerFromCommentPinCell(_ cancel: Bool)
 }
 
 class CPCommentsCell: UITableViewCell {
@@ -39,7 +39,7 @@ class CPCommentsCell: UITableViewCell {
 //    var buttonLike: UIButton!
     var buttonShare: UIButton!
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenWidth = UIScreen.main.bounds.width
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,26 +55,26 @@ class CPCommentsCell: UITableViewCell {
         self.addSubview(self.imageViewAvatar)
         self.imageViewAvatar.layer.cornerRadius = 19.5
         self.imageViewAvatar.clipsToBounds = true
-        self.imageViewAvatar.contentMode = .ScaleAspectFill
+        self.imageViewAvatar.contentMode = .scaleAspectFill
         self.addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imageViewAvatar)
 //        self.addConstraintsWithFormat("V:|-15-[v0(39)]", options: [], views: imageViewAvatar)
         
         self.textViewComment = UITextView()
         self.addSubview(self.textViewComment)
         self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        self.textViewComment.editable = false
-        self.textViewComment.userInteractionEnabled = false
-        self.textViewComment.textContainerInset = UIEdgeInsetsZero
+        self.textViewComment.isEditable = false
+        self.textViewComment.isUserInteractionEnabled = false
+        self.textViewComment.textContainerInset = UIEdgeInsets.zero
         self.textViewComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         self.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: textViewComment)
         self.addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(25)]", options: [], views: imageViewAvatar, textViewComment)
-        self.textViewComment.scrollEnabled = false
+        self.textViewComment.isScrollEnabled = false
         
         self.labelUsername = UILabel()
         self.addSubview(self.labelUsername)
         self.labelUsername.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.labelUsername.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.labelUsername.textAlignment = .Left
+        self.labelUsername.textAlignment = .left
         self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelUsername)
         self.addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: labelUsername)
         
@@ -82,7 +82,7 @@ class CPCommentsCell: UITableViewCell {
         self.addSubview(self.labelTimestamp)
         self.labelTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
         self.labelTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelTimestamp.textAlignment = .Left
+        self.labelTimestamp.textAlignment = .left
         self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelTimestamp)
         self.addConstraintsWithFormat("V:|-36-[v0(20)]", options: [], views: labelTimestamp)
         
@@ -150,29 +150,29 @@ class CPCommentsCell: UITableViewCell {
         */
         
         self.buttonForWholeCell = UIButton()
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), forControlEvents: .TouchDown)
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.cancelTouchToReplyTimer(_:)), forControlEvents: [.TouchUpInside, .TouchUpOutside])
+        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchDown)
+        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
         self.addSubview(buttonForWholeCell)
         self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
         self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
         
         // Button 6: Add Comment
         self.buttonShare = UIButton()
-        self.buttonShare.setImage(UIImage(named: "commentPinForwardHollow"), forState: .Normal)
+        self.buttonShare.setImage(UIImage(named: "commentPinForwardHollow"), for: UIControlState())
 //        self.buttonShare.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonShare.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), forControlEvents: .TouchUpInside)
+        self.buttonShare.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchUpInside)
         self.addSubview(buttonShare)
         self.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonShare)
         self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: buttonShare)
     }
     
-    func showActionSheet(sender: UIButton) {
+    func showActionSheet(_ sender: UIButton) {
         if let username = labelUsername.text {
             self.delegate?.showActionSheetFromCommentPinCell(username)
         }
     }
     
-    func cancelTouchToReplyTimer(sender: UIButton) {
+    func cancelTouchToReplyTimer(_ sender: UIButton) {
         self.delegate?.cancelTouchToReplyTimerFromCommentPinCell(true)
     }
 }

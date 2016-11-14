@@ -10,8 +10,8 @@ import UIKit
 import CoreLocation
 
 class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate {
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     //6 plus 414 736
     //6      375 667
     //5      320 568
@@ -31,20 +31,20 @@ class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate 
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.actionTry()
     }
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         print("didChangeAuthorizationStatus ++++")
         switch status {
-        case .NotDetermined:
+        case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
             break
-        case .Authorized:
+        case .authorizedAlways:
 //            print(".Authorized")
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             break
-        case .Denied:
+        case .denied:
             print(".Denied")
 //            jumpToLocationEnable()
             break
@@ -60,14 +60,14 @@ class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate 
         //let buttonSubmitHeight = screenHeight * 0.05842391
         
         
-        buttonSubmit = UIButton(frame: CGRectMake(20, 20, buttonSubmitWidth, buttonSubmitHeight))
+        buttonSubmit = UIButton(frame: CGRect(x: 20, y: 20, width: buttonSubmitWidth, height: buttonSubmitHeight))
         //buttonSubmit = UIButton(frame: CGRectMake(screenWidth/2-172, 498, 344, 43))
-        buttonSubmit.setTitle("Go to Setting to enable location access!", forState: .Normal)
-        buttonSubmit.titleLabel?.textColor = UIColor.whiteColor()
+        buttonSubmit.setTitle("Go to Setting to enable location access!", for: UIControlState())
+        buttonSubmit.titleLabel?.textColor = UIColor.white
         buttonSubmit.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonSubmit.layer.cornerRadius = 7
         
-        buttonSubmit.addTarget(self, action: #selector(self.openSettings), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSubmit.addTarget(self, action: #selector(self.openSettings), for: UIControlEvents.touchUpInside)
         self.view.addSubview(buttonSubmit)
     }
     
@@ -76,23 +76,23 @@ class LocationEnableViewController: UIViewController ,CLLocationManagerDelegate 
         let buttonTryAgainHeight : CGFloat = 50.0
         
         
-        buttonTryAgain = UIButton(frame: CGRectMake(30, 300, buttonTryAgainWidth, buttonTryAgainHeight))
+        buttonTryAgain = UIButton(frame: CGRect(x: 30, y: 300, width: buttonTryAgainWidth, height: buttonTryAgainHeight))
         
-        buttonTryAgain.setTitle("Try Again", forState: .Normal)
-        buttonTryAgain.titleLabel?.textColor = UIColor.blueColor()
+        buttonTryAgain.setTitle("Try Again", for: UIControlState())
+        buttonTryAgain.titleLabel?.textColor = UIColor.blue
         buttonTryAgain.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonTryAgain.layer.cornerRadius = 7
-        buttonTryAgain.addTarget(self, action: #selector(LocationEnableViewController.actionTry), forControlEvents: .TouchUpInside)
+        buttonTryAgain.addTarget(self, action: #selector(LocationEnableViewController.actionTry), for: .touchUpInside)
         
         self.view.addSubview(buttonTryAgain)
     }
     func openSettings() {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     func actionTry(){
         let authstate = CLLocationManager.authorizationStatus()
-        if(authstate == .AuthorizedAlways){
-            self.dismissViewControllerAnimated(true, completion: nil)
+        if(authstate == .authorizedAlways){
+            self.dismiss(animated: true, completion: nil)
         }
         else{
             //nothing here

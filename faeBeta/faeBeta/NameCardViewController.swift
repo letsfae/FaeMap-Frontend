@@ -13,8 +13,8 @@ import SDWebImage
 class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     //tableView
     var tableViewNameCard : UITableView!
@@ -55,18 +55,18 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         // Do any additional setup after loading the view.
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         //super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = false
-        self.navigationController?.navigationBarHidden = false
-        self.navigationController?.navigationBar.hidden = false
-        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.isTranslucent = false
         setupNavigationBar()
         let showGenderAge = FaeUser()
-        showGenderAge.getSelfNamecard(){(status:Int, message:AnyObject?) in
+        showGenderAge.getSelfNamecard(){(status:Int, message: Any?) in
             print("DEBUG showgender")
             if(status / 100 == 2){
-                print(message)
+//                print(message)
                 let genderAgeInfo = JSON(message!)
                 if let genderInfo = genderAgeInfo["show_gender"].bool {
                     showGender = genderInfo
@@ -99,7 +99,7 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
         // Dispose of any resources that can be recreated.
     }
     
-    func getColor(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
+    func getColor(_ red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }
 
@@ -107,26 +107,26 @@ class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, 
 // MARK: tableview
 extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
     func initialTableview() {
-        tableViewNameCard = UITableView(frame: CGRectMake(0, 0, screenWidth, 736*screenHeightFactor))
+        tableViewNameCard = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 736*screenHeightFactor))
         tableViewNameCard.delegate = self
         tableViewNameCard.dataSource = self
-        tableViewNameCard.backgroundColor = UIColor.clearColor()
-        tableViewNameCard.separatorStyle = .None
+        tableViewNameCard.backgroundColor = UIColor.clear
+        tableViewNameCard.separatorStyle = .none
         tableViewNameCard.rowHeight = 55 * screenHeightFactor
         
-        tableViewNameCard.registerClass(NameCardFirstFiveCell.self, forCellReuseIdentifier: cellGeneral)
-        tableViewNameCard.registerClass(NameCardWithSwitchCell.self, forCellReuseIdentifier: cellSwitch)
+        tableViewNameCard.register(NameCardFirstFiveCell.self, forCellReuseIdentifier: cellGeneral)
+        tableViewNameCard.register(NameCardWithSwitchCell.self, forCellReuseIdentifier: cellSwitch)
         
         self.view.addSubview(tableViewNameCard)
         initialHeaderView()
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 7
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row <= 4 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneral, forIndexPath: indexPath) as! NameCardFirstFiveCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellGeneral, for: indexPath) as! NameCardFirstFiveCell
+            cell.selectionStyle = .none
             if indexPath.row == 0 {
                 cell.labelDes.text = "Display Name"
                 cell.labelUserSet.text = nickname
@@ -145,8 +145,8 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellSwitch, forIndexPath: indexPath) as! NameCardWithSwitchCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellSwitch, for: indexPath) as! NameCardWithSwitchCell
+            cell.selectionStyle = .none
             if indexPath.row == 5 {
                 cell.labelDes.text = "Show Gender"
                 cell.cellSwitch.setOn(showGender, animated: false)
@@ -157,7 +157,7 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCell()
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {//nickname
             jumpToNickname()
         } else if indexPath.row == 1 {//short intro
@@ -172,71 +172,71 @@ extension NameCardViewController : UITableViewDelegate, UITableViewDataSource {
         }
     }
     func jumpToTags() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardTagsViewController")as! NameCardTagsViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardTagsViewController")as! NameCardTagsViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToNickname() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameSettingViewController")as! NameSettingViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameSettingViewController")as! NameSettingViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToIntro() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("IntroSettingViewController")as! IntroSettingViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "IntroSettingViewController")as! IntroSettingViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "navigationBack"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
-        let label = UILabel(frame: CGRectMake(0,0,147,27))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "navigationBack"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.isNavigationBarHidden = false
+        let label = UILabel(frame: CGRect(x: 0,y: 0,width: 147,height: 27))
         label.text = "Your NameCard"
         label.font = UIFont(name: "AvenirNext-Medium", size: 20)
         self.navigationItem.titleView = label
     }
     func navBarLeftButtonTapped()
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 //add Header view
 extension NameCardViewController {
     func initialHeaderView() {
-        viewHeaderBackground = UIView(frame: CGRectMake(0, 0, screenWidth, 274*screenHeightFactor))
+        viewHeaderBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 274*screenHeightFactor))
         viewHeaderBackground.center.x = screenWidth/2
         tableViewNameCard.tableHeaderView = viewHeaderBackground
         //tableViewNameCard.tableHeaderView?.frame = CGRectMake(0, 0, screenWidth, 316)
-        viewUpUnderline = UIView(frame: CGRectMake(0, 0, screenWidth, 1))
-        viewDownUnderline = UIView(frame: CGRectMake(17,274*screenHeightFactor,screenWidth - 34,1))
+        viewUpUnderline = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        viewDownUnderline = UIView(frame: CGRect(x: 17,y: 274*screenHeightFactor,width: screenWidth - 34,height: 1))
         viewUpUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
         viewDownUnderline.backgroundColor = UIColor(colorLiteralRed: 200/255, green: 199/255, blue: 204/255, alpha: 1)
         self.view.addSubview(viewUpUnderline)
         viewHeaderBackground.addSubview(viewDownUnderline)
-        viewNameCardTitle = UIView(frame: CGRectMake((screenWidth-268)/2, 51*screenHeightFactor, 268*screenWidthFactor, 180*screenHeightFactor))
+        viewNameCardTitle = UIView(frame: CGRect(x: (screenWidth-268)/2, y: 51*screenHeightFactor, width: 268*screenWidthFactor, height: 180*screenHeightFactor))
         viewNameCardTitle.center.x = screenWidth / 2
-        viewNameCardTitle.layer.borderColor = UIColor.grayColor().CGColor
+        viewNameCardTitle.layer.borderColor = UIColor.gray.cgColor
         viewNameCardTitle.layer.borderWidth = 1.0
         viewNameCardTitle.layer.cornerRadius = 15
         viewNameCardTitle.clipsToBounds = true
         viewHeaderBackground.addSubview(viewNameCardTitle)
         
-        imageViewCover = UIImageView(frame: CGRectMake(0, 0, 268*screenWidthFactor, 120*screenHeightFactor))
+        imageViewCover = UIImageView(frame: CGRect(x: 0, y: 0, width: 268*screenWidthFactor, height: 120*screenHeightFactor))
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
-        imageViewCover.contentMode = .ScaleAspectFill
+        imageViewCover.contentMode = .scaleAspectFill
         if user_id != nil {
             let stringHeaderURL = "https://api.letsfae.com/files/users/\(user_id)/name_card_cover"
-            imageViewCover.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
+            imageViewCover.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
-        imageViewTitleProfile = UIImageView(frame: CGRectMake(103.5*screenWidthFactor, 71*screenHeightFactor, 61*screenWidthFactor, 61*screenHeightFactor))
+        imageViewTitleProfile = UIImageView(frame: CGRect(x: 103.5*screenWidthFactor, y: 71*screenHeightFactor, width: 61*screenWidthFactor, height: 61*screenHeightFactor))
         imageViewTitleProfile.layer.cornerRadius = 30.5 * screenWidthFactor
         imageViewTitleProfile.layer.masksToBounds = true
         imageViewTitleProfile.clipsToBounds = true
         imageViewTitleProfile.layer.borderWidth = 5
-        imageViewTitleProfile.layer.borderColor = UIColor.whiteColor().CGColor
-        imageViewTitleProfile.contentMode = .ScaleAspectFill
+        imageViewTitleProfile.layer.borderColor = UIColor.white.cgColor
+        imageViewTitleProfile.contentMode = .scaleAspectFill
         
         /*
         imageViewTitleProfile.layer.shadowOpacity = 0.5
@@ -247,44 +247,44 @@ extension NameCardViewController {
         
         viewNameCardTitle.addSubview(imageViewTitleProfile)
         
-        labelNickname = UILabel(frame: CGRectMake(0, 138*screenHeightFactor, 268*screenWidthFactor, 27*screenHeightFactor))
+        labelNickname = UILabel(frame: CGRect(x: 0, y: 138*screenHeightFactor, width: 268*screenWidthFactor, height: 27*screenHeightFactor))
         if nickname == nil || nickname == "" {
             labelNickname.text = "Anonymous"
         } else {
             labelNickname.text = nickname
         }
         labelNickname.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-        labelNickname.textAlignment = .Center
+        labelNickname.textAlignment = .center
         labelNickname.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         viewNameCardTitle.addSubview(labelNickname)
         
         //the second header view
-        viewNameCardDescr = UIView(frame: CGRectMake(73 + self.screenWidth,119 - 64,268,180))
-        viewNameCardDescr.layer.borderColor = UIColor.grayColor().CGColor
+        viewNameCardDescr = UIView(frame: CGRect(x: 73 + self.screenWidth,y: 119 - 64,width: 268,height: 180))
+        viewNameCardDescr.layer.borderColor = UIColor.gray.cgColor
         viewNameCardDescr.layer.borderWidth = 1.0
         viewNameCardDescr.layer.cornerRadius = 15
         viewHeaderBackground.addSubview(viewNameCardDescr)
         
-        imageViewDescrProfile = UIImageView(frame: CGRectMake((268 - 61) / 2, 96 - 119, 61, 61))
+        imageViewDescrProfile = UIImageView(frame: CGRect(x: (268 - 61) / 2, y: 96 - 119, width: 61, height: 61))
         imageViewDescrProfile.layer.cornerRadius = 61 / 2
         imageViewDescrProfile.layer.masksToBounds = true
         imageViewDescrProfile.clipsToBounds = true
         imageViewDescrProfile.layer.borderWidth = 5
-        imageViewDescrProfile.layer.borderColor = UIColor.whiteColor().CGColor
-        imageViewDescrProfile.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).CGColor
+        imageViewDescrProfile.layer.borderColor = UIColor.white.cgColor
+        imageViewDescrProfile.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
         imageViewDescrProfile.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         imageViewDescrProfile.layer.shadowOpacity = 0.3
         imageViewDescrProfile.layer.shadowRadius = 5.0
-        imageViewDescrProfile.contentMode = .ScaleAspectFill
+        imageViewDescrProfile.contentMode = .scaleAspectFill
         viewNameCardDescr.addSubview(imageViewDescrProfile)
         if user_id != nil {
             let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewTitleProfile.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+            imageViewTitleProfile.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
-        viewGender = UIView(frame: CGRectMake(90 - 73, 139 - 119, 50, 18))
+        viewGender = UIView(frame: CGRect(x: 90 - 73, y: 139 - 119, width: 50, height: 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)
-        let tempImage = UIImageView(frame: CGRectMake(0, 0, 50, 18))
+        let tempImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 18))
         tempImage.image = UIImage(named: "map_userpin_male")
         viewGender.addSubview(tempImage)
         viewNameCardDescr.addSubview(viewGender)
@@ -296,68 +296,68 @@ extension NameCardViewController {
 //        labelAge.textColor = UIColor.whiteColor()
 //        viewGender.addSubview(labelAge)
         
-        buttonMore = UIButton(frame: CGRectMake(292 - 73, 139 - 119, 32, 18))
-        buttonMore.setImage(UIImage(named: "map_userpin_dark"), forState: .Normal)
+        buttonMore = UIButton(frame: CGRect(x: 292 - 73, y: 139 - 119, width: 32, height: 18))
+        buttonMore.setImage(UIImage(named: "map_userpin_dark"), for: UIControlState())
         viewNameCardDescr.addSubview(buttonMore)
         
-        viewLine = UIView(frame: CGRectMake(0, 56,268,1))
+        viewLine = UIView(frame: CGRect(x: 0, y: 56,width: 268,height: 1))
         viewLine.backgroundColor = getColor(200, green: 199, blue: 204)
         viewNameCardDescr.addSubview(viewLine)
         
-        labelIntro = UILabel(frame: CGRectMake(97 - 73, 193 - 119,220, 45))
+        labelIntro = UILabel(frame: CGRect(x: 97 - 73, y: 193 - 119,width: 220, height: 45))
         labelIntro.textColor = getColor(155, green: 155, blue: 155)
         labelIntro.numberOfLines = 2
-        labelIntro.textAlignment = .Center
+        labelIntro.textAlignment = .center
         labelIntro.text = "nothing here"
         labelIntro.font = UIFont(name: "AvenirNext-Medium", size: 15)
         viewNameCardDescr.addSubview(labelIntro)
         
-        buttonDoFaevor = UIButton(frame: CGRectMake(101 - 73, 248 - 119, 104, 27))
+        buttonDoFaevor = UIButton(frame: CGRect(x: 101 - 73, y: 248 - 119, width: 104, height: 27))
         buttonDoFaevor.backgroundColor = getColor(255, green: 128, blue: 128)
-        buttonDoFaevor.setTitle("I do Faevors", forState: .Normal)
-        buttonDoFaevor.titleLabel?.textColor = UIColor.whiteColor()
+        buttonDoFaevor.setTitle("I do Faevors", for: UIControlState())
+        buttonDoFaevor.titleLabel?.textColor = UIColor.white
         buttonDoFaevor.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         buttonDoFaevor.layer.cornerRadius = 4.6
         viewNameCardDescr.addSubview(buttonDoFaevor)
         
-        buttonFriends = UIButton(frame: CGRectMake(215 - 73, 248 - 119, 99, 27))
+        buttonFriends = UIButton(frame: CGRect(x: 215 - 73, y: 248 - 119, width: 99, height: 27))
         buttonFriends.backgroundColor = getColor(230, green: 140, blue: 102)
-        buttonFriends.setTitle("LF Friends", forState: .Normal)
-        buttonFriends.titleLabel?.textColor = UIColor.whiteColor()
+        buttonFriends.setTitle("LF Friends", for: UIControlState())
+        buttonFriends.titleLabel?.textColor = UIColor.white
         buttonFriends.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         buttonFriends.layer.cornerRadius = 4.6
         viewNameCardDescr.addSubview(buttonFriends)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(NameCardViewController.showNameCardTitle))
-        swipeRight.direction = .Right
+        swipeRight.direction = .right
         self.viewHeaderBackground.addGestureRecognizer(swipeRight)
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(NameCardViewController.showNameCardDescr))
-        swipeLeft.direction = .Left
+        swipeLeft.direction = .left
         self.viewHeaderBackground.addGestureRecognizer(swipeLeft)
     }
     func showNameCardTitle() {// right swipe
-        UIView.animateWithDuration(0.25, animations: ({
+        UIView.animate(withDuration: 0.25, animations: ({
             self.viewNameCardTitle.center.x = self.view.center.x
             self.viewNameCardDescr.center.x = self.view.center.x + self.screenWidth
         }))
     }
     func showNameCardDescr() {// left swipe
-        UIView.animateWithDuration(0.25, animations: ({
+        UIView.animate(withDuration: 0.25, animations: ({
             self.viewNameCardTitle.center.x = self.view.center.x - self.screenWidth
             self.viewNameCardDescr.center.x = self.view.center.x
         }))
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
 
         if imagePick == 0 {
             self.imageViewTitleProfile.image = image
             let avatar = FaeImage()
             avatar.image = image
-            avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
-                print(code)
-                print(message)
+            avatar.faeUploadImageInBackground { (code:Int, message: Any?) in
+//                print(code)
+//                print(message)
                 if code / 100 == 2 {
                     //                self.imageViewAvatarMore.image = image
                 } else {
@@ -369,9 +369,9 @@ extension NameCardViewController {
             let coverImage = FaeImage()
             coverImage.image = image
             
-            coverImage.faeUploadCoverImageInBackground { (code:Int, message:AnyObject?) in
-                print(code)
-                print(message)
+            coverImage.faeUploadCoverImageInBackground { (code:Int, message: Any?) in
+//                print(code)
+//                print(message)
                 if code / 100 == 2 {
                     //                self.imageViewAvatarMore.image = image
                 } else {
@@ -380,38 +380,38 @@ extension NameCardViewController {
             }
         }
 
-        self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
+        self.imagePicker.dismiss(animated: true, completion: nil)
     }
-    func showPhotoSelected(sender: Int) {
+    func showPhotoSelected(_ sender: Int) {
         //if sender = 0 show profile
         self.imagePick = sender
-        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
+        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = colorFae
-        let showLibrary = UIAlertAction(title: "Choose from library", style: .Default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .PhotoLibrary
+        let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
+            self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
-            self.presentViewController(self.imagePicker,animated:true,completion:nil)
+            self.present(self.imagePicker,animated:true,completion:nil)
         }
-        let showCamera = UIAlertAction(title: "Take photos", style: .Default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .Camera
+        let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
+            self.imagePicker.sourceType = .camera
             menu.removeFromParentViewController()
-            self.presentViewController(self.imagePicker,animated:true,completion:nil)
+            self.present(self.imagePicker,animated:true,completion:nil)
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction) in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             
         }
         menu.addAction(showLibrary)
         menu.addAction(showCamera)
         menu.addAction(cancel)
-        self.presentViewController(menu,animated:true,completion: nil)
+        self.present(menu,animated:true,completion: nil)
     }
 }
 extension NSAttributedString {
     
-    func widthWithConstrainedHeight(height: CGFloat) -> CGFloat {
-        let constraintRect = CGSize(width: CGFloat.max, height: height)
+    func widthWithConstrainedHeight(_ height: CGFloat) -> CGFloat {
+        let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)
         
-        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         
         return boundingBox.width
     }

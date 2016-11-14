@@ -54,11 +54,11 @@ let firebase = FIRDatabase.database().reference()
 
 //create a recent : if the chatRoomId is already exist in firebase, we don't need to create a new one.
 
-func createdRecent(userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String) {
+func createdRecent(_ userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String) {
     
     //firebase query
     
-    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value, withBlock:{
+    firebase.child("Recent").queryOrdered(byChild: "chatRoomId").queryEqual(toValue: chatRoomId).observeSingleEvent(of: .value, with:{
         snapshot in
         
         var createRecent = true
@@ -66,9 +66,9 @@ func createdRecent(userId : String, chatRoomId : String, members : [String], wit
         //check if we have a result
         if snapshot.exists() {
             print(snapshot)
-            for recent in snapshot.value!.allValues {
+            for recent in (snapshot.value! as AnyObject).allValues {
                 //if we already have recent with passed userId, we dont create a new one
-                let senderId = (recent as! NSDictionary).valueForKey("userId") as? String
+                let senderId = (recent as! NSDictionary).value(forKey: "userId") as? String
                 if senderId == userId {
                     createRecent = false
                 }
@@ -83,7 +83,7 @@ func createdRecent(userId : String, chatRoomId : String, members : [String], wit
 
 // creating a recent object
 
-func CreateRecentItem(userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String, lastMessage: String, counter: Int) {
+func CreateRecentItem(_ userId : String, chatRoomId : String, members : [String], withUserUsername : String, withUserUserId : String, lastMessage: String, counter: Int) {
     
     // let firebase create a reference with a random generated id
     
@@ -91,9 +91,9 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
     
     let recentId = ref.key
     
-    let date = dateFormatter().stringFromDate(NSDate())
+    let date = dateFormatter().string(from: Date())
     
-    let recent = ["recentId" : recentId, "userId" : userId, "chatRoomId" : chatRoomId, "members" : members, "withUserUsername" : withUserUsername, "lastMessage" : lastMessage, "counter" : counter, "date" : date, "withUserUserId" : withUserUserId]
+    let recent = ["recentId" : recentId, "userId" : userId, "chatRoomId" : chatRoomId, "members" : members, "withUserUsername" : withUserUsername, "lastMessage" : lastMessage, "counter" : counter, "date" : date, "withUserUserId" : withUserUserId] as [String : Any]
     
     // set value for the reference
     
@@ -109,32 +109,32 @@ func CreateRecentItem(userId : String, chatRoomId : String, members : [String], 
 
 //given a chatRoomId, we update last message for it.
 
-func UpdateRecents(chatRoomId : String, lastMessage : String, withUser: FaeWithUser) {
+func UpdateRecents(_ chatRoomId : String, lastMessage : String, withUser: FaeWithUser) {
 
     //firebase query
-    firebase.child("Recent").queryOrderedByChild("chatRoomId").queryEqualToValue(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+    firebase.child("Recent").queryOrdered(byChild: "chatRoomId").queryEqual(toValue: chatRoomId).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
         
         if snapshot.exists() {
-            for recent in snapshot.value!.allValues {
+            for recent in (snapshot.value! as AnyObject).allValues {
                 
                 //update recent
                 updateRecentItem(recent as! NSDictionary, lastMessage: lastMessage)
             }
             
-            if(snapshot.value!.allValues.count == 1){
+            if((snapshot.value! as AnyObject).allValues.count == 1){
                 CreateRecentItem(withUser.userId, chatRoomId: chatRoomId, members: [user_id.stringValue, withUser.userId], withUserUsername: username!, withUserUserId: user_id.stringValue, lastMessage: lastMessage, counter: 1)
             }
         }
     }
 }
 
-func updateRecentItem(recent : NSDictionary, lastMessage : String) {
-    let date = dateFormatter().stringFromDate(NSDate())
+func updateRecentItem(_ recent : NSDictionary, lastMessage : String) {
+    let date = dateFormatter().string(from: Date())
     
     var counter = recent["counter"] as! Int
     
     let localStorage = LocalStorageManager()
-    localStorage.readLogInfo()
+    _ = localStorage.readLogInfo()
     
     if recent["userId"] as? String !=  "\(user_id.stringValue)" {
         counter += 1
@@ -142,11 +142,11 @@ func updateRecentItem(recent : NSDictionary, lastMessage : String) {
     
     //only the date we need to update
     
-    let values = ["lastMessage" : lastMessage, "counter" : counter, "date" : date]
+    let values = ["lastMessage" : lastMessage, "counter" : counter, "date" : date] as [String : Any]
     
     //firebase query : update
     
-    firebase.child("Recent").child((recent["recentId"] as? String)!).updateChildValues(values as [NSObject : AnyObject]) { (error, ref) in
+    firebase.child("Recent").child((recent["recentId"] as? String)!).updateChildValues(values as [AnyHashable: Any]) { (error, ref) in
         if error != nil {
             print("Error couldn't update recent item: \(error)")
         }
@@ -156,17 +156,17 @@ func updateRecentItem(recent : NSDictionary, lastMessage : String) {
 
 //MARK : Restart recent chat
 
-func restartRecentChat(recent : NSDictionary) {
+func restartRecentChat(_ recent : NSDictionary) {
     
     let localStorage = LocalStorageManager()
-    localStorage.readLogInfo()
+    _ = localStorage.readLogInfo()
 }
 
 
 
 //MARK : delete recent functions
 
-func DeleteRecentItem(recent : JSON, completion: ((Int,AnyObject?) -> Void)?) {
+func DeleteRecentItem(_ recent : JSON, completion: ((Int,Any?) -> Void)?) {
     let chat_room_id = recent["chat_id"].number
     deleteFromURL("chats/\(chat_room_id!)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
         if(completion != nil) {
@@ -177,7 +177,7 @@ func DeleteRecentItem(recent : JSON, completion: ((Int,AnyObject?) -> Void)?) {
 
 //MARK : Clear recent counter function
 
-func clearRecentCounter(chatRoomId : String?) {
+func clearRecentCounter(_ chatRoomId : String?) {
     if let chatRoomId = chatRoomId{
         postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: headerAuthentication(), completion: { (statusCode, result) in
             
@@ -186,7 +186,7 @@ func clearRecentCounter(chatRoomId : String?) {
 }
 
 
-func ClearRecentCounterItem(recent : NSDictionary) {
+func ClearRecentCounterItem(_ recent : NSDictionary) {
     
     //firebase query : update
     
@@ -199,8 +199,8 @@ func ClearRecentCounterItem(recent : NSDictionary) {
 
 private let dateFormat = "yyyyMMddHHmmss"
 
-func dateFormatter() -> NSDateFormatter {
-    let dateFormatter = NSDateFormatter()
+func dateFormatter() -> DateFormatter {
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = dateFormat
     return dateFormatter
 }

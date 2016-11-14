@@ -26,7 +26,7 @@ class NameCardWithSwitchCell: UITableViewCell {
         self.addConstraintsWithFormat("H:[v0(39)]-30-|", options: [], views: cellSwitch)
         self.addConstraintsWithFormat("V:|-16-[v0(23)]", options: [], views: cellSwitch)
         cellSwitch.onTintColor = colorFae
-        cellSwitch.addTarget(self, action: #selector(self.switchAction(_:)), forControlEvents: .ValueChanged)
+        cellSwitch.addTarget(self, action: #selector(self.switchAction(_:)), for: .valueChanged)
     }
     
     func loadLabel() {
@@ -35,14 +35,14 @@ class NameCardWithSwitchCell: UITableViewCell {
         labelDes.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelDes.text = ""
         labelDes.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        labelDes.textAlignment = .Left
+        labelDes.textAlignment = .left
         self.addConstraintsWithFormat("H:|-25-[v0(200)]", options: [], views: labelDes)
         self.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: labelDes)
     }
     
-    func switchAction(sender: AnyObject) {
+    func switchAction(_ sender: AnyObject) {
         var value = true
-        if sender.on == true {
+        if sender.isOn == true {
             value = true
         } else {
             value = false
@@ -51,7 +51,7 @@ class NameCardWithSwitchCell: UITableViewCell {
         if labelDes.text == "Show Gender" {
             let user = FaeUser()
             user.whereKey("show_gender", value: String(value))
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
+            user.updateNameCard { (status:Int, objects: Any?) in
                 print (status)
                 if status / 100 == 2 {
                     showGender = value
@@ -63,7 +63,7 @@ class NameCardWithSwitchCell: UITableViewCell {
         } else {
             let user = FaeUser()
             user.whereKey("show_age", value: String(value))
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
+            user.updateNameCard { (status:Int, objects: Any?) in
                 print (status)
                 if status / 100 == 2 {
                     showAge = value

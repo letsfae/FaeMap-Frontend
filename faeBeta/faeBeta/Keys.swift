@@ -58,15 +58,15 @@ var arrayNameCard = [Int:UIImage]()
 
 func headerAuthentication()->[String : AnyObject] {
     if userTokenEncode != nil && userTokenEncode != "" {
-        return ["Authorization":userTokenEncode]
+        return ["Authorization":userTokenEncode as AnyObject]
     }
     if is_Login == 1 && userTokenEncode != nil {
-        return ["Authorization":userTokenEncode]
+        return ["Authorization":userTokenEncode as AnyObject]
     }
     let shareAPI = LocalStorageManager()
     if let encode=shareAPI.readByKey("userTokenEncode") as? String {
         userTokenEncode = encode 
-        return ["Authorization":userTokenEncode]
+        return ["Authorization":userTokenEncode as AnyObject]
     }
     return [:]
 }

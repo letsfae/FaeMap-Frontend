@@ -12,7 +12,7 @@ import UIKit
 protocol FAENumberKeyboardDelegate
 {
     // num can be -1 ~ 9. -1 means delete.
-    func keyboardButtonTapped(num:Int)
+    func keyboardButtonTapped(_ num:Int)
 }
 
 class FAENumberKeyboard: UIView {
@@ -39,29 +39,29 @@ class FAENumberKeyboard: UIView {
     }
     
     //MARK: - setup
-    private func loadNib()
+    fileprivate func loadNib()
     {
-        uiview = NSBundle.mainBundle().loadNibNamed("FAENumberKeyboard", owner: self, options: nil)![0] as? UIView
-        self.insertSubview(uiview!, atIndex: 0)
+        uiview = Bundle.main.loadNibNamed("FAENumberKeyboard", owner: self, options: nil)![0] as? UIView
+        self.insertSubview(uiview!, at: 0)
         uiview!.frame = self.bounds
-        uiview!.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        uiview!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    private func setup()
+    fileprivate func setup()
     {
         for button in numberButtons
         {
-            button.backgroundColor = UIColor.clearColor()
-            button.setAttributedTitle(NSAttributedString(string: "\(button.tag)" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 38)!]), forState: .Normal)
-            button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), forControlEvents: .TouchUpInside)
+            button.backgroundColor = UIColor.clear
+            button.setAttributedTitle(NSAttributedString(string: "\(button.tag)" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 38)!]), for: UIControlState())
+            button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
         }
-        let deleteIcon = UIImageView(frame: CGRectMake(screenWidth / 6 - 20 , 20 * screenHeightFactor * screenHeightFactor, 31, 22))
+        let deleteIcon = UIImageView(frame: CGRect(x: screenWidth / 6 - 20 , y: 20 * screenHeightFactor * screenHeightFactor, width: 31, height: 22))
         deleteIcon.image = UIImage(named: "erase")
         deleteButton.addSubview(deleteIcon)
-        deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), forControlEvents: .TouchUpInside)
+        deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
     }
     
-    func numberButtonTapped(sender:AnyObject)
+    func numberButtonTapped(_ sender:AnyObject)
     {
         let button = sender as! UIButton
         if(delegate != nil){

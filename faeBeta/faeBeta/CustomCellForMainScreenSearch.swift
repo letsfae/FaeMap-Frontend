@@ -33,17 +33,17 @@ class CustomCellForMainScreenSearch: UITableViewCell {
         let labelTitleY = 13 * screenWidthFactor
         let labelSubTitleY = 33 * screenWidthFactor
         
-        labelTitle = UILabel(frame: CGRectMake(labelX, labelTitleY, labelWidth, labelHeight))
+        labelTitle = UILabel(frame: CGRect(x: labelX, y: labelTitleY, width: labelWidth, height: labelHeight))
         labelTitle.text = ""
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_18)
-        labelTitle.textAlignment = .Left
+        labelTitle.textAlignment = .left
         labelTitle.textColor = titleColor
         self.addSubview(labelTitle)
         
-        labelSubTitle = UILabel(frame: CGRectMake(labelX, labelSubTitleY, labelWidth, labelHeight))
+        labelSubTitle = UILabel(frame: CGRect(x: labelX, y: labelSubTitleY, width: labelWidth, height: labelHeight))
         labelSubTitle.text = ""
         labelSubTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_13)
-        labelSubTitle.textAlignment = .Left
+        labelSubTitle.textAlignment = .left
         labelSubTitle.textColor = subTitleColor
         self.addSubview(labelSubTitle)
     }

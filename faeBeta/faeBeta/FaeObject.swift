@@ -12,10 +12,10 @@ class FaeObject: NSObject {
     var keyForSearch : String!
     var keyValue = [String:AnyObject]()
     
-    func initWithClassName(className:String){
+    func initWithClassName(_ className:String){
         
     }
-    func setValueForKey(key:String, value:AnyObject){
+    func setValueForKey(_ key:String, value:AnyObject){
         
     }
 //    func saveInBackground(status: Int , message:String)->()->Void{

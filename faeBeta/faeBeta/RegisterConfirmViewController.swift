@@ -31,42 +31,42 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let viewWidth = view.frame.size.width
         
         
-        let backButton = UIButton(frame: CGRectMake(10, 25, 40, 40))
-        backButton.setImage(UIImage(named: "NavigationBackNew"), forState: .Normal)
-        backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        backButton.addTarget(self, action: #selector(self.backButtonPressed), forControlEvents: .TouchUpInside)
+        let backButton = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
+        backButton.setImage(UIImage(named: "NavigationBackNew"), for: UIControlState())
+        backButton.setTitleColor(UIColor.blue, for: UIControlState())
+        backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let titleLabel = UILabel(frame: CGRectMake(0, viewHeight * 95/736.0, viewWidth, 35))
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: viewHeight * 95/736.0, width: viewWidth, height: 35))
         titleLabel.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 25)
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         titleLabel.text = "All Good to Go!"
         
-        let imageView = UIImageView(frame: CGRectMake(30, viewHeight * 185/736.0, viewWidth - 60, (viewWidth - 60) * 300/351.0))
+        let imageView = UIImageView(frame: CGRect(x: 30, y: viewHeight * 185/736.0, width: viewWidth - 60, height: (viewWidth - 60) * 300/351.0))
         imageView.image = UIImage(named: "FaePic")
         
-        let titleLabel1 = UILabel(frame: CGRectMake(0, viewHeight * 500/736.0, viewWidth, 35))
+        let titleLabel1 = UILabel(frame: CGRect(x: 0, y: viewHeight * 500/736.0, width: viewWidth, height: 35))
         titleLabel1.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
         titleLabel1.font = UIFont(name: "AvenirNext-Medium", size: 25)
-        titleLabel1.textAlignment = .Center
+        titleLabel1.textAlignment = .center
         titleLabel1.text = "Welcome to Fae!"
         
-        let finishButton = UIButton(frame: CGRectMake(0, screenHeight - 131 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        let finishButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 131 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         //        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
         finishButton.layer.cornerRadius = 25 * screenHeightFactor
         finishButton.layer.masksToBounds = true
         finishButton.center.x = screenWidth / 2
         
-        finishButton.setTitle("Finish!", forState: .Normal)
+        finishButton.setTitle("Finish!", for: UIControlState())
         finishButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
         
         finishButton.backgroundColor = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
-        finishButton.addTarget(self, action: #selector(self.finishButtonPressed), forControlEvents: .TouchUpInside)
+        finishButton.addTarget(self, action: #selector(self.finishButtonPressed), for: .touchUpInside)
         
         
-        let termsOfServiceLabel = UILabel(frame: CGRectMake(0, screenHeight - 56, screenWidth, 50))
+        let termsOfServiceLabel = UILabel(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 50))
         termsOfServiceLabel.numberOfLines = 2
-        termsOfServiceLabel.textAlignment = .Center
+        termsOfServiceLabel.textAlignment = .center
         
         let myString = "By signing up, you agree to Fae's Terms of Service \n and Privacy Policy."
         let myAttribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
@@ -93,12 +93,12 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         view.addSubview(finishButton)
         view.addSubview(titleLabel1)
         view.addSubview(termsOfServiceLabel)
-        view.bringSubviewToFront(backButton)
+        view.bringSubview(toFront: backButton)
         
     }
     
     override func backButtonPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func finishButtonPressed() {
@@ -109,7 +109,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         showActivityIndicator()
         print(faeUser.keyValue)
         faeUser.signUpInBackground { (status, message) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status/100 == 2 {
                     self.loginUser()
@@ -120,8 +120,8 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func loginUser() {
         showActivityIndicator()
-        faeUser.logInBackground({(status:Int, error:AnyObject?) in
-            dispatch_async(dispatch_get_main_queue(), {
+        faeUser.logInBackground({(status:Int, error:Any?) in
+            DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
                     print("login success")
@@ -134,15 +134,15 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     func jumpToEnableLocation() {
         let authstate = CLLocationManager.authorizationStatus()
         
-        if(authstate != CLAuthorizationStatus.AuthorizedAlways){
-            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("EnableLocationViewController")as! EnableLocationViewController
+        if(authstate != CLAuthorizationStatus.authorizedAlways){
+            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
             self.navigationController?.pushViewController(vc, animated: true)
         }else{
-            let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-            if notificationType?.types == UIUserNotificationType.None {
-                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("EnableNotificationViewController") , animated: true)
+            let notificationType = UIApplication.shared.currentUserNotificationSettings
+            if notificationType?.types == UIUserNotificationType() {
+                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
             }else{
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }

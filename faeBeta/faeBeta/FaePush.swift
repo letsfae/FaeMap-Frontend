@@ -15,19 +15,19 @@ class FaePush: NSObject {
         //        self.isLogin = false
         //        self.userToken = ""
     }
-    func whereKey(key:String, value:String)->Void{
-        keyValue[key]=value
+    func whereKey(_ key:String, value:String)->Void{
+        keyValue[key]=value as AnyObject?
     }
-    func whereKeyInt(key:String, value:Int)->Void{
-        keyValue[key]=value
+    func whereKeyInt(_ key:String, value:Int)->Void{
+        keyValue[key]=value as AnyObject?
     }
     func clearKeyValue()->Void{
         self.keyValue = [String:AnyObject]()
     }
 
-    func getSync(completion:(Int,AnyObject?)->Void){
+    func getSync(_ completion:@escaping (Int,Any?)->Void){
 //        print(headerAuthentication())
-        getFromURL("sync", parameter: nil, authentication: headerAuthentication()) {(status: Int, message: AnyObject?) in
+        getFromURL("sync", parameter: nil, authentication: headerAuthentication()) {(status: Int, message: Any?) in
 //            print(message)
             //self.clearKeyValue()
             completion(status, message);

@@ -29,19 +29,19 @@ class AlbumTableViewCell: UITableViewCell {
         albumNumberLabel.font = UIFont(name: "AvenirNext-Medium", size: 15.0)
         
         checkMarkImage.image = UIImage(named: "albumTableCheckMark")
-        titleImageView.contentMode = .ScaleAspectFill
+        titleImageView.contentMode = .scaleAspectFill
         titleImageView.clipsToBounds = true
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func setCheckMark(bool : Bool) {
-        checkMarkImage.hidden = bool
+    func setCheckMark(_ bool : Bool) {
+        checkMarkImage.isHidden = bool
     }
     
 }

@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class RegisterPasswordViewController: RegisterBaseViewController {
     
@@ -33,7 +57,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         tableView.dataSource = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         passwordTableViewCell.makeFirstResponder()
     }
@@ -42,7 +66,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(false)
+        _ = navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
@@ -52,16 +76,16 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterInfo() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterInfoViewController") as! RegisterInfoViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func getInfoView() -> UIView {
         
-        let infoView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 85 * screenHeightFactor))
+        let infoView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
         
-        let imageView = UIImageView(frame: CGRectMake(view.frame.size.width/2.0 - 160 * screenWidthFactor, 0, 320 * screenWidthFactor , 85 * screenHeightFactor))
+        let imageView = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor , height: 85 * screenHeightFactor))
         imageView.image = UIImage(named: "InfoPassword")
         
         infoView.addSubview(imageView)
@@ -84,9 +108,9 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     func registerCell() {
         
-        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
         
     }
     
@@ -101,24 +125,24 @@ class RegisterPasswordViewController: RegisterBaseViewController {
 
 extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Protect your Account \n with a Strong Password!")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
             cell.setSubTitleLabelText("Must be at least 8 characters!")
             return cell
         case 2:
             if passwordTableViewCell == nil {
-                passwordTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                passwordTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 
                 passwordTableViewCell.setPlaceholderLabelText("New Password",indexPath: indexPath)
                 passwordTableViewCell.setRightPlaceHolderDisplay(true)
@@ -127,13 +151,13 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
             }
             return passwordTableViewCell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
             return 59
@@ -149,11 +173,11 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
 
 extension RegisterPasswordViewController: RegisterTextfieldProtocol {
     
-    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
+    func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
     }
     
-    func textFieldShouldReturn(indexPath: NSIndexPath) {
+    func textFieldShouldReturn(_ indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             passwordTableViewCell.endAsResponder()
@@ -162,7 +186,7 @@ extension RegisterPasswordViewController: RegisterTextfieldProtocol {
         }
     }
     
-    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
+    func textFieldDidChange(_ text: String, indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             password = text

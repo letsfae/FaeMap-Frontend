@@ -10,8 +10,8 @@ import UIKit
 
 class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCountryCodeDelegate, SetupPhoneNumberDelegate {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     //6 plus 414 736
     //6      375 667
     //5      320 568
@@ -49,7 +49,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         navigationBarSetting()
         clearSubview()
         if checkIfHavePhoneConnected() {
@@ -61,7 +61,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
     
@@ -71,35 +71,35 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     }
     
     func navigationBarSetting() {
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
         self.title = "Phone"
-        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray]
+        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray] as [String : Any]
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
     }
     
     func loadTextField() {
         textPhoneNumber = UITextField(frame: CGRect(x: 0 + 20, y: 250, width: screenWidth - 40, height: 34))
-        textPhoneNumber.textAlignment = .Center
+        textPhoneNumber.textAlignment = .center
         textPhoneNumber.font = UIFont(name: "Avenir Next", size: 25)
         textPhoneNumber.textColor = UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1.0)
         textPhoneNumber.placeholder = "Phone Number"
         textPhoneNumber.becomeFirstResponder()
-        textPhoneNumber.keyboardType = .NumberPad
+        textPhoneNumber.keyboardType = .numberPad
         textPhoneNumber.tintColor = colorFae
-        textPhoneNumber.addTarget(self, action: #selector(PhoneConnectViewController.checkValidation), forControlEvents: .EditingChanged)
+        textPhoneNumber.addTarget(self, action: #selector(PhoneConnectViewController.checkValidation), for: .editingChanged)
         self.view.addSubview(textPhoneNumber)
     }
     
-    func disableButton(button : UIButton) {
+    func disableButton(_ button : UIButton) {
         button.backgroundColor = colorDisableButton
-        button.enabled = false
+        button.isEnabled = false
     }
     
-    func enableButton(button : UIButton) {
+    func enableButton(_ button : UIButton) {
         button.backgroundColor = colorFae
-        button.enabled = true
+        button.isEnabled = true
     }
     
     func checkValidation() {
@@ -120,9 +120,9 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     
     func buttonCountrySetDidClick() {
         print("clicked button for country set")
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("CountryCodePickerViewController")as! CountryCodePickerViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "CountryCodePickerViewController")as! CountryCodePickerViewController
         vc.countryCodeDelegate = self
-        self.presentViewController(vc, animated: true, completion: nil)
+        self.present(vc, animated: true, completion: nil)
     }
     
     func buttonLinkDidClick() {
@@ -138,7 +138,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     }
     
     func jumpToVerification(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("VerificationPhoneViewController")as! VerificationPhoneViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "VerificationPhoneViewController")as! VerificationPhoneViewController
         vc.countryCode = defaultCode
         vc.phoneNumber = textPhoneNumber.text!
         vc.delegate = self
@@ -163,7 +163,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         linkTextLabel.text = "Link your phone number"
         
         textViewHint = UILabel(frame: CGRect(x: 88, y: 343, width: 239, height: 54))
-        textViewHint.textAlignment = .Center
+        textViewHint.textAlignment = .center
         textViewHint.font = UIFont(name: "Avenir Next", size: 13)
         textViewHint.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0)
         textViewHint.text = "Get convenient access to your Contacts,\nfind & invite your Friends, and add\nan extra wall of security to your account. "
@@ -173,21 +173,21 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         loadCountryAndCode()
         labelCountryCode.textColor = faeGray
         labelCountryCode.font = UIFont(name: "Avenir Next", size: 22)
-        labelCountryCode.textAlignment = .Center
+        labelCountryCode.textAlignment = .center
         
         
         
         buttonLink = UIButton(frame: CGRect(x: 127, y: 437, width: 160, height: 39))
         buttonLink.layer.cornerRadius = 7
-        buttonLink.tintColor = UIColor.whiteColor()
-        buttonLink.setTitle("Link", forState: .Normal)
-        buttonLink.addTarget(self, action: #selector(PhoneConnectViewController.buttonLinkDidClick), forControlEvents: .TouchUpInside)
+        buttonLink.tintColor = UIColor.white
+        buttonLink.setTitle("Link", for: UIControlState())
+        buttonLink.addTarget(self, action: #selector(PhoneConnectViewController.buttonLinkDidClick), for: .touchUpInside)
         disableButton(buttonLink)
         
         buttonCountrySet = UIButton(frame: CGRect(x: 40, y: 175, width: screenWidth - 80, height: 45))
-        buttonCountrySet.setTitle("", forState: .Normal)
-        buttonCountrySet.tintColor = UIColor.clearColor()
-        buttonCountrySet.addTarget(self, action: #selector(PhoneConnectViewController.buttonCountrySetDidClick), forControlEvents: .TouchUpInside)
+        buttonCountrySet.setTitle("", for: UIControlState())
+        buttonCountrySet.tintColor = UIColor.clear
+        buttonCountrySet.addTarget(self, action: #selector(PhoneConnectViewController.buttonCountrySetDidClick), for: .touchUpInside)
     }
     
     func createItemWhenPhoneConnect() {
@@ -201,7 +201,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         linkTextLabel.attributedText = attributedString
         
         textViewHint = UILabel(frame: CGRect(x: 88, y: 343, width: 239, height: 54))
-        textViewHint.textAlignment = .Center
+        textViewHint.textAlignment = .center
         textViewHint.font = UIFont(name: "Avenir Next", size: 13)
         textViewHint.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0)
         textViewHint.text = "Get convenient access to your Contacts,\nfind & invite your Friends, and add\nan extra wall of security to your account. "
@@ -211,19 +211,19 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         labelCountryCode.text = "\(defaultCountry) +\(defaultCode)"
         labelCountryCode.textColor = faeGray
         labelCountryCode.font = UIFont(name: "Avenir Next", size: 22)
-        labelCountryCode.textAlignment = .Center
+        labelCountryCode.textAlignment = .center
         
         buttonLink = UIButton(frame: CGRect(x: 127, y: 437, width: 160, height: 39))
         buttonLink.layer.cornerRadius = 7
-        buttonLink.tintColor = UIColor.whiteColor()
-        buttonLink.setTitle("change", forState: .Normal)
-        buttonLink.addTarget(self, action: #selector(PhoneConnectViewController.buttonChangeDidClick), forControlEvents: .TouchUpInside)
+        buttonLink.tintColor = UIColor.white
+        buttonLink.setTitle("change", for: UIControlState())
+        buttonLink.addTarget(self, action: #selector(PhoneConnectViewController.buttonChangeDidClick), for: .touchUpInside)
         enableButton(buttonLink)
         
         labelConnectedPhone = UILabel(frame: CGRect(x: 20, y: 250, width: screenWidth - 40, height: 34))
         labelConnectedPhone.text = phoneString
         labelConnectedPhone.font = UIFont(name: "Avenir New", size: 25)
-        labelConnectedPhone.textAlignment = .Center
+        labelConnectedPhone.textAlignment = .center
         labelConnectedPhone.textColor = faeGray
     }
     
@@ -249,13 +249,13 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         }
     }
     
-    func setCountryCode(code: CountryCode) {
+    func setCountryCode(_ code: CountryCode) {
         defaultCode = code.cd
         defaultCountry = code.ct
         loadCountryAndCode()
     }
     
-    func setupPhoneNumber(phone : String) {
+    func setupPhoneNumber(_ phone : String) {
         phoneString = phone
     }
     
@@ -265,7 +265,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         let attachmentString = NSMutableAttributedString(attributedString: NSAttributedString(attachment: attachment))
         let countryAndCode = " \(defaultCountry) +\(defaultCode)"
         let countryString = NSMutableAttributedString(string: countryAndCode)
-        attachmentString.appendAttributedString(countryString)
+        attachmentString.append(countryString)
         labelCountryCode.attributedText = attachmentString
     }
     

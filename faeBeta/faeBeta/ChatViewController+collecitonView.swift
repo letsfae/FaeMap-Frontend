@@ -17,14 +17,14 @@ extension ChatViewController {
     // MARK: - collection view delegate
     
     // JSQMessage delegate not only should handle chat bubble itself, it should handle photoQuickSelect cell
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCellCustom
+        let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCellCustom
         
         let data = messages[indexPath.row]
         
         if data.senderId == user_id.stringValue {
-            cell.textView?.textColor = UIColor.whiteColor()
+            cell.textView?.textColor = UIColor.white
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
             cell.textView?.textColor = UIColor(red: 107.0/255.0, green: 105.0/255.0, blue: 105.0/255.0, alpha: 1.0)
@@ -57,30 +57,30 @@ extension ChatViewController {
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == self.collectionView && indexPath.row == messages.count - 1{
             clearRecentCounter(chat_id)
         }
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
         
         return messages[indexPath.row]
         
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
     
     //this delegate is used to tell which bubble image should be used on current message
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         
         let data = messages[indexPath.row]
         
         if data.senderId == user_id.stringValue {
             if data.isMediaMessage {
-                outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubbleImage: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleRedColor())
+                outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleRed())
             }
             return outgoingBubble
         } else {
@@ -89,19 +89,19 @@ extension ChatViewController {
     }
     
     //this is used to edit top label of every cell
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
         let object = objects[indexPath.row]
         if object["hasTimeStamp"] as! Bool {
             let message = messages[indexPath.item]
             
-            return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
+            return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
         }
         
         return nil
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
         let object = objects[indexPath.row]
         if object["hasTimeStamp"] as! Bool  {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
@@ -111,12 +111,12 @@ extension ChatViewController {
         
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAt indexPath: IndexPath!) -> CGFloat {
         return 0.0
     }
     
     
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
         
         let message = objects[indexPath.row]
         
@@ -130,10 +130,10 @@ extension ChatViewController {
         
     }
     // bind avatar image
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
         
         let message = messages[indexPath.row]
-        let avatar = avatarDictionary!.objectForKey(message.senderId) as! JSQMessageAvatarImageDataSource
+        let avatar = avatarDictionary!.object(forKey: message.senderId) as! JSQMessageAvatarImageDataSource
         
         return avatar
     }
@@ -141,7 +141,7 @@ extension ChatViewController {
     
     //taped bubble
     // function when user tap the bubble, like image, location
-    override func collectionView(collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
         
         closeToolbarContentView()
         
@@ -153,10 +153,10 @@ extension ChatViewController {
             
             let mediaItem = message.media as! JSQPhotoMediaItemCustom
             
-            let photos = IDMPhoto.photosWithImages([mediaItem.image])
+            let photos = IDMPhoto.photos(withImages: [mediaItem.image])
             let browser = IDMPhotoBrowser(photos: photos)
             
-            self.presentViewController(browser, animated: true, completion: nil)
+            self.present(browser!, animated: true, completion: nil)
         }
         
         if object["type"] as! String == "location" {
@@ -165,7 +165,7 @@ extension ChatViewController {
             
             let mediaItem = message.media as! JSQLocationMediaItemCustom
             
-            let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("ChatMapViewController")as! ChatMapViewController
+            let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
             
             vc.chatLatitude = mediaItem.coordinate.latitude
             vc.chatLongitude = mediaItem.coordinate.longitude
@@ -180,16 +180,16 @@ extension ChatViewController {
             
             let dataUrl = mediaItem.fileURL
             
-            let player = AVPlayer(URL:dataUrl)
+            let player = AVPlayer(url:dataUrl!)
             let playerController = AVPlayerViewController()
             playerController.player = player
-            self.presentViewController(playerController, animated: true) {
+            self.present(playerController, animated: true) {
                 player.play()
             }
         }
     }
     
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         var returnValue = false
         
         let object = objects[indexPath.row]

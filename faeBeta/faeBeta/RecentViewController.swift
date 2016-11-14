@@ -18,32 +18,32 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     var recents: JSON? // an array of dic to store recent chatting informations
     var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
-    var loadingRecentTimer: NSTimer!
+    var loadingRecentTimer: Timer!
     
     // MARK: - View did/will funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.backgroundColor = UIColor.whiteColor()
+        self.tableView.backgroundColor = UIColor.white
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
         downloadCurrentUserAvatar()
 //        firebase.keepSynced(true)
 
-        if let recentData = NSUserDefaults.standardUserDefaults().arrayForKey(user_id.stringValue + "recentData"){
+        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
             self.tableView.reloadData()
         }
 
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
 //        firebase.removeValue()
         loadingRecentTimer.invalidate()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        loadingRecentTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+    override func viewWillAppear(_ animated: Bool) {
+        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
     }
     
     /*
@@ -61,21 +61,21 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 
         let sortButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
         sortButton.titleLabel?.text = ""
-        sortButton.addTarget(self, action: #selector(RecentViewController.sortAlert), forControlEvents: .TouchUpInside)
+        sortButton.addTarget(self, action: #selector(RecentViewController.sortAlert), for: .touchUpInside)
         
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
-        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
+        self.navigationController?.navigationBar.isTranslucent = false
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = "Social"
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         
         self.navigationItem.titleView = titleLabel
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .Plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))
         
         //ATTENTION: Temporary comment it here because it's not used for now
 //        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
@@ -93,16 +93,16 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func navigationLeftItemTapped() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     func navigationRightItemTapped() {
         
     }
     
     //MARK:- tableView delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(cellsCurrentlyEditing.count == 0){
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
             
 //            let recent = recents![indexPath.row]
             
@@ -110,22 +110,22 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             
 //            restartRecentChat(recent)
             
-            performSegueWithIdentifier("recentToChatSeg", sender: indexPath)
+            performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
         }else{
             for indexP in cellsCurrentlyEditing {
-                let cell = tableView.cellForRowAtIndexPath(indexP as! NSIndexPath) as! RecentTableViewCell
+                let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
                 cell.closeCell()
             }
         }
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
     
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         //        let recent = recents[indexPath.row]
         //
@@ -141,49 +141,49 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76
     }
     
     //MARK: action
     
-    @IBAction func startNewChatBarButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
+    @IBAction func startNewChatBarButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "recentToChooseUserVC", sender: self)
     }
     
     //MARK: - UItableViewDataSource
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recents == nil ? 0 : recents!.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! RecentTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
         cell.delegate = self
         let recent = recents![indexPath.row]
         
         cell.bindData(recent)
 
-        if (self.cellsCurrentlyEditing.containsObject(indexPath)) {
+        if (self.cellsCurrentlyEditing.contains(indexPath)) {
             cell.openCell()
         }
         return cell
     }
     //MARK: - helpers
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if segue.identifier == "recentToChooseUserVC" {
 //            let vc = segue.destinationViewController as! ChooseUserViewController
 //            vc.delegate = self
 //        }
         if segue.identifier == "recentToChatSeg" {
-            let indexPath = sender as! NSIndexPath
-            let chatVC = segue.destinationViewController as! ChatViewController
+            let indexPath = sender as! IndexPath
+            let chatVC = segue.destination as! ChatViewController
             chatVC.hidesBottomBarWhenPushed = true
             let recent = recents![indexPath.row]
             chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
@@ -215,7 +215,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func downloadCurrentUserAvatar()
     {
         if(avatarDic[user_id] == nil){
-            getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:AnyObject?) in
+            getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
                 if status / 100 == 2 {
                     avatarDic[user_id] = image as? UIImage
                 }
@@ -224,15 +224,15 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     //MARK: load recents form firebase
     
-    func loadRecents(animated:Bool, removeIndexPaths indexPathSet:[NSIndexPath]? ) {
+    func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
                 self.recents = json
-                    NSUserDefaults.standardUserDefaults().setObject(cacheRecent, forKey: (user_id.stringValue + "recentData"))
+                    UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
 
                 if(animated){
-                    self.tableView.deleteRowsAtIndexPaths(indexPathSet!, withRowAnimation: .Left)
+                    self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 }else{
                     if(!isDraggingRecentTableViewCell){
                         self.tableView.reloadData()
@@ -256,25 +256,25 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         meunMessage.addAttributes([NSFontAttributeName : UIFont(name: "Avenir Next", size: 18)!, NSForegroundColorAttributeName : grey], range: NSRange(location: 0, length: meunMessage.length))
         
-        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .ActionSheet)
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
         
         optionMenu.setValue(meunMessage, forKey: "attributedMessage")
         
         
-        let time = UIAlertAction(title: "Time Received", style: .Default) { (aler : UIAlertAction!) in
+        let time = UIAlertAction(title: "Time Received", style: .default) { (aler : UIAlertAction!) in
             print("Take photo")
             
         }
         
-        let unread = UIAlertAction(title: "Unread Messages", style: .Default) { (aler : UIAlertAction) in
+        let unread = UIAlertAction(title: "Unread Messages", style: .default) { (aler : UIAlertAction) in
             print("photo library")
         }
         
-        let markers = UIAlertAction(title: "Markers", style: .Default) { (aler : UIAlertAction) in
+        let markers = UIAlertAction(title: "Markers", style: .default) { (aler : UIAlertAction) in
             print("Share location")
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (aler : UIAlertAction) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (aler : UIAlertAction) in
             print("Cancel")
         }
         
@@ -282,16 +282,16 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         optionMenu.addAction(unread)
         optionMenu.addAction(markers)
         optionMenu.addAction(cancelAction)
-        self.presentViewController(optionMenu, animated: true, completion: nil)
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
-    func closeAllCell(recognizer:UITapGestureRecognizer){
-        let point = recognizer.locationInView(tableView)
-        if let indexPath = tableView.indexPathForRowAtPoint(point) {
-            self.tableView(tableView, didSelectRowAtIndexPath: indexPath)
+    func closeAllCell(_ recognizer:UITapGestureRecognizer){
+        let point = recognizer.location(in: tableView)
+        if let indexPath = tableView.indexPathForRow(at: point) {
+            self.tableView(tableView, didSelectRowAt: indexPath)
         }else{
             for indexP in cellsCurrentlyEditing {
-                let cell = tableView.cellForRowAtIndexPath(indexP as! NSIndexPath) as! RecentTableViewCell
+                let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
                 cell.closeCell()
             }
         }
@@ -299,27 +299,27 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: - swipeable cell delegate
     
-    func cellwillOpen(cell: UITableViewCell) {
+    func cellwillOpen(_ cell: UITableViewCell) {
         closeAllCell(UITapGestureRecognizer())
     }
     
-    func cellDidOpen(cell: UITableViewCell)
+    func cellDidOpen(_ cell: UITableViewCell)
     {
-        let currentEditingIndexPath = self.tableView.indexPathForCell(cell)
+        let currentEditingIndexPath = self.tableView.indexPath(for: cell)
         if(currentEditingIndexPath != nil){
-            self.cellsCurrentlyEditing.addObject(currentEditingIndexPath!)
+            self.cellsCurrentlyEditing.add(currentEditingIndexPath!)
         }
     }
     
-    func cellDidClose(cell: UITableViewCell)
+    func cellDidClose(_ cell: UITableViewCell)
     {
-        if(self.tableView.indexPathForCell(cell) != nil){
-            self.cellsCurrentlyEditing.removeObject(self.tableView.indexPathForCell(cell)!)
+        if(self.tableView.indexPath(for: cell) != nil){
+            self.cellsCurrentlyEditing.remove(self.tableView.indexPath(for: cell)!)
         }
     }
     
-    func deleteButtonTapped(cell: UITableViewCell) {
-        let indexPath = tableView.indexPathForCell(cell)!
+    func deleteButtonTapped(_ cell: UITableViewCell) {
+        let indexPath = tableView.indexPath(for: cell)!
         let recent = recents![indexPath.row]
         
         //remove recent form the array
@@ -332,6 +332,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             }
         })
         
-        cellsCurrentlyEditing.removeObject(indexPath)
+        cellsCurrentlyEditing.remove(indexPath)
     }
 }

@@ -16,7 +16,7 @@ extension FaeMapViewController {
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
-        timerUpdateSelfLocation = NSTimer.scheduledTimerWithTimeInterval(20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
     func updateTimerForLoadRegionPin() {
@@ -24,22 +24,22 @@ extension FaeMapViewController {
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
-        timerLoadRegionPins = NSTimer.scheduledTimerWithTimeInterval(600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
     }
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
         self.faeMapView.clear()
         self.updateTimerForSelfLoc()
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "500000")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
-        loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
+        loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             for eachTimer in self.NSTimerDisplayMarkerArray {
                 eachTimer.invalidate()
@@ -52,14 +52,14 @@ extension FaeMapViewController {
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
                     if let typeInfo = mapInfoJSON[i]["type"].string {
-                        pinData["type"] = typeInfo
+                        pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
                             pinShowOnMap.zIndex = 0
                         }
                     }
                     if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
-                        pinData["comment_id"] = commentIDInfo
+                        pinData["comment_id"] = commentIDInfo as AnyObject?
                         self.mapCommentPinsDic[commentIDInfo] = pinShowOnMap
                         if self.commentIDFromOpenedPinCell == commentIDInfo {
                             print("TESTing far away from")
@@ -69,34 +69,34 @@ extension FaeMapViewController {
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
-                        pinData["user_id"] = userIDInfo
+                        pinData["user_id"] = userIDInfo as AnyObject?
                     }
                     if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                        pinData["created_at"] = createdTimeInfo
+                        pinData["created_at"] = createdTimeInfo as AnyObject?
                     }
                     if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
-                        pinData["latitude"] = latitudeInfo
+                        pinData["latitude"] = latitudeInfo as AnyObject?
                         pinShowOnMap.position.latitude = latitudeInfo
                     }
                     if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
-                        pinData["longitude"] = longitudeInfo
+                        pinData["longitude"] = longitudeInfo as AnyObject?
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
                     pinShowOnMap.userData = pinData
                     let delay: Double = Double(arc4random_uniform(300)) / 100
                     let infoDict: [String: AnyObject] = ["argumentInt": pinShowOnMap]
-                    let timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
+                    let timer = Timer.scheduledTimer(timeInterval: TimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: infoDict, repeats: false)
                     self.NSTimerDisplayMarkerArray.append(timer)
                 }
             }
         }
     }
     
-    func editTimerToDisplayMarker(timer: NSTimer) {
+    func editTimerToDisplayMarker(_ timer: Timer) {
         if let userInfo = timer.userInfo as? Dictionary<String, AnyObject> {
             let marker = userInfo["argumentInt"] as! GMSMarker
             marker.appearAnimation = kGMSMarkerAnimationPop
-            marker.groundAnchor = CGPointMake(0.5, 1)
+            marker.groundAnchor = CGPoint(x: 0.5, y: 1)
             marker.map = self.faeMapView
         }
     }
@@ -109,14 +109,14 @@ extension FaeMapViewController {
             }
             canDoNextUserUpdate = false
             self.renewSelfLocation()
-            let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-            let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+            let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             let getMapUserInfo = FaeMap()
             getMapUserInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
             getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
             getMapUserInfo.whereKey("radius", value: "500000")
             getMapUserInfo.whereKey("type", value: "user")
-            getMapUserInfo.getMapInformation {(status: Int, message: AnyObject?) in
+            getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
                 let mapUserInfoJSON = JSON(message!)
                 if mapUserInfoJSON.count > 0 {
                     for i in 0...(mapUserInfoJSON.count-1) {
@@ -124,17 +124,17 @@ extension FaeMapViewController {
                         let pinShowOnMap = GMSMarker()
                         var pinData = [String: AnyObject]()
                         if let userIDInfo = mapUserInfoJSON[i]["user_id"].int {
-                            pinData["user_id"] = userIDInfo
+                            pinData["user_id"] = userIDInfo as AnyObject?
                             userID = userIDInfo
-                            if userID == user_id {
+                            if userID == user_id.intValue {
                                 continue
                             }
                         }
                         if let typeInfo = mapUserInfoJSON[i]["type"].string {
-                            pinData["type"] = typeInfo
+                            pinData["type"] = typeInfo as AnyObject?
                         }
                         if let createdTimeInfo = mapUserInfoJSON[i]["created_at"].string {
-                            pinData["created_at"] = createdTimeInfo
+                            pinData["created_at"] = createdTimeInfo as AnyObject?
                         }
                         if mapUserInfoJSON[i]["geolocation"].count == 5 {
                             var latitude: CLLocationDegrees = -999.9
@@ -142,10 +142,10 @@ extension FaeMapViewController {
                             let random = Int(arc4random_uniform(5))
                             if let latitudeInfo = mapUserInfoJSON[i]["geolocation"][random]["latitude"].double {
                                 latitude = latitudeInfo
-                                pinData["latitude"] = latitudeInfo
+                                pinData["latitude"] = latitudeInfo as AnyObject?
                                 if let longitudeInfo = mapUserInfoJSON[i]["geolocation"][random]["longitude"].double {
                                     longitude = longitudeInfo
-                                    pinData["longitude"] = longitudeInfo
+                                    pinData["longitude"] = longitudeInfo as AnyObject?
                                     let point = CLLocationCoordinate2DMake(latitude, longitude)
                                     let getMiniAvatar = FaeUser()
                                     getMiniAvatar.getOthersProfile("\(userID)") {(status, message) in
@@ -159,7 +159,7 @@ extension FaeMapViewController {
                                             fadeAnimation.fromValue = 0.0
                                             fadeAnimation.toValue = 1.0
                                             fadeAnimation.duration = 1
-                                            pinShowOnMap.layer.addAnimation(fadeAnimation, forKey: "Opacity")
+                                            pinShowOnMap.layer.add(fadeAnimation, forKey: "Opacity")
                                             pinShowOnMap.zIndex = 1
                                             pinShowOnMap.map = self.faeMapView
                                             self.canDoNextUserUpdate = true

@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (3.5.1)
+  - Alamofire (4.0.1)
   - Backendless-ios-SDK (3.0.43)
   - DACircularProgress (2.3.1)
   - Firebase/AdMob (3.9.0):
@@ -85,10 +85,10 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
-  - SwiftyJSON (2.4.0)
+  - SwiftyJSON (3.1.1)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.4)
+  - Alamofire (~> 4.0)
   - Backendless-ios-SDK
   - Firebase/AdMob
   - Firebase/Auth
@@ -100,11 +100,11 @@ DEPENDENCIES:
   - IDMPhotoBrowser
   - JSQMessagesViewController
   - KTCenterFlowLayout
-  - SDWebImage (~> 3.7)
-  - SwiftyJSON (~> 2.3)
+  - SDWebImage (~> 3.8)
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: 0dfba1184a543e2aa160f4e39cac4e8aba48d223
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   Backendless-ios-SDK: b53ffb135b571af9526f01ea1a171e682b7b4d0b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Firebase: ff77ffb77b317c3720fef57a60e9335cebf962e6
@@ -128,8 +128,8 @@ SPEC CHECKSUMS:
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
+  SwiftyJSON: f0be2e604f83e8405a624e9f891898bf6ed4e019
 
-PODFILE CHECKSUM: 26112a358944818b8fd8580d6d4759b6c8888f93
+PODFILE CHECKSUM: 2e58a828c33d750abc4dd1f7290620bc5aa49180
 
 COCOAPODS: 1.2.0.beta.1

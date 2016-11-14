@@ -9,21 +9,21 @@
 import UIKit
 
 class LocalStorageManager: NSObject {
-    private let defaults = NSUserDefaults.standardUserDefaults()
-    func saveString(key:String,value:String){
-        self.defaults.setObject(value, forKey: key)
+    fileprivate let defaults = UserDefaults.standard
+    func saveString(_ key:String,value:String){
+        self.defaults.set(value, forKey: key)
     }
-    func saveInt(key:String,value:Int){
-        self.defaults.setObject(value, forKey: key)
+    func saveInt(_ key:String,value:Int){
+        self.defaults.set(value, forKey: key)
     }
-    func saveNumber(key:String,value:NSNumber){
-        self.defaults.setObject(value, forKey: key)
+    func saveNumber(_ key:String,value:NSNumber){
+        self.defaults.set(value, forKey: key)
     }
     
-    func readByKey(key:String)->AnyObject? {
+    func readByKey(_ key:String)->AnyObject? {
         //        return self.defaults.objectForKey(key)?
-        if let obj = self.defaults.objectForKey(key) {
-            return obj
+        if let obj = self.defaults.object(forKey: key) {
+            return obj as AnyObject?
         }
         return nil
     }
@@ -160,7 +160,7 @@ class LocalStorageManager: NSObject {
     }
     
     func readLogInfo()->Bool{
-        readUsername()
+        _ = readUsername()
         if is_Login == 1 {
             return true
         }
@@ -186,10 +186,10 @@ class LocalStorageManager: NSObject {
     }
     func isFirstPushLaunch() -> Bool {
         let firstLaunchFlag = "FirstPushLaunchFlag"
-        let isFirstLaunch = NSUserDefaults.standardUserDefaults().stringForKey(firstLaunchFlag) == nil
+        let isFirstLaunch = UserDefaults.standard.string(forKey: firstLaunchFlag) == nil
         if (isFirstLaunch) {
-            NSUserDefaults.standardUserDefaults().setObject("false", forKey: firstLaunchFlag)
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set("false", forKey: firstLaunchFlag)
+            UserDefaults.standard.synchronize()
         }
         return isFirstLaunch
     }

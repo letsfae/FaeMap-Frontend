@@ -29,15 +29,15 @@ class WelcomeContentContainerFace: UIView {
     }
     
     //MARK: - setup
-    private func loadNib()
+    fileprivate func loadNib()
     {
-        uiview = NSBundle.mainBundle().loadNibNamed("WelcomeContentContainerFace", owner: self, options: nil)![0] as? UIView
-        self.insertSubview(uiview!, atIndex: 0)
+        uiview = Bundle.main.loadNibNamed("WelcomeContentContainerFace", owner: self, options: nil)![0] as? UIView
+        self.insertSubview(uiview!, at: 0)
         uiview!.frame = self.bounds
-        uiview!.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        uiview!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    func populateContentContainer(imageName:String, title:String, description:String)
+    func populateContentContainer(_ imageName:String, title:String, description:String)
     {
         self.imageView.image = UIImage(named: imageName)
         self.titleLabel.text = title

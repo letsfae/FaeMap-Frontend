@@ -11,22 +11,22 @@ import Foundation
 extension String {
     func formatFaeDate() -> String {
         // convert to NSDate
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        dateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
-        let myDate = dateFormatter.dateFromString(self)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        let myDate = dateFormatter.date(from: self)
         
         if myDate != nil {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
-            let localTimeZone = NSTimeZone.localTimeZone().abbreviation
-            let elapsed = Int(NSDate().timeIntervalSinceDate(myDate!))
+            let localTimeZone = NSTimeZone.local.abbreviation()
+            let elapsed = Int(Date().timeIntervalSince(myDate!))
             print("DEBUG TIMEE")
             print(elapsed)
             if localTimeZone != nil {
-                dateFormatter.timeZone = NSTimeZone(abbreviation: "\(localTimeZone!)")
-                let normalFormat = dateFormatter.stringFromDate(myDate!)
+                dateFormatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
+                let normalFormat = dateFormatter.string(from: myDate!)
                 dateFormatter.dateFormat = "EEEE, HH:mm"
-                let dayFormat = dateFormatter.stringFromDate(myDate!)
+                let dayFormat = dateFormatter.string(from: myDate!)
                 // Greater than or equal to one day
                 if elapsed >= 604800 {
                     return "\(normalFormat)"

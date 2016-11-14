@@ -10,8 +10,8 @@ import UIKit
 
 class IntroSettingViewController: UIViewController , UITextViewDelegate{
 
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     var labelTitle : UILabel!
     var textInput : UITextView!
     var buttonSave : UIButton!
@@ -24,26 +24,26 @@ class IntroSettingViewController: UIViewController , UITextViewDelegate{
         addObservers()
         // Do any additional setup after loading the view.
     }
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.isNavigationBarHidden = false
     }
     func navBarLeftButtonTapped()
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     func loadTitle() {
-        labelTitle = UILabel(frame: CGRectMake((screenWidth - 140) / 2, 99 - 64, 140, 27))
+        labelTitle = UILabel(frame: CGRect(x: (screenWidth - 140) / 2, y: 99 - 64, width: 140, height: 27))
         labelTitle.text = "Short Intro"
         labelTitle.font = UIFont(name:"AvenirNext-Medium", size: 20)
-        labelTitle.textAlignment = .Center
+        labelTitle.textAlignment = .center
         labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         self.view.addSubview(labelTitle)
 
-        textInput = UITextView(frame: CGRectMake((screenWidth - 244) / 2, 174 - 64, 244, 102))
+        textInput = UITextView(frame: CGRect(x: (screenWidth - 244) / 2, y: 174 - 64, width: 244, height: 102))
         //textInput.textAlignment = .Center
         //textInput.text = "Write a Short Intro"
         textInput.font = UIFont(name: "AvenirNext-Regular", size: 25)
@@ -51,42 +51,42 @@ class IntroSettingViewController: UIViewController , UITextViewDelegate{
         textInput.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         textInput.delegate = self
         self.view.addSubview(textInput)
-        labelPlaceholder = UILabel(frame: CGRectMake(-5, 10, 244, 34))
-        labelPlaceholder.textAlignment = .Center
+        labelPlaceholder = UILabel(frame: CGRect(x: -5, y: 10, width: 244, height: 34))
+        labelPlaceholder.textAlignment = .center
         labelPlaceholder.text = "Write a Short Intro"
         labelPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 25)
         labelPlaceholder.textColor = UIColor(colorLiteralRed: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         self.textInput.addSubview(labelPlaceholder)
 
-        buttonSave = UIButton(frame: CGRectMake(0, screenHeight - 64 - 30 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        buttonSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 64 - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         buttonSave.center.x = screenWidth / 2
         buttonSave.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        buttonSave.setTitle("Save", forState: .Normal)
+        buttonSave.setTitle("Save", for: UIControlState())
         buttonSave.layer.cornerRadius = 25
-        buttonSave.titleLabel?.textColor = UIColor.whiteColor()
-        buttonSave.addTarget(self, action: #selector(NameSettingViewController.actionSave), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSave.titleLabel?.textColor = UIColor.white
+        buttonSave.addTarget(self, action: #selector(NameSettingViewController.actionSave), for: UIControlEvents.touchUpInside)
         self.view.addSubview(buttonSave)
-        labelDesc = UILabel(frame: CGRectMake(0, self.buttonSave.frame.origin.y - 16 - 18 , 242, 36))
+        labelDesc = UILabel(frame: CGRect(x: 0, y: self.buttonSave.frame.origin.y - 16 - 18 , width: 242, height: 36))
         labelDesc.center.x = screenWidth / 2
         labelDesc.text = "30 Characters"
         labelDesc.textColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        labelDesc.textAlignment = .Center
+        labelDesc.textAlignment = .center
 //        labelDesc.numberOfLines = 0
         self.view.addSubview(labelDesc)
     }
     func addObservers(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         self.view.addGestureRecognizer(tapGesture)
         //textInput.addTarget(self, action: #selector(self.textfieldDidChange(_:)), forControlEvents:.EditingChanged )
 
     }
-    func keyboardWillShow(notification:NSNotification){
+    func keyboardWillShow(_ notification:Notification){
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
 
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.buttonSave.frame.origin.y += (screenHeight - keyboardFrame.height) - self.buttonSave.frame.origin.y - 50 * screenHeightFactor - 14 - 64
             self.labelDesc.frame.origin.y = self.buttonSave.frame.origin.y - 16 - 18
             //self.supportButton.frame.origin.y += (screenHeight - keyboardFrame.height) - self.supportButton.frame.origin.y - 50 * screenHeightFactor - 14 - 22 - 19
@@ -95,8 +95,8 @@ class IntroSettingViewController: UIViewController , UITextViewDelegate{
         })
     }
 
-    func keyboardWillHide(notification:NSNotification){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+    func keyboardWillHide(_ notification:Notification){
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.buttonSave.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor - 64
             self.labelDesc.frame.origin.y = self.buttonSave.frame.origin.y - 16 - 18
             //self.supportButton.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71
@@ -106,28 +106,28 @@ class IntroSettingViewController: UIViewController , UITextViewDelegate{
     func handleTap(){
         self.view.endEditing(true)
         if textInput.text.characters.count == 0 {
-            labelPlaceholder.hidden = false
+            labelPlaceholder.isHidden = false
         }
     }
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return textView.text.characters.count + (text.characters.count - range.length) <= 30
     }
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let count = textView.text.characters.count
         let num : Int = 30 - count
         labelDesc.text =  String(num) + " Characters"
         if num > 0 {
-            labelPlaceholder.hidden = true
+            labelPlaceholder.isHidden = true
         }
     }
     func actionSave() {
         let user = FaeUser()
         if let str = textInput.text {
             user.whereKey("short_intro", value: str)
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
+            user.updateNameCard { (status:Int, objects: Any?) in
                 print (status)
                 if status / 100 == 2 {
-                    self.navigationController?.popViewControllerAnimated(true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
                 else {
 

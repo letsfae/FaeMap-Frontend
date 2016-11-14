@@ -12,9 +12,9 @@ import CoreLocation
 
 protocol CommentPinViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
-    func dismissMarkerShadow(dismiss: Bool)
+    func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
-    func animateToCameraFromCommentPinDetailView(coordinate: CLLocationCoordinate2D, commentID: Int)
+    func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int)
 }
 
 class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
@@ -105,8 +105,8 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
-    private var isObservingInputTextView = false
-    private var inputTextViewContext = 0
+    fileprivate var isObservingInputTextView = false
+    fileprivate var inputTextViewContext = 0
     var inputTextViewMaximumHeight:CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
@@ -127,15 +127,15 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     var draggingButtonSubview: UIView!
     
     // Timer for animating heart
-    var animatingHeartTimer: NSTimer!
+    var animatingHeartTimer: Timer!
     
     // Timer for touching pin comment cell
-    var touchToReplyTimer: NSTimer!
+    var touchToReplyTimer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.clearColor()
-        self.modalPresentationStyle = .OverCurrentContext
+        self.view.backgroundColor = UIColor.clear
+        self.modalPresentationStyle = .overCurrentContext
         loadCommentPinDetailWindow()
         loadTransparentButtonBackToMap()
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
@@ -151,24 +151,24 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             }
         }
         if toolbarHeightConstraint == nil{
-            toolbarHeightConstraint = NSLayoutConstraint(item:inputToolbar, attribute:.Height,relatedBy:.Equal,toItem:nil,attribute:.NotAnAttribute ,multiplier:1,constant:90)
+            toolbarHeightConstraint = NSLayoutConstraint(item:inputToolbar, attribute:.height,relatedBy:.equal,toItem:nil,attribute:.notAnAttribute ,multiplier:1,constant:90)
             self.inputToolbar.addConstraint(toolbarHeightConstraint)
             
-            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.Width,relatedBy:.Equal,toItem:self.view,attribute:.Width ,multiplier:1,constant:0)
+            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.width,relatedBy:.equal,toItem:self.view,attribute:.width ,multiplier:1,constant:0)
             self.view.addConstraint(toolbarDistanceToBottom)
             
-            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.Bottom,relatedBy:.Equal,toItem:self.view,attribute:.Bottom ,multiplier:1,constant:0)
+            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.bottom,relatedBy:.equal,toItem:self.view,attribute:.bottom ,multiplier:1,constant:0)
             self.view.addConstraint(toolbarDistanceToBottom)
             self.view.setNeedsUpdateConstraints()
         }
     }
     
-    override func viewDidAppear(animated:Bool) {
+    override func viewDidAppear(_ animated:Bool) {
         adjustInputToolbarHeightConstraint(byDelta: -90)// A tricky way to set the toolbarHeight to default
         super.viewDidAppear(animated)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         closeToolbarContentView()
         removeObservers()
@@ -185,30 +185,30 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func loadTransparentButtonBackToMap() {
-        let subviewBackToMap = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        let subviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(subviewBackToMap)
-        self.view.sendSubviewToBack(subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), forControlEvents: .TouchUpInside)
+        self.view.sendSubview(toBack: subviewBackToMap)
+        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), for: .touchUpInside)
     }
     
-    private func addObservers() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide), name:UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+    fileprivate func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name:NSNotification.Name.UIKeyboardDidShow, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name:NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
         
         if (self.isObservingInputTextView) {
             return;
         }
         let scrollView = self.inputToolbar.contentView.textView as UIScrollView
-        scrollView.addObserver(self, forKeyPath: "contentSize", options: [.Old, .New], context: nil)
+        scrollView.addObserver(self, forKeyPath: "contentSize", options: [.old, .new], context: nil)
         
         self.isObservingInputTextView = true
     }
     
-    private func removeObservers() {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+    fileprivate func removeObservers() {
+        NotificationCenter.default.removeObserver(self)
         if (!self.isObservingInputTextView) {
             return;
         }
@@ -217,7 +217,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         self.isObservingInputTextView = false
     }
     
-    private func setupInputToolbar()
+    fileprivate func setupInputToolbar()
     {
         func loadInputBarComponent() {
             
@@ -225,10 +225,10 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             let contentView = self.inputToolbar.contentView
             let contentOffset = (screenWidth - 42 - 29 * 5) / 4 + 29
             buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
-            buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), forControlEvents: .TouchUpInside)
-            contentView.addSubview(buttonKeyBoard)
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+            buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
+            buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
+            contentView?.addSubview(buttonKeyBoard)
             
             /*
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
@@ -253,11 +253,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             */
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
-            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
-            contentView.addSubview(buttonSend)
-            buttonSend.enabled = false
-            buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .highlighted)
+            contentView?.addSubview(buttonSend)
+            buttonSend.isEnabled = false
+            buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), for: .touchUpInside)
             
             buttonSet.append(buttonKeyBoard)
 //            buttonSet.append(buttonSticker)
@@ -266,7 +266,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
             buttonSet.append(buttonSend)
             
             for button in buttonSet{
-                button.autoresizingMask = [.FlexibleTopMargin]
+                button.autoresizingMask = [.flexibleTopMargin]
             }
         }
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
@@ -274,7 +274,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         inputToolbar.contentView.textView.tintColor = colorFae
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
         inputToolbar.contentView.textView.delaysContentTouches = false
-        lableTextViewPlaceholder = UILabel(frame: CGRectMake(7, 3, 200, 27))
+        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 7, y: 3, width: 200, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lableTextViewPlaceholder.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1.0)
         lableTextViewPlaceholder.text = "Write a Comment..."
@@ -283,33 +283,33 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         inputToolbar.maximumHeight = 128
         self.uiviewCommentPinDetail.addSubview(inputToolbar)
         loadInputBarComponent()
-        inputToolbar.hidden = true
+        inputToolbar.isHidden = true
     }
     
-    private func setupToolbarContentView() {
+    fileprivate func setupToolbarContentView() {
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
-        UIApplication.sharedApplication().keyWindow?.addSubview(toolbarContentView)
+        UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
     
     // Animation of the red sliding line
-    func animationRedSlidingLine(sender: UIButton) {
+    func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.hidden = true
-            tableCommentsForComment.hidden = false
+            tableViewPeople.isHidden = true
+            tableCommentsForComment.isHidden = false
             commentDetailFullBoardScrollView.contentSize.height = tableCommentsForComment.frame.size.height + 281
         }
         else if sender.tag == 3 {
-            tableViewPeople.hidden = false
-            tableCommentsForComment.hidden = true
+            tableViewPeople.isHidden = false
+            tableCommentsForComment.isHidden = true
             commentDetailFullBoardScrollView.contentSize.height = tableViewPeople.frame.size.height + 281
         }
         let tag = CGFloat(sender.tag)
         let centerAtOneThird = screenWidth / 4
         let targetCenter = CGFloat(tag * centerAtOneThird)
-        UIView.animateWithDuration(0.25, animations:({
+        UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter
         }), completion: { (done: Bool) in
@@ -324,13 +324,13 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         buttonMoreOnCommentCellExpanded = false
         let subviewXBefore: CGFloat = 400 / 414 * screenWidth
         let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-        UIView.animateWithDuration(0.25, animations: ({
-            self.moreButtonDetailSubview.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+        UIView.animate(withDuration: 0.25, animations: ({
+            self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
 //            self.buttonShareOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
 //            self.buttonSaveOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            self.buttonEditOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            self.buttonDeleteOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            self.buttonReportOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
+            self.buttonEditOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonDeleteOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonReportOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
 //            self.buttonShareOnCommentDetail.alpha = 0.0
 //            self.buttonSaveOnCommentDetail.alpha = 0.0
             self.buttonEditOnCommentDetail.alpha = 0.0
@@ -341,12 +341,12 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     // Disable a button, make it unclickable
-    func disableTheButton(button: UIButton) {
+    func disableTheButton(_ button: UIButton) {
         let origImage = button.imageView?.image
-        let tintedImage = origImage?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        button.setImage(tintedImage, forState: .Normal)
-        button.tintColor = UIColor.lightGrayColor()
-        button.userInteractionEnabled = false
+        let tintedImage = origImage?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        button.setImage(tintedImage, for: UIControlState())
+        button.tintColor = UIColor.lightGray
+        button.isUserInteractionEnabled = false
     }
     
     // Hide comment pin detail window
@@ -354,7 +354,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         if uiviewCommentPinDetail != nil {
             if commentPinDetailShowed {
                 actionBackToMap(self.buttonCommentPinBackToMap)
-                UIView.animateWithDuration(0.583, animations: ({
+                UIView.animate(withDuration: 0.583, animations: ({
                     
                 }), completion: { (done: Bool) in
                     if done {
@@ -367,7 +367,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     func animateHeart() {
         buttonCommentPinLike.tag = 0
-        animatingHeart = UIImageView(frame: CGRectMake(0, 0, 26, 22))
+        animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
         animatingHeart.image = UIImage(named: "commentPinLikeFull")
         animatingHeart.layer.zPosition = 108
         uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
@@ -377,13 +377,13 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         let randomY = CGFloat(arc4random_uniform(50) + 100)
         let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
         
-        var transform: CGAffineTransform = CGAffineTransformMakeTranslation(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
-        let path =  CGPathCreateMutable()
-        CGPathMoveToPoint(path, &transform, 0, 0)
-        CGPathAddLineToPoint(path, &transform, randomX-75, -randomY)
+        let transform: CGAffineTransform = CGAffineTransform(translationX: buttonCommentPinLike.center.x, y: buttonCommentPinLike.center.y)
+        let path =  CGMutablePath()
+        path.move(to: CGPoint(x:0,y:0), transform: transform )
+        path.addLine(to: CGPoint(x:randomX-75, y:-randomY), transform: transform)
         
         let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")
-        scaleAnimation.values = [NSValue(CATransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(CATransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
+        scaleAnimation.values = [NSValue(caTransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(caTransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
         scaleAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
         scaleAnimation.duration = 1
         
@@ -396,41 +396,41 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         orbit.duration = 1
         orbit.path = path
         orbit.calculationMode = kCAAnimationPaced
-        animatingHeart.layer.addAnimation(orbit, forKey:"Move")
-        animatingHeart.layer.addAnimation(fadeAnimation, forKey: "Opacity")
-        animatingHeart.layer.addAnimation(scaleAnimation, forKey: "Scale")
-        animatingHeart.layer.position = CGPointMake(buttonCommentPinLike.center.x, buttonCommentPinLike.center.y)
+        animatingHeart.layer.add(orbit, forKey:"Move")
+        animatingHeart.layer.add(fadeAnimation, forKey: "Opacity")
+        animatingHeart.layer.add(scaleAnimation, forKey: "Scale")
+        animatingHeart.layer.position = CGPoint(x: buttonCommentPinLike.center.x, y: buttonCommentPinLike.center.y)
     }
     
     func appWillEnterForeground(){
         
     }
     
-    func keyboardWillShow(notification: NSNotification){
-        let userInfo:NSDictionary = notification.userInfo!
-        let keyboardFrame:NSValue = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.CGRectValue()
+    func keyboardWillShow(_ notification: Notification){
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
-        UIView.animateWithDuration(0.3,delay: 0, options: .CurveLinear, animations:{
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = -keyboardHeight
             self.view.setNeedsUpdateConstraints()
         }, completion: nil)
     }
     
-    func keyboardDidShow(notification: NSNotification){
+    func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
     }
     
-    func keyboardWillHide(notification: NSNotification){
-        UIView.animateWithDuration(0.3,delay: 0, options: .CurveLinear, animations:{
+    func keyboardWillHide(_ notification: Notification){
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = 0
             self.view.setNeedsUpdateConstraints()
         }, completion: nil)
     }
     
-    func keyboardDidHide(notification: NSNotification){
+    func keyboardDidHide(_ notification: Notification){
         toolbarContentView.keyboardShow = false
     }
     
@@ -439,14 +439,14 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     func showKeyboard() {
         
         resetToolbarButtonIcon()
-        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.toolbarContentView.showKeyboard()
         self.inputToolbar.contentView.textView.becomeFirstResponder()
     }
     
     func showCamera() {
         view.endEditing(true)
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.closeToolbarContentView()
             }, completion:{ (Bool) -> Void in
         })
@@ -456,7 +456,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     func showStikcer() {
         resetToolbarButtonIcon()
-        buttonSticker.setImage(UIImage(named: "stickerChosen"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
@@ -464,30 +464,30 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     
     func showLibrary() {
         resetToolbarButtonIcon()
-        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), forState: .Normal)
+        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showLibrary()
         moveUpInputBarContentView(animated)
     }
     
     func sendMessageButtonTapped() {
-        sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
-        buttonSend.enabled = false
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        sendMessage(self.inputToolbar.contentView.textView.text, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        buttonSend.isEnabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
-    private func resetToolbarButtonIcon()
+    fileprivate func resetToolbarButtonIcon()
     {
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
 //        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
 //        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
 //        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
 //        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
-    private func closeToolbarContentView() {
+    fileprivate func closeToolbarContentView() {
         resetToolbarButtonIcon()
         moveDownInputBar()
         toolbarContentView.closeAll()
@@ -504,11 +504,11 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         self.view.setNeedsUpdateConstraints()
     }
     
-    func moveUpInputBarContentView(animated: Bool)
+    func moveUpInputBarContentView(_ animated: Bool)
     {
         if(animated){
             self.toolbarContentView.frame.origin.y = screenHeight
-            UIView.animateWithDuration(0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
                 self.toolbarContentView.frame.origin.y = screenHeight - 271
                 }, completion:{ (Bool) -> Void in
@@ -520,28 +520,28 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     // MARK: - send messages
-    func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?) {
+    func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
             commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: realText)
         }
         self.inputToolbar.contentView.textView.text = ""
-        self.lableTextViewPlaceholder.hidden = false
+        self.lableTextViewPlaceholder.isHidden = false
         self.inputToolbar.contentView.textView.resignFirstResponder()
     }
     
     //MARK: -  UIImagePickerController
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-        self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        self.sendMessage(nil, date: Date(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
         
 //        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
     }
     
-    func image(image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?) {
+    func image(_ image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?) {
         self.appWillEnterForeground()
     }
     
@@ -550,10 +550,10 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         
     }
     
-    func sendStickerWithImageName(name : String) {
+    func sendStickerWithImageName(_ name : String) {
         
     }
-    func sendImages(images:[UIImage]) {
+    func sendImages(_ images:[UIImage]) {
         
     }
     
@@ -567,52 +567,52 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     //MARK: - TEXTVIEW delegate
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView == self.inputToolbar.contentView.textView {
-            let spacing = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            let spacing = CharacterSet.whitespacesAndNewlines
             
-            if self.inputToolbar.contentView.textView.text.stringByTrimmingCharactersInSet(spacing).isEmpty == false {
-                self.lableTextViewPlaceholder.hidden = true
+            if self.inputToolbar.contentView.textView.text.trimmingCharacters(in: spacing).isEmpty == false {
+                self.lableTextViewPlaceholder.isHidden = true
             }
             else {
-                self.lableTextViewPlaceholder.hidden = false
+                self.lableTextViewPlaceholder.isHidden = false
             }
             if textView.text.characters.count == 0 {
                 // when text has no char, cannot send message
-                buttonSend.enabled = false
-                buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+                buttonSend.isEnabled = false
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
             } else {
-                buttonSend.enabled = true
-                buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
+                buttonSend.isEnabled = true
+                buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
             }
         }
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+    func textViewDidEndEditing(_ textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard()
     }
     
     
     
     //MARK: - observe key path
-    override func observeValueForKeyPath(keyPath: String?,
-                                         ofObject object: AnyObject?,
-                                                  change: [String : AnyObject]?,
-                                                  context: UnsafeMutablePointer<Void>)
+    override func observeValue(forKeyPath keyPath: String?,
+                                         of object: Any?,
+                                                  change: [NSKeyValueChangeKey : Any]?,
+                                                  context: UnsafeMutableRawPointer?)
     {
         let textView = object as! UITextView
         if (textView == self.inputToolbar.contentView.textView && keyPath! == "contentSize") {
             
-            let oldContentSize = change![NSKeyValueChangeOldKey]!.CGSizeValue
+            let oldContentSize = (change![NSKeyValueChangeKey.oldKey]! as AnyObject).cgSizeValue
                 
-            let newContentSize = change![NSKeyValueChangeNewKey]!.CGSizeValue
+            let newContentSize = (change![NSKeyValueChangeKey.newKey]! as AnyObject).cgSizeValue
             
-            let dy = newContentSize().height - oldContentSize().height;
+            let dy = (newContentSize?.height)! - (oldContentSize?.height)!;
             
             if toolbarHeightConstraint != nil {
                 self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
@@ -620,19 +620,19 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         }
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        self.inputToolbar.contentView.textView.resignFirstResponder()
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
         if commentDetailFullBoardScrollView.contentOffset.y >= 226 {
             if self.controlBoard != nil {
-                self.controlBoard.hidden = false
+                self.controlBoard.isHidden = false
             }
         }
         if commentDetailFullBoardScrollView.contentOffset.y < 226 {
             if self.controlBoard != nil {
-                self.controlBoard.hidden = true
+                self.controlBoard.isHidden = true
             }
         }
     }

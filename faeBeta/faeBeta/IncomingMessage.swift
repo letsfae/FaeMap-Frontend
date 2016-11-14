@@ -18,7 +18,7 @@ class IncomingMessage {
         collectionView = collectionView_
     }
     
-    func createMessage(dictionary : NSDictionary) -> JSQMessage? {
+    func createMessage(_ dictionary : NSDictionary) -> JSQMessage? {
         
         var message : JSQMessage?
         let type = dictionary["type"] as? String
@@ -57,22 +57,22 @@ class IncomingMessage {
         }
     }
     
-    func createTextMessage(item : NSDictionary) -> JSQMessage {
+    func createTextMessage(_ item : NSDictionary) -> JSQMessage {
         
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         let text = item["message"] as? String
         
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, text: text)
         
     }
     
-    func createLocationMessage(item : NSDictionary) -> JSQMessage {
+    func createLocationMessage(_ item : NSDictionary) -> JSQMessage {
         
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         
         let latitude = item["latitude"] as? Double
         let longitude = item["longitude"] as? Double
@@ -120,7 +120,7 @@ class IncomingMessage {
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
     }
     
-    func returnOutgoingStatusFromUser(senderId : String) -> Bool {
+    func returnOutgoingStatusFromUser(_ senderId : String) -> Bool {
         
         if senderId == user_id.stringValue {
             //outgoings
@@ -130,17 +130,17 @@ class IncomingMessage {
         }
     }
     
-    func createPictureMessage(item : NSDictionary) -> JSQMessage {
+    func createPictureMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         
         let mediaItem = JSQPhotoMediaItemCustom(image: nil)
         
-        mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         
         imageFromData(item) { (image) in
-            mediaItem.image = image
+            mediaItem?.image = image
             self.collectionView.reloadData()
         }
         
@@ -149,21 +149,21 @@ class IncomingMessage {
     
     
     // create incoming audio message
-    func createAudioMessage(item : NSDictionary) -> JSQMessage {
+    func createAudioMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         
         let isOutGoingMessage = userId! == user_id.stringValue
-        let options: AVAudioSessionCategoryOptions = [AVAudioSessionCategoryOptions.DuckOthers, AVAudioSessionCategoryOptions.DefaultToSpeaker,AVAudioSessionCategoryOptions.AllowBluetooth]
+        let options: AVAudioSessionCategoryOptions = [AVAudioSessionCategoryOptions.duckOthers, AVAudioSessionCategoryOptions.defaultToSpeaker,AVAudioSessionCategoryOptions.allowBluetooth]
         let font = UIFont(name: "AvenirNext-DemiBold", size: 16)
         let attribute = JSQAudioMediaViewAttributesCustom(
             playButtonImage: UIImage(named: isOutGoingMessage ? "playButton_white.png" : "playButton_red.png")!,
             pauseButtonImage: UIImage(named: isOutGoingMessage ? "pauseButton_white.png" : "pauseButton_red.png")!,
-            labelFont: font!,
+            label: font!,
             showFractionalSecodns:false,
-            backgroundColor: isOutGoingMessage ? UIColor.faeAppRedColor() : UIColor.whiteColor(),
-            tintColor: isOutGoingMessage ? UIColor.whiteColor() : UIColor.faeAppRedColor(),
+            backgroundColor: isOutGoingMessage ? UIColor.faeAppRedColor() : UIColor.white,
+            tintColor: isOutGoingMessage ? UIColor.white : UIColor.faeAppRedColor(),
             controlInsets:UIEdgeInsetsMake(7, 12, 3, 14),
             controlPadding:5,
             audioCategory:"AVAudioSessionCategoryPlayback",
@@ -177,21 +177,21 @@ class IncomingMessage {
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
 
-    func createVideoMessage(item : NSDictionary) -> JSQMessage {
+    func createVideoMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         let image = item["snapImage"] as? UIImage
         var duration = 0
         if item["videoDuration"] != nil {
             duration = item["videoDuration"] as! Int
         }
-        let mediaItem = JSQVideoMediaItemCustom(fileURL:NSURL(),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL:URL(string:""),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
 
         videoFromData(item) { (videoURL) in
             self.snapShotFromData(item) { (image) in
-                mediaItem.fileURL = videoURL!
-                mediaItem.snapImage = image
+                mediaItem?.fileURL = videoURL!
+                mediaItem?.snapImage = image
                 self.collectionView.reloadData()
             }
 
@@ -199,18 +199,18 @@ class IncomingMessage {
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
 
-    func createStickerMessage(item : NSDictionary) -> JSQMessage {
+    func createStickerMessage(_ item : NSDictionary) -> JSQMessage {
         
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
-        let date = dateFormatter().dateFromString((item["date"] as? String)!)
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
         
         let mediaItem = JSQStickerMediaItem(image: nil)
         
-        mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         
         imageFromData(item) { (image) in
-            mediaItem.image = image
+            mediaItem?.image = image
             self.collectionView.reloadData()
         }
         
@@ -218,56 +218,56 @@ class IncomingMessage {
         
     }
     
-    func imageFromData(item : NSDictionary, result : (image : UIImage?) -> Void) {
+    func imageFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         
-        let decodedData = NSData(base64EncodedString: (item["picture"] as? String)!, options: NSDataBase64DecodingOptions(rawValue : 0))
+        let decodedData = Data(base64Encoded: (item["picture"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0))
         
         image = UIImage(data: decodedData!)
         
-        result(image: image)
+        result(image)
     }
     
-    func voiceFromData(item : NSDictionary, result : (voiceData : NSData?) -> Void) {
-        let decodedData = NSData(base64EncodedString: (item["audio"] as? String)!, options: NSDataBase64DecodingOptions(rawValue : 0))
+    func voiceFromData(_ item : NSDictionary, result : (_ voiceData : Data?) -> Void) {
+        let decodedData = Data(base64Encoded: (item["audio"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0))
         
-        result(voiceData: decodedData)
+        result(decodedData)
     }
     
-    func videoFromData(item : NSDictionary, result : (videoData : NSURL?) -> Void) {
+    func videoFromData(_ item : NSDictionary, result : (_ videoData : URL?) -> Void) {
         let str = item["video"] as? String
-        let filePath = self.documentsPathForFileName("/\(str!.substringWithRange(str!.endIndex.advancedBy(-33) ..< str!.endIndex.advancedBy(-1)))).mov")
+        let filePath = self.documentsPathForFileName("/\(str!.substring(with: str!.characters.index(str!.endIndex, offsetBy: -33) ..< str!.characters.index(str!.endIndex, offsetBy: -1)))).mov")
 
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(filePath) {
-            let videoFileURL = NSURL(fileURLWithPath: filePath)
-            result(videoData: videoFileURL)
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: filePath) {
+            let videoFileURL = URL(fileURLWithPath: filePath)
+            result(videoFileURL)
         } else {
-            if let decodedData = NSData(base64EncodedString: str!, options: NSDataBase64DecodingOptions(rawValue : 0)){
+            if let decodedData = Data(base64Encoded: str!, options: NSData.Base64DecodingOptions(rawValue : 0)){
                 if(str!.characters.count > 50){
-                    decodedData.writeToFile(filePath, atomically:true)
+                    try? decodedData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                     
-                    let videoFileURL = NSURL(fileURLWithPath: filePath)
-                    result(videoData: videoFileURL)
+                    let videoFileURL = URL(fileURLWithPath: filePath)
+                    result(videoFileURL)
                 }
             }
         }
     }
     
-    func documentsPathForFileName(name: String) -> String {
+    func documentsPathForFileName(_ name: String) -> String {
         
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        return documentsPath.stringByAppendingString(name)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        return documentsPath + name
     }
     
-    func snapShotFromData(item : NSDictionary, result : (image : UIImage?) -> Void) {
+    func snapShotFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         if let data = item["snapImage"] {
-            let decodedData = NSData(base64EncodedString: (data as? String)!, options: NSDataBase64DecodingOptions(rawValue : 0))
+            let decodedData = Data(base64Encoded: (data as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0))
             
             image = UIImage(data: decodedData!)
             
         }
-        result(image: image)
+        result(image)
     }
 }

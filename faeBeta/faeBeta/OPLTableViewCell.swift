@@ -11,8 +11,8 @@ import CoreLocation
 
 protocol OpenedPinTableViewCellDelegate {
     // Pass CL2D location to OpenedPinTableViewController
-    func passCL2DLocationToOpenedPinList(coordinate: CLLocationCoordinate2D, commentID: Int)
-    func deleteThisCellCalledFromDelegate(indexPath: NSIndexPath)
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, commentID: Int)
+    func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath)
 }
 
 class OPLTableViewCell: UITableViewCell {
@@ -29,7 +29,7 @@ class OPLTableViewCell: UITableViewCell {
     var commentID: Int = -999
     var userID: String = "NULL"
     var location: CLLocationCoordinate2D!
-    var indexPathInCell: NSIndexPath!
+    var indexPathInCell: IndexPath!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,7 +46,7 @@ class OPLTableViewCell: UITableViewCell {
         imageViewAvatar.clipsToBounds = true
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true
-        imageViewAvatar.contentMode = .ScaleAspectFill
+        imageViewAvatar.contentMode = .scaleAspectFill
         self.addConstraintsWithFormat("H:|-14-[v0(50)]", options: [], views: imageViewAvatar)
         self.addConstraintsWithFormat("V:|-13-[v0(50)]", options: [], views: imageViewAvatar)
     }
@@ -72,37 +72,37 @@ class OPLTableViewCell: UITableViewCell {
     func loadButton() {
         deleteButton = UIButton(frame: CGRect(x: 341, y: 14, width: 100, height: 48))
         let imageDelete = UIImage(named: "comment_pin_delete")
-        deleteButton.setImage(imageDelete, forState: .Normal)
+        deleteButton.setImage(imageDelete, for: UIControlState())
         self.addSubview(deleteButton)
         self.addConstraintsWithFormat("H:[v0(100)]-(-27)-|", options: [], views: deleteButton)
         self.addConstraintsWithFormat("V:|-14-[v0(48)]", options: [], views: deleteButton)
-        deleteButton.addTarget(self, action: #selector(OPLTableViewCell.deleteThisCell(_:)), forControlEvents: .TouchUpInside)
-        deleteButton.enabled = false
+        deleteButton.addTarget(self, action: #selector(OPLTableViewCell.deleteThisCell(_:)), for: .touchUpInside)
+        deleteButton.isEnabled = false
         
         jumpToDetail = UIButton(frame: CGRect(x: 0, y: 3, width: 341, height: 70))
         self.addSubview(jumpToDetail)
         self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth-73))]", options: [], views: jumpToDetail)
         self.addConstraintsWithFormat("V:|-3-[v0(70)]", options: [], views: jumpToDetail)
-        jumpToDetail.addTarget(self, action: #selector(OPLTableViewCell.jumpToDetailAndAnimate(_:)), forControlEvents: .TouchUpInside)
-        jumpToDetail.enabled = false
+        jumpToDetail.addTarget(self, action: #selector(OPLTableViewCell.jumpToDetailAndAnimate(_:)), for: .touchUpInside)
+        jumpToDetail.isEnabled = false
     }
     
     func loadUnderLine() {
-        underLine = UIView(frame: CGRectMake(0, 75, screenWidth, 1))
+        underLine = UIView(frame: CGRect(x: 0, y: 75, width: screenWidth, height: 1))
         underLine.layer.borderWidth = screenWidth
-        underLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).CGColor
+        underLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         self.addSubview(underLine)
     }
     
     func loadBackground() {
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
     }
     
-    func jumpToDetailAndAnimate(sender: UIButton) {
+    func jumpToDetailAndAnimate(_ sender: UIButton) {
         self.delegate?.passCL2DLocationToOpenedPinList(location, commentID: commentID)
     }
     
-    func deleteThisCell(sender: UIButton) {
+    func deleteThisCell(_ sender: UIButton) {
         self.delegate?.deleteThisCellCalledFromDelegate(indexPathInCell)
     }
     

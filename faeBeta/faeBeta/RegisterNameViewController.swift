@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class RegisterNameViewController: RegisterBaseViewController {
     
@@ -34,7 +58,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         tableView.dataSource = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
@@ -42,32 +66,32 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     func registerCell() {
         
-        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
         
     }
     
     
     func createAlreadyGotAnAccountView() -> UIView {
-        let createAlreadyGotAnAccountView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 25))
+        let createAlreadyGotAnAccountView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
         
         
         //Already got an Account? 
-        let label = UILabel(frame: CGRectMake(view.frame.size.width/2.0 - 94, 0, 155, 25))
+        let label = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 94, y: 0, width: 155, height: 25))
         label.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
             NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor()]
         )
         createAlreadyGotAnAccountView.addSubview(label)
         
-        let button = UIButton(frame: CGRectMake(view.frame.size.width/2.0 + 54, 0, 45, 25))
+        let button = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 54, y: 0, width: 45, height: 25))
         let titleString = "Log In!"
         let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!,
                           NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let myAttrString = NSMutableAttributedString(string: titleString, attributes: attribute)
         
-        button.setAttributedTitle(myAttrString, forState: .Normal)
-        button.addTarget(self, action: #selector(self.loginButtonTapped), forControlEvents: .TouchUpInside)
+        button.setAttributedTitle(myAttrString, for: UIControlState())
+        button.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
         
         createAlreadyGotAnAccountView.addSubview(button)
         
@@ -76,7 +100,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func continueButtonPressed() {
@@ -86,7 +110,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterEmail() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterEmailViewController")as! RegisterEmailViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterEmailViewController")as! RegisterEmailViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: false)
     }
@@ -98,7 +122,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func loginButtonTapped() {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -122,45 +146,45 @@ class RegisterNameViewController: RegisterBaseViewController {
 
 extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Hi there! Great to see you! \nLet's create your Fae Account!")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
             cell.setSubTitleLabelText("Enter your Full Name")
             return cell
         case 2:
             if firstNameTableViewCell == nil {
-                firstNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                firstNameTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 firstNameTableViewCell.setPlaceholderLabelText("First Name", indexPath: indexPath)
-                firstNameTableViewCell.textfield.autocapitalizationType = .Words
+                firstNameTableViewCell.textfield.autocapitalizationType = .words
                 firstNameTableViewCell.delegate = self
             }
             return firstNameTableViewCell
         case 3:
             if lastNameTableViewCell == nil {
-                lastNameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                lastNameTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 lastNameTableViewCell.setPlaceholderLabelText("Last Name", indexPath: indexPath)
-                lastNameTableViewCell.textfield.autocapitalizationType = .Words
+                lastNameTableViewCell.textfield.autocapitalizationType = .words
                 lastNameTableViewCell.delegate = self
             }
             return lastNameTableViewCell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
             case 0:
                 return 59
@@ -178,17 +202,17 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
 
 extension RegisterNameViewController: RegisterTextfieldProtocol {
     
-    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
+    func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
     }
     
-    func textFieldShouldReturn(indexPath: NSIndexPath) {
+    func textFieldShouldReturn(_ indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             lastNameTableViewCell.makeFirstResponder()
             break
         case 3:
-            if continueButton.enabled {
+            if continueButton.isEnabled {
                 lastNameTableViewCell.endAsResponder()
             } else {
                 firstNameTableViewCell.makeFirstResponder()
@@ -197,7 +221,7 @@ extension RegisterNameViewController: RegisterTextfieldProtocol {
         }
     }
     
-    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
+    func textFieldDidChange(_ text: String, indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             firstName = text

@@ -10,7 +10,7 @@ import UIKit
 
 protocol SetupPhoneNumberDelegate {
     
-    func setupPhoneNumber(phone : String)
+    func setupPhoneNumber(_ phone : String)
     
 }
 
@@ -19,8 +19,8 @@ class VerificationPhoneViewController: UIViewController {
     var countryCode = ""
     var phoneNumber = ""
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     
     var labelVerificationTitle : UILabel!
     var labelVerificationHint : UILabel!
@@ -29,7 +29,7 @@ class VerificationPhoneViewController: UIViewController {
     var buttonProceed : UIButton!
     var buttonResend : UIButton!
     
-    var TextFieldDummy = UITextField(frame: CGRectZero)
+    var TextFieldDummy = UITextField(frame: CGRect.zero)
     
     var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
     
@@ -45,7 +45,7 @@ class VerificationPhoneViewController: UIViewController {
     
     var index : Int = 0
     
-    let isIPhone5 = UIScreen.mainScreen().bounds.size.height == 568
+    let isIPhone5 = UIScreen.main.bounds.size.height == 568
     
     var delegate : SetupPhoneNumberDelegate!
     
@@ -65,16 +65,16 @@ class VerificationPhoneViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
     
     
     func navigationBarSetting() {
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
         self.title = "Phone"
-        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray]
+        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray] as [String : Any]
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
     }
@@ -82,13 +82,13 @@ class VerificationPhoneViewController: UIViewController {
     func loadTextLabel() {
         labelPhoneNumber = UILabel(frame: CGRect(x: 20, y: 376, width: screenWidth - 40, height: 27))
         labelPhoneNumber.textColor = warmGray
-        labelPhoneNumber.textAlignment = .Center
+        labelPhoneNumber.textAlignment = .center
         labelPhoneNumber.font = UIFont(name: "Avenir Next", size: 20)
         labelPhoneNumber.text = "+\(countryCode) \(phoneNumber)"
         self.view.addSubview(labelPhoneNumber)
         
         labelVerificationHint = UILabel(frame: CGRect(x: 91.5, y: 352, width: 231, height: 18))
-        labelVerificationHint.textAlignment = .Center
+        labelVerificationHint.textAlignment = .center
         labelVerificationHint.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0)
         labelVerificationHint.font = UIFont(name: "Avenir Next", size: 13)
         labelVerificationHint.text = "Didn’t get a code? Tap here to Resend."
@@ -97,7 +97,7 @@ class VerificationPhoneViewController: UIViewController {
         labelVerificationTitle = UILabel(frame: CGRect(x: 91, y: 103, width: 233, height: 50))
         labelVerificationTitle.font = UIFont(name: "Avenir Next", size: 18)
         labelVerificationTitle.numberOfLines = 0
-        labelVerificationTitle.textAlignment = .Center
+        labelVerificationTitle.textAlignment = .center
         labelVerificationTitle.textColor = faeGray
         labelVerificationTitle.text = "Verify your Number with the\nCode we texted you."
         self.view.addSubview(labelVerificationTitle)
@@ -105,8 +105,8 @@ class VerificationPhoneViewController: UIViewController {
     
     func loadTextField() {
         self.view.addSubview(TextFieldDummy)
-        TextFieldDummy.keyboardType = UIKeyboardType.NumberPad
-        TextFieldDummy.addTarget(self, action: #selector(VerificationPhoneViewController.textFieldValueDidChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        TextFieldDummy.keyboardType = UIKeyboardType.numberPad
+        TextFieldDummy.addTarget(self, action: #selector(VerificationPhoneViewController.textFieldValueDidChanged(_:)), for: UIControlEvents.editingChanged)
         TextFieldDummy.becomeFirstResponder()
     }
     
@@ -117,7 +117,7 @@ class VerificationPhoneViewController: UIViewController {
         let height = 0.017*screenHeigh
         let interval = 0.1014 * screenWidth
         for i in 0  ..< 6 {
-            imageCodeDotArray.append(UIImageView(frame : CGRectMake(xDistance, paddingTop, length, height)))
+            imageCodeDotArray.append(UIImageView(frame : CGRect(x: xDistance, y: paddingTop, width: length, height: height)))
             xDistance += interval
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
             self.view.addSubview(imageCodeDotArray[i]);
@@ -133,24 +133,24 @@ class VerificationPhoneViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-    func textFieldValueDidChanged(textField: UITextField) {
+    func textFieldValueDidChanged(_ textField: UITextField) {
         let buffer = textField.text!
         if(buffer.characters.count<index) {
             index -= 1;
-            imageCodeDotArray[index].hidden = false
-            textVerificationCode[index].hidden = true
+            imageCodeDotArray[index].isHidden = false
+            textVerificationCode[index].isHidden = true
             disableButton(buttonProceed)
         } else if (buffer.characters.count > index) {
             if(buffer.characters.count >= 6) {
                 enableButton(buttonProceed)
             }
             if(buffer.characters.count > 6) {
-                let endIndex = buffer.startIndex.advancedBy(6)
-                textField.text = buffer.substringToIndex(endIndex)
+                let endIndex = buffer.characters.index(buffer.startIndex, offsetBy: 6)
+                textField.text = buffer.substring(to: endIndex)
             } else {
-                textVerificationCode[index].text = (String)(buffer[buffer.endIndex.predecessor()])
-                imageCodeDotArray[index].hidden = true
-                textVerificationCode[index].hidden = false;
+                textVerificationCode[index].text = (String)(buffer[buffer.characters.index(before: buffer.endIndex)])
+                imageCodeDotArray[index].isHidden = true
+                textVerificationCode[index].isHidden = false;
                 index += 1
             }
         }
@@ -164,46 +164,46 @@ class VerificationPhoneViewController: UIViewController {
         let paddingTop = 0.28*screenHeigh
         let interval = 0.102*screenWidth
         for i in 0  ..< 6 {
-            textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
+            textVerificationCode.append(UILabel(frame: CGRect(x: xDistance, y: paddingTop, width: length, height: height)))
             if(isIPhone5) {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)
             } else {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 60)
             }
             textVerificationCode[i].textColor = colorFae
-            textVerificationCode[i].textAlignment = .Center
+            textVerificationCode[i].textAlignment = .center
             let attributedString = NSMutableAttributedString(string: "\(i)")
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.6), range: NSRange(location: 0, length: attributedString.length))
             
             textVerificationCode[i].attributedText = attributedString
-            textVerificationCode[i].hidden = true
+            textVerificationCode[i].isHidden = true
             xDistance += interval
             self.view.addSubview(textVerificationCode[i])
         }
     }
     
-    func disableButton(button : UIButton) {
+    func disableButton(_ button : UIButton) {
         button.backgroundColor = colorDisableButton
-        button.enabled = false
+        button.isEnabled = false
     }
     
-    func enableButton(button : UIButton) {
+    func enableButton(_ button : UIButton) {
         button.backgroundColor = colorFae
-        button.enabled = true
+        button.isEnabled = true
     }
     
     func loadButton() {
         buttonProceed = UIButton(frame: CGRect(x: 0, y: 456, width: screenWidth, height: 56))
-        buttonProceed.setTitle("Proceed", forState: .Normal)
+        buttonProceed.setTitle("Proceed", for: UIControlState())
         buttonProceed.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)
         disableButton(buttonProceed)
-        buttonProceed.addTarget(self, action: #selector(VerificationPhoneViewController.verfication), forControlEvents: .TouchUpInside)
+        buttonProceed.addTarget(self, action: #selector(VerificationPhoneViewController.verfication), for: .touchUpInside)
         self.view.addSubview(buttonProceed)
         
         buttonResend = UIButton(frame: CGRect(x: 85, y: 345, width: 245, height: 65))
-        buttonResend.setTitle("", forState: .Normal)
-        buttonResend.backgroundColor = UIColor.clearColor()
-        buttonResend.addTarget(self, action: #selector(VerificationPhoneViewController.resendCode), forControlEvents: .TouchUpInside)
+        buttonResend.setTitle("", for: UIControlState())
+        buttonResend.backgroundColor = UIColor.clear
+        buttonResend.addTarget(self, action: #selector(VerificationPhoneViewController.resendCode), for: .touchUpInside)
         self.view.addSubview(buttonResend)
     }
     
@@ -238,7 +238,7 @@ class VerificationPhoneViewController: UIViewController {
         } else {
             if let navController = self.navigationController {
                 self.delegate.setupPhoneNumber(phoneNumber)
-                navController.popViewControllerAnimated(true)
+                navController.popViewController(animated: true)
             }
         }
     }

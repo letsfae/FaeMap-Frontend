@@ -9,18 +9,18 @@
 import UIKit
 
 extension CreatePinViewController: SelectLocationViewControllerDelegate {
-    func actionSelectLocation(sender: UIButton) {
+    func actionSelectLocation(_ sender: UIButton) {
         let selectLocationVC = SelectLocationViewController()
-        selectLocationVC.modalPresentationStyle = .OverCurrentContext
+        selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
-        self.presentViewController(selectLocationVC, animated: false, completion: nil)
+        self.present(selectLocationVC, animated: false, completion: nil)
     }
     
-    func sendAddress(value: String) {
+    func sendAddress(_ value: String) {
         labelSelectLocationContent.text = value
     }
     
-    func sendGeoInfo(latitude: String, longitude: String) {
+    func sendGeoInfo(_ latitude: String, longitude: String) {
         selectedLatitude = latitude
         selectedLongitude = longitude
     }

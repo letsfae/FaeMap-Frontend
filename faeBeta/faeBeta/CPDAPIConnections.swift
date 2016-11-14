@@ -12,7 +12,7 @@ import SDWebImage
 
 extension CommentPinViewController {
     // Like comment pin
-    func actionLikeThisComment(sender: UIButton) {
+    func actionLikeThisComment(_ sender: UIButton) {
         endEdit()
         
         if animatingHeartTimer != nil {
@@ -20,7 +20,7 @@ extension CommentPinViewController {
         }
         
         if sender.tag == 1 && commentIDCommentPinDetailView != "-999" {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = UIImage(named: "commentPinLikeHollow")
             }
@@ -32,7 +32,7 @@ extension CommentPinViewController {
         }
         
         if sender.tag == 0 && commentIDCommentPinDetailView != "-999" {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
             self.animateHeart()
             likeThisPin("comment", pinID: commentIDCommentPinDetailView)
             print("debug animating sender.tag 0")
@@ -41,19 +41,19 @@ extension CommentPinViewController {
         }
     }
     
-    func actionHoldingLikeButton(sender: UIButton) {
+    func actionHoldingLikeButton(_ sender: UIButton) {
         endEdit()
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
-        animatingHeartTimer = NSTimer.scheduledTimerWithTimeInterval(0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Upvote comment pin
-    func actionUpvoteThisComment(sender: UIButton) {
+    func actionUpvoteThisComment(_ sender: UIButton) {
         if isUpVoting {
             return
         }
         
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
         
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -65,8 +65,8 @@ extension CommentPinViewController {
     }
     
     // Down vote comment pin
-    func actionDownVoteThisComment(sender: UIButton) {
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+    func actionDownVoteThisComment(_ sender: UIButton) {
+        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
         if animatingHeart != nil {
             animatingHeart.image = UIImage(named: "commentPinLikeHollow")
         }
@@ -75,11 +75,11 @@ extension CommentPinViewController {
         }
     }
     
-    func commentThisPin(type: String, pinID: String, text: String) {
+    func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
         if commentIDCommentPinDetailView != "-999" {
-            commentThisPin.commentThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+            commentThisPin.commentThisPin(type , commentId: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully comment this comment pin!")
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
@@ -92,11 +92,11 @@ extension CommentPinViewController {
         }
     }
     
-    func likeThisPin(type: String, pinID: String) {
+    func likeThisPin(_ type: String, pinID: String) {
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+            likeThisPin.likeThisPin(type , commentId: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully like this comment pin!")
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
@@ -108,11 +108,11 @@ extension CommentPinViewController {
         }
     }
     
-    func saveThisPin(type: String, pinID: String) {
+    func saveThisPin(_ type: String, pinID: String) {
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            saveThisPin.saveThisPin(type , commentId: pinID) {(status: Int, message: AnyObject?) in
+            saveThisPin.saveThisPin(type , commentId: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully save this comment pin!")
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
@@ -124,11 +124,11 @@ extension CommentPinViewController {
         }
     }
     
-    func unlikeThisPin(type: String, pinID: String) {
+    func unlikeThisPin(_ type: String, pinID: String) {
         let unlikeThisPin = FaePinAction()
         unlikeThisPin.whereKey("", value: "")
         if commentIDCommentPinDetailView != "-999" {
-            unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: AnyObject?) in
+            unlikeThisPin.unlikeThisPin(type , commentID: pinID) {(status: Int, message: Any?) in
                 if status/100 == 2 {
                     print("Successfully unlike this comment pin!")
                     self.getPinAttributeNum("comment", pinID: self.commentIDCommentPinDetailView)
@@ -140,9 +140,9 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinAttributeNum(type: String, pinID: String) {
+    func getPinAttributeNum(_ type: String, pinID: String) {
         let getPinAttr = FaePinAction()
-        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             
             if let likes = mapInfoJSON["likes"].int {
@@ -163,9 +163,9 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinAttributeCommentsNum(type: String, pinID: String) {
+    func getPinAttributeCommentsNum(_ type: String, pinID: String) {
         let getPinAttr = FaePinAction()
-        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+        getPinAttr.getPinAttribute(type, commentId: pinID) {(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if let comments = mapInfoJSON["comments"].int {
                 self.labelCommentPinCommentsCount.text = "\(comments)"
@@ -175,11 +175,11 @@ extension CommentPinViewController {
         }
     }
     
-    func getPinComments(type: String, pinID: String, sendMessageFlag: Bool) {
+    func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnCommentDetail.removeAll()
         dictPeopleOfCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
-        getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: AnyObject?) in
+        getPinCommentsDetail.getPinComments(type, commentId: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
@@ -187,29 +187,29 @@ extension CommentPinViewController {
                     var userID = -999
                     var latestDate = "NULL"
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
-                        dicCell["pin_comment_id"] = pin_comment_id
+                        dicCell["pin_comment_id"] = pin_comment_id as AnyObject?
                     }
                     
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
-                        dicCell["user_id"] = user_id
+                        dicCell["user_id"] = user_id as AnyObject?
                         if !self.dictPeopleOfCommentDetail.keys.contains(user_id) {
                             userID = user_id
                         }
                     }
                     if let content = commentsOfCommentJSON[i]["content"].string {
-                        dicCell["content"] = content
+                        dicCell["content"] = content as AnyObject?
                     }
                     if let date = commentsOfCommentJSON[i]["created_at"].string {
-                        dicCell["date"] = date.formatFaeDate()
+                        dicCell["date"] = date.formatFaeDate() as AnyObject?
                         latestDate = date.formatFaeDate()
                     }
                     if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
-                        dicCell["timezone_type"] = timezone_type
+                        dicCell["timezone_type"] = timezone_type as AnyObject?
                     }
                     if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
-                        dicCell["timezone"] = timezone
+                        dicCell["timezone"] = timezone as AnyObject?
                     }
-                    self.dictCommentsOnCommentDetail.insert(dicCell, atIndex: 0)
+                    self.dictCommentsOnCommentDetail.insert(dicCell, at: 0)
                     if userID != -999 {
                         self.dictPeopleOfCommentDetail[userID] = latestDate
                     }
@@ -238,7 +238,7 @@ extension CommentPinViewController {
     
     func getCommentInfo() {
         let getCommentById = FaeMap()
-        getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: AnyObject?) in
+        getCommentById.getComment(commentIDCommentPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let userid = commentInfoJSON["user_id"].int {
                 print(user_id)
@@ -251,14 +251,14 @@ extension CommentPinViewController {
             }
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
-                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
+                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
                     self.buttonCommentPinLike.tag = 0
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
                     }
                 }
                 else {
-                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), forState: .Normal)
+                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
                     self.buttonCommentPinLike.tag = 1
                     if self.animatingHeart != nil {
                         self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
@@ -267,7 +267,7 @@ extension CommentPinViewController {
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
                 let stringHeaderURL = "https://api.letsfae.com/files/users/\(toGetUserName)/avatar"
-                self.imageCommentPinUserAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
+                self.imageCommentPinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
@@ -285,15 +285,16 @@ extension CommentPinViewController {
         }
     }
     
-    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+    func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
         let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
-        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+        
+        userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"),options: [], completed: {
+            (image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Swift.Void in
             // completion code here
             if userAvatar.image != nil {
                 let croppedImage = self.cropToBounds(userAvatar.image!)
                 userAvatar.image = croppedImage
             }
-        }
-        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
+        })
     }
 }

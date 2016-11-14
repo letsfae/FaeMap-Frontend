@@ -23,7 +23,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         navBarDefaultShadowImage = UINavigationBar.appearance().shadowImage
         UINavigationBar.appearance().shadowImage = UIImage()
         setupViewFrame()
@@ -33,45 +33,45 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         setupNavigationBar()
     }
     
     // MARK: - Setup
-    private func addObservers()
+    fileprivate func addObservers()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: "resetPasswordSucceed", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: NSNotification.Name(rawValue: "resetPasswordSucceed"), object: nil)
 
     }
     
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
     
-    private func setupViewFrame()
+    fileprivate func setupViewFrame()
     {
-        self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight)
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        self.view.backgroundColor = UIColor.white
     }
     
-    private func setupImageContainerPageViewController()
+    fileprivate func setupImageContainerPageViewController()
     {
-        pageControl = WelcomePageControl(frame: CGRectMake(screenWidth / 2 - 45, 56, 90, 10))
+        pageControl = WelcomePageControl(frame: CGRect(x: screenWidth / 2 - 45, y: 56, width: 90, height: 10))
         pageControl.numberOfPages = 5
-        self.view.insertSubview(pageControl, atIndex: 0)
+        self.view.insertSubview(pageControl, at: 0)
         
-        self.imageContainerPageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation:.Horizontal, options: [UIPageViewControllerOptionSpineLocationKey:NSNumber(float: 5)])
+        self.imageContainerPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation:.horizontal, options: [UIPageViewControllerOptionSpineLocationKey:NSNumber(value: 5 as Float)])
         
         self.imageContainerPageViewController.delegate = self
         self.imageContainerPageViewController.dataSource = self
         let viewControllers = NSArray(object: viewControllerAtIndex(0))
-        self.imageContainerPageViewController.setViewControllers((viewControllers as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
+        self.imageContainerPageViewController.setViewControllers((viewControllers as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.forward, animated: true, completion: nil)
         
         self.addChildViewController(self.imageContainerPageViewController)
         self.view.addSubview(self.imageContainerPageViewController.view)
-        self.imageContainerPageViewController.didMoveToParentViewController(self)
-        self.imageContainerPageViewController.view.frame = CGRectMake(0, 90 * screenHeightFactor, screenWidth, screenHeight - 336 * screenHeightFactor);
+        self.imageContainerPageViewController.didMove(toParentViewController: self)
+        self.imageContainerPageViewController.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor);
         self.imageContainerPageViewController.view.layoutIfNeeded()
         for view in self.imageContainerPageViewController.view.subviews {
             if let scrollView = view as? UIScrollView {
@@ -80,55 +80,55 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         }
     }
     
-    private func setupBottomPart()
+    fileprivate func setupBottomPart()
     {
         // look around label
-        lookAroundButton = UIButton(frame: CGRectMake(0,screenHeight - 216 * screenHeightFactor,125,22))
+        lookAroundButton = UIButton(frame: CGRect(x: 0,y: screenHeight - 216 * screenHeightFactor,width: 125,height: 22))
         lookAroundButton.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 16)
         
-        lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
+        lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
 //        self.view.insertSubview(lookAroundButton, atIndex: 0)
         
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
-        loginButton = UIButton(frame: CGRectMake(0, screenHeight - 176 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        loginButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         loginButton.center.x = screenWidth / 2
-        loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: font! ]), forState: .Normal)
+        loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         loginButton.layer.cornerRadius = 25*screenHeightFactor
         loginButton.backgroundColor = UIColor.faeAppRedColor()
-        loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(loginButton, atIndex: 0)
-        self.view.bringSubviewToFront(loginButton)
+        loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
+        self.view.insertSubview(loginButton, at: 0)
+        self.view.bringSubview(toFront: loginButton)
         
         // create account button
-        createAccountButton = UIButton(frame: CGRectMake(0, screenHeight - 106 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        createAccountButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 106 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         createAccountButton.center.x = screenWidth / 2
-        createAccountButton.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), forState: .Normal)
-        createAccountButton.backgroundColor = UIColor.whiteColor()
-        createAccountButton.layer.borderColor = UIColor.faeAppRedColor().CGColor
+        createAccountButton.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
+        createAccountButton.backgroundColor = UIColor.white
+        createAccountButton.layer.borderColor = UIColor.faeAppRedColor().cgColor
         createAccountButton.layer.borderWidth = 3
         createAccountButton.layer.cornerRadius = 25*screenHeightFactor
-        createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(createAccountButton, atIndex: 0)
-        self.view.bringSubviewToFront(createAccountButton)
+        createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
+        self.view.insertSubview(createAccountButton, at: 0)
+        self.view.bringSubview(toFront: createAccountButton)
 
         // create copyright label
         font = UIFont(name: "AvenirNext-Regular", size: 10)
         
-        rightLabel = UILabel(frame: CGRectMake(0, screenHeight - 35, 300, 50))
+        rightLabel = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
         rightLabel.numberOfLines = 2
         rightLabel.attributedText = NSAttributedString(string: "© 2016 Fae Maps ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
-        rightLabel.textAlignment = .Center
+        rightLabel.textAlignment = .center
         rightLabel.sizeToFit()
         rightLabel.center.x = screenWidth / 2
-        self.view.insertSubview(rightLabel, atIndex: 0)
+        self.view.insertSubview(rightLabel, at: 0)
         
     }
     
     // MARK: imageContainerGenerator
-    private func viewControllerAtIndex(index: Int) -> WelcomeImageContainerViewController
+    fileprivate func viewControllerAtIndex(_ index: Int) -> WelcomeImageContainerViewController
     {
         let vc = WelcomeImageContainerViewController()
         vc.index = index
@@ -136,7 +136,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     // MARK: UIPageViewController delegate & dataSource
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if(completed){
             let currentViewController = pageViewController.viewControllers?.last as! WelcomeImageContainerViewController
             pageControl.currentPage = currentViewController.index
@@ -144,7 +144,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
     {
         let currentViewController = viewController as! WelcomeImageContainerViewController
         if(currentViewController.index == 0){
@@ -155,7 +155,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
     {
         let currentViewController = viewController as! WelcomeImageContainerViewController
         if(currentViewController.index == 4){
@@ -167,7 +167,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     //MARK: UIScrollView delegate
-    func scrollViewDidScroll(scrollView: UIScrollView)
+    func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
         let point = scrollView.contentOffset;
         let percentComplete = (point.x - screenWidth) / screenWidth
@@ -177,11 +177,11 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     //MARK: helper
     func loginButtonTapped()
     {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LogInViewController")as! LogInViewController
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     func jumpToSignUp() {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RegisterNameViewController")as! RegisterNameViewController
+        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
 }

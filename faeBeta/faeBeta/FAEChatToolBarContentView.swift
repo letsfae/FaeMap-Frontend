@@ -8,6 +8,30 @@
 
 import UIKit
 import Photos
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 /// Delegate to react the action from toolbar contentView
@@ -22,13 +46,13 @@ import Photos
     /// send the sticker image with specific name
     ///
     /// - parameter name: the name of the sticker
-    func sendStickerWithImageName(name : String)
+    func sendStickerWithImageName(_ name : String)
     
     
     /// send multiple images from quick image picker
     ///
     /// - parameter images: an array of selected images
-    func sendImages(images:[UIImage])
+    func sendImages(_ images:[UIImage])
     
     // present the complete photo album
     // should present CustomCollectionViewController
@@ -37,12 +61,12 @@ import Photos
     /// need to implement this method if sending audio is needed
     ///
     /// - parameter data: the audio data to send
-    optional func sendAudioData(data:NSData)
+    @objc optional func sendAudioData(_ data:Data)
     
     // end any editing. Especially the input toolbar textView.
-    optional func endEdit()
+    @objc optional func endEdit()
     
-    optional func sendVideoData(video: NSData, snapImage: UIImage, duration: Int)
+    @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
 }
 
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
@@ -55,23 +79,23 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
     // Photos
-    private var photoPicker : PhotoPicker!
-    private var photoQuickCollectionView : UICollectionView!//preview of the photoes
-    private let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
+    fileprivate var photoPicker : PhotoPicker!
+    fileprivate var photoQuickCollectionView : UICollectionView!//preview of the photoes
+    fileprivate let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
 
-    private let requestOption = PHImageRequestOptions()
-    private var imageQuickPickerShow = false //false : not open the photo preview
+    fileprivate let requestOption = PHImageRequestOptions()
+    fileprivate var imageQuickPickerShow = false //false : not open the photo preview
     
-    private var quickSendImageButton : UIButton!//right
-    private var moreImageButton : UIButton!//left
+    fileprivate var quickSendImageButton : UIButton!//right
+    fileprivate var moreImageButton : UIButton!//left
     
     //sticker
-    private var stickerViewShow = false//false : not open the stick view
-    private var stickerPicker : StickerPickView!
+    fileprivate var stickerViewShow = false//false : not open the stick view
+    fileprivate var stickerPicker : StickerPickView!
     
     //record
-    private var recordShow = false
-    private var audioRecorderContentView: AudioRecorderView!
+    fileprivate var recordShow = false
+    fileprivate var audioRecorderContentView: AudioRecorderView!
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
@@ -90,14 +114,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     
     /// setup UI and funcs
-    private func setup()
+    fileprivate func setup()
     {
         // sticker view
         func initializeStickerView() {
             stickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
             stickerPicker.sendStickerDelegate = self
             self.addSubview(stickerPicker)
-            stickerPicker.hidden = true
+            stickerPicker.isHidden = true
         }
         
         //quick image picker
@@ -106,30 +130,30 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             //photoes preview
             let layout = UICollectionViewFlowLayout()
             //        layout.itemSize = CGSizeMake(220, 235)
-            layout.scrollDirection = .Horizontal
-            layout.itemSize = CGSizeMake(220, 271)
+            layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 220, height: 271)
             layout.sectionInset = UIEdgeInsetsMake(0, 1, 0, 1)
             photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
-            photoQuickCollectionView.registerNib(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
-            photoQuickCollectionView.backgroundColor = UIColor.whiteColor()
+            photoQuickCollectionView.register(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+            photoQuickCollectionView.backgroundColor = UIColor.white
             photoQuickCollectionView.delegate = self
             photoQuickCollectionView.dataSource = self
             quickSendImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
-            quickSendImageButton.setImage(UIImage(named: "moreImage"), forState: .Normal)
-            quickSendImageButton.addTarget(self, action: #selector(self.showFullAlbum), forControlEvents: .TouchUpInside)
+            quickSendImageButton.setImage(UIImage(named: "moreImage"), for: UIControlState())
+            quickSendImageButton.addTarget(self, action: #selector(self.showFullAlbum), for: .touchUpInside)
             moreImageButton = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
-            moreImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), forControlEvents: .TouchUpInside)
-            moreImageButton.setImage(UIImage(named: "imageQuickSend"), forState: .Normal)
-            moreImageButton.setImage(UIImage(named: "imageQuickSend_disabled"), forState: .Disabled)
+            moreImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), for: .touchUpInside)
+            moreImageButton.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
+            moreImageButton.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
             photoPicker = PhotoPicker.shared
             
             self.addSubview(photoQuickCollectionView)
             self.addSubview(quickSendImageButton)
             self.addSubview(moreImageButton)
 
-            photoQuickCollectionView.hidden = true
-            quickSendImageButton.hidden = true
-            moreImageButton.hidden = true
+            photoQuickCollectionView.isHidden = true
+            quickSendImageButton.isHidden = true
+            moreImageButton.isHidden = true
 
             updateSendButtonStatus()
         }
@@ -137,15 +161,15 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         //MARK: voice helper function
         
         func setupRecorder() {
-            self.audioRecorderContentView = NSBundle.mainBundle().loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
+            self.audioRecorderContentView = Bundle.main.loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
             self.audioRecorderContentView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
             self.audioRecorderContentView.delegate = self
             self.addSubview(audioRecorderContentView)
             
-            audioRecorderContentView.hidden = true
+            audioRecorderContentView.isHidden = true
         }
         
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         initializeStickerView()
         initializePhotoQuickPicker()
         setupRecorder()
@@ -154,19 +178,19 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // MARK: - show different content
     func showKeyboard()
     {
-        self.hidden = true
+        self.isHidden = true
         if stickerViewShow {
-            stickerPicker.hidden = true
+            stickerPicker.isHidden = true
             stickerViewShow = false
         }
         if imageQuickPickerShow {
-            photoQuickCollectionView.hidden = true
-            moreImageButton.hidden = true
-            quickSendImageButton.hidden = true
+            photoQuickCollectionView.isHidden = true
+            moreImageButton.isHidden = true
+            quickSendImageButton.isHidden = true
             imageQuickPickerShow = false
         }
         if recordShow {
-            audioRecorderContentView.hidden = true
+            audioRecorderContentView.isHidden = true
             recordShow = false
         }
     }
@@ -174,19 +198,19 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func showStikcer()
     {
-        self.hidden = false
+        self.isHidden = false
         //show stick view, and dismiss all other views, like keyboard and photoes preview
         if !stickerViewShow {
-            self.stickerPicker.hidden = false
+            self.stickerPicker.isHidden = false
  
             if self.imageQuickPickerShow {
-                self.photoQuickCollectionView.hidden = true
-                self.moreImageButton.hidden = true
-                self.quickSendImageButton.hidden = true
+                self.photoQuickCollectionView.isHidden = true
+                self.moreImageButton.isHidden = true
+                self.quickSendImageButton.isHidden = true
                 self.imageQuickPickerShow = false
             }
             else if (recordShow){
-                self.audioRecorderContentView.hidden = true
+                self.audioRecorderContentView.isHidden = true
                 self.recordShow = false
             }
             else if (keyboardShow){
@@ -200,28 +224,28 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func showLibrary()
     {
-        self.hidden = false
+        self.isHidden = false
         if !imageQuickPickerShow {
             self.photoQuickCollectionView?.reloadData()
-            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            let indexPath = IndexPath(row: 0, section: 0)
             if(photoPicker.currentAlbum != nil){
-                self.photoQuickCollectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
+                self.photoQuickCollectionView?.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
             }
-            photoQuickCollectionView.hidden = false
-            quickSendImageButton.hidden = false
-            moreImageButton.hidden = false
+            photoQuickCollectionView.isHidden = false
+            quickSendImageButton.isHidden = false
+            moreImageButton.isHidden = false
             
             quickSendImageButton.alpha = 0
             moreImageButton.alpha = 0
             
             if stickerViewShow {
-                stickerPicker.hidden = true
+                stickerPicker.isHidden = true
                 stickerViewShow = false
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
             }
             else if recordShow {
-                self.audioRecorderContentView.hidden = true
+                self.audioRecorderContentView.isHidden = true
                 self.recordShow = false
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
@@ -233,7 +257,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
             }else{
-                UIView.animateWithDuration(0.3, animations: {
+                UIView.animate(withDuration: 0.3, animations: {
                     self.quickSendImageButton.alpha = 1
                     self.moreImageButton.alpha = 1
                     }, completion:{ (Bool) -> Void in
@@ -249,19 +273,19 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     func showRecord() {
-        self.hidden = false
+        self.isHidden = false
 
         if !recordShow {
             self.audioRecorderContentView.requireForPermission(nil)
-            self.audioRecorderContentView.hidden = false
+            self.audioRecorderContentView.isHidden = false
             
             if stickerViewShow {
-                stickerPicker.hidden = true
+                stickerPicker.isHidden = true
                 stickerViewShow = false
             }else if imageQuickPickerShow{
-                self.photoQuickCollectionView.hidden = true
-                self.moreImageButton.hidden = true
-                self.quickSendImageButton.hidden = true
+                self.photoQuickCollectionView.isHidden = true
+                self.moreImageButton.isHidden = true
+                self.quickSendImageButton.isHidden = true
                 self.imageQuickPickerShow = false
             }else if keyboardShow {
                 UIView.setAnimationsEnabled(false)
@@ -275,15 +299,15 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     /// close all content
     func closeAll()
     {
-        stickerPicker.hidden = true
+        stickerPicker.isHidden = true
         stickerViewShow = false
         
-        photoQuickCollectionView.hidden = true
-        moreImageButton.hidden = true
-        quickSendImageButton.hidden = true
+        photoQuickCollectionView.isHidden = true
+        moreImageButton.isHidden = true
+        quickSendImageButton.isHidden = true
         imageQuickPickerShow = false
         
-        audioRecorderContentView.hidden = true
+        audioRecorderContentView.isHidden = true
         recordShow = false
         audioRecorderContentView.switchToRecordMode()
     }
@@ -304,12 +328,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
         photoPicker.indexImageDict.removeAll()
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.photoQuickCollectionView.reloadData()
         });
     }
 
-    private func shiftChosenFrameFromIndex(index : Int)
+    fileprivate func shiftChosenFrameFromIndex(_ index : Int)
     {
         // when deselect one image in photoes preview, we need to reshuffule
         if index > photoPicker.indexImageDict.count {
@@ -322,23 +346,23 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             photoPicker.indexImageDict[i-1] = image
             photoPicker.indexAssetDict[i-1] = asset
         }
-        photoPicker.indexAssetDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
-        photoPicker.indexImageDict.removeValueForKey(photoPicker.indexImageDict.count - 1)
+        photoPicker.indexAssetDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
+        photoPicker.indexImageDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
         self.photoQuickCollectionView.reloadData()
     }
     
-    private func updateSendButtonStatus()
+    fileprivate func updateSendButtonStatus()
     {
-        moreImageButton.enabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
+        moreImageButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
     }
     
     //MARK: - photoPicker Collection View Delegate
     //photoes preview layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
 //    
@@ -346,12 +370,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
 //        return 3
 //    }
 //    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(photoQuickCollectionReuseIdentifier, forIndexPath: indexPath) as! PhotoPickerCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoQuickCollectionReuseIdentifier, for: indexPath) as! PhotoPickerCollectionViewCell
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == self.photoQuickCollectionView {
             let cell = cell as! PhotoPickerCollectionViewCell
             //get image from PHFetchResult
@@ -371,9 +395,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     //photoes preview delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoPickerCollectionViewCell
+            let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
             let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             
             if !cell.photoSelected {
@@ -382,7 +406,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 } else {
 
                     
-                    if(asset.mediaType == .Image){
+                    if(asset.mediaType == .image){
                         if(photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can't select photo with video")
                             return
@@ -392,10 +416,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         let count = self.photoPicker.indexImageDict.count
                         
                         let highQRequestOption = PHImageRequestOptions()
-                        highQRequestOption.resizeMode = .None
-                        highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
-                        highQRequestOption.synchronous = true
-                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(1500,1500), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                        highQRequestOption.resizeMode = .none
+                        highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                        highQRequestOption.isSynchronous = true
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
                             self.photoPicker.indexImageDict[count] = result
                         }
                     }else{
@@ -413,44 +437,44 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                         photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                         let lowQRequestOption = PHVideoRequestOptions()
-                        lowQRequestOption.deliveryMode = .FastFormat //high pixel
-                        PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (asset, audioMix, info) in
+                        lowQRequestOption.deliveryMode = .fastFormat //high pixel
+                        PHCachingImageManager.default().requestAVAsset(forVideo: asset, options: lowQRequestOption) { (asset, audioMix, info) in
                             self.photoPicker.videoAsset = asset
                         }
                         
                         let highQRequestOption = PHImageRequestOptions()
-                        highQRequestOption.resizeMode = .Exact
-                        highQRequestOption.deliveryMode = .HighQualityFormat //high pixel
-                        highQRequestOption.synchronous = true
-                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(210,150), contentMode: .AspectFill, options: highQRequestOption) { (result, info) in
+                        highQRequestOption.resizeMode = .exact
+                        highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                        highQRequestOption.isSynchronous = true
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 210,height: 150), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
                             self.photoPicker.videoImage = result
                         }
                     }
                     cell.selectCell(max(photoPicker.indexImageDict.count - 1, 0))
-                    self.photoQuickCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Left, animated: true)
+                    self.photoQuickCollectionView.scrollToItem(at: indexPath, at: .left, animated: true)
                 }
             } else {
                 cell.deselectCell()
                 if let deselectedIndex = photoPicker.assetIndexDict[asset]{
-                photoPicker.assetIndexDict.removeValueForKey(asset)
-                photoPicker.indexAssetDict.removeValueForKey(deselectedIndex)
-                photoPicker.indexImageDict.removeValueForKey(deselectedIndex)
+                photoPicker.assetIndexDict.removeValue(forKey: asset)
+                photoPicker.indexAssetDict.removeValue(forKey: deselectedIndex)
+                photoPicker.indexImageDict.removeValue(forKey: deselectedIndex)
                 shiftChosenFrameFromIndex(deselectedIndex + 1)
                 }
                 photoPicker.videoAsset = nil
                 photoPicker.videoImage = nil
             }
             //            print("imageDict has \(imageDict.count) images")
-            collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+            collectionView.deselectItem(at: indexPath, animated: true)
             updateSendButtonStatus()
         }
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         if(photoPicker.cameraRoll == nil){
             photoPicker.getSmartAlbum()
         }
@@ -463,13 +487,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     //MARK: - AudioRecorderViewDelegate
 
-    func audioRecorderView(audioView: AudioRecorderView, needToSendAudioData data: NSData){
+    func audioRecorderView(_ audioView: AudioRecorderView, needToSendAudioData data: Data){
         self.delegate.sendAudioData?(data)
         
     }
     
     // MARK: - Sticker delegate
-    func sendStickerWithImageName(name : String)
+    func sendStickerWithImageName(_ name : String)
     {
         self.delegate.sendStickerWithImageName(name)
         self.stickerPicker.updateStickerHistory(name)
@@ -491,7 +515,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         self.delegate.sendImages(images)
     }
     
-    private func sendVideoFromQuickPicker()
+    fileprivate func sendVideoFromQuickPicker()
     {
         UIScreenService.showActivityIndicator()
 
@@ -499,30 +523,30 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
         // asset is you AVAsset object
         let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
-        let filePath = NSTemporaryDirectory().stringByAppendingFormat("/video.mov")
+        let filePath = NSTemporaryDirectory().appendingFormat("/video.mov")
         do{
-            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+            try FileManager.default.removeItem(atPath: filePath)
         }catch{
             
         }
-        exportSession!.outputURL = NSURL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
+        exportSession!.outputURL = URL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
 
         let fileUrl = exportSession!.outputURL
         // e.g .mov type
         exportSession!.outputFileType = AVFileTypeQuickTimeMovie
         
-        exportSession!.exportAsynchronouslyWithCompletionHandler{
+        exportSession!.exportAsynchronously{
             Void in
             switch exportSession!.status {
-            case  AVAssetExportSessionStatus.Failed:
+            case  AVAssetExportSessionStatus.failed:
                 print("failed import video: \(exportSession!.error)")
                 break
-            case AVAssetExportSessionStatus.Cancelled:
+            case AVAssetExportSessionStatus.cancelled:
                 print("cancelled import video: \(exportSession!.error)")
                 break
             default:
                 print("completed import video")
-                if let data = NSData(contentsOfURL:fileUrl!){
+                if let data = try? Data(contentsOf: fileUrl!){
                     self.delegate.sendVideoData?(data, snapImage:image ,duration:duration)
                 }
             }
@@ -530,9 +554,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
     
-    func documentsPathForFileName(name: String) -> String {
+    func documentsPathForFileName(_ name: String) -> String {
         
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        return documentsPath.stringByAppendingString(name)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        return documentsPath + name
     }
 }

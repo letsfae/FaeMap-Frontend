@@ -15,21 +15,21 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     func loadButton() {
         // Left window on main map to open account system
         buttonLeftTop = UIButton()
-        buttonLeftTop.setImage(UIImage(named: "leftTopButton"), forState: .Normal)
+        buttonLeftTop.setImage(UIImage(named: "leftTopButton"), for: UIControlState())
         self.view.addSubview(buttonLeftTop)
-        buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
         buttonLeftTop.layer.zPosition = 500
         
         // Open main map search
         buttonMainScreenSearch = UIButton()
-        buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), forState: .Normal)
+        buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), for: UIControlState())
         self.view.addSubview(buttonMainScreenSearch)
-        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
         self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
-        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         buttonMainScreenSearch.layer.zPosition = 500
         
         /* This is not for 11.01 Dev Version
@@ -45,8 +45,8 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         // Click to back to north
         buttonToNorth = UIButton()
         view.addSubview(buttonToNorth)
-        buttonToNorth.setImage(UIImage(named: "compass_new"), forState: .Normal)
-        buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonToNorth.setImage(UIImage(named: "compass_new"), for: UIControlState())
+        buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
         buttonToNorth.layer.zPosition = 500
@@ -54,53 +54,53 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         // Click to locate the current location
         buttonSelfPosition = UIButton()
         view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
-        buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSelfPosition.setImage(UIImage(named: "self_position"), for: UIControlState())
+        buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
         buttonSelfPosition.layer.zPosition = 500
         
         // Open chat view
         buttonChatOnMap = UIButton()
-        buttonChatOnMap.setImage(UIImage(named: "chat_map"), forState: .Normal)
-        buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonChatOnMap.setImage(UIImage(named: "chat_map"), for: UIControlState())
+        buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), for: UIControlEvents.touchUpInside)
         view.addSubview(buttonChatOnMap)
         view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
         buttonChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
-        labelUnreadMessages = UILabel(frame: CGRectMake(55, 1, 25, 22))
+        labelUnreadMessages = UILabel(frame: CGRect(x: 55, y: 1, width: 25, height: 22))
         labelUnreadMessages.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
         labelUnreadMessages.layer.cornerRadius = 11
         labelUnreadMessages.layer.masksToBounds = true
         labelUnreadMessages.layer.opacity = 0.9
         labelUnreadMessages.text = "1"
-        labelUnreadMessages.textAlignment = .Center
-        labelUnreadMessages.textColor = UIColor.whiteColor()
+        labelUnreadMessages.textAlignment = .center
+        labelUnreadMessages.textColor = UIColor.white
         labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         buttonChatOnMap.addSubview(labelUnreadMessages)
         
         // Create pin on main map
-        buttonPinOnMap = UIButton(frame: CGRectMake(323, 646, 79, 79))
-        buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map"), forState: .Normal)
+        buttonPinOnMap = UIButton(frame: CGRect(x: 323, y: 646, width: 79, height: 79))
+        buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map"), for: UIControlState())
         view.addSubview(buttonPinOnMap)
-        buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonPinOnMap)
         buttonPinOnMap.layer.zPosition = 500
     }
     
     //MARK: Actions for these buttons
-    func actionSelfPosition(sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
+    func actionSelfPosition(_ sender: UIButton!) {
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
             currentLocation = locManager.location
         }
         if currentLocation != nil {
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
             self.renewSelfLocation()
-            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
             if userStatus != 5  {
                 loadPositionAnimateImage()
@@ -109,39 +109,39 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         }
     }
     
-    func actionTrueNorth(sender: UIButton!) {
+    func actionTrueNorth(_ sender: UIButton!) {
         self.renewSelfLocation()
         self.updateTimerForSelfLoc()
-        self.faeMapView.animateToBearing(0)
+        self.faeMapView.animate(toBearing: 0)
     }
     
     // Jump to create pin view controller
-    func actionCreatePin(sender: UIButton!) {
+    func actionCreatePin(_ sender: UIButton!) {
         let createPinVC = CreatePinViewController()
-        createPinVC.modalPresentationStyle = .OverCurrentContext
+        createPinVC.modalPresentationStyle = .overCurrentContext
         createPinVC.currentLatitude = self.currentLatitude
         createPinVC.currentLongitude = self.currentLongitude
         createPinVC.delegate = self
-        self.presentViewController(createPinVC, animated: false, completion: nil)
+        self.present(createPinVC, animated: false, completion: nil)
     }
     
     // Back from create pin view controller
-    func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let camera = GMSCameraPosition.cameraWithLatitude(latitude, longitude: longitude, zoom: 17)
+    func sendCommentGeoInfo(_ commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(commentID)
     }
     
     // Animation for pin logo
-    func animatePinWhenItIsCreated(commentID: String) {
-        tempMarker = UIImageView(frame: CGRectMake(0, 0, 167, 178))
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2-25.5)
+    func animatePinWhenItIsCreated(_ commentID: String) {
+        tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 167, height: 178))
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2-25.5)
         tempMarker.center = mapCenter
         tempMarker.image = UIImage(named: "commentMarkerWhenCreated")
         self.view.addSubview(tempMarker)
-        markerMask = UIView(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        markerMask = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(markerMask)
-        UIView.animateWithDuration(0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveLinear, animations: {
+        UIView.animate(withDuration: 0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.tempMarker.frame.size.width = 48
             self.tempMarker.frame.size.height = 51
             self.tempMarker.center = mapCenter
@@ -157,15 +157,15 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         markerMask.removeFromSuperview()
     }
     
-    func loadMarkerWithCommentID(commentID: String, tempMaker: UIImageView) {
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinateForPoint(mapCenter)
+    func loadMarkerWithCommentID(_ commentID: String, tempMaker: UIImageView) {
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "200")
         loadPinsByZoomLevel.whereKey("type", value: "comment")
-        loadPinsByZoomLevel.getMapInformation{(status:Int, message:AnyObject?) in
+        loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
@@ -176,58 +176,58 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
                         if commentID != "\(commentIDInfo)" {
                             continue
                         }
-                        pinData["comment_id"] = commentIDInfo
+                        pinData["comment_id"] = commentIDInfo as AnyObject?
                     }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
-                        pinData["type"] = typeInfo
+                        pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
                             pinShowOnMap.zIndex = 0
                         }
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
-                        pinData["user_id"] = userIDInfo
+                        pinData["user_id"] = userIDInfo as AnyObject?
                     }
                     if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                        pinData["created_at"] = createdTimeInfo
+                        pinData["created_at"] = createdTimeInfo as AnyObject?
                     }
                     if let contentInfo = mapInfoJSON[i]["content"].string {
-                        pinData["content"] = contentInfo
+                        pinData["content"] = contentInfo as AnyObject?
                     }
                     if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
-                        pinData["latitude"] = latitudeInfo
+                        pinData["latitude"] = latitudeInfo as AnyObject?
                         pinShowOnMap.position.latitude = latitudeInfo
                     }
                     if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
-                        pinData["longitude"] = longitudeInfo
+                        pinData["longitude"] = longitudeInfo as AnyObject?
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
                     if let isLiked = mapInfoJSON[i]["user_pin_operations"]["is_liked"].bool {
-                        pinData["is_liked"] = isLiked
+                        pinData["is_liked"] = isLiked as AnyObject?
                     }
                     if let likedTimestamp = mapInfoJSON[i]["user_pin_operations"]["liked_timestamp"].string {
-                        pinData["liked_timestamp"] = likedTimestamp
+                        pinData["liked_timestamp"] = likedTimestamp as AnyObject?
                     }
                     if let isSaved = mapInfoJSON[i]["user_pin_operations"]["is_saved"].bool {
-                        pinData["is_saved"] = isSaved
+                        pinData["is_saved"] = isSaved as AnyObject?
                     }
                     if let savedTimestamp = mapInfoJSON[i]["user_pin_operations"]["saved_timestamp"].string {
-                        pinData["saved_timestamp"] = savedTimestamp
+                        pinData["saved_timestamp"] = savedTimestamp as AnyObject?
                     }
                     
                     pinShowOnMap.userData = pinData
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
-                    NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
+                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
                 }
             }
         }
     }
     
-    func jumpToMainScreenSearch(sender: UIButton) {
+    func jumpToMainScreenSearch(_ sender: UIButton) {
         let mainScreenSearchVC = MainScreenSearchViewController()
-        mainScreenSearchVC.modalPresentationStyle = .OverCurrentContext
+        mainScreenSearchVC.modalPresentationStyle = .overCurrentContext
         mainScreenSearchVC.delegate = self
-        self.presentViewController(mainScreenSearchVC, animated: false, completion: nil)
+        self.present(mainScreenSearchVC, animated: false, completion: nil)
     }
 }

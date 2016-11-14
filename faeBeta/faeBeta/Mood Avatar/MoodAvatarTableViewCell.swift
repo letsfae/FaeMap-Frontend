@@ -10,8 +10,8 @@ import UIKit
 
 class MoodAvatarTableViewCell: UITableViewCell {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var maleImage: UIImageView!
     var femaleImage: UIImageView!
@@ -54,11 +54,11 @@ class MoodAvatarTableViewCell: UITableViewCell {
         labelAvatarDes = UILabel()
         labelAvatarDes.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelAvatarDes.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        labelAvatarDes.textAlignment = .Center
+        labelAvatarDes.textAlignment = .center
         self.addSubview(labelAvatarDes)
         self.addConstraintsWithFormat("H:[v0(140)]", options: [], views: labelAvatarDes)
         self.addConstraintsWithFormat("V:[v0(25)]-17-|", options: [], views: labelAvatarDes)
-        NSLayoutConstraint(item: labelAvatarDes, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        NSLayoutConstraint(item: labelAvatarDes, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         buttonLeft = UIButton()
         self.addSubview(buttonLeft)

@@ -12,11 +12,11 @@ import SwiftyJSON
 import CoreLocation
 
 extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tableOpenedPin {
             return self.openedPinListArray.count
         }
@@ -25,15 +25,15 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableOpenedPin {
-            let cell = tableView.dequeueReusableCellWithIdentifier("openedPinCell", forIndexPath: indexPath) as! OPLTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "openedPinCell", for: indexPath) as! OPLTableViewCell
             cell.delegate = self
             let commentID = openedPinListArray[indexPath.row]
             cell.commentID = commentID
             cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
-            getCommentById.getComment("\(commentID)") {(status: Int, message: AnyObject?) in
+            getCommentById.getComment("\(commentID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
                 if let userid = commentInfoJSON["user_id"].int {
                     self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userid)
@@ -50,11 +50,11 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
                         cell.location = CLLocationCoordinate2DMake(latitudeInfo+0.001, longitudeInfo)
                     }
                 }
-                cell.deleteButton.enabled = true
-                cell.jumpToDetail.enabled = true
+                cell.deleteButton.isEnabled = true
+                cell.jumpToDetail.isEnabled = true
             }
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
         else {
@@ -62,11 +62,11 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.tableOpenedPin {
             return 76
         }

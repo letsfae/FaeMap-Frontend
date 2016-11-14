@@ -15,7 +15,7 @@ class RegisterBaseViewController: UIViewController {
     var tableView: UITableView!
     var continueButton: UIButton!
     var bottomView: UIView!
-    var activeIndexPath: NSIndexPath?
+    var activeIndexPath: IndexPath?
     var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - View Lifecycle
@@ -24,19 +24,19 @@ class RegisterBaseViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         
         addTapGesture()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         registerForNotifications()
         createActivityIndicator()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         deRegisterForNotification()
@@ -49,7 +49,7 @@ class RegisterBaseViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func handleTap(sender: UITapGestureRecognizer) {
+    func handleTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
@@ -64,16 +64,16 @@ class RegisterBaseViewController: UIViewController {
 
 extension RegisterBaseViewController {
     
-    func createTopView(imageNamed: String) {
-        let topView = UIView(frame: CGRectMake(0, 20, view.frame.size.width, 50))
-        topView.backgroundColor = UIColor.whiteColor()
+    func createTopView(_ imageNamed: String) {
+        let topView = UIView(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 50))
+        topView.backgroundColor = UIColor.white
         
-        let backButton = UIButton(frame: CGRectMake(10, 5, 40, 40))
-        backButton.setImage(UIImage(named: "Fill 1"), forState: .Normal)
-        backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        backButton.addTarget(self, action: #selector(self.backButtonPressed), forControlEvents: .TouchUpInside)
+        let backButton = UIButton(frame: CGRect(x: 10, y: 5, width: 40, height: 40))
+        backButton.setImage(UIImage(named: "Fill 1"), for: UIControlState())
+        backButton.setTitleColor(UIColor.blue, for: UIControlState())
+        backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let progressImageView = UIImageView(frame: CGRectMake(view.frame.size.width/2.0 - 45, 20, 90, 10))
+        let progressImageView = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
         
         progressImageView.image = UIImage(named: imageNamed)
         
@@ -88,23 +88,23 @@ extension RegisterBaseViewController {
         
     }
     
-    func createBottomView(subview: UIView) {
+    func createBottomView(_ subview: UIView) {
         
-        bottomView = UIView(frame: CGRectMake(0, screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, view.frame.size.width, subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
+        bottomView = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
         
-        continueButton = UIButton(frame: CGRectMake(0, subview.frame.size.height + 18, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        continueButton = UIButton(frame: CGRect(x: 0, y: subview.frame.size.height + 18, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         continueButton.center.x = screenWidth / 2
         continueButton.layer.cornerRadius = 25 * screenHeightFactor
         continueButton.layer.masksToBounds = true
         
-        continueButton.setTitle("Continue", forState: .Normal)
+        continueButton.setTitle("Continue", for: UIControlState())
         continueButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
         
         continueButton.backgroundColor = UIColor(red: 255/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1.0)
         
         
-        continueButton.enabled = false
-        continueButton.addTarget(self, action: #selector(self.continueButtonPressed), forControlEvents: .TouchUpInside)
+        continueButton.isEnabled = false
+        continueButton.addTarget(self, action: #selector(self.continueButtonPressed), for: .touchUpInside)
         
         bottomView.addSubview(subview)
         bottomView.addSubview(continueButton)
@@ -116,8 +116,8 @@ extension RegisterBaseViewController {
         
     }
     
-    func enableContinueButton(enable: Bool) {
-        continueButton.enabled = enable
+    func enableContinueButton(_ enable: Bool) {
+        continueButton.isEnabled = enable
         
         if enable {
             continueButton.backgroundColor = UIColor.faeAppRedColor()
@@ -126,28 +126,28 @@ extension RegisterBaseViewController {
         }
     }
     
-    func createTableView(height: CGFloat) {
-        tableView = UITableView(frame: CGRectMake(0, 70, view.frame.size.width, height))
+    func createTableView(_ height: CGFloat) {
+        tableView = UITableView(frame: CGRect(x: 0, y: 70, width: view.frame.size.width, height: height))
         view.addSubview(tableView)
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.allowsSelection = false
-        tableView.scrollEnabled = false
+        tableView.isScrollEnabled = false
         
     }
     
     func createActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
         
         view.addSubview(activityIndicator)
-        view.bringSubviewToFront(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     func showActivityIndicator() {
@@ -158,7 +158,7 @@ extension RegisterBaseViewController {
         shouldShowActivityIndicator(false)
     }
     
-    func shouldShowActivityIndicator(show: Bool) {
+    func shouldShowActivityIndicator(_ show: Bool) {
         
         if show {
             activityIndicator.startAnimating()
@@ -166,7 +166,7 @@ extension RegisterBaseViewController {
             activityIndicator.stopAnimating()
         }
         
-        view.userInteractionEnabled = !show
+        view.isUserInteractionEnabled = !show
     }
     
 }
@@ -175,19 +175,19 @@ extension RegisterBaseViewController {
     
     func registerForNotifications() {
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
     func deRegisterForNotification() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
         
         var bottomViewFrame = bottomView.frame
@@ -200,7 +200,7 @@ extension RegisterBaseViewController {
             tableViewFrame!.origin.y = min(screenHeight - keyboardFrame.size.height - bottomViewFrame.size.height - tableViewFrame!.size.height, 70)
         }
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.bottomView.frame = bottomViewFrame
             if self.tableView != nil {
                 self.tableView.frame = tableViewFrame!
@@ -209,7 +209,7 @@ extension RegisterBaseViewController {
         })
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         
         var bottomViewFrame = bottomView.frame
         bottomViewFrame.origin.y = view.frame.height - bottomViewFrame.size.height
@@ -219,10 +219,10 @@ extension RegisterBaseViewController {
         if tableView != nil {
             tableViewFrame = tableView.frame
             tableViewFrame!.origin.y = 70
-            tableView.scrollEnabled = false
+            tableView.isScrollEnabled = false
         }
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.bottomView.frame = bottomViewFrame
             if self.tableView != nil {
                 self.tableView.frame = tableViewFrame!

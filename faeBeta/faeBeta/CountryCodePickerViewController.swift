@@ -10,7 +10,7 @@ import UIKit
 
 protocol SetCountryCodeDelegate {
     
-    func setCountryCode(code : CountryCode)
+    func setCountryCode(_ code : CountryCode)
     
 }
 
@@ -32,8 +32,8 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
     var countries = [CountryCode]()
     var filteredCountries = [CountryCode]()
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     
     var countryCodeDelegate : SetCountryCodeDelegate!
     
@@ -44,7 +44,7 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         tableView.delegate = self
         tableView.dataSource = self
         SearchBar.delegate = self
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.tableView.reloadData()
         // Do any additional setup after loading the view.
     }
@@ -54,25 +54,25 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchActive = false
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        cell = UITableViewCell(style: .Value1, reuseIdentifier: "cell")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: "cell")! as UITableViewCell
+        cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
         var country : CountryCode
         if searchActive {
             country = filteredCountries[indexPath.row]
@@ -84,11 +84,11 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         return cell
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchActive {
             return filteredCountries.count
         } else {
@@ -96,18 +96,18 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         }
     }
     
-    func filterContentForSearchText(searchText : String, scope: String = "Title") {
+    func filterContentForSearchText(_ searchText : String, scope: String = "Title") {
         self.filteredCountries = self.countries.filter({ (country) -> Bool in
             //            let categoryMatch = (scope == "Title")
-            let stringMatch = country.ct.rangeOfString(searchText)
+            let stringMatch = country.ct.range(of: searchText)
             return stringMatch != nil
         })
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredCountries = countries.filter({ (text) -> Bool in
-            let tmp: NSString = text.ct
-            let range = tmp.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            let tmp: NSString = text.ct as NSString
+            let range = tmp.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             return range.location != NSNotFound
         })
         if filteredCountries.count == 0 {
@@ -118,7 +118,7 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
         self.tableView.reloadData()
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let country : CountryCode
         
         if searchActive {
@@ -127,14 +127,14 @@ class CountryCodePickerViewController: UIViewController, UITableViewDelegate, UI
             country = self.countries[indexPath.row]
         }
         countryCodeDelegate.setCountryCode(country)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func loadItem() {
         SearchBar = UISearchBar(frame: CGRect(x: 0, y: 20, width: screenWidth, height: 44))
         self.view.addSubview(SearchBar)
-        tableView = UITableView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: screenHeigh - 64), style: .Plain)
+        tableView = UITableView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: screenHeigh - 64), style: .plain)
         self.view.addSubview(tableView)
     }
     

@@ -8,6 +8,19 @@
 
 import Foundation
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class PasswordTexField : UITextField {
     
@@ -17,73 +30,73 @@ class PasswordTexField : UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        rightButton = UIButton(frame: CGRectMake(0, 0, 15, 15))
-        rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+        rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        rightButton.setImage(UIImage(named: "check_eye_close_red")!, for: UIControlState())
         imageName = "check_eye_close_red"
-        self.secureTextEntry = true
+        self.isSecureTextEntry = true
         self.rightView = rightButton
-        rightButton.addTarget(self, action: #selector(PasswordTexField.rightButtonClicked), forControlEvents: UIControlEvents.TouchUpInside)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), forControlEvents: .EditingChanged)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), forControlEvents: .EditingDidEnd)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), forControlEvents: .EditingDidBegin)
-        self.clearButtonMode = UITextFieldViewMode.Never
+        rightButton.addTarget(self, action: #selector(PasswordTexField.rightButtonClicked), for: UIControlEvents.touchUpInside)
+        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingChanged)
+        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingDidEnd)
+        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingDidBegin)
+        self.clearButtonMode = UITextFieldViewMode.never
         //        self.rightViewMode = UITextFieldViewMode.WhileEditing
     }
     
-    func rightButtonClicked(sender:UIButton)
+    func rightButtonClicked(_ sender:UIButton)
     {
-        self.secureTextEntry = !self.secureTextEntry
+        self.isSecureTextEntry = !self.isSecureTextEntry
         self.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         if(imageName == "check_eye_close_red") {
-            rightButton.setImage(UIImage(named: "check_eye_open_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_open_red")!, for: UIControlState())
             imageName = "check_eye_open_red"
         } else if (imageName == "check_eye_open_red") {
-            rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_close_red")!, for: UIControlState())
             imageName = "check_eye_close_red"
         } else if(imageName == "check_eye_close_yellow") {
-            rightButton.setImage(UIImage(named: "check_eye_open_yellow")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_open_yellow")!, for: UIControlState())
             imageName = "check_eye_open_yellow"
         } else if (imageName == "check_eye_open_yellow") {
-            rightButton.setImage(UIImage(named: "check_eye_close_yellow")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_close_yellow")!, for: UIControlState())
             imageName = "check_eye_close_yellow"
         } else if(imageName == "check_eye_close_orange") {
-            rightButton.setImage(UIImage(named: "check_eye_open_orange")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_open_orange")!, for: UIControlState())
             imageName = "check_eye_open_orange"
         } else {
-            rightButton.setImage(UIImage(named: "check_eye_close_orange")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_close_orange")!, for: UIControlState())
             imageName = "check_eye_close_orange"
         }
     }
     
     func decideButtonImage() {
         if(self.text?.characters.count < 8) {
-            if(self.secureTextEntry) {
-                rightButton.setImage(UIImage(named: "check_eye_close_yellow")!, forState: UIControlState.Normal)
+            if(self.isSecureTextEntry) {
+                rightButton.setImage(UIImage(named: "check_eye_close_yellow")!, for: UIControlState())
                 imageName = "check_eye_close_yellow"
             } else {
-                rightButton.setImage(UIImage(named: "check_eye_open_yellow")!, forState: UIControlState.Normal)
+                rightButton.setImage(UIImage(named: "check_eye_open_yellow")!, for: UIControlState())
                 imageName = "check_eye_open_yellow"
             }
         } else if (isValidPassword(self.text!)) {
-            if(self.secureTextEntry) {
-                rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+            if(self.isSecureTextEntry) {
+                rightButton.setImage(UIImage(named: "check_eye_close_red")!, for: UIControlState())
                 imageName = "check_eye_close_red"
             } else {
-                rightButton.setImage(UIImage(named: "check_eye_open_red")!, forState: UIControlState.Normal)
+                rightButton.setImage(UIImage(named: "check_eye_open_red")!, for: UIControlState())
                 imageName = "check_eye_open_red"
             }
         } else {
-            if(self.secureTextEntry) {
-                rightButton.setImage(UIImage(named: "check_eye_close_orange")!, forState: UIControlState.Normal)
+            if(self.isSecureTextEntry) {
+                rightButton.setImage(UIImage(named: "check_eye_close_orange")!, for: UIControlState())
                 imageName = "check_eye_close_orange"
             } else {
-                rightButton.setImage(UIImage(named: "check_eye_open_orange")!, forState: UIControlState.Normal)
+                rightButton.setImage(UIImage(named: "check_eye_open_orange")!, for: UIControlState())
                 imageName = "check_eye_open_orange"
             }
         }
     }
     
-    func isValidPassword(testStr:String) -> Bool {
+    func isValidPassword(_ testStr:String) -> Bool {
         var uppercase = 0
         var symbol = 0
         var digit = 0

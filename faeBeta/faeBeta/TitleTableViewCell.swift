@@ -23,13 +23,13 @@ class TitleTableViewCell: UITableViewCell {
     
     // MARK: - Function
     
-    func setTitleLabelText(titleText: String)  {
+    func setTitleLabelText(_ titleText: String)  {
         titleLabel.text = titleText
     }
     
     // MARK: - Selection
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

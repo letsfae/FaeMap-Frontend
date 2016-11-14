@@ -12,11 +12,11 @@ import SwiftyJSON
 extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tableCommentsForComment {
             return dictCommentsOnCommentDetail.count
         }
@@ -28,9 +28,9 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableCommentsForComment {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinCommentsCell", forIndexPath: indexPath) as! CPCommentsCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinCommentsCell", for: indexPath) as! CPCommentsCell
             cell.delegate = self
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
             if let userID = dictCell["user_id"].int {
@@ -42,7 +42,7 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
                     }
                 }
                 let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
-                cell.imageViewAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .RefreshCached)
+                cell.imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
             }
             if let date = dictCell["date"].string {
                 cell.labelTimestamp.text = date
@@ -50,12 +50,12 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
             if let content = dictCell["content"].string {
                 cell.textViewComment.text = content
             }
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
         else if tableView == self.tableViewPeople {
-            let cell = tableView.dequeueReusableCellWithIdentifier("commentPinPeopleCell", forIndexPath: indexPath) as! OPLTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinPeopleCell", for: indexPath) as! OPLTableViewCell
             let userID = Array(dictPeopleOfCommentDetail.keys)[indexPath.row]
             let latestDate = dictPeopleOfCommentDetail[userID]
             let getUserName = FaeUser()
@@ -70,21 +70,21 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
             
 //            getAndSetUserAvatar(cell.imageViewAvatar, userID: userID)
 //            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
-            cell.deleteButton.hidden = true
-            cell.jumpToDetail.hidden = true
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.deleteButton.isHidden = true
+            cell.jumpToDetail.isHidden = true
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
         else {
             let cell = UITableViewCell()
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.tableCommentsForComment {
             return 140
         }
@@ -96,9 +96,9 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == self.tableCommentsForComment {
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as! CPCommentsCell
+            let cell = tableView.cellForRow(at: indexPath) as! CPCommentsCell
             if let usernameInCell = cell.labelUsername.text {
                 self.actionShowActionSheet(usernameInCell)
             }

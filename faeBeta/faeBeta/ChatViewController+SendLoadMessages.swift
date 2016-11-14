@@ -13,10 +13,10 @@ import FirebaseDatabase
 
 extension ChatViewController: OutgoingMessageProtocol{
     //MARK: - send message
-    func sendMessage(text : String?, date: NSDate, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : NSData?, audio : NSData?, video : NSData?, videoDuration: Int) {
+    func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?, video : Data?, videoDuration: Int) {
         
-        var outgoingMessage = OutgoingMessage?()
-        let shouldHaveTimeStamp = date.timeIntervalSinceDate(lastMarkerDate) > 300 && !isContinuallySending
+        var outgoingMessage: OutgoingMessage? = nil
+        let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
         //if text message
         if text != nil {
             // send message
@@ -27,11 +27,11 @@ extension ChatViewController: OutgoingMessageProtocol{
             // send picture message
             
             var imageData = UIImageJPEGRepresentation(pic,1)
-            let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+            let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
             imageData = UIImageJPEGRepresentation(pic,factor)
             outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             isContinuallySending = true
-            NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
+            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
         }
         
         if let sti = sticker {
@@ -43,8 +43,8 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         if let loc = location {
             // send location message
-            let lat : NSNumber = NSNumber(double: loc.coordinate.latitude)
-            let lon : NSNumber = NSNumber(double: loc.coordinate.longitude)
+            let lat : NSNumber = NSNumber(value: loc.coordinate.latitude as Double)
+            let lon : NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
             
             outgoingMessage = OutgoingMessage(message: "[Location]", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
@@ -73,32 +73,32 @@ extension ChatViewController: OutgoingMessageProtocol{
     }
     
     //send image delegate function
-    func sendImages(images:[UIImage]) {
+    func sendImages(_ images:[UIImage]) {
         for i in 0 ..< images.count {
-            sendMessage(nil, date: NSDate(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+            sendMessage(nil, date: Date(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
         }
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
-    func sendStickerWithImageName(name: String) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+    func sendStickerWithImageName(_ name: String) {
+        sendMessage(nil, date: Date(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
         //        stickerPicker.reloadHistory()
     }
     
-    func sendAudioData(data: NSData) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil, videoDuration: 0)
+    func sendAudioData(_ data: Data) {
+        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil, videoDuration: 0)
     }
     
     //MARK: locationSend Delegate
-    func sendPickedLocation(lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: NSData) {
-        sendMessage(nil, date: NSDate(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil, videoDuration: 0)
+    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: Data) {
+        sendMessage(nil, date: Date(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil, videoDuration: 0)
     }
     
-    func sendVideoData(video: NSData, snapImage: UIImage, duration: Int){
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int){
         var imageData = UIImageJPEGRepresentation(snapImage,1)
-        let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+        let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
         imageData = UIImageJPEGRepresentation(snapImage,factor)
-        sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video, videoDuration: duration)
+        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video, videoDuration: duration)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
@@ -106,7 +106,7 @@ extension ChatViewController: OutgoingMessageProtocol{
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     func loadMessage() {
         
-        ref.child(chatRoomId).queryLimitedToLast(UInt(numberOfMessagesOneTime)).observeEventType(.ChildAdded) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
                 // becasue the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
@@ -120,7 +120,7 @@ extension ChatViewController: OutgoingMessageProtocol{
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
                     
-                    self.finishReceivingMessageAnimated(true)
+                    self.finishReceivingMessage(animated: true)
                     
                     
                 }
@@ -132,18 +132,18 @@ extension ChatViewController: OutgoingMessageProtocol{
             }
         }
         
-        ref.child(chatRoomId).observeEventType(.ChildChanged) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).observe(.childChanged) { (snapshot : FIRDataSnapshot) in
             
         }
         
-        ref.child(chatRoomId).observeEventType(.ChildRemoved) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).observe(.childRemoved) { (snapshot : FIRDataSnapshot) in
             
         }
         
-        ref.child(chatRoomId).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+        ref.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
             //this function will run only once
             self.insertMessages()
-            self.finishReceivingMessageAnimated(true)
+            self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
             self.scrollToBottom(true)
         }
@@ -153,18 +153,18 @@ extension ChatViewController: OutgoingMessageProtocol{
     func loadPreviousMessages(){
         self.isLoadingPreviousMessages = true
         if(totalNumberOfMessages > numberOfMessagesLoaded){
-            ref.child(chatRoomId).queryOrderedByChild("index").queryStartingAtValue(max(totalNumberOfMessages - numberOfMessagesLoaded - numberOfMessagesOneTime + 1,1)).queryEndingAtValue(totalNumberOfMessages - numberOfMessagesLoaded).observeSingleEventOfType(.Value) { (snapshot : FIRDataSnapshot) in
+            ref.child(chatRoomId).queryOrdered(byChild: "index").queryStarting(atValue: max(totalNumberOfMessages - numberOfMessagesLoaded - numberOfMessagesOneTime + 1,1)).queryEnding(atValue: totalNumberOfMessages - numberOfMessagesLoaded).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
                 if snapshot.exists() {
-                    let result = snapshot.value!.allValues as! [NSDictionary]
-                    for item in result.sort({ ($0["index"] as! Int) > ($1["index"] as! Int)}) {
-                        self.insertMessage(item,atIndex: 0)
+                    let result = (snapshot.value! as AnyObject).allValues as! [NSDictionary]
+                    for item in result.sorted(by: { ($0["index"] as! Int) > ($1["index"] as! Int)}) {
+                        _ = self.insertMessage(item,atIndex: 0)
                         self.numberOfMessagesLoaded += 1
                         
                     }
                     let oldOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y
                     self.collectionView.reloadData()
                     self.collectionView.layoutIfNeeded()
-                    self.collectionView.contentOffset = CGPointMake(0.0, self.collectionView.contentSize.height - oldOffset);
+                    self.collectionView.contentOffset = CGPoint(x: 0.0, y: self.collectionView.contentSize.height - oldOffset);
                     
                 }
                 self.isLoadingPreviousMessages = false
@@ -179,17 +179,17 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         for item in loaded {
             //create message
-            insertMessage(item)
+            _ = insertMessage(item)
         }
     }
     
-    func insertMessage(item : NSDictionary) -> Bool {
+    func insertMessage(_ item : NSDictionary) -> Bool {
         //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
         if(item["hasTimeStamp"] as! Bool){
-            let date = dateFormatter().dateFromString((item["date"] as? String)!)
+            let date = dateFormatter().date(from: (item["date"] as? String)!)
             lastMarkerDate = date
         }
         objects.append(item)
@@ -198,19 +198,19 @@ extension ChatViewController: OutgoingMessageProtocol{
         return incoming(item)
     }
     
-    func insertMessage(item : NSDictionary, atIndex index: Int) -> Bool {
+    func insertMessage(_ item : NSDictionary, atIndex index: Int) -> Bool {
         //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
         
-        objects.insert(item, atIndex: index)
-        messages.insert(message!, atIndex: index)
+        objects.insert(item, at: index)
+        messages.insert(message!, at: index)
         
         return incoming(item)
     }
     
-    func incoming(item : NSDictionary) -> Bool {
+    func incoming(_ item : NSDictionary) -> Bool {
         if user_id.stringValue == item["senderId"] as! String {
             return false
         } else {
@@ -218,7 +218,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
     }
     
-    func outgoing(item : NSDictionary) -> Bool {
+    func outgoing(_ item : NSDictionary) -> Bool {
         if user_id.stringValue == item["senderId"] as! String {
             return true
         } else {
@@ -228,7 +228,7 @@ extension ChatViewController: OutgoingMessageProtocol{
     }
     
     // outgoingmessage delegate
-    func updateChat_Id(newId: String) {
+    func updateChat_Id(_ newId: String) {
         chat_id = newId
     }
 }

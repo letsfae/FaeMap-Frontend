@@ -9,9 +9,9 @@
 import UIKit
 
 protocol PasswordCellProtocol {
-    func textViewShouldReturn(indexPath: NSIndexPath)
-    func textViewDidBeginEditing(indexPath: NSIndexPath)
-    func textViewDidChange(text: String, indexPath: NSIndexPath)
+    func textViewShouldReturn(_ indexPath: IndexPath)
+    func textViewDidBeginEditing(_ indexPath: IndexPath)
+    func textViewDidChange(_ text: String, indexPath: IndexPath)
 }
 
 class PasswordTableViewCell: UITableViewCell {
@@ -24,7 +24,7 @@ class PasswordTableViewCell: UITableViewCell {
     // MARK: - Variables
     
     var delegate: PasswordCellProtocol?
-    var indexPath: NSIndexPath!
+    var indexPath: IndexPath!
     var isCharacterLimit = true
     var textEntered: String = ""
     var spaceText: String = ""
@@ -41,9 +41,9 @@ class PasswordTableViewCell: UITableViewCell {
     
     // MARK: - Functions
     
-    func setPlaceholderLabelText(indexPath: NSIndexPath)  {
+    func setPlaceholderLabelText(_ indexPath: IndexPath)  {
         self.indexPath = indexPath
-        textView.autocorrectionType = .No
+        textView.autocorrectionType = .no
     }
     
     func makeFirstResponder() {
@@ -56,12 +56,12 @@ class PasswordTableViewCell: UITableViewCell {
     
     // MARK: - IBAction
     
-    @IBAction func showPasswordButtonTapped(sender: AnyObject) {
+    @IBAction func showPasswordButtonTapped(_ sender: AnyObject) {
         
         showText = !showText
         
         changeColorOFImage(textEntered)
-        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), forState: .Normal)
+        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), for: UIControlState())
         
         let font = UIFont(name: "AvenirNext-Regular", size:22)
         
@@ -81,8 +81,8 @@ class PasswordTableViewCell: UITableViewCell {
             let attrStringWithImage = NSAttributedString(attachment: textAttachment)
             
             for _ in 0..<textEntered.characters.count {
-                attributedStringWithImage.appendAttributedString(attrStringWithImage)
-                attributedStringWithImage.appendAttributedString(NSAttributedString(string: " "))
+                attributedStringWithImage.append(attrStringWithImage)
+                attributedStringWithImage.append(NSAttributedString(string: " "))
             }
             
             
@@ -95,7 +95,7 @@ class PasswordTableViewCell: UITableViewCell {
     
     // MARK: - Selection
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
@@ -105,11 +105,11 @@ class PasswordTableViewCell: UITableViewCell {
 
 extension PasswordTableViewCell: UITextViewDelegate {
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.textViewDidBeginEditing(indexPath)
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         if textEntered.characters.count > 16 && text != "" {
             return false
@@ -129,7 +129,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         delegate?.textViewDidChange(textEntered, indexPath: indexPath)
         
         changeColorOFImage(textEntered)
-        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), forState: .Normal)
+        showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), for: UIControlState())
         if !showText {
             setTextToDot(text)
             return false
@@ -137,7 +137,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         return true
     }
     
-    func setTextToDot(text: String) {
+    func setTextToDot(_ text: String) {
         
         let font = UIFont(name: "AvenirNext-Regular", size:22)
         
@@ -153,15 +153,15 @@ extension PasswordTableViewCell: UITextViewDelegate {
         let attrStringWithImage = NSAttributedString(attachment: textAttachment)
         
         for _ in 0..<textEntered.characters.count {
-            attributedStringWithImage.appendAttributedString(attrStringWithImage)
-            attributedStringWithImage.appendAttributedString(NSAttributedString(string: " "))
+            attributedStringWithImage.append(attrStringWithImage)
+            attributedStringWithImage.append(NSAttributedString(string: " "))
         }
         
         if text != "" {
             
             attributedString = textView.attributedText.mutableCopy() as! NSMutableAttributedString
             
-            attributedString.appendAttributedString(NSAttributedString(string: text, attributes: myAttribute))
+            attributedString.append(NSAttributedString(string: text, attributes: myAttribute))
             textView.attributedText = attributedString
             
             attributedStringWithImage.addAttributes(myAttribute, range: NSRange.init(location: 0, length: attributedStringWithImage.length))
@@ -177,7 +177,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         self.textView.font = font
     }
     
-    func changeColorOFImage(testStr:String) {
+    func changeColorOFImage(_ testStr:String) {
         var uppercase = 0
         var symbol = 0
         var digit = 0
@@ -205,13 +205,9 @@ extension PasswordTableViewCell: UITextViewDelegate {
         }
     }
     
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    func delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
 }

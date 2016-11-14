@@ -10,10 +10,10 @@ import UIKit
 
 class TagsCollectionViewCell: UICollectionViewCell {
     var labelTitle : UILabel!
-    var colorSelf : UIColor = UIColor.clearColor(){
+    var colorSelf : UIColor = UIColor.clear{
         didSet {
-            self.contentView.layer.borderColor = colorSelf.CGColor
-            if selected == true {
+            self.contentView.layer.borderColor = colorSelf.cgColor
+            if isSelected == true {
                 cellDidSelected()
             } else {
                 cellDidUnselected()
@@ -21,9 +21,9 @@ class TagsCollectionViewCell: UICollectionViewCell {
         }
     }
     var colors = [UIColor]()
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            if selected == false {
+            if isSelected == false {
                 cellDidUnselected()
             } else {
                 cellDidSelected()
@@ -40,10 +40,10 @@ class TagsCollectionViewCell: UICollectionViewCell {
         self.contentView.layer.cornerRadius = 6.6
         let wid = self.contentView.bounds.width
         let hei = self.contentView.bounds.height
-        labelTitle = UILabel(frame: CGRectMake(25,0,wid - 25 * 2, hei))
+        labelTitle = UILabel(frame: CGRect(x: 25,y: 0,width: wid - 25 * 2, height: hei))
         labelTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         labelTitle.translatesAutoresizingMaskIntoConstraints = false;
-        labelTitle.backgroundColor = UIColor.clearColor()
+        labelTitle.backgroundColor = UIColor.clear
         labelTitle.textColor = colorSelf
         self.contentView.addSubview(labelTitle)
         
@@ -54,16 +54,16 @@ class TagsCollectionViewCell: UICollectionViewCell {
     }
     
     func cellDidSelected() {
-        labelTitle.textColor = UIColor.whiteColor()
+        labelTitle.textColor = UIColor.white
         self.contentView.backgroundColor = colorSelf
     }
     
     func cellDidUnselected() {
-        self.contentView.backgroundColor = UIColor.clearColor()
+        self.contentView.backgroundColor = UIColor.clear
         labelTitle.textColor = colorSelf
     }
     func newContentSize() -> CGSize {
-        var size = labelTitle.intrinsicContentSize()
+        var size = labelTitle.intrinsicContentSize
         size.height = 39;
         size.width += 25 * 2
         return size;

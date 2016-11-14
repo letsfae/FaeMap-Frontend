@@ -13,15 +13,15 @@ import SwiftyJSON
 extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func loadNamecard() {
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         
         uiviewDialog = UIView(frame: CGRect(x: (screenWidth-maxLength)/2, y: 140*screenWidthFactor, width: maxLength,height: 302))
         uiviewDialog.backgroundColor = UIColor(patternImage: UIImage(named: "map_userpin_dialog")!)
         uiviewDialog.layer.zPosition = 20
         
         uiviewCard = UIView(frame: CGRect(x: 0, y: 0,width: maxLength,height: 200))
-        uiviewCard.backgroundColor = UIColor.clearColor()
-        uiviewCard.hidden = true
+        uiviewCard.backgroundColor = UIColor.clear
+        uiviewCard.isHidden = true
         uiviewDialog.addSubview(uiviewCard)
         
         //avatar
@@ -29,23 +29,23 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         imageviewNamecardAvatar.image = UIImage(named: "myAvatorLin")
         imageviewNamecardAvatar.layer.cornerRadius = 35
         imageviewNamecardAvatar.clipsToBounds = true
-        imageviewNamecardAvatar.layer.borderColor = UIColor.whiteColor().CGColor
+        imageviewNamecardAvatar.layer.borderColor = UIColor.white.cgColor
         imageviewNamecardAvatar.layer.borderWidth = 5
-        imageviewNamecardAvatar.contentMode = .ScaleAspectFill
+        imageviewNamecardAvatar.contentMode = .scaleAspectFill
         
         //background
         imageviewUserPinBackground = UIImageView(frame: CGRect(x: (maxLength - 268)/2, y: 20, width: 268, height: 126))
         imageviewUserPinBackground.image = UIImage(named: "map_userpin_background")
         imageviewUserPinBackground.clipsToBounds = false
-        imageviewUserPinBackground.contentMode = .ScaleAspectFill
+        imageviewUserPinBackground.contentMode = .scaleAspectFill
         
         //button more
         buttonMore = UIButton(frame: CGRect(x: (maxLength-72), y: 40/736*screenHeight, width: 37, height: 17))
         
-        buttonMore.setImage(UIImage(named: "map_namecard_dots"), forState: UIControlState.Normal)
+        buttonMore.setImage(UIImage(named: "map_namecard_dots"), for: UIControlState())
         
         //buttonMore.backgroundColor = UIColor.blackColor()
-        buttonMore.addTarget(self, action: #selector(FaeMapViewController.buttonMoreAction(_:)), forControlEvents: .TouchUpInside)
+        buttonMore.addTarget(self, action: #selector(FaeMapViewController.buttonMoreAction(_:)), for: .touchUpInside)
         
         //load function view
         loadFunctionview()
@@ -53,27 +53,27 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //label name
         labelNamecardName = UILabel(frame: CGRect(x: (maxLength-180)/2, y: 166, width: 180, height: 27))
         labelNamecardName.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
-        labelNamecardName.textColor = UIColor.darkGrayColor()
-        labelNamecardName.textAlignment = .Center
+        labelNamecardName.textColor = UIColor.darkGray
+        labelNamecardName.textAlignment = .center
         labelNamecardName.text = "LinLInLiN"
         
         //label description
         labelNamecardDescription = UILabel(frame: CGRect(x: (maxLength-294)/2, y: 100, width: 294, height: 44))
         labelNamecardDescription.numberOfLines = 2
         labelNamecardDescription.font = UIFont(name: "AvenirNext-Medium", size: 15.0)
-        labelNamecardDescription.textColor = UIColor.lightGrayColor()
-        labelNamecardDescription.textAlignment = .Center
+        labelNamecardDescription.textColor = UIColor.lightGray
+        labelNamecardDescription.textAlignment = .center
         labelNamecardDescription.text = "hahahaaahahah\nahaahahahahahahahe\nhahahhahahahahahahahahahahah"
         
         //line
         viewLine2 = UIView(frame: CGRect(x: (maxLength-268)/2, y: 80, width: 268, height: 1))
-        viewLine2.backgroundColor = UIColor.lightGrayColor()
+        viewLine2.backgroundColor = UIColor.lightGray
         //viewLine2.hidden = true
         viewLine = UIView(frame: CGRect(x: (maxLength-252)/2, y: 210, width: 252, height: 1))
-        viewLine.backgroundColor = UIColor.lightGrayColor()
+        viewLine.backgroundColor = UIColor.lightGray
         
         //gender
-        imageViewGender = UIImageView(frame: CGRectMake(37, 40, 50, 19))
+        imageViewGender = UIImageView(frame: CGRect(x: 37, y: 40, width: 50, height: 19))
         imageViewGender.image = UIImage(named: "map_userpin_male")
         //imageViewGender.hidden = true
         uiviewCard.addSubview(imageViewGender)
@@ -81,16 +81,16 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //age
         labelNamecardAge = UILabel(frame: CGRect(x: 27, y: 1, width: 16, height: 18))
         labelNamecardAge.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelNamecardAge.textColor = UIColor.whiteColor()
+        labelNamecardAge.textColor = UIColor.white
         imageViewGender.addSubview(labelNamecardAge)
         
         //load button
         buttonChat = UIButton(frame: CGRect(x:(maxLength-190)/2, y: 230, width: 190, height: 39))
         buttonChat.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
         buttonChat.layer.cornerRadius = 19
-        buttonChat.setTitle("Chat", forState: .Normal)
+        buttonChat.setTitle("Chat", for: UIControlState())
         buttonChat.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20.0)
-        buttonChat.addTarget(self, action: #selector(FaeMapViewController.buttonChatAction(_:)), forControlEvents: .TouchUpInside)
+        buttonChat.addTarget(self, action: #selector(FaeMapViewController.buttonChatAction(_:)), for: .touchUpInside)
         
         loadTags()
         //uiviewTag.hidden = true
@@ -114,7 +114,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //        print("get name card")
         /*
         let user1 = FaeUser()
-        user1.getNamecardOfSpecificUser(String(4)){(status:Int, message:AnyObject?) in
+        user1.getNamecardOfSpecificUser(String(4)){(status:Int, message: Any?) in
             print(status)
             print("gets name")
             if(status / 100 == 2){
@@ -122,20 +122,20 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
         }
          */
-        //        user1.getSelfNamecard{(status:Int, message:AnyObject?) in
+        //        user1.getSelfNamecard{(status:Int, message: Any?) in
         //            if(status / 100 == 2){
         //                print("gets self name")
         //                print(message)
         //            }
         //        }
-        //        user1.getAllTags{(status:Int, message:AnyObject?) in
+        //        user1.getAllTags{(status:Int, message: Any?) in
         //            if(status / 100 == 2){
         //                print("gets all tags")
         //                print(message)
         //            }
         //        }
         //
-//        user1.getSelfProfile{(status:Int, message:AnyObject?) in
+//        user1.getSelfProfile{(status:Int, message: Any?) in
 //            if(status / 100 == 2){
 //                print("gets self profile")
 //                print(status)
@@ -143,7 +143,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //            }
 //        }
         //
-        //        user1.getOthersProfile(String(1)){(status:Int, message:AnyObject?) in
+        //        user1.getOthersProfile(String(1)){(status:Int, message: Any?) in
         //            print(status)
         //            print("gets others profile")
         //            if(status / 100 == 2){
@@ -154,7 +154,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //        user1.whereKey("nick_name", value: "heheda")
         //        user1.whereKey("short_intro", value: "hansome boy")
         //        user1.whereKey("tag_ids", value: "4;5;6")
-        //        user1.updateNameCard{(status:Int, message:AnyObject?) in
+        //        user1.updateNameCard{(status:Int, message: Any?) in
         //            if(status / 100 == 2){
         //                print("update name card")
         //                print(status)
@@ -166,22 +166,22 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
     }
     
-    func showOpenUserPinAnimation(lati: CLLocationDegrees, longi: CLLocationDegrees) {
-        UIView.animateWithDuration(0.2, animations: ({
+    func showOpenUserPinAnimation(_ lati: CLLocationDegrees, longi: CLLocationDegrees) {
+        UIView.animate(withDuration: 0.2, animations: ({
             self.uiviewDialog.alpha = 1.0
         }))
         openUserPinActive = true
-        let camera = GMSCameraPosition.cameraWithLatitude(lati+0.001, longitude: longi, zoom: 17)
-        faeMapView.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: lati+0.001, longitude: longi, zoom: 17)
+        faeMapView.animate(to: camera)
     }
     
     func hideOpenUserPinAnimation() {
-        UIView.animateWithDuration(0.2, animations: ({
+        UIView.animate(withDuration: 0.2, animations: ({
             self.uiviewDialog.alpha = 0.0
         }))
     }
     
-    func getColor(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
+    func getColor(_ red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }
     
@@ -211,25 +211,25 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         for i in 0 ..< tagName.count {
             let buttonTag : UIButton = UIButton(frame: CGRect(x: xOffset, y: 0, width: tagLength[i], height: tagHeight))
             buttonTag.backgroundColor = tagColor[i]
-            buttonTag.setAttributedTitle(tagTitle[i], forState: .Normal)
-            buttonTag.titleLabel?.textColor = UIColor.whiteColor()
+            buttonTag.setAttributedTitle(tagTitle[i], for: UIControlState())
+            buttonTag.titleLabel?.textColor = UIColor.white
             uiviewTag.addSubview(buttonTag)
             xOffset += (tagLength[i]+intervalInLine)
         }
         
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch: UITouch = touches.first{
             if(touch.view != uiviewFunction && touch.view != buttonMore){
                 hideFunctionview()
             }
             if(touch.view == uiviewDialog || touch.view == uiviewCard){
-                imageviewUserPinBackground.hidden = true
+                imageviewUserPinBackground.isHidden = true
                 imageviewNamecardAvatar.frame.origin.y = -10
                 //viewLine2.hidden = false
-                labelNamecardName.hidden = true
-                uiviewCard.hidden = false
+                labelNamecardName.isHidden = true
+                uiviewCard.isHidden = false
                 //uiviewTag.hidden = false
                 //imageViewGender.hidden = false
             }
@@ -240,51 +240,51 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         
         uiviewFunction = UIView(frame: CGRect(x: (maxLength - 288)/2,y: 116,width: 288,height: 70))
-        uiviewFunction.backgroundColor = UIColor.clearColor()
+        uiviewFunction.backgroundColor = UIColor.clear
         uiviewCard.addSubview(uiviewFunction)
         
         let buttonWidth = 44.0
         let interval = 26.0
         
         buttonShare = UIButton(frame: CGRect(x: (288-3*buttonWidth-3*interval)/2,y: 10,width: buttonWidth,height: 51))
-        buttonShare.setImage(UIImage(named: "map_userpin_share"), forState: .Normal)
-        buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), forControlEvents: .TouchUpInside)
+        buttonShare.setImage(UIImage(named: "map_userpin_share"), for: UIControlState())
+        buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), for: .touchUpInside)
         //uiviewFunction.addSubview(buttonShare)
         
         buttonKeep = UIButton(frame: CGRect(x: (288-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
-        buttonKeep.setImage(UIImage(named: "map_userpin_keep"), forState: .Normal)
-        buttonKeep.addTarget(self, action: #selector(buttonKeepAction(_:)), forControlEvents: .TouchUpInside)
+        buttonKeep.setImage(UIImage(named: "map_userpin_keep"), for: UIControlState())
+        buttonKeep.addTarget(self, action: #selector(buttonKeepAction(_:)), for: .touchUpInside)
         //uiviewFunction.addSubview(buttonKeep)
         
         //buttonReport = UIButton(frame: CGRect(x: (298-3*buttonWidth-2*interval)/2+2*interval+2*buttonWidth,y: 10,width: buttonWidth,height: 51))
         buttonReport = UIButton(frame: CGRect(x: (288-buttonWidth)/2,y: 10,width: buttonWidth,height: 51))
-        buttonReport.setImage(UIImage(named: "map_userpin_report"), forState: .Normal)
-        buttonReport.addTarget(self, action: #selector(buttonReportAction(_:)), forControlEvents: .TouchUpInside)
+        buttonReport.setImage(UIImage(named: "map_userpin_report"), for: UIControlState())
+        buttonReport.addTarget(self, action: #selector(buttonReportAction(_:)), for: .touchUpInside)
         
         uiviewFunction.addSubview(buttonReport)
         
-        uiviewFunction.hidden = true
+        uiviewFunction.isHidden = true
     }
     
-    func buttonFollowAction(sender: UIButton!){
+    func buttonFollowAction(_ sender: UIButton!){
         print("Follow")
     }
     
-    func buttonShareAction(sender: UIButton!){
+    func buttonShareAction(_ sender: UIButton!){
         print("Share")
     }
     
-    func buttonKeepAction(sender: UIButton!){
+    func buttonKeepAction(_ sender: UIButton!){
         print("Keep")
     }
     
-    func buttonReportAction(sender: UIButton!){
+    func buttonReportAction(_ sender: UIButton!){
         print("Report")
     }
     
     
-    func buttonChatAction(sender: UIButton!){
-        let withUserId:NSNumber = self.currentViewingUserId
+    func buttonChatAction(_ sender: UIButton!){
+        let withUserId:NSNumber = NSNumber(value: self.currentViewingUserId)
         
         //First get chatroom id
         getFromURL("chats/users/\(user_id)/\(withUserId)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
@@ -310,8 +310,8 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
         }
     }
-    func startChat(chat_id: String? ,withUserId: NSNumber, withUserName: String?){
-        let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("ChatViewController")as! ChatViewController
+    func startChat(_ chat_id: String? ,withUserId: NSNumber, withUserName: String?){
+        let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
         
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId)" : "\(withUserId)-\(user_id)"
         chatVC.chat_id = chat_id
@@ -320,32 +320,32 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func buttonMoreAction(sender: UIButton!){
+    func buttonMoreAction(_ sender: UIButton!){
         print("more")
         showFunctionview()
     }
     
     func hideFunctionview(){
-        buttonMore.setImage(UIImage(named: "map_userpin_more"), forState: .Normal)
-        uiviewFunction.hidden = true
-        labelNamecardDescription.hidden = false
-        uiviewTag.hidden = false
+        buttonMore.setImage(UIImage(named: "map_userpin_more"), for: UIControlState())
+        uiviewFunction.isHidden = true
+        labelNamecardDescription.isHidden = false
+        uiviewTag.isHidden = false
         print("hiddend")
     }
     
     func showFunctionview(){
-        buttonMore.setImage(UIImage(named: "map_userpin_dark"), forState: UIControlState.Normal)
-        uiviewFunction.hidden = false
-        labelNamecardDescription.hidden = true
-        uiviewTag.hidden = true
+        buttonMore.setImage(UIImage(named: "map_userpin_dark"), for: UIControlState())
+        uiviewFunction.isHidden = false
+        labelNamecardDescription.isHidden = true
+        uiviewTag.isHidden = true
         print("show")
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 8
     }
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellPhotos, forIndexPath: indexPath)as! NameCardAddCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellPhotos, for: indexPath)as! NameCardAddCollectionViewCell
         if indexPath.row==1{
             cell.imageViewTitle.image = UIImage(named: "map_namecard_photo")
         }
@@ -378,11 +378,11 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
-    func loadUserPinInformation(userId: String){
+    func loadUserPinInformation(_ userId: String){
         //        let avatar = FaeImage()
         //        let image = UIImage(named: "navigationBack")
         //        avatar.image = image
-        //        avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
+        //        avatar.faeUploadImageInBackground { (code:Int, message: Any?) in
         //            print("")
         //            print(code)
         //            print(message)
@@ -393,62 +393,62 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //            }
         //        }
         let user = FaeUser();
-        imageviewUserPinBackground.hidden = false
+        imageviewUserPinBackground.isHidden = false
         imageviewNamecardAvatar.frame.origin.y = 90
-        labelNamecardName.hidden = false
-        uiviewCard.hidden = true
+        labelNamecardName.isHidden = false
+        uiviewCard.isHidden = true
         //let stringHeaderURL = "baseURL + "/files/users/"29/avatar"
         let stringHeaderURL = baseURL + "/files/users/" + userId + "/avatar"
-        imageviewNamecardAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL))
+        imageviewNamecardAvatar.sd_setImage(with: URL(string: stringHeaderURL))
         if imageviewNamecardAvatar.image == nil{
             imageviewNamecardAvatar.image = UIImage(named: "myAvatorLin")
         }
-        user.getNamecardOfSpecificUser(userId){(status:Int?, message:AnyObject?) in
-            print("kick")
-            print(message)
+        user.getNamecardOfSpecificUser(userId){(status:Int?, message: Any?) in
+//            print("kick")
+//            print(message)
             if(status! / 100 == 2){
                 // success
-                if message != nil{
-                    if message!["nick_name"] != nil{
-                        self.labelNamecardName.text = message!["nick_name"] as? String
+                if let message = message as? NSDictionary{
+                    if message["nick_name"] != nil{
+                        self.labelNamecardName.text = message["nick_name"] as? String
                     }
-                    if message!["short_intro"] != nil{
-                        self.labelNamecardDescription.text = message!["short_intro"] as? String
+                    if message["short_intro"] != nil{
+                        self.labelNamecardDescription.text = message["short_intro"] as? String
                     }
-                    if message!["show_gender"] as! Bool == true{
+                    if message["show_gender"] as! Bool == true{
                         print("get in")
                         self.imageViewGender.alpha = 1.0
-                        if message!["show_age"] as! Bool == true{
+                        if message["show_age"] as! Bool == true{
                             self.imageViewGender.frame.size.width = 50
-                            if message!["gender"] as? String == "male" {
+                            if message["gender"] as? String == "male" {
                                 self.imageViewGender.image = UIImage(named: "map_userpin_male&age")
                             }
-                            if message!["gender"] as? String == "female"{
+                            if message["gender"] as? String == "female"{
                                 self.imageViewGender.image = UIImage(named: "map_userpin_female&age")
                             }
-                            self.labelNamecardAge.hidden = false
-                            if !(message!["age"] is NSNull){
-                                self.labelNamecardAge.text = String(message!["age"] as! Int)
+                            self.labelNamecardAge.isHidden = false
+                            if !(message["age"] is NSNull){
+                                self.labelNamecardAge.text = String(message["age"] as! Int)
                             }
                         }
                         else{
                             self.imageViewGender.frame.size.width = 30
-                            if message!["gender"] as? String == "male" {
+                            if message["gender"] as? String == "male" {
                                 self.imageViewGender.image = UIImage(named: "map_userpin_male")
                             }
-                            if message!["gender"] as? String == "female"{
+                            if message["gender"] as? String == "female"{
                                 self.imageViewGender.image = UIImage(named: "map_userpin_female")
                             }
                             self.labelNamecardAge.alpha = 0.0;
                         }
                     }
                     else{
-                        self.imageViewGender.hidden = true
+                        self.imageViewGender.isHidden = true
                     }
-                    if message!["tags"] != nil{
+                    if message["tags"] != nil{
                         self.tagName.removeAll()
                         self.tagColor.removeAll()
-                        let arr = message!["tags"] as! [[String : AnyObject]]
+                        let arr = message["tags"] as! [[String : AnyObject]]
                         for i in 0 ..< arr.count{
                             self.tagName.append(arr[i]["title"] as! String)
                             self.tagColor.append(self.colorWithHexString(String(arr[i]["color"]! as! String)))
@@ -466,25 +466,25 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
     }
     
-    func colorWithHexString (hex:String) -> UIColor {
-        var cString:String = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercaseString
+    func colorWithHexString (_ hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines).uppercased()
         
         if (cString.hasPrefix("#")) {
-            cString = (cString as NSString).substringFromIndex(1)
+            cString = (cString as NSString).substring(from: 1)
         }
         
         if (cString.characters.count != 6) {
-            return UIColor.grayColor()
+            return UIColor.gray
         }
         
-        let rString = (cString as NSString).substringToIndex(2)
-        let gString = ((cString as NSString).substringFromIndex(2) as NSString).substringToIndex(2)
-        let bString = ((cString as NSString).substringFromIndex(4) as NSString).substringToIndex(2)
+        let rString = (cString as NSString).substring(to: 2)
+        let gString = ((cString as NSString).substring(from: 2) as NSString).substring(to: 2)
+        let bString = ((cString as NSString).substring(from: 4) as NSString).substring(to: 2)
         
         var r:CUnsignedInt = 0, g:CUnsignedInt = 0, b:CUnsignedInt = 0;
-        NSScanner(string: rString).scanHexInt(&r)
-        NSScanner(string: gString).scanHexInt(&g)
-        NSScanner(string: bString).scanHexInt(&b)
+        Scanner(string: rString).scanHexInt32(&r)
+        Scanner(string: gString).scanHexInt32(&g)
+        Scanner(string: bString).scanHexInt32(&b)
         
         return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(1))
     }

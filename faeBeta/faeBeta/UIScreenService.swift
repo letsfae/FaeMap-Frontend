@@ -10,38 +10,38 @@ import Foundation
 import UIKit
 
 class UIScreenService{
-    private class var activityIndicator : UIActivityIndicatorView{
+    fileprivate class var activityIndicator : UIActivityIndicatorView{
         struct Element
         {
             static var indicator = UIActivityIndicatorView()
 
         }
-        Element.indicator.activityIndicatorViewStyle = .WhiteLarge
+        Element.indicator.activityIndicatorViewStyle = .whiteLarge
         Element.indicator.color = UIColor.faeAppRedColor()
 //        Element.indicator.tintColor = UIColor.faeAppRedColor()
         Element.indicator.hidesWhenStopped = true
-        Element.indicator.center = UIApplication.sharedApplication().keyWindow!.center
+        Element.indicator.center = UIApplication.shared.keyWindow!.center
         return Element.indicator
     }
     
     class func showActivityIndicator()
     {
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             UIScreenService.activityIndicator.startAnimating()
-            UIApplication.sharedApplication().keyWindow!.userInteractionEnabled = false
-            UIApplication.sharedApplication().keyWindow!.addSubview(UIScreenService.activityIndicator)
+            UIApplication.shared.keyWindow!.isUserInteractionEnabled = false
+            UIApplication.shared.keyWindow!.addSubview(UIScreenService.activityIndicator)
         }
     }
     
     class func hideActivityIndicator()
     {
-        dispatch_async(dispatch_get_main_queue()) {
-            UIScreenService.activityIndicator.color = UIColor.clearColor()
+        DispatchQueue.main.async {
+            UIScreenService.activityIndicator.color = UIColor.clear
             UIScreenService.activityIndicator.stopAnimating()
-            UIScreenService.activityIndicator.hidden = true
+            UIScreenService.activityIndicator.isHidden = true
             UIScreenService.activityIndicator.removeFromSuperview()
 
-            UIApplication.sharedApplication().keyWindow!.userInteractionEnabled = true
+            UIApplication.shared.keyWindow!.isUserInteractionEnabled = true
         }
     }
 }

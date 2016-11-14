@@ -17,25 +17,25 @@ class PasswordAgainTextField : UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        rightButton = UIButton(frame: CGRectMake(0, 0, 15, 15))
-        rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+        rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        rightButton.setImage(UIImage(named: "check_eye_close_red")!, for: UIControlState())
         imageName = "check_eye_close_red"
-        self.secureTextEntry = true
+        self.isSecureTextEntry = true
         self.rightView = rightButton
-        rightButton.addTarget(self, action: #selector(PasswordAgainTextField.rightButtonClicked), forControlEvents: UIControlEvents.TouchUpInside)
-        self.clearButtonMode = UITextFieldViewMode.Never
+        rightButton.addTarget(self, action: #selector(PasswordAgainTextField.rightButtonClicked), for: UIControlEvents.touchUpInside)
+        self.clearButtonMode = UITextFieldViewMode.never
         //        self.rightViewMode = UITextFieldViewMode.WhileEditing
     }
     
-    func rightButtonClicked(sender:UIButton)
+    func rightButtonClicked(_ sender:UIButton)
     {
-        self.secureTextEntry = !self.secureTextEntry
+        self.isSecureTextEntry = !self.isSecureTextEntry
         self.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         if(imageName == "check_eye_close_red") {
-            rightButton.setImage(UIImage(named: "check_eye_open_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_open_red")!, for: UIControlState())
             imageName = "check_eye_open_red"
         } else if(imageName == "check_eye_open_red") {
-            rightButton.setImage(UIImage(named: "check_eye_close_red")!, forState: UIControlState.Normal)
+            rightButton.setImage(UIImage(named: "check_eye_close_red")!, for: UIControlState())
             imageName = "check_eye_close_red"
         }
     }

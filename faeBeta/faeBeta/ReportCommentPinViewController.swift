@@ -17,8 +17,8 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
      */
     var reportType: Int = 0
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let colorPlaceHolder = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
     
     var buttonBackToCommentDetail: UIButton!
@@ -29,12 +29,12 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         loadBasicItems()
         addObservers()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         textViewReportContent.becomeFirstResponder()
     }
@@ -45,44 +45,44 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     
     func loadBasicItems() {
         buttonBackToCommentDetail = UIButton()
-        buttonBackToCommentDetail.setImage(UIImage(named: "reportCommentBackToMap"), forState: .Normal)
+        buttonBackToCommentDetail.setImage(UIImage(named: "reportCommentBackToMap"), for: UIControlState())
         self.view.addSubview(buttonBackToCommentDetail)
         self.view.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: buttonBackToCommentDetail)
         self.view.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonBackToCommentDetail)
         buttonBackToCommentDetail.addTarget(self,
                                action: #selector(ReportCommentPinViewController.actionBackToCommentPinDetail(_:)),
-                               forControlEvents: .TouchUpInside)
+                               for: .touchUpInside)
         
-        imageDescription = UIImageView(frame: CGRectMake(0, 72, 361*screenWidthFactor, 54*screenHeightFactor))
+        imageDescription = UIImageView(frame: CGRect(x: 0, y: 72, width: 361*screenWidthFactor, height: 54*screenHeightFactor))
         imageDescription.center.x = screenWidth/2
-        imageDescription.contentMode = .ScaleAspectFit
+        imageDescription.contentMode = .scaleAspectFit
         self.view.addSubview(imageDescription)
         
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreatePinViewController.tapOutsideToDismissKeyboard(_:)))
         self.view.addGestureRecognizer(tapToDismissKeyboard)
         
         let font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        buttonSendReport = UIButton(frame: CGRectMake(0, screenHeight - 176 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        buttonSendReport = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         buttonSendReport.center.x = screenWidth / 2
-        buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: font! ]), forState: .Normal)
+        buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
         buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
-        buttonSendReport.addTarget(self, action: #selector(ReportCommentPinViewController.actionSendReport(_:)), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(buttonSendReport, atIndex: 0)
-        self.view.bringSubviewToFront(buttonSendReport)
+        buttonSendReport.addTarget(self, action: #selector(ReportCommentPinViewController.actionSendReport(_:)), for: .touchUpInside)
+        self.view.insertSubview(buttonSendReport, at: 0)
+        self.view.bringSubview(toFront: buttonSendReport)
         
         textViewReportContent = UITextView()
         textViewReportContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewReportContent.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        textViewReportContent.backgroundColor = UIColor.clearColor()
+        textViewReportContent.backgroundColor = UIColor.clear
         textViewReportContent.tintColor = UIColor.faeAppRedColor()
         textViewReportContent.delegate = self
-        textViewReportContent.scrollEnabled = false
+        textViewReportContent.isScrollEnabled = false
         self.view.addSubview(textViewReportContent)
         self.view.addConstraintsWithFormat("H:[v0(294)]", options: [], views: textViewReportContent)
         self.view.addConstraintsWithFormat("V:|-157-[v0(44)]", options: [], views: textViewReportContent)
-        NSLayoutConstraint(item: textViewReportContent, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        lableTextViewPlaceholder = UILabel(frame: CGRectMake(5, 8, 294, 27))
+        NSLayoutConstraint(item: textViewReportContent, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lableTextViewPlaceholder.textColor = colorPlaceHolder
         if reportType == 0 {
@@ -101,14 +101,14 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         textViewReportContent.addSubview(lableTextViewPlaceholder)
     }
     
-    func actionBackToCommentPinDetail(sender: UIButton) {
+    func actionBackToCommentPinDetail(_ sender: UIButton) {
         textViewReportContent.endEditing(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func actionSendReport(sender: UIButton) {
+    func actionSendReport(_ sender: UIButton) {
         textViewReportContent.endEditing(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func handleTap() {
@@ -116,62 +116,62 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     }
     
     func addObservers() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    func keyboardWillShow(notification:NSNotification) {
+    func keyboardWillShow(_ notification:Notification) {
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.buttonSendReport.frame.origin.y += (self.screenHeight - keyboardFrame.height) - self.buttonSendReport.frame.origin.y - 50 * screenHeightFactor - 14
         })
     }
     
-    func keyboardWillHide(notification:NSNotification) {
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+    func keyboardWillHide(_ notification:Notification) {
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.buttonSendReport.frame.origin.y = self.screenHeight - 30 - 50 * screenHeightFactor
         })
     }
     
-    func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
+    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewReportContent.endEditing(true)
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView == textViewReportContent {
-            let spacing = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            let spacing = CharacterSet.whitespacesAndNewlines
             
-            if textViewReportContent.text.stringByTrimmingCharactersInSet(spacing).isEmpty == false {
-                buttonSendReport.enabled = true
-                lableTextViewPlaceholder.hidden = true
+            if textViewReportContent.text.trimmingCharacters(in: spacing).isEmpty == false {
+                buttonSendReport.isEnabled = true
+                lableTextViewPlaceholder.isHidden = true
                 buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
             }
             else {
-                buttonSendReport.enabled = false
-                lableTextViewPlaceholder.hidden = false
+                buttonSendReport.isEnabled = false
+                lableTextViewPlaceholder.isHidden = false
                 buttonSendReport.backgroundColor = UIColor.faeAppDisabledRedColor()
             }
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
         if numLines <= 8 {
             let fixedWidth = textView.frame.size.width
-            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
             var newFrame = textView.frame
             newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
             textView.frame = newFrame
-            textView.scrollEnabled = false
+            textView.isScrollEnabled = false
         }
         else if numLines > 8 {
-            textView.scrollEnabled = true
+            textView.isScrollEnabled = true
         }
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if textView == textViewReportContent {
             if (text == "\n")  {
                 textViewReportContent.resignFirstResponder()

@@ -11,7 +11,7 @@ import Foundation
 // delegate to find sticker image name from dictionary by the frame of sticker being clicked
 
 protocol findStickerFromDictDelegate {
-    func findStickerName(index : Int)
+    func findStickerName(_ index : Int)
 }
 
 // this class is used to figure out position of all sticker in scroll view. Now the matrix is 5 column and 2 row, you can change formation by changing
@@ -25,7 +25,7 @@ class StickerAlbum {
     var colPerPage : CGFloat = 4
     var stickerName = [[String]]()
     var stickerPos = [CGRect]()
-    let widthPage : CGFloat = UIScreen.mainScreen().bounds.width
+    let widthPage : CGFloat = UIScreen.main.bounds.width
     let heightPage : CGFloat = 195
     let length : CGFloat = 82
     var pageNumber = 0
@@ -37,7 +37,7 @@ class StickerAlbum {
         calculatePos()
     }
     
-    func appendNewImage(name : String) {
+    func appendNewImage(_ name : String) {
         if stickerName.count == 0
             || stickerName[stickerName.count - 1].count == (Int)(rowPerPage * colPerPage) {
             stickerName.append([String]())
@@ -46,7 +46,7 @@ class StickerAlbum {
         pageNumber = stickerName.count
     }
     
-    func attachStickerButton(scrollView : UIScrollView) {
+    func attachStickerButton(_ scrollView : UIScrollView) {
         for page in 0..<pageNumber {
             for row in 0..<Int(rowPerPage) {
                 for col in 0..<Int(colPerPage) {
@@ -58,10 +58,10 @@ class StickerAlbum {
                     let newFrame = CGRect(x: stickerPos[index].origin.x + CGFloat(page) * widthPage, y: stickerPos[index].origin.y, width: stickerPos[index].width, height: stickerPos[index].height)
                     let imageView = UIImageView(frame: newFrame)
                     imageView.image = UIImage(named: stickerName[page][index])
-                    imageView.contentMode = .ScaleAspectFit
+                    imageView.contentMode = .scaleAspectFit
                     let button = UIButton(frame: newFrame)
                     //add function
-                    button.addTarget(self, action: #selector(calculateIndex), forControlEvents: .TouchUpInside)
+                    button.addTarget(self, action: #selector(calculateIndex), for: .touchUpInside)
                     scrollView.addSubview(imageView)
                     scrollView.addSubview(button)
                     imageSet.append(imageView)
@@ -102,7 +102,7 @@ class StickerAlbum {
         }
     }
     
-    @objc func calculateIndex(sender : UIButton) {
+    @objc func calculateIndex(_ sender : UIButton) {
         let original = sender.frame.origin
         let currentPage = (Int)(original.x / widthPage)
         let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)

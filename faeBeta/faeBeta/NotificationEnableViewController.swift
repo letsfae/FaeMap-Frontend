@@ -10,8 +10,8 @@ import UIKit
 
 class NotificationEnableViewController: UIViewController {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeigh = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeigh = UIScreen.main.bounds.height
     //6 plus 414 736
     //6      375 667
     //5      320 568
@@ -29,7 +29,7 @@ class NotificationEnableViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.actionTry()
     }
     func loadGoToSettingButton(){
@@ -37,13 +37,13 @@ class NotificationEnableViewController: UIViewController {
         let buttonTestHeight : CGFloat = 50.0
         //let buttonSubmitHeight = screenHeight * 0.05842391
         
-        buttonTest = UIButton(frame: CGRectMake(30, 100, buttonTestWidth, buttonTestHeight))
+        buttonTest = UIButton(frame: CGRect(x: 30, y: 100, width: buttonTestWidth, height: buttonTestHeight))
         //buttonSubmit = UIButton(frame: CGRectMake(screenWidth/2-172, 498, 344, 43))
-        buttonTest.setTitle("Go to settings to enable notification", forState: .Normal)
-        buttonTest.titleLabel?.textColor = UIColor.blueColor()
+        buttonTest.setTitle("Go to settings to enable notification", for: UIControlState())
+        buttonTest.titleLabel?.textColor = UIColor.blue
         buttonTest.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonTest.layer.cornerRadius = 7
-        buttonTest.addTarget(self, action: #selector(self.openSettings), forControlEvents: .TouchUpInside)
+        buttonTest.addTarget(self, action: #selector(self.openSettings), for: .touchUpInside)
         //        buttonSubmit.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(buttonTest)
     }
@@ -53,30 +53,30 @@ class NotificationEnableViewController: UIViewController {
         let buttonTryAgainHeight : CGFloat = 50.0
         
         
-        buttonTryAgain = UIButton(frame: CGRectMake(30, 300, buttonTryAgainWidth, buttonTryAgainHeight))
+        buttonTryAgain = UIButton(frame: CGRect(x: 30, y: 300, width: buttonTryAgainWidth, height: buttonTryAgainHeight))
         
-        buttonTryAgain.setTitle("Try Again", forState: .Normal)
-        buttonTryAgain.titleLabel?.textColor = UIColor.blueColor()
+        buttonTryAgain.setTitle("Try Again", for: UIControlState())
+        buttonTryAgain.titleLabel?.textColor = UIColor.blue
         buttonTryAgain.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonTryAgain.layer.cornerRadius = 7
-        buttonTryAgain.addTarget(self, action: #selector(NotificationEnableViewController.actionTry), forControlEvents: .TouchUpInside)
+        buttonTryAgain.addTarget(self, action: #selector(NotificationEnableViewController.actionTry), for: .touchUpInside)
         
         self.view.addSubview(buttonTryAgain)
     }
     
     func openSettings() {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     func actionTry(){
         //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("TabBarViewController")as! TabBarViewController
         //        self.presentViewController(vc, animated: true, completion: nil)
-        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-        print(notificationType?.types)
-        if notificationType?.types == UIUserNotificationType.None {
+        let notificationType = UIApplication.shared.currentUserNotificationSettings
+//        print(notificationType?.types)
+        if notificationType?.types == UIUserNotificationType() {
             // waiting
         }
         else{
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     /*

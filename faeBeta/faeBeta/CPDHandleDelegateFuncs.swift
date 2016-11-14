@@ -18,10 +18,10 @@ extension CommentPinViewController: EditCommentPinViewControllerDelegate, Opened
         }
     }
     
-    func animateToCameraFromOpenedPinListView(coordinate: CLLocationCoordinate2D, commentID: Int) {
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, commentID: Int) {
         self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
         self.backJustOnce = true
-        self.subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
+        self.subviewWhite.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.uiviewCommentPinDetail.center.y += screenHeight
         self.commentIDCommentPinDetailView = "\(commentID)"
         if commentIDCommentPinDetailView != "-999" {
@@ -29,11 +29,11 @@ extension CommentPinViewController: EditCommentPinViewControllerDelegate, Opened
         }
     }
     
-    func backFromOpenedPinList(back: Bool) {
+    func backFromOpenedPinList(_ back: Bool) {
         if back {
             backJustOnce = true
-            subviewWhite.frame = CGRectMake(0, 0, screenWidth, 65)
-            UIView.animateWithDuration(0.583, animations:({
+            subviewWhite.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+            UIView.animate(withDuration: 0.583, animations:({
                 self.uiviewCommentPinDetail.center.y += screenHeight
             }), completion: { (done: Bool) in
                 if done {
@@ -43,43 +43,43 @@ extension CommentPinViewController: EditCommentPinViewControllerDelegate, Opened
         }
         if !back {
             self.delegate?.dismissMarkerShadow(true)
-            self.dismissViewControllerAnimated(false, completion: nil)
+            self.dismiss(animated: false, completion: nil)
         }
     }
     
-    func showActionSheetFromCommentPinCell(username: String) {
+    func showActionSheetFromCommentPinCell(_ username: String) {
         self.inputToolbar.contentView.textView.resignFirstResponder()
-        let infoDict: [String: AnyObject] = ["argumentInt": username]
-        touchToReplyTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(CommentPinViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
+        let infoDict: [String: AnyObject] = ["argumentInt": username as AnyObject]
+        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(CommentPinViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
     }
     
-    func cancelTouchToReplyTimerFromCommentPinCell(cancel: Bool) {
+    func cancelTouchToReplyTimerFromCommentPinCell(_ cancel: Bool) {
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
     }
     
-    func showActionSheetWithTimer(timer: NSTimer) {
+    func showActionSheetWithTimer(_ timer: Timer) {
         if let usernameInfo = timer.userInfo as? Dictionary<String, AnyObject> {
             let userN = usernameInfo["argumentInt"] as! String
-            let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .ActionSheet)
+            let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
             menu.view.tintColor = colorFae
-            let writeReply = UIAlertAction(title: "Write a Reply", style: .Default) { (alert: UIAlertAction) in
-                self.inputToolbar.hidden = false
+            let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
+                self.inputToolbar.isHidden = false
                 self.inputToolbar.contentView.textView.text = "@\(userN) "
                 self.inputToolbar.contentView.textView.becomeFirstResponder()
-                self.lableTextViewPlaceholder.hidden = true
+                self.lableTextViewPlaceholder.isHidden = true
             }
-            let report = UIAlertAction(title: "Report", style: .Default) { (alert: UIAlertAction) in
+            let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
                 self.actionReportThisPin(self.buttonReportOnCommentDetail)
             }
-            let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction) in
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
                 
             }
             menu.addAction(writeReply)
             menu.addAction(report)
             menu.addAction(cancel)
-            self.presentViewController(menu, animated: true, completion: nil)
+            self.present(menu, animated: true, completion: nil)
         }
     }
 }

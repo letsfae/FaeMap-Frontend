@@ -9,8 +9,8 @@
 import UIKit
 
 class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     var collectionViewSelf : UICollectionView!
     let tagName = ["Single", "Dating", "LF Friends", "Foodie", "Athlete", "HMU", "AMA", "Student", "Seller", "For Hire", "Cinephile", "Bookworm", "I do Favors", "Services", "Visitor", "Traveller", "Local"]
     var colorSelf = [UIColor]()
@@ -28,13 +28,13 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
 //        let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 15.0
         layout.minimumLineSpacing = 33.0
-        collectionViewSelf = UICollectionView(frame: CGRectMake(0, 132 - 64, screenWidth, screenHeight - 120), collectionViewLayout: layout)
-        collectionViewSelf.backgroundColor = UIColor.clearColor()
+        collectionViewSelf = UICollectionView(frame: CGRect(x: 0, y: 132 - 64, width: screenWidth, height: screenHeight - 120), collectionViewLayout: layout)
+        collectionViewSelf.backgroundColor = UIColor.clear
         collectionViewSelf.delegate = self
         collectionViewSelf.dataSource = self
         collectionViewSelf.allowsMultipleSelection = true
 //        collectionViewSelf.registerNib(UINib(nibName: "TagsCollectionViewCell",bundle: nil), forCellWithReuseIdentifier: cellText)
-        collectionViewSelf.registerClass(TagsCollectionViewCell.self, forCellWithReuseIdentifier: cellText)
+        collectionViewSelf.register(TagsCollectionViewCell.self, forCellWithReuseIdentifier: cellText)
         self.view.addSubview(collectionViewSelf)
         colorSelf.append(colors(255, green: 114, blue: 169))
         colorSelf.append(colors(223, green: 157, blue: 248))
@@ -54,22 +54,22 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
         colorSelf.append(colors(102, green: 160, blue: 228))
         colorSelf.append(colors(122, green: 212, blue: 134))
         
-        buttonSuggest = UIButton(frame: CGRectMake((screenWidth - 300)/2, screenHeight - 80, 300, 50))
+        buttonSuggest = UIButton(frame: CGRect(x: (screenWidth - 300)/2, y: screenHeight - 80, width: 300, height: 50))
 //        buttonSuggest.titleLabel?.text = "+ Suggest New Tags"
-        buttonSuggest.backgroundColor = UIColor.whiteColor()
-        buttonSuggest.setTitle("+ Suggest New Tags", forState: .Normal)
-        buttonSuggest.setTitleColor(colors(249, green: 90, blue: 90), forState: .Normal)
+        buttonSuggest.backgroundColor = UIColor.white
+        buttonSuggest.setTitle("+ Suggest New Tags", for: UIControlState())
+        buttonSuggest.setTitleColor(colors(249, green: 90, blue: 90), for: UIControlState())
         buttonSuggest.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
 //        buttonSuggest.titleLabel?.textColor = colors(249, green: 90, blue: 90)
         buttonSuggest.layer.cornerRadius = 25
         buttonSuggest.layer.borderWidth = 2.0
-        buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).CGColor
-        buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.actionSuggestNewTags(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSuggest.layer.borderColor = colors(249, green: 90, blue: 90).cgColor
+        buttonSuggest.addTarget(self, action: #selector(NameCardTagsViewController.actionSuggestNewTags(_:)), for: UIControlEvents.touchUpInside)
         self.view.addSubview(buttonSuggest)
-        self.view.bringSubviewToFront(buttonSuggest)
+        self.view.bringSubview(toFront: buttonSuggest)
         
 //        buttonSave = UIBarButtonItem(frame: CGRectMake(screenWidth - 44 - 14, 32 - 64, 44, 27))
-        buttonSave = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NameCardTagsViewController.saveTags))
+        buttonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(NameCardTagsViewController.saveTags))
         
         //buttonSave = UIButton(frame: CGRectMake(0,0,44,27))
         //buttonSave.addTarget(self, action: "saveTags", forControlEvents: .TouchUpInside)
@@ -78,32 +78,32 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
 //        self.view.addSubview(buttonSave)
         self.navigationItem.rightBarButtonItem = buttonSave
 
-        labelTitle = UILabel(frame: CGRectMake((screenWidth - 173) / 2, 39, 174, 64))
+        labelTitle = UILabel(frame: CGRect(x: (screenWidth - 173) / 2, y: 39, width: 174, height: 64))
         labelTitle.text = "Choose three Tags that represent you!"
         labelTitle.numberOfLines = 0
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelTitle.textColor = getColor( 89,green: 89, blue: 89)
         self.view.addSubview(labelTitle)
     }
-    func getColor(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
+    func getColor(_ red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationController?.isNavigationBarHidden = false
         //self.navigationController?.navigationBar.backgroundColor = UIColor.whiteColor()
-        self.navigationController?.navigationBar.translucent = true//the navigationvar will disapear
+        self.navigationController?.navigationBar.isTranslucent = true//the navigationvar will disapear
     }
     func navBarLeftButtonTapped()
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     func saveTags() {
         if arrIndex.count != 0 {
@@ -118,11 +118,11 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
             print(str)
             let user = FaeUser()
             user.whereKey("tag_ids", value: str)// MARK: bug here sometime will happen why?
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
-                print (status)
-                print (objects)
+            user.updateNameCard { (status:Int, objects:Any?) in
+//                print (status)
+//                print (objects)
                 if status / 100 == 2 {
-                    self.navigationController?.popViewControllerAnimated(true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
                 else {
 
@@ -130,51 +130,51 @@ class NameCardTagsViewController: UIViewController, UICollectionViewDelegate, UI
             }
         }
     }
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tagName.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: indexPath)as! TagsCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellText, for: indexPath)as! TagsCollectionViewCell
         cell.colorSelf = colorSelf[indexPath.row]
 //        cell.colorSelf = UIColor.blueColor()
         cell.labelTitle.text = tagName[indexPath.row]
         return cell
     }
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(arrIndex)
         if arrIndex.count >= 3 {
             let index = arrIndex.last
             arrIndex.removeLast()
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: NSIndexPath(forItem: index!, inSection: 0))as! TagsCollectionViewCell
-            collectionView.deselectItemAtIndexPath(NSIndexPath(forItem: index!, inSection: 0), animated: true)
-            cell.selected = false
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellText, for: IndexPath(item: index!, section: 0))as! TagsCollectionViewCell
+            collectionView.deselectItem(at: IndexPath(item: index!, section: 0), animated: true)
+            cell.isSelected = false
 //            arrIndex.append(indexPath.row)
         }
         arrIndex.append(indexPath.row)
 
     }
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         for i in 0 ..< arrIndex.count {
             if arrIndex[i] == indexPath.row {
-                arrIndex.removeAtIndex(i)
+                arrIndex.remove(at: i)
 //                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellText, forIndexPath: NSIndexPath(forItem: index!, inSection: 0))as! TagsCollectionViewCell
 
                 break;
             }
         }
     }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         cellSize.labelTitle.text = tagName[indexPath.row]
         return cellSize.newContentSize()
     }
-    func colors(red: Float, green: Float, blue: Float) -> UIColor {
+    func colors(_ red: Float, green: Float, blue: Float) -> UIColor {
         return UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
     }
-    func actionSuggestNewTags(sender: UIButton) {
+    func actionSuggestNewTags(_ sender: UIButton) {
         let suggestNewTagsVC = ReportCommentPinViewController()
         suggestNewTagsVC.reportType = 2
-        self.presentViewController(suggestNewTagsVC, animated: true, completion: nil)
+        self.present(suggestNewTagsVC, animated: true, completion: nil)
     }
     /*
     // MARK: - Navigation

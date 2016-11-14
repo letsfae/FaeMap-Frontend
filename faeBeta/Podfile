@@ -1,11 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.2'
+platform :ios, ‘9.0’
 use_frameworks!
 
 target 'faeBeta' do
-	pod 'Alamofire', '~> 3.4'
-    pod 'SwiftyJSON', '~> 2.3'
-	pod 'SDWebImage', '~>3.7'
+	pod 'Alamofire’, '~> 4.0'
+    	pod 'SwiftyJSON'
+	pod 'SDWebImage', '~>3.8’
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
 	pod 'Firebase/Auth'

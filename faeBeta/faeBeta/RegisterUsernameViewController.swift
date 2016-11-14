@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class RegisterUsernameViewController: RegisterBaseViewController {
     
@@ -33,7 +57,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         tableView.dataSource = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         usernameTableViewCell.makeFirstResponder()
     }
@@ -42,7 +66,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(false)
+        _ = navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
@@ -50,21 +74,21 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterPassword() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterPasswordViewController") as! RegisterPasswordViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterPasswordViewController") as! RegisterPasswordViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func getErrorView() -> UIView {
-        let errorView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 40))
+        let errorView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
         
-        let errorLabel = UILabel(frame: CGRectMake(0, 0, view.frame.size.width, 40))
+        let errorLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
         errorLabel.textColor = UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
         errorLabel.font = UIFont(name: "AvenirNext-Medium", size: 13)
         errorLabel.numberOfLines = 2
-        errorLabel.textAlignment = .Center
+        errorLabel.textAlignment = .center
         errorLabel.text = "This Username is currently Unavailable. \n Choose another One!"
-        errorLabel.hidden = true
+        errorLabel.isHidden = true
         
         usernameExistLabel = errorLabel
         errorView.addSubview(errorLabel)
@@ -77,7 +101,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         var isValid = false
         
         let userNameRegEx = ".*[^A-Za-z0-9_].*"
-        let range = username!.rangeOfString(userNameRegEx, options:.RegularExpressionSearch)
+        let range = username!.range(of: userNameRegEx, options:.regularExpression)
         let result = range != nil ? false : true
         
         isValid = username != nil && username?.characters.count > 2 && result
@@ -90,16 +114,16 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         faeUser.whereKey("user_name", value: username!)
         showActivityIndicator()
         faeUser.checkUserExistence { (status, message) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status/100 == 2 {
-                    let value = message?.valueForKey("existence")
+                    let value = (message as AnyObject).value(forKey: "existence")
                     if (value != nil) {
                         if value! as! Int == 0 {
                             self.jumpToRegisterPassword()
-                            self.usernameExistLabel.hidden = true
+                            self.usernameExistLabel.isHidden = true
                         } else {
-                            self.usernameExistLabel.hidden = false
+                            self.usernameExistLabel.isHidden = false
                         }
                     }
                 }
@@ -109,9 +133,9 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     func registerCell() {
         
-        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
         
     }
     
@@ -127,42 +151,42 @@ class RegisterUsernameViewController: RegisterBaseViewController {
 
 extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Choose a Unique Username \nto Represent You!")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
             cell.setSubTitleLabelText("Letters & Numbers & Underscore Only")
             return cell
         case 2:
             if usernameTableViewCell == nil {
-                usernameTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                usernameTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 usernameTableViewCell.setPlaceholderLabelText("NewUsername", indexPath: indexPath)
                 usernameTableViewCell.setTextFieldForUsernameConfiguration()
                 usernameTableViewCell.isUsernameField = true
                 usernameTableViewCell.setCharacterLimit(20)
                 usernameTableViewCell.setLeftPlaceHolderDisplay(true)
                 usernameTableViewCell.delegate = self
-                usernameTableViewCell.textfield.keyboardType = .NamePhonePad
+                usernameTableViewCell.textfield.keyboardType = .namePhonePad
 
             }
             return usernameTableViewCell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
             return 59
@@ -178,11 +202,11 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
 
 extension RegisterUsernameViewController: RegisterTextfieldProtocol {
     
-    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
+    func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
     }
     
-    func textFieldShouldReturn(indexPath: NSIndexPath) {
+    func textFieldShouldReturn(_ indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             usernameTableViewCell.endAsResponder()
@@ -191,11 +215,11 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
         }
     }
     
-    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
+    func textFieldDidChange(_ text: String, indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             username = text
-            self.usernameExistLabel.hidden = true
+            self.usernameExistLabel.isHidden = true
             break
         default: break
         }

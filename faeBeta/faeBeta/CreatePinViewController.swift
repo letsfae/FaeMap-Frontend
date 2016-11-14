@@ -11,15 +11,15 @@ import SwiftyJSON
 import CoreLocation
 
 protocol CreatePinViewControllerDelegate {
-    func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func sendCommentGeoInfo(_ commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
 }
 
 class CreatePinViewController: UIViewController, UITextViewDelegate {
     
     var delegate: CreatePinViewControllerDelegate?
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     // MARK: -- Blur View Pin Buttons and Labels
     var uiviewPinSelections: UIView!
@@ -73,46 +73,46 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.clearColor()
+        self.view.backgroundColor = UIColor.clear
         loadBlurAndPinSelection()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        blurViewMap.hidden = false
-        UIView.animateWithDuration(0.25, delay: 0, options: .CurveEaseOut, animations: {
+        blurViewMap.isHidden = false
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
             self.blurViewMap.alpha = 1.0
             }, completion: nil)
         actionCreateCommentPin(buttonComment)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locManager.location
         currentLatitude = currentLocation.coordinate.latitude
         currentLongitude = currentLocation.coordinate.longitude
     }
     
     func loadBlurAndPinSelection() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         blurViewMap = UIVisualEffectView(effect: blurEffect)
-        blurViewMap.frame = CGRectMake(0, 0, screenWidth, screenHeight)
+        blurViewMap.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         //        blurViewMap.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.1)
         //        blurViewMap.layer.opacity = 0.6
         self.view.addSubview(blurViewMap)
         loadPinSelections()
         loadCreateCommentPinView()
-        uiviewCreateCommentPin.hidden = false
+        uiviewCreateCommentPin.isHidden = false
         uiviewCreateCommentPin.alpha = 0.0
         blurViewMap.alpha = 0.0
-        blurViewMap.hidden = true
+        blurViewMap.isHidden = true
     }
     
     // MARK: -- Pins Creating Selections View
@@ -141,7 +141,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         
         buttonComment.addTarget(self,
                                 action: #selector(CreatePinViewController.actionCreateCommentPin(_:)),
-                                forControlEvents: .TouchUpInside)
+                                for: .touchUpInside)
         
         // initial position of labels for cool animation
         let labelCenterX_1: CGFloat = 31/414 * screenWidth
@@ -167,51 +167,51 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         let labelTitleW: CGFloat = 145/414 * screenWidth
         let labelTitleH: CGFloat = 41/414 * screenWidth
         let labelTitleF: CGFloat = 30/414 * screenWidth
-        labelSubmitTitle = UILabel(frame: CGRectMake(labelTitleX, labelTitleY, labelTitleW, labelTitleH))
+        labelSubmitTitle = UILabel(frame: CGRect(x: labelTitleX, y: labelTitleY, width: labelTitleW, height: labelTitleH))
         labelSubmitTitle.alpha = 0.0
         labelSubmitTitle.font = UIFont(name: "AvenirNext-DemiBold", size: labelTitleF)
         labelSubmitTitle.text = "Create Pin"
-        labelSubmitTitle.textAlignment = .Center
-        labelSubmitTitle.textColor = UIColor.whiteColor()
+        labelSubmitTitle.textAlignment = .center
+        labelSubmitTitle.textColor = UIColor.white
         uiviewPinSelections.addSubview(labelSubmitTitle)
         
-        buttonClosePinBlurView = UIButton(frame: CGRectMake(0, screenHeight, screenWidth, 65))
+        buttonClosePinBlurView = UIButton(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 65))
         buttonClosePinBlurView.addTarget(self,
                                          action: #selector(CreatePinViewController.actionCloseSubmitPins(_:)),
-                                         forControlEvents: .TouchUpInside)
+                                         for: .touchUpInside)
         buttonClosePinBlurView.alpha = 0.0
         buttonClosePinBlurView.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
-        buttonClosePinBlurView.setTitle("Close", forState: .Highlighted)
-        buttonClosePinBlurView.setTitle("Close", forState: .Normal)
-        buttonClosePinBlurView.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        buttonClosePinBlurView.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        buttonClosePinBlurView.setTitle("Close", for: .highlighted)
+        buttonClosePinBlurView.setTitle("Close", for: UIControlState())
+        buttonClosePinBlurView.setTitleColor(UIColor.lightGray, for: .highlighted)
+        buttonClosePinBlurView.setTitleColor(UIColor.white, for: UIControlState())
         buttonClosePinBlurView.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         uiviewPinSelections.addSubview(buttonClosePinBlurView)
-        uiviewPinSelections.hidden = true
+        uiviewPinSelections.isHidden = true
         
         blurViewMap.addSubview(uiviewPinSelections)
     }
     
-    func actionCloseSubmitPins(sender: UIButton!) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func actionCloseSubmitPins(_ sender: UIButton!) {
+        self.dismiss(animated: false, completion: nil)
     }
     
-    func createSubmitButton(x: CGFloat, y: CGFloat, picName: String) -> UIButton {
-        let button = UIButton(frame: CGRectMake(x, y, 0, 0))
-        button.setImage(UIImage(named: picName), forState: .Normal)
+    func createSubmitButton(_ x: CGFloat, y: CGFloat, picName: String) -> UIButton {
+        let button = UIButton(frame: CGRect(x: x, y: y, width: 0, height: 0))
+        button.setImage(UIImage(named: picName), for: UIControlState())
         uiviewPinSelections.addSubview(button)
         return button
     }
     
-    func createSubmitLabel(x: CGFloat, y: CGFloat, title: String) -> UILabel {
+    func createSubmitLabel(_ x: CGFloat, y: CGFloat, title: String) -> UILabel {
         let width: CGFloat = 95/414 * screenWidth
         let height: CGFloat = 27/414 * screenWidth
         let fontSize: CGFloat = 20/414 * screenWidth
-        let label = UILabel(frame: CGRectMake(x, y, width, height))
+        let label = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
         label.text = title
         label.font = UIFont(name: "AvenirNext-DemiBold", size: fontSize)
-        label.textAlignment = .Center
-        label.textColor = UIColor.whiteColor()
+        label.textAlignment = .center
+        label.textColor = UIColor.white
         label.alpha = 0.0
         uiviewPinSelections.addSubview(label)
         return label
@@ -221,18 +221,18 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         uiviewCreateCommentPin = UIView(frame: blurViewMap.bounds)
         blurViewMap.addSubview(uiviewCreateCommentPin)
         
-        textViewForCommentPin = UITextView(frame: CGRectMake(60, 198, 294, 27))
+        textViewForCommentPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
         textViewForCommentPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        textViewForCommentPin.textColor = UIColor.whiteColor()
-        textViewForCommentPin.backgroundColor = UIColor.clearColor()
-        textViewForCommentPin.tintColor = UIColor.whiteColor()
+        textViewForCommentPin.textColor = UIColor.white
+        textViewForCommentPin.backgroundColor = UIColor.clear
+        textViewForCommentPin.tintColor = UIColor.white
         textViewForCommentPin.delegate = self
-        textViewForCommentPin.scrollEnabled = false
+        textViewForCommentPin.isScrollEnabled = false
         uiviewCreateCommentPin.addSubview(textViewForCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: textViewForCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-198-[v0(44)]", options: [], views: textViewForCommentPin)
-        NSLayoutConstraint(item: textViewForCommentPin, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        lableTextViewPlaceholder = UILabel(frame: CGRectMake(5, 8, 171, 27))
+        NSLayoutConstraint(item: textViewForCommentPin, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 171, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lableTextViewPlaceholder.textColor = colorPlaceHolder
         lableTextViewPlaceholder.text = "Type a comment..."
@@ -241,19 +241,19 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreatePinViewController.tapOutsideToDismissKeyboard(_:)))
         uiviewCreateCommentPin.addGestureRecognizer(tapToDismissKeyboard)
         
-        let imageCreateCommentPin = UIImageView(frame: CGRectMake(166, 41, 83, 90))
+        let imageCreateCommentPin = UIImageView(frame: CGRect(x: 166, y: 41, width: 83, height: 90))
         imageCreateCommentPin.image = UIImage(named: "comment_pin_main_create")
         uiviewCreateCommentPin.addSubview(imageCreateCommentPin)
-        let labelCreateCommentPinTitle = UILabel(frame: CGRectMake(109, 139, 196, 27))
+        let labelCreateCommentPinTitle = UILabel(frame: CGRect(x: 109, y: 139, width: 196, height: 27))
         labelCreateCommentPinTitle.text = "Create Comment Pin"
         labelCreateCommentPinTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        labelCreateCommentPinTitle.textAlignment = .Center
-        labelCreateCommentPinTitle.textColor = UIColor.whiteColor()
+        labelCreateCommentPinTitle.textAlignment = .center
+        labelCreateCommentPinTitle.textColor = UIColor.white
         uiviewCreateCommentPin.addSubview(labelCreateCommentPinTitle)
 //        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(83)][v1(196)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-41-[v0(90)]-8-[v1(27)]", options: [], views: imageCreateCommentPin, labelCreateCommentPinTitle)
-        NSLayoutConstraint(item: imageCreateCommentPin, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
-        NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        NSLayoutConstraint(item: imageCreateCommentPin, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         /*
         // Hide this button for 11.01 Dev
@@ -272,15 +272,15 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         /////////////////////////////////
         */
         
-        let buttonCloseCreateComment = UIButton(frame: CGRectMake(381, 36, 18, 18))
-        buttonCloseCreateComment.setImage(UIImage(named: "comment_main_close"), forState: .Normal)
+        let buttonCloseCreateComment = UIButton(frame: CGRect(x: 381, y: 36, width: 18, height: 18))
+        buttonCloseCreateComment.setImage(UIImage(named: "comment_main_close"), for: UIControlState())
         uiviewCreateCommentPin.addSubview(buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(18)]", options: [], views: buttonCloseCreateComment)
         
-        let buttonCloseCreateCommentLargerCover = UIButton(frame: CGRectMake(345, 36, 54, 54))
+        let buttonCloseCreateCommentLargerCover = UIButton(frame: CGRect(x: 345, y: 36, width: 54, height: 54))
         uiviewCreateCommentPin.addSubview(buttonCloseCreateCommentLargerCover)
-        buttonCloseCreateCommentLargerCover.addTarget(self, action: #selector(CreatePinViewController.actionCloseSubmitPins(_:)), forControlEvents: .TouchUpInside)
+        buttonCloseCreateCommentLargerCover.addTarget(self, action: #selector(CreatePinViewController.actionCloseSubmitPins(_:)), for: .touchUpInside)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(54)]-15-|", options: [], views: buttonCloseCreateCommentLargerCover)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-36-[v0(54)]", options: [], views: buttonCloseCreateCommentLargerCover)
         
@@ -288,7 +288,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         uiviewCreateCommentPin.addSubview(uiviewSelectLocation)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(276)]", options: [], views: uiviewSelectLocation)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(29)]-155-|", options: [], views: uiviewSelectLocation)
-        NSLayoutConstraint(item: uiviewSelectLocation, attribute: .CenterX, relatedBy: .Equal, toItem: uiviewCreateCommentPin, attribute: .CenterX, multiplier: 1.0, constant: 0).active = true
+        NSLayoutConstraint(item: uiviewSelectLocation, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         let imageSelectLocation_1 = UIImageView()
         imageSelectLocation_1.image = UIImage(named: "pin_select_location_1")
@@ -305,68 +305,68 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         labelSelectLocationContent = UILabel()
         labelSelectLocationContent.text = "Current Location"
         labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelSelectLocationContent.textAlignment = .Left
-        labelSelectLocationContent.textColor = UIColor.whiteColor()
+        labelSelectLocationContent.textAlignment = .left
+        labelSelectLocationContent.textColor = UIColor.white
         uiviewSelectLocation.addSubview(labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
-        buttonSelectLocation.addTarget(self, action: #selector(CreatePinViewController.actionSelectLocation(_:)), forControlEvents: .TouchUpInside)
+        buttonSelectLocation.addTarget(self, action: #selector(CreatePinViewController.actionSelectLocation(_:)), for: .touchUpInside)
         uiviewSelectLocation.addConstraintsWithFormat("H:[v0(276)]-0-|", options: [], views: buttonSelectLocation)
         uiviewSelectLocation.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonSelectLocation)
         
         buttonCommentSubmit = UIButton()
-        buttonCommentSubmit.setTitle("Submit!", forState: .Normal)
-        buttonCommentSubmit.setTitle("Submit!", forState: .Highlighted)
-        buttonCommentSubmit.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        buttonCommentSubmit.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        buttonCommentSubmit.setTitle("Submit!", for: UIControlState())
+        buttonCommentSubmit.setTitle("Submit!", for: .highlighted)
+        buttonCommentSubmit.setTitleColor(UIColor.white, for: UIControlState())
+        buttonCommentSubmit.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonCommentSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+        buttonCommentSubmit.backgroundColor = UIColor.lightGray
         uiviewCreateCommentPin.addSubview(buttonCommentSubmit)
-        buttonCommentSubmit.addTarget(self, action: #selector(CreatePinViewController.actionSubmitComment(_:)), forControlEvents: .TouchUpInside)
+        buttonCommentSubmit.addTarget(self, action: #selector(CreatePinViewController.actionSubmitComment(_:)), for: .touchUpInside)
         blurViewMap.addSubview(uiviewCreateCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonCommentSubmit)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonCommentSubmit)
     }
     
-    func tapOutsideToDismissKeyboard(sender: UITapGestureRecognizer) {
+    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewForCommentPin.endEditing(true)
         textViewForCommentPin.resignFirstResponder()
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView == textViewForCommentPin {
-            let spacing = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            let spacing = CharacterSet.whitespacesAndNewlines
             
-            if textViewForCommentPin.text.stringByTrimmingCharactersInSet(spacing).isEmpty == false {
-                buttonCommentSubmit.enabled = true
-                lableTextViewPlaceholder.hidden = true
+            if textViewForCommentPin.text.trimmingCharacters(in: spacing).isEmpty == false {
+                buttonCommentSubmit.isEnabled = true
+                lableTextViewPlaceholder.isHidden = true
                 buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1.0)
             }
             else {
-                buttonCommentSubmit.enabled = false
-                lableTextViewPlaceholder.hidden = false
-                buttonCommentSubmit.backgroundColor = UIColor.lightGrayColor()
+                buttonCommentSubmit.isEnabled = false
+                lableTextViewPlaceholder.isHidden = false
+                buttonCommentSubmit.backgroundColor = UIColor.lightGray
             }
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
         if numLines <= 8 {
             let fixedWidth = textView.frame.size.width
-            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
             var newFrame = textView.frame
             newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
             textView.frame = newFrame
-            textView.scrollEnabled = false
+            textView.isScrollEnabled = false
         }
         else if numLines > 8 {
-            textView.scrollEnabled = true
+            textView.isScrollEnabled = true
         }
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if textView == textViewForCommentPin {
             if (text == "\n")  {
                 textViewForCommentPin.resignFirstResponder()
@@ -378,8 +378,8 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     }
 
     // It is not currently use for 11.01's DEV
-    func actionCreateCommentPin(sender: UIButton!) {
-        UIView.animateWithDuration(0.4, delay: 0, options: .TransitionFlipFromBottom, animations: ({
+    func actionCreateCommentPin(_ sender: UIButton!) {
+        UIView.animate(withDuration: 0.4, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
             self.uiviewCreateCommentPin.alpha = 1.0
         }), completion: nil)
@@ -387,7 +387,7 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     }
     ///////////////////////////////////////////
     
-    func actionSubmitComment(sender: UIButton) {
+    func actionSubmitComment(_ sender: UIButton) {
         let postSingleComment = FaeMap()
 
         var submitLatitude = selectedLatitude
@@ -410,19 +410,19 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
         postSingleComment.whereKey("interaction_radius", value: "99999999")
         postSingleComment.whereKey("duration", value: "180")
         
-        postSingleComment.postComment{(status: Int, message: AnyObject?) in
-            if let getMessage = message {
+        postSingleComment.postComment{(status: Int, message: Any?) in
+            if let getMessage = message as? NSDictionary{
                 print("Have Post Comment")
                 if let getMessageID = getMessage["comment_id"] {
                     let getJustPostedComment = FaeMap()
-                    getJustPostedComment.getComment("\(getMessageID!)"){(status: Int, message: AnyObject?) in
+                    getJustPostedComment.getComment("\(getMessageID)"){(status: Int, message: Any?) in
                         print("Have got comment_id of this posted comment")
-                        let latDouble = Double(submitLatitude)
-                        let longDouble = Double(submitLongitude)
+                        let latDouble = Double(submitLatitude!)
+                        let longDouble = Double(submitLongitude!)
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
-                        self.delegate?.sendCommentGeoInfo("\(getMessageID!)", latitude: lat, longitude: long)
-                        self.dismissViewControllerAnimated(false, completion: nil)
+                        self.delegate?.sendCommentGeoInfo("\(getMessageID)", latitude: lat, longitude: long)
+                        self.dismiss(animated: false, completion: nil)
                     }
                 }
                 else {

@@ -17,8 +17,8 @@ class MoreVisibleTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        switchInvisible.transform = CGAffineTransformMakeScale(0.74, 0.74)
-        switchInvisible.hidden = true
+        switchInvisible.transform = CGAffineTransform(scaleX: 0.74, y: 0.74)
+        switchInvisible.isHidden = true
         switchInvisible.onTintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelTitle.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
@@ -26,7 +26,7 @@ class MoreVisibleTableViewCell: UITableViewCell {
         // default hidden
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

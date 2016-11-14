@@ -14,7 +14,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == tableviewMore {
             return 1
         }
@@ -24,7 +24,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView == self.mapChatTable) {
             return 10
         }
@@ -40,18 +40,18 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.mapChatTable {
-            let cell = tableView.dequeueReusableCellWithIdentifier("mapChatTableCell", forIndexPath: indexPath) as! MapChatTableCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mapChatTableCell", for: indexPath) as! MapChatTableCell
+            cell.selectionStyle = .none
             cell.layoutMargins = UIEdgeInsetsMake(0, 84, 0, 0)
             return cell
         }
         else if tableView == tableviewMore {
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellTableViewMore, forIndexPath: indexPath)as! MoreVisibleTableViewCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellTableViewMore, for: indexPath)as! MoreVisibleTableViewCell
+            cell.selectionStyle = .none
             if indexPath.row == 0 {
-                cell.switchInvisible.hidden = false
+                cell.switchInvisible.isHidden = false
                 let checkUserStatus = self.getUserStatus()
                 print("DEBUG getUserStatus")
                 print(checkUserStatus)
@@ -60,7 +60,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 cell.labelTitle.text = "Go Invisible"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell0")
-                cell.switchInvisible.addTarget(self, action: #selector(self.switchToInvisibleOrOnline(_:)), forControlEvents: .ValueChanged)
+                cell.switchInvisible.addTarget(self, action: #selector(self.switchToInvisibleOrOnline(_:)), for: .valueChanged)
             } else if indexPath.row == 1 {
                 cell.labelTitle.text = "Mood Avatar"
                 cell.imageViewTitle.image = UIImage(named: "tableViewMoreCell1")
@@ -92,7 +92,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == tableviewMore {
             if indexPath.row == 1 {
 //                animationMoreHide(nil)
@@ -100,7 +100,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
             }
             if indexPath.row == 2 {
                 let user = FaeUser()
-                user.logOut{ (status:Int?, message: AnyObject?) in
+                user.logOut{ (status:Int?, message: Any?) in
                     if ( status! / 100 == 2 ){
                         //success
                         self.animationMoreHide(UIButton())
@@ -128,7 +128,7 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.mapChatTable {
             return 75.0
         }

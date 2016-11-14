@@ -11,15 +11,15 @@ import GoogleMaps
 
 protocol MainScreenSearchViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
-    func animateToCameraFromMainScreenSearch(coordinate: CLLocationCoordinate2D)
+    func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D)
 }
 
 class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
     var delegate: MainScreenSearchViewControllerDelegate?
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     let fontColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
     
@@ -50,13 +50,13 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     var placeholder = [GMSAutocompletePrediction]()
     
     var resultTableWidth: CGFloat {
-        if UIScreen.mainScreen().bounds.width == 414 { // 5.5
+        if UIScreen.main.bounds.width == 414 { // 5.5
             return 398
         }
-        else if UIScreen.mainScreen().bounds.width == 320 { // 4.0
+        else if UIScreen.main.bounds.width == 320 { // 4.0
             return 308
         }
-        else if UIScreen.mainScreen().bounds.width == 375 { // 4.7
+        else if UIScreen.main.bounds.width == 375 { // 4.7
             return 360.5
         }
         return 308
@@ -70,9 +70,9 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         loadCustomSearchController()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animateWithDuration(0.25, animations: ({
+        UIView.animate(withDuration: 0.25, animations: ({
             self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
             self.blurViewMainScreenSearch.alpha = 1.0
         }), completion: { (done: Bool) in
@@ -87,30 +87,30 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func loadBlurView() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         blurViewMainScreenSearch = UIVisualEffectView(effect: blurEffect)
-        blurViewMainScreenSearch.frame = CGRectMake(0, 0, screenWidth, screenHeight)
+        blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         blurViewMainScreenSearch.alpha = 0.0
         self.view.addSubview(blurViewMainScreenSearch)
     }
     
     func loadFunctionButtons() {
-        searchBarSubview = UIView(frame: CGRectMake(0, 0, screenWidth, 64))
+        searchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
         searchBarSubview.layer.zPosition = 1
         self.view.addSubview(searchBarSubview)
         self.searchBarSubview.center.y -= self.searchBarSubview.frame.size.height
-        let backSubviewButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.searchBarSubview.addSubview(backSubviewButton)
-        backSubviewButton.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
+        backSubviewButton.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
         backSubviewButton.layer.zPosition = 0
         
-        let viewToHideLeftSideSearchBar = UIView(frame: CGRectMake(0, 0, 50, 64))
-        viewToHideLeftSideSearchBar.backgroundColor = UIColor.whiteColor()
+        let viewToHideLeftSideSearchBar = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 64))
+        viewToHideLeftSideSearchBar.backgroundColor = UIColor.white
         self.searchBarSubview.addSubview(viewToHideLeftSideSearchBar)
         viewToHideLeftSideSearchBar.layer.zPosition = 2
         
         let viewToHideRightSideSearchBar = UIView()
-        viewToHideRightSideSearchBar.backgroundColor = UIColor.whiteColor()
+        viewToHideRightSideSearchBar.backgroundColor = UIColor.white
         self.searchBarSubview.addSubview(viewToHideRightSideSearchBar)
         viewToHideRightSideSearchBar.layer.zPosition = 2
         self.searchBarSubview.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
@@ -119,56 +119,56 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func loadCustomSearchController() {
         customSearchController = CustomSearchController(searchResultsController: self,
-                                                        searchBarFrame: CGRectMake(18, 24, resultTableWidth, 36),
+                                                        searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
                                                         searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
                                                         searchBarTextColor: fontColor,
-                                                        searchBarTintColor: UIColor.whiteColor())
+                                                        searchBarTintColor: UIColor.white)
         customSearchController.customSearchBar.placeholder = "Search Fae Map                                         "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.whiteColor().CGColor
+        customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
         customSearchController.customSearchBar.tintColor = colorFae
         
         searchBarSubview.addSubview(customSearchController.customSearchBar)
-        searchBarSubview.backgroundColor = UIColor.whiteColor()
+        searchBarSubview.backgroundColor = UIColor.white
         
-        searchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
+        searchBarSubview.layer.borderColor = UIColor.white.cgColor
         searchBarSubview.layer.borderWidth = 1.0
         
-        let buttonBackToFaeMap = UIButton(frame: CGRectMake(0, 32, 40.5, 18))
-        buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), forState: .Normal)
+        let buttonBackToFaeMap = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
+        buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
         self.searchBarSubview.addSubview(buttonBackToFaeMap)
-        buttonBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), forControlEvents: .TouchUpInside)
+        buttonBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
         buttonBackToFaeMap.layer.zPosition = 3
         
         buttonClearSearchBar = UIButton()
-        buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), forState: .Normal)
+        buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())
         self.searchBarSubview.addSubview(buttonClearSearchBar)
         buttonClearSearchBar.addTarget(self,
                                        action: #selector(MainScreenSearchViewController.actionClearSearchBar(_:)),
-                                       forControlEvents: .TouchUpInside)
+                                       for: .touchUpInside)
         buttonClearSearchBar.layer.zPosition = 3
         self.searchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
         self.searchBarSubview.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonClearSearchBar)
-        buttonClearSearchBar.hidden = true
+        buttonClearSearchBar.isHidden = true
         
-        let uiviewCommentPinUnderLine = UIView(frame: CGRectMake(0, 63, screenWidth, 1))
+        let uiviewCommentPinUnderLine = UIView(frame: CGRect(x: 0, y: 63, width: screenWidth, height: 1))
         uiviewCommentPinUnderLine.layer.borderWidth = 1
-        uiviewCommentPinUnderLine.layer.borderColor = UIColor(red: 196/255, green: 195/255, blue: 200/255, alpha: 1.0).CGColor
+        uiviewCommentPinUnderLine.layer.borderColor = UIColor(red: 196/255, green: 195/255, blue: 200/255, alpha: 1.0).cgColor
         uiviewCommentPinUnderLine.layer.zPosition = 4
         self.searchBarSubview.addSubview(uiviewCommentPinUnderLine)
     }
     
-    func actionDimissSearchBar(sender: UIButton) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func actionDimissSearchBar(_ sender: UIButton) {
+        self.dismiss(animated: false, completion: nil)
     }
     
-    func actionClearSearchBar(sender: UIButton) {
+    func actionClearSearchBar(_ sender: UIButton) {
         customSearchController.customSearchBar.text = ""
     }
     
     // MARK: UISearchResultsUpdating delegate function
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         tblSearchResults.reloadData()
     }
     
@@ -193,7 +193,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
                         self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
-                        self.dismissViewControllerAnimated(false, completion: nil)
+                        self.dismiss(animated: false, completion: nil)
                     }
                 })
             })
@@ -209,13 +209,13 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         tblSearchResults.reloadData()
     }
     
-    func didChangeSearchText(searchText: String) {
+    func didChangeSearchText(_ searchText: String) {
         if(searchText != "") {
-            buttonClearSearchBar.hidden = false
+            buttonClearSearchBar.isHidden = false
             let placeClient = GMSPlacesClient()
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
-                (results, error : NSError?) -> Void in
-                if(error != nil) {
+                (results, error : Error?) -> Void in
+                if let error = error{
                     print(error)
                 }
                 self.placeholder.removeAll()
@@ -234,7 +234,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
             }
         }
         else {
-            buttonClearSearchBar.hidden = true
+            buttonClearSearchBar.isHidden = true
             self.placeholder.removeAll()
             searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()
@@ -242,38 +242,38 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func searchBarTableHideAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 0)
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 0)
+            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 0)
         }), completion: nil)
     }
     
     func searchBarTableShowAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, self.resultTableWidth, 300*screenWidthFactor)
-            self.uiviewTableSubview.frame = CGRectMake(8, 76, self.resultTableWidth, 300*screenWidthFactor)
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 300*screenWidthFactor)
+            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 300*screenWidthFactor)
         }), completion: nil)
     }
     
     // MARK: TableView Initialize
     
     func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(8, 76, resultTableWidth, 0))
+        uiviewTableSubview = UIView(frame: CGRect(x: 8, y: 76, width: resultTableWidth, height: 0))
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.registerClass(CustomCellForMainScreenSearch.self, forCellReuseIdentifier: "customCellForMainScreenSearch")
-        tblSearchResults.scrollEnabled = false
+        tblSearchResults.register(CustomCellForMainScreenSearch.self, forCellReuseIdentifier: "customCellForMainScreenSearch")
+        tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
-        tblSearchResults.separatorInset = UIEdgeInsetsZero
-        tblSearchResults.layoutMargins = UIEdgeInsetsZero
-        uiviewTableSubview.layer.borderColor = UIColor.whiteColor().CGColor
+        tblSearchResults.separatorInset = UIEdgeInsets.zero
+        tblSearchResults.layoutMargins = UIEdgeInsets.zero
+        uiviewTableSubview.layer.borderColor = UIColor.white.cgColor
         uiviewTableSubview.layer.borderWidth = 1.0
         uiviewTableSubview.layer.cornerRadius = 2.0
         uiviewTableSubview.layer.shadowOpacity = 0.5
         uiviewTableSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         uiviewTableSubview.layer.shadowRadius = 2.5
-        uiviewTableSubview.layer.shadowColor = UIColor.blackColor().CGColor
+        uiviewTableSubview.layer.shadowColor = UIColor.black.cgColor
         uiviewTableSubview.addSubview(tblSearchResults)
         self.view.addSubview(uiviewTableSubview)
     }
@@ -281,11 +281,11 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     // MARK: UITableView Delegate and Datasource functions
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView == self.tblSearchResults) {
             return placeholder.count
         }
@@ -295,15 +295,15 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCellWithIdentifier("customCellForMainScreenSearch", forIndexPath: indexPath) as! CustomCellForMainScreenSearch
+            let cell = tableView.dequeueReusableCell(withIdentifier: "customCellForMainScreenSearch", for: indexPath) as! CustomCellForMainScreenSearch
             cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
             if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
                 cell.labelSubTitle.text = secondaryText.string
             }
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
         else {
@@ -311,7 +311,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(tableView == self.tblSearchResults) {
             let placesClient = GMSPlacesClient()
             placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
@@ -321,18 +321,18 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
                         self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
-                        self.dismissViewControllerAnimated(false, completion: nil)
+                        self.dismiss(animated: false, completion: nil)
                     }
                 })
             })
             self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(tableView == self.tblSearchResults) {
             return 60 * screenWidthFactor
         }
@@ -341,7 +341,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         }
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }
 }

@@ -8,12 +8,12 @@
 
 import Foundation
 
-func emailVerification(email : String)-> Bool{
+func emailVerification(_ email : String)-> Bool{
     //should obey the structure of email
     let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-    return NSPredicate(format:"SELF MATCHES %@", emailRegEx).evaluateWithObject(email)
+    return NSPredicate(format:"SELF MATCHES %@", emailRegEx).evaluate(with: email)
 }
-func passwordVerification(password:String)->Bool{
+func passwordVerification(_ password:String)->Bool{
     //the rules of password，规则太复杂
     var uppercase = 0
     var symbol = 0
@@ -35,31 +35,31 @@ func passwordVerification(password:String)->Bool{
     return false
 }
 
-func passwordDoubleVerification(password1 : String, password2 : String)->Bool {
+func passwordDoubleVerification(_ password1 : String, password2 : String)->Bool {
     return password1 == password2
 }
 
-func checkSignUp(firstName : String ,lastName : String , birthday : NSDate , gender: String )->Bool{
+func checkSignUp(_ firstName : String ,lastName : String , birthday : Date , gender: String )->Bool{
     return false
 }
 
-func checkLogIn(email:String , password:String)->Bool{
+func checkLogIn(_ email:String , password:String)->Bool{
     return false
 }
 
 
-func timeToString(time : NSDate)->String {
-    let dateFormatter = NSDateFormatter()
+func timeToString(_ time : Date)->String {
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    dateFormatter.timeZone = NSTimeZone(name: "UTC")
-    let dateString = dateFormatter.stringFromDate(time)
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    let dateString = dateFormatter.string(from: time)
     //    print(dateString)
     return dateString
 }
-func stringToTime(str : String)->NSDate {
-    let dateFormatter = NSDateFormatter()
+func stringToTime(_ str : String)->Date {
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    dateFormatter.timeZone = NSTimeZone(name: "UTC")
-    let date = dateFormatter.dateFromString(str)
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    let date = dateFormatter.date(from: str)
     return date!
 }

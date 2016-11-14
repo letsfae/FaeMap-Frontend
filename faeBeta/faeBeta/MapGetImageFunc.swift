@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 extension FaeMapViewController {
-    func cropToBounds(image: UIImage) -> UIImage {
+    func cropToBounds(_ image: UIImage) -> UIImage {
         
-        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
+        let contextImage: UIImage = UIImage(cgImage: image.cgImage!)
         
         let contextSize: CGSize = contextImage.size
         
@@ -38,13 +38,13 @@ extension FaeMapViewController {
             cgheight = contextSize.width
         }
         
-        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
         
         // Create bitmap image from context using the rect
-        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage!, rect)!
+        let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
         
         // Create a new image based on the imageRef and rotate back to the original orientation
-        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
         
         return image
     }

@@ -14,9 +14,9 @@ class NameCardShowTableViewCell: UITableViewCell {
     
     @IBOutlet weak var switchOutlet: UISwitch!
 
-    @IBAction func switchAction(sender: AnyObject) {
+    @IBAction func switchAction(_ sender: AnyObject) {
         var value = true
-        if sender.on == true {
+        if sender.isOn == true {
             value = true
         } else {
             value = false
@@ -25,7 +25,7 @@ class NameCardShowTableViewCell: UITableViewCell {
         if labelShow.text == "Show Gender" {
             let user = FaeUser()
             user.whereKey("show_gender", value: String(value))
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
+            user.updateNameCard { (status:Int, objects: Any?) in
                 print (status)
                 if status / 100 == 2 {
                 }
@@ -36,7 +36,7 @@ class NameCardShowTableViewCell: UITableViewCell {
         } else {
             let user = FaeUser()
             user.whereKey("show_age", value: String(value))
-            user.updateNameCard { (status:Int, objects:AnyObject?) in
+            user.updateNameCard { (status:Int, objects: Any?) in
                 print (status)
                 if status / 100 == 2 {
                 }
@@ -51,12 +51,12 @@ class NameCardShowTableViewCell: UITableViewCell {
         super.awakeFromNib()
 //        switchOutlet.on = false
         //switchOutlet.tintColor = UIColor.redColor()
-        switchOutlet.onTintColor = UIColor.redColor()
+        switchOutlet.onTintColor = UIColor.red
         labelShow.textColor = UIColor(colorLiteralRed: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

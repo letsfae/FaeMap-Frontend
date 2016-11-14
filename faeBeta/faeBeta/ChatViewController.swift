@@ -18,13 +18,13 @@ import AVFoundation
 
 public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
-public var headerDeviceToken: NSData!
+public var headerDeviceToken: Data!
 
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
 {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     //    let appDeleget = UIApplication.sharedApplication().delegate as! AppDelegate
     let ref = firebase.database.reference().child("Message")// reference to all chat room
@@ -47,11 +47,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var chatRoomId : String!
     var chat_id: String?//the chat Id returned by the server
     var initialLoadComplete : Bool = false// the first time open this chat room, false means we need to load every message to the chat room, true means we only need to load the new messages.
-    var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubbleImage: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImageWithColor(UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0))
+    var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImage(with: UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0))
     //the message I sent bubble
-    let incomingBubble = JSQMessagesBubbleImageFactoryCustom(bubbleImage: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).incomingMessagesBubbleImageWithColor(UIColor.whiteColor())
+    let incomingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).incomingMessagesBubbleImage(with: UIColor.white)
     //the message other person sent bubble
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)//gray color
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     //pink color
@@ -98,7 +98,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var isLoadingPreviousMessages = false
     
     //time stamp
-    var lastMarkerDate: NSDate! = NSDate.distantPast()
+    var lastMarkerDate: Date! = Date.distantPast
     
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
@@ -115,7 +115,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //    }
     
     
-    private func observeTyping() {
+    fileprivate func observeTyping() {
         //        print("the senderId is \(self.senderId)")
         //        userIsTypingRef = userIsTypingRef.child(self.senderId)
         //        userIsTypingRef.onDisconnectRemoveValue()
@@ -140,14 +140,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: - view did/will funcs
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         //update recent
         closeToolbarContentView()
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        clearRecentCounter(chatRoomId)// clear the unread message count
     }
@@ -165,7 +165,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         // Do any additional setup after loading the view.
         loadInputBarComponent()
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
-        self.inputToolbar.contentView.backgroundColor = UIColor.whiteColor()
+        self.inputToolbar.contentView.backgroundColor = UIColor.white
         self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
         addObservers()
         // setup requestion option 
@@ -174,7 +174,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 //        requestOption.synchronous = false
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         //check user default
         super.viewWillAppear(true)
         loadUserDefault()
@@ -193,9 +193,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: - setup
     
     func navigationBarSet() {
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
-        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray]
+        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray] as [String : Any]
         self.navigationController?.navigationBar.tintColor = colorFae
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
@@ -206,25 +206,25 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = withUser!.userName
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         self.navigationItem.titleView = titleLabel
     }
     
     func addObservers(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow), name:UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidHide), name:UIKeyboardDidHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.appWillEnterForeground), name:"appWillEnterForeground", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name:NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name:NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
 
     //MARK: user default function
     func loadUserDefault() {
-        firstLoad = userDefaults.boolForKey(kFIRSTRUN)
+        firstLoad = userDefaults.bool(forKey: kFIRSTRUN)
         
         if !firstLoad! {
-            userDefaults.setBool(true, forKey: kFIRSTRUN)
-            userDefaults.setBool(showAvatar, forKey: kAVATARSTATE)
+            userDefaults.set(true, forKey: kFIRSTRUN)
+            userDefaults.set(showAvatar, forKey: kAVATARSTATE)
             userDefaults.synchronize()
         }
         showAvatar = true
@@ -239,52 +239,52 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let contentView = self.inputToolbar.contentView
         let contentOffset = (screenWidth - 42 - 29 * 7) / 6 + 29
         buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
-        buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), forControlEvents: .TouchUpInside)
-        contentView.addSubview(buttonKeyBoard)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
+        buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
+        contentView?.addSubview(buttonKeyBoard)
         
         buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-        buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), forControlEvents: .TouchUpInside)
-        contentView.addSubview(buttonSticker)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        buttonSticker.addTarget(self, action: #selector(ChatViewController.showStikcer), for: .touchUpInside)
+        contentView?.addSubview(buttonSticker)
         
         buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-        contentView.addSubview(buttonImagePicker)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        contentView?.addSubview(buttonImagePicker)
         
-        buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), forControlEvents: .TouchUpInside)
+        buttonImagePicker.addTarget(self, action: #selector(ChatViewController.showLibrary), for: .touchUpInside)
         
         let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
-        buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
-        contentView.addSubview(buttonCamera)
+        buttonCamera.setImage(UIImage(named: "camera"), for: UIControlState())
+        buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
+        contentView?.addSubview(buttonCamera)
         
-        buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), forControlEvents: .TouchUpInside)
+        buttonCamera.addTarget(self, action: #selector(ChatViewController.showCamera), for: .touchUpInside)
         
         buttonVoiceRecorder = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Highlighted)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
         //add a function
-        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.showRecord), forControlEvents: .TouchUpInside)
+        buttonVoiceRecorder.addTarget(self, action: #selector(ChatViewController.showRecord), for: .touchUpInside)
         
-        contentView.addSubview(buttonVoiceRecorder)
+        contentView?.addSubview(buttonVoiceRecorder)
         
         let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Normal)
-        buttonLocation.setImage(UIImage(named: "shareLocation"), forState: .Highlighted)
+        buttonLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
+        buttonLocation.setImage(UIImage(named: "shareLocation"), for: .highlighted)
         //add a function
-        buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), forControlEvents: .TouchUpInside)
-        contentView.addSubview(buttonLocation)
+        buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), for: .touchUpInside)
+        contentView?.addSubview(buttonLocation)
         
         buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Highlighted)
-        contentView.addSubview(buttonSend)
-        buttonSend.enabled = false
-        buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), forControlEvents: .TouchUpInside)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .highlighted)
+        contentView?.addSubview(buttonSend)
+        buttonSend.isEnabled = false
+        buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), for: .touchUpInside)
         
         buttonSet.append(buttonKeyBoard)
         buttonSet.append(buttonSticker)
@@ -295,7 +295,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonSet.append(buttonSend)
         
         for button in buttonSet{
-            button.autoresizingMask = [.FlexibleTopMargin]
+            button.autoresizingMask = [.flexibleTopMargin]
         }
     }
     
@@ -304,12 +304,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
-        UIApplication.sharedApplication().keyWindow?.addSubview(toolbarContentView)
+        UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
     
     //MARK: - JSQMessages Delegate function
     
-    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+    override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         if text != "" {
             //send message
             sendMessage(text, date: date, picture: nil, sticker : nil, location: nil, snapImage : nil, audio : nil, video: nil, videoDuration: 0)
@@ -320,7 +320,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showKeyboard() {
         
         resetToolbarButtonIcon()
-        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.toolbarContentView.showKeyboard()
         scrollToBottom(true)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
@@ -328,7 +328,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showCamera() {
         view.endEditing(true)
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
              self.closeToolbarContentView()
             }, completion:{ (Bool) -> Void in
         })
@@ -339,7 +339,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showStikcer() {
         resetToolbarButtonIcon()
-        buttonSticker.setImage(UIImage(named: "stickerChosen"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
@@ -347,7 +347,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showLibrary() {
         resetToolbarButtonIcon()
-        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), forState: .Normal)
+        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showLibrary()
         moveUpInputBarContentView(animated)
@@ -355,7 +355,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showRecord() {
         resetToolbarButtonIcon()
-        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), forState: .Normal)
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showRecord()
         moveUpInputBarContentView(animated)
@@ -364,16 +364,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func sendLocation() {
         resetToolbarButtonIcon()
         closeToolbarContentView()
-        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewControllerWithIdentifier("ChatSendLocationController") as! ChatSendLocationController
+        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
         vc.locationDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
     func sendMessageButtonTapped() {
-        sendMessage(self.inputToolbar.contentView.textView.text, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
-        buttonSend.enabled = false
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        sendMessage(self.inputToolbar.contentView.textView.text, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+        buttonSend.isEnabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
     //MARK: navigationItem function
@@ -387,45 +387,45 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
      
     //MARK: - input text field delegate & keyboard
     
-    override func textViewDidChange(textView: UITextView) {
+    override func textViewDidChange(_ textView: UITextView) {
         if textView.text.characters.count == 0 {
             // when text has no char, cannot send message
-            buttonSend.enabled = false
-            buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+            buttonSend.isEnabled = false
+            buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
         } else {
-            buttonSend.enabled = true
-            buttonSend.setImage(UIImage(named: "canSendMessage"), forState: .Normal)
+            buttonSend.isEnabled = true
+            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
         }
     }
     
-    override func textViewDidEndEditing(textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
+    override func textViewDidEndEditing(_ textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
     }
     
-    override func textViewDidBeginEditing(textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboard"), forState: .Normal)
+    override func textViewDidBeginEditing(_ textView: UITextView) {
+        buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard()
     }
     
-    func keyboardDidShow(notification: NSNotification){
+    func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
         scrollToBottom(true)
     }
     
-    func keyboardDidHide(notification: NSNotification){
+    func keyboardDidHide(_ notification: Notification){
         toolbarContentView.keyboardShow = false
     }
     
     
     // MARK: - scroll view delegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (toolbarContentView.mediaContentShow) && !isClosingToolbarContentView && scrollView.scrollEnabled == true){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (toolbarContentView.mediaContentShow) && !isClosingToolbarContentView && scrollView.isScrollEnabled == true){
                 self.toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
 
-                self.inputToolbar.frame.origin.y = min(screenHeight - 273 - CGRectGetHeight(self.inputToolbar.frame) - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - CGRectGetHeight(self.inputToolbar.frame) - 64)
+                self.inputToolbar.frame.origin.y = min(screenHeight - 273 - self.inputToolbar.frame.height - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - self.inputToolbar.frame.height - 64)
             }
             if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
@@ -433,20 +433,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if(scrollView == collectionView){
             scrollViewOriginOffset = scrollView.contentOffset.y
         }
     }
     
-    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>)
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>)
     {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             if(scrollViewCurrentOffset - scrollViewOriginOffset < -5){
                 
                 isClosingToolbarContentView = true
-                UIView.animateWithDuration(0.2, animations: {
+                UIView.animate(withDuration: 0.2, animations: {
                     self.moveDownInputBar()
                     self.toolbarContentView.frame.origin.y = self.screenHeight
                     }, completion: {(Bool)->Void in
@@ -472,44 +472,44 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func getAvatar() {
         if showAvatar {
             createAvatars(avatarImageDictionary)
-            self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeMake(35, 35)
-            self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeMake(35, 35)
+            self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 35, height: 35)
+            self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 35, height: 35)
             if collectionView != nil {
                 collectionView.reloadData()
             }
         }
     }
     
-        func createAvatars(avatars : NSMutableDictionary?) {
-            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
-            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage((avatarDic[NSNumber(integer:Int(withUser!.userId)!)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
-            avatarDictionary = [user_id.stringValue : currentUserAvatar, withUser!.userId : withUserAvatar]
+        func createAvatars(_ avatars : NSMutableDictionary?) {
+            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
+            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
+            avatarDictionary = [user_id.stringValue : currentUserAvatar!, withUser!.userId : withUserAvatar!]
             // need to check if collectionView exist before reload
         }
     
-    func moveUpInputBarContentView(animated: Bool)
+    func moveUpInputBarContentView(_ animated: Bool)
     {
-        self.collectionView.scrollEnabled = false
+        self.collectionView.isScrollEnabled = false
         if(animated){
             self.toolbarContentView.frame.origin.y = self.screenHeight
-            UIView.animateWithDuration(0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
                 self.toolbarContentView.frame.origin.y = self.screenHeight - 271
                 }, completion:{ (Bool) -> Void in
-                    self.collectionView.scrollEnabled = true
+                    self.collectionView.isScrollEnabled = true
             })
         }else{
             self.moveUpInputBar()
             self.toolbarContentView.frame.origin.y = self.screenHeight - 271
-            self.collectionView.scrollEnabled = true
+            self.collectionView.isScrollEnabled = true
         }
         scrollToBottom(animated)
     }
     
     func moveUpInputBar() {
         //when keybord, stick, photoes preview show, move tool bar up
-        let height = CGRectGetHeight(self.inputToolbar.frame)
-        let width = CGRectGetWidth(self.inputToolbar.frame)
+        let height = self.inputToolbar.frame.height
+        let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
         let yPosition = screenHeight - 271 - height - 64
         UIView.setAnimationsEnabled(false)
@@ -517,27 +517,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
         UIView.setAnimationsEnabled(true)
         //        self.inputToolbar.frame.origin.y = yPosition
-        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+        self.inputToolbar.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
     }
     
     func moveDownInputBar() {
         //
-        let height = CGRectGetHeight(self.inputToolbar.frame)
-        let width = CGRectGetWidth(self.inputToolbar.frame)
+        let height = self.inputToolbar.frame.height
+        let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
         let yPosition = screenHeight - height - 64
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
-        self.inputToolbar.frame = CGRectMake(xPosition, yPosition, width, height)
+        self.inputToolbar.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
     }
     
-    func scrollToBottom(animated:Bool) {
+    func scrollToBottom(_ animated:Bool) {
         //override:
         let item = self.collectionView(self.collectionView!, numberOfItemsInSection: 0) - 1
         //get the last item index
         if item >= 0 {
-            let lastItemIndex = NSIndexPath(forItem: item, inSection: 0)
-            self.collectionView?.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: UICollectionViewScrollPosition.Top , animated: animated)
+            let lastItemIndex = IndexPath(item: item, section: 0)
+            self.collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.top , animated: animated)
         }
     }
     
@@ -551,30 +551,30 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func showAlertView(withWarning text: String) {
-        let alert = UIAlertController(title:text, message: "", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title:text, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func getMoreImage()
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
-        let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewControllerWithIdentifier("CustomCollectionViewController")as! CustomCollectionViewController
+        let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "CustomCollectionViewController")as! CustomCollectionViewController
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func resetToolbarButtonIcon()
+    fileprivate func resetToolbarButtonIcon()
     {
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Normal)
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), forState: .Highlighted)
-        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Normal)
-        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), forState: .Highlighted)
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), forState: .Normal)
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
+        buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
     func endEdit()
@@ -583,20 +583,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //MARK: -  UIImagePickerController
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let type = info[UIImagePickerControllerMediaType] as! String
         switch type {
         case (kUTTypeImage as String as String):
             let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
             
-            self.sendMessage(nil, date: NSDate(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+            self.sendMessage(nil, date: Date(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
             
             UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         case (kUTTypeMovie as String as String):
-            let movieURL = info[UIImagePickerControllerMediaURL] as! NSURL
+            let movieURL = info[UIImagePickerControllerMediaURL] as! URL
 
             //get duration of the video
-            let asset = AVURLAsset(URL: movieURL)
+            let asset = AVURLAsset(url: movieURL)
             let duration = CMTimeGetSeconds(asset.duration);
             let seconds = Int(ceil(duration))
             
@@ -607,30 +607,30 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             //get snapImage
             var snapImage = UIImage()
             do{
-                let imageRef = try imageGenerator.copyCGImageAtTime(time, actualTime:nil)
-                snapImage = UIImage(CGImage: imageRef)
+                let imageRef = try imageGenerator.copyCGImage(at: time, actualTime:nil)
+                snapImage = UIImage(cgImage: imageRef)
             }
             catch{
                 //Handle failure
             }
             
             var imageData = UIImageJPEGRepresentation(snapImage,1)
-            let factor = min( 5000000.0 / CGFloat(imageData!.length), 1.0)
+            let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
             imageData = UIImageJPEGRepresentation(snapImage,factor)
         
             let path = movieURL.path
-            let data = NSFileManager.defaultManager().contentsAtPath(path!)
-            self.sendMessage(nil, date: NSDate(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: data, videoDuration: seconds)
+            let data = FileManager.default.contents(atPath: path)
+            self.sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: data, videoDuration: seconds)
             break
         default:
             break
         }
 
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
     }
     
-    func image(image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
+    func image(_ image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
     {
         self.appWillEnterForeground()
     }

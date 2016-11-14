@@ -11,24 +11,24 @@ import UIKit
 class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     
     //MARK: - Interface
-    private var titleLabel: UILabel!
-    private var emailTextField: FAETextField!
-    private var infoButton: UIButton!
-    private var sendCodeButton: UIButton!
+    fileprivate var titleLabel: UILabel!
+    fileprivate var emailTextField: FAETextField!
+    fileprivate var infoButton: UIButton!
+    fileprivate var sendCodeButton: UIButton!
     
-    private enum pageStateType {
+    fileprivate enum pageStateType {
         case enteringUserName
         case enteringCode
     }
     
-    private var pageState = pageStateType.enteringUserName
-    private var numberKeyboard: FAENumberKeyboard!
-    private var verificationCodeView: FAEVerificationCodeView!
+    fileprivate var pageState = pageStateType.enteringUserName
+    fileprivate var numberKeyboard: FAENumberKeyboard!
+    fileprivate var verificationCodeView: FAEVerificationCodeView!
     
-    private var timer: NSTimer!
-    private var remainingTime = 59
+    fileprivate var timer: Timer!
+    fileprivate var remainingTime = 59
     
-    private var activityIndicator: UIActivityIndicatorView!
+    fileprivate var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - View did/will ...
     override func viewDidLoad() {
@@ -40,15 +40,15 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool){
+    override func viewWillAppear(_ animated: Bool){
         super.viewWillAppear(animated)
         
         //if it's back from set password
         if numberKeyboard != nil{
-            self.infoButton.frame = CGRectMake(87, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, screenWidth - 175, 18)
+            self.infoButton.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
             self.infoButton.alpha = 1
             
-            self.sendCodeButton.frame = CGRectMake(57, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor)
+            self.sendCodeButton.frame = CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor)
             self.sendCodeButton.center.x = screenWidth / 2
         }
         
@@ -59,53 +59,53 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    private func setupNavigationBar()
+    fileprivate func setupNavigationBar()
     {
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(SignInSupportViewController.navBarLeftButtonTapped))
-        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(SignInSupportViewController.navBarLeftButtonTapped))
+        self.navigationController?.isNavigationBarHidden = false
     }
     
-    private func setupInterface()
+    fileprivate func setupInterface()
     {
         
         // set up the title label
-        titleLabel = UILabel(frame: CGRectMake(30, 72, screenWidth - 60, 60))
+        titleLabel = UILabel(frame: CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60))
         titleLabel.numberOfLines = 2
         titleLabel.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         //        titleLabel.sizeToFit()
         titleLabel.center.x = screenWidth / 2
         titleLabel.adjustsFontSizeToFitWidth = true
         self.view.addSubview(titleLabel)
         
         // set up the email/username text field
-        emailTextField = FAETextField(frame: CGRectMake(15,171, screenWidth - 30, 30))
+        emailTextField = FAETextField(frame: CGRect(x: 15,y: 171, width: screenWidth - 30, height: 30))
         emailTextField.placeholder = "Email Address"
         emailTextField.adjustsFontSizeToFitWidth = true
         self.view.addSubview(emailTextField)
         
         // set up the "We can’t find an account with this Email!" label
-        infoButton = UIButton(frame: CGRectMake(87, screenHeight - 50 * screenHeightFactor - 67 , screenWidth - 175, 18))
+        infoButton = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67 , width: screenWidth - 175, height: 18))
         infoButton.setAttributedTitle(NSAttributedString(string: "We can’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]),
-                                      forState: .Normal)
-        infoButton.contentHorizontalAlignment = .Center
+                                      for: UIControlState())
+        infoButton.contentHorizontalAlignment = .center
         infoButton.sizeToFit()
         infoButton.center.x = screenWidth / 2
         infoButton.alpha = 0
         self.view.addSubview(infoButton)
         
         // set up the send button
-        sendCodeButton = UIButton(frame: CGRectMake(0, screenHeight - 30 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor))
+        sendCodeButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         sendCodeButton.center.x = screenWidth / 2
         
-        sendCodeButton.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
+        sendCodeButton.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         sendCodeButton.layer.cornerRadius = 25*screenHeightFactor
-        sendCodeButton.enabled = false
+        sendCodeButton.isEnabled = false
         sendCodeButton.backgroundColor = UIColor.faeAppDisabledRedColor()
-        sendCodeButton.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.insertSubview(sendCodeButton, atIndex: 0)
+        sendCodeButton.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), for: .touchUpInside)
+        self.view.insertSubview(sendCodeButton, at: 0)
         
     }
     
@@ -118,38 +118,38 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         self.view.endEditing(true)
         
         // setup the fake keyboard for numbers input
-        numberKeyboard = FAENumberKeyboard(frame:CGRectMake(0,screenHeight - 244 * screenHeightFactor ,screenWidth,244 * screenHeightFactor))
+        numberKeyboard = FAENumberKeyboard(frame:CGRect(x: 0,y: screenHeight - 244 * screenHeightFactor ,width: screenWidth,height: 244 * screenHeightFactor))
         self.view.addSubview(numberKeyboard)
         numberKeyboard.delegate = self
-        numberKeyboard.transform = CGAffineTransformMakeTranslation(0, numberKeyboard.bounds.size.height)
+        numberKeyboard.transform = CGAffineTransform(translationX: 0, y: numberKeyboard.bounds.size.height)
         
         // setup the verification code screen
-        verificationCodeView = FAEVerificationCodeView(frame:CGRectMake(85 * screenWidthFactor, 148, 244 * screenWidthFactor, 82))
+        verificationCodeView = FAEVerificationCodeView(frame:CGRect(x: 85 * screenWidthFactor, y: 148, width: 244 * screenWidthFactor, height: 82))
         self.view.addSubview(verificationCodeView)
         verificationCodeView.alpha = 0
         
-        sendCodeButton.enabled = false
+        sendCodeButton.isEnabled = false
         sendCodeButton.backgroundColor = UIColor.faeAppDisabledRedColor()
         
         // start transaction animation
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut , animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions() , animations: {
             
-            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
-            self.sendCodeButton.setAttributedTitle(NSAttributedString(string: "Continue", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), forState:.Normal)
+            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+            self.sendCodeButton.setAttributedTitle(NSAttributedString(string: "Continue", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
             
-            self.infoButton.frame = CGRectMake(87, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, screenWidth - 175, 18)
+            self.infoButton.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
             self.infoButton.alpha = 1
 
-            self.sendCodeButton.frame = CGRectMake(57, screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, screenWidth - 114 * screenWidthFactor * screenWidthFactor, 50 * screenHeightFactor)
+            self.sendCodeButton.frame = CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor)
             self.sendCodeButton.center.x = screenWidth / 2
             
             self.emailTextField.alpha = 0
-            self.numberKeyboard.transform = CGAffineTransformMakeTranslation(0, 0)
+            self.numberKeyboard.transform = CGAffineTransform(translationX: 0, y: 0)
             self.verificationCodeView.alpha = 1
             
             self.view.layoutIfNeeded()
             }, completion: { (Bool) in
-                self.emailTextField.hidden = true
+                self.emailTextField.isHidden = true
                 self.startTimer()
         })
         
@@ -160,13 +160,13 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     func createActivityIndicator()
     {
         activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor.faeAppRedColor()
         
         view.addSubview(activityIndicator)
-        view.bringSubviewToFront(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     func sendCodeButtonTapped()
@@ -174,7 +174,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         activityIndicator.startAnimating()
         if(pageState == .enteringUserName){
             self.view.endEditing(true)
-            postToURL("reset_login/code", parameter: ["email": emailTextField.text!], authentication: nil, completion: { (statusCode, result) in
+            postToURL("reset_login/code", parameter: ["email": emailTextField.text! as AnyObject], authentication: nil, completion: { (statusCode, result) in
                 if(statusCode / 100 == 2 ){
                     self.setupEnteringVerificationCode()
                 }else{
@@ -183,15 +183,15 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
                 self.activityIndicator.stopAnimating()
             })
         }else{
-            postToURL("reset_login/code/verify", parameter: ["email": emailTextField.text!, "code": verificationCodeView.displayValue], authentication: nil, completion: { (statusCode, result) in
+            postToURL("reset_login/code/verify", parameter: ["email": emailTextField.text! as AnyObject, "code": verificationCodeView.displayValue as AnyObject], authentication: nil, completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
-                        let controller = UIStoryboard(name: "Main",bundle: nil).instantiateViewControllerWithIdentifier("SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
+                        let controller = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
                         controller.email = self.emailTextField.text!
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
                     }else{
                         for _ in 0..<6{
-                            self.verificationCodeView.addDigit(-1)
+                            _ = self.verificationCodeView.addDigit(-1)
                         }
                     }
                     self.activityIndicator.stopAnimating()
@@ -200,24 +200,24 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     }
     
     func addObservers(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         self.view.addGestureRecognizer(tapGesture)
-        emailTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), forControlEvents:.EditingChanged )
+        emailTextField.addTarget(self, action: #selector(self.textfieldDidChange(_:)), for:.editingChanged )
 
     }
     
     //MARK: - FAENumberKeyboard delegate
-    func keyboardButtonTapped(num:Int)
+    func keyboardButtonTapped(_ num:Int)
     {
         let num = verificationCodeView.addDigit(num)
         // means the user entered 6 digits
         if(num == 6){
-            sendCodeButton.enabled = true
+            sendCodeButton.isEnabled = true
             sendCodeButton.backgroundColor = UIColor.faeAppRedColor()
         }else{
-            sendCodeButton.enabled = false
+            sendCodeButton.isEnabled = false
             sendCodeButton.backgroundColor = UIColor.faeAppDisabledRedColor()
         }
     }
@@ -225,56 +225,56 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     //MARK: helper
     func startTimer()
     {
-        infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
-        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(SignInSupportViewController.updateTime), userInfo: nil, repeats: true)
+        infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(SignInSupportViewController.updateTime), userInfo: nil, repeats: true)
     }
     
     func updateTime()
     {
         if(remainingTime > 0){
-            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), forState: .Normal)
+            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
             remainingTime = remainingTime - 1
         }
         else{
             remainingTime = 59
             timer.invalidate()
             timer = nil
-            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), forState: .Normal)
-            self.infoButton.addTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), forControlEvents: .TouchUpInside )
+            self.infoButton.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+            self.infoButton.addTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), for: .touchUpInside )
         }
     }
     
     func resendVerificationCode()
     {
         
-        postToURL("reset_login/code", parameter: ["email": emailTextField.text!], authentication: nil, completion: { (statusCode, result) in
+        postToURL("reset_login/code", parameter: ["email": emailTextField.text! as AnyObject], authentication: nil, completion: { (statusCode, result) in
             })
         startTimer()
-        infoButton.removeTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), forControlEvents: .TouchUpInside)
+        infoButton.removeTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), for: .touchUpInside)
     }
     
     
     func navBarLeftButtonTapped()
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - keyboard
     
     // This is just a temporary method to make the login button clickable
-    func keyboardWillShow(notification:NSNotification){
+    func keyboardWillShow(_ notification:Notification){
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.sendCodeButton.frame.origin.y += (screenHeight - keyboardFrame.height) - self.sendCodeButton.frame.origin.y - 50 * screenHeightFactor - 14
             
             self.infoButton.frame.origin.y += (screenHeight - keyboardFrame.height) - self.infoButton.frame.origin.y - 50 * screenHeightFactor - 14 - 18 - 19
         })
     }
     
-    func keyboardWillHide(notification:NSNotification){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+    func keyboardWillHide(_ notification:Notification){
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.sendCodeButton.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
             self.infoButton.frame.origin.y = screenHeight - 50 * screenHeightFactor - 67
         })
@@ -286,19 +286,19 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         self.view.endEditing(true)
     }
     
-    func isValidEmail(testStr:String) -> Bool {
+    func isValidEmail(_ testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        let range = testStr.range(of: emailRegEx, options:.regularExpression)
         let result = range != nil ? true : false
         return result
     }
     
-    func textfieldDidChange(textfield: UITextField){
+    func textfieldDidChange(_ textfield: UITextField){
         if isValidEmail(textfield.text!) {
-            sendCodeButton.enabled = true
+            sendCodeButton.isEnabled = true
             sendCodeButton.backgroundColor = UIColor.faeAppRedColor()
         }else{
-            sendCodeButton.enabled = false
+            sendCodeButton.isEnabled = false
             sendCodeButton.backgroundColor = UIColor.faeAppDisabledRedColor()
         }
     }

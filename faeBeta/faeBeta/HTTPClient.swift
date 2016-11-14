@@ -26,7 +26,7 @@ import SDWebImage
  }*/
 // not use anymore
 
-func postImageToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -43,24 +43,20 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
     }
     // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
-        let imageData = parameter!["avatar"]as! NSData
+        let imageData = parameter!["avatar"]as! Data
         
-        Alamofire.upload(.POST, URL, headers: headers, multipartFormData: { (MultipartFormData) in
+//        public func upload(multipartFormData: @escaping (Alamofire.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: UInt64 = default, to url: URLConvertible, method: Alamofire.HTTPMethod = default, headers: HTTPHeaders? = default, encodingCompletion: ((Alamofire.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+
+        Alamofire.upload(multipartFormData: {
+            (MultipartFormData) in
             //                MultipartFormData.appendBodyPart
-            MultipartFormData.appendBodyPart(data: imageData, name: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
-            }, encodingMemoryThreshold: 100, encodingCompletion: { encodingResult in
+            MultipartFormData.append(imageData, withName: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
+        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
                 switch encodingResult {
-                case .Success(let upload, _, _):
+                case .success(let upload, _, _):
                     upload.responseJSON { response in
                         print(response.response.debugDescription)
                         if response.response != nil{
-//                            if(response.response!.statusCode != 0){
-//                                print("finished")
-//                            }
-//                            if let JSON = response.response?.allHeaderFields{
-//                                print(JSON)
-//                                
-//                            }
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode,resMess)
                             }
@@ -74,7 +70,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
                         }
                         
                     }
-                case .Failure(let encodingError):
+                case .failure(let encodingError):
                     completion(-400,"failure")
                     print(encodingError)
                 }
@@ -84,7 +80,7 @@ func postImageToURL(className:String,parameter:[String:AnyObject]? , authenticat
 
 }
 
-func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func postCoverImageToURL(_ className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -101,16 +97,16 @@ func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authen
     }
     // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
-        let imageData = parameter!["name_card_cover"]as! NSData
+        let imageData = parameter!["name_card_cover"]as! Data
 
-        Alamofire.upload(.POST, URL, headers: headers, multipartFormData: { (MultipartFormData) in
-            //                MultipartFormData.appendBodyPart
-            MultipartFormData.appendBodyPart(data: imageData, name: "name_card_cover", fileName: "name_card_cover", mimeType: "image/jpeg")
-            }, encodingMemoryThreshold: 100, encodingCompletion: { encodingResult in
+        Alamofire.upload( multipartFormData:
+            { (MultipartFormData) in
+            MultipartFormData.append(imageData, withName: "name_card_cover", fileName: "name_card_cover", mimeType: "image/jpeg")
+        },usingThreshold: 100, to: URL,  method: .post, headers: headers, encodingCompletion: { encodingResult in
                 switch encodingResult {
-                case .Success(let upload, _, _):
+                case .success(let upload, _, _):
                     upload.responseJSON { response in
-                        print(response.response)
+//                        print(response.response)
                         if response.response != nil{
                             //                            if(response.response!.statusCode != 0){
                             //                                print("finished")
@@ -132,7 +128,7 @@ func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authen
                         }
 
                     }
-                case .Failure(let encodingError):
+                case .failure(let encodingError):
                     completion(-400,"failure")
                     print(encodingError)
                 }
@@ -142,7 +138,7 @@ func postCoverImageToURL(className:String,parameter:[String:AnyObject]? , authen
     
 }
 
-func getImageFromURL(className:String, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func getImageFromURL(_ className:String, authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -161,13 +157,13 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
     //    manager.setValue("User-Agent", forHTTPHeaderField: headerUserAgent)
     //    manager.setValue("Fae-Client-Version", forHTTPHeaderField: headerClientVersion)
     //    manager.setValue("Accept", forHTTPHeaderField: headerAccept)
-    manager.setValue("Authorization", forHTTPHeaderField: "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw")
+    manager?.setValue("Authorization", forHTTPHeaderField: "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw")
     //get function doesn't work
-    manager.downloadImageWithURL(NSURL(string: URL), options: SDWebImageDownloaderOptions.AllowInvalidSSLCertificates,
+    _ = manager?.downloadImage(with: Foundation.URL(string: URL), options: .allowInvalidSSLCertificates,
                                  progress: {( receivedSize: Int, expectedSize: Int) in
 //                                    print(receivedSize)
         }
-        , completed: { (image:UIImage!, data:NSData!, error:NSError!, finished:Bool) -> Void in
+        , completed: { (image:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void in
             //            print(error)
             if (image != nil)
             {
@@ -179,7 +175,7 @@ func getImageFromURL(className:String, authentication:[String : AnyObject]?, com
             }
     })
 }
-func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[String: AnyObject]?, completion:(Int, AnyObject?) -> Void){
+func postToURL(_ className:String, parameter:[String:Any]?, authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -196,7 +192,9 @@ func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[
     
     // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
-        Alamofire.request(.POST, URL, parameters: parameter, headers: headers)
+        
+
+        Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 //print(response)
@@ -223,7 +221,7 @@ func postToURL(className:String, parameter:[String:AnyObject]?, authentication:[
 }
 
 
-func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     //print(parameter)
     let URL = baseURL + "/" + className
     var headers = [
@@ -241,7 +239,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
     
     // Ren: delete do-catch here because no error thrown in do
     if parameter == nil{
-        Alamofire.request(.GET, URL, headers: headers)
+        Alamofire.request(URL, headers: headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
@@ -260,7 +258,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
         }
     }
     else{
-        Alamofire.request(.GET, URL, parameters: parameter, headers:headers)
+        Alamofire.request(URL, parameters: parameter!, headers:headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
                 if response.response != nil{
@@ -281,7 +279,7 @@ func getFromURL(className:String,parameter:[String:AnyObject]?, authentication:[
 
 }
 
-func deleteFromURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func deleteFromURL(_ className:String,parameter:[String:Any] , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "Accept": headerAccept,
@@ -290,7 +288,7 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
         "Device-ID" : headerDeviceID,
         ]
     if authentication == nil {
-        completion(500,"we must get the authentication number")
+        completion(500,"we must get the authentication number" as AnyObject?)
     }
     if authentication != nil {
         for(key,value) in authentication! {
@@ -299,7 +297,7 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
     }
 //    print(headers)
     // Ren: delete do-catch here because no error thrown in do
-    Alamofire.request(.DELETE, URL,headers:headers)
+    Alamofire.request(URL, method: .delete, headers:headers)
         .responseJSON{response in
             //print(response.response!.statusCode)
             if response.response != nil{
@@ -319,7 +317,7 @@ func deleteFromURL(className:String,parameter:[String:AnyObject] , authenticatio
 
 }
 
-func putToURL(className:String,parameter:[String:AnyObject] , authentication:[String : AnyObject]?, completion:(Int,AnyObject?)->Void){
+func putToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -335,7 +333,7 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
     }
     
     // Ren: delete do-catch here because no error thrown in do
-    Alamofire.request(.PUT, URL, parameters: parameter,headers:headers)
+    Alamofire.request(URL, method: .put, parameters: parameter, headers:headers)
         .responseJSON{response in
             //print(response.response!.statusCode)
             if response.response != nil{
@@ -362,17 +360,17 @@ func putToURL(className:String,parameter:[String:AnyObject] , authentication:[St
 
 
 //utf-5 encode
-func utf8Encode(inputString:String)->String{
+func utf8Encode(_ inputString:String)->String{
     //MARK: REN tempory change it here, test if anything's wrong
-    let encodedString = inputString.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+    let encodedString = inputString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
  //   let encodedString = inputString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
     return encodedString!
 }
 
 //utf-8 decode
-func utf8Decode(inputString:String)->String{
+func utf8Decode(_ inputString:String)->String{
     //MARK: REN tempory change it here, test if anything's wrong
-    let decodeString = inputString.stringByRemovingPercentEncoding!
+    let decodeString = inputString.removingPercentEncoding!
     //let decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
     return decodeString
 }

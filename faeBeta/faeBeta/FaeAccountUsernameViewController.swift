@@ -10,8 +10,8 @@ import UIKit
 
 class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
 
     var username: String!
     
@@ -79,7 +79,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelPrompt.text = "Choose an unique Username\nto represent you!"
         labelPrompt.numberOfLines = 2
         labelPrompt.font = UIFont(name: "AvenirNext-Medium", size: 18.0)
-        labelPrompt.textAlignment = .Center
+        labelPrompt.textAlignment = .center
         labelPrompt.textColor = UIColor(white: 89.0 / 255.0, alpha: 0.6)
         self.view.addSubview(labelPrompt)
         
@@ -90,7 +90,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelHint.text = "Only Letters & Numbers"
         labelHint.numberOfLines = 1
         labelHint.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelHint.textAlignment = .Center
+        labelHint.textAlignment = .center
         labelHint.textColor = UIColor(white: 138.0 / 255.0, alpha: 0.6)
         self.view.addSubview(labelHint)
         
@@ -101,7 +101,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelUsername.text = "@LilyLily67890"
         labelUsername.numberOfLines = 1
         labelUsername.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
-        labelUsername.textAlignment = .Center
+        labelUsername.textAlignment = .center
         labelUsername.textColor = UIColor(white: 155.0 / 255.0, alpha: 1.0)
         self.view.addSubview(labelUsername)
         
@@ -112,7 +112,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelUsedTo.text = "Usernames can be used to:"
         labelUsedTo.numberOfLines = 1
         labelUsedTo.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
-        labelUsedTo.textAlignment = .Center
+        labelUsedTo.textAlignment = .center
         labelUsedTo.textColor = UIColor(white: 89.0 / 255.0, alpha: 0.6)
         self.view.addSubview(labelUsedTo)
         
@@ -123,7 +123,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelFunction.text = "-Log in, Find & Discover People, Add Contacts,\nStart Chats, Tag Friends & much more…"
         labelFunction.numberOfLines = 2
         labelFunction.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelFunction.textAlignment = .Center
+        labelFunction.textAlignment = .center
         labelFunction.textColor = UIColor(white: 138.0 / 255.0, alpha: 0.6)
         self.view.addSubview(labelFunction)
         
@@ -134,7 +134,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelResetHint.text = "If you want to change your Username,\nplease request a Username Reset."
         labelResetHint.numberOfLines = 2
         labelResetHint.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelResetHint.textAlignment = .Center
+        labelResetHint.textAlignment = .center
         labelResetHint.textColor = UIColor(white: 138.0 / 255.0, alpha: 0.6)
         self.view.addSubview(labelResetHint)
     }
@@ -144,60 +144,60 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         let buttonCreateWidth = 160/414 * screenWidth
         let buttonCreateHeight:CGFloat = 39.0
         buttonCreate = UIButton(frame: CGRect(x: (screenWidth-buttonCreateWidth)/2, y: buttonCreateY, width: buttonCreateWidth, height: buttonCreateHeight))
-        buttonCreate.setTitle("Create", forState: .Normal)
-        buttonCreate.titleLabel?.textColor = UIColor.whiteColor()
+        buttonCreate.setTitle("Create", for: UIControlState())
+        buttonCreate.titleLabel?.textColor = UIColor.white
         buttonCreate.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonCreate.layer.cornerRadius = 7
-        buttonCreate.titleLabel?.textAlignment = .Center
-        buttonCreate.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCreate.titleLabel?.textAlignment = .center
+        buttonCreate.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), for: UIControlEvents.touchUpInside)
         self.view.addSubview(buttonCreate)
         
         let buttonResetY = 528/736 * screenHeight
         let buttonResetWidth = 217/414 * screenWidth
         let buttonResetHeight:CGFloat = 39.0
         buttonReset = UIButton(frame: CGRect(x: (screenWidth-buttonResetWidth)/2, y: buttonResetY, width: buttonResetWidth, height: buttonResetHeight))
-        buttonReset.setTitle("Request Reset", forState: .Normal)
-        buttonReset.titleLabel?.textColor = UIColor.whiteColor()
+        buttonReset.setTitle("Request Reset", for: UIControlState())
+        buttonReset.titleLabel?.textColor = UIColor.white
         buttonReset.backgroundColor = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
         buttonReset.layer.cornerRadius = 7
-        buttonReset.titleLabel?.textAlignment = .Center
-        buttonReset.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonReset.titleLabel?.textAlignment = .center
+        buttonReset.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), for: UIControlEvents.touchUpInside)
         self.view.addSubview(buttonReset)
 
     }
     
-    func buttonAction(sender: UIButton){
+    func buttonAction(_ sender: UIButton){
         //labelWelcome.text = "sdasdjak"
         if sender == buttonCreate{
             let user = FaeUser()
             if (textFieldUsername.text != nil) && (textFieldUsername.text != ""){
                 user.whereKey("username", value: textFieldUsername.text!)
-                user.checkUserExistence{(status:Int?, message:AnyObject?) in
+                user.checkUserExistence{(status:Int?, message: Any?) in
                     if ( status! / 100 == 2 ){
-                        if message != nil{
-                            if let didexist = message!["existence"]{
+                        if let message = (message as? NSDictionary) {
+                            if let didexist = message["existence"]{
                                 if didexist as! Bool{
                                     self.labelPrompt.text = "Oh No…This Username is taken.\nPlease choose another one!"
                                 }
                                 else{
                                     self.username = self.textFieldUsername.text!
-                                    self.buttonReset.setTitle("Processing...", forState: .Normal)
+                                    self.buttonReset.setTitle("Processing...", for: UIControlState())
                                     self.buttonReset.backgroundColor = self.colorButtonPink
-                                    self.buttonCreate.enabled = false
+                                    self.buttonCreate.isEnabled = false
                                     self.usernameExist()
                                     let userUpdate = FaeUser()
                                     userUpdate.whereKey("user_name", value: self.textFieldUsername.text!)
-                                    userUpdate.updateAccountBasicInfo{(code:Int?, message:AnyObject?) in
+                                    userUpdate.updateAccountBasicInfo{(code:Int?, message: Any?) in
                                         if code!/100 == 2{
                                             print("yes")
-                                            self.buttonReset.setTitle("Reset", forState: .Normal)
+                                            self.buttonReset.setTitle("Reset", for: UIControlState())
                                             self.labelUsername.text = self.textFieldUsername.text!
                                             self.buttonReset.backgroundColor = self.colorButtonRed
                                         }
                                         else{
                                             self.usernameNotExist()
                                         }
-                                        self.buttonCreate.enabled = true
+                                        self.buttonCreate.isEnabled = true
                                     }
                                 }
                             }
@@ -216,36 +216,36 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
             }
         }
         else if sender == buttonReset{
-            self.backgroundGrey.hidden = false
-            self.viewEnterPassport.hidden = true
-            self.viewAlert.hidden = false
+            self.backgroundGrey.isHidden = false
+            self.viewEnterPassport.isHidden = true
+            self.viewAlert.isHidden = false
         }
         else if sender == buttonYes{
-            viewAlert.hidden = false
-            viewEnterPassport.hidden = false
+            viewAlert.isHidden = false
+            viewEnterPassport.isHidden = false
         }
         else if sender == buttonContinue{
             if textfieldPassword.text != nil{
                 if textfieldPassword.text != ""{
                     if checkPassword(textfieldPassword.text!){
                         print("heheahahahah")
-                        self.backgroundGrey.hidden = true
-                        self.buttonReset.setTitle("Processing...", forState: .Normal)
+                        self.backgroundGrey.isHidden = true
+                        self.buttonReset.setTitle("Processing...", for: UIControlState())
                         self.buttonReset.backgroundColor = colorButtonPink
-                        self.buttonReset.enabled = false
+                        self.buttonReset.isEnabled = false
                         let user = FaeUser()
                         user.whereKey("user_name", value: self.textFieldUsername.text!)
-                        user.updateAccountBasicInfo{(code:Int?, message:AnyObject?) in
+                        user.updateAccountBasicInfo{(code:Int?, message: Any?) in
                             if code!/100 == 2{
                                 print("yes")
-                                self.buttonReset.setTitle("Reset", forState: .Normal)
+                                self.buttonReset.setTitle("Reset", for: UIControlState())
                                 self.labelUsername.text = self.textFieldUsername.text!
                                 self.buttonReset.backgroundColor = self.colorButtonRed
                             }
                             else{
                                 self.usernameNotExist()
                             }
-                            self.buttonReset.enabled = true
+                            self.buttonReset.isEnabled = true
                         }
 
                         //user.whereKey("user_name", value: )
@@ -271,15 +271,15 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         textFieldUsername.font = UIFont(name: "AvenirNext-Regular", size: 22.0)
         //textFieldUsername.textColor = UIColor.redColor()
         textFieldUsername.delegate = self
-        textFieldUsername.autocorrectionType = .No
-        textFieldUsername.textAlignment = .Center
+        textFieldUsername.autocorrectionType = .no
+        textFieldUsername.textAlignment = .center
         self.view.addSubview(textFieldUsername)
     }
     
     
     func loadBackground(){
         let backgroundButtonMain = UIButton(frame: self.view.frame)
-        backgroundButtonMain.addTarget(self, action: #selector(FaeAccountUsernameViewController.usernameInputFinished), forControlEvents: UIControlEvents.TouchUpInside)
+        backgroundButtonMain.addTarget(self, action: #selector(FaeAccountUsernameViewController.usernameInputFinished), for: UIControlEvents.touchUpInside)
         self.view.addSubview(backgroundButtonMain)
         
         
@@ -295,18 +295,18 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         //backgroundGrey.addGestureRecognizer(tapGesture2)
         //backgroundGrey.userInteractionEnabled = true
         //self.view.addSubview(backgroundGrey)
-        UIApplication.sharedApplication().keyWindow?.rootViewController!.view.addSubview(backgroundGrey)
+        UIApplication.shared.keyWindow?.rootViewController!.view.addSubview(backgroundGrey)
         //backgroundGrey.hidden = true
         
         backgroundButton = UIButton(frame: backgroundGrey.frame)
-        backgroundButton.addTarget(self, action: #selector(FaeAccountUsernameViewController.showMainView(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        backgroundButton.addTarget(self, action: #selector(FaeAccountUsernameViewController.showMainView(_:)), for: UIControlEvents.touchUpInside)
         backgroundGrey.addSubview(backgroundButton)
         
         let viewAlertY = 160/736 * screenHeight
         let viewAlertWidth = 350/414 * screenWidth
         let viewAlertHeight:CGFloat = 229.0
         viewAlert = UIView(frame: CGRect(x: (screenWidth-viewAlertWidth)/2, y: viewAlertY, width: viewAlertWidth, height: viewAlertHeight))
-        viewAlert.backgroundColor = UIColor.whiteColor()
+        viewAlert.backgroundColor = UIColor.white
         viewAlert.layer.cornerRadius = 21
         
         
@@ -318,7 +318,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelAlertQuestion.numberOfLines = 2
         labelAlertQuestion.font = UIFont(name: "AvenirNext-Medium", size: 20.0)
         
-        labelAlertQuestion.textAlignment = .Center
+        labelAlertQuestion.textAlignment = .center
         labelAlertQuestion.textColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 1.0)
         viewAlert.addSubview(labelAlertQuestion)
 
@@ -330,7 +330,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelAlertAction.text = "We’ll send you a message when your\nUsername is ready to be resetted. Meanwhile\nyou can still use your Username."
         labelAlertAction.numberOfLines = 3
         labelAlertAction.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelAlertAction.textAlignment = .Center
+        labelAlertAction.textAlignment = .center
         labelAlertAction.textColor = UIColor(red: 138.0 / 255.0, green: 138.0 / 255.0, blue: 138.0 / 255.0, alpha: 1.0)
         viewAlert.addSubview(labelAlertAction)
         
@@ -338,12 +338,12 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         let buttonYesWidth = 130/414 * screenWidth
         let buttonYesHeight:CGFloat = 39.0
         buttonYes = UIButton(frame: CGRect(x: (viewAlertWidth-buttonYesWidth)/2, y: buttonYesY, width: buttonYesWidth, height: buttonYesHeight))
-        buttonYes.setTitle("Yes", forState: .Normal)
-        buttonYes.titleLabel?.textColor = UIColor.whiteColor()
+        buttonYes.setTitle("Yes", for: UIControlState())
+        buttonYes.titleLabel?.textColor = UIColor.white
         buttonYes.backgroundColor = colorButtonRed
         buttonYes.layer.cornerRadius = 7
-        buttonYes.titleLabel?.textAlignment = .Center
-        buttonYes.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonYes.titleLabel?.textAlignment = .center
+        buttonYes.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), for: UIControlEvents.touchUpInside)
         viewAlert.addSubview(buttonYes)
      
         let imageAlertDeleteY = 15/736 * screenHeight
@@ -353,19 +353,19 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         imageAlertDelete.image = UIImage(named: "check_cross_red")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FaeAccountUsernameViewController.showMainView(_:)))
         imageAlertDelete.addGestureRecognizer(tapGesture)
-        imageAlertDelete.userInteractionEnabled = true
+        imageAlertDelete.isUserInteractionEnabled = true
         viewAlert.addSubview(imageAlertDelete)
         
         
         self.backgroundGrey.addSubview(viewAlert)
-        viewAlert.hidden = false
+        viewAlert.isHidden = false
         
         
         let viewEnterPassportY = 160/736 * screenHeight
         let viewEnterPassportWidth = 350/414 * screenWidth
         let viewEnterPassportHeight:CGFloat = 229.0
         viewEnterPassport = UIView(frame: CGRect(x: (screenWidth-viewEnterPassportWidth)/2, y: viewEnterPassportY, width: viewEnterPassportWidth, height: viewEnterPassportHeight))
-        viewEnterPassport.backgroundColor = UIColor.whiteColor()
+        viewEnterPassport.backgroundColor = UIColor.white
         viewEnterPassport.layer.cornerRadius = 21
         
         
@@ -377,7 +377,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelEnterPassword.numberOfLines = 1
         labelEnterPassword.font = UIFont(name: "AvenirNext-Medium", size: 20.0)
         
-        labelEnterPassword.textAlignment = .Center
+        labelEnterPassword.textAlignment = .center
         labelEnterPassword.textColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 1.0)
         viewEnterPassport.addSubview(labelEnterPassword)
         
@@ -389,7 +389,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         labelForgetPassword.text = "Forgot Password"
         labelForgetPassword.numberOfLines = 1
         labelForgetPassword.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        labelForgetPassword.textAlignment = .Center
+        labelForgetPassword.textAlignment = .center
         labelForgetPassword.textColor = UIColor(red: 138.0 / 255.0, green: 138.0 / 255.0, blue: 138.0 / 255.0, alpha: 1.0)
         viewEnterPassport.addSubview(labelForgetPassword)
         
@@ -397,12 +397,12 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         let buttonContinueWidth = 130/414 * screenWidth
         let buttonContinueHeight:CGFloat = 39.0
         buttonContinue = UIButton(frame: CGRect(x: (viewEnterPassportWidth-buttonContinueWidth)/2, y: buttonContinueY, width: buttonContinueWidth, height: buttonContinueHeight))
-        buttonContinue.setTitle("Continue", forState: .Normal)
-        buttonContinue.titleLabel?.textColor = UIColor.whiteColor()
+        buttonContinue.setTitle("Continue", for: UIControlState())
+        buttonContinue.titleLabel?.textColor = UIColor.white
         buttonContinue.backgroundColor = colorButtonPink
         buttonContinue.layer.cornerRadius = 7
-        buttonContinue.titleLabel?.textAlignment = .Center
-        buttonContinue.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonContinue.titleLabel?.textAlignment = .center
+        buttonContinue.addTarget(self, action: #selector(FaeAccountUsernameViewController.buttonAction(_:)), for: UIControlEvents.touchUpInside)
         viewEnterPassport.addSubview(buttonContinue)
         
         let textfieldPasswordY = 85/736 * screenHeight
@@ -412,7 +412,7 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         textfieldPassword.placeholder = "Password"
         textfieldPassword.font = UIFont(name: "AvenirNext-Regular", size: 20.0)
         textfieldPassword.delegate = self
-        textfieldPassword.secureTextEntry = true
+        textfieldPassword.isSecureTextEntry = true
         viewEnterPassport.addSubview(textfieldPassword)
         
         let lineY = 113/736 * screenHeight
@@ -429,13 +429,13 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
         imageEnterPasswordDelete.image = UIImage(named: "check_cross_red")
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(FaeAccountUsernameViewController.showMainView(_:)))
         imageEnterPasswordDelete.addGestureRecognizer(tapGesture1)
-        imageEnterPasswordDelete.userInteractionEnabled = true
+        imageEnterPasswordDelete.isUserInteractionEnabled = true
         viewEnterPassport.addSubview(imageEnterPasswordDelete)
-        viewEnterPassport.hidden = true
+        viewEnterPassport.isHidden = true
         
         self.backgroundGrey.addSubview(viewEnterPassport)
         
-        self.backgroundGrey.hidden = true
+        self.backgroundGrey.isHidden = true
         
         
     }
@@ -453,30 +453,30 @@ class FaeAccountUsernameViewController: UIViewController, UITextFieldDelegate{
 
     }
     
-    func checkPassword(password: String) ->Bool{
+    func checkPassword(_ password: String) ->Bool{
         return true
     }
     
-    func showMainView(sender: UIImageView){
-        backgroundGrey.hidden = true
+    func showMainView(_ sender: UIImageView){
+        backgroundGrey.isHidden = true
     }
     
     func usernameExist(){
-        labelResetHint.hidden = false
-        buttonReset.hidden = false
-        labelUsername.hidden = false
-        labelHint.hidden = true
-        textFieldUsername.hidden = true
-        buttonCreate.hidden = true
+        labelResetHint.isHidden = false
+        buttonReset.isHidden = false
+        labelUsername.isHidden = false
+        labelHint.isHidden = true
+        textFieldUsername.isHidden = true
+        buttonCreate.isHidden = true
     }
     
     func usernameNotExist(){
-        labelResetHint.hidden = true
-        buttonReset.hidden = true
-        labelUsername.hidden = true
-        labelHint.hidden = false
-        textFieldUsername.hidden = false
-        buttonCreate.hidden = false
+        labelResetHint.isHidden = true
+        buttonReset.isHidden = true
+        labelUsername.isHidden = true
+        labelHint.isHidden = false
+        textFieldUsername.isHidden = false
+        buttonCreate.isHidden = false
         
     }
     

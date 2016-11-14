@@ -34,40 +34,40 @@ class PhotoPicker {
     var videoAsset: AVAsset? = nil
     var videoImage: UIImage? = nil
     
-    private init() {
+    fileprivate init() {
         getSmartAlbum()
     }
     
     func getSmartAlbum() {
         selectedAlbum.removeAll()
-        let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .AlbumRegular, options: nil)
+        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        smartAlbums.enumerateObjectsUsingBlock( {
-            if let assetCollection = $0.0 as? PHAssetCollection {
-                let assetsFetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: allPhotosOptions)
-                let numberOfAssets = assetsFetchResult.count
-                if numberOfAssets != 0 {
-                    self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
-                    if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
-                        self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
-                        self.currentAlbum = self.cameraRoll
-                    }
+        smartAlbums.enumerateObjects( {
+            let assetCollection = $0.0
+            let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: allPhotosOptions)
+            let numberOfAssets = assetsFetchResult.count
+            if numberOfAssets != 0 {
+                self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult as! PHFetchResult<AnyObject>))
+                if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
+                    self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult as! PHFetchResult<AnyObject>)
+                    self.currentAlbum = self.cameraRoll
                 }
             }
+            
         })
         calculateVideoDuration()
 
     }
     
-    private func calculateVideoDuration(){
+    fileprivate func calculateVideoDuration(){
         if(cameraRoll != nil){
             for i in 0 ..< self.cameraRoll.albumCount {
                 let asset = self.cameraRoll.albumContent[i] as! PHAsset
-                if asset.mediaType == .Video && assetDurationDict[asset] == nil {
+                if asset.mediaType == .video && assetDurationDict[asset] == nil {
                     let lowQRequestOption = PHVideoRequestOptions()
-                    lowQRequestOption.deliveryMode = .FastFormat //high pixel
-                    PHCachingImageManager.defaultManager().requestAVAssetForVideo(asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
+                    lowQRequestOption.deliveryMode = .fastFormat //high pixel
+                    PHCachingImageManager.default().requestAVAsset(forVideo: asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
                         if(assetTwo != nil){
                             let duration = Int(Int(assetTwo!.duration.value) / Int(assetTwo!.duration.timescale))
                             self.assetDurationDict[asset] =  duration

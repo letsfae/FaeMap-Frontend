@@ -17,7 +17,7 @@ class CustomSearchBar: UISearchBar {
     
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         // Drawing code
         
         // Find the index of the search field in the search bar subviews.
@@ -26,7 +26,7 @@ class CustomSearchBar: UISearchBar {
             let searchField: UITextField = (subviews[0] ).subviews[index] as! UITextField
             
             // Set its frame.
-            searchField.frame = CGRectMake(5.0, 5.0, frame.size.width - 10.0, frame.size.height - 10.0)
+            searchField.frame = CGRect(x: 5.0, y: 5.0, width: frame.size.width - 10.0, height: frame.size.height - 10.0)
             
             // Set the font and text color of the search field.
             searchField.font = preferredFont
@@ -36,7 +36,7 @@ class CustomSearchBar: UISearchBar {
             searchField.backgroundColor = barTintColor
         }
         
-        super.drawRect(rect)
+        super.draw(rect)
     }
     
     
@@ -48,8 +48,8 @@ class CustomSearchBar: UISearchBar {
         preferredFont = font
         preferredTextColor = textColor
         
-        searchBarStyle = UISearchBarStyle.Prominent
-        translucent = false
+        searchBarStyle = UISearchBarStyle.prominent
+        isTranslucent = false
     }
     
     
@@ -64,7 +64,7 @@ class CustomSearchBar: UISearchBar {
         let searchBarView = subviews[0]
         
         for i in 0 ..< searchBarView.subviews.count {
-            if searchBarView.subviews[i].isKindOfClass(UITextField) {
+            if searchBarView.subviews[i].isKind(of: UITextField.self) {
                 index = i
                 break
             }

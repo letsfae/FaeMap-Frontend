@@ -7,11 +7,24 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 
 class FaeAccountViewController: UIViewController {
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let colorGreyFae = UIColor(colorLiteralRed: 138/255, green: 138/255, blue: 138/255, alpha: 1)
     //tableview
     var myTableView : UITableView!
@@ -81,7 +94,7 @@ class FaeAccountViewController: UIViewController {
     
     var passwordRetryChance : Int = 6
     
-    var TextFieldDummy = UITextField(frame: CGRectZero)
+    var TextFieldDummy = UITextField(frame: CGRect.zero)
     
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     
@@ -98,9 +111,9 @@ class FaeAccountViewController: UIViewController {
     
     var countDown : Int = 60
     
-    var timer : NSTimer!
+    var timer : Timer!
     
-    let isIPhone5 = UIScreen.mainScreen().bounds.size.height == 568
+    let isIPhone5 = UIScreen.main.bounds.size.height == 568
     
     var passwordValidated = false
     
@@ -112,53 +125,53 @@ class FaeAccountViewController: UIViewController {
         
         self.navigationController?.navigationBar.topItem?.title = ""
         addTableView()
-        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.red
 //        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named: "transparent"), forBarMetrics: UIBarMetrics.Default)
         self.navigationController?.navigationBar.shadowImage = nil
 //        self.navigationController?.navigationBar.shadowImage = UIImage(named: "transparent")
         initialSubView()
         // Do any additional setup after loading the view.
         let shareAPI = LocalStorageManager()
-        shareAPI.readLogInfo()
-        print(userFirstname)
+        _ = shareAPI.readLogInfo()
+        print(userFirstname ?? "Failed to load userName")
         
         let user = FaeUser()
-        user.getAccountBasicInfo({(status:Int,message:AnyObject?) in
+        user.getAccountBasicInfo({(status:Int,message: Any?) in
         })
     }
     func initialSubView(){
         initialFirstLastName()
         initialBirthdayView()
         initialGenderView()
-        popUpView = UIView(frame: CGRectZero)
+        popUpView = UIView(frame: CGRect.zero)
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
 //        self.myTableView.reloadData()
         //reload after internet completed
     }
     func addTableView(){
-        myTableView = UITableView(frame: CGRectMake(0, 0, screenWidth, screenHeight),style: .Grouped)
+        myTableView = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight),style: .grouped)
         myTableView.delegate = self
         myTableView.dataSource = self
         self.view.addSubview(myTableView)
         myTableView.rowHeight = 54
-        myTableView.registerNib( UINib(nibName: "FaeAccountTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneralIdentifier)
-        myTableView.registerNib(UINib(nibName: "FaeAccountWithoutTableViewCell",bundle: nil), forCellReuseIdentifier: cellTitleIdentifier)
-        myTableView.backgroundColor = UIColor.clearColor()
-        myTableView.separatorColor = UIColor.clearColor()
+        myTableView.register( UINib(nibName: "FaeAccountTableViewCell", bundle: nil), forCellReuseIdentifier: cellGeneralIdentifier)
+        myTableView.register(UINib(nibName: "FaeAccountWithoutTableViewCell",bundle: nil), forCellReuseIdentifier: cellTitleIdentifier)
+        myTableView.backgroundColor = UIColor.clear
+        myTableView.separatorColor = UIColor.clear
     }
     func jumpToAccountEmail(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("AccountEmailViewController")as! AccountEmailViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "AccountEmailViewController")as! AccountEmailViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToPhone(){
         let phoneNumber = alreadyBindWithPhoneNumber()
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("PhoneConnectViewController") as! PhoneConnectViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhoneConnectViewController") as! PhoneConnectViewController
         vc.phoneString = phoneNumber
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToUsername(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("FaeAccountUsernameViewController")as! FaeAccountUsernameViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "FaeAccountUsernameViewController")as! FaeAccountUsernameViewController
         self.navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -191,7 +204,7 @@ extension FaeAccountViewController {
         popUpDialogView = UIView(frame: CGRect(x: 32, y: 160, width: 350, height: 208))
         popUpDialogView.layer.cornerRadius = 21
         popUpDialogView.layer.zPosition = 30
-        popUpDialogView.backgroundColor = UIColor.whiteColor()
+        popUpDialogView.backgroundColor = UIColor.white
         
         labelDialogTital = UILabel(frame: CGRect(x: 111.5, y: 30, width: 127, height: 21))
         let attributedString = NSMutableAttributedString(string: "See you soon!")
@@ -199,7 +212,7 @@ extension FaeAccountViewController {
         labelDialogTital.attributedText = attributedString
         labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
         labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-        labelDialogTital.textAlignment = .Center
+        labelDialogTital.textAlignment = .center
         popUpDialogView.addSubview(labelDialogTital)
         
         addCancelButton()
@@ -209,15 +222,15 @@ extension FaeAccountViewController {
         labelContent.numberOfLines = 0
         labelContent.font = UIFont(name: "Avenir Next", size: 13)
         labelContent.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1)
-        labelContent.textAlignment = .Center
+        labelContent.textAlignment = .center
         popUpDialogView.addSubview(labelContent)
         
         let buttonLogOut = UIButton(frame: CGRect(x: 107, y: 148, width: 137, height: 39))
         buttonLogOut.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
-        buttonLogOut.setTitle("Log Out", forState: .Normal)
+        buttonLogOut.setTitle("Log Out", for: UIControlState())
         buttonLogOut.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)
         buttonLogOut.layer.cornerRadius = 7
-        buttonLogOut.addTarget(self, action: #selector(FaeAccountViewController.logOut), forControlEvents: .TouchUpInside)
+        buttonLogOut.addTarget(self, action: #selector(FaeAccountViewController.logOut), for: .touchUpInside)
         popUpDialogView.addSubview(buttonLogOut)
         
         popUpView.addSubview(popUpDialogView)
@@ -228,7 +241,7 @@ extension FaeAccountViewController {
     func logOut() {
         let user = FaeUser()
 
-        user.logOut{(status: Int, message: AnyObject?) in
+        user.logOut{(status: Int, message: Any?) in
         }
         
         jumpTowelcomeVC()
@@ -244,7 +257,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         clearSubViewFor(popUpView)
         preparePopUpView()
         popUpDialogView = UIView(frame: CGRect(x: 32, y: 160, width: 350, height: 229))
-        popUpDialogView.backgroundColor = UIColor.whiteColor()
+        popUpDialogView.backgroundColor = UIColor.white
         popUpDialogView.layer.zPosition = 30
         popUpDialogView.layer.cornerRadius = 21
         
@@ -254,16 +267,16 @@ extension FaeAccountViewController : UITextFieldDelegate{
         labelDialogTital.attributedText = attributedString
         labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
         labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-        labelDialogTital.textAlignment = .Center
+        labelDialogTital.textAlignment = .center
         popUpDialogView.addSubview(labelDialogTital)
         
         textPassWordCheck = UITextField(frame: CGRect(x: 42, y: 90, width: 266, height: 21))
-        textPassWordCheck.textAlignment = .Center
+        textPassWordCheck.textAlignment = .center
         textPassWordCheck.textColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0)
         textPassWordCheck.placeholder = "Password"
         textPassWordCheck.font = UIFont(name: "Avenir Next", size: 20)
-        textPassWordCheck.addTarget(self, action: #selector(FaeAccountViewController.passwordFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
-        textPassWordCheck.secureTextEntry = true
+        textPassWordCheck.addTarget(self, action: #selector(FaeAccountViewController.passwordFieldDidChange), for: UIControlEvents.editingChanged)
+        textPassWordCheck.isSecureTextEntry = true
         textPassWordCheck.textColor = colorFae
         textPassWordCheck.tintColor = colorFae
         textPassWordCheck.delegate = self
@@ -275,10 +288,10 @@ extension FaeAccountViewController : UITextFieldDelegate{
         popUpDialogView.addSubview(underLineView)
         
         buttonContinuePasswordChange = UIButton(frame: CGRect(x: 107, y: 148, width: 137, height: 39))
-        buttonContinuePasswordChange.setTitle("Continue", forState: .Normal)
+        buttonContinuePasswordChange.setTitle("Continue", for: UIControlState())
         buttonContinuePasswordChange.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)
         buttonContinuePasswordChange.layer.cornerRadius = 7
-        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.processPWDChangeRequest), forControlEvents: .TouchUpInside)
+        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.processPWDChangeRequest), for: .touchUpInside)
         disableButton(buttonContinuePasswordChange)
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
@@ -287,15 +300,15 @@ extension FaeAccountViewController : UITextFieldDelegate{
         labelRetryHint = UILabel(frame: CGRect(x: 127.5, y: 51, width: 97, height: 18))
         labelRetryHint.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0)
         labelRetryHint.font = UIFont(name: "Avenir Next", size: 13)
-        labelRetryHint.textAlignment = .Center
-        labelRetryHint.hidden = true
+        labelRetryHint.textAlignment = .center
+        labelRetryHint.isHidden = true
         popUpDialogView.addSubview(labelRetryHint)
         
         let buttonForgetPassword = UIButton(frame: CGRect(x: 126, y: 197, width: 100, height: 18))
-        buttonForgetPassword.setTitle("Forgot Password", forState: .Normal)
-        buttonForgetPassword.setTitleColor(UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0), forState: .Normal)
+        buttonForgetPassword.setTitle("Forgot Password", for: UIControlState())
+        buttonForgetPassword.setTitleColor(UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0), for: UIControlState())
         buttonForgetPassword.titleLabel?.font = UIFont(name: "Avenir Next", size: 13)
-        buttonForgetPassword.addTarget(self, action: #selector(FaeAccountViewController.jumpToforgetPassword), forControlEvents: .TouchUpInside)
+        buttonForgetPassword.addTarget(self, action: #selector(FaeAccountViewController.jumpToforgetPassword), for: .touchUpInside)
         popUpDialogView.addSubview(buttonForgetPassword)
         
         popUpView.addSubview(popUpDialogView)
@@ -305,7 +318,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func addSendCodeView() {
         clearSubViewFor(popUpDialogView)
         popUpDialogView = UIView(frame: CGRect(x: 32, y: 160, width: 350, height: 210))
-        popUpDialogView.backgroundColor = UIColor.whiteColor()
+        popUpDialogView.backgroundColor = UIColor.white
         popUpDialogView.layer.zPosition = 30
         popUpDialogView.layer.cornerRadius = 21
         
@@ -314,11 +327,11 @@ extension FaeAccountViewController : UITextFieldDelegate{
         labelDialogTital.numberOfLines = 0
         labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
         labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-        labelDialogTital.textAlignment = .Center
+        labelDialogTital.textAlignment = .center
         popUpDialogView.addSubview(labelDialogTital)
         
-        buttonContinuePasswordChange.frame = CGRectMake(107, 150, 137, 39)
-        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.sendCodeToEmail), forControlEvents: .TouchUpInside)
+        buttonContinuePasswordChange.frame = CGRect(x: 107, y: 150, width: 137, height: 39)
+        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.sendCodeToEmail), for: .touchUpInside)
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
         let labelEmail = UILabel(frame: CGRect(x: 30, y: 98, width: 290, height: 21))
@@ -326,7 +339,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         let attributeEmail = NSMutableAttributedString(string: convertEmailAddress(getCurrentUserEmail()))
         attributeEmail.addAttribute(NSKernAttributeName, value: CGFloat(-0.3), range: NSRange(location: 0, length: attributeEmail.length))
         labelEmail.attributedText = attributeEmail
-        labelEmail.textAlignment = .Center
+        labelEmail.textAlignment = .center
         labelEmail.textColor = UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0)
         popUpDialogView.addSubview(labelEmail)
         
@@ -338,13 +351,13 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func addCodeView() {
         clearSubViewFor(popUpDialogView)
         popUpDialogView = UIView(frame: CGRect(x: 32, y: 139, width: 350, height: 239))
-        popUpDialogView.backgroundColor = UIColor.whiteColor()
+        popUpDialogView.backgroundColor = UIColor.white
         popUpDialogView.layer.zPosition = 30
         popUpDialogView.layer.cornerRadius = 21
         
-        buttonContinuePasswordChange.frame = CGRectMake(75, 179, 200, 39)
-        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.resendCode), forControlEvents: .TouchUpInside)
-        buttonContinuePasswordChange.setTitle("Resend Code", forState: .Normal)
+        buttonContinuePasswordChange.frame = CGRect(x: 75, y: 179, width: 200, height: 39)
+        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.resendCode), for: .touchUpInside)
+        buttonContinuePasswordChange.setTitle("Resend Code", for: UIControlState())
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
         labelDialogTital = UILabel(frame: CGRect(x: 40, y: 30, width: 270, height: 60))
@@ -352,14 +365,14 @@ extension FaeAccountViewController : UITextFieldDelegate{
         labelDialogTital.numberOfLines = 0
         labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
         labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-        labelDialogTital.textAlignment = .Center
+        labelDialogTital.textAlignment = .center
         popUpDialogView.addSubview(labelDialogTital)
         
         buttonProceed = UIButton(frame: CGRect(x: 0, y: 456, width: screenWidth, height: 56))
-        buttonProceed.setTitle("Proceed", forState: .Normal)
+        buttonProceed.setTitle("Proceed", for: UIControlState())
         buttonProceed.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)
         disableButton(buttonProceed)
-        buttonProceed.addTarget(self, action: #selector(FaeAccountViewController.processToNewPassword), forControlEvents: .TouchUpInside)
+        buttonProceed.addTarget(self, action: #selector(FaeAccountViewController.processToNewPassword), for: .touchUpInside)
         self.view.addSubview(buttonProceed)
         
         addCancelButton()
@@ -371,14 +384,14 @@ extension FaeAccountViewController : UITextFieldDelegate{
         
         popUpView.addSubview(popUpDialogView)
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(FaeAccountViewController.update), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(FaeAccountViewController.update), userInfo: nil, repeats: true)
     }
     
     func addResetPasswordView() {
         clearSubViewFor(popUpDialogView)
         popUpDialogView.removeFromSuperview()
         popUpDialogView = UIView(frame: CGRect(x: 32, y: 160, width: 350, height: 278))
-        popUpDialogView.backgroundColor = UIColor.whiteColor()
+        popUpDialogView.backgroundColor = UIColor.white
         popUpDialogView.layer.zPosition = 30
         popUpDialogView.layer.cornerRadius = 21
         
@@ -390,27 +403,27 @@ extension FaeAccountViewController : UITextFieldDelegate{
         labelDialogTital.attributedText = attributedString
         labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
         labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-        labelDialogTital.textAlignment = .Center
+        labelDialogTital.textAlignment = .center
         popUpDialogView.addSubview(labelDialogTital)
         
-        buttonContinuePasswordChange.frame = CGRectMake(110, 218, 130, 39)
-        buttonContinuePasswordChange.setTitle("Save", forState: .Normal)
-        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.updatePasswordToBackEnd), forControlEvents: .TouchUpInside)
+        buttonContinuePasswordChange.frame = CGRect(x: 110, y: 218, width: 130, height: 39)
+        buttonContinuePasswordChange.setTitle("Save", for: UIControlState())
+        buttonContinuePasswordChange.addTarget(self, action: #selector(FaeAccountViewController.updatePasswordToBackEnd), for: .touchUpInside)
         popUpDialogView.addSubview(buttonContinuePasswordChange)
         
         popUpView.addSubview(popUpDialogView)
         
         //load textfield
         
-        textPassword = PasswordTexField(frame: CGRectMake(81, 84, 230, 25))
-        let passwordPlaceholder = NSAttributedString(string: "New Password", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()])
+        textPassword = PasswordTexField(frame: CGRect(x: 81, y: 84, width: 230, height: 25))
+        let passwordPlaceholder = NSAttributedString(string: "New Password", attributes: [NSForegroundColorAttributeName : UIColor.gray])
         textPassword.attributedPlaceholder = passwordPlaceholder
         //        textPasswordAgain.textColor = ColorFae
         textPassword.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         popUpDialogView.addSubview(textPassword)
         
-        textPasswordAgain = PasswordAgainTextField(frame: CGRectMake(81, 148, 230, 25))
-        let passwordAgainPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()])
+        textPasswordAgain = PasswordAgainTextField(frame: CGRect(x: 81, y: 148, width: 230, height: 25))
+        let passwordAgainPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.gray])
         textPasswordAgain.attributedPlaceholder = passwordAgainPlaceholder;
         //        textPasswordAgain.textColor = ColorFae
         textPasswordAgain.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
@@ -418,60 +431,60 @@ extension FaeAccountViewController : UITextFieldDelegate{
         
         //load inline view
         
-        inLineViewPassword = UIView(frame: CGRectMake(35, 112, 280, 2))
+        inLineViewPassword = UIView(frame: CGRect(x: 35, y: 112, width: 280, height: 2))
         inLineViewPassword.layer.borderWidth = 1.0
-        inLineViewPassword.layer.borderColor = UIColor.grayColor().CGColor
+        inLineViewPassword.layer.borderColor = UIColor.gray.cgColor
         popUpDialogView.addSubview(inLineViewPassword)
         
-        inLineViewPasswordAgain = UIView(frame: CGRectMake(35, 176, 280, 2))
+        inLineViewPasswordAgain = UIView(frame: CGRect(x: 35, y: 176, width: 280, height: 2))
         inLineViewPasswordAgain.layer.borderWidth = 1.0
-        inLineViewPasswordAgain.layer.borderColor = UIColor.grayColor().CGColor
+        inLineViewPasswordAgain.layer.borderColor = UIColor.gray.cgColor
         popUpDialogView.addSubview(inLineViewPasswordAgain)
         
         //load small icon
         
-        imagePassword = UIImageView(frame: CGRectMake(43, 78.1, 16.8, 27.9))
+        imagePassword = UIImageView(frame: CGRect(x: 43, y: 78.1, width: 16.8, height: 27.9))
         imagePassword.image = UIImage(named: "password_gray")
         popUpDialogView.addSubview(imagePassword)
         
-        imagePasswordAgain = UIImageView(frame: CGRectMake(41, 144, 22.7, 26.2))
+        imagePasswordAgain = UIImageView(frame: CGRect(x: 41, y: 144, width: 22.7, height: 26.2))
         imagePasswordAgain.image = UIImage(named: "conf_password_gray")
         popUpDialogView.addSubview(imagePasswordAgain)
         
         // load image view
         
-        imageAlertView = UIImageView(frame: CGRectMake(301, 87, 7, 20))
+        imageAlertView = UIImageView(frame: CGRect(x: 301, y: 87, width: 7, height: 20))
         imageAlertView.image = UIImage(named: "Page 1")
-        imageAlertView.hidden = true
+        imageAlertView.isHidden = true
         popUpDialogView.addSubview(imageAlertView)
         
-        imageCheckPassword = UIImageView(frame: CGRectMake(298, 89, 15, 17))
+        imageCheckPassword = UIImageView(frame: CGRect(x: 298, y: 89, width: 15, height: 17))
         imageCheckPassword.image = UIImage(named: "check_yes")
-        imageCheckPassword.layer.hidden = true
+        imageCheckPassword.layer.isHidden = true
         popUpDialogView.addSubview(imageCheckPassword)
         
-        imageCheckPasswordAgain = UIImageView(frame: CGRectMake(298, 153, 15, 17))
+        imageCheckPasswordAgain = UIImageView(frame: CGRect(x: 298, y: 153, width: 15, height: 17))
         imageCheckPasswordAgain.image = UIImage(named: "check_yes")
-        imageCheckPasswordAgain.layer.hidden = true
+        imageCheckPasswordAgain.layer.isHidden = true
         popUpDialogView.addSubview(imageCheckPasswordAgain)
         
         //load hint
         
-        labelPasswordHint = UILabel(frame: CGRectMake(35, 115.5, 280, 15))
-        labelPasswordHint.textAlignment = .Right
+        labelPasswordHint = UILabel(frame: CGRect(x: 35, y: 115.5, width: 280, height: 15))
+        labelPasswordHint.textAlignment = .right
         labelPasswordHint.font = UIFont(name: "Helvetica Neue", size: 11)
-        labelPasswordHint.layer.hidden = true
+        labelPasswordHint.layer.isHidden = true
         popUpDialogView.addSubview(labelPasswordHint)
         
         //load callback
         
-        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsFocus), forControlEvents: .EditingDidBegin)
-        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsNotFocus), forControlEvents: .EditingDidEnd)
-        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsChanged), forControlEvents: .EditingChanged)
+        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsFocus), for: .editingDidBegin)
+        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsNotFocus), for: .editingDidEnd)
+        textPassword.addTarget(self, action: #selector(FaeAccountViewController.passwordIsChanged), for: .editingChanged)
         
-        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsFocus), forControlEvents: .EditingDidBegin)
-        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsNotFocus), forControlEvents: .EditingDidEnd)
-        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsChanged), forControlEvents: .EditingChanged)
+        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsFocus), for: .editingDidBegin)
+        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsNotFocus), for: .editingDidEnd)
+        textPasswordAgain.addTarget(self, action: #selector(FaeAccountViewController.passwordAgainIsChanged), for: .editingChanged)
     }
     
     func loadDot() {
@@ -481,7 +494,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         let height : CGFloat = 13.0
         let interval : CGFloat = 42.0
         for i in 0  ..< 6 {
-            imageCodeDotArray.append(UIImageView(frame : CGRectMake(xDistance, paddingTop, length, height)))
+            imageCodeDotArray.append(UIImageView(frame : CGRect(x: xDistance, y: paddingTop, width: length, height: height)))
             xDistance += interval
             imageCodeDotArray[i].image = UIImage(named: "verification_dot")
             popUpDialogView.addSubview(imageCodeDotArray[i]);
@@ -495,19 +508,19 @@ extension FaeAccountViewController : UITextFieldDelegate{
         let paddingTop : CGFloat = 94.0
         let interval : CGFloat = 42
         for i in 0  ..< 6 {
-            textVerificationCode.append(UILabel(frame: CGRectMake(xDistance, paddingTop, length, height)))
+            textVerificationCode.append(UILabel(frame: CGRect(x: xDistance, y: paddingTop, width: length, height: height)))
             if(isIPhone5) {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 40)
             } else {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)
             }
             textVerificationCode[i].textColor = colorFae
-            textVerificationCode[i].textAlignment = .Center
+            textVerificationCode[i].textAlignment = .center
             let attributedString = NSMutableAttributedString(string: "\(i)")
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.6), range: NSRange(location: 0, length: attributedString.length))
             
             textVerificationCode[i].attributedText = attributedString
-            textVerificationCode[i].hidden = true
+            textVerificationCode[i].isHidden = true
             xDistance += interval
             popUpDialogView.addSubview(textVerificationCode[i])
         }
@@ -515,8 +528,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
     
     func loadTextField() {
         self.view.addSubview(TextFieldDummy)
-        TextFieldDummy.keyboardType = UIKeyboardType.NumberPad
-        TextFieldDummy.addTarget(self, action: #selector(FaeAccountViewController.textFieldValueDidChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        TextFieldDummy.keyboardType = UIKeyboardType.numberPad
+        TextFieldDummy.addTarget(self, action: #selector(FaeAccountViewController.textFieldValueDidChanged(_:)), for: UIControlEvents.editingChanged)
         TextFieldDummy.becomeFirstResponder()
     }
     
@@ -532,7 +545,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
             labelDialogTital.attributedText = attributedString
             labelDialogTital.font = UIFont(name: "Avenir Next", size: 20)
             labelDialogTital.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
-            labelDialogTital.textAlignment = .Center
+            labelDialogTital.textAlignment = .center
             popUpDialogView.addSubview(labelDialogTital)
             passwordRetryChance -= 1
             if(passwordRetryChance == 0) {
@@ -541,7 +554,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
             }
             //update text for button
             labelRetryHint.text = "\(passwordRetryChance) more tries left."
-            labelRetryHint.hidden = false
+            labelRetryHint.isHidden = false
         }
     }
     
@@ -550,44 +563,44 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func passwordIsFocus() {
         print("password is focused")
         imagePassword.image = UIImage(named: "password_red")
-        inLineViewPassword.layer.borderColor = ColorFae.CGColor
-        textPassword.rightViewMode = .WhileEditing
+        inLineViewPassword.layer.borderColor = ColorFae.cgColor
+        textPassword.rightViewMode = .whileEditing
         passwordIsChanged()
-        imageCheckPassword.hidden = true
-        imageAlertView.hidden = true
+        imageCheckPassword.isHidden = true
+        imageAlertView.isHidden = true
         checkAllValidation()
     }
     
     func passwordIsChanged() {
         if textPassword.text!.characters.count < 8 {
             imagePassword.image = UIImage(named: "password_yellow")
-            inLineViewPassword.layer.borderColor = ColorFaeYellow.CGColor
+            inLineViewPassword.layer.borderColor = ColorFaeYellow.cgColor
             labelPasswordHint.textColor = ColorFaeYellow
             textPassword.textColor = ColorFaeYellow
             labelPasswordHint.text = "Must be at least 8 characters"
             
-            labelPasswordHint.hidden = false
+            labelPasswordHint.isHidden = false
         } else if (passwordVerification(textPassword.text!)){
             imagePassword.image = UIImage(named: "password_red")
-            inLineViewPassword.layer.borderColor = ColorFae.CGColor
+            inLineViewPassword.layer.borderColor = ColorFae.cgColor
             textPassword.textColor = ColorFae
-            labelPasswordHint.hidden = true
+            labelPasswordHint.isHidden = true
             passwordValidated = true
         } else {
             imagePassword.image = UIImage(named: "password_orange")
-            inLineViewPassword.layer.borderColor = ColorFaeOrange.CGColor
+            inLineViewPassword.layer.borderColor = ColorFaeOrange.cgColor
             labelPasswordHint.textColor = ColorFaeOrange
             textPassword.textColor = ColorFaeOrange
             labelPasswordHint.text = "Try adding Capital Letters/Numbers/Symbols"
-            labelPasswordHint.hidden = false
+            labelPasswordHint.isHidden = false
         }
         if(textPassword.text != "" && textPasswordAgain.text != "") {
             if(isValidPasswordAgain()) {
                 imageCheckPasswordAgain.image = UIImage(named: "check_yes")
-                imageCheckPasswordAgain.hidden = false
+                imageCheckPasswordAgain.isHidden = false
             } else {
                 imageCheckPasswordAgain.image = UIImage(named: "check_cross_red")
-                imageCheckPasswordAgain.hidden = false
+                imageCheckPasswordAgain.isHidden = false
             }
             
         }
@@ -598,28 +611,28 @@ extension FaeAccountViewController : UITextFieldDelegate{
         print("password is not focused")
         if(textPassword.text == "" ) {
             imagePassword.image = UIImage(named: "password_gray")
-            inLineViewPassword.layer.borderColor = UIColor.grayColor().CGColor
-            labelPasswordHint.hidden = true
+            inLineViewPassword.layer.borderColor = UIColor.gray.cgColor
+            labelPasswordHint.isHidden = true
         } else if(textPassword.text?.characters.count < 8) {
             imageCheckPassword.image = UIImage(named: "check_cross_red")
-            imageCheckPassword.hidden = false
+            imageCheckPassword.isHidden = false
         } else if (!passwordVerification(textPassword.text!)){
-            imageAlertView.hidden = false
+            imageAlertView.isHidden = false
         } else {
             imageCheckPassword.image = UIImage(named: "check_yes")
-            imageCheckPassword.hidden = false
+            imageCheckPassword.isHidden = false
         }
         checkAllValidation()
     }
     
     func passwordAgainIsFocus() {
         imagePasswordAgain.image = UIImage(named: "conf_password_red")
-        inLineViewPasswordAgain.layer.borderColor = ColorFae.CGColor
+        inLineViewPasswordAgain.layer.borderColor = ColorFae.cgColor
         textPasswordAgain.textColor = ColorFae
         if(!isValidPasswordAgain()) {
-            imageCheckPasswordAgain.hidden = true
+            imageCheckPasswordAgain.isHidden = true
             passwordAgainValidated = false
-            textPasswordAgain.rightViewMode = .WhileEditing
+            textPasswordAgain.rightViewMode = .whileEditing
         }
         checkAllValidation()
     }
@@ -627,32 +640,32 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func passwordAgainIsChanged() {
         if(isValidPasswordAgain()) {
             imageCheckPasswordAgain.image = UIImage(named: "check_yes")
-            imageCheckPasswordAgain.hidden = false
+            imageCheckPasswordAgain.isHidden = false
             passwordAgainValidated = true
-            textPasswordAgain.rightViewMode = .Never
+            textPasswordAgain.rightViewMode = .never
         } else {
-            textPasswordAgain.rightViewMode = .WhileEditing
-            imageCheckPasswordAgain.hidden = true
+            textPasswordAgain.rightViewMode = .whileEditing
+            imageCheckPasswordAgain.isHidden = true
             passwordAgainValidated = false
         }
         checkAllValidation()
     }
     
     func passwordAgainIsNotFocus() {
-        textPasswordAgain.rightViewMode = .Never
+        textPasswordAgain.rightViewMode = .never
         if(textPasswordAgain.text == "") {
             imagePasswordAgain.image = UIImage(named: "conf_password_gray")
-            inLineViewPasswordAgain.layer.borderColor = UIColor.grayColor().CGColor
+            inLineViewPasswordAgain.layer.borderColor = UIColor.gray.cgColor
         } else if(!isValidPasswordAgain()) {
             imageCheckPasswordAgain.image = UIImage(named: "check_cross_red")
-            imageCheckPasswordAgain.hidden = false
+            imageCheckPasswordAgain.isHidden = false
             passwordAgainValidated = false
         }
         checkAllValidation()
     }
     
     func isValidPasswordAgain() -> Bool {
-        if(textPasswordAgain.text != "" && textPassword != "") {
+        if(textPasswordAgain.text != "" && textPassword.text != "") {
             return textPasswordAgain.text == textPassword.text
         } else {
             return false
@@ -673,20 +686,20 @@ extension FaeAccountViewController : UITextFieldDelegate{
         if(countDown > 0) {
             let title = "Resend Code \(countDown)"
             countDown -= 1
-            buttonContinuePasswordChange.setTitle(title, forState: .Normal)
+            buttonContinuePasswordChange.setTitle(title, for: UIControlState())
         } else {
             let title = "Resend Code"
-            buttonContinuePasswordChange.setTitle(title, forState: .Normal)
+            buttonContinuePasswordChange.setTitle(title, for: UIControlState())
             enableButton(buttonContinuePasswordChange)
         }
     }
     
-    func textFieldValueDidChanged(textField: UITextField) {
+    func textFieldValueDidChanged(_ textField: UITextField) {
         let buffer = textField.text!
         while(buffer.characters.count<index) {
             index -= 1;
-            imageCodeDotArray[index].hidden = false
-            textVerificationCode[index].hidden = true
+            imageCodeDotArray[index].isHidden = false
+            textVerificationCode[index].isHidden = true
             disableButton(buttonProceed)
         }
         if (buffer.characters.count > index) {
@@ -694,12 +707,12 @@ extension FaeAccountViewController : UITextFieldDelegate{
                 enableButton(buttonProceed)
             }
             if(buffer.characters.count > 6) {
-                let endIndex = buffer.startIndex.advancedBy(6)
-                textField.text = buffer.substringToIndex(endIndex)
+                let endIndex = buffer.characters.index(buffer.startIndex, offsetBy: 6)
+                textField.text = buffer.substring(to: endIndex)
             } else {
-                textVerificationCode[index].text = (String)(buffer[buffer.endIndex.predecessor()])
-                imageCodeDotArray[index].hidden = true
-                textVerificationCode[index].hidden = false;
+                textVerificationCode[index].text = (String)(buffer[buffer.characters.index(before: buffer.endIndex)])
+                imageCodeDotArray[index].isHidden = true
+                textVerificationCode[index].isHidden = false;
                 index += 1
             }
         }
@@ -714,7 +727,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         }
     }
     
-    func passwordIsCorrectFromBackEnd(password : String) -> Bool {
+    func passwordIsCorrectFromBackEnd(_ password : String) -> Bool {
         return password == userPassword
     }
     
@@ -732,7 +745,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         
     }
     
-    func updateRetryTimeToBackEnd(time : Int) {
+    func updateRetryTimeToBackEnd(_ time : Int) {
         
     }
     
@@ -770,7 +783,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
             addResetPasswordView()
             buttonProceed.removeFromSuperview()
         } else {
-            labelDialogTital.frame = CGRectMake(45, 20, 260, 70)
+            labelDialogTital.frame = CGRect(x: 45, y: 20, width: 260, height: 70)
             labelDialogTital.text = "Oops…That’s not the right\ncode. Please try again!"
         }
     }
@@ -779,7 +792,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
         return userEmail
     }
     
-    func convertEmailAddress(email : String) -> String {
+    func convertEmailAddress(_ email : String) -> String {
         return email
     }
     
@@ -823,8 +836,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func jumpTowelcomeVC() {
 //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
 //        self.presentViewController(vc, animated: true, completion: nil)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
-        self.presentViewController(vc, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        self.present(vc, animated: true, completion: nil)
     }
     
 }
@@ -857,20 +870,20 @@ extension FaeAccountViewController {
         popUpView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         let buttonBackGround = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         buttonBackGround.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.5)
-        buttonBackGround.setTitle("", forState: .Normal)
-        buttonBackGround.addTarget(self, action: #selector(FaeAccountViewController.cancelpopUpView), forControlEvents: .TouchUpInside)
+        buttonBackGround.setTitle("", for: UIControlState())
+        buttonBackGround.addTarget(self, action: #selector(FaeAccountViewController.cancelpopUpView), for: .touchUpInside)
         buttonBackGround.layer.zPosition = 20
         popUpView.addSubview(buttonBackGround)
     }
     
     func addCancelButton() {
         let buttonCancel = UIButton(frame: CGRect(x: 15, y: 15, width: 17, height: 17))
-        buttonCancel.setImage(UIImage(named: "check_cross_red"), forState: .Normal)
-        buttonCancel.addTarget(self, action: #selector(FaeAccountViewController.cancelpopUpView), forControlEvents: .TouchUpInside)
+        buttonCancel.setImage(UIImage(named: "check_cross_red"), for: UIControlState())
+        buttonCancel.addTarget(self, action: #selector(FaeAccountViewController.cancelpopUpView), for: .touchUpInside)
         popUpDialogView.addSubview(buttonCancel)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
@@ -894,20 +907,20 @@ extension FaeAccountViewController {
         passwordValidated = false
     }
     
-    func clearSubViewFor(view : UIView) {
+    func clearSubViewFor(_ view : UIView) {
         for subview in view.subviews {
             subview.removeFromSuperview()
         }
     }
     
-    func disableButton(button : UIButton) {
+    func disableButton(_ button : UIButton) {
         button.backgroundColor = colorDisableButton
-        button.enabled = false
+        button.isEnabled = false
     }
     
-    func enableButton(button : UIButton) {
+    func enableButton(_ button : UIButton) {
         button.backgroundColor = colorFae
-        button.enabled = true
+        button.isEnabled = true
     }
     
 }
@@ -918,61 +931,61 @@ extension FaeAccountViewController{
     func initialGenderView(){
         let x : CGFloat = 32
         let y : CGFloat = 160
-        viewGenderBackground = UIView(frame: CGRectMake(0,0,screenWidth,screenHeight))
+        viewGenderBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         viewGenderBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
-        buttonBackgroundCloseGender = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseGender = UIButton(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        buttonBackgroundCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), for: .touchUpInside)
         viewGenderBackground.addSubview(buttonBackgroundCloseGender)
         
-        viewGender = UIView(frame: CGRectMake(x,y,350,228))
-        viewGender.backgroundColor = UIColor.whiteColor()
+        viewGender = UIView(frame: CGRect(x: x,y: y,width: 350,height: 228))
+        viewGender.backgroundColor = UIColor.white
         viewGender.layer.cornerRadius = 21
         viewGenderBackground.addSubview(viewGender)
         
-        buttonCloseGender = UIButton(frame: CGRectMake(47-x,175-y,17,17))
-        buttonCloseGender.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), forControlEvents: .TouchUpInside)
+        buttonCloseGender = UIButton(frame: CGRect(x: 47-x,y: 175-y,width: 17,height: 17))
+        buttonCloseGender.setImage(UIImage(named: "accountCloseFirstLast"), for: UIControlState())
+        buttonCloseGender.addTarget(self, action: #selector(FaeAccountViewController.actionCloseGenderView), for: .touchUpInside)
         viewGender.addSubview(buttonCloseGender)
         
-        labelTitleGender = UILabel(frame: CGRectMake(0,190-y,350,21))
+        labelTitleGender = UILabel(frame: CGRect(x: 0,y: 190-y,width: 350,height: 21))
         labelTitleGender.text = "Your Gender"
         labelTitleGender.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelTitleGender.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1)
-        labelTitleGender.textAlignment = .Center
+        labelTitleGender.textAlignment = .center
         viewGender.addSubview(labelTitleGender)
         
-        buttonMale = UIButton(frame: CGRectMake(90-x,240-y,70,65))
+        buttonMale = UIButton(frame: CGRect(x: 90-x,y: 240-y,width: 70,height: 65))
         buttonMale.tag = 0
-        buttonMale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
+        buttonMale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), for: .touchUpInside)
         viewGender.addSubview(buttonMale)
         
-        buttonFemale = UIButton(frame: CGRectMake(267-x,240-y,58,65))
+        buttonFemale = UIButton(frame: CGRect(x: 267-x,y: 240-y,width: 58,height: 65))
         buttonFemale.tag = 1
-        buttonFemale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), forControlEvents: .TouchUpInside)
+        buttonFemale.addTarget(self, action: #selector(FaeAccountViewController.genderImage(_:)), for: .touchUpInside)
         viewGender.addSubview(buttonFemale)
         if gender == 0 {
-            buttonMale.sendActionsForControlEvents(.TouchUpInside)
+            buttonMale.sendActions(for: .touchUpInside)
         }else {
-            buttonFemale.sendActionsForControlEvents(.TouchUpInside)
+            buttonFemale.sendActions(for: .touchUpInside)
         }
         
-        buttonSaveGender = UIButton(frame: CGRectMake(142-x,328-y,130,39))
+        buttonSaveGender = UIButton(frame: CGRect(x: 142-x,y: 328-y,width: 130,height: 39))
         buttonSaveGender.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveGender.layer.cornerRadius = 7
-        buttonSaveGender.setTitle("Save", forState: .Normal)
-        buttonSaveGender.addTarget(self, action: #selector(FaeAccountViewController.actionSaveGender), forControlEvents: .TouchUpInside)
+        buttonSaveGender.setTitle("Save", for: UIControlState())
+        buttonSaveGender.addTarget(self, action: #selector(FaeAccountViewController.actionSaveGender), for: .touchUpInside)
         viewGender.addSubview(buttonSaveGender)
         
     }
-    func genderImage(sender : UIButton){
+    func genderImage(_ sender : UIButton){
         if sender.tag == 0 {//male
-            buttonMale.setImage(UIImage(named: "male_selected"), forState: .Normal)
-            buttonFemale.setImage(UIImage(named: "female_unselected"), forState: .Normal)
+            buttonMale.setImage(UIImage(named: "male_selected"), for: UIControlState())
+            buttonFemale.setImage(UIImage(named: "female_unselected"), for: UIControlState())
             gender = 0
         }else if sender.tag == 1{
-            buttonMale.setImage(UIImage(named: "male_unselected"), forState: .Normal)
-            buttonFemale.setImage(UIImage(named: "female_selected"), forState: .Normal)
+            buttonMale.setImage(UIImage(named: "male_unselected"), for: UIControlState())
+            buttonFemale.setImage(UIImage(named: "female_selected"), for: UIControlState())
             gender = 1
         }
     }
@@ -987,7 +1000,7 @@ extension FaeAccountViewController{
         }
         let user = FaeUser()
         user.whereKey("gender", value: genderUpload)
-        user.updateAccountBasicInfo({(status:Int,message:AnyObject?)in
+        user.updateAccountBasicInfo({(status:Int,message: Any?)in
             if status / 100 == 2 {
                 //success
                 self.myTableView.reloadData()
@@ -1011,51 +1024,51 @@ extension FaeAccountViewController {
     func initialBirthdayView(){
         let x : CGFloat = 32
         let y : CGFloat = 160
-        viewBirthdayBackground = UIView(frame: CGRectMake(0,0,screenWidth,screenHeight))
+        viewBirthdayBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         viewBirthdayBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
-        buttonBackgroundCloseBirthday = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
+        buttonBackgroundCloseBirthday = UIButton(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        buttonBackgroundCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), for: .touchUpInside)
         viewBirthdayBackground.addSubview(buttonBackgroundCloseBirthday)
         
-        viewBirthday = UIView(frame: CGRectMake(32,160,350,208))
-        viewBirthday.backgroundColor = UIColor.whiteColor()
+        viewBirthday = UIView(frame: CGRect(x: 32,y: 160,width: 350,height: 208))
+        viewBirthday.backgroundColor = UIColor.white
         viewBirthday.layer.cornerRadius = 21
         viewBirthdayBackground.addSubview(viewBirthday)
         
-        buttonCloseBirthday = UIButton(frame: CGRectMake(47-x,175-y,17,17))
-        buttonCloseBirthday.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), forControlEvents: .TouchUpInside)
+        buttonCloseBirthday = UIButton(frame: CGRect(x: 47-x,y: 175-y,width: 17,height: 17))
+        buttonCloseBirthday.setImage(UIImage(named: "accountCloseFirstLast"), for: UIControlState())
+        buttonCloseBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionCloseBrithdayView), for: .touchUpInside)
         viewBirthday.addSubview(buttonCloseBirthday)
         
-        labelTitleBirthday = UILabel(frame: CGRectMake(0,190-y,350,21))
-        labelTitleBirthday.textAlignment = .Center
+        labelTitleBirthday = UILabel(frame: CGRect(x: 0,y: 190-y,width: 350,height: 21))
+        labelTitleBirthday.textAlignment = .center
         labelTitleBirthday.text = "Your Birthday"
         labelTitleBirthday.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelTitleBirthday.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1)
         viewBirthday.addSubview(labelTitleBirthday)
         
-        labelDataShowBirthday = UILabel(frame: CGRectMake(74-x,250-y,266,21))
-        labelDataShowBirthday.textAlignment = .Center
+        labelDataShowBirthday = UILabel(frame: CGRect(x: 74-x,y: 250-y,width: 266,height: 21))
+        labelDataShowBirthday.textAlignment = .center
         labelDataShowBirthday.textColor = colorGreyFae
         viewBirthday.addSubview(labelDataShowBirthday)
         
-        viewUnderlineBirthday = UIView(frame: CGRectMake(74-x,273-y,266,2))
+        viewUnderlineBirthday = UIView(frame: CGRect(x: 74-x,y: 273-y,width: 266,height: 2))
         viewUnderlineBirthday.backgroundColor = UIColor(colorLiteralRed: 182/255, green: 182/255, blue: 182/255, alpha: 1)
         viewBirthday.addSubview(viewUnderlineBirthday)
         
-        buttonSaveBirthday = UIButton(frame: CGRectMake(142-x,308-y,130,39))
+        buttonSaveBirthday = UIButton(frame: CGRect(x: 142-x,y: 308-y,width: 130,height: 39))
         buttonSaveBirthday.layer.cornerRadius = 7
         buttonSaveBirthday.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        buttonSaveBirthday.setTitle("Save", forState: .Normal)
-        buttonSaveBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionSaveBirthday), forControlEvents: .TouchUpInside)
+        buttonSaveBirthday.setTitle("Save", for: UIControlState())
+        buttonSaveBirthday.addTarget(self, action: #selector(FaeAccountViewController.actionSaveBirthday), for: .touchUpInside)
         viewBirthday.addSubview(buttonSaveBirthday)
         
-        dataPickerBirthday = UIDatePicker(frame: CGRectMake(0,screenHeight-216,screenWidth,216))
-        dataPickerBirthday.timeZone = NSTimeZone.localTimeZone()
-        dataPickerBirthday.datePickerMode = UIDatePickerMode.Date
-        dataPickerBirthday.backgroundColor = UIColor.whiteColor()
-        dataPickerBirthday.addTarget(self, action: #selector(FaeAccountViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
+        dataPickerBirthday = UIDatePicker(frame: CGRect(x: 0,y: screenHeight-216,width: screenWidth,height: 216))
+        dataPickerBirthday.timeZone = TimeZone.autoupdatingCurrent
+        dataPickerBirthday.datePickerMode = UIDatePickerMode.date
+        dataPickerBirthday.backgroundColor = UIColor.white
+        dataPickerBirthday.addTarget(self, action: #selector(FaeAccountViewController.handleDatePicker(_:)), for: .valueChanged)
         viewBirthdayBackground.addSubview(dataPickerBirthday)
     }
     //MARK: save birthday to database
@@ -1066,7 +1079,7 @@ extension FaeAccountViewController {
         let dateString = timeToString(dateGot)
         let user = FaeUser()
         user.whereKey("birthday", value: dateString)
-        user.updateAccountBasicInfo({(status:Int,message:AnyObject?)in
+        user.updateAccountBasicInfo({(status:Int,message: Any?)in
             if status / 100 == 2 {
                 //success
                 self.myTableView.reloadData()
@@ -1078,11 +1091,11 @@ extension FaeAccountViewController {
         
         actionCloseBrithdayView()
     }
-    func handleDatePicker(sender: UIDatePicker) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
-        sender.maximumDate = NSDate()
-        labelDataShowBirthday.text = dateFormatter.stringFromDate(sender.date)
+    func handleDatePicker(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long
+        sender.maximumDate = Date()
+        labelDataShowBirthday.text = dateFormatter.string(from: sender.date)
     }
     func actionCloseBrithdayView(){
         viewBirthdayBackground.removeFromSuperview()
@@ -1096,57 +1109,57 @@ extension FaeAccountViewController {
     func initialFirstLastName(){
         let x : CGFloat = 32
         let y : CGFloat = 160
-        viewFirstLastBackground = UIView(frame: CGRectMake(0,0,screenWidth,screenHeight))
+        viewFirstLastBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         viewFirstLastBackground.backgroundColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
         
-        buttonBackgroundClose = UIButton(frame: CGRectMake(0,0,screenWidth,screenHeight))
-        buttonBackgroundClose.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), forControlEvents: .TouchUpInside)
+        buttonBackgroundClose = UIButton(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        buttonBackgroundClose.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), for: .touchUpInside)
         viewFirstLastBackground.addSubview(buttonBackgroundClose)
         
-        viewFirstAndLast = UIView(frame: CGRectMake(32,160,350,258))
-        viewFirstAndLast.backgroundColor = UIColor.whiteColor()
+        viewFirstAndLast = UIView(frame: CGRect(x: 32,y: 160,width: 350,height: 258))
+        viewFirstAndLast.backgroundColor = UIColor.white
         viewFirstAndLast.layer.cornerRadius = 21
         viewFirstLastBackground.addSubview(viewFirstAndLast)
         
-        buttonCloseName = UIButton(frame: CGRectMake(47-x,175-y,17,17))
-        buttonCloseName.setImage(UIImage(named: "accountCloseFirstLast"), forState: .Normal)
-        buttonCloseName.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), forControlEvents: .TouchUpInside)
+        buttonCloseName = UIButton(frame: CGRect(x: 47-x,y: 175-y,width: 17,height: 17))
+        buttonCloseName.setImage(UIImage(named: "accountCloseFirstLast"), for: UIControlState())
+        buttonCloseName.addTarget(self, action: #selector(FaeAccountViewController.closeFirstLastView), for: .touchUpInside)
         viewFirstAndLast.addSubview(buttonCloseName)
         
-        labelTitleFirstLast = UILabel(frame: CGRectMake(0,190-y,350,21))
-        labelTitleFirstLast.textAlignment = .Center
+        labelTitleFirstLast = UILabel(frame: CGRect(x: 0,y: 190-y,width: 350,height: 21))
+        labelTitleFirstLast.textAlignment = .center
         labelTitleFirstLast.textColor = UIColor(colorLiteralRed: 107/255, green: 105/255, blue: 105/255, alpha: 1)
         viewFirstAndLast.addSubview(labelTitleFirstLast)
         
-        labelDetailFirstLast = UILabel(frame: CGRectMake(76-x,223-y,262,54))
+        labelDetailFirstLast = UILabel(frame: CGRect(x: 76-x,y: 223-y,width: 262,height: 54))
         labelDetailFirstLast.text = "Please enter your real name so its easier for your friends to find you! You can toggle to/not to show this name in Edit Profile."
         labelDetailFirstLast.textColor = UIColor(colorLiteralRed: 138/255, green: 138/255, blue: 138/255, alpha: 1)
         labelDetailFirstLast.font = UIFont(name: "AvenirNext-Medium", size: 13)
         labelDetailFirstLast.numberOfLines = 0
         viewFirstAndLast.addSubview(labelDetailFirstLast)
         
-        textFieldFirstLast = UITextField(frame: CGRectMake(74-x,300-y,262,22))
+        textFieldFirstLast = UITextField(frame: CGRect(x: 74-x,y: 300-y,width: 262,height: 22))
         textFieldFirstLast.placeholder = "Please enter your name"
-        textFieldFirstLast.textAlignment = .Center
+        textFieldFirstLast.textAlignment = .center
         textFieldFirstLast.textColor = colorGreyFae
         viewFirstAndLast.addSubview(textFieldFirstLast)
         
-        viewUnderlineName = UIView(frame: CGRectMake(74-x,323-y,266,2))
+        viewUnderlineName = UIView(frame: CGRect(x: 74-x,y: 323-y,width: 266,height: 2))
         viewUnderlineName.backgroundColor = UIColor(colorLiteralRed: 182/255, green: 182/255, blue: 182/255, alpha: 1)
 //        viewUnderlineName.backgroundColor = UIColor.blackColor()
         viewFirstAndLast.addSubview(viewUnderlineName)
         
-        buttonSaveName = UIButton(frame: CGRectMake(142-x,358-y,130,39))
-        buttonSaveName.setTitle("Save", forState: .Normal)
+        buttonSaveName = UIButton(frame: CGRect(x: 142-x,y: 358-y,width: 130,height: 39))
+        buttonSaveName.setTitle("Save", for: UIControlState())
 //        buttonSaveName.tag = sender
-        buttonSaveName.addTarget(self, action: #selector(FaeAccountViewController.actionSaveFirstLastName(_:)), forControlEvents: .TouchUpInside)
+        buttonSaveName.addTarget(self, action: #selector(FaeAccountViewController.actionSaveFirstLastName(_:)), for: .touchUpInside)
         buttonSaveName.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         buttonSaveName.layer.cornerRadius = 7
         viewFirstAndLast.addSubview(buttonSaveName)
         
     }
     // MARK: save first name and last name function
-    func actionSaveFirstLastName(sender:UIButton){
+    func actionSaveFirstLastName(_ sender:UIButton){
         if let strInputName = textFieldFirstLast.text {
             let user = FaeUser()
             if sender.tag == 0 {//first name
@@ -1155,7 +1168,7 @@ extension FaeAccountViewController {
             }else if sender.tag == 1 {//last name
                 user.whereKey("last_name", value: strInputName)
             }
-            user.updateAccountBasicInfo({(status:Int,message:AnyObject?)in
+            user.updateAccountBasicInfo({(status:Int,message: Any?)in
                 if status / 100 == 2 {
                 //success
                         self.myTableView.reloadData()
@@ -1170,7 +1183,7 @@ extension FaeAccountViewController {
     func closeFirstLastView(){
         viewFirstLastBackground.removeFromSuperview()
     }
-    func showFirstLastView(sender:Int){
+    func showFirstLastView(_ sender:Int){
         if sender == 0 {
             //first name
             labelTitleFirstLast.text = "Your First Name"
@@ -1187,10 +1200,10 @@ extension FaeAccountViewController {
 
 // MARK: tableview delegate and dataSource
 extension FaeAccountViewController: UITableViewDelegate , UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return 11
         if section == 0 {
             return 4
@@ -1200,11 +1213,11 @@ extension FaeAccountViewController: UITableViewDelegate , UITableViewDataSource 
         }
         return 3
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellGeneralIdentifier)as! FaeAccountTableViewCell
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.accessoryType = .DisclosureIndicator
-        let cell2 = tableView.dequeueReusableCellWithIdentifier(cellTitleIdentifier)as! FaeAccountWithoutTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellGeneralIdentifier)as! FaeAccountTableViewCell
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.accessoryType = .disclosureIndicator
+        let cell2 = tableView.dequeueReusableCell(withIdentifier: cellTitleIdentifier)as! FaeAccountWithoutTableViewCell
 //        cell.labelTitle.text = String(indexPath.row)
         //section 0
         if indexPath.section == 0 && indexPath.row  == 0 {
@@ -1281,10 +1294,10 @@ extension FaeAccountViewController: UITableViewDelegate , UITableViewDataSource 
         
         return cell
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        section 0
         if indexPath.section == 0 && indexPath.row  == 0 {
-            print(userFirstname)
+//            print(userFirstname ?? "No userFirstname")
             self.showFirstLastView(0)
         }
         if indexPath.section == 0 && indexPath.row  == 1 {

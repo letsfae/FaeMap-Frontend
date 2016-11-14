@@ -27,7 +27,7 @@ class EnterCodeTableViewCell: UITableViewCell {
         textfield.becomeFirstResponder()
     }
     
-    func showText(text: String) {
+    func showText(_ text: String) {
         textfield.text = text
     }
     
@@ -37,7 +37,7 @@ class EnterCodeTableViewCell: UITableViewCell {
     
     // MARK: - Selection Function
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

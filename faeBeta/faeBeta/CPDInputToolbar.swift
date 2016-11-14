@@ -17,7 +17,7 @@ extension CommentPinViewController{
         return self.inputToolbar.frame.minY <= inputTextViewMaximumHeight 
     }
     
-    func adjustInputToolbarForComposerTextViewContentSizeChange(dy:CGFloat)
+    func adjustInputToolbarForComposerTextViewContentSizeChange(_ dy:CGFloat)
     {
         var dy = dy
         let contentSizeIsIncreasing = dy > 0
@@ -29,7 +29,7 @@ extension CommentPinViewController{
             }
         }
         
-        let toolbarOriginY = CGRectGetMinY(self.inputToolbar.frame)
+        let toolbarOriginY = self.inputToolbar.frame.minY
         let newToolbarOriginY = toolbarOriginY - dy
 
         
@@ -51,7 +51,7 @@ extension CommentPinViewController{
     func adjustInputToolbarHeightConstraint(byDelta delta:CGFloat)
     {
         let dy = delta
-        let proposedHeight = CGRectGetHeight(self.inputToolbar.frame) + dy
+        let proposedHeight = self.inputToolbar.frame.height + dy
         var finalHeight = max(proposedHeight, self.inputToolbar.preferredDefaultHeight)
         if(self.inputToolbar.maximumHeight != UInt(NSNotFound)){
             finalHeight = min(finalHeight, CGFloat(self.inputToolbar.maximumHeight))
@@ -63,16 +63,16 @@ extension CommentPinViewController{
         }
     }
     
-    func scrollComposerTextViewToBottom(animated:Bool)
+    func scrollComposerTextViewToBottom(_ animated:Bool)
     {
         let textView = self.inputToolbar.contentView.textView
-        let contentOffsetToShowLastLine = CGPointMake(0, textView.contentSize.height - CGRectGetHeight(textView.bounds))
+        let contentOffsetToShowLastLine = CGPoint(x: 0, y: (textView?.contentSize.height)! - (textView?.bounds.height)!)
         if (!animated) {
-            textView.contentOffset = contentOffsetToShowLastLine;
+            textView?.contentOffset = contentOffsetToShowLastLine;
             return;
         }
-        UIView.animateWithDuration(0.01, delay: 0.01, options: .CurveLinear, animations: {
-            textView.contentOffset = contentOffsetToShowLastLine;
+        UIView.animate(withDuration: 0.01, delay: 0.01, options: .curveLinear, animations: {
+            textView?.contentOffset = contentOffsetToShowLastLine;
             }, completion: nil)
     }
 

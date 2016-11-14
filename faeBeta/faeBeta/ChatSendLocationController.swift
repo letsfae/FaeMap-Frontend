@@ -11,13 +11,13 @@ import GoogleMaps
 import CoreLocation
 
 protocol LocationSendDelegate {
-    func sendPickedLocation(lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : NSData)
+    func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : Data)
 }
 
 class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var widthFactor : CGFloat = 375 / 414
     var heightFactor : CGFloat = 667 / 736
@@ -56,7 +56,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         widthFactor = screenWidth / 414
         heightFactor = screenHeight / 736
         loadMapView()
@@ -66,22 +66,22 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         loadPin()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         locManager.requestAlwaysAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined){
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined){
             print("Not Authorised")
             self.locManager.requestAlwaysAuthorization()
         }
         
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied){
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
             jumpToLocationEnable()
         }
         
         willAppearFirstLoad = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func jumpToLocationEnable(){
@@ -90,33 +90,33 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func loadMapView() {
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        faeMapView.myLocationEnabled = true
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        faeMapView.isMyLocationEnabled = true
         faeMapView.delegate = self
         self.view = faeMapView
     }
     
     func loadPin() {
-        let pinImage = UIImageView(frame: CGRectMake(186 * widthFactor, 326 * heightFactor, 45 * widthFactor, 47 * heightFactor))
+        let pinImage = UIImageView(frame: CGRect(x: 186 * widthFactor, y: 326 * heightFactor, width: 45 * widthFactor, height: 47 * heightFactor))
         pinImage.image = UIImage(named: "chat_map_currentLoc")
         self.view.addSubview(pinImage)
     }
     
-    func mapView(mapView: GMSMapView, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         customSearchController.customSearchBar.endEditing(true)
     }
     
-    func mapView(mapView: GMSMapView, idleAtCameraPosition position: GMSCameraPosition) {
+    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
         
-        let mapCenter = CGPointMake(screenWidth/2, screenHeight/2)
-        let mapCenterCoordinate = mapView.projection.coordinateForPoint(mapCenter)
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = mapView.projection.coordinate(for: mapCenter)
         GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
             (response, error) -> Void in
             if let fullAddress = response?.firstResult()?.lines {
                 var addressToSearchBar = ""
                 for line in fullAddress {
-                    if fullAddress.indexOf(line) == fullAddress.count-1 {
+                    if fullAddress.index(of: line) == fullAddress.count-1 {
                         addressToSearchBar += line + ""
                     }
                     else {
@@ -130,110 +130,110 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         })
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if willAppearFirstLoad {
             currentLocation = locManager.location
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
             faeMapView.camera = camera
             willAppearFirstLoad = false
         }
     }
     
     func configureCustomSearchController() {
-        searchBarSubview = UIView(frame: CGRectMake(8 * widthFactor, 23 * heightFactor, (screenWidth - 8 * 2 * widthFactor), 48 * heightFactor))
+        searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0, 5 * heightFactor, 398 * widthFactor, 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.whiteColor())
+        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.white)
         customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.whiteColor().CGColor
+        customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
         
         searchBarSubview.addSubview(customSearchController.customSearchBar)
-        searchBarSubview.backgroundColor = UIColor.whiteColor()
+        searchBarSubview.backgroundColor = UIColor.white
         self.view.addSubview(searchBarSubview)
         
-        searchBarSubview.layer.borderColor = UIColor.whiteColor().CGColor
+        searchBarSubview.layer.borderColor = UIColor.white.cgColor
         searchBarSubview.layer.borderWidth = 1.0
         searchBarSubview.layer.cornerRadius = 2.0
         searchBarSubview.layer.shadowOpacity = 0.5
         searchBarSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         searchBarSubview.layer.shadowRadius = 5.0
-        searchBarSubview.layer.shadowColor = UIColor.blackColor().CGColor
+        searchBarSubview.layer.shadowColor = UIColor.black.cgColor
         
-        searchBarSubviewButton = UIButton(frame: CGRectMake(8 * widthFactor, 23 * heightFactor, 398 * widthFactor, 48 * heightFactor))
+        searchBarSubviewButton = UIButton(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: 398 * widthFactor, height: 48 * heightFactor))
         searchBarSubview.addSubview(searchBarSubviewButton)
-        searchBarSubviewButton.addTarget(self, action: #selector(ChatSendLocationController.actionActiveSearchBar(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        searchBarSubviewButton.addTarget(self, action: #selector(ChatSendLocationController.actionActiveSearchBar(_:)), for: UIControlEvents.touchUpInside)
         
     }
     
     func loadButton() {
-        buttonSelfPosition = UIButton(frame: CGRectMake(screenWidth - (16+59) *  widthFactor, screenHeight - 59 * widthFactor - 75 * heightFactor, 59 * widthFactor, 59 * widthFactor))
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), forState: .Normal)
+        buttonSelfPosition = UIButton(frame: CGRect(x: screenWidth - (16+59) *  widthFactor, y: screenHeight - 59 * widthFactor - 75 * heightFactor, width: 59 * widthFactor, height: 59 * widthFactor))
+        buttonSelfPosition.setImage(UIImage(named: "self_position"), for: UIControlState())
         self.view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.addTarget(self, action: #selector(ChatSendLocationController.actionSelfPosition(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSelfPosition.addTarget(self, action: #selector(ChatSendLocationController.actionSelfPosition(_:)), for: UIControlEvents.touchUpInside)
         
-        buttonCancelSelectLocation = UIButton(frame: CGRectMake(16 * widthFactor, screenHeight - 59 * widthFactor - 75 * heightFactor, 59 * widthFactor, 59 * widthFactor))
-        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), forState: .Normal)
+        buttonCancelSelectLocation = UIButton(frame: CGRect(x: 16 * widthFactor, y: screenHeight - 59 * widthFactor - 75 * heightFactor, width: 59 * widthFactor, height: 59 * widthFactor))
+        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), for: UIControlState())
         self.view.addSubview(buttonCancelSelectLocation)
-        buttonCancelSelectLocation.addTarget(self, action: #selector(ChatSendLocationController.actionCancelSelectLocation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCancelSelectLocation.addTarget(self, action: #selector(ChatSendLocationController.actionCancelSelectLocation(_:)), for: UIControlEvents.touchUpInside)
         
-        buttonSetLocationOnMap = UIButton(frame: CGRectMake(0, screenHeight - 65 * heightFactor, screenWidth, 65 * heightFactor))
-        buttonSetLocationOnMap.setTitle("Send Location", forState: .Normal)
-        buttonSetLocationOnMap.setTitle("Send Location", forState: .Highlighted)
-        buttonSetLocationOnMap.setTitleColor(colorFae, forState: .Normal)
-        buttonSetLocationOnMap.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        buttonSetLocationOnMap = UIButton(frame: CGRect(x: 0, y: screenHeight - 65 * heightFactor, width: screenWidth, height: 65 * heightFactor))
+        buttonSetLocationOnMap.setTitle("Send Location", for: UIControlState())
+        buttonSetLocationOnMap.setTitle("Send Location", for: .highlighted)
+        buttonSetLocationOnMap.setTitleColor(colorFae, for: UIControlState())
+        buttonSetLocationOnMap.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
         self.view.addSubview(buttonSetLocationOnMap)
-        buttonSetLocationOnMap.addTarget(self, action: #selector(ChatSendLocationController.actionSetLocationForComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonSetLocationOnMap.addTarget(self, action: #selector(ChatSendLocationController.actionSetLocationForComment(_:)), for: UIControlEvents.touchUpInside)
     }
     
-    func actionSelfPosition(sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
+    func actionSelfPosition(_ sender: UIButton!) {
+        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
             currentLocation = locManager.location
         }
         self.currentLatitude = currentLocation.coordinate.latitude
         self.currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.cameraWithLatitude(currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        faeMapView.animate(to: camera)
     }
     
-    func actionCancelSelectLocation(sender: UIButton!) {
-        self.navigationController?.popViewControllerAnimated(true)
+    func actionCancelSelectLocation(_ sender: UIButton!) {
+        _ = self.navigationController?.popViewController(animated: true)
 //        self.dismissViewControllerAnimated(true, completion: nil);
     }
     
-    func actionSetLocationForComment(sender: UIButton!) {
+    func actionSetLocationForComment(_ sender: UIButton!) {
         UIGraphicsBeginImageContext(self.faeMapView.frame.size)
-        self.faeMapView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        self.faeMapView.layer.render(in: UIGraphicsGetCurrentContext()!)
         let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
-        self.navigationController?.popViewControllerAnimated(true)
-        locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : screenShotImage!.highestQualityJPEGNSData)
+        _ = self.navigationController?.popViewController(animated: true)
+        locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : screenShotImage!.highestQualityJPEGNSData as Data)
     }
     
-    func actionActiveSearchBar(sender: UIButton!) {
+    func actionActiveSearchBar(_ sender: UIButton!) {
         self.customSearchController.customSearchBar.becomeFirstResponder()
     }
     
     func loadTableView() {
-        uiviewTableSubview = UIView(frame: CGRectMake(0, 0, 398 * widthFactor, 0))
+        uiviewTableSubview = UIView(frame: CGRect(x: 0, y: 0, width: 398 * widthFactor, height: 0))
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.registerClass(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
-        tblSearchResults.scrollEnabled = false
+        tblSearchResults.register(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
+        tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
-        tblSearchResults.separatorInset = UIEdgeInsetsZero
-        tblSearchResults.layoutMargins = UIEdgeInsetsZero
-        uiviewTableSubview.layer.borderColor = UIColor.whiteColor().CGColor
+        tblSearchResults.separatorInset = UIEdgeInsets.zero
+        tblSearchResults.layoutMargins = UIEdgeInsets.zero
+        uiviewTableSubview.layer.borderColor = UIColor.white.cgColor
         uiviewTableSubview.layer.borderWidth = 1.0
         uiviewTableSubview.layer.cornerRadius = 2.0
         uiviewTableSubview.layer.shadowOpacity = 0.5
         uiviewTableSubview.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         uiviewTableSubview.layer.shadowRadius = 5.0
-        uiviewTableSubview.layer.shadowColor = UIColor.blackColor().CGColor
+        uiviewTableSubview.layer.shadowColor = UIColor.black.cgColor
         uiviewTableSubview.addSubview(tblSearchResults)
         self.view.addSubview(uiviewTableSubview)
     }
@@ -241,11 +241,11 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     
     // MARK: UITableView Delegate and Datasource functions
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView == self.tblSearchResults){
             return placeholder.count
         }
@@ -254,12 +254,12 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if(tableView == self.tblSearchResults){
-            let cell = tableView.dequeueReusableCellWithIdentifier("customCellForAddressSearch", forIndexPath: indexPath) as! CustomCellForAddressSearch
+            let cell = tableView.dequeueReusableCell(withIdentifier: "customCellForAddressSearch", for: indexPath) as! CustomCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
         else{
@@ -267,7 +267,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(tableView == self.tblSearchResults){
             let placesClient = GMSPlacesClient()
             placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
@@ -276,19 +276,19 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
                 GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animateToCameraPosition(camera)
+                        let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
+                        self.faeMapView.animate(to: camera)
                     }
                 })
             })
             self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
             self.customSearchController.customSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(tableView == self.tblSearchResults){
             return 48.0
         }
@@ -299,21 +299,21 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func searchBarTableHideAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398 * self.widthFactor, 0)
-            self.uiviewTableSubview.frame = CGRectMake(8 * self.widthFactor, (23+53) * self.heightFactor, 398 * self.widthFactor, 0)
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: 398 * self.widthFactor, height: 0)
+            self.uiviewTableSubview.frame = CGRect(x: 8 * self.widthFactor, y: (23+53) * self.heightFactor, width: 398 * self.widthFactor, height: 0)
         }), completion: nil)
     }
     
     func searchBarTableShowAnimation() {
-        UIView.animateWithDuration(0.25, delay: 0, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRectMake(0, 0, 398 * self.widthFactor, 240 * self.heightFactor)
-            self.uiviewTableSubview.frame = CGRectMake(8 * self.widthFactor, (23+53) * self.heightFactor, 398 * self.widthFactor, 240 * self.heightFactor)
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: 398 * self.widthFactor, height: 240 * self.heightFactor)
+            self.uiviewTableSubview.frame = CGRect(x: 8 * self.widthFactor, y: (23+53) * self.heightFactor, width: 398 * self.widthFactor, height: 240 * self.heightFactor)
         }), completion: nil)
     }
     
     // MARK: UISearchResultsUpdating delegate function
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResultsForSearchController(_ searchController: UISearchController) {
         tblSearchResults.reloadData()
     }
     
@@ -337,8 +337,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
                 GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                     (response, error) -> Void in
                     if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.cameraWithTarget(selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animateToCameraPosition(camera)
+                        let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
+                        self.faeMapView.animate(to: camera)
                     }
                 })
             })
@@ -354,12 +354,12 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         tblSearchResults.reloadData()
     }
     
-    func didChangeSearchText(searchText: String) {
+    func didChangeSearchText(_ searchText: String) {
         if(searchText != "") {
             let placeClient = GMSPlacesClient()
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
-                (results, error : NSError?) -> Void in
-                if(error != nil) {
+                (results, error : Error?) -> Void in
+                if let error = error {
                     print(error)
                 }
                 self.placeholder.removeAll()

@@ -9,9 +9,9 @@
 import UIKit
 
 protocol RegisterTextfieldProtocol {
-    func textFieldShouldReturn(indexPath: NSIndexPath)
-    func textFieldDidBeginEditing(indexPath: NSIndexPath)
-    func textFieldDidChange(text: String, indexPath: NSIndexPath)
+    func textFieldShouldReturn(_ indexPath: IndexPath)
+    func textFieldDidBeginEditing(_ indexPath: IndexPath)
+    func textFieldDidChange(_ text: String, indexPath: IndexPath)
 }
 
 class RegisterTextfieldTableViewCell: UITableViewCell {
@@ -23,7 +23,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     // MARK: - Variables
     
     var delegate: RegisterTextfieldProtocol?
-    var indexPath: NSIndexPath!
+    var indexPath: IndexPath!
     var isUsernameField = false
     var isCharacterLimit = false
     var limitNumber: Int = Int.max
@@ -31,32 +31,32 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        textfield = FAETextField(frame: CGRectMake(15, self.contentView.frame.height / 2 - 17 ,self.contentView.frame.width - 30, 34))
+        textfield = FAETextField(frame: CGRect(x: 15, y: self.contentView.frame.height / 2 - 17 ,width: self.contentView.frame.width - 30, height: 34))
         self.contentView.addSubview(textfield)
         textfield.delegate = self
-        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), forControlEvents:.EditingChanged )
+        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for:.editingChanged )
 
         // Initialization code
     }
 
     override func layoutSubviews(){
         super.layoutSubviews()
-        textfield.frame =  CGRectMake(15, self.contentView.frame.height / 2 - 17 ,self.contentView.frame.width - 30, 34)
+        textfield.frame =  CGRect(x: 15, y: self.contentView.frame.height / 2 - 17 ,width: self.contentView.frame.width - 30, height: 34)
 
     }
     
     // MARK: - Functions
     
-    func setPlaceholderLabelText(text: String, indexPath: NSIndexPath)  {
+    func setPlaceholderLabelText(_ text: String, indexPath: IndexPath)  {
         textfield.placeholder = text
         self.indexPath = indexPath
     }
     
     func setTextFieldForPasswordConfiguration() {
-        textfield.secureTextEntry = true
+        textfield.isSecureTextEntry = true
     }
     
-    func setCharacterLimit(number:Int) {
+    func setCharacterLimit(_ number:Int) {
         isCharacterLimit = true
         limitNumber = number
     }
@@ -65,18 +65,18 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         isUsernameField = true
     }
     
-    func setLeftPlaceHolderDisplay(bool:Bool){
+    func setLeftPlaceHolderDisplay(_ bool:Bool){
         textfield.isUsernameTextField = bool
         self.setNeedsDisplay()
     }
     
-    func setRightPlaceHolderDisplay(bool:Bool){
-        textfield.secureTextEntry = bool
+    func setRightPlaceHolderDisplay(_ bool:Bool){
+        textfield.isSecureTextEntry = bool
         self.setNeedsDisplay()
     }
     
-    func updateTextColorAccordingToPassword(text:String){
-        if(!textfield.secureTextEntry){
+    func updateTextColorAccordingToPassword(_ text:String){
+        if(!textfield.isSecureTextEntry){
             return;
         }
         
@@ -111,7 +111,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     // MARK: - Selection Function
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
@@ -121,21 +121,21 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
 
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
-    func textFieldDidChange(textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) {
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.textFieldDidBeginEditing(indexPath)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         delegate?.textFieldShouldReturn(indexPath)
         return true
     }
     
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentCharacterCount = textField.text?.characters.count ?? 0
         if (range.length + range.location > currentCharacterCount){
             return false

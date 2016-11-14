@@ -15,15 +15,15 @@ extension FaeMapViewController {
     
     func loadMapChat()
     {
-        self.labelUnreadMessages.hidden = true
-        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(self.updateUnreadChatIndicator), userInfo: nil, repeats: true)
+        self.labelUnreadMessages.isHidden = true
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.updateUnreadChatIndicator), userInfo: nil, repeats: true)
     }
 
     func updateUnreadChatIndicator(){
         getFromURL("sync", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if(status / 100 == 2){
                 if let cacheRecent = result as? NSDictionary {
-                    let totalUnread = (cacheRecent["chat"] as! NSNumber).intValue + (cacheRecent["chat_room"] as! NSNumber).intValue
+                    let totalUnread = (cacheRecent["chat"] as! NSNumber).int32Value + (cacheRecent["chat_room"] as! NSNumber).int32Value
                     self.labelUnreadMessages.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
                     
                     if(totalUnread / 10 >= 1){
@@ -32,8 +32,8 @@ extension FaeMapViewController {
                         self.labelUnreadMessages.frame.size.width = 22
                     }
                     
-                    self.labelUnreadMessages.hidden = totalUnread == 0
-                    UIApplication.sharedApplication().applicationIconBadgeNumber = Int(totalUnread)
+                    self.labelUnreadMessages.isHidden = totalUnread == 0
+                    UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
                 }
             }
         }
@@ -43,13 +43,13 @@ extension FaeMapViewController {
         firebase.child("Recent").removeAllObservers()// reference to all chat room
     }
     
-    func animationMapChatShow(sender: UIButton!) {
+    func animationMapChatShow(_ sender: UIButton!) {
         UINavigationBar.appearance().shadowImage = navBarDefaultShadowImage
         // check if the user's logged in the backendless
-        self.presentViewController (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
+        self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }
 
-    func segueToChat(withUserId: NSNumber, withUserName: String ){
+    func segueToChat(_ withUserId: NSNumber, withUserName: String ){
         let chatVC = ChatViewController()
         
         chatVC.hidesBottomBarWhenPushed = true
@@ -62,8 +62,8 @@ extension FaeMapViewController {
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func animationMapChatHide(sender: UIButton!) {
-        UIView.animateWithDuration(0.25, animations: ({
+    func animationMapChatHide(_ sender: UIButton!) {
+        UIView.animate(withDuration: 0.25, animations: ({
             self.mapChatSubview.alpha = 0.0
             self.mapChatWindow.alpha = 0.0
         }))

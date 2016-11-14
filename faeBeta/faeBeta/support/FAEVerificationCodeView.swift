@@ -15,7 +15,7 @@ class FAEVerificationCodeView: UIView {
 
     @IBOutlet var numberLabels: [UILabel]!
 
-    private var pointer = 0
+    fileprivate var pointer = 0
     
     var displayValue: String{
         get{
@@ -43,19 +43,19 @@ class FAEVerificationCodeView: UIView {
     }
     
     //MARK: - setup
-    private func loadNib()
+    fileprivate func loadNib()
     {
-        uiview = NSBundle.mainBundle().loadNibNamed("FAEVerificationCodeView", owner: self, options: nil)![0] as? UIView
-        self.insertSubview(uiview!, atIndex: 0)
+        uiview = Bundle.main.loadNibNamed("FAEVerificationCodeView", owner: self, options: nil)![0] as? UIView
+        self.insertSubview(uiview!, at: 0)
         uiview!.frame = self.bounds
-        uiview!.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        uiview!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    private func setup()
+    fileprivate func setup()
     {
         for label in numberLabels{
             label.attributedText = NSAttributedString(string: "･" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
-            label.textAlignment = .Center
+            label.textAlignment = .center
         }
     }
     
@@ -66,18 +66,18 @@ class FAEVerificationCodeView: UIView {
     /// - parameter digit: the int that need to be appended
     ///
     /// - returns: the numebr of digits appened
-    func addDigit(digit:Int) -> Int
+    func addDigit(_ digit:Int) -> Int
     {
         if(digit >= 0 && pointer < numberLabels.count){
             let label = numberLabels[pointer]
             label.attributedText = NSAttributedString(string: "\(digit)" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
-            label.textAlignment = .Center
+            label.textAlignment = .center
             pointer = pointer + 1
         }else if(digit < 0 && pointer > 0){
             pointer = pointer - 1
             let label = numberLabels[pointer]
             label.attributedText = NSAttributedString(string: "･" , attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
-            label.textAlignment = .Center
+            label.textAlignment = .center
         }
         return pointer
     }

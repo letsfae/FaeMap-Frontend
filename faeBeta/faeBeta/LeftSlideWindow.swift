@@ -14,20 +14,20 @@ import SDWebImage
 extension FaeMapViewController {
     func loadMore() {
         let shareAPI = LocalStorageManager()
-        shareAPI.readLogInfo()
-        dimBackgroundMoreButton = UIButton(frame: CGRectMake(0, 0, screenWidth, screenHeight))
+        _ = shareAPI.readLogInfo()
+        dimBackgroundMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         dimBackgroundMoreButton.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
         dimBackgroundMoreButton.alpha = 0.0
         self.view.addSubview(dimBackgroundMoreButton)
         dimBackgroundMoreButton.layer.zPosition = 599
-        dimBackgroundMoreButton.addTarget(self, action: #selector(FaeMapViewController.animationMoreHide(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        dimBackgroundMoreButton.addTarget(self, action: #selector(FaeMapViewController.animationMoreHide(_:)), for: UIControlEvents.touchUpInside)
         
         let leftSwipe = UISwipeGestureRecognizer(target: self,
                                                  action: #selector(FaeMapViewController.animationMoreHide(_:)))
-        leftSwipe.direction = .Left
+        leftSwipe.direction = .left
         
-        uiviewMoreButton = UIView(frame: CGRectMake(-tableViewWeight, 0, tableViewWeight, screenHeight))
-        uiviewMoreButton.backgroundColor = UIColor.whiteColor()
+        uiviewMoreButton = UIView(frame: CGRect(x: -tableViewWeight, y: 0, width: tableViewWeight, height: screenHeight))
+        uiviewMoreButton.backgroundColor = UIColor.white
         uiviewMoreButton.layer.zPosition = 600
         uiviewMoreButton.addGestureRecognizer(leftSwipe)
         self.view.addSubview(uiviewMoreButton)
@@ -36,12 +36,12 @@ extension FaeMapViewController {
         imagePicker.delegate = self
 
         //initial tableview
-        tableviewMore = UITableView(frame: CGRectMake(0, 0, tableViewWeight, screenHeight), style: .Grouped)
+        tableviewMore = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWeight, height: screenHeight), style: .grouped)
         tableviewMore.delegate = self
         tableviewMore.dataSource = self
-        tableviewMore.registerNib(UINib(nibName: "MoreVisibleTableViewCell",bundle: nil), forCellReuseIdentifier: cellTableViewMore)
-        tableviewMore.backgroundColor = UIColor.clearColor()
-        tableviewMore.separatorColor = UIColor.clearColor()
+        tableviewMore.register(UINib(nibName: "MoreVisibleTableViewCell",bundle: nil), forCellReuseIdentifier: cellTableViewMore)
+        tableviewMore.backgroundColor = UIColor.clear
+        tableviewMore.separatorColor = UIColor.clear
         tableviewMore.rowHeight = 60
 //        tableviewMore.scrollEnabled = falsey
         tableviewMore.alwaysBounceVertical = false
@@ -53,87 +53,87 @@ extension FaeMapViewController {
     
     func jumpToMoodAvatar() {
         animationMoreHide(nil)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MoodAvatarViewController")as! MoodAvatarViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController")as! MoodAvatarViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToNameCard() {
         animationMoreHide(nil)// new add
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NameCardViewController")as! NameCardViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardViewController")as! NameCardViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToMyFaeMainPage() {
         animationMoreHide(nil)// new add
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MyFaeMainPageViewController")as! MyFaeMainPageViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController")as! MyFaeMainPageViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToAccount(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("FaeAccountViewController")as! FaeAccountViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "FaeAccountViewController")as! FaeAccountViewController
         self.navigationController?.pushViewController(vc, animated: true)
         
     }
     func jumpToMyPins(){
         
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("MyPinsViewController")as! MyPinsViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyPinsViewController")as! MyPinsViewController
         self.navigationController?.pushViewController(vc, animated: true)
 
     }
     func jumpTowelcomeVC() {
         //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
         //        self.presentViewController(vc, animated: true, completion: nil)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("NavigationWelcomeViewController")as! NavigationWelcomeViewController
-        self.presentViewController(vc, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        self.present(vc, animated: true, completion: nil)
     }
     
     func addHeaderViewForMore(){
-        viewHeaderForMore = UIView(frame: CGRectMake(0,0,tableViewWeight,268))
+        viewHeaderForMore = UIView(frame: CGRect(x: 0,y: 0,width: tableViewWeight,height: 268))
         viewHeaderForMore.backgroundColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         tableviewMore.tableHeaderView = viewHeaderForMore
-        tableviewMore.tableHeaderView?.frame = CGRectMake(0, 0, 311, 268)
+        tableviewMore.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: 311, height: 268)
         
-        imageViewBackgroundMore = UIImageView(frame: CGRectMake(0, 148, tableViewWeight, 120))
+        imageViewBackgroundMore = UIImageView(frame: CGRect(x: 0, y: 148, width: tableViewWeight, height: 120))
         imageViewBackgroundMore.image = UIImage(named: "tableViewMoreBackground")
         viewHeaderForMore.addSubview(imageViewBackgroundMore)
         
         //exchange left and right button
         //left button is mapboard button
-        buttonMoreLeft = UIButton(frame: CGRectMake(15,27,29,29))
-        buttonMoreLeft.setImage(UIImage(named: "tableviewMoreRightButton-1"), forState: .Normal)
+        buttonMoreLeft = UIButton(frame: CGRect(x: 15,y: 27,width: 29,height: 29))
+        buttonMoreLeft.setImage(UIImage(named: "tableviewMoreRightButton-1"), for: UIControlState())
 //        viewHeaderForMore.addSubview(buttonMoreLeft)
         
         //right button is my namecard button
-        buttonMoreRight = UIButton(frame: CGRectMake((tableViewWeight - 29 - 15),26,29,29))
-        buttonMoreRight.setImage(UIImage(named: "tableViewMoreLeftButton"), forState: .Normal)
-        buttonMoreRight.addTarget(self, action: #selector(FaeMapViewController.jumpToNameCard), forControlEvents: .TouchUpInside)
+        buttonMoreRight = UIButton(frame: CGRect(x: (tableViewWeight - 29 - 15),y: 26,width: 29,height: 29))
+        buttonMoreRight.setImage(UIImage(named: "tableViewMoreLeftButton"), for: UIControlState())
+        buttonMoreRight.addTarget(self, action: #selector(FaeMapViewController.jumpToNameCard), for: .touchUpInside)
         viewHeaderForMore.addSubview(buttonMoreRight)
         
         
-        imageViewAvatarMore = UIImageView(frame: CGRectMake((tableViewWeight - 91) / 2,36,91,91))
+        imageViewAvatarMore = UIImageView(frame: CGRect(x: (tableViewWeight - 91) / 2,y: 36,width: 91,height: 91))
 //        imageViewAvatarMore.layer.cornerRadius = 81 / 2
         imageViewAvatarMore.layer.cornerRadius = 91 / 2
         imageViewAvatarMore.layer.masksToBounds = true
         imageViewAvatarMore.clipsToBounds = true
         imageViewAvatarMore.layer.borderWidth = 5
-        imageViewAvatarMore.layer.borderColor = UIColor.whiteColor().CGColor
+        imageViewAvatarMore.layer.borderColor = UIColor.white.cgColor
 //        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         if user_id != nil {
         let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)
-            imageViewAvatarMore.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .RefreshCached)
+            imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
-        buttonImagePicker = UIButton(frame: CGRectMake((tableViewWeight - 91) / 2, 36, 91, 91))
+        buttonImagePicker = UIButton(frame: CGRect(x: (tableViewWeight - 91) / 2, y: 36, width: 91, height: 91))
 //        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
-        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.jumpToMyFaeMainPage), forControlEvents: .TouchUpInside)
+        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.jumpToMyFaeMainPage), for: .touchUpInside)
         viewHeaderForMore.addSubview(buttonImagePicker)
         
-        labelMoreName = UILabel(frame: CGRectMake((tableViewWeight - 180) / 2,134,180,27))
+        labelMoreName = UILabel(frame: CGRect(x: (tableViewWeight - 180) / 2,y: 134,width: 180,height: 27))
         labelMoreName.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        labelMoreName.textAlignment = .Center
-        labelMoreName.textColor = UIColor.whiteColor()
+        labelMoreName.textAlignment = .center
+        labelMoreName.textColor = UIColor.white
         if userFirstname != nil {
             labelMoreName.text = userFirstname! + " " + userLastname!
         }
@@ -145,56 +145,56 @@ extension FaeMapViewController {
         }
         viewHeaderForMore.addSubview(labelMoreName)
     }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
 //        arrayNameCard[imageIndex] = image
         imageViewAvatarMore.image = image
         let avatar = FaeImage()
         avatar.image = image
-        avatar.faeUploadImageInBackground { (code:Int, message:AnyObject?) in
-            print(code)
-            print(message)
+        avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
+//            print(code)
+//            print(message)
             if code / 100 == 2 {
                 self.imageViewAvatarMore.image = image
             } else {
                 //failure
             }
         }
-        self.imagePicker.dismissViewControllerAnimated(true, completion: nil)
+        self.imagePicker.dismiss(animated: true, completion: nil)
     }
     func showPhotoSelected() {
-        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .ActionSheet)
-        let showLibrary = UIAlertAction(title: "Choose from library", style: .Default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .PhotoLibrary
+        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
+            self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
-            self.presentViewController(self.imagePicker,animated:true,completion:nil)
+            self.present(self.imagePicker,animated:true,completion:nil)
         }
-        let showCamera = UIAlertAction(title: "Take photoes", style: .Default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .Camera
+        let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
+            self.imagePicker.sourceType = .camera
             menu.removeFromParentViewController()
-            self.presentViewController(self.imagePicker,animated:true,completion:nil)
+            self.present(self.imagePicker,animated:true,completion:nil)
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction) in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             
         }
         menu.addAction(showLibrary)
         menu.addAction(showCamera)
         menu.addAction(cancel)
-        self.presentViewController(menu,animated:true,completion: nil)
+        self.present(menu,animated:true,completion: nil)
     }
-    func animationMoreShow(sender: UIButton!) {
+    func animationMoreShow(_ sender: UIButton!) {
         updateName()
         if user_id != nil {
             self.getAndSetUserAvatar(self.imageViewAvatarMore, userID: Int(user_id))
         }
-        UIView.animateWithDuration(0.25, animations: ({
+        UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
             self.dimBackgroundMoreButton.alpha = 0.7
             self.dimBackgroundMoreButton.layer.opacity = 0.7
         }))
     }
     
-    func animationMoreHide(sender: UIButton!) {
-        UIView.animateWithDuration(0.2, animations:({
+    func animationMoreHide(_ sender: UIButton!) {
+        UIView.animate(withDuration: 0.2, animations:({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x - self.tableViewWeight
             self.dimBackgroundMoreButton.alpha = 0.0
         }), completion: { (done: Bool) in
@@ -204,30 +204,30 @@ extension FaeMapViewController {
         })
     }
     
-    func switchToInvisibleOrOnline(sender: UISwitch) {
+    func switchToInvisibleOrOnline(_ sender: UISwitch) {
         let switchToInvisible = FaeUser()
-        if (sender.on == true){
+        if (sender.isOn == true){
             print("sender.on")
             switchToInvisible.whereKey("status", value: "5")
             switchToInvisible.setSelfStatus({ (status, message) in
                 if status / 100 == 2 {
                     userStatus = 5
-                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
-                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to invisible")
                     if userStatus == 5 {
-                        self.faeMapView.myLocationEnabled = true
+                        self.faeMapView.isMyLocationEnabled = true
                         if self.myPositionOutsideMarker_1 != nil {
-                            self.myPositionOutsideMarker_1.hidden = true
+                            self.myPositionOutsideMarker_1.isHidden = true
                         }
                         if self.myPositionOutsideMarker_2 != nil {
-                            self.myPositionOutsideMarker_2.hidden = true
+                            self.myPositionOutsideMarker_2.isHidden = true
                         }
                         if self.myPositionOutsideMarker_3 != nil {
-                            self.myPositionOutsideMarker_3.hidden = true
+                            self.myPositionOutsideMarker_3.isHidden = true
                         }
                         if self.myPositionIcon != nil {
-                            self.myPositionIcon.hidden = true
+                            self.myPositionIcon.isHidden = true
                         }
                     }
                 }
@@ -243,8 +243,8 @@ extension FaeMapViewController {
                 if status / 100 == 2 {
                     userStatus = 1
                     self.actionSelfPosition(self.buttonSelfPosition)
-                    let storageForUserStatus = NSUserDefaults.standardUserDefaults()
-                    storageForUserStatus.setObject(userStatus, forKey: "userStatus")
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to online")
                 }
                 else {
@@ -267,7 +267,7 @@ extension FaeMapViewController {
         })
     }
     
-    func userIsActive(status: Int) {
+    func userIsActive(_ status: Int) {
         let userIsActive = FaeUser()
         userIsActive.whereKey("status", value: "\(status)")
         userIsActive.setSelfStatus({ (status, message) in
@@ -290,21 +290,21 @@ extension FaeMapViewController {
         return -999
     }
     
-    func getAndSetUserAvatar(userAvatar: UIImageView, userID: Int) {
+    func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
         let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
-        let block = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) -> Void in
+        let block = {(image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Void in
             // completion code here
             if userAvatar.image != nil {
                 let croppedImage = self.cropToBounds(userAvatar.image!)
                 userAvatar.image = croppedImage
             }
         }
-        userAvatar.sd_setImageWithURL(NSURL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), completed: block)
+        userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"),options:[], completed: block)
     }
     
     func updateName() {
         let updateNickName = FaeUser()
-        updateNickName.getSelfNamecard(){(status:Int, message:AnyObject?) in
+        updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
             if(status / 100 == 2){
                 let nickNameInfo = JSON(message!)
                 if let str = nickNameInfo["nick_name"].string{

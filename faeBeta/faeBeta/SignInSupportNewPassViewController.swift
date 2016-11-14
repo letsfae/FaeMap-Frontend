@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class SignInSupportNewPassViewController: RegisterBaseViewController {
     
@@ -28,18 +52,18 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         // Do any additional setup after loading the view.
         createBottomView(getInfoView())
         createTableView(59 + 135 * screenHeightFactor)
-        continueButton.setTitle("Update", forState: .Normal)
+        continueButton.setTitle("Update", for: UIControlState())
 
         registerCell()
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.navigationController?.navigationBarHidden = false
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(self.backButtonPressed))
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(self.backButtonPressed))
 
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         passwordTableViewCell.makeFirstResponder()
     }
@@ -48,7 +72,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func continueButtonPressed() {
@@ -57,16 +81,16 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterInfo() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RegisterInfoViewController") as! RegisterInfoViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func getInfoView() -> UIView {
         
-        let infoView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 85 * screenHeightFactor))
+        let infoView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
         
-        let imageView = UIImageView(frame: CGRectMake(view.frame.size.width/2.0 - 160 * screenWidthFactor, 0, 320 * screenWidthFactor , 85 * screenHeightFactor))
+        let imageView = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor , height: 85 * screenHeightFactor))
         imageView.image = UIImage(named: "InfoPassword")
         
         infoView.addSubview(imageView)
@@ -88,20 +112,20 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         let param = ["email":email!,
                      "code":code!,
                      "password":password!]
-        postToURL("/reset_login/password", parameter: param, authentication: headerAuthentication()) { (status:Int, message:AnyObject?) in
+        postToURL("/reset_login/password", parameter: param as [String : AnyObject]?, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.shouldShowActivityIndicator(false)
             if(status / 100 == 2){
-                self.navigationController?.popToRootViewControllerAnimated(true)
-                NSNotificationCenter.defaultCenter().postNotificationName("resetPasswordSucceed", object: nil)
+                _ = self.navigationController?.popToRootViewController(animated: true)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
             }
         }
     }
     
     func registerCell() {
         
-        tableView.registerNib(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.registerNib(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
         
     }
     
@@ -116,24 +140,24 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
 
 extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Protect your Account \n with a Strong Password!")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
             cell.setSubTitleLabelText("Must be at least 8 characters!")
             return cell
         case 2:
             if passwordTableViewCell == nil {
-                passwordTableViewCell = tableView.dequeueReusableCellWithIdentifier("RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
+                passwordTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 
                 passwordTableViewCell.setPlaceholderLabelText("New Password",indexPath: indexPath)
                 passwordTableViewCell.setRightPlaceHolderDisplay(true)
@@ -142,13 +166,13 @@ extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDa
             }
             return passwordTableViewCell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TitleTableViewCellIdentifier") as! TitleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
             
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
             return 59
@@ -164,11 +188,11 @@ extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDa
 
 extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
     
-    func textFieldDidBeginEditing(indexPath: NSIndexPath) {
+    func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
     }
     
-    func textFieldShouldReturn(indexPath: NSIndexPath) {
+    func textFieldShouldReturn(_ indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             passwordTableViewCell.endAsResponder()
@@ -177,7 +201,7 @@ extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
         }
     }
     
-    func textFieldDidChange(text: String, indexPath: NSIndexPath) {
+    func textFieldDidChange(_ text: String, indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
             password = text

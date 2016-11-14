@@ -34,7 +34,7 @@ class NameCardFirstFiveCell: UITableViewCell {
         labelDes.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelDes.text = ""
         labelDes.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        labelDes.textAlignment = .Left
+        labelDes.textAlignment = .left
         self.addConstraintsWithFormat("H:|-25-[v0(200)]", options: [], views: labelDes)
         self.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: labelDes)
         
@@ -43,7 +43,7 @@ class NameCardFirstFiveCell: UITableViewCell {
         labelUserSet.font = UIFont(name: "AvenirNext-Medium", size: 15)
         labelUserSet.text = ""
         labelUserSet.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
-        labelUserSet.textAlignment = .Right
+        labelUserSet.textAlignment = .right
         self.addConstraintsWithFormat("H:[v0(100)]-40-|", options: [], views: labelUserSet)
         self.addConstraintsWithFormat("V:|-20-[v0(25)]", options: [], views: labelUserSet)
     }

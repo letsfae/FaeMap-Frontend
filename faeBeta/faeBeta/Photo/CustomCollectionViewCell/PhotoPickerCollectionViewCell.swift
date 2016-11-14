@@ -14,20 +14,20 @@ import Photos
 class PhotoPickerCollectionViewCell: UICollectionViewCell {
 
     //MARK: - properties
-    private(set) var photoSelected = false
+    fileprivate(set) var photoSelected = false
     
-    @IBOutlet weak private var photoImageView: UIImageView!
-    @IBOutlet weak private var chosenIndicatorImageView: UIImageView!
+    @IBOutlet weak fileprivate var photoImageView: UIImageView!
+    @IBOutlet weak fileprivate var chosenIndicatorImageView: UIImageView!
     
     @IBOutlet weak var videoDurationLabel: UILabel!
-    @IBOutlet weak private var videoIndicatorView: UIView!
-    @IBOutlet weak private var videoDurationLabelLength: NSLayoutConstraint!
-    @IBOutlet weak private var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
+    @IBOutlet weak fileprivate var videoIndicatorView: UIView!
+    @IBOutlet weak fileprivate var videoDurationLabelLength: NSLayoutConstraint!
+    @IBOutlet weak fileprivate var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
     
     //MARK: - life cycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.photoImageView.contentMode = .ScaleAspectFill
+        self.photoImageView.contentMode = .scaleAspectFill
         deselectCell()
         videoIndicatorView.alpha = 0
     }
@@ -44,7 +44,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     /// Select this cell
     ///
     /// - Parameter indicatorNum: the number that appear's on the top right minus 1 (0 - 9)
-    func selectCell(indicatorNum: Int)
+    func selectCell(_ indicatorNum: Int)
     {
         assert(indicatorNum >= 0 && indicatorNum <= 9, "Invalid indicator number! The number should be between 0 - 9")
         let imageName = "chosenIndicatorIcon_selected\(indicatorNum+1)"
@@ -60,7 +60,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     }
     
     //MARK: - image related
-    private func setImage(thumbnailImage : UIImage) {
+    fileprivate func setImage(_ thumbnailImage : UIImage) {
         self.photoImageView.image = thumbnailImage
     }
     
@@ -78,8 +78,8 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         self.layoutSubviews()
     }
     
-    func loadImage(asset: PHAsset,requestOption option: PHImageRequestOptions){
-        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: CGSizeMake(self.frame.width - 1 / 3, self.frame.width - 1 / 3), contentMode: .AspectFill, options: option) { (result, info) in
+    func loadImage(_ asset: PHAsset,requestOption option: PHImageRequestOptions){
+        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: self.frame.width - 1 / 3, height: self.frame.width - 1 / 3), contentMode: .aspectFill, options: option) { (result, info) in
             self.setImage(result!)
         }
     }
