@@ -266,7 +266,7 @@ extension CommentPinViewController {
                 }
             }
             if let toGetUserName = commentInfoJSON["user_id"].int {
-                let stringHeaderURL = "https://api.letsfae.com/files/users/\(toGetUserName)/avatar"
+                let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imageCommentPinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
@@ -286,7 +286,7 @@ extension CommentPinViewController {
     }
     
     func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+        let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
         
         userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"),options: [], completed: {
             (image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Swift.Void in

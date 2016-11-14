@@ -149,7 +149,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
         if is_Login == 0 {
-            self.jumpToWelcomeView(false)
+            self.jumpToWelcomeView(animated: false)
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
         myPositionIconFirstLoaded = true
@@ -216,7 +216,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func appBackFromBackground() {
         print("App back from background!")
         self.actionSelfPosition(self.buttonSelfPosition)
-        self.updateTimerForLoadRegionPin()
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
     }
     
@@ -243,7 +246,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         self.present(locEnableVC, animated: true, completion: nil)
     }
     
-    func jumpToWelcomeView(_ animated: Bool){
+    func jumpToWelcomeView(animated: Bool){
         let welcomeVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
         self.present(welcomeVC, animated: animated, completion: nil)
     }
@@ -296,7 +299,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
-            self.updateTimerForSelfLoc()
+            
         }
         
         if userStatus == 5 {
@@ -385,37 +388,34 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let currentPosition = mapCenterCoordinate
-        let curPosition = previousPosition
-        self.previousPosition = currentPosition
         
         let currentZoomLevel = mapView.camera.zoom
         let preZoomLevel = previousZoomLevel
         self.previousZoomLevel = currentZoomLevel
         
         if currentZoomLevel >= 13 {
-            if abs(currentZoomLevel-preZoomLevel) > 1 {
-//                print("DEBUG: Zoom level diff > 1")
-                self.updateTimerForLoadRegionPin()
-                self.updateTimerForSelfLoc()
+            let powFactor: Double = Double(21 - currentZoomLevel)
+            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+            
+            if abs(currentZoomLevel-preZoomLevel) >= 1 {
+                print("DEBUG: Zoom level diff >= 1")
+                self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                 return
             }
-            if curPosition != nil {
-                let powFactor: Double = Double(21 - currentZoomLevel)
-                let coorDistance: Double = 0.0004*pow(2.0, powFactor)
-                let latitudeExceed = abs(currentPosition.latitude-(curPosition?.latitude)!) > coorDistance
-                let longitudeExceed = abs(currentPosition.longitude-(curPosition?.longitude)!) > coorDistance
-                if latitudeExceed {
-//                    print("DEBUG: Position diff > \(coorDistance)")
+            if let curPosition = previousPosition {
+                let latitudeOffset = abs(currentPosition.latitude-curPosition.latitude)
+                let longitudeOffset = abs(currentPosition.longitude-curPosition.longitude)
+                var coorOffset = pow(latitudeOffset, 2.0) + pow(longitudeOffset, 2.0)
+                coorOffset = pow(coorOffset, 0.5)*111
+                if coorOffset > coorDistance {
+                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
                     mapView.clear()
-                    self.updateTimerForLoadRegionPin()
-                    self.updateTimerForSelfLoc()
+                    self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+                    self.previousPosition = currentPosition
                     return
                 }
-                if longitudeExceed {
-//                    print("DEBUG: Position diff > \(coorDistance)")
-                    mapView.clear()
-                    self.updateTimerForLoadRegionPin()
-                    self.updateTimerForSelfLoc()
+                else {
+                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
                 }
             }
         }
@@ -620,7 +620,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
-        self.updateTimerForLoadRegionPin()
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
     }
     
     func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int) {
@@ -637,7 +640,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
         }
         else {
             self.commentIDFromOpenedPinCell = commentID
-            self.updateTimerForLoadRegionPin()
+            let currentZoomLevel = faeMapView.camera.zoom
+            let powFactor: Double = Double(21 - currentZoomLevel)
+            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         }
         self.faeMapView.animate(to: camera)
     }

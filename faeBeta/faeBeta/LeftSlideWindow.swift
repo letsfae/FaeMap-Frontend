@@ -291,7 +291,7 @@ extension FaeMapViewController {
     }
     
     func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+        let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
         let block = {(image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Void in
             // completion code here
             if userAvatar.image != nil {

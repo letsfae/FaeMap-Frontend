@@ -104,11 +104,11 @@ extension FaeMapViewController: UITableViewDelegate, UITableViewDataSource {
                     if ( status! / 100 == 2 ){
                         //success
                         self.animationMoreHide(UIButton())
-                        self.jumpToWelcomeView(true)
+                        self.jumpToWelcomeView(animated: true)
                     }
                     else{
                         //failure
-                        self.jumpToWelcomeView(true)
+                        self.jumpToWelcomeView(animated: true)
                     }
                 }
             }

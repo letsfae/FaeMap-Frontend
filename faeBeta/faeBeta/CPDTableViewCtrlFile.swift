@@ -41,7 +41,7 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
                         cell.labelUsername.text = "\(username)"
                     }
                 }
-                let stringHeaderURL = "https://api.letsfae.com/files/users/\(userID)/avatar"
+                let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
                 cell.imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
             }
             if let date = dictCell["date"].string {

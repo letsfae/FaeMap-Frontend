@@ -110,9 +110,12 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     }
     
     func actionTrueNorth(_ sender: UIButton!) {
-        self.renewSelfLocation()
-        self.updateTimerForSelfLoc()
         self.faeMapView.animate(toBearing: 0)
+        self.renewSelfLocation()
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
     }
     
     // Jump to create pin view controller
