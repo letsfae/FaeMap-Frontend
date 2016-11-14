@@ -225,7 +225,7 @@ extension NameCardViewController {
         imageViewCover.clipsToBounds = true
         imageViewCover.contentMode = .scaleAspectFill
         if user_id != nil {
-            let stringHeaderURL = "https://api.letsfae.com/files/users/\(user_id)/name_card_cover"
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/name_card_cover"
             imageViewCover.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)

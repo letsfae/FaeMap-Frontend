@@ -11,16 +11,16 @@ import GoogleMaps
 import SwiftyJSON
 
 extension FaeMapViewController {
-    func updateTimerForSelfLoc() {
-        self.updateSelfLocation()
+    func updateTimerForSelfLoc(radius: Int) {
+        self.updateSelfLocation(radius: radius)
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
-    func updateTimerForLoadRegionPin() {
-        self.loadCurrentRegionPins()
+    func updateTimerForLoadRegionPin(radius: Int) {
+        self.loadCurrentRegionPins(radius: radius)
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
@@ -28,9 +28,9 @@ extension FaeMapViewController {
     }
     
     // MARK: -- Load Pins based on the Current Region Camera
-    func loadCurrentRegionPins() {
+    func loadCurrentRegionPins(radius: Int) {
         self.faeMapView.clear()
-        self.updateTimerForSelfLoc()
+        self.updateTimerForSelfLoc(radius: radius)
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -102,7 +102,7 @@ extension FaeMapViewController {
     }
     
     // Timer to update location (send self location to server)
-    func updateSelfLocation() {
+    func updateSelfLocation(radius: Int) {
         if startUpdatingLocation && canDoNextUserUpdate {
             for everyUser in self.mapUserPinsDic {
                 everyUser.map = nil
