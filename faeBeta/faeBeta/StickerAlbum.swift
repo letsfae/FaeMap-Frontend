@@ -11,7 +11,7 @@ import Foundation
 // delegate to find sticker image name from dictionary by the frame of sticker being clicked
 
 protocol findStickerFromDictDelegate {
-    func findStickerName(_ index : Int)
+    func sendSticker(album: String, index: Int)
 }
 
 // this class is used to figure out position of all sticker in scroll view. Now the matrix is 5 column and 2 row, you can change formation by changing
@@ -19,6 +19,7 @@ protocol findStickerFromDictDelegate {
 
 class StickerAlbum {
     
+    var albumName = ""
     var currentSelectedIndex = -1
     var currentPage = 0
     var rowPerPage : CGFloat = 2
@@ -32,8 +33,16 @@ class StickerAlbum {
     var buttonSet = [UIButton]()
     var imageSet = [UIImageView]()
     var findStickerDelegate : findStickerFromDictDelegate!
+    var basePages = 0
     
     init() {
+        calculatePos()
+    }
+    
+    init(name: String, row: Int, col: Int, basePage: Int) {
+        albumName = name
+        rowPerPage = CGFloat(row)
+        colPerPage = CGFloat(col)
         calculatePos()
     }
     
@@ -124,6 +133,6 @@ class StickerAlbum {
         index += (Int)(CGFloat(currentPage) * colPerPage * rowPerPage)
         self.currentSelectedIndex = index
         print("the index is: \(index)")
-        findStickerDelegate.findStickerName(index)
+        findStickerDelegate.sendSticker(album: albumName,index: index)
     }
 }

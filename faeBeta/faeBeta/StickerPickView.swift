@@ -19,11 +19,6 @@ protocol SendStickerDelegate {
 
 class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, findStickerFromDictDelegate {
     
-    var stickerScrollViews = [StickerScrollView]()
-    //MARK: maybe wast too much memory
-    //stickerScroll views is the same to the stickerFixView but it contain different sticker sets
-    var stickerFixView = [StickerScrollView]()
-    // stickerFixView is used to show tool scroll view such as favorite sticker, histroy page, and more
     var pageControl : UIPageControl!
     var stickerTabView : StickerTabView!
     //a tab view to controll the stickerScrollView and the stickerFixView
@@ -42,9 +37,9 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         configurePageController()
         configureTabView()
         stickerTabView.switcher = self
-        for stickerView in stickerScrollViews {
-            stickerView.delegate = self
-            stickerView.stickerAlbum.findStickerDelegate = self
+        currentScrollView.delegate = self
+        for stickerAlbum in currentScrollView.stickerAlbums{
+            stickerAlbum.findStickerDelegate = self
         }
     }
     
@@ -54,14 +49,15 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     
     func configureScrollView() {
+        var index = 0
+        let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
+
         for stickerName in stickerIndex {
-            let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
+            index += 1
             prepareAlbum(view, name: stickerName)
             attachButton(view)
-            stickerScrollViews.append(view)
         }
-        currentScrollView = stickerScrollViews[3]
-        self.addSubview(currentScrollView)
+        currentScrollView = view
     }
     
     func configureHistoryPage() {
@@ -72,7 +68,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     func configurePageController() {
         self.pageControl = UIPageControl(frame: CGRect(x: 0, y: 209, width: self.frame.width, height: 8))
-        self.pageControl.numberOfPages = currentScrollView.stickerAlbum.pageNumber
+        self.pageControl.numberOfPages = currentScrollView.currentAlbum.pageNumber
         self.pageControl.currentPage = 0
         self.pageControl.pageIndicatorTintColor = UIColor(red: 182 / 255, green: 182 / 255, blue: 182 / 255, alpha: 1.0)
         self.pageControl.currentPageIndicatorTintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
@@ -87,6 +83,11 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func prepareAlbum(_ view : StickerScrollView, name : String) {
+        if(name != "faeEmoji"){
+            view.createNewAlbums(name: name, row: 2, col: 4)
+        }else{
+            view.createNewAlbums(name: name, row: 4, col: 7)
+        }
         if let images = stickerDictionary[name] {
             for image in images {
                 view.appendNewImage(image)
@@ -105,23 +106,29 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func switchSticker(_ index: Int) {
-        currentScrollView.removeFromSuperview()
-        currentScrollView = stickerScrollViews[index]
-        self.addSubview(currentScrollView)
-        pageControl.removeFromSuperview()
+        scrollToPage(currentScrollView.stickerAlbums[index].basePages )
+        
+        if(pageControl != nil){
+            pageControl.removeFromSuperview()
+        }
         pageControl = nil
         configurePageController()
         pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
     }
     
     func switchToHeader(_ index: Int) {
-        currentScrollView.removeFromSuperview()
-        currentScrollView = stickerFixView[index]
-        self.addSubview(currentScrollView)
-        pageControl.removeFromSuperview()
-        pageControl = nil
-        configurePageController()
-        pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
+//        currentScrollView.removeFromSuperview()
+//        currentScrollView = stickerScrollViews[index]
+//        self.addSubview(currentScrollView)
+//        pageControl.removeFromSuperview()
+//        pageControl = nil
+//        configurePageController()
+//        pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
+    }
+    
+    func scrollToPage(_ index: Int)
+    {
+        currentScrollView.contentOffset.x = screenWidth * CGFloat(index)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -129,19 +136,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         pageControl.currentPage = Int(pageNumber)
     }
     
-    func findAlbumName() -> String {
-        for i in 0..<stickerScrollViews.count {
-            if stickerScrollViews[i] == currentScrollView {
-                print("the name of album is : \(stickerIndex[i])")
-                return stickerIndex[i]
-            }
-        }
-        return ""
-    }
-    
-    func findStickerName(_ index : Int) {
-        let albumName = findAlbumName()
-        if let albumSet = stickerDictionary[albumName] {
+    func sendSticker(album: String, index : Int) {
+        if let albumSet = stickerDictionary[album] {
             print("the name of sticker is : \(albumSet[index])")
             sendStickerDelegate.sendStickerWithImageName(albumSet[index])
         } else {
@@ -175,10 +171,10 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func reloadHistory() {
-        let historyView = stickerScrollViews[1]
-        historyView.stickerAlbum.clearAll()
-        prepareAlbum(historyView, name: "stickerHistory")
-        attachButton(historyView)
+//        let historyView = stickerScrollViews[1]
+//        historyView.stickerAlbum.clearAll()
+//        prepareAlbum(historyView, name: "stickerHistory")
+//        attachButton(historyView)
     }
 }
 

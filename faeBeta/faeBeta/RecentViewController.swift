@@ -186,7 +186,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let chatVC = segue.destination as! ChatViewController
             chatVC.hidesBottomBarWhenPushed = true
             let recent = recents![indexPath.row]
-            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id.stringValue)"
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
