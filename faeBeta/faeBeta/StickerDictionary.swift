@@ -23,7 +23,7 @@ var stickerDictionary = [
         ["steamBun1", "steamBun2", "steamBun3", "steamBun4", "steamBun5", "steamBun6", "steamBun7", "steamBun8", "steamBun9", "steamBun10", "steamBun11", "steamBun12", "steamBun13", "steamBun14", "steamBun15", "steamBun16", "steamBun17", "steamBun18", "steamBun19", "steamBun20", "steamBun21", "steamBun22", "steamBun23", "steamBun24", "steamBun25", "steamBun26", "steamBun27", "steamBun28", "steamBun29", "steamBun30", "steamBun31", "steamBun32"]
 ]
 
-var stickerIndex = ["stickerMore", "stickerHistory", "stickerLike", "faeEmoji","faeSticker","faeGuy", "steamBun"]
+var stickerIndex = ["stickerHistory", "stickerLike", "faeEmoji","faeSticker","faeGuy", "steamBun"]
 
 var pageNumDictionary = ["stickerMore": 0,
                          "stickerHistory": 0,

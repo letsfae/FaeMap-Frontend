@@ -30,7 +30,7 @@ class StickerScrollView : UIScrollView {
     
     func createNewAlbums(name: String, row: Int, col: Int)
     {
-        cumulativePage += stickerAlbums.last?.pageNumber ?? 0
+        cumulativePage += stickerAlbums.last != nil ? max(stickerAlbums.last!.pageNumber ,1) : 0
         let album = StickerAlbum(name: name, row: row, col: col, basePage: cumulativePage)
         stickerAlbums.append(album)
         
@@ -52,7 +52,20 @@ class StickerScrollView : UIScrollView {
     }
     
     func clearButton() {
-//        stickerAlbum.clearButton()
+        for stickerAlbum in stickerAlbums {
+            stickerAlbum.clearAll()
+        }
+        stickerAlbums.removeAll()
+        cumulativePage = 0
     }
     
+    func getAlbum(withName name:String) -> StickerAlbum?
+    {
+        for stickerAlbum in stickerAlbums {
+            if stickerAlbum.albumName == name{
+                return stickerAlbum
+            }
+        }
+        return nil
+    }
 }

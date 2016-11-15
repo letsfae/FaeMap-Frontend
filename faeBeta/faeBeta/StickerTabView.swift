@@ -27,6 +27,8 @@ class StickerTabView: UIView {
     var tabIndicator : UIView!
     var tabframe: CGRect!
     
+    var tabButtons = [UIButton]()
+    
     var switcher : SwitchStickerDelegate!
     
     override init(frame : CGRect) {
@@ -69,7 +71,10 @@ class StickerTabView: UIView {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
-        for name in stickerIndex {
+        var newStickerIndex = stickerIndex
+        newStickerIndex.insert("stickerMore", at: 0)
+        
+        for name in newStickerIndex {
             let imageView = UIImageView(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
             imageView.image = UIImage(named: name)
             imageView.contentMode = .scaleAspectFit
@@ -78,6 +83,7 @@ class StickerTabView: UIView {
             button.addTarget(self, action: #selector(scrollGroupClicked), for: .touchUpInside)
             scrollView.addSubview(imageView)
             scrollView.addSubview(button)
+            tabButtons.append(button)
             x += cellWidth - 8
             let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: buttonLength))
             line.backgroundColor = UIColor(red: 230 / 255, green: 230 / 255, blue: 230 / 255, alpha: 1.0)
@@ -107,14 +113,17 @@ class StickerTabView: UIView {
     }
     
     func scrollGroupClicked(_ sender : UIButton) {
+        updateTabIndicator(sender)
+        let xOffset = tabIndicator.frame.origin.x
+        switcher.switchSticker(Int(xOffset / cellWidth))
+    }
+    
+    func updateTabIndicator(_ sender: UIButton)
+    {
         tabIndicator.removeFromSuperview()
         tabIndicator.frame.origin = CGPoint(x: sender.frame.origin.x - (cellWidth - buttonLength) / 2, y: 37)
         tabIndicator.isHidden = false
         scrollView.addSubview(tabIndicator)
-        print(tabIndicator.frame.origin.x)
-        let xOffset = tabIndicator.frame.origin.x
-        print(Int(xOffset / cellWidth))
-        switcher.switchSticker(Int(xOffset / cellWidth))
     }
     
 }

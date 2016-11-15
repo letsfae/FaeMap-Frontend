@@ -38,9 +38,9 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         configureTabView()
         stickerTabView.switcher = self
         currentScrollView.delegate = self
-        for stickerAlbum in currentScrollView.stickerAlbums{
-            stickerAlbum.findStickerDelegate = self
-        }
+
+        switchSticker(3)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,9 +55,10 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         for stickerName in stickerIndex {
             index += 1
             prepareAlbum(view, name: stickerName)
-            attachButton(view)
         }
+        attachButton(view)
         currentScrollView = view
+        self.addSubview(view)
     }
     
     func configureHistoryPage() {
@@ -87,12 +88,15 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
             view.createNewAlbums(name: name, row: 2, col: 4)
         }else{
             view.createNewAlbums(name: name, row: 4, col: 7)
+            view.currentAlbum = view.currentAlbum ?? view.stickerAlbums.last!
         }
         if let images = stickerDictionary[name] {
             for image in images {
                 view.appendNewImage(image)
             }
         }
+        pageNumDictionary[name] = max(view.stickerAlbums.last!.pageNumber , 1)
+        view.stickerAlbums.last!.findStickerDelegate = self
     }
     
     func attachButton(_ view : StickerScrollView) {
@@ -106,14 +110,11 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func switchSticker(_ index: Int) {
-        scrollToPage(currentScrollView.stickerAlbums[index].basePages )
-        
-        if(pageControl != nil){
-            pageControl.removeFromSuperview()
+        if(index > 0 && index <= currentScrollView.stickerAlbums.count){
+            scrollToPage(currentScrollView.stickerAlbums[index - 1].basePages )
+            currentScrollView.currentAlbum = currentScrollView.stickerAlbums[index - 1]
+            updatePageControl()
         }
-        pageControl = nil
-        configurePageController()
-        pageControl.currentPage = Int(round(currentScrollView.contentOffset.x / currentScrollView.frame.size.width))
     }
     
     func switchToHeader(_ index: Int) {
@@ -132,8 +133,22 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
-        pageControl.currentPage = Int(pageNumber)
+        let pages = currentScrollView.currentAlbum.basePages
+        let baseOffset = CGFloat(pages) * screenWidth
+        let page = Int(round((currentScrollView.contentOffset.x - baseOffset) / currentScrollView.frame.size.width))
+        if(page < 0){
+            let currentName = currentScrollView.currentAlbum.albumName
+            self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[stickerIndex.index(of: currentName)! - 1]
+            updatePageControl()
+            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[stickerIndex.index(of: currentName)!])
+        }else if (page >= pageControl.numberOfPages){
+            let currentName = currentScrollView.currentAlbum.albumName
+            self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[stickerIndex.index(of: currentName)! + 1]
+            updatePageControl()
+            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[stickerIndex.index(of: currentName)! + 2])
+        }else{
+            pageControl.currentPage = page
+        }
     }
     
     func sendSticker(album: String, index : Int) {
@@ -171,10 +186,29 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     func reloadHistory() {
-//        let historyView = stickerScrollViews[1]
-//        historyView.stickerAlbum.clearAll()
-//        prepareAlbum(historyView, name: "stickerHistory")
-//        attachButton(historyView)
+        let currentSize = currentScrollView.contentSize
+        let currentName = currentScrollView.currentAlbum.albumName
+        currentScrollView.clearButton()
+        for stickerName in stickerIndex {
+            prepareAlbum(currentScrollView, name: stickerName)
+        }
+        currentScrollView.currentAlbum = currentScrollView.getAlbum(withName: currentName)
+        attachButton(currentScrollView)
+        if(currentScrollView.contentSize != currentSize){
+            currentScrollView.contentOffset.x += screenWidth
+        }
+    }
+    
+    func updatePageControl()
+    {
+        if(pageControl != nil){
+            pageControl.removeFromSuperview()
+        }
+        pageControl = nil
+        configurePageController()
+        let pages = currentScrollView.currentAlbum.basePages
+        let baseOffset = CGFloat(pages) * screenWidth
+        pageControl.currentPage = Int(round((currentScrollView.contentOffset.x - baseOffset) / currentScrollView.frame.size.width))
     }
 }
 

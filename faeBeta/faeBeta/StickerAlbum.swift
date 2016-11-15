@@ -21,7 +21,6 @@ class StickerAlbum {
     
     var albumName = ""
     var currentSelectedIndex = -1
-    var currentPage = 0
     var rowPerPage : CGFloat = 2
     var colPerPage : CGFloat = 4
     var stickerName = [[String]]()
@@ -43,6 +42,7 @@ class StickerAlbum {
         albumName = name
         rowPerPage = CGFloat(row)
         colPerPage = CGFloat(col)
+        basePages = basePage
         calculatePos()
     }
     
@@ -64,7 +64,7 @@ class StickerAlbum {
                     if(stickerName[page].count <= index) {
                         break
                     }
-                    let newFrame = CGRect(x: stickerPos[index].origin.x + CGFloat(page) * widthPage, y: stickerPos[index].origin.y, width: stickerPos[index].width, height: stickerPos[index].height)
+                    let newFrame = CGRect(x: stickerPos[index].origin.x + CGFloat(page + basePages) * widthPage, y: stickerPos[index].origin.y, width: stickerPos[index].width, height: stickerPos[index].height)
                     let imageView = UIImageView(frame: newFrame)
                     imageView.image = UIImage(named: stickerName[page][index])
                     imageView.contentMode = .scaleAspectFit
@@ -97,6 +97,7 @@ class StickerAlbum {
     func clearAll() {
         self.stickerName.removeAll()
         self.pageNumber = 0
+        self.basePages = 0
         clearButton()
     }
     
@@ -113,7 +114,7 @@ class StickerAlbum {
     
     @objc func calculateIndex(_ sender : UIButton) {
         let original = sender.frame.origin
-        let currentPage = (Int)(original.x / widthPage)
+        let currentPage = (Int)(original.x / widthPage) - basePages
         let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
         let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
         var index = 0
@@ -128,7 +129,7 @@ class StickerAlbum {
             index += (Int)(colPerPage)
             print(index)
         }
-        let temp = original.x - (CGFloat)(currentPage) * widthPage
+        let temp = original.x - (CGFloat)(currentPage + basePages) * widthPage
         index += Int(temp / (inlineInterval + length))
         index += (Int)(CGFloat(currentPage) * colPerPage * rowPerPage)
         self.currentSelectedIndex = index
