@@ -41,15 +41,17 @@ class MoodAvatarTableViewCell: UITableViewCell {
         
         maleImage = UIImageView()
         maleImage.image = UIImage(named: "")
+        maleImage.contentMode = .scaleAspectFill
         self.addSubview(maleImage)
         self.addConstraintsWithFormat("H:|-50-[v0(50)]", options: [], views: maleImage)
-        self.addConstraintsWithFormat("V:[v0(45)]-5-|", options: [], views: maleImage)
+        self.addConstraintsWithFormat("V:[v0(50)]-5-|", options: [], views: maleImage)
         
         femaleImage = UIImageView()
         femaleImage.image = UIImage(named: "")
+        femaleImage.contentMode = .scaleAspectFill
         self.addSubview(femaleImage)
         self.addConstraintsWithFormat("H:[v0(50)]-50-|", options: [], views: femaleImage)
-        self.addConstraintsWithFormat("V:[v0(45)]-5-|", options: [], views: femaleImage)
+        self.addConstraintsWithFormat("V:[v0(50)]-5-|", options: [], views: femaleImage)
         
         labelAvatarDes = UILabel()
         labelAvatarDes.font = UIFont(name: "AvenirNext-Medium", size: 18)

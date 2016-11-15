@@ -51,7 +51,7 @@ var userPhoneNumber : String?
 var userEmailVerified : Bool = false
 var userPhoneVerified : Bool = false
 
-var userAvatarMap = "avatar_1" // new var by Yue Shen
+var userAvatarMap = "mapAvatar_1" // new var by Yue Shen
 
 var arrayNameCard = [Int:UIImage]()
 //var arrayNameCard : [Int: UIImage]!

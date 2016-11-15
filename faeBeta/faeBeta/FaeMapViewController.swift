@@ -609,10 +609,10 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 self.myPositionOutsideMarker_2.image = UIImage(named: "myPosition_outside")
                 self.myPositionOutsideMarker_3.image = UIImage(named: "myPosition_outside")
                 if let miniAvatar = userMiniAvatar {
-                    self.myPositionIcon.setImage(UIImage(named: "avatar_\(miniAvatar+1)"), for: UIControlState())
+                    self.myPositionIcon.setImage(UIImage(named: "mapAvatar_\(miniAvatar+1)"), for: UIControlState())
                 }
                 else {
-                    self.myPositionIcon.setImage(UIImage(named: "avatar_1"), for: UIControlState())
+                    self.myPositionIcon.setImage(UIImage(named: "mapAvatar_1"), for: UIControlState())
                 }
             }
         })
