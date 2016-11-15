@@ -4,8 +4,8 @@
 * SwiftJSON is a public framework, aims to deal with the JSON data from Backend. 
 * Because of the "Optianal" and "Wrapping" features of Swift language, it becomes complex to get the real data and handle the error as the same time.
 * It is a must for Fae Frontend Developers to know how it works and how to use.
-The code would look like this:
 
+The code would look like this:
 ```swift
 if let statusesArray = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]],
     let user = statusesArray[0]["user"] as? [String: AnyObject],
@@ -15,9 +15,7 @@ if let statusesArray = try? JSONSerialization.jsonObject(with: data, options: .a
 ```
 
 It's not good.
-
 Even if we use optional chaining, it would be messy:
-
 ```swift
 if let JSONObject = try JSONSerialization.jsonObject(with: data,, options: .allowFragments) as? [[String: AnyObject]],
     let username = (JSONObject[0]["user"] as? [String: AnyObject])?["name"] as? String {
@@ -28,7 +26,6 @@ if let JSONObject = try JSONSerialization.jsonObject(with: data,, options: .allo
 An unreadable mess--for something that should really be simple!
 
 With SwiftyJSON all you have to do is:
-
 ```swift
 let json = JSON(data: dataFromNetworking)
 if let userName = json[0]["user"]["name"].string {
