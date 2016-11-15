@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMaps
+import GooglePlaces
 
 protocol MainScreenSearchViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
@@ -212,10 +213,16 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     func didChangeSearchText(_ searchText: String) {
         if(searchText != "") {
             buttonClearSearchBar.isHidden = false
+            ///
             let placeClient = GMSPlacesClient()
+            /*
+            let filter = GMSAutocompleteFilter()
+            filter.type = .establishment
+             */
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
                 (results, error : Error?) -> Void in
                 if let error = error{
+                    print("DEBUG GooglePlaces Error")
                     print(error)
                 }
                 self.placeholder.removeAll()
@@ -223,7 +230,6 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                     return
                 } else {
                     for result in results! {
-                        print(result)
                         self.placeholder.append(result)
                     }
                     self.tblSearchResults.reloadData()

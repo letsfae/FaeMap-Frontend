@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import GoogleMaps
+import GooglePlaces
 import Firebase
 import FirebaseDatabase
 
@@ -27,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         //        UIApplication.sharedApplication().registerForRemoteNotifications()
         GMSServices.provideAPIKey(GoogleMapKey)
+        GMSPlacesClient.provideAPIKey(GoogleMapKey)
         
         let notificationType: UIUserNotificationType = [.alert , .badge , .sound]
         

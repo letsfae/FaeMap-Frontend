@@ -58,7 +58,13 @@ PODS:
   - Google-Mobile-Ads-SDK (7.14.0)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
-  - GoogleMaps (1.13.2)
+  - GoogleMaps (2.1.1):
+    - GoogleMaps/Maps (= 2.1.1)
+  - GoogleMaps/Base (2.1.1)
+  - GoogleMaps/Maps (2.1.1):
+    - GoogleMaps/Base
+  - GooglePlaces (2.1.1):
+    - GoogleMaps/Base (= 2.1.1)
   - GoogleSymbolUtilities (1.1.2)
   - GoogleToolboxForMac/DebugUtils (2.1.0):
     - GoogleToolboxForMac/Defines (= 2.1.0)
@@ -96,7 +102,8 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/RemoteConfig
   - Firebase/Storage
-  - GoogleMaps (~> 1.13.2)
+  - GoogleMaps
+  - GooglePlaces
   - IDMPhotoBrowser
   - JSQMessagesViewController
   - KTCenterFlowLayout
@@ -118,7 +125,8 @@ SPEC CHECKSUMS:
   FirebaseStorage: c50aa353bf484072704e73b4aff1bd47adb735c4
   Google-Mobile-Ads-SDK: dbb0211c52ca02f72331b831ce4ccd218cf08748
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
-  GoogleMaps: b20a103ff307f58392e603cf142e59d7e30374c1
+  GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
+  GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
@@ -130,6 +138,6 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: f0be2e604f83e8405a624e9f891898bf6ed4e019
 
-PODFILE CHECKSUM: 2e58a828c33d750abc4dd1f7290620bc5aa49180
+PODFILE CHECKSUM: 38a9974cfb58a2fad96991ea3dc37eab77a59ebc
 
 COCOAPODS: 1.2.0.beta.1

@@ -402,6 +402,7 @@ class FaeMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMana
                 self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                 return
             }
+            
             if let curPosition = previousPosition {
                 let latitudeOffset = abs(currentPosition.latitude-curPosition.latitude)
                 let longitudeOffset = abs(currentPosition.longitude-curPosition.longitude)
