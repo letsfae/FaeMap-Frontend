@@ -4,6 +4,6 @@
 	Because of the "Optianal" and "Wrapping" features of Swift language,
 	it becomes complex to get the real data and handle the error as the same time.
 	It is a must for Fae Frontend Developers to know how it works and how to use.
-	For more details, please check https://github.com/SwiftyJSON/SwiftyJSON
+	For more details, please check [SwiftyJSON on Github](https://github.com/SwiftyJSON/SwiftyJSON)
 ## License
 	2016 Faevorite Inc.
