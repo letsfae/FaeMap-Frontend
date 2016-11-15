@@ -7,4 +7,4 @@
 * For more details, please check [SwiftyJSON on Github](https://github.com/SwiftyJSON/SwiftyJSON)
 
 ## License
-	2016 Faevorite Inc.
+2016 Faevorite Inc.
