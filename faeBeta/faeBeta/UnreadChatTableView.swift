@@ -31,8 +31,11 @@ extension FaeMapViewController {
                     }else{
                         self.labelUnreadMessages.frame.size.width = 22
                     }
-                    
+                    self.buttonChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
                     self.labelUnreadMessages.isHidden = totalUnread == 0
+                    if totalUnread == 0 {
+                        self.buttonChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
+                    }
                     UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
                 }
             }

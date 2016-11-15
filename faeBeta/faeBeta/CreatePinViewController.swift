@@ -44,7 +44,6 @@ class CreatePinViewController: UIViewController, UITextViewDelegate {
     var labelSubmitJoinMe: UILabel!
     var labelSubmitSell: UILabel!
     var labelSubmitLive: UILabel!
-    var labelUnreadMessages: UILabel!
     
     var buttonClosePinBlurView: UIButton!
     var buttonCommentSubmit: UIButton!

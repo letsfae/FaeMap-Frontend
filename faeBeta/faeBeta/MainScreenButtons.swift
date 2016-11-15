@@ -15,7 +15,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     func loadButton() {
         // Left window on main map to open account system
         buttonLeftTop = UIButton()
-        buttonLeftTop.setImage(UIImage(named: "leftTopButton"), for: UIControlState())
+        buttonLeftTop.setImage(UIImage(named: "mainScreenMore"), for: UIControlState())
         self.view.addSubview(buttonLeftTop)
         buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
@@ -24,28 +24,26 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         
         // Open main map search
         buttonMainScreenSearch = UIButton()
-        buttonMainScreenSearch.setImage(UIImage(named: "middleTopButton"), for: UIControlState())
+        buttonMainScreenSearch.setImage(UIImage(named: "mainScreenFaeLogo"), for: UIControlState())
         self.view.addSubview(buttonMainScreenSearch)
         buttonMainScreenSearch.addTarget(self, action: #selector(FaeMapViewController.jumpToMainScreenSearch(_:)), for: UIControlEvents.touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(29)]", options: [], views: buttonMainScreenSearch)
-        self.view.addConstraintsWithFormat("V:|-24-[v0(32)]", options: [], views: buttonMainScreenSearch)
+        self.view.addConstraintsWithFormat("H:[v0(33)]", options: [], views: buttonMainScreenSearch)
+        self.view.addConstraintsWithFormat("V:|-22-[v0(36)]", options: [], views: buttonMainScreenSearch)
         NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         buttonMainScreenSearch.layer.zPosition = 500
         
-        /* This is not for 11.01 Dev Version
         // Wind bell
         buttonRightTop = UIButton()
-        buttonRightTop.setImage(UIImage(named: "rightTopButton"), forState: .Normal)
+        buttonRightTop.setImage(UIImage(named: "mainScreenWindBell"), for: UIControlState())
         self.view.addSubview(buttonRightTop)
-        buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
-        */
         
         // Click to back to north
         buttonToNorth = UIButton()
         view.addSubview(buttonToNorth)
-        buttonToNorth.setImage(UIImage(named: "compass_new"), for: UIControlState())
+        buttonToNorth.setImage(UIImage(named: "mainScreenNorth"), for: UIControlState())
         buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
@@ -54,7 +52,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         // Click to locate the current location
         buttonSelfPosition = UIButton()
         view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), for: UIControlState())
+        buttonSelfPosition.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
         buttonSelfPosition.addTarget(self, action: #selector(FaeMapViewController.actionSelfPosition(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
         view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
@@ -62,7 +60,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         
         // Open chat view
         buttonChatOnMap = UIButton()
-        buttonChatOnMap.setImage(UIImage(named: "chat_map"), for: UIControlState())
+        buttonChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
         buttonChatOnMap.addTarget(self, action: #selector(FaeMapViewController.animationMapChatShow(_:)), for: UIControlEvents.touchUpInside)
         view.addSubview(buttonChatOnMap)
         view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
@@ -83,7 +81,7 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
         
         // Create pin on main map
         buttonPinOnMap = UIButton(frame: CGRect(x: 323, y: 646, width: 79, height: 79))
-        buttonPinOnMap.setImage(UIImage(named: "set_pin_on_map"), for: UIControlState())
+        buttonPinOnMap.setImage(UIImage(named: "mainScreenPin"), for: UIControlState())
         view.addSubview(buttonPinOnMap)
         buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
