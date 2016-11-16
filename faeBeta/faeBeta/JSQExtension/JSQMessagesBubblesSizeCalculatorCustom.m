@@ -24,7 +24,7 @@
 #import <JSQMessagesViewController/JSQMessageData.h>
 
 #import <JSQMessagesViewController/UIImage+JSQMessages.h>
-
+#import "EmojiService.h"
 
 @interface JSQMessagesBubblesSizeCalculatorCustom ()
 
@@ -122,9 +122,9 @@
         CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble;
         CGFloat maximumTextWidth = [self textBubbleWidthForLayout:layout] - avatarSize.width - layout.messageBubbleLeftRightMargin - horizontalInsetsTotal - 30;
 
-        CGRect stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
+        CGRect stringRect =
+        [ [EmojiService shrinkString:[messageData text]] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
                                                              options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-//                                                          attributes:@{ NSFontAttributeName : layout.messageBubbleFont }
                                                           attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:16.0]}
                              
                                                              context:nil];
@@ -183,5 +183,6 @@
     
     return self.layoutWidthForFixedWidthBubbles;
 }
+
 
 @end

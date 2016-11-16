@@ -39,8 +39,9 @@
 #import <JSQMessagesViewController/NSBundle+JSQMessages.h>
 
 #import <objc/runtime.h>
+#import "faeBeta-swift.h"
 
-
+#import "EmojiService.h"
 // Fixes rdar://26295020
 // See issue #1247 and Peter Steinberger's comment:
 // https://github.com/jessesquires/JSQMessagesViewController/issues/1247#issuecomment-219386199
@@ -561,8 +562,9 @@ JSQMessagesKeyboardControllerDelegate>
     cell.delegate = collectionView;
 
     if (!isMediaMessage) {
-        cell.textView.text = [messageItem text];
-
+        
+        cell.textView.attributedText = [EmojiService translateString: [messageItem text] isOutGoing: isOutgoingMessage];
+        
         if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
             //  workaround for iOS 7 textView data detectors bug
             cell.textView.text = nil;
@@ -1160,5 +1162,6 @@ JSQMessagesKeyboardControllerDelegate>
 - (void)customAction1: (id)sender{
     printf("custom");
 }
+
 
 @end
