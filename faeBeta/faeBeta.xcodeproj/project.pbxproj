@@ -1007,7 +1007,7 @@
 			name = MainScreenSearch;
 			sourceTree = "<group>";
 		};
-		B8744BE31DB877A1005809DA /* CreatePinMenuExtension */ = {
+		B8744BE31DB877A1005809DA /* PinMenuExtension */ = {
 			isa = PBXGroup;
 			children = (
 				B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */,
@@ -1015,7 +1015,7 @@
 				B81563831DDB97E200BF85A1 /* PinMenuActions.swift */,
 				B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */,
 			);
-			name = CreatePinMenuExtension;
+			name = PinMenuExtension;
 			sourceTree = "<group>";
 		};
 		B88A3E331DC9465200351A2A /* OpenedPinList */ = {
@@ -1030,10 +1030,10 @@
 		B8D5EEC41DB840BC00C62628 /* PinMenu */ = {
 			isa = PBXGroup;
 			children = (
-				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 				B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */,
-				B8744BE31DB877A1005809DA /* CreatePinMenuExtension */,
+				B8744BE31DB877A1005809DA /* PinMenuExtension */,
 				B81563851DDB987600BF85A1 /* CreateCommentPin */,
+				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
 			name = PinMenu;
 			sourceTree = "<group>";

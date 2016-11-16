@@ -51,7 +51,11 @@ extension CreateCommentPinViewController: UITextViewDelegate {
                 textViewForCommentPin.resignFirstResponder()
                 return false
             }
-            return textView.text.characters.count + (text.characters.count - range.length) <= 200
+            let countChars = textView.text.characters.count + (text.characters.count - range.length)
+            if countChars <= 200 {
+                self.labelCountChars.text = "\(200-countChars)"
+            }
+            return countChars <= 200
         }
         return true
     }

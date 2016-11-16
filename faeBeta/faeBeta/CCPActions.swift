@@ -12,6 +12,11 @@ import CoreLocation
 
 extension CreateCommentPinViewController {
     
+    func actionFinishEditing(_ sender: UIButton) {
+        textViewForCommentPin.endEditing(true)
+        textViewForCommentPin.resignFirstResponder()
+    }
+    
     func actionBackToPinSelections(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewCreateCommentPin.alpha = 0.0

@@ -41,9 +41,19 @@ class CreateCommentPinViewController: UIViewController {
     // MARK: -- Buttons
     var buttonCommentSubmit: UIButton!
     
+    // MARK: -- Keyboard Tool Bar
+    var uiviewToolBar: UIView!
+    var buttonOpenFaceGesPanel: UIButton!
+    var buttonFinishEdit: UIButton!
+    
+    // MARK: -- Count Number of Characters
+    var labelCountChars: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateCommentPinView()
+        loadKeyboardToolBar()
+        addObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,12 +68,31 @@ class CreateCommentPinViewController: UIViewController {
         currentLatitude = currentLocation.coordinate.latitude
         currentLongitude = currentLocation.coordinate.longitude
     }
+    
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(_ notification:Notification) {
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.uiviewToolBar.frame.origin.y = screenHeight - keyboardFrame.height - 50
+            self.labelCountChars.frame.origin.y = screenHeight - keyboardFrame.height - 81
+        })
+    }
+    
+    func keyboardWillHide(_ notification:Notification) {
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.uiviewToolBar.frame.origin.y = screenHeight
+            self.labelCountChars.frame.origin.y = screenHeight
+        })
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
-
-    
 
 }
