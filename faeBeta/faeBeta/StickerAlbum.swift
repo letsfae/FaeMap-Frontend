@@ -104,7 +104,8 @@ class StickerAlbum {
         }
     }
     
-    func calculatePos() {
+    
+    private func calculatePos() {
         let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
         let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
         var y = lineInterval + 10
@@ -143,21 +144,20 @@ class StickerAlbum {
         let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
         var index = 0
         // check value
-        print(original)
-        print(currentPage)
-        print(lineInterval)
-        print(inlineInterval)
-        print(colPerPage)
-        print((Int)(original.y / lineInterval))
-        if ((Int)(original.y / lineInterval) > 1) {
-            index += (Int)(colPerPage)
+//        print(original)
+//        print(currentPage)
+//        print(lineInterval)
+//        print(inlineInterval)
+//        print(colPerPage)
+//        print((Int)(original.y / lineInterval))
+        if Int(original.y / (lineInterval + length)) > 1 {
+            index += Int(colPerPage) * Int(original.y / (lineInterval + length))
             print(index)
         }
         let temp = original.x - (CGFloat)(currentPage + basePages) * widthPage
         index += Int(temp / (inlineInterval + length))
-        index += (Int)(CGFloat(currentPage) * colPerPage * rowPerPage)
+        index += (Int)(CGFloat(currentPage) * (colPerPage * rowPerPage - (isEmojiAlbum ? 1 : 0)))
         self.currentSelectedIndex = index
-        print("the index is: \(index)")
         findStickerDelegate.sendSticker(album: albumName,index: index)
     }
     
