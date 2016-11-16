@@ -1,5 +1,8 @@
 # FaeMap-Frontend
 
+[Use of SwiftyJSON](https://github.com/letsfae/FaeMap-Frontend/blob/master/README.md#use-of-swiftyjson)
+[Use of GoogleMaps and GooglePlaces](https://github.com/letsfae/FaeMap-Frontend/blob/master/README.md#use-of-swiftyjson)
+
 ## Use of SwiftyJSON
 [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) is a public framework, aims to deal with the JSON data from Backend. 
 
