@@ -1,12 +1,9 @@
 # FaeMap-Frontend
 
-[Use of SwiftyJSON](#use-of-swiftyjson)
-
-[Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
-
-[Use of Delegate](#use-of-delegate-in-swift)
-
-[License](#license)
+* [Use of SwiftyJSON](#use-of-swiftyjson)
+* [Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
+* [Use of Delegate](#use-of-delegate-in-swift)
+* [License](#license)
 
 ## Use of SwiftyJSON
 [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) is a public framework, aims to deal with the JSON data from Backend. 
