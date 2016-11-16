@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension FaeMapViewController: CreatePinViewControllerDelegate {
+extension FaeMapViewController: PinMenuDelegate {
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         // Left window on main map to open account system
@@ -118,16 +118,16 @@ extension FaeMapViewController: CreatePinViewControllerDelegate {
     
     // Jump to create pin view controller
     func actionCreatePin(_ sender: UIButton!) {
-        let createPinVC = CreatePinViewController()
-        createPinVC.modalPresentationStyle = .overCurrentContext
-        createPinVC.currentLatitude = self.currentLatitude
-        createPinVC.currentLongitude = self.currentLongitude
-        createPinVC.delegate = self
-        self.present(createPinVC, animated: false, completion: nil)
+        let pinMenuVC = PinMenuViewController()
+        pinMenuVC.modalPresentationStyle = .overCurrentContext
+        pinMenuVC.currentLatitude = self.currentLatitude
+        pinMenuVC.currentLongitude = self.currentLongitude
+        pinMenuVC.delegate = self
+        self.present(pinMenuVC, animated: false, completion: nil)
     }
     
-    // Back from create pin view controller
-    func sendCommentGeoInfo(_ commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    // Back from pin menu view controller
+    func sendPinGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(commentID)

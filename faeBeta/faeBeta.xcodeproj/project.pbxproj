@@ -164,6 +164,19 @@
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */; };
+		B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563831DDB97E200BF85A1 /* PinMenuActions.swift */; };
+		B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563861DDB98FC00BF85A1 /* CreateCommentPinViewController.swift */; };
+		B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */; };
+		B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */; };
+		B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638C1DDBA36900BF85A1 /* CCPActions.swift */; };
+		B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */; };
+		B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */; };
+		B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */; };
+		B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563961DDBF7E500BF85A1 /* SPLActions.swift */; };
+		B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */; };
+		B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */; };
+		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
 		B82712DC1DD44B2B00A631DD /* ImageProcessingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
@@ -175,7 +188,7 @@
 		B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */; };
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
-		B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */; };
+		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B8840E1C1DB6A8C6009CFF00 /* MapToCPDSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */; };
@@ -188,10 +201,10 @@
 		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
 		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
 		B8B86D6B1DD68243001273F6 /* MapGetImageFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */; };
-		B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */; };
+		B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */; };
 		B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
 		B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
-		B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */; };
+		B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */; };
 		B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
@@ -401,6 +414,19 @@
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuLoadItems.swift; sourceTree = "<group>"; };
+		B81563831DDB97E200BF85A1 /* PinMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuActions.swift; sourceTree = "<group>"; };
+		B81563861DDB98FC00BF85A1 /* CreateCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPinViewController.swift; sourceTree = "<group>"; };
+		B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPLoadItems.swift; sourceTree = "<group>"; };
+		B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPTextViewControll.swift; sourceTree = "<group>"; };
+		B815638C1DDBA36900BF85A1 /* CCPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPActions.swift; sourceTree = "<group>"; };
+		B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPDelegateCtrl.swift; sourceTree = "<group>"; };
+		B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuDelegateCtrl.swift; sourceTree = "<group>"; };
+		B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLLoadItems.swift; sourceTree = "<group>"; };
+		B81563961DDBF7E500BF85A1 /* SPLActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLActions.swift; sourceTree = "<group>"; };
+		B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLMapMethods.swift; sourceTree = "<group>"; };
+		B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLSearchBarMethods.swift; sourceTree = "<group>"; };
+		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
 		B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingFunctions.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
@@ -412,7 +438,7 @@
 		B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewControl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
-		B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocation.swift; sourceTree = "<group>"; };
+		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCPDSegue.swift; sourceTree = "<group>"; };
@@ -425,10 +451,10 @@
 		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
 		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
 		B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapGetImageFunc.swift; sourceTree = "<group>"; };
-		B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinMainMenu.swift; sourceTree = "<group>"; };
+		B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuAnimation.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDLoadItems.swift; sourceTree = "<group>"; };
 		B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDAPIConnections.swift; sourceTree = "<group>"; };
-		B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinViewController.swift; sourceTree = "<group>"; };
+		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDTableViewCtrlFile.swift; sourceTree = "<group>"; };
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -913,12 +939,54 @@
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
 				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
-				B8D5EEC41DB840BC00C62628 /* CreatePin */,
+				B8D5EEC41DB840BC00C62628 /* PinMenu */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
 				B8F633651DCA649D00C9A079 /* Support */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		B81563851DDB987600BF85A1 /* CreateCommentPin */ = {
+			isa = PBXGroup;
+			children = (
+				B81563861DDB98FC00BF85A1 /* CreateCommentPinViewController.swift */,
+				B81563901DDBD8E700BF85A1 /* CCPExtension */,
+			);
+			name = CreateCommentPin;
+			sourceTree = "<group>";
+		};
+		B81563901DDBD8E700BF85A1 /* CCPExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */,
+				B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */,
+				B815638C1DDBA36900BF85A1 /* CCPActions.swift */,
+				B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */,
+				B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */,
+			);
+			name = CCPExtension;
+			sourceTree = "<group>";
+		};
+		B81563931DDBF74300BF85A1 /* SelectPinLocation */ = {
+			isa = PBXGroup;
+			children = (
+				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
+				B81563981DDBF7EA00BF85A1 /* SPLExtension */,
+			);
+			name = SelectPinLocation;
+			sourceTree = "<group>";
+		};
+		B81563981DDBF7EA00BF85A1 /* SPLExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */,
+				B81563961DDBF7E500BF85A1 /* SPLActions.swift */,
+				B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */,
+				B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */,
+				B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */,
+			);
+			name = SPLExtension;
 			sourceTree = "<group>";
 		};
 		B84E1A5C1DCBE1F1000E29B9 /* OpenedPinListExtension */ = {
@@ -939,13 +1007,15 @@
 			name = MainScreenSearch;
 			sourceTree = "<group>";
 		};
-		B8744BE31DB877A1005809DA /* CreatePinExtension */ = {
+		B8744BE31DB877A1005809DA /* CreatePinMenuExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B8C4A9701DB9553800002062 /* CreatePinMainMenu.swift */,
-				B85FE6CF1DB8786C00BB8F6A /* SelectLocation.swift */,
+				B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */,
+				B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */,
+				B81563831DDB97E200BF85A1 /* PinMenuActions.swift */,
+				B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */,
 			);
-			name = CreatePinExtension;
+			name = CreatePinMenuExtension;
 			sourceTree = "<group>";
 		};
 		B88A3E331DC9465200351A2A /* OpenedPinList */ = {
@@ -957,14 +1027,15 @@
 			name = OpenedPinList;
 			sourceTree = "<group>";
 		};
-		B8D5EEC41DB840BC00C62628 /* CreatePin */ = {
+		B8D5EEC41DB840BC00C62628 /* PinMenu */ = {
 			isa = PBXGroup;
 			children = (
-				B8D5EEC51DB8422600C62628 /* CreatePinViewController.swift */,
-				B8744BE31DB877A1005809DA /* CreatePinExtension */,
-				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
+				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
+				B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */,
+				B8744BE31DB877A1005809DA /* CreatePinMenuExtension */,
+				B81563851DDB987600BF85A1 /* CreateCommentPin */,
 			);
-			name = CreatePin;
+			name = PinMenu;
 			sourceTree = "<group>";
 		};
 		B8E819541DB3248C00D418D1 /* CommentPinDetail */ = {
@@ -1209,6 +1280,7 @@
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */,
+				B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */,
 				B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				DC3D105A1DC2B1AC0011C772 /* CPDInputToolbar.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
@@ -1216,10 +1288,13 @@
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
+				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
+				B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
+				B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B82712DC1DD44B2B00A631DD /* ImageProcessingFunctions.swift in Sources */,
 				B8A3BF5E1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift in Sources */,
@@ -1227,10 +1302,11 @@
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
-				B8C4A9711DB9553800002062 /* CreatePinMainMenu.swift in Sources */,
+				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
+				B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */,
 				B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */,
 				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
-				B85FE6D01DB8786C00BB8F6A /* SelectLocation.swift in Sources */,
+				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
@@ -1240,6 +1316,7 @@
 				B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
+				B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
@@ -1249,8 +1326,10 @@
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
+				B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
+				B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */,
 				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				DC477A5F1DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
@@ -1262,6 +1341,7 @@
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
 				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
+				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
@@ -1269,6 +1349,7 @@
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
+				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
@@ -1284,6 +1365,7 @@
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
 				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
+				B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
@@ -1303,6 +1385,7 @@
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
+				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
@@ -1328,6 +1411,7 @@
 				B064EEA71D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
+				B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* MapTableDelegate.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
@@ -1353,7 +1437,7 @@
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
-				B8D5EEC61DB8422600C62628 /* CreatePinViewController.swift in Sources */,
+				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,

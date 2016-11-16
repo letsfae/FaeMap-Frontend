@@ -31,8 +31,6 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>MGLMapboxAccessToken</key>
-	<string>pk.eyJ1IjoieWFuY3l3YW5nIiwiYSI6ImNpb2J0ajc4djA0OWZ2NmtxczV5Z2R6MDUifQ.yTa-GcWK8rQcb6PMyH64MA</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs your permission to use the camera</string>
 	<key>NSLocationAlwaysUsageDescription</key>

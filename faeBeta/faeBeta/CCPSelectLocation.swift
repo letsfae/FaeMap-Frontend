@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CreatePinViewController: SelectLocationViewControllerDelegate {
+extension CreateCommentPinViewController: SelectLocationViewControllerDelegate {
     func actionSelectLocation(_ sender: UIButton) {
         let selectLocationVC = SelectLocationViewController()
         selectLocationVC.modalPresentationStyle = .overCurrentContext
