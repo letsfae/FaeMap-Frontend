@@ -12,6 +12,8 @@ import Foundation
 
 protocol SendStickerDelegate {
     func sendStickerWithImageName(_ name : String)
+    func appendEmojiWithImageName(_ name: String)
+    func deleteEmoji()
 }
 
 // this class is used to show all content in sticker part. It has tab view to switch set of sticker,
@@ -151,13 +153,22 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         }
     }
     
+    // MARK: - findStickerFromDictDelegate
     func sendSticker(album: String, index : Int) {
         if let albumSet = stickerDictionary[album] {
-            print("the name of sticker is : \(albumSet[index])")
-            sendStickerDelegate.sendStickerWithImageName(albumSet[index])
+            if(album == "faeEmoji"){
+                sendStickerDelegate.appendEmojiWithImageName(albumSet[index])
+            }else{
+                print("the name of sticker is : \(albumSet[index])")
+                sendStickerDelegate.sendStickerWithImageName(albumSet[index])
+            }
         } else {
             print("cannot find that image")
         }
+    }
+    
+    func deleteEmoji() {
+        sendStickerDelegate.deleteEmoji()
     }
     
     //make local storage to record history in map, to count the frequency.

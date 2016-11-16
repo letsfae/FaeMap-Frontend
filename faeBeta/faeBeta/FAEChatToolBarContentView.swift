@@ -70,6 +70,8 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
+
+
     
     //MARK: - Properties
     var keyboardShow = false // false: keyboard is hide
@@ -99,6 +101,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
+    weak var inputToolbar: JSQMessagesInputToolbarCustom!// IMPORTANT: need to set toolbar to use the whole function
     
     //MARK: - init & setup
     override init(frame: CGRect)
@@ -497,6 +500,43 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     {
         self.delegate.sendStickerWithImageName(name)
         self.stickerPicker.updateStickerHistory(name)
+    }
+    
+    func appendEmojiWithImageName(_ name: String)
+    {
+        if inputToolbar != nil{
+            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+        }
+    }
+    
+    func deleteEmoji()
+    {
+        if inputToolbar != nil{
+            var previous = inputToolbar.contentView.textView.text
+            if previous?.characters.count > 0 && previous?.characters.last != "]"{
+                inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -1 ))!)
+            }else if previous?.characters.count > 0 && previous?.characters.last == "]"{
+                var i = 1
+                var findEmoji = false
+                while( i <= (previous?.characters.count)!){
+                    if previous?.characters[(previous?.characters.index((previous?.endIndex)!, offsetBy: -i ))!] == "[" {
+                        let between = previous?.substring(with:
+                            previous!.characters.index((previous?.endIndex)!, offsetBy: -(i-1)) ..< previous!.characters.index((previous?.endIndex)!, offsetBy: -1 ))
+                        if between != nil && (stickerDictionary["faeEmoji"]?.contains(between!))!{
+                            findEmoji = true
+                            break
+                        }
+                    }
+                    i += 1
+                }
+                
+                if findEmoji{
+                    inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -i ))!)
+                }else{
+                    inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -1 ))!)
+                }
+            }
+        }
     }
     
     // MARK: - Quick image picker delegate

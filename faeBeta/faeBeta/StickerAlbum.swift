@@ -12,6 +12,7 @@ import Foundation
 
 protocol findStickerFromDictDelegate {
     func sendSticker(album: String, index: Int)
+    func deleteEmoji()
 }
 
 // this class is used to figure out position of all sticker in scroll view. Now the matrix is 5 column and 2 row, you can change formation by changing
@@ -27,12 +28,27 @@ class StickerAlbum {
     var stickerPos = [CGRect]()
     let widthPage : CGFloat = UIScreen.main.bounds.width
     let heightPage : CGFloat = 195
-    let length : CGFloat = 82
+    var length : CGFloat
+    {
+        get{
+            if colPerPage > 4{
+                return 32
+            }else{
+                return 82
+            }
+        }
+    }
     var pageNumber = 0
     var buttonSet = [UIButton]()
     var imageSet = [UIImageView]()
     var findStickerDelegate : findStickerFromDictDelegate!
     var basePages = 0
+    
+    private var isEmojiAlbum: Bool{
+        get{
+            return colPerPage > 4
+        }
+    }
     
     init() {
         calculatePos()
@@ -48,7 +64,7 @@ class StickerAlbum {
     
     func appendNewImage(_ name : String) {
         if stickerName.count == 0
-            || stickerName[stickerName.count - 1].count == (Int)(rowPerPage * colPerPage) {
+            || stickerName.last!.count == (isEmojiAlbum ? (Int)(rowPerPage * colPerPage) - 1 : (Int)(rowPerPage * colPerPage) ) {
             stickerName.append([String]())
         }
         stickerName[stickerName.count - 1].append(name)
@@ -61,20 +77,28 @@ class StickerAlbum {
                 for col in 0..<Int(colPerPage) {
                     let index = row * Int(colPerPage) + col
 //                    print(index)
-                    if(stickerName[page].count <= index) {
+                    if(stickerName[page].count <= index && !isEmojiAlbum) {
                         break
                     }
+            
                     let newFrame = CGRect(x: stickerPos[index].origin.x + CGFloat(page + basePages) * widthPage, y: stickerPos[index].origin.y, width: stickerPos[index].width, height: stickerPos[index].height)
                     let imageView = UIImageView(frame: newFrame)
-                    imageView.image = UIImage(named: stickerName[page][index])
                     imageView.contentMode = .scaleAspectFit
                     let button = UIButton(frame: newFrame)
                     //add function
-                    button.addTarget(self, action: #selector(calculateIndex), for: .touchUpInside)
                     scrollView.addSubview(imageView)
                     scrollView.addSubview(button)
                     imageSet.append(imageView)
                     buttonSet.append(button)
+                    
+                    if isEmojiAlbum && (index + 1) == Int(rowPerPage * colPerPage) {
+                        imageView.image = UIImage(named: "erase")
+                        button.addTarget(self, action: #selector(deleteEmoji), for: .touchUpInside)
+
+                    }else if (stickerName[page].count > index){
+                        imageView.image = UIImage(named: stickerName[page][index])
+                        button.addTarget(self, action: #selector(calculateIndex), for: .touchUpInside)
+                    }
                 }
             }
         }
@@ -135,5 +159,9 @@ class StickerAlbum {
         self.currentSelectedIndex = index
         print("the index is: \(index)")
         findStickerDelegate.sendSticker(album: albumName,index: index)
+    }
+    
+    @objc func deleteEmoji(_ sender: UIButton){
+        findStickerDelegate.deleteEmoji()
     }
 }

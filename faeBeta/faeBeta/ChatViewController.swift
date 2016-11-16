@@ -303,6 +303,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     {
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
         toolbarContentView.delegate = self
+        toolbarContentView.inputToolbar = inputToolbar
         toolbarContentView.cleanUpSelectedPhotos()
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
