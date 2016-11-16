@@ -12,6 +12,7 @@ import Firebase
 import FirebaseDatabase
 
 extension ChatViewController: OutgoingMessageProtocol{
+    
     //MARK: - send message
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?, video : Data?, videoDuration: Int) {
         
@@ -26,12 +27,11 @@ extension ChatViewController: OutgoingMessageProtocol{
         if let pic = picture {
             // send picture message
             
-            var imageData = UIImageJPEGRepresentation(pic,1)
-            let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
-            imageData = UIImageJPEGRepresentation(pic,factor)
-            outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-            isContinuallySending = true
-            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
+            if let imageData = compressImageToData(pic){
+                outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+                isContinuallySending = true
+                Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
+            }
         }
         
         if let sti = sticker {
@@ -62,14 +62,12 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        //        print(outgoingMessage!.messageDictionary)
-        //        print(chatRoomId)
         self.finishSendingMessage()
         
         outgoingMessage!.delegate = self
         
         // add this outgoing message under chatRoom with id and content
-        outgoingMessage!.sendMessage(chatRoomId, item: outgoingMessage!.messageDictionary, withUser: withUser!)
+        outgoingMessage!.sendMessage(chatRoomId, withUser: withUser!)
     }
     
     //send image delegate function
@@ -87,19 +85,6 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     func sendAudioData(_ data: Data) {
         sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil, videoDuration: 0)
-    }
-    
-    //MARK: locationSend Delegate
-    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: Data) {
-        sendMessage(nil, date: Date(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil, videoDuration: 0)
-    }
-    
-    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int){
-        var imageData = UIImageJPEGRepresentation(snapImage,1)
-        let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
-        imageData = UIImageJPEGRepresentation(snapImage,factor)
-        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video, videoDuration: duration)
-        self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     //MARK: Load Message
@@ -132,13 +117,14 @@ extension ChatViewController: OutgoingMessageProtocol{
             }
         }
         
-        ref.child(chatRoomId).observe(.childChanged) { (snapshot : FIRDataSnapshot) in
-            
-        }
-        
-        ref.child(chatRoomId).observe(.childRemoved) { (snapshot : FIRDataSnapshot) in
-            
-        }
+        // for futher usage. may allow the user to drawback or modify message
+//        ref.child(chatRoomId).observe(.childChanged) { (snapshot : FIRDataSnapshot) in
+//            
+//        }
+//        
+//        ref.child(chatRoomId).observe(.childRemoved) { (snapshot : FIRDataSnapshot) in
+//            
+//        }
         
         ref.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
             //this function will run only once
@@ -210,7 +196,8 @@ extension ChatViewController: OutgoingMessageProtocol{
         return incoming(item)
     }
     
-    func incoming(_ item : NSDictionary) -> Bool {
+    //MARK: utilities
+    private func incoming(_ item : NSDictionary) -> Bool {
         if user_id.stringValue == item["senderId"] as! String {
             return false
         } else {
@@ -218,7 +205,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
     }
     
-    func outgoing(_ item : NSDictionary) -> Bool {
+    private func outgoing(_ item : NSDictionary) -> Bool {
         if user_id.stringValue == item["senderId"] as! String {
             return true
         } else {
@@ -227,8 +214,36 @@ extension ChatViewController: OutgoingMessageProtocol{
         
     }
     
-    // outgoingmessage delegate
+    
+    /// This method will transfer an UIImage into NSData, and limit the size of the data
+    ///
+    /// - Parameter image: the image you want to compress
+    /// - Returns: a data for the image
+    private func compressImageToData(_ image: UIImage) -> Data?
+    {
+        var imageData = UIImageJPEGRepresentation(image,1)
+        let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
+        imageData = UIImageJPEGRepresentation(image,factor)
+        return imageData
+    }
+    
+    //MARK: - locationSend Delegate
+    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: Data) {
+        sendMessage(nil, date: Date(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil, videoDuration: 0)
+    }
+    
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int){
+        var imageData = UIImageJPEGRepresentation(snapImage,1)
+        let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
+        imageData = UIImageJPEGRepresentation(snapImage,factor)
+        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video, videoDuration: duration)
+        self.toolbarContentView.cleanUpSelectedPhotos()
+    }
+    
+    //MARK: - outgoingmessage delegate
     func updateChat_Id(_ newId: String) {
         chat_id = newId
     }
+    
+    
 }

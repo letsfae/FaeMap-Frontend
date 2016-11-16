@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseDatabase
 
 //MARK: Show unread chat tableView
 extension FaeMapViewController {
@@ -37,10 +35,6 @@ extension FaeMapViewController {
                 }
             }
         }
-    }
-    
-    func stopMapChat(){
-        firebase.child("Recent").removeAllObservers()// reference to all chat room
     }
     
     func animationMapChatShow(_ sender: UIButton!) {

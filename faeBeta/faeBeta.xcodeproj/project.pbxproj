@@ -41,7 +41,6 @@
 		B064EEA71D6E0CA100C078F5 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA31D6E0CA100C078F5 /* Avatar.swift */; };
 		B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */; };
 		B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */; };
-		B064EEB01D6E0CA100C078F5 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA61D6E0CA100C078F5 /* Recent.swift */; };
 		B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
 		B064EEC21D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
 		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
@@ -131,7 +130,6 @@
 		B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35481D8DC7E200B0540B /* Chat.storyboard */; };
 		B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
 		B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
-		B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */; };
 		B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
 		B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
 		B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
@@ -197,6 +195,7 @@
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
 		B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
+		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */; };
 		DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3982091DD2BC88000CB51F /* UIScreenService.swift */; };
@@ -266,7 +265,6 @@
 		B064EEA31D6E0CA100C078F5 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomingMessage.swift; sourceTree = "<group>"; };
 		B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutgoingMessage.swift; sourceTree = "<group>"; };
-		B064EEA61D6E0CA100C078F5 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FullPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
@@ -359,7 +357,6 @@
 		B0BF35481D8DC7E200B0540B /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
-		B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseUserViewController.swift; sourceTree = "<group>"; };
 		B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQLocationMediaItemCustom.h; sourceTree = "<group>"; };
 		B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQLocationMediaItemCustom.m; sourceTree = "<group>"; };
 		B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleImageFactoryCustom.h; sourceTree = "<group>"; };
@@ -437,6 +434,7 @@
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
+		DC084A901DDCF969007DCC88 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
 		DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
 		DC3982091DD2BC88000CB51F /* UIScreenService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScreenService.swift; sourceTree = "<group>"; };
@@ -661,7 +659,7 @@
 				DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
-				B064EEA61D6E0CA100C078F5 /* Recent.swift */,
+				DC084A901DDCF969007DCC88 /* Recent.swift */,
 			);
 			name = FireBaseData;
 			sourceTree = "<group>";
@@ -671,7 +669,6 @@
 			children = (
 				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
-				B0BF35541D8DC84E00B0540B /* ChooseUserViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,
 				DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */,
@@ -1218,6 +1215,7 @@
 				DC3D105A1DC2B1AC0011C772 /* CPDInputToolbar.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
+				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
@@ -1288,7 +1286,6 @@
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
-				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
@@ -1369,7 +1366,6 @@
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
-				B064EEB01D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,

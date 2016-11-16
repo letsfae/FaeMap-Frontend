@@ -9,8 +9,26 @@
 import Foundation
 import UIKit
 
-//var baseURL = "https://api.letsfae.com"
-var baseURL = "https://dev.letsfae.com"
+private enum SERVERTYPE {
+    case development
+    case production
+}
+
+// change this to .production to switch to production mode
+private let server = SERVERTYPE.development
+
+var baseURL : String{
+    get{
+        return server == .development ? "https://dev.letsfae.com" : "https://api.letsfae.com"
+    }
+}
+
+var fireBaseRef : String{
+    get{
+        return server == .development ? "Message-dev" : "Message-prod"
+    }
+}
+
 var version = "x.faeapp.v1"
 var headerAccept = "application/x.faeapp.v1+json"
 var headerContentType = "application/x-www-form-urlencoded"

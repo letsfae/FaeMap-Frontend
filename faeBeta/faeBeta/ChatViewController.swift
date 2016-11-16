@@ -26,8 +26,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
-    //    let appDeleget = UIApplication.sharedApplication().delegate as! AppDelegate
-    let ref = firebase.database.reference().child("Message")// reference to all chat room
+    let ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
     var messages : [JSQMessage] = []
     var objects : [NSDictionary] = []//
     var loaded : [NSDictionary] = []// load dict from firebase that this chat room all message

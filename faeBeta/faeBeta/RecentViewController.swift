@@ -103,14 +103,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRow(at: indexPath, animated: true)
-            
-//            let recent = recents![indexPath.row]
-            
-            //create recent for both users
-            
-//            restartRecentChat(recent)
-            
             performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
+            
         }else{
             for indexP in cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
