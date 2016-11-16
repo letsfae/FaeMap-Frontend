@@ -28,6 +28,8 @@ if let JSONObject = try JSONSerialization.jsonObject(with: data,, options: .allo
 
 With SwiftyJSON all you have to do is:
 ```swift
+import SwiftyJSON
+
 let json = JSON(data: dataFromNetworking)
 if let userName = json[0]["user"]["name"].string {
   //Now you got your value
@@ -35,7 +37,25 @@ if let userName = json[0]["user"]["name"].string {
 ```
 For more details, please check [SwiftyJSON on Github](https://github.com/SwiftyJSON/SwiftyJSON)
 
+## Use of GoogleMaps and GooglePlaces SDK for iOS
+[GoogleMaps](https://developers.google.com/maps/documentation/ios-sdk/) Maps Documents
 
+[GooglePlaces](https://developers.google.com/places/ios-api/) Places Document
+
+Initial Two API in AppDelegate.swift file
+```Swift
+import GoogleMaps
+import GooglePlaces
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        ...
+        GMSServices.provideAPIKey(GoogleMapKey)
+        GMSPlacesClient.provideAPIKey(GoogleMapKey)
+        ...
+}
+```
+
+Note that GoogleMapKey is the same with two APIs, which can be generated through [Google Console](https://console.cloud.google.com)
 
 ## License
 2016 Faevorite Inc.
