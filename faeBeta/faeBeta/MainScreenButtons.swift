@@ -81,7 +81,7 @@ extension FaeMapViewController: PinMenuDelegate {
         
         // Create pin on main map
         buttonPinOnMap = UIButton(frame: CGRect(x: 323, y: 646, width: 79, height: 79))
-        buttonPinOnMap.setImage(UIImage(named: "mainScreenPin"), for: UIControlState())
+        buttonPinOnMap.setImage(UIImage(named: "mainScreenPinMap"), for: UIControlState())
         view.addSubview(buttonPinOnMap)
         buttonPinOnMap.addTarget(self, action: #selector(FaeMapViewController.actionCreatePin(_:)), for: UIControlEvents.touchUpInside)
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
