@@ -57,6 +57,47 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 Note that GoogleMapKey is the same with two APIs, which can be generated through [Google Console](https://console.cloud.google.com)
 
+## Use of Delegate in Swift
+First, create a protocol and declare it in the class that will call delegate function.
+```Swift
+protocol FirstViewControllerDelegate {
+    func someFunction(arg1: Int, arg2: String, arg3: Bool)
+}
+// We will use UIViewController as an example, 
+// because we often pass data back from UIViewController class when finishing use of it.
+// Typically, any class can be used here.
+class YourFirstClass: UIViewController {
+    // Declare your delegate to initialize protocol here
+    var delegate: FirstViewControllerDelegate? // Use "?" to prevent bug occurring
+}
+```
+Second, add protocol to the class that will execute the protocol function, "someFunction" for this example.
+```Swift
+class YourSecondClass: UIViewController, FirstViewControllerDelegate {
+    // In this class, you must confirm the protocol "FirstViewControllerDelegate",
+    // or error will occur.
+    func someFunction(arg1: Int, arg2: String, arg3: Bool) {
+        // Deal with your code here,
+        // this function will call if YourFirstClass's delegate calls this function.
+        print("arg1: \(arg1)")
+        print("arg2: \(arg2)")
+        print("arg3: \(arg3)")
+    }
+}
+```
+
+Last, call delegate function directly in YourFirstClass, and function details will be excuted in YourSecondClass
+```Swift
+class YourFirstClass: UIViewController {
+    var delegate: FirstViewControllerDelegate?
+    func viewDidLoad() {
+        super.viewDidLoad()
+        // In thie following way, someFunction will be called and arg1-3 will be passed to YourFirstClass
+        self.delegate?.someFunction(arg1: 777, arg2: "777", arg3: true)
+    }
+}
+```
+
 ## License
 2016 Faevorite Inc.
     
