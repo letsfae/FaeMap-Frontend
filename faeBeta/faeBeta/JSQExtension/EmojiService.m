@@ -32,7 +32,6 @@
                 char d = [string characterAtIndex:j];
                 if(d == ']'){
                     NSString *name = [string substringWithRange:NSMakeRange(i + 1, j - i - 1)];
-                    NSLog(@"%@", name);
                     if ([emojiNames containsObject:(name)] ){
                         
                         NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
@@ -71,7 +70,6 @@
                 char d = [string characterAtIndex:j];
                 if(d == ']'){
                     NSString *name = [string substringWithRange:NSMakeRange(i + 1, j - i - 1)];
-                    NSLog(@"%@", name);
                     if ([emojiNames containsObject:(name)] ){
                         
                         [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@"||||||"] attributes:textAttributes]];
