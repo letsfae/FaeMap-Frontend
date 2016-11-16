@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "emojiTabIcon.png",
+      "filename" : "faeEmoji.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "emojiTabIcon@2x.png",
+      "filename" : "faeEmoji@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "emojiTabIcon@3x.png",
+      "filename" : "faeEmoji@3x.png",
       "scale" : "3x"
     }
   ],

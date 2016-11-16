@@ -85,7 +85,7 @@ class RecentTableViewCell: UITableViewCell {
         if let name = recent["with_user_name"].string{
             nameLabel.text = name
         }
-        lastMessageLabel.text = recent["last_message"].string
+        lastMessageLabel.text = recent["last_message"].string!
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 11
         counterLabel.layer.masksToBounds = true
