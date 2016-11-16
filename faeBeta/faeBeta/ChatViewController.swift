@@ -144,6 +144,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewWillDisappear(true)
         //update recent
         closeToolbarContentView()
+        removeObservers()
         ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
     }
     
@@ -216,6 +217,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name:NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name:NSNotification.Name.UIKeyboardDidHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
+        inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new] , context: nil)
+    }
+    
+    func removeObservers()
+    {
+        self.inputToolbar.contentView.textView.removeObserver(self, forKeyPath: "text", context: nil)
     }
 
     //MARK: user default function
@@ -280,8 +287,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         contentView?.addSubview(buttonLocation)
         
         buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .disabled )
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .highlighted)
+        buttonSend.setImage(UIImage(named: "canSendMessage"), for: .normal )
+        
         contentView?.addSubview(buttonSend)
         buttonSend.isEnabled = false
         buttonSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), for: .touchUpInside)
@@ -374,7 +383,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func sendMessageButtonTapped() {
         sendMessage(self.inputToolbar.contentView.textView.text, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
         buttonSend.isEnabled = false
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
     //MARK: navigationItem function
@@ -392,10 +400,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if textView.text.characters.count == 0 {
             // when text has no char, cannot send message
             buttonSend.isEnabled = false
-            buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
         } else {
             buttonSend.isEnabled = true
-            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
         }
     }
     
@@ -575,12 +581,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        buttonSend.isEnabled = false
     }
     
     func endEdit()
     {
         self.view.endEditing(true)
+    }
+    
+    //MARK: - obsere value
+    
+    override func observeValue(forKeyPath keyPath: String?,
+                               of object: Any?,
+                               change: [NSKeyValueChangeKey : Any]?,
+                               context: UnsafeMutableRawPointer?)
+    {
+        let textView = object as! UITextView
+        if (textView == self.inputToolbar.contentView.textView && keyPath! == "text") {
+
+            let newString = (change![NSKeyValueChangeKey.newKey]! as! String)
+            buttonSend.isEnabled = newString.characters.count > 0
+        }
     }
     
     //MARK: -  UIImagePickerController
