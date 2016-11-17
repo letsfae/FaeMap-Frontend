@@ -22,10 +22,7 @@ public var headerDeviceToken: Data!
 
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
 {
-    
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    
+    //MARK: - properties
     let ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
     var messages : [JSQMessage] = []
     var objects : [NSDictionary] = []//
@@ -35,7 +32,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var avatarDictionary : NSMutableDictionary?//not use anymore
     //
     var showAvatar : Bool = true//false not show avatar , true show avatar
-    let factor : CGFloat = 375 / 414// autolayout factor MARK: 5s may has error, 6 and 6+ is ok
     var firstLoad : Bool?// whether it is the first time to load this room.
     var withUser : FaeWithUser?
 
@@ -51,27 +47,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let incomingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named:"bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).incomingMessagesBubbleImage(with: UIColor.white)
     //the message other person sent bubble
     let userDefaults = UserDefaults.standard
-    var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)//gray color
-    let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-    //pink color
-    
+
     //voice MARK: has bug here can record and upload but can't replay after download,
     var fileName = "audioFile.caf"
 //    var soundPlayer : AVAudioPlayer!
 
     //custom toolBar the bottom toolbar button
-    var buttonSet = [UIButton]()
-    var buttonSend : UIButton!
-    var buttonKeyBoard : UIButton!
-    var buttonSticker : UIButton!
-    var buttonImagePicker : UIButton!
-    var buttonVoiceRecorder: UIButton!
-    //album //a helper to send photo
+    private var buttonSet = [UIButton]()
+    private var buttonSend : UIButton!
+    private var buttonKeyBoard : UIButton!
+    private var buttonSticker : UIButton!
+    private var buttonImagePicker : UIButton!
+    private var buttonVoiceRecorder: UIButton!
 
-    var isContinuallySending = false
-
-    //keyboard
-    var keyboardHeight: CGFloat! = 0
+    var isContinuallySending = false// this virable is use to avoid mutiple time stamp when sending photos, true: did send sth in last 5s
     
     //toolbar content
     var toolbarContentView : FAEChatToolBarContentView!
@@ -94,6 +83,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         set{
         }
     }
+    
     var isLoadingPreviousMessages = false
     
     //time stamp
@@ -137,7 +127,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //        }
     }
     
-    // MARK: - view did/will funcs
+    // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
@@ -192,18 +182,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: - setup
     
-    func navigationBarSet() {
+    private func navigationBarSet() {
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
-        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : faeGray] as [String : Any]
-        self.navigationController?.navigationBar.tintColor = colorFae
+        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor.faeAppInputTextGrayColor()] as [String : Any]
+        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
         
         //ATTENTION: Temporary comment it here because it's not used for now
 //        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
-        
-        
+    
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = withUser!.userName
         titleLabel.textAlignment = .center
@@ -454,7 +443,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 isClosingToolbarContentView = true
                 UIView.animate(withDuration: 0.2, animations: {
                     self.moveDownInputBar()
-                    self.toolbarContentView.frame.origin.y = self.screenHeight
+                    self.toolbarContentView.frame.origin.y = screenHeight
                     }, completion: {(Bool)->Void in
                         self.toolbarContentView.closeAll()
                         self.resetToolbarButtonIcon()
@@ -466,47 +455,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     
-    //MARK: - Helper functions
-    func enableTimeStamp(){
-        self.isContinuallySending = false
-    }
     
-    func haveAccessToLocation() -> Bool {// not use anymore
-        return true
-    }
-    
-    func getAvatar() {
-        if showAvatar {
-            createAvatars(avatarImageDictionary)
-            self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 35, height: 35)
-            self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 35, height: 35)
-            if collectionView != nil {
-                collectionView.reloadData()
-            }
-        }
-    }
-    
-        func createAvatars(_ avatars : NSMutableDictionary?) {
-            let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
-            let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
-            avatarDictionary = [user_id.stringValue : currentUserAvatar!, withUser!.userId : withUserAvatar!]
-            // need to check if collectionView exist before reload
-        }
-    
+    //MARK: - move input bars
     func moveUpInputBarContentView(_ animated: Bool)
     {
         self.collectionView.isScrollEnabled = false
         if(animated){
-            self.toolbarContentView.frame.origin.y = self.screenHeight
+            self.toolbarContentView.frame.origin.y = screenHeight
             UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
-                self.toolbarContentView.frame.origin.y = self.screenHeight - 271
-                }, completion:{ (Bool) -> Void in
-                    self.collectionView.isScrollEnabled = true
+                self.toolbarContentView.frame.origin.y = screenHeight - 271
+            }, completion:{ (Bool) -> Void in
+                self.collectionView.isScrollEnabled = true
             })
         }else{
             self.moveUpInputBar()
-            self.toolbarContentView.frame.origin.y = self.screenHeight - 271
+            self.toolbarContentView.frame.origin.y = screenHeight - 271
             self.collectionView.isScrollEnabled = true
         }
         scrollToBottom(animated)
@@ -536,6 +500,32 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
         self.inputToolbar.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
     }
+
+    
+    //MARK: - Helper functions
+    
+    // allow app to add time stamp to message
+    func enableTimeStamp(){
+        self.isContinuallySending = false
+    }
+    
+    private func getAvatar() {
+        if showAvatar {
+            createAvatars(avatarImageDictionary)
+            self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 35, height: 35)
+            self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 35, height: 35)
+            if collectionView != nil {
+                collectionView.reloadData()
+            }
+        }
+    }
+    
+    private func createAvatars(_ avatars : NSMutableDictionary?) {
+        let currentUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[user_id] ?? UIImage(named: "avatarPlaceholder")) , diameter: 70)
+        let withUserAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: (avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)] ?? UIImage(named: "avatarPlaceholder")), diameter: 70)
+        avatarDictionary = [user_id.stringValue : currentUserAvatar!, withUser!.userId : withUserAvatar!]
+        // need to check if collectionView exist before reload
+    }
     
     func scrollToBottom(_ animated:Bool) {
         //override:
@@ -562,6 +552,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    // segue to the full album page
     func getMoreImage()
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview

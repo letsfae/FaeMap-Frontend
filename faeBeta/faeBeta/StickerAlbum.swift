@@ -161,7 +161,7 @@ class StickerAlbum {
         var index = 0
         
         // get how many rows above this sticker
-        if Int(original.y / (lineInterval + stickerLength)) > 1 {
+        if Int(original.y / (lineInterval + stickerLength)) >= 1 {
             index += Int(colPerPage) * Int(original.y / (lineInterval + stickerLength))
         }
         

@@ -9,7 +9,10 @@
 import Foundation
 import UIKit
 
+
+/// This this a public class use to add a loading indicator on the screen, while the indicator is appearing, the userInteraction is disabled
 class UIScreenService{
+    
     fileprivate class var activityIndicator : UIActivityIndicatorView{
         struct Element
         {
@@ -18,7 +21,6 @@ class UIScreenService{
         }
         Element.indicator.activityIndicatorViewStyle = .whiteLarge
         Element.indicator.color = UIColor.faeAppRedColor()
-//        Element.indicator.tintColor = UIColor.faeAppRedColor()
         Element.indicator.hidesWhenStopped = true
         Element.indicator.center = UIApplication.shared.keyWindow!.center
         return Element.indicator
