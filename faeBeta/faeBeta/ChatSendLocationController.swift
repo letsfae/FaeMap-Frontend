@@ -209,9 +209,10 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     func actionSetLocationForComment(_ sender: UIButton!) {
         UIGraphicsBeginImageContext(self.faeMapView.frame.size)
         self.faeMapView.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
-        _ = self.navigationController?.popViewController(animated: true)
-        locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : screenShotImage!.highestQualityJPEGNSData as Data)
+        if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
+            _ = self.navigationController?.popViewController(animated: true)
+            locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+        }
     }
     
     func actionActiveSearchBar(_ sender: UIButton!) {

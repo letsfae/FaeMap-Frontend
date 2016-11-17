@@ -18,9 +18,9 @@ protocol OutgoingMessageProtocol {
 // this class is used to box information of one message user sent and send them to firebase.
 class OutgoingMessage {
     
-    fileprivate let firebase = FIRDatabase.database().reference().child("Message")
+    private let firebase = FIRDatabase.database().reference().child(fireBaseRef)
     
-    let messageDictionary : NSMutableDictionary
+    private let messageDictionary : NSMutableDictionary
     
     var delegate : OutgoingMessageProtocol!
     //text
@@ -62,8 +62,9 @@ class OutgoingMessage {
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "video" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
     
-    func sendMessage(_ chatRoomId : String, item : NSMutableDictionary, withUser user: FaeWithUser) {
+    func sendMessage(_ chatRoomId : String, withUser user: FaeWithUser) {
         
+        let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()
         
         item["messageId"] = reference.key
@@ -83,7 +84,5 @@ class OutgoingMessage {
                 })
             }
         }
-        
     }
-    
 }

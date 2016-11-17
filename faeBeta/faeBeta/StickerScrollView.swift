@@ -12,9 +12,9 @@ import Foundation
 // it is used to create a scroll view, size is based on the calculation of its StickerAlbum
 
 class StickerScrollView : UIScrollView {
-    var stickerAlbums : [StickerAlbum]!
+    private(set) var stickerAlbums : [StickerAlbum]!
     var currentAlbum : StickerAlbum!
-    var cumulativePage = 0
+    private var cumulativePage = 0
     
     override init(frame : CGRect) {
         super.init(frame: frame)
@@ -28,6 +28,13 @@ class StickerScrollView : UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    /// create a new album
+    ///
+    /// - Parameters:
+    ///   - name: the name of the album
+    ///   - row: number of rows per page
+    ///   - col: number of cols per page
     func createNewAlbums(name: String, row: Int, col: Int)
     {
         cumulativePage += stickerAlbums.last != nil ? max(stickerAlbums.last!.pageNumber ,1) : 0
@@ -42,7 +49,7 @@ class StickerScrollView : UIScrollView {
     }
     
     func attachButton() {
-        let totalPages = pageNumDictionary.reduce(0,{$0 + $1.value})
+        let totalPages = StickerInfoStrcut.pageNumDictionary.reduce(0,{$0 + $1.value})
         
         self.contentSize = CGSize(width: self.frame.size.width * max(1, CGFloat(totalPages)), height: self.frame.size.height)
 
@@ -59,6 +66,11 @@ class StickerScrollView : UIScrollView {
         cumulativePage = 0
     }
     
+    
+    /// get the album with the specific name
+    ///
+    /// - Parameter name: the name of the album
+    /// - Returns: a StickerAlbum
     func getAlbum(withName name:String) -> StickerAlbum?
     {
         for stickerAlbum in stickerAlbums {

@@ -33,7 +33,7 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-protocol SwipeableCellDelegate {
+protocol SwipeableCellDelegate: class {
     func cellwillOpen(_ cell:UITableViewCell)
     func cellDidOpen(_ cell:UITableViewCell)
     func cellDidClose(_ cell:UITableViewCell)
@@ -42,26 +42,28 @@ protocol SwipeableCellDelegate {
 
 class RecentTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var lastMessageLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var counterLabel: UILabel!
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var countLabelLength: NSLayoutConstraint!
-    @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var distanceToRight: NSLayoutConstraint!
-    @IBOutlet weak var distanceToLeft: NSLayoutConstraint!
-    @IBOutlet weak var mainView: UIView!
+    // MARK: - properties
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var lastMessageLabel: UILabel!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet private weak var avatarImageView: UIImageView!
+    @IBOutlet private weak var countLabelLength: NSLayoutConstraint!
+    @IBOutlet private weak var deleteButton: UIButton!
+    @IBOutlet private weak var distanceToRight: NSLayoutConstraint!
+    @IBOutlet private weak var distanceToLeft: NSLayoutConstraint!
+    @IBOutlet private weak var mainView: UIView!
     
-    var panRecognizer:UIPanGestureRecognizer!
-    var panStartPoint:CGPoint!
-    var startingRightLayoutConstraintConstant: CGFloat = 0
-    var buttonTotalWidth: CGFloat = 69
+    private var panRecognizer:UIPanGestureRecognizer!
+    private var panStartPoint:CGPoint!
+    private var startingRightLayoutConstraintConstant: CGFloat = 0
+    private var buttonTotalWidth: CGFloat = 69
     
-    let kBounceValue:CGFloat = 20.0
+    private let kBounceValue:CGFloat = 20.0
     
-    var delegate: SwipeableCellDelegate!
+    weak var delegate: SwipeableCellDelegate!
     
+    //MARK : - life cycle
     override func awakeFromNib() {
         super.awakeFromNib()
         self.panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
@@ -69,12 +71,14 @@ class RecentTableViewCell: UITableViewCell {
         self.mainView.addGestureRecognizer(self.panRecognizer)
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    override func prepareForReuse()
+    {
+        super.prepareForReuse()
+        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
     }
-    // MARK: populate cell 
+    
+    // MARK: - populate cell
+    // set up the cell with a JSON data
     func bindData(_ recent : JSON) {
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
@@ -85,12 +89,14 @@ class RecentTableViewCell: UITableViewCell {
         if let name = recent["with_user_name"].string{
             nameLabel.text = name
         }
-        lastMessageLabel.text = recent["last_message"].string!
+        if let lastMessage = recent["last_message"].string{
+            lastMessageLabel.text = lastMessage
+        }
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 11
         counterLabel.layer.masksToBounds = true
         counterLabel.backgroundColor = UIColor.faeAppRedColor()
-        if (recent["unread_count"].number)!.int32Value != 0 {
+        if recent["unread_count"].number != nil && (recent["unread_count"].number)!.int32Value != 0 {
             counterLabel.isHidden = false
             counterLabel.text = recent["unread_count"].number!.int32Value > 99 ? "•••" : "\(recent["unread_count"].number!.int32Value)"
             if(counterLabel.text?.characters.count >= 2){
@@ -101,33 +107,34 @@ class RecentTableViewCell: UITableViewCell {
         }else{
             counterLabel.isHidden = true
         }
-        var timeString = recent["last_message_timestamp"].string
-        var index = 0
-        for c in (timeString?.characters)!{
-            if c < "0" || c > "9" {
-                timeString?.remove(at: (timeString?.characters.index((timeString?.characters.startIndex)!, offsetBy: index))!)
-            }else{
-                index += 1
+        
+        if var timeString = recent["last_message_timestamp"].string{
+            var index = 0
+            for c in timeString.characters{
+                if c < "0" || c > "9" {
+                    timeString.remove(at: timeString.characters.index(timeString.characters.startIndex, offsetBy: index))
+                }else{
+                    index += 1
+                }
             }
+            
+            let date = dateFormatter().date(from: timeString)
+            let seconds = Date().timeIntervalSince(date!)
+            dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
+            dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+            dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         }
         
-        let date = dateFormatter().date(from: timeString!)
-        let seconds = Date().timeIntervalSince(date!)
-        dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
-        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
-        dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-        
-        if(avatarDic[recent["with_user_id"].number!] == nil){
+        if recent["with_user_id"].number != nil && (avatarDic[recent["with_user_id"].number!] == nil){
             getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
                 if status / 100 == 2 {
                     avatarDic[recent["with_user_id"].number!] = image as? UIImage
                 }
             })
         }
-        
     }
-    // MARK: helper
-    func TimeElipsed(_ seconds : TimeInterval, lastMessageTime:Date) -> String {
+    // MARK: - helper
+    private func TimeElipsed(_ seconds : TimeInterval, lastMessageTime:Date) -> String {
         let dayFormatter = dateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
         let minFormatter = dateFormatter()
@@ -154,12 +161,13 @@ class RecentTableViewCell: UITableViewCell {
     }
 
     
-    //MARK: - delete button related
-    @IBAction func deleteButtonTapped(_ sender: UIButton) {
+    //MARK: - Delete button related
+    @IBAction private func deleteButtonTapped(_ sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
     }
     
-    func panThisCell(_ recognizer:UIPanGestureRecognizer){
+    //MARK: - Cell control
+    @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
         switch (recognizer.state) {
         case .began:
             isDraggingRecentTableViewCell = true
@@ -239,10 +247,9 @@ class RecentTableViewCell: UITableViewCell {
         default:
             break;
         }
-    
     }
     
-    func resetConstraintContstantsToZero(_ animated: Bool, notifyDelegateDidClose notifyDelegate:Bool)
+    private func resetConstraintContstantsToZero(_ animated: Bool, notifyDelegateDidClose notifyDelegate:Bool)
     {
         if (notifyDelegate) {
             self.delegate.cellDidClose(self)
@@ -269,7 +276,7 @@ class RecentTableViewCell: UITableViewCell {
         });
     }
     
-    func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool)
+    private func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool)
     {
         if (notifyDelegate) {
             self.delegate.cellDidOpen(self)
@@ -295,7 +302,7 @@ class RecentTableViewCell: UITableViewCell {
         })
     }
     
-    func updateConstraintsIfNeeded(_ animated:Bool, completion: @escaping ( (_ finised:Bool) -> Void))
+    private func updateConstraintsIfNeeded(_ animated:Bool, completion: @escaping ( (_ finised:Bool) -> Void))
     {
         var duration:Double = 0;
         if (animated) {
@@ -304,12 +311,6 @@ class RecentTableViewCell: UITableViewCell {
         UIView.animate(withDuration: duration, delay: 0, options:.curveEaseOut , animations: {
             self.layoutIfNeeded()
         }, completion: completion)
-    }
-    
-    override func prepareForReuse()
-    {
-        super.prepareForReuse()
-        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
     }
     
     func openCell()
@@ -321,7 +322,4 @@ class RecentTableViewCell: UITableViewCell {
         self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
     }
     
-//    override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
 }

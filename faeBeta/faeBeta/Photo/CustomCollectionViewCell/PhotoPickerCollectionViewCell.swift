@@ -78,6 +78,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         self.layoutSubviews()
     }
     
+    // given a PHAsset, request the image and populate the cell with the image
     func loadImage(_ asset: PHAsset,requestOption option: PHImageRequestOptions){
         PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: self.frame.width - 1 / 3, height: self.frame.width - 1 / 3), contentMode: .aspectFill, options: option) { (result, info) in
             self.setImage(result!)
