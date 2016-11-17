@@ -211,7 +211,6 @@
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
-		DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 /* End PBXBuildFile section */
@@ -455,7 +454,6 @@
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
-		DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatHTTPClient.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
 		F6A15D28833770A41D53F457 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
@@ -653,7 +651,6 @@
 			isa = PBXGroup;
 			children = (
 				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
-				DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				DC084A901DDCF969007DCC88 /* Recent.swift */,
@@ -1314,7 +1311,6 @@
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
-				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
 				B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,

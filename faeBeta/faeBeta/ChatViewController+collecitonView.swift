@@ -51,7 +51,9 @@ extension ChatViewController {
                 break
             case "video":
                 cell.contentType = Video
+            // if it's a unknow message type, display a unknow message type
             default:
+                cell.contentType = Text
                 break
         }
         return cell
@@ -151,40 +153,42 @@ extension ChatViewController {
             
             let message = messages[indexPath.row]
             
-            let mediaItem = message.media as! JSQPhotoMediaItemCustom
-            
-            let photos = IDMPhoto.photos(withImages: [mediaItem.image])
-            let browser = IDMPhotoBrowser(photos: photos)
-            
-            self.present(browser!, animated: true, completion: nil)
+            if let mediaItem = message.media as? JSQPhotoMediaItemCustom{
+                let photos = IDMPhoto.photos(withImages: [mediaItem.image])
+                let browser = IDMPhotoBrowser(photos: photos)
+                
+                self.present(browser!, animated: true, completion: nil)
+            }
         }
         
         if object["type"] as! String == "location" {
             
             let message = messages[indexPath.row]
             
-            let mediaItem = message.media as! JSQLocationMediaItemCustom
-            
-            let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
-            
-            vc.chatLatitude = mediaItem.coordinate.latitude
-            vc.chatLongitude = mediaItem.coordinate.longitude
-            
-            self.navigationController?.pushViewController(vc, animated: true)
+            if let mediaItem = message.media as? JSQLocationMediaItemCustom {
+                
+                let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
+                
+                vc.chatLatitude = mediaItem.coordinate.latitude
+                vc.chatLongitude = mediaItem.coordinate.longitude
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
         
         if object["type"] as! String == "video" {
             let message = messages[indexPath.row]
             
-            let mediaItem = message.media as! JSQVideoMediaItemCustom
-            
-            let dataUrl = mediaItem.fileURL
-            
-            let player = AVPlayer(url:dataUrl!)
-            let playerController = AVPlayerViewController()
-            playerController.player = player
-            self.present(playerController, animated: true) {
-                player.play()
+            if let mediaItem = message.media as? JSQVideoMediaItemCustom
+            {
+                if let dataUrl = mediaItem.fileURL {
+                    let player = AVPlayer(url:dataUrl)
+                    let playerController = AVPlayerViewController()
+                    playerController.player = player
+                    self.present(playerController, animated: true) {
+                        player.play()
+                    }
+                }
             }
         }
     }

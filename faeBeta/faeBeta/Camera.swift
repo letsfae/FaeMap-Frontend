@@ -19,47 +19,49 @@ class Camera {
         delegate = delegate_
     }
     
-    func PresentPhotoLibrary(_ target : UIViewController, canEdit : Bool) {
-        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary)
-            && !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.savedPhotosAlbum) {
-            return
-        }
-        
-        let type = kUTTypeImage as String
-        let imagePicker = UIImagePickerController()
-        
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            imagePicker.sourceType = .photoLibrary
-            
-            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) {
-                
-                if (availableTypes as NSArray).contains(type) {
-                    
-                    imagePicker.mediaTypes = [type]
-                    imagePicker.allowsEditing = canEdit
-                }
-            }
-        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
-            imagePicker.sourceType = .savedPhotosAlbum
-            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .savedPhotosAlbum) {
-                if (availableTypes as NSArray).contains(type) {
-                    imagePicker.mediaTypes = [type]
-                }
-            }
-        } else {
-            return
-        }
-        imagePicker.allowsEditing = canEdit
-        imagePicker.delegate = delegate
-        target.present(imagePicker, animated: true, completion: nil)
-    }
+//  View photo in system library
+    //    func PresentPhotoLibrary(_ target : UIViewController, canEdit : Bool) {
+//        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary)
+//            && !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.savedPhotosAlbum) {
+//            return
+//        }
+//        
+//        let type = kUTTypeImage as String
+//        let imagePicker = UIImagePickerController()
+//        
+//        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+//            imagePicker.sourceType = .photoLibrary
+//            
+//            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) {
+//                
+//                if (availableTypes as NSArray).contains(type) {
+//                    
+//                    imagePicker.mediaTypes = [type]
+//                    imagePicker.allowsEditing = canEdit
+//                }
+//            }
+//        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+//            imagePicker.sourceType = .savedPhotosAlbum
+//            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .savedPhotosAlbum) {
+//                if (availableTypes as NSArray).contains(type) {
+//                    imagePicker.mediaTypes = [type]
+//                }
+//            }
+//        } else {
+//            return
+//        }
+//        imagePicker.allowsEditing = canEdit
+//        imagePicker.delegate = delegate
+//        target.present(imagePicker, animated: true, completion: nil)
+//    }
     
+    // for photo & video taking
     func presentPhotoCamera(_ target : UIViewController, canEdit : Bool) {
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
             return
         }
-        let type1 = kUTTypeImage as String
-        let type2 = kUTTypeMovie as String
+        let type1 = kUTTypeImage as String // take photo
+        let type2 = kUTTypeMovie as String // shoot video
         let imagePicker = UIImagePickerController()
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {

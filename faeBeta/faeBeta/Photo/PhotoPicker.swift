@@ -20,19 +20,18 @@ class PhotoPicker {
         return Singleton.instance
     }
     
-    var selectedAlbum = [SmartAlbum]()
+    var selectedAlbum = [SmartAlbum]() // a set of albums from the phone
     var currentAlbum : SmartAlbum! = nil
-    var cameraRoll : SmartAlbum! = nil
-    var currentAlbumIndex : Int = 0
+    var cameraRoll : SmartAlbum! = nil // the all photos album
     
-    var assetIndexDict = [PHAsset : Int]()
-    var indexAssetDict = [Int : PHAsset]()
-    var indexImageDict = [Int: UIImage]()
+    var assetIndexDict = [PHAsset : Int]() // a dictionary storing the selected photo's PHAsset file and its index between 0-9 (max 10 pics)
+    var indexAssetDict = [Int : PHAsset]() // a reverse dictionary of assetIndexDict representing the order of the photos
+    var indexImageDict = [Int: UIImage]() // a dic storing all the UIImages of photo selected. This will not be updated if user's selecting video
     
-    var assetDurationDict = [PHAsset : Int]()
+    var assetDurationDict = [PHAsset : Int]()// a dic store the duration for every video
     
-    var videoAsset: AVAsset? = nil
-    var videoImage: UIImage? = nil
+    var videoAsset: AVAsset? = nil // the selected video's AVAsset
+    var videoImage: UIImage? = nil // the selected video's preview image
     
     fileprivate init() {
         getSmartAlbum()

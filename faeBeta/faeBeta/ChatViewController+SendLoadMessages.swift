@@ -168,21 +168,36 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
     }
     
+    /// append message to then end
+    ///
+    /// - Parameter item: the message information
+    /// - Returns: true: the message is incoming message false: it's outgoing
     func insertMessage(_ item : NSDictionary) -> Bool {
         //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
         let message = incomingMessage.createMessage(item)
-        if(item["hasTimeStamp"] as! Bool){
+        if(item["hasTimeStamp"] != nil && item["hasTimeStamp"] as! Bool){
             let date = dateFormatter().date(from: (item["date"] as? String)!)
             lastMarkerDate = date
         }
-        objects.append(item)
-        messages.append(message!)
-        
-        return incoming(item)
+        if let message = message{
+            
+            objects.append(item)
+            messages.append(message)
+            
+            return incoming(item)
+        }
+        return false
     }
     
+    
+    /// insert the message into the whole messages
+    ///
+    /// - Parameters:
+    ///   - item: the message information
+    ///   - index: the place to insert the message
+    /// - Returns: true: the message is incoming message false: it's outgoing
     func insertMessage(_ item : NSDictionary, atIndex index: Int) -> Bool {
         //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
@@ -195,7 +210,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         return incoming(item)
     }
     
-    //MARK: utilities
+    
     private func incoming(_ item : NSDictionary) -> Bool {
         if user_id.stringValue == item["senderId"] as! String {
             return false
@@ -212,7 +227,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
         
     }
-    
     
     /// This method will transfer an UIImage into NSData, and limit the size of the data
     ///

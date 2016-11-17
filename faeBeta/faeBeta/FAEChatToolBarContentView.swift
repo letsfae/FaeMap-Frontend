@@ -56,7 +56,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     // present the complete photo album
     // should present CustomCollectionViewController
-    func getMoreImage()
+    func showFullAlbum()
     
     /// need to implement this method if sending audio is needed
     ///
@@ -69,17 +69,21 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
 }
 
+
+
+/// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
 
-
-    
     //MARK: - Properties
     var keyboardShow = false // false: keyboard is hide
+    
+    // Whether the media content view is show
     var mediaContentShow : Bool{
         get{
             return imageQuickPickerShow || stickerViewShow || recordShow
         }
     }
+    
     // Photos
     fileprivate var photoPicker : PhotoPicker!
     fileprivate var photoQuickCollectionView : UICollectionView!//preview of the photoes
@@ -96,7 +100,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     fileprivate var stickerPicker : StickerPickView!
     
     //record
-    fileprivate var recordShow = false
+    fileprivate var recordShow = false // false: not open the record view
     fileprivate var audioRecorderContentView: AudioRecorderView!
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
@@ -141,13 +145,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             photoQuickCollectionView.backgroundColor = UIColor.white
             photoQuickCollectionView.delegate = self
             photoQuickCollectionView.dataSource = self
-            quickSendImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
-            quickSendImageButton.setImage(UIImage(named: "moreImage"), for: UIControlState())
-            quickSendImageButton.addTarget(self, action: #selector(self.showFullAlbum), for: .touchUpInside)
-            moreImageButton = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
-            moreImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), for: .touchUpInside)
-            moreImageButton.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
-            moreImageButton.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
+            moreImageButton = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
+            moreImageButton.setImage(UIImage(named: "moreImage"), for: UIControlState())
+            moreImageButton.addTarget(self, action: #selector(self.showFullAlbum), for: .touchUpInside)
+            quickSendImageButton = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
+            quickSendImageButton.addTarget(self, action: #selector(self.sendImageFromQuickPicker), for: .touchUpInside)
+            quickSendImageButton.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
+            quickSendImageButton.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
             photoPicker = PhotoPicker.shared
             
             self.addSubview(photoQuickCollectionView)
@@ -272,7 +276,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func showFullAlbum()
     {
-        self.delegate.getMoreImage()
+        self.delegate.showFullAlbum()
     }
     
     func showRecord() {
@@ -331,11 +335,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         photoPicker.indexAssetDict.removeAll()
         photoPicker.assetIndexDict.removeAll()
         photoPicker.indexImageDict.removeAll()
+        
+        // use main queue to reload data to avoid problem
         DispatchQueue.main.async(execute: {
             self.photoQuickCollectionView.reloadData()
         });
     }
 
+    // this is the method to handle the number at the top right of the cell
     fileprivate func shiftChosenFrameFromIndex(_ index : Int)
     {
         // when deselect one image in photoes preview, we need to reshuffule
@@ -356,7 +363,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     fileprivate func updateSendButtonStatus()
     {
-        moreImageButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
+        quickSendImageButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
     }
     
     //MARK: - photoPicker Collection View Delegate
@@ -368,11 +375,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
-//    
-//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> CGFloat {
-//        return 3
-//    }
-//    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoQuickCollectionReuseIdentifier, for: indexPath) as! PhotoPickerCollectionViewCell
         return cell
@@ -509,6 +512,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
     
+    // delete one emoji from the text view , if there's no emoji,then delete one character
     func deleteEmoji()
     {
         if inputToolbar != nil{
@@ -594,9 +598,4 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
     
-    func documentsPathForFileName(_ name: String) -> String {
-        
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        return documentsPath + name
-    }
 }

@@ -10,24 +10,13 @@ import Foundation
 import Photos
 // class to store information of one album.
 class SmartAlbum {
-    var albumName : String!
-    var albumCount : Int!
-    var albumContent : PHFetchResult<AnyObject>!
+    private(set) var albumName : String!
+    private(set) var albumCount : Int!
+    private(set) var albumContent : PHFetchResult<AnyObject>!
+    
     init(albumName : String, albumCount: Int, albumContent : PHFetchResult<AnyObject>) {
         self.albumName = albumName
         self.albumCount = albumCount
         self.albumContent = albumContent
-    }
-    
-    func getNumberOfAssets() -> Int {
-        return albumCount
-    }
-    
-    func getAlbumName() -> String {
-        return albumName
-    }
-    
-    func getAlbumContent() -> PHFetchResult<AnyObject> {
-        return albumContent
     }
 }

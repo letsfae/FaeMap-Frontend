@@ -139,7 +139,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        clearRecentCounter(chatRoomId)// clear the unread message count
     }
     
     override func viewDidLoad() {
@@ -150,34 +149,26 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.senderId = user_id.stringValue
         self.senderDisplayName = withUser!.userName
         self.inputToolbar.contentView.textView.delegate = self
+        
         //load firebase messages
         loadMessage()
         // Do any additional setup after loading the view.
         loadInputBarComponent()
+        
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.white
         self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
-        addObservers()
-        // setup requestion option 
-//        requestOption.resizeMode = .Fast //resize time fast
-//        requestOption.deliveryMode = .HighQualityFormat //high pixel
-//        requestOption.synchronous = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
         super.viewWillAppear(true)
+        addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
         setupToolbarContentView()
-    }
-    
-    
-    func appWillEnterForeground(){
-        self.collectionView.reloadData()
-        self.toolbarContentView.reloadPhotoAlbum()
     }
     
     // MARK: - setup
@@ -296,6 +287,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    // be sure to call this in ViewWillAppear!!!
     func setupToolbarContentView()
     {
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
@@ -554,7 +546,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     // segue to the full album page
-    func getMoreImage()
+    func showFullAlbum()
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "CustomCollectionViewController")as! CustomCollectionViewController
@@ -562,6 +554,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    // change every button to its origin state
     fileprivate func resetToolbarButtonIcon()
     {
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
@@ -595,7 +588,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    // Need to refresh the album because user might take a photo outside the app
+    func appWillEnterForeground(){
+        self.collectionView.reloadData()
+        self.toolbarContentView.reloadPhotoAlbum()
+    }
+    
     //MARK: -  UIImagePickerController
+    
+    // handle events after user took a photo/video
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let type = info[UIImagePickerControllerMediaType] as! String
         switch type {
@@ -643,6 +644,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
     }
     
+    // after saving the photo, refresh the album
     func image(_ image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?)
     {
         self.appWillEnterForeground()
