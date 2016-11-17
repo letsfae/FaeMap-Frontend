@@ -87,15 +87,15 @@
 		B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
 		B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */; };
-		B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2D1D5E435200356705 /* MainScreenButtons.swift */; };
+		B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */; };
 		B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2E1D5E435200356705 /* MapChatTableCell.swift */; };
 		B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */; };
-		B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D331D5E435200356705 /* OpenUserPinView.swift */; };
+		B0714D671D5E435200356705 /* FMOpenUserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D331D5E435200356705 /* FMOpenUserPin.swift */; };
 		B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D341D5E435200356705 /* RightSlideWindow.swift */; };
-		B0714D6D1D5E435200356705 /* MapTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D351D5E435200356705 /* MapTableDelegate.swift */; };
-		B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* UnreadChatTableView.swift */; };
-		B0714D731D5E435200356705 /* UpdateMapPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* UpdateMapPins.swift */; };
+		B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D351D5E435200356705 /* FMMapTableDelegate.swift */; };
+		B0714D701D5E435200356705 /* FMUnreadChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */; };
+		B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* FMUpdateMapPins.swift */; };
 		B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D381D5E435200356705 /* WindBellTableViewCell.swift */; };
 		B0714D791D5E435200356705 /* WindBellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0714D391D5E435200356705 /* WindBellTableViewCell.xib */; };
 		B0714D821D5E465900356705 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D811D5E465900356705 /* Camera.swift */; };
@@ -182,7 +182,6 @@
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
 		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
-		B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */; };
 		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */; };
 		B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */; };
@@ -200,15 +199,17 @@
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
 		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
-		B8B86D6B1DD68243001273F6 /* MapGetImageFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */; };
 		B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */; };
 		B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */; };
 		B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */; };
+		B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */; };
+		B8CAA03D1DDD931D00DEC329 /* FMSelfPositionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */; };
+		B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */; };
+		B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA0401DDD948400DEC329 /* FMActions.swift */; };
 		B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */; };
 		B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
-		B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */; };
@@ -325,15 +326,15 @@
 		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
 		B0714D2B1D5E435200356705 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindow.swift; sourceTree = "<group>"; };
-		B0714D2D1D5E435200356705 /* MainScreenButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenButtons.swift; sourceTree = "<group>"; };
+		B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMainScreenItems.swift; sourceTree = "<group>"; };
 		B0714D2E1D5E435200356705 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
-		B0714D331D5E435200356705 /* OpenUserPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUserPinView.swift; sourceTree = "<group>"; };
+		B0714D331D5E435200356705 /* FMOpenUserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMOpenUserPin.swift; sourceTree = "<group>"; };
 		B0714D341D5E435200356705 /* RightSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSlideWindow.swift; sourceTree = "<group>"; };
-		B0714D351D5E435200356705 /* MapTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTableDelegate.swift; sourceTree = "<group>"; };
-		B0714D361D5E435200356705 /* UnreadChatTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnreadChatTableView.swift; sourceTree = "<group>"; };
-		B0714D371D5E435200356705 /* UpdateMapPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateMapPins.swift; sourceTree = "<group>"; };
+		B0714D351D5E435200356705 /* FMMapTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapTableDelegate.swift; sourceTree = "<group>"; };
+		B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUnreadChatTableView.swift; sourceTree = "<group>"; };
+		B0714D371D5E435200356705 /* FMUpdateMapPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdateMapPins.swift; sourceTree = "<group>"; };
 		B0714D381D5E435200356705 /* WindBellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindBellTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D391D5E435200356705 /* WindBellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindBellTableViewCell.xib; sourceTree = "<group>"; };
 		B0714D811D5E465900356705 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
@@ -433,7 +434,6 @@
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
-		B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReturnFromTapAtMarker.swift; sourceTree = "<group>"; };
 		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForMainScreenSearch.swift; sourceTree = "<group>"; };
@@ -451,15 +451,17 @@
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
 		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
-		B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapGetImageFunc.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuAnimation.swift; sourceTree = "<group>"; };
 		B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDLoadItems.swift; sourceTree = "<group>"; };
 		B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDAPIConnections.swift; sourceTree = "<group>"; };
+		B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapViewCtrl.swift; sourceTree = "<group>"; };
+		B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMSelfPositionAnimation.swift; sourceTree = "<group>"; };
+		B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDelegateCtrl.swift; sourceTree = "<group>"; };
+		B8CAA0401DDD948400DEC329 /* FMActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMActions.swift; sourceTree = "<group>"; };
 		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDTableViewCtrlFile.swift; sourceTree = "<group>"; };
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentOnPinToolBar.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
@@ -617,16 +619,17 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */,
+				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
+				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
+				B0714D351D5E435200356705 /* FMMapTableDelegate.swift */,
+				B0714D331D5E435200356705 /* FMOpenUserPin.swift */,
+				B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */,
+				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
+				B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */,
+				B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
-				B0714D2D1D5E435200356705 /* MainScreenButtons.swift */,
-				B0714D351D5E435200356705 /* MapTableDelegate.swift */,
-				B0714D331D5E435200356705 /* OpenUserPinView.swift */,
-				B8490EEF1DC43BE100F4D648 /* ReturnFromTapAtMarker.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
-				B0714D361D5E435200356705 /* UnreadChatTableView.swift */,
-				B0714D371D5E435200356705 /* UpdateMapPins.swift */,
-				B8F98EDB1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift */,
-				B8B86D6A1DD68243001273F6 /* MapGetImageFunc.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -938,8 +941,8 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
+				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
 				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
@@ -1344,7 +1347,7 @@
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
-				B0714D671D5E435200356705 /* OpenUserPinView.swift in Sources */,
+				B0714D671D5E435200356705 /* FMOpenUserPin.swift in Sources */,
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
@@ -1353,12 +1356,11 @@
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
-				B8490EF01DC43BE100F4D648 /* ReturnFromTapAtMarker.swift in Sources */,
 				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
-				B0714D731D5E435200356705 /* UpdateMapPins.swift in Sources */,
+				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
@@ -1376,17 +1378,18 @@
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
-				B0714D701D5E435200356705 /* UnreadChatTableView.swift in Sources */,
+				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
+				B0714D701D5E435200356705 /* FMUnreadChatTableView.swift in Sources */,
 				B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
-				B8B86D6B1DD68243001273F6 /* MapGetImageFunc.swift in Sources */,
 				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
+				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
@@ -1396,6 +1399,7 @@
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
+				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
 				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
@@ -1404,7 +1408,7 @@
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
-				B0714D551D5E435200356705 /* MainScreenButtons.swift in Sources */,
+				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
@@ -1418,7 +1422,7 @@
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
-				B0714D6D1D5E435200356705 /* MapTableDelegate.swift in Sources */,
+				B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */,
@@ -1429,7 +1433,6 @@
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
-				B8F98EDC1DAF3E2B004BCFBF /* CommentOnPinToolBar.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
 				B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
@@ -1456,6 +1459,7 @@
 				B064EEB01D6E0CA100C078F5 /* Recent.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
+				B8CAA03D1DDD931D00DEC329 /* FMSelfPositionAnimation.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,

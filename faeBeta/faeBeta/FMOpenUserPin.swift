@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension FaeMapViewController {
     
     func loadNamecard() {
         self.view.backgroundColor = UIColor.white
@@ -166,12 +166,12 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
     }
     
-    func showOpenUserPinAnimation(_ lati: CLLocationDegrees, longi: CLLocationDegrees) {
+    func showOpenUserPinAnimation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         UIView.animate(withDuration: 0.2, animations: ({
             self.uiviewDialog.alpha = 1.0
         }))
         openUserPinActive = true
-        let camera = GMSCameraPosition.camera(withLatitude: lati+0.001, longitude: longi, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
         faeMapView.animate(to: camera)
     }
     
@@ -340,43 +340,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         uiviewTag.isHidden = true
         print("show")
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellPhotos, for: indexPath)as! NameCardAddCollectionViewCell
-        if indexPath.row==1{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo")
-        }
-        else if indexPath.row==0{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo3")
-        }
-        else if indexPath.row==2{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo")
-        }
-        else if indexPath.row==3{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo1")
-        }
-        else if indexPath.row==4{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo2")
-        }
-        else if indexPath.row==5{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo3")
-        }
-        else if indexPath.row==6{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo3")
-        }
-        else if indexPath.row==7{
-            cell.imageViewTitle.image = UIImage(named: "map_namecard_photo3")
-        }
-        else{
-            cell.imageViewTitle.image = UIImage(named: "nameCardEmpty")
-        }
-        
-        return cell
-    }
-    
     
     func loadUserPinInformation(_ userId: String){
         //        let avatar = FaeImage()

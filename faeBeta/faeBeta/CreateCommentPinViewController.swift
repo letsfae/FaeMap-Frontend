@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-protocol CreateCommentPinDelegate {
+protocol CreateCommentPinDelegate: class {
     func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
     func backFromCCP(back: Bool)
     func closePinMenu(close: Bool)
@@ -17,7 +17,7 @@ protocol CreateCommentPinDelegate {
 
 class CreateCommentPinViewController: UIViewController {
     
-    var delegate: CreateCommentPinDelegate?
+    weak var delegate: CreateCommentPinDelegate?
 
     // MARK: -- Create Comment Pin
     var uiviewCreateCommentPin: UIView!

@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 import CoreLocation
+import SDWebImage
 
 extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -36,7 +37,8 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             getCommentById.getComment("\(commentID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
                 if let userid = commentInfoJSON["user_id"].int {
-                    self.getAndSetUserAvatar(cell.imageViewAvatar, userID: userid)
+                    let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
+                    cell.imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
                 }
                 print(commentInfoJSON)
                 if let time = commentInfoJSON["created_at"].string {

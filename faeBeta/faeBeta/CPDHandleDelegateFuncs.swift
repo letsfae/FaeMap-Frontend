@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLocation
 
-extension CommentPinViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, CPCommentsCellDelegate {
+extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, CPCommentsCellDelegate {
     
     func reloadCommentContent() {
         if commentIDCommentPinDetailView != "-999" {
@@ -50,7 +50,7 @@ extension CommentPinViewController: EditCommentPinViewControllerDelegate, Opened
     func showActionSheetFromCommentPinCell(_ username: String) {
         self.inputToolbar.contentView.textView.resignFirstResponder()
         let infoDict: [String: AnyObject] = ["argumentInt": username as AnyObject]
-        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(CommentPinViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
+        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(CommentPinDetailViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
     }
     
     func cancelTouchToReplyTimerFromCommentPinCell(_ cancel: Bool) {

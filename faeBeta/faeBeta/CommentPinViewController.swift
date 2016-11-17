@@ -10,19 +10,19 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-protocol CommentPinViewControllerDelegate {
+protocol CommentPinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map
     func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
     func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int)
 }
 
-class CommentPinViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     // Delegate of this class
-    var delegate: CommentPinViewControllerDelegate?
+    weak var delegate: CommentPinDetailDelegate?
     
     // Comment ID To Use In This Controller
     var commentIdSentBySegue: Int = -999
@@ -188,7 +188,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         let subviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(subviewBackToMap)
         self.view.sendSubview(toBack: subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(CommentPinViewController.actionBackToMap(_:)), for: .touchUpInside)
+        subviewBackToMap.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: .touchUpInside)
     }
     
     fileprivate func addObservers() {

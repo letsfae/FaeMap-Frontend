@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension CommentPinViewController {
+extension CommentPinDetailViewController {
     func cropToBounds(_ image: UIImage) -> UIImage {
         
         let contextImage: UIImage = UIImage(cgImage: image.cgImage!)
