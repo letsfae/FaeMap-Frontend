@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -117,9 +119,9 @@ class RegisterUsernameViewController: RegisterBaseViewController {
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status/100 == 2 {
-                    let value = (message as AnyObject).value(forKey: "existence")
-                    if (value != nil) {
-                        if value! as! NSNumber == 0 {
+                    let valueInfo = JSON(message!)
+                    if let value = valueInfo["existence"].int {
+                        if value == 0 {
                             self.jumpToRegisterPassword()
                             self.usernameExistLabel.isHidden = true
                         } else {
@@ -132,7 +134,6 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func registerCell() {
-        
         tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
         tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
         tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")

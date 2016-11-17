@@ -154,7 +154,7 @@ extension FaeMapViewController {
                                             self.mapUserPinsDic.append(pinShowOnMap)
                                             pinShowOnMap.position = point
                                             pinShowOnMap.userData = pinData
-                                            pinShowOnMap.icon = UIImage(named: "avatar_\(miniAvatar+1)")
+                                            pinShowOnMap.icon = UIImage(named: "mapAvatar_\(miniAvatar+1)")
                                             let fadeAnimation = CABasicAnimation(keyPath: "opacity")
                                             fadeAnimation.fromValue = 0.0
                                             fadeAnimation.toValue = 1.0

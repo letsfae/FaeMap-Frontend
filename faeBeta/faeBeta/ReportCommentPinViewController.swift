@@ -58,7 +58,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         imageDescription.contentMode = .scaleAspectFit
         self.view.addSubview(imageDescription)
         
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreatePinViewController.tapOutsideToDismissKeyboard(_:)))
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(ReportCommentPinViewController.tapOutsideToDismissKeyboard(_:)))
         self.view.addGestureRecognizer(tapToDismissKeyboard)
         
         let font = UIFont(name: "AvenirNext-DemiBold", size: 20)

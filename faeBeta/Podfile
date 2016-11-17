@@ -4,7 +4,7 @@ use_frameworks!
 
 target 'faeBeta' do
 	pod 'Alamofire’, '~> 4.0'
-    	pod 'SwiftyJSON'
+    pod 'SwiftyJSON'
 	pod 'SDWebImage', '~>3.8’
 	pod 'Firebase/Storage'
 	pod 'Firebase/AdMob'
@@ -16,5 +16,6 @@ target 'faeBeta' do
 	pod 'IDMPhotoBrowser'
 	pod 'Backendless-ios-SDK'
 	pod 'KTCenterFlowLayout'
-	pod 'GoogleMaps', '~> 1.13.2'
+	pod 'GooglePlaces'
+	pod 'GoogleMaps'
 end
