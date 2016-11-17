@@ -29,19 +29,26 @@ extension CreateCommentPinViewController: UITextViewDelegate {
                 lableTextViewPlaceholder.isHidden = false
                 buttonCommentSubmit.backgroundColor = UIColor.lightGray
             }
-        }
-        let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-        if numLines <= 8 {
-            let fixedWidth = textView.frame.size.width
-            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            var newFrame = textView.frame
-            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-            textView.frame = newFrame
-            textView.isScrollEnabled = false
-        }
-        else if numLines > 8 {
-            textView.isScrollEnabled = true
+            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
+            var numlineOnDevice = 3
+            if screenWidth == 375 {
+                numlineOnDevice = 4
+            }
+            else if screenWidth == 414 {
+                numlineOnDevice = 7
+            }
+            if numLines <= numlineOnDevice {
+                let fixedWidth = textView.frame.size.width
+                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                var newFrame = textView.frame
+                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+                textView.frame = newFrame
+                textView.isScrollEnabled = false
+            }
+            else if numLines > numlineOnDevice {
+                textView.isScrollEnabled = true
+            }
         }
     }
     
