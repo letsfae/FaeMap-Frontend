@@ -313,7 +313,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func startChat(_ chat_id: String? ,withUserId: NSNumber, withUserName: String?){
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
         
-        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId)" : "\(withUserId)-\(user_id)"
+        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
         chatVC.chat_id = chat_id
         let withUserName = withUserName ?? "Chat"
         chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)

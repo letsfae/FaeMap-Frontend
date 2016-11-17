@@ -72,15 +72,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          }*/
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        //        let token=String(data: deviceToken, encoding: NSUTF8StringEncoding)
-//        let token = NSString(format: "%@", deviceToken) -- 10.22 Mark
-        //        print(token)
-        //        token = token.stringByReplacingOccurrencesOfString("<", withString: "")
-        //        token = token.stringByReplacingOccurrencesOfString(">", withString: "")
-        //        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
-        //        print(token)
-//        headerDeviceID = String(token)
-        print(headerDeviceID)
+        var token: String = ""
+        for i in 0..<deviceToken.count {
+            token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
+        }
+        headerDeviceID = token
+        print("Device ID: ", headerDeviceID)
     }
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
         if identifier == "answerAction" {
@@ -240,4 +237,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+//
+//extension NSData {
+//    func hexString() -> String {
+//        return map { String(format: "%02hhx", $0) }.joined()
+//    }
+//}
 

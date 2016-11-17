@@ -1361,7 +1361,6 @@
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,
-				B0BF35551D8DC84E00B0540B /* ChooseUserViewController.swift in Sources */,
 				B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
