@@ -103,6 +103,20 @@ class YourFirstClass: UIViewController {
 }
 ```
 
+P.S.
+
+Adding "@objc" in front of protocol and adding "@objc optional" in front of protocol function name will make functions optional to use
+
+Example:
+```Swift
+@objc protocol FirstViewControllerDelegate {
+    @objc optional func someFunction(arg1: Int)
+    @objc optional func anotherFunction(arg1: Int)
+    func mustConfirmThisFunction(arg1: Int)
+}
+```
+Then, in the class "YourSecondClass", the first two functions in the protocol are optional to use, but the third function must be implemented.
+
 ## License
 2016 Faevorite Inc.
     
