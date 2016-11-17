@@ -138,18 +138,13 @@ class StickerAlbum {
     }
     
     @objc func calculateIndex(_ sender : UIButton) {
+        
         let original = sender.frame.origin
         let currentPage = (Int)(original.x / widthPage) - basePages
         let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
         let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
         var index = 0
-        // check value
-//        print(original)
-//        print(currentPage)
-//        print(lineInterval)
-//        print(inlineInterval)
-//        print(colPerPage)
-//        print((Int)(original.y / lineInterval))
+        
         if Int(original.y / (lineInterval + length)) > 1 {
             index += Int(colPerPage) * Int(original.y / (lineInterval + length))
             print(index)
