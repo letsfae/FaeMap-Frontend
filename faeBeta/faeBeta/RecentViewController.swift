@@ -10,15 +10,17 @@ import UIKit
 import SwiftyJSON
 
 public var isDraggingRecentTableViewCell = false
-public var avatarDic = [NSNumber:UIImage]()
+public var avatarDic = [NSNumber:UIImage]() // an dictionary to store avatar, this should be moved to else where later
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
+    //MARK: - properties
     
-    var recents: JSON? // an array of dic to store recent chatting informations
-    var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet()
-    var loadingRecentTimer: Timer!
+    @IBOutlet private weak var tableView: UITableView!
+    
+    private var recents: JSON? // an array of dic to store recent chatting informations
+    private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
+    private var loadingRecentTimer: Timer!
     
     // MARK: - View did/will funcs
     override func viewDidLoad() {
@@ -28,7 +30,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         navigationBarSet()
         addGestureRecognizer()
         downloadCurrentUserAvatar()
-//        firebase.keepSynced(true)
 
         if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
@@ -38,7 +39,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-//        firebase.removeValue()
         loadingRecentTimer.invalidate()
     }
     
@@ -58,10 +58,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func navigationBarSet() {
-
-        let sortButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
-        sortButton.titleLabel?.text = ""
-        sortButton.addTarget(self, action: #selector(RecentViewController.sortAlert), for: .touchUpInside)
         
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = UIColor.white
@@ -83,28 +79,25 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 86 , bottom: 0, right: 0)
     }
     
-    func addGestureRecognizer()
+    private func addGestureRecognizer()
     {
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(RecentViewController.closeAllCell)))
     }
     
-    func crossTapped() {
-//        performSegueWithIdentifier("recentToChooseUserVC", sender: self)
-    }
-    
     func navigationLeftItemTapped() {
         self.dismiss(animated: true, completion: nil)
-    }
-    func navigationRightItemTapped() {
-        
     }
     
     //MARK:- tableView delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRow(at: indexPath, animated: true)
-            performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
             
+            if let recent = recents?[indexPath.row]{
+                if recent["with_user_id"].number != nil{
+                    performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
+                }
+            }
         }else{
             for indexP in cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
@@ -117,39 +110,14 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         return false
     }
     
-    
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        
-        //        let recent = recents[indexPath.row]
-        //
-        //        //remove recent form the array
-        //
-        //        recents.removeAtIndex(indexPath.row)
-        //
-        //        //delect recent from firebase
-        //
-        //        DeleteRecentItem(recent)
-        //
-        //        tableView.reloadData()
-    }
-    
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76
-    }
-    
-    //MARK: action
-    
-    @IBAction func startNewChatBarButtonPressed(_ sender: AnyObject) {
-        performSegue(withIdentifier: "recentToChooseUserVC", sender: self)
     }
     
     //MARK: - UItableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recents == nil ? 0 : recents!.count
@@ -171,10 +139,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK: - helpers
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "recentToChooseUserVC" {
-//            let vc = segue.destinationViewController as! ChooseUserViewController
-//            vc.delegate = self
-//        }
+
         if segue.identifier == "recentToChatSeg" {
             let indexPath = sender as! IndexPath
             let chatVC = segue.destination as! ChatViewController
@@ -188,25 +153,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-//    func createChatroom(withUser: BackendlessUser) {
-//        
-//        let chatVC = ChatViewController()
-//        
-//        chatVC.hidesBottomBarWhenPushed = true
-//        // set chatVC recent to our recent.
-//        
-////        chatVC.withUser = withUser
-//        
-//        chatVC.chatRoomId = startChat(backendless.userService.currentUser, user2: withUser)
-//        
-//        navigationController?.pushViewController(chatVC, animated: true)
-//    }
-    
-    func startCheckingRecent(){
+    @objc private func startCheckingRecent(){
         loadRecents(false, removeIndexPaths: nil)
     }
     
-    func downloadCurrentUserAvatar()
+    /// download current user's avatar from server
+    private func downloadCurrentUserAvatar()
     {
         if(avatarDic[user_id] == nil){
             getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
@@ -216,16 +168,22 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             })
         }
     }
-    //MARK: load recents form firebase
     
-    func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
+    //MARK: load recents form server
+    
+    /// load recent list from server
+    ///
+    /// - Parameters:
+    ///   - animated: update the table with/without animation
+    ///   - indexPathSet: the specific indexpath set needed to update, set nil if you want to update the whole recent list
+    private func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
                 self.recents = json
                     UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
 
-                if(animated){
+                if(animated && indexPathSet != nil){
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 }else{
                     if(!isDraggingRecentTableViewCell){
@@ -239,45 +197,45 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 
     }
     
-    //MARK: sortAlertView
+//    func sortAlert() {
+//        print("clicked")
+//        
+//        let grey = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 1.0)
+//        
+//        let meunMessage = NSMutableAttributedString(string: "Sort Chats By")
+//        
+//        meunMessage.addAttributes([NSFontAttributeName : UIFont(name: "Avenir Next", size: 18)!, NSForegroundColorAttributeName : grey], range: NSRange(location: 0, length: meunMessage.length))
+//        
+//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
+//        
+//        optionMenu.setValue(meunMessage, forKey: "attributedMessage")
+//        
+//        
+//        let time = UIAlertAction(title: "Time Received", style: .default) { (aler : UIAlertAction!) in
+//            print("Take photo")
+//            
+//        }
+//        
+//        let unread = UIAlertAction(title: "Unread Messages", style: .default) { (aler : UIAlertAction) in
+//            print("photo library")
+//        }
+//        
+//        let markers = UIAlertAction(title: "Markers", style: .default) { (aler : UIAlertAction) in
+//            print("Share location")
+//        }
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (aler : UIAlertAction) in
+//            print("Cancel")
+//        }
+//        
+//        optionMenu.addAction(time)
+//        optionMenu.addAction(unread)
+//        optionMenu.addAction(markers)
+//        optionMenu.addAction(cancelAction)
+//        self.present(optionMenu, animated: true, completion: nil)
+//    }
     
-    func sortAlert() {
-        print("clicked")
-        
-        let grey = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 1.0)
-        
-        let meunMessage = NSMutableAttributedString(string: "Sort Chats By")
-        
-        meunMessage.addAttributes([NSFontAttributeName : UIFont(name: "Avenir Next", size: 18)!, NSForegroundColorAttributeName : grey], range: NSRange(location: 0, length: meunMessage.length))
-        
-        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-        
-        optionMenu.setValue(meunMessage, forKey: "attributedMessage")
-        
-        
-        let time = UIAlertAction(title: "Time Received", style: .default) { (aler : UIAlertAction!) in
-            print("Take photo")
-            
-        }
-        
-        let unread = UIAlertAction(title: "Unread Messages", style: .default) { (aler : UIAlertAction) in
-            print("photo library")
-        }
-        
-        let markers = UIAlertAction(title: "Markers", style: .default) { (aler : UIAlertAction) in
-            print("Share location")
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (aler : UIAlertAction) in
-            print("Cancel")
-        }
-        
-        optionMenu.addAction(time)
-        optionMenu.addAction(unread)
-        optionMenu.addAction(markers)
-        optionMenu.addAction(cancelAction)
-        self.present(optionMenu, animated: true, completion: nil)
-    }
+    
     
     func closeAllCell(_ recognizer:UITapGestureRecognizer){
         let point = recognizer.location(in: tableView)
@@ -317,9 +275,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let recent = recents![indexPath.row]
         
         //remove recent form the array
-//        recents.
-        
-        //delect recent from firebase
         DeleteRecentItem(recent, completion: {(statusCode, result) -> Void in
             if statusCode / 100 == 2{
                 self.loadRecents(true, removeIndexPaths: [indexPath])

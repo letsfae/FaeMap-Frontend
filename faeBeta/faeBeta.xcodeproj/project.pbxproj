@@ -38,7 +38,6 @@
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
 		B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBA1DCE357700D6745A /* FaePush.swift */; };
 		B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBE1DD24FEE00D6745A /* Key.swift */; };
-		B064EEA71D6E0CA100C078F5 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA31D6E0CA100C078F5 /* Avatar.swift */; };
 		B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */; };
 		B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */; };
 		B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
@@ -262,7 +261,6 @@
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
 		B05E2DBA1DCE357700D6745A /* FaePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePush.swift; sourceTree = "<group>"; };
 		B05E2DBE1DD24FEE00D6745A /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		B064EEA31D6E0CA100C078F5 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomingMessage.swift; sourceTree = "<group>"; };
 		B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutgoingMessage.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -654,7 +652,6 @@
 		B0714DAC1D5E46D600356705 /* FireBaseData */ = {
 			isa = PBXGroup;
 			children = (
-				B064EEA31D6E0CA100C078F5 /* Avatar.swift */,
 				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
 				DCF1EBCF1DA317AA0066B3ED /* chatHTTPClient.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
@@ -1327,7 +1324,6 @@
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
-				B064EEA71D6E0CA100C078F5 /* Avatar.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
