@@ -8,6 +8,7 @@
 
 import Foundation
 import JSQMessagesViewController
+
 //this is a class that subclass JSQPhotoMediaItem, to show sticker in a chat bubble.
 // it overrided the size of chat bubble
 class JSQStickerMediaItem: JSQPhotoMediaItem {
@@ -28,6 +29,7 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
         }
         return cachedImageView
     }
+    
     //overridde the photo size to the stick size
     override func mediaViewDisplaySize() -> CGSize {
         return CGSize(width: 120, height: 90)

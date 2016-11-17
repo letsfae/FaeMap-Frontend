@@ -22,11 +22,16 @@
                                                                              size:16.0f],
                                      @"NSForegroundColorAttributeName": isOutGoing ? [UIColor whiteColor] : [UIColor faeAppRedColor]
                                      };
+    int first = 0;
     for (int i = 0; i < [string length] ; i++) {
+        
         char c = [string characterAtIndex:i];
-        if(c != '['){
-            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@"%c", c] attributes:textAttributes]];
-        }else{
+        if(c == '['){
+            if(first < i){
+                NSString *beforeString = [string substringWithRange:NSMakeRange(first, i - first)];
+                [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: beforeString attributes:textAttributes]];
+                first = i;
+            }
             int j = i + 1;
             while(j < [string length]){
                 char d = [string characterAtIndex:j];
@@ -42,6 +47,7 @@
                         
                         [attributedString appendAttributedString:attrStringWithImage];
                         i = j;
+                        first = i+1;
                     }
                     break;
                 }
@@ -49,6 +55,11 @@
             }
         }
     }
+    if(first < [string length]){
+        NSString *beforeString = [string substringWithRange:NSMakeRange(first, [string length] - first)];
+        [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: beforeString attributes:textAttributes]];
+    }
+    
     return attributedString;
 }
 
@@ -59,12 +70,18 @@
     
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
-    NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular" size:16.0f]};
+    NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular"
+                                                                             size:16.0f]};
+    int first = 0;
     for (int i = 0; i < [string length] ; i++) {
+        
         char c = [string characterAtIndex:i];
-        if(c != '['){
-            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@"%c", c] attributes:textAttributes]];
-        }else{
+        if(c == '['){
+            if(first < i){
+                NSString *beforeString = [string substringWithRange:NSMakeRange(first, i - first)];
+                [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: beforeString attributes:textAttributes]];
+                first = i;
+            }
             int j = i + 1;
             while(j < [string length]){
                 char d = [string characterAtIndex:j];
@@ -73,7 +90,9 @@
                     if ([emojiNames containsObject:(name)] ){
                         
                         [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@"||||||"] attributes:textAttributes]];
+
                         i = j;
+                        first = i+1;
                     }
                     break;
                 }
@@ -81,6 +100,12 @@
             }
         }
     }
+    if(first < [string length]){
+        NSString *beforeString = [string substringWithRange:NSMakeRange(first, [string length] - first)];
+        [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString: beforeString attributes:textAttributes]];
+    }
+    
+    
     return [attributedString string];
 }
 

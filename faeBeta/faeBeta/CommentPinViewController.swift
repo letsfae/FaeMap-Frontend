@@ -557,7 +557,7 @@ class CommentPinViewController: UIViewController, UIImagePickerControllerDelegat
         
     }
     
-    func getMoreImage() {
+    func showFullAlbum() {
         
     }
     

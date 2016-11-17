@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AudioRecorderViewDelegate {
+protocol AudioRecorderViewDelegate: class {
     func audioRecorderView(_ audioView: AudioRecorderView, needToSendAudioData data: Data)
 }
 
@@ -16,42 +16,35 @@ class AudioRecorderView: UIView {
 
 //MARK: - properties
     
-    @IBOutlet weak var mainButton: UIButton!
-    @IBOutlet weak var leftButton: UIButton!
-    @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet weak var signalImageView: UIImageView!
+    @IBOutlet private weak var mainButton: UIButton!
+    @IBOutlet private weak var leftButton: UIButton!
+    @IBOutlet private weak var rightButton: UIButton!
+    @IBOutlet private weak var infoLabel: UILabel! // the label displaying "to short" or "record duration"
+    @IBOutlet fileprivate weak var signalImageView: UIImageView! // the image view on the record button to show the signal icon
     
-    var isRecordMode = true // true: record mode  false: play mode
-    var isPressingMainButton = false
-    var flowTimer: Timer! // the timer to display flow
-    var timeTimer: Timer! // the timer to count the time
-    var progressTimer: Timer!
+    fileprivate var isRecordMode = true // true: record mode  false: play mode
+    private var isPressingMainButton = false
+    private var flowTimer: Timer! // the timer to display flow
+    private var timeTimer: Timer! // the timer to count the time
+    fileprivate var progressTimer: Timer!
     
-    var currentTime = 0
+    private var currentTime = 0 // 0 - 60 current time for recording
     
-    var soundRecorder : AVAudioRecorder!
-    var soundPlayer: AVAudioPlayer!
-    var recordingSession: AVAudioSession!
-    var voiceData = Data()
-    var startRecording = false
-    var isPlayingRecroding = false // true: is playing the audio
+    private var soundRecorder : AVAudioRecorder!
+    private var soundPlayer: AVAudioPlayer!
+    private var recordingSession: AVAudioSession!
+    private var voiceData = Data()
+    private var startRecording = false // true: is recording
+    private var isPlayingRecroding = false // true: is playing the audio
     
-    var delegate : AudioRecorderViewDelegate!
+    weak var delegate : AudioRecorderViewDelegate!
     
-    let leftAndRightButtonResizingFactorMax: CGFloat = 1.3
+    private let leftAndRightButtonResizingFactorMax: CGFloat = 1.3 // while recording, the buttom left & right button will become larger when you move your finger toward to it. This factor limit the maximum size of it
     
-    @IBOutlet weak var signalIconHeight: NSLayoutConstraint!
-    @IBOutlet weak var signalIconWidth: NSLayoutConstraint!
+    @IBOutlet private weak var signalIconHeight: NSLayoutConstraint!
+    @IBOutlet private weak var signalIconWidth: NSLayoutConstraint!
     
     //MARK: - init
-    init(){
-        super.init(frame:CGRect.zero)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -79,14 +72,9 @@ class AudioRecorderView: UIView {
         setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
     }
     
-    func setInfoLabel(_ text:String, color: UIColor){
-        let attributedText = NSAttributedString(string:text, attributes: [NSForegroundColorAttributeName: color, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
-        infoLabel.attributedText = attributedText
-        infoLabel.sizeToFit()
-        self.setNeedsLayout()
-    }
     
-    func mainButtonPressing(_ sender: UIButton)
+    //MARK: - button actions
+    @objc private func mainButtonPressing(_ sender: UIButton)
     {
         if(isRecordMode){
             isPressingMainButton = true
@@ -119,7 +107,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func mainButtonReleased(_ sender: UIButton){
+    @objc private func mainButtonReleased(_ sender: UIButton){
         if(isRecordMode){
             isPressingMainButton = false
             let isValidAudio = stopRecord()
@@ -164,7 +152,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func leftButtonPressed(_ sender: UIButton){
+    @objc private func leftButtonPressed(_ sender: UIButton){
         if(!isRecordMode){
             switchToRecordMode()
             resumeBackGroundMusic()
@@ -174,7 +162,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func rightButtonPressed(_ sender: UIButton){
+    @objc private func rightButtonPressed(_ sender: UIButton){
         if(!isRecordMode){
             self.delegate.audioRecorderView(self, needToSendAudioData: self.voiceData)//temporary put it here
             switchToRecordMode()
@@ -185,123 +173,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    fileprivate func startDisplayingFlow(){
-        flowTimer = Timer.scheduledTimer(timeInterval: 0.7, target: self, selector: #selector(self.generateFlow), userInfo: nil, repeats: true)
-    }
-    
-    func generateFlow(){
-        if(isPressingMainButton){
-            let view = UIView(frame: CGRect(x: 0,y: 0,width: 100,height: 100))
-            view.layer.cornerRadius = 50
-            view.backgroundColor = UIColor.faeAppRedColor()
-            view.alpha = 0.5
-            view.center = self.mainButton.center
-            self.addSubview(view)
-            self.sendSubview(toBack: view)
-            
-            UIView.animate(withDuration: 2, delay: 0, options:.curveEaseOut , animations: {
-//                view.transform = CGAffineTransformMakeScale(3, 3)
-                view.frame = CGRect(x: 0,y: 0,width: 300,height: 300)
-                //add cornerRadius animation
-                let animation = CABasicAnimation(keyPath: "cornerRadius")
-                animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-                animation.fromValue = view.layer.cornerRadius
-                animation.toValue = 150
-                animation.duration = 2
-                view.layer.add(animation, forKey: "cornerRadius")
-                
-                view.center = self.mainButton.center
-                view.alpha = 0
-                }, completion: { (complete) in
-                    view.removeFromSuperview()
-            })
-            
-        }else{
-            flowTimer.invalidate()
-        }
-    }
-    
-    //MARK: - helper
-    
-    func setupRecorder() {
-
-        recordingSession = AVAudioSession.sharedInstance()
-        do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try recordingSession.overrideOutputAudioPort(.speaker)
-        } catch let error as NSError {
-            print(error.description)
-        }
-        let recordSettings = [AVFormatIDKey : Int(kAudioFormatAppleLossless),
-                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-                              AVEncoderBitRateKey : 320000,
-                              AVNumberOfChannelsKey : 2,
-                              AVSampleRateKey : 44100.0 ] as [String : Any]
-        soundRecorder = nil
-        do {
-            soundRecorder = try AVAudioRecorder(url: getFileURL(), settings: recordSettings as [String : AnyObject])
-            soundRecorder.delegate = self
-            soundRecorder.prepareToRecord()
-        } catch {
-            print("cannot record")
-        }
-    }
-    
-    func startRecord(){
-        if(mainButton.isEnabled){
-            if !soundRecorder.isRecording {
-                print("recording")
-                soundRecorder.record()
-            }
-            currentTime = 60
-            self.updateTime()
-            timeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
-        }
-    }
-    
-    
-    func stopRecord() -> Bool{
-        soundRecorder.stop()
-        if(timeTimer != nil){
-            timeTimer.invalidate()
-        }
-        // send voice message to firebase
-        voiceData = try! Data(contentsOf: getFileURL())
-        
-        // add a check to avoid short sound message
-        soundPlayer = nil
-        do {
-            soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
-            soundPlayer.delegate = self
-        } catch {
-            print("cannot play")
-        }
-        if(soundPlayer != nil && soundPlayer.duration < 1.0){
-            return false;
-        }
-        return true
-    }
-
-    func getFileURL() -> URL {
-        //record: change the default save file path from getCacheDirectory
-        let tempDir = NSTemporaryDirectory()
-        let filePath = tempDir + "/TempMemo.caf"
-        
-        return URL(fileURLWithPath: filePath)
-    }
-    
-    func updateTime(){
-        currentTime -= 1
-        let secondString = currentTime < 10 ? "0\(currentTime)" : "\(currentTime)"
-        setInfoLabel("0:\(secondString)", color: UIColor.faeAppRedColor())
-        if(currentTime == 0){
-            timeTimer.invalidate()
-            _ = self.stopRecord()
-            isPressingMainButton = false
-        }
-    }
-    
-    func mainButtonDragInside(_ sender: UIButton, withEvent event:UIEvent)
+    @objc private func mainButtonDragInside(_ sender: UIButton, withEvent event:UIEvent)
     {
         if(isRecordMode){
             let touch: UITouch = (event.allTouches?.first)!
@@ -329,9 +201,9 @@ class AudioRecorderView: UIView {
             }
         }
     }
-
     
-    func mainButtonDragOutside(_ sender: UIButton, withEvent event:UIEvent)
+    
+    @objc private func mainButtonDragOutside(_ sender: UIButton, withEvent event:UIEvent)
     {
         if(isRecordMode){
             let touch: UITouch = (event.allTouches?.first)!
@@ -359,12 +231,12 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func mainButtonTouchUpInSide(_ sender: UIButton, withEvent event: UIEvent)
+    @objc private func mainButtonTouchUpInSide(_ sender: UIButton, withEvent event: UIEvent)
     {
         mainButtonReleased(sender)
         if(isRecordMode){
             let audioIsValid = self.stopRecord()
-
+            
             let touch: UITouch = (event.allTouches?.first)!
             let loc = touch.location(in: self)
             if(leftButton.frame.contains(loc)){
@@ -386,7 +258,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func mainButtonTouchUpOutSide(_ sender: UIButton, withEvent event:UIEvent) {
+    @objc private func mainButtonTouchUpOutSide(_ sender: UIButton, withEvent event:UIEvent) {
         if isRecordMode{
             mainButtonReleased(sender)
             let audioIsValid = self.stopRecord()
@@ -410,28 +282,29 @@ class AudioRecorderView: UIView {
         }
     }
     
+    //MARK: - switch mode
     func switchToPlayMode(){
         UIView.animate(withDuration: 0.2, animations: {
-
-        self.isRecordMode = false
-        self.signalImageView.image = UIImage(named: "playButton_red_new")
-        self.signalIconWidth.constant = 55
-        self.signalIconHeight.constant = 55
-        self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), for: UIControlState())
-        self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon_red"), for: .highlighted)
-        self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), for: UIControlState())
-        self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon_red"), for: .highlighted)
-        self.leftButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-        self.rightButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-  
-        self.leftButton.alpha = 1
-        self.rightButton.alpha = 1
-
-        let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
-        self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
-        
+            
+            self.isRecordMode = false
+            self.signalImageView.image = UIImage(named: "playButton_red_new")
+            self.signalIconWidth.constant = 55
+            self.signalIconHeight.constant = 55
+            self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), for: UIControlState())
+            self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon_red"), for: .highlighted)
+            self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), for: UIControlState())
+            self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon_red"), for: .highlighted)
+            self.leftButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.rightButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+            
+            self.leftButton.alpha = 1
+            self.rightButton.alpha = 1
+            
+            let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
+            self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
+            
         }, completion: { (completed) in
-        }) 
+        })
     }
     
     func switchToRecordMode(){
@@ -453,20 +326,117 @@ class AudioRecorderView: UIView {
         }) 
     }
     
-    func showWarnMeesage()
+    //MARK: - recorder
+    private func setupRecorder() {
+        
+        recordingSession = AVAudioSession.sharedInstance()
+        do {
+            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try recordingSession.overrideOutputAudioPort(.speaker)
+        } catch let error as NSError {
+            print(error.description)
+        }
+        let recordSettings = [AVFormatIDKey : Int(kAudioFormatAppleLossless),
+                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+                              AVEncoderBitRateKey : 320000,
+                              AVNumberOfChannelsKey : 2,
+                              AVSampleRateKey : 44100.0 ] as [String : Any]
+        soundRecorder = nil
+        do {
+            soundRecorder = try AVAudioRecorder(url: getFileURL(), settings: recordSettings as [String : AnyObject])
+            soundRecorder.delegate = self
+            soundRecorder.prepareToRecord()
+        } catch {
+            print("cannot record")
+        }
+    }
+    
+    private func startRecord(){
+        if(mainButton.isEnabled){
+            if !soundRecorder.isRecording {
+                print("recording")
+                soundRecorder.record()
+            }
+            currentTime = 60
+            self.updateTime()
+            timeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
+        }
+    }
+    
+    
+    /// stop recording audio
+    ///
+    /// - Returns: whether the record is valid
+    private func stopRecord() -> Bool{
+        soundRecorder.stop()
+        if(timeTimer != nil){
+            timeTimer.invalidate()
+        }
+        // send voice message to firebase
+        voiceData = try! Data(contentsOf: getFileURL())
+        
+        // add a check to avoid short sound message
+        soundPlayer = nil
+        do {
+            soundPlayer = try AVAudioPlayer(data: voiceData, fileTypeHint: nil)
+            soundPlayer.delegate = self
+        } catch {
+            print("cannot play")
+        }
+        if(soundPlayer != nil && soundPlayer.duration < 1.0){
+            return false;
+        }
+        return true
+    }
+    
+    //MARK: - helper
+    
+    func setInfoLabel(_ text:String, color: UIColor){
+        let attributedText = NSAttributedString(string:text, attributes: [NSForegroundColorAttributeName: color, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
+        infoLabel.attributedText = attributedText
+        infoLabel.sizeToFit()
+        self.setNeedsLayout()
+    }
+
+    
+    /// get a temporary file url to store the audio recorded
+    ///
+    /// - Returns: the url to store audio
+    private func getFileURL() -> URL {
+        //record: change the default save file path from getCacheDirectory
+        let tempDir = NSTemporaryDirectory()
+        let filePath = tempDir + "/TempMemo.caf"
+        
+        return URL(fileURLWithPath: filePath)
+    }
+    
+    // while recording, update the time passed
+    @objc private func updateTime(){
+        currentTime -= 1
+        let secondString = currentTime < 10 ? "0\(currentTime)" : "\(currentTime)"
+        setInfoLabel("0:\(secondString)", color: UIColor.faeAppRedColor())
+        if(currentTime == 0){
+            timeTimer.invalidate()
+            _ = self.stopRecord()
+            isPressingMainButton = false
+        }
+    }
+    
+    private func showWarnMeesage()
     {
         setInfoLabel("Too Short!", color: UIColor.faeAppRedColor())
         mainButton.isEnabled = false
         Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(self.recoverRecordButton), userInfo: nil, repeats: false)
     }
     
-    func recoverRecordButton()
+    // transform the record button to origin looks
+    @objc private func recoverRecordButton()
     {
         setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
         mainButton.isEnabled = true
     }
     
-    func resumeBackGroundMusic()
+    private func resumeBackGroundMusic()
     {
         do {
             try AVAudioSession.sharedInstance().setActive(false, with: .notifyOthersOnDeactivation)
@@ -476,12 +446,13 @@ class AudioRecorderView: UIView {
         }
     }
     
-    func updateProgressTimer()
+    @objc private func updateProgressTimer()
     {
         let secondString = self.soundPlayer.currentTime < 9 ? "0\(Int(ceil(self.soundPlayer.currentTime)))" : "\(Int(ceil(self.soundPlayer.currentTime)))"
         self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
     }
     
+    // Ask the user for permission to use the microphone
     func requireForPermission(_ completion: ((Bool) -> ())?)
     {
         // add this line to active microphone check
@@ -493,10 +464,47 @@ class AudioRecorderView: UIView {
             }
         }
     }
+    
+    // start displaying the wave around the record button
+    fileprivate func startDisplayingFlow(){
+        flowTimer = Timer.scheduledTimer(timeInterval: 0.7, target: self, selector: #selector(self.generateFlow), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func generateFlow(){
+        if(isPressingMainButton){
+            let view = UIView(frame: CGRect(x: 0,y: 0,width: 100,height: 100))
+            view.layer.cornerRadius = 50
+            view.backgroundColor = UIColor.faeAppRedColor()
+            view.alpha = 0.5
+            view.center = self.mainButton.center
+            self.addSubview(view)
+            self.sendSubview(toBack: view)
+            
+            UIView.animate(withDuration: 2, delay: 0, options:.curveEaseOut , animations: {
+                //                view.transform = CGAffineTransformMakeScale(3, 3)
+                view.frame = CGRect(x: 0,y: 0,width: 300,height: 300)
+                //add cornerRadius animation
+                let animation = CABasicAnimation(keyPath: "cornerRadius")
+                animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+                animation.fromValue = view.layer.cornerRadius
+                animation.toValue = 150
+                animation.duration = 2
+                view.layer.add(animation, forKey: "cornerRadius")
+                
+                view.center = self.mainButton.center
+                view.alpha = 0
+            }, completion: { (complete) in
+                view.removeFromSuperview()
+            })
+            
+        }else{
+            flowTimer.invalidate()
+        }
+    }
 }
 
+//MARK: - AVAudioPlayerDelegate
 extension AudioRecorderView:  AVAudioRecorderDelegate, AVAudioPlayerDelegate{
-    //MARK: - AVAudioPlayerDelegate
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if(flag && !isRecordMode){
             signalImageView.image = UIImage(named: "playButton_red_new")

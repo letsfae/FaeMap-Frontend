@@ -10,7 +10,7 @@ import Foundation
 
 // delegate to find sticker image name from dictionary by the frame of sticker being clicked
 
-protocol findStickerFromDictDelegate {
+protocol findStickerFromDictDelegate: class {
     func sendSticker(album: String, index: Int)
     func deleteEmoji()
 }
@@ -20,15 +20,17 @@ protocol findStickerFromDictDelegate {
 
 class StickerAlbum {
     
-    var albumName = ""
-    var currentSelectedIndex = -1
-    var rowPerPage : CGFloat = 2
-    var colPerPage : CGFloat = 4
-    var stickerName = [[String]]()
-    var stickerPos = [CGRect]()
-    let widthPage : CGFloat = UIScreen.main.bounds.width
-    let heightPage : CGFloat = 195
-    var length : CGFloat
+    private(set) var albumName = ""
+    private var rowPerPage : CGFloat = 2
+    private var colPerPage : CGFloat = 4
+    private var stickerName = [[String]]() // a two dimentional array to store names for all the sticker, 
+    // look like this: [[page1name1,page1name2,page1name3], [page2name1,page2name2,page2name3]]
+    
+    private var stickerPos = [CGRect]() // an array to store positions for all the sticker
+    private let widthPage : CGFloat = screenWidth
+    private let heightPage : CGFloat = 195
+    
+    private var stickerLength : CGFloat
     {
         get{
             if colPerPage > 4{
@@ -38,11 +40,14 @@ class StickerAlbum {
             }
         }
     }
-    var pageNumber = 0
-    var buttonSet = [UIButton]()
-    var imageSet = [UIImageView]()
-    var findStickerDelegate : findStickerFromDictDelegate!
-    var basePages = 0
+    
+    private(set) var pageNumber = 0 // the number of pages for this set of stickers, will be automatically calculated
+    
+    private var buttonSet = [UIButton]() // a set to store all the sticker buttons
+    private var imageSet = [UIImageView]() // a set to store all the sticker imageViews
+    
+    weak var findStickerDelegate : findStickerFromDictDelegate!
+    private(set) var basePages = 0
     
     private var isEmojiAlbum: Bool{
         get{
@@ -62,6 +67,7 @@ class StickerAlbum {
         calculatePos()
     }
     
+    // add one emoji into this album
     func appendNewImage(_ name : String) {
         if stickerName.count == 0
             || stickerName.last!.count == (isEmojiAlbum ? (Int)(rowPerPage * colPerPage) - 1 : (Int)(rowPerPage * colPerPage) ) {
@@ -71,12 +77,14 @@ class StickerAlbum {
         pageNumber = stickerName.count
     }
     
+    // Call this method after all the images for this ablum is appended
     func attachStickerButton(_ scrollView : UIScrollView) {
+        
         for page in 0..<pageNumber {
             for row in 0..<Int(rowPerPage) {
                 for col in 0..<Int(colPerPage) {
                     let index = row * Int(colPerPage) + col
-//                    print(index)
+
                     if(stickerName[page].count <= index && !isEmojiAlbum) {
                         break
                     }
@@ -85,7 +93,7 @@ class StickerAlbum {
                     let imageView = UIImageView(frame: newFrame)
                     imageView.contentMode = .scaleAspectFit
                     let button = UIButton(frame: newFrame)
-                    //add function
+
                     scrollView.addSubview(imageView)
                     scrollView.addSubview(button)
                     imageSet.append(imageView)
@@ -104,20 +112,23 @@ class StickerAlbum {
         }
     }
     
-    func calculatePos() {
-        let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
-        let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
+    
+    /// calculate the postion for each sticker and store it in an array
+    private func calculatePos() {
+        let lineInterval = (heightPage - rowPerPage * stickerLength) / (1 + rowPerPage)
+        let inlineInterval = (widthPage - colPerPage * stickerLength) / (1 + colPerPage)
         var y = lineInterval + 10
         for _ in 0..<(Int)(rowPerPage) {
             var x = inlineInterval
             for _ in 0..<(Int)(colPerPage) {
-                stickerPos.append(CGRect(x: x, y: y, width: length, height: length))
-                x += length + inlineInterval
+                stickerPos.append(CGRect(x: x, y: y, width: stickerLength, height: stickerLength))
+                x += stickerLength + inlineInterval
             }
-            y += length + lineInterval
+            y += stickerLength + lineInterval
         }
     }
     
+    // clean up the scroll view, remove all stickers attached to the scroll view
     func clearAll() {
         self.stickerName.removeAll()
         self.pageNumber = 0
@@ -125,7 +136,8 @@ class StickerAlbum {
         clearButton()
     }
     
-    func clearButton() {
+    
+    private func clearButton() {
         if buttonSet.count != 0 {
             for button in buttonSet {
                 button.removeFromSuperview()
@@ -136,32 +148,36 @@ class StickerAlbum {
         }
     }
     
-    @objc func calculateIndex(_ sender : UIButton) {
+    
+    /// calculate which sticker user pressed by it's frame and send it out
+    ///
+    /// - Parameter sender: the sticker button user pressed
+    @objc private func calculateIndex(_ sender : UIButton) {
+        
         let original = sender.frame.origin
         let currentPage = (Int)(original.x / widthPage) - basePages
-        let lineInterval = (heightPage - rowPerPage * length) / (1 + rowPerPage)
-        let inlineInterval = (widthPage - colPerPage * length) / (1 + colPerPage)
+        let lineInterval = (heightPage - rowPerPage * stickerLength) / (1 + rowPerPage)
+        let inlineInterval = (widthPage - colPerPage * stickerLength) / (1 + colPerPage)
         var index = 0
-        // check value
-        print(original)
-        print(currentPage)
-        print(lineInterval)
-        print(inlineInterval)
-        print(colPerPage)
-        print((Int)(original.y / lineInterval))
-        if ((Int)(original.y / lineInterval) > 1) {
-            index += (Int)(colPerPage)
-            print(index)
+        
+        // get how many rows above this sticker
+        if Int(original.y / (lineInterval + stickerLength)) >= 1 {
+            index += Int(colPerPage) * Int(original.y / (lineInterval + stickerLength))
         }
+        
+        // get how many col before this sticker
         let temp = original.x - (CGFloat)(currentPage + basePages) * widthPage
-        index += Int(temp / (inlineInterval + length))
-        index += (Int)(CGFloat(currentPage) * colPerPage * rowPerPage)
-        self.currentSelectedIndex = index
-        print("the index is: \(index)")
+        index += Int(temp / (inlineInterval + stickerLength))
+        
+        // add up the emoji number in previous page
+        index += (Int)(CGFloat(currentPage) * (colPerPage * rowPerPage - (isEmojiAlbum ? 1 : 0)))
+        
+        // send the emoji out
         findStickerDelegate.sendSticker(album: albumName,index: index)
     }
     
-    @objc func deleteEmoji(_ sender: UIButton){
+    // delete one emoji
+    @objc private func deleteEmoji(_ sender: UIButton){
         findStickerDelegate.deleteEmoji()
     }
 }

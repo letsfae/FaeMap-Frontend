@@ -46,37 +46,34 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 class CustomCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
     
-    var photoPicker : PhotoPicker!
+    //MARK: - properties
+    private var photoPicker : PhotoPicker!
     
-    let photoPickerCellIdentifier = "FullPhotoPickerCollectionViewCell"
+    private let photoPickerCellIdentifier = "FullPhotoPickerCollectionViewCell"
     
-    let layOut = UICollectionViewFlowLayout()
+    private var cancelButton : UIButton! // left nav button
+    private var sendButton: UIButton! // right nav button
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+    private var quitButton : UIButton! // the background quit button when opening the album table
+    private var showTableButton : UIButton! // middle nav button
     
-    var cancelButton : UIButton!
-    var sendButton: UIButton!
+    private var titleLabel : UILabel! // the lable for the album name
     
-    var quitButton : UIButton!
-    var showTableButton : UIButton!
+    private let requestOption = PHImageRequestOptions()
     
-    var titleLabel : UILabel!
-    
-    let requestOption = PHImageRequestOptions()
-    
-    var currentCell : AlbumTableViewCell!
+    private var currentCell : AlbumTableViewCell! // current selected album cell
     
     // table view variable
     
-    var tableViewAlbum : UITableView!
-    let albumReuseIdentifiler = "AlbumTableViewCell"
-    var tableViewAlbumVisible = false
+    private var tableViewAlbum : UITableView! // the table for all the album name
+    private let albumReuseIdentifiler = "AlbumTableViewCell"
+    private var tableViewAlbumVisible = false // true: displaying the album table
 
     //send image delegate
     
-    var imageDelegate : SendMutipleImagesDelegate!
+    weak var imageDelegate : SendMutipleImagesDelegate!
 
+    //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
@@ -97,7 +94,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         prepareTableView()
     }
     
-    func prepareTableView() {
+    //MARK: - Setup
+    private func prepareTableView() {
         tableViewAlbum = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 480))
         tableViewAlbum.register(UINib(nibName: "AlbumTableViewCell", bundle: nil), forCellReuseIdentifier: albumReuseIdentifiler)
         tableViewAlbum.delegate = self
@@ -123,12 +121,176 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         } )
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func navigationBarSet() {
+        let centerView = UIView(frame: CGRect(x: 0,y: 0,width: 200,height: 30))
+        showTableButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
+        showTableButton.titleLabel?.text = ""
+        showTableButton.addTarget(self, action: #selector(CustomCollectionViewController.showAlbumTable), for: .touchUpInside)
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
+        self.navigationController?.navigationBar.isTranslucent = false
+        
+        titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
+        titleLabel.text = "All Photos"
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
+        centerView.addSubview(titleLabel)
+        
+        
+        let arrow = UIImageView(frame: CGRect(x: 97, y: 25, width: 10, height: 6))
+        arrow.image = UIImage(named: "arrow")
+        centerView.addSubview(arrow)
+        centerView.addSubview(showTableButton)
+        self.navigationItem.titleView = centerView
+        
+        sendButton = UIButton(frame: CGRect(x: 0,y: 0,width: 50,height: 30))
+        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        sendButton.setAttributedTitle(attributedText, for: UIControlState())
+        sendButton.contentHorizontalAlignment = .right
+        sendButton.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
+        sendButton.isEnabled = false
+        let offsetItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        offsetItem.width = -10
+        self.navigationItem.rightBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: sendButton)]
+        
+        
+        cancelButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 30))
+        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        cancelButton.setAttributedTitle(attributedText2, for: UIControlState())
+        cancelButton.contentHorizontalAlignment = .left
+        cancelButton.addTarget(self, action: #selector(self.cancelSend), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: cancelButton)]
+        
+        updateSendButtonStatus()
     }
     
-    //MARK: collectionViewController Delegate
+    //MARK: - support method
+    
+    @objc private func showAlbumTable() {
+        if !tableViewAlbumVisible {
+            quitButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            quitButton.backgroundColor = UIColor(red: 58 / 255, green: 51 / 255, blue: 51 / 255, alpha: 0.5)
+            self.view.addSubview(quitButton)
+            quitButton.addTarget(self, action: #selector(CustomCollectionViewController.dismissAlbumTable), for: .touchUpInside)
+            self.view.addSubview(tableViewAlbum)
+            tableViewAlbum.setContentOffset(CGPoint.zero, animated: true)
+        } else {
+            dismissAlbumTable()
+        }
+        tableViewAlbumVisible = !tableViewAlbumVisible
+    }
+    
+    // first check if tne user want to send images or video then do things accordingly
+    @objc private func sendImages() {
+        if(photoPicker.videoAsset != nil){
+            sendVideoFromQuickPicker()
+        }else{
+            var images = [UIImage]()
+            for i in 0..<photoPicker.indexImageDict.count
+            {
+                images.append( photoPicker.indexImageDict[i]! )
+            }
+            imageDelegate.sendImages(images)
+        }
+        cancelSend()
+    }
+    
+    fileprivate func sendVideoFromQuickPicker()
+    {
+        UIScreenService.showActivityIndicator()
+        let snapImage = self.photoPicker.videoImage!
+        let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
+        // asset is you AVAsset object
+        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
+        let filePath = NSTemporaryDirectory().appendingFormat("/video.mov")
+        do{
+            try FileManager.default.removeItem(atPath: filePath)
+        }catch{
+            
+        }
+        exportSession!.outputURL = URL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
+        
+        let fileUrl = exportSession!.outputURL
+        // e.g .mov type
+        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
+        
+        exportSession!.exportAsynchronously{
+            Void in
+            switch exportSession!.status {
+            case  AVAssetExportSessionStatus.failed:
+                print("failed import video: \(exportSession!.error)")
+                break
+            case AVAssetExportSessionStatus.cancelled:
+                print("cancelled import video: \(exportSession!.error)")
+                break
+            default:
+                print("completed import video")
+                if let data = try? Data(contentsOf: fileUrl!){
+                    self.imageDelegate.sendVideoData?(data, snapImage: snapImage, duration: duration)
+                }
+            }
+            UIScreenService.hideActivityIndicator()
+        }
+    }
+    
+    @objc private func cancelSend() {
+        photoPicker.indexAssetDict.removeAll()
+        photoPicker.assetIndexDict.removeAll()
+        photoPicker.indexImageDict.removeAll()
+
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func dismissAlbumTable() {
+        quitButton.removeFromSuperview()
+        tableViewAlbum.removeFromSuperview()
+    }
+    
+    private func showAlertView(withWarning text:String) {
+        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    
+    private func shiftChosenFrameFromIndex(_ index : Int) {
+        // when deselect one image in photoes preview, we need to reshuffule
+        if index > photoPicker.indexImageDict.count {
+            return
+        }
+        for i in index...photoPicker.indexImageDict.count {
+            let image = photoPicker.indexImageDict[i]
+            let asset = photoPicker.indexAssetDict[i]
+            photoPicker.assetIndexDict[asset!] = i - 1
+            photoPicker.indexImageDict[i-1] = image
+            photoPicker.indexAssetDict[i-1] = asset
+        }
+        photoPicker.indexAssetDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
+        photoPicker.indexImageDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
+        self.collectionView?.performBatchUpdates({
+            self.collectionView?.reloadSections(IndexSet(integer: 0) )
+            }, completion: nil)
+
+    }
+    
+    fileprivate func updateSendButtonStatus()
+    {
+        sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
+        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        sendButton.setAttributedTitle(attributedText, for: UIControlState())
+    }
+    
+    //MARK: - observe value
+    @objc private func appWillEnterForeground()
+    {
+        photoPicker.getSmartAlbum()
+        self.collectionView?.reloadData()
+        self.tableViewAlbum.reloadData()
+    }
+    
+    //MARK: - collectionViewController Delegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -234,183 +396,14 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             cell.deselectCell()
         }
     }
-//    
-//    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-//        let mycell = cell as! PhotoPickerCollectionViewCell
-//        mycell.photoImageView.image = nil
-//    }
-//    
+    //
+    //    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    //        let mycell = cell as! PhotoPickerCollectionViewCell
+    //        mycell.photoImageView.image = nil
+    //    }
+    //
     
-    //MARK: support method
-    
-    func navigationBarSet() {
-        let centerView = UIView(frame: CGRect(x: 0,y: 0,width: 200,height: 30))
-        showTableButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
-        showTableButton.titleLabel?.text = ""
-        showTableButton.addTarget(self, action: #selector(CustomCollectionViewController.showAlbumTable), for: .touchUpInside)
-        
-        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.isTranslucent = false
-        
-        titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = "All Photos"
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        centerView.addSubview(titleLabel)
-        
-        
-        let arrow = UIImageView(frame: CGRect(x: 97, y: 25, width: 10, height: 6))
-        arrow.image = UIImage(named: "arrow")
-        centerView.addSubview(arrow)
-        centerView.addSubview(showTableButton)
-        self.navigationItem.titleView = centerView
-        
-        sendButton = UIButton(frame: CGRect(x: 0,y: 0,width: 50,height: 30))
-        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
-        sendButton.setAttributedTitle(attributedText, for: UIControlState())
-        sendButton.contentHorizontalAlignment = .right
-        sendButton.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
-        sendButton.isEnabled = false
-        let offsetItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        offsetItem.width = -10
-        self.navigationItem.rightBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: sendButton)]
-        
-        
-        cancelButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 30))
-        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
-        cancelButton.setAttributedTitle(attributedText2, for: UIControlState())
-        cancelButton.contentHorizontalAlignment = .left
-        cancelButton.addTarget(self, action: #selector(self.cancelSend), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: cancelButton)]
-
-        updateSendButtonStatus()
-        
-    }
-    
-    func showAlbumTable() {
-        if !tableViewAlbumVisible {
-            quitButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-            quitButton.backgroundColor = UIColor(red: 58 / 255, green: 51 / 255, blue: 51 / 255, alpha: 0.5)
-            self.view.addSubview(quitButton)
-            quitButton.addTarget(self, action: #selector(CustomCollectionViewController.dismissAlbumTable), for: .touchUpInside)
-            self.view.addSubview(tableViewAlbum)
-            tableViewAlbum.setContentOffset(CGPoint.zero, animated: true)
-        } else {
-            dismissAlbumTable()
-        }
-        tableViewAlbumVisible = !tableViewAlbumVisible
-    }
-    
-    func sendImages() {
-        if(photoPicker.videoAsset != nil){
-            sendVideoFromQuickPicker()
-        }else{
-            var images = [UIImage]()
-            for i in 0..<photoPicker.indexImageDict.count
-            {
-                images.append( photoPicker.indexImageDict[i]! )
-            }
-            imageDelegate.sendImages(images)
-        }
-        cancelSend()
-    }
-    
-    fileprivate func sendVideoFromQuickPicker()
-    {
-        UIScreenService.showActivityIndicator()
-        let snapImage = self.photoPicker.videoImage!
-        let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
-        // asset is you AVAsset object
-        let exportSession = AVAssetExportSession(asset:photoPicker.videoAsset!, presetName: AVAssetExportPresetMediumQuality)
-        let filePath = NSTemporaryDirectory().appendingFormat("/video.mov")
-        do{
-            try FileManager.default.removeItem(atPath: filePath)
-        }catch{
-            
-        }
-        exportSession!.outputURL = URL(fileURLWithPath: filePath) // Better to use initFileURLWithPath:isDirectory: if you know if the path is a directory vs non-directory, as it saves an i/o.
-        
-        let fileUrl = exportSession!.outputURL
-        // e.g .mov type
-        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
-        
-        exportSession!.exportAsynchronously{
-            Void in
-            switch exportSession!.status {
-            case  AVAssetExportSessionStatus.failed:
-                print("failed import video: \(exportSession!.error)")
-                break
-            case AVAssetExportSessionStatus.cancelled:
-                print("cancelled import video: \(exportSession!.error)")
-                break
-            default:
-                print("completed import video")
-                if let data = try? Data(contentsOf: fileUrl!){
-                    self.imageDelegate.sendVideoData?(data, snapImage: snapImage, duration: duration)
-                }
-            }
-            UIScreenService.hideActivityIndicator()
-        }
-    }
-    
-    func cancelSend() {
-        photoPicker.indexAssetDict.removeAll()
-        photoPicker.assetIndexDict.removeAll()
-        photoPicker.indexImageDict.removeAll()
-
-        _ = self.navigationController?.popViewController(animated: true)
-    }
-    
-    func dismissAlbumTable() {
-        quitButton.removeFromSuperview()
-        tableViewAlbum.removeFromSuperview()
-    }
-    
-    func showAlertView(withWarning text:String) {
-        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-
-    
-    func shiftChosenFrameFromIndex(_ index : Int) {
-        // when deselect one image in photoes preview, we need to reshuffule
-        if index > photoPicker.indexImageDict.count {
-            return
-        }
-        for i in index...photoPicker.indexImageDict.count {
-            let image = photoPicker.indexImageDict[i]
-            let asset = photoPicker.indexAssetDict[i]
-            photoPicker.assetIndexDict[asset!] = i - 1
-            photoPicker.indexImageDict[i-1] = image
-            photoPicker.indexAssetDict[i-1] = asset
-        }
-        photoPicker.indexAssetDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
-        photoPicker.indexImageDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
-        self.collectionView?.performBatchUpdates({
-            self.collectionView?.reloadSections(IndexSet(integer: 0) )
-            }, completion: nil)
-
-    }
-    
-    func appWillEnterForeground()
-    {
-        photoPicker.getSmartAlbum()
-        self.collectionView?.reloadData()
-        self.tableViewAlbum.reloadData()
-
-    }
-    
-    fileprivate func updateSendButtonStatus()
-    {
-        sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
-        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
-        sendButton.setAttributedTitle(attributedText, for: UIControlState())
-    }
-    
-    //MARK: table view delegate method
+    //MARK: - table view delegate method
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -418,8 +411,14 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: albumReuseIdentifiler) as! AlbumTableViewCell
-        cell.albumTitleLabel.text = photoPicker.selectedAlbum[indexPath.row].albumName
-        cell.albumNumberLabel.text = "\(photoPicker.selectedAlbum[indexPath.row].albumCount)"
+        
+        if let albumName = photoPicker.selectedAlbum[indexPath.row].albumName{
+            cell.albumTitleLabel.text = albumName
+        }
+        if let albumCount = photoPicker.selectedAlbum[indexPath.row].albumCount{
+            cell.albumNumberLabel.text = "\(albumCount)"
+        }
+
         cell.checkMarkImage.isHidden = photoPicker.selectedAlbum[indexPath.row].albumName != photoPicker.currentAlbum.albumName
         
         if !cell.checkMarkImage.isHidden {
@@ -463,13 +462,4 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             tableViewAlbumVisible = !tableViewAlbumVisible
         }
     }
-}
-
-extension UIImage {
-    var uncompressedPNGData: Data      { return UIImagePNGRepresentation(self)!        }
-    var highestQualityJPEGNSData: Data { return UIImageJPEGRepresentation(self, 1.0)!  }
-    var highQualityJPEGNSData: Data    { return UIImageJPEGRepresentation(self, 0.75)! }
-    var mediumQualityJPEGNSData: Data  { return UIImageJPEGRepresentation(self, 0.5)!  }
-    var lowQualityJPEGNSData: Data     { return UIImageJPEGRepresentation(self, 0.25)! }
-    var lowestQualityJPEGNSData:Data   { return UIImageJPEGRepresentation(self, 0.0)!  }
 }
