@@ -9,28 +9,27 @@
 import Foundation
 
 // this delegate is used to switch between scroll views
-
-protocol SwitchStickerDelegate {
+protocol SwitchStickerDelegate: class {
     func switchSticker(_ index : Int)
-    func switchToHeader(_ index : Int)
 }
 
 class StickerTabView: UIView {
     
-    var currentTab = 5
-    var cellWidth : CGFloat = 44.5
-    var buttonLength : CGFloat = 28
+    //MARK: - properties
+    private var cellWidth : CGFloat = 44.5
+    private var buttonLength : CGFloat = 28
 //    var headGroupImageName = ["stickerMore", "stickerRecent", "stickerLike"]
-    var headGroupImageName = [String]()
-    var headView : UIView!
-    var scrollView : UIScrollView!
-    var tabIndicator : UIView!
-    var tabframe: CGRect!
+    private var headGroupImageName = [String]()
+    private var headView : UIView!
+    private var scrollView : UIScrollView!
+    private var tabIndicator : UIView!
+    private var tabframe: CGRect!
     
-    var tabButtons = [UIButton]()
+    private(set) var tabButtons = [UIButton]()
     
-    var switcher : SwitchStickerDelegate!
+    weak var switcher : SwitchStickerDelegate!
     
+    //MARK: - init
     override init(frame : CGRect) {
         super.init(frame: frame)
         tabframe = frame
@@ -45,7 +44,8 @@ class StickerTabView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureHeadGroupView() {
+    //MARK: - Setup
+    private func configureHeadGroupView() {
         headView = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
@@ -55,7 +55,7 @@ class StickerTabView: UIView {
             imageView.contentMode = .scaleAspectFit
             let button = UIButton(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
             button.setTitle("", for: UIControlState())
-            button.addTarget(self, action: #selector(groupButtonClicked), for: .touchUpInside)
+//            button.addTarget(self, action: #selector(groupButtonClicked), for: .touchUpInside)
             headView.addSubview(imageView)
             headView.addSubview(button)
             x += cellWidth - 8
@@ -67,11 +67,11 @@ class StickerTabView: UIView {
         self.addSubview(headView)
     }
     
-    func configureScrollView() {
+    private func configureScrollView() {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
-        var newStickerIndex = stickerIndex
+        var newStickerIndex = StickerInfoStrcut.stickerIndex
         newStickerIndex.insert("stickerMore", at: 0)
         
         for name in newStickerIndex {
@@ -90,29 +90,21 @@ class StickerTabView: UIView {
             scrollView.addSubview(line)
             x += (cellWidth - buttonLength) / 2
         }
-        scrollView.contentSize = CGSize(width: CGFloat(45 * stickerIndex.count), height: scrollView.frame.height)
+        scrollView.contentSize = CGSize(width: CGFloat(45 * StickerInfoStrcut.stickerIndex.count), height: scrollView.frame.height)
         scrollView.addSubview(tabIndicator)
         self.addSubview(scrollView)
     }
     
-    func configureTabIndicator() {
+    private func configureTabIndicator() {
         tabIndicator = UIView(frame: CGRect(x: 135, y: 37, width: 44, height: 3))
         tabIndicator.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
     }
     
-    
-    func groupButtonClicked(_ sender : UIButton) {
-        print("click")
-        tabIndicator.removeFromSuperview()
-        tabIndicator.frame.origin = CGPoint(x: sender.frame.origin.x - (cellWidth - buttonLength) / 2, y: 37)
-        tabIndicator.isHidden = false
-        let xOffset = tabIndicator.frame.origin.x
-        print(Int(xOffset / cellWidth))
-        headView.addSubview(tabIndicator)
-        switcher.switchToHeader(Int(xOffset / cellWidth))
-    }
-    
-    func scrollGroupClicked(_ sender : UIButton) {
+    // MARK: - helper
+    /// When the tab button is clicked
+    ///
+    /// - Parameter sender: the tab clicked
+    @objc private func scrollGroupClicked(_ sender : UIButton) {
         updateTabIndicator(sender)
         let xOffset = tabIndicator.frame.origin.x
         switcher.switchSticker(Int(xOffset / cellWidth))

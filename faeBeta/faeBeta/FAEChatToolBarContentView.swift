@@ -522,7 +522,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                     if previous?.characters[(previous?.characters.index((previous?.endIndex)!, offsetBy: -i ))!] == "[" {
                         let between = previous?.substring(with:
                             previous!.characters.index((previous?.endIndex)!, offsetBy: -(i-1)) ..< previous!.characters.index((previous?.endIndex)!, offsetBy: -1 ))
-                        if between != nil && (stickerDictionary["faeEmoji"]?.contains(between!))!{
+                        if between != nil && (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between!))!{
                             findEmoji = true
                             break
                         }
