@@ -73,12 +73,11 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
             print("Not Authorised")
             self.locManager.requestAlwaysAuthorization()
         }
-        
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
             jumpToLocationEnable()
         }
-        
         willAppearFirstLoad = true
+        self.actionSelfPosition(self.buttonSelfPosition)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,7 +170,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     
     func loadButton() {
         buttonSelfPosition = UIButton(frame: CGRect(x: screenWidth - (16+59) *  widthFactor, y: screenHeight - 59 * widthFactor - 75 * heightFactor, width: 59 * widthFactor, height: 59 * widthFactor))
-        buttonSelfPosition.setImage(UIImage(named: "self_position"), for: UIControlState())
+        buttonSelfPosition.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
         self.view.addSubview(buttonSelfPosition)
         buttonSelfPosition.addTarget(self, action: #selector(ChatSendLocationController.actionSelfPosition(_:)), for: UIControlEvents.touchUpInside)
         
@@ -195,10 +194,12 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
             currentLocation = locManager.location
         }
-        self.currentLatitude = currentLocation.coordinate.latitude
-        self.currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.animate(to: camera)
+        if currentLocation != nil {
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+            faeMapView.animate(to: camera)
+        }
     }
     
     func actionCancelSelectLocation(_ sender: UIButton!) {
@@ -211,7 +212,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         self.faeMapView.layer.render(in: UIGraphicsGetCurrentContext()!)
         if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
             _ = self.navigationController?.popViewController(animated: true)
-            locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot : UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+            locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
         }
     }
     
@@ -240,9 +241,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         self.view.addSubview(uiviewTableSubview)
     }
     
-    
     // MARK: UITableView Delegate and Datasource functions
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

@@ -183,9 +183,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         willAppearFirstLoad = true
         getSelfAccountInfo()
-        self.buttonLeftTop.isHidden = false
-        self.buttonMainScreenSearch.isHidden = false
-        // self.buttonRightTop.hidden = false // -> Not for 11.01 Dev
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         self.actionSelfPosition(self.buttonSelfPosition)
@@ -197,9 +194,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.buttonLeftTop.isHidden = true
-        self.buttonMainScreenSearch.isHidden = true
-        self.buttonRightTop.isHidden = true
         // Need a Comment Clearance??????
         self.navigationController?.navigationBar.isTranslucent = false
     }
