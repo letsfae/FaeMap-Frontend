@@ -65,7 +65,7 @@ Note that GoogleMapKey is the same with two APIs, which can be generated through
 ## Use of Delegate in Swift
 First, create a protocol and declare it in the class that will call delegate function.
 ```Swift
-protocol FirstViewControllerDelegate {
+protocol FirstViewControllerDelegate: class {
     func someFunction(arg1: Int, arg2: String, arg3: Bool)
 }
 // We will use UIViewController as an example, 
@@ -73,7 +73,7 @@ protocol FirstViewControllerDelegate {
 // Typically, any class can be used here.
 class YourFirstClass: UIViewController {
     // Declare your delegate to initialize protocol here
-    var delegate: FirstViewControllerDelegate? // Use "?" to prevent bug occurring
+    weak var delegate: FirstViewControllerDelegate? // Use "?" to prevent bug occurring
 }
 ```
 Second, add protocol to the class that will execute the protocol function, "someFunction" for this example.
