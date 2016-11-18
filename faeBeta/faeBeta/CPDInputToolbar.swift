@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CommentPinViewController{
+extension CommentPinDetailViewController{
     
     //MARK: - adjust input toolbar textView size
     

@@ -184,7 +184,8 @@ extension FaeMapViewController {
     func animationMoreShow(_ sender: UIButton!) {
         updateName()
         if user_id != nil {
-            self.getAndSetUserAvatar(self.imageViewAvatarMore, userID: Int(user_id))
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
+            self.imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
         UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
@@ -288,18 +289,6 @@ extension FaeMapViewController {
             return userStatus
         }
         return -999
-    }
-    
-    func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
-        let block = {(image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Void in
-            // completion code here
-            if userAvatar.image != nil {
-                let croppedImage = self.cropToBounds(userAvatar.image!)
-                userAvatar.image = croppedImage
-            }
-        }
-        userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"),options:[], completed: block)
     }
     
     func updateName() {

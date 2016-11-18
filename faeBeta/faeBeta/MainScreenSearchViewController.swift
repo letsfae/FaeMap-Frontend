@@ -10,14 +10,14 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-protocol MainScreenSearchViewControllerDelegate {
+protocol MainScreenSearchDelegate: class {
     // Cancel marker's shadow when back to Fae Map
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D)
 }
 
 class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
-    var delegate: MainScreenSearchViewControllerDelegate?
+    weak var delegate: MainScreenSearchDelegate?
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height

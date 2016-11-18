@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-protocol OpenedPinTableViewCellDelegate {
+protocol OpenedPinTableCellDelegate: class {
     // Pass CL2D location to OpenedPinTableViewController
     func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, commentID: Int)
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath)
@@ -17,7 +17,7 @@ protocol OpenedPinTableViewCellDelegate {
 
 class OPLTableViewCell: UITableViewCell {
  
-    var delegate: OpenedPinTableViewCellDelegate?
+    weak var delegate: OpenedPinTableCellDelegate?
     
     var imageViewAvatar: UIImageView!
     var content: UILabel!

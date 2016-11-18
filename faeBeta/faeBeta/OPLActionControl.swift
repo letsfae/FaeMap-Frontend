@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension OpenedPinListViewController: OpenedPinTableViewCellDelegate {
+extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
     // Pan gesture for dragging comment pin list dragging button
     func panActionCommentPinListDrag(_ pan: UIPanGestureRecognizer) {

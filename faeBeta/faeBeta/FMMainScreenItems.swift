@@ -10,7 +10,22 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension FaeMapViewController: PinMenuDelegate {
+extension FaeMapViewController {
+    
+    // MARK: -- Load Map
+    func loadMapView() {
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        faeMapView.delegate = self
+        self.view = faeMapView
+        locManager.delegate = self
+        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locManager.startUpdatingLocation()
+        
+        // Default is true, if true, panGesture could not be detected
+        self.faeMapView.settings.consumesGesturesInView = false
+    }
+    
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         // Left window on main map to open account system
@@ -89,50 +104,6 @@ extension FaeMapViewController: PinMenuDelegate {
         buttonPinOnMap.layer.zPosition = 500
     }
     
-    //MARK: Actions for these buttons
-    func actionSelfPosition(_ sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
-            currentLocation = locManager.location
-        }
-        if currentLocation != nil {
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            self.renewSelfLocation()
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.camera = camera
-            if userStatus != 5  {
-                loadPositionAnimateImage()
-                getSelfAccountInfo()
-            }
-        }
-    }
-    
-    func actionTrueNorth(_ sender: UIButton!) {
-        self.faeMapView.animate(toBearing: 0)
-        self.renewSelfLocation()
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-    }
-    
-    // Jump to create pin view controller
-    func actionCreatePin(_ sender: UIButton!) {
-        let pinMenuVC = PinMenuViewController()
-        pinMenuVC.modalPresentationStyle = .overCurrentContext
-        pinMenuVC.currentLatitude = self.currentLatitude
-        pinMenuVC.currentLongitude = self.currentLongitude
-        pinMenuVC.delegate = self
-        self.present(pinMenuVC, animated: false, completion: nil)
-    }
-    
-    // Back from pin menu view controller
-    func sendPinGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
-        faeMapView.camera = camera
-        animatePinWhenItIsCreated(commentID)
-    }
-    
     // Animation for pin logo
     func animatePinWhenItIsCreated(_ commentID: String) {
         tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 167, height: 178))
@@ -192,9 +163,6 @@ extension FaeMapViewController: PinMenuDelegate {
                     if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
                         pinData["created_at"] = createdTimeInfo as AnyObject?
                     }
-                    if let contentInfo = mapInfoJSON[i]["content"].string {
-                        pinData["content"] = contentInfo as AnyObject?
-                    }
                     if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
                         pinData["latitude"] = latitudeInfo as AnyObject?
                         pinShowOnMap.position.latitude = latitudeInfo
@@ -203,19 +171,6 @@ extension FaeMapViewController: PinMenuDelegate {
                         pinData["longitude"] = longitudeInfo as AnyObject?
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
-                    if let isLiked = mapInfoJSON[i]["user_pin_operations"]["is_liked"].bool {
-                        pinData["is_liked"] = isLiked as AnyObject?
-                    }
-                    if let likedTimestamp = mapInfoJSON[i]["user_pin_operations"]["liked_timestamp"].string {
-                        pinData["liked_timestamp"] = likedTimestamp as AnyObject?
-                    }
-                    if let isSaved = mapInfoJSON[i]["user_pin_operations"]["is_saved"].bool {
-                        pinData["is_saved"] = isSaved as AnyObject?
-                    }
-                    if let savedTimestamp = mapInfoJSON[i]["user_pin_operations"]["saved_timestamp"].string {
-                        pinData["saved_timestamp"] = savedTimestamp as AnyObject?
-                    }
-                    
                     pinShowOnMap.userData = pinData
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView

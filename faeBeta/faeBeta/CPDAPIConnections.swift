@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import SDWebImage
 
-extension CommentPinViewController {
+extension CommentPinDetailViewController {
     // Like comment pin
     func actionLikeThisComment(_ sender: UIButton) {
         endEdit()
@@ -44,7 +44,7 @@ extension CommentPinViewController {
     func actionHoldingLikeButton(_ sender: UIButton) {
         endEdit()
         buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
-        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinViewController.animateHeart), userInfo: nil, repeats: true)
+        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinDetailViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Upvote comment pin
@@ -283,18 +283,5 @@ extension CommentPinViewController {
                 self.textviewCommentPinDetail.text = "\(content)"
             }
         }
-    }
-    
-    func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
-        
-        userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"),options: [], completed: {
-            (image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Swift.Void in
-            // completion code here
-            if userAvatar.image != nil {
-                let croppedImage = self.cropToBounds(userAvatar.image!)
-                userAvatar.image = croppedImage
-            }
-        })
     }
 }

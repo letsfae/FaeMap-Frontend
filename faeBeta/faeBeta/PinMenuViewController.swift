@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol PinMenuDelegate {
+protocol PinMenuDelegate: class {
     func sendPinGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
 }
 
 class PinMenuViewController: UIViewController {
     
-    var delegate: PinMenuDelegate?
+    weak var delegate: PinMenuDelegate?
     
     // MARK: -- Blur View Pin Buttons and Labels
     var uiviewPinSelections: UIView!

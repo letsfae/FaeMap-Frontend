@@ -2,7 +2,7 @@
 //  ChatMapViewController.swift
 //  faeBeta
 //
-//  Created by 王彦翔 on 16/7/28.
+//  Created by Yue on 16/7/28.
 //  Copyright © 2016年 fae. All rights reserved.
 //
 
@@ -12,12 +12,10 @@ import CoreLocation
 
 class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate {
     
-    //MARK: - properties
-    
+    // MARK: - properties
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let navigationBarHeight : CGFloat = 20
-    
     
     var faeMapView: GMSMapView!
     
@@ -44,8 +42,6 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     var myPositionIcon: UIImageView!
     var willAppearFirstLoad = false
     var startUpdatingLocation = false
-    
-
     
     var buttonTopLeft: UIButton!
     var buttonTopRight: UIButton!
@@ -103,7 +99,6 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         imagePinOnMap.image = UIImage(named: "comment_pin_image")
         imagePinOnMap.isHidden = true
         
-        
         // load address
         viewAddress = UIView(frame: CGRect(x: 0, y: screenHeight - 91, width: screenWidth, height: 125))
         viewAddress.layer.cornerRadius = 25
@@ -128,8 +123,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         viewAddress.addSubview(labelStreet)
         viewAddress.addSubview(labelCity)
         faeMapView.addSubview(viewAddress)
-        
-        
+
         // load pop up dialog
         viewPopUp = UIView(frame: CGRect(x: screenWidth - 179, y: 62, width: 166, height: 90))
         viewPopUp.backgroundColor = UIColor(patternImage: UIImage(named: "chat_map_popup")!)
@@ -163,18 +157,18 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         self.view.addSubview(buttonTopLeft)
         
         buttonTopRight = UIButton(frame: CGRect(x:screenWidth-15-31, y: 26, width: 30, height: 30))
-        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for:UIControlState())
-        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for:.highlighted)
+        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for: UIControlState())
+        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for: .highlighted)
         buttonTopRight.addTarget(self, action: #selector(buttonTopRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonTopRight)
         
         buttonBottomLeft = UIButton(frame: CGRect(x:20, y: screenHeight - 164, width: 60, height: 60))
-        buttonBottomLeft.backgroundColor = UIColor(patternImage: UIImage(named: "chat_map_bottomLeft")!)
+        buttonBottomLeft.setImage(UIImage(named: "chat_map_bottomLeft"), for: UIControlState())
         buttonBottomLeft.addTarget(self, action: #selector(buttonBottomLeftAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomLeft)
         
         buttonBottomRight = UIButton(frame: CGRect(x:screenWidth-20-60, y: screenHeight - 164, width: 60, height: 60))
-        buttonBottomRight.backgroundColor = UIColor(patternImage: UIImage(named: "self_position")!)
+        buttonBottomRight.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
         buttonBottomRight.addTarget(self, action: #selector(buttonBottomRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomRight)
     }

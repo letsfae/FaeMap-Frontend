@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
+extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,9 +67,6 @@ extension CommentPinViewController: UITableViewDelegate, UITableViewDataSource {
                     cell.time.text = latestDate
                 }
             }
-            
-//            getAndSetUserAvatar(cell.imageViewAvatar, userID: userID)
-//            cell.imageViewAvatar.image = UIImage(named: "Eddie Gelfen")
             cell.deleteButton.isHidden = true
             cell.jumpToDetail.isHidden = true
             cell.separatorInset = UIEdgeInsets.zero

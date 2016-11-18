@@ -11,7 +11,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension CommentPinViewController {
+extension CommentPinDetailViewController {
     
     // Pan gesture for dragging comment pin detail dragging button
     func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {
@@ -106,7 +106,7 @@ extension CommentPinViewController {
             buttonFakeTransparentClosingView.layer.zPosition = 101
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
-                                                       action: #selector(CommentPinViewController.actionToCloseOtherViews(_:)),
+                                                       action: #selector(CommentPinDetailViewController.actionToCloseOtherViews(_:)),
                                                        for: .touchUpInside)
             let subviewXBefore: CGFloat = 400 / 414 * screenWidth
             let subviewYBefore: CGFloat = 57 / 414 * screenWidth
@@ -142,7 +142,7 @@ extension CommentPinViewController {
             //            buttonShareOnCommentDetail.clipsToBounds = true
             //            buttonShareOnCommentDetail.alpha = 0.0
             //            buttonShareOnCommentDetail.addTarget(self,
-            //                                                 action: #selector(CommentPinViewController.actionShareComment(_:)),
+            //                                                 action: #selector(CommentPinDetailViewController.actionShareComment(_:)),
             //                                                 forControlEvents: .TouchUpInside)
             
             buttonEditOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
@@ -152,7 +152,7 @@ extension CommentPinViewController {
             buttonEditOnCommentDetail.clipsToBounds = true
             buttonEditOnCommentDetail.alpha = 0.0
             buttonEditOnCommentDetail.addTarget(self,
-                                                action: #selector(CommentPinViewController.actionEditComment(_:)),
+                                                action: #selector(CommentPinDetailViewController.actionEditComment(_:)),
                                                 for: .touchUpInside)
             
             // --> Not for 11.01 Dev
@@ -163,7 +163,7 @@ extension CommentPinViewController {
             //            buttonSaveOnCommentDetail.clipsToBounds = true
             //            buttonSaveOnCommentDetail.alpha = 0.0
             //            buttonSaveOnCommentDetail.addTarget(self,
-            //                                                action: #selector(CommentPinViewController.actionSavedThisPin(_:)),
+            //                                                action: #selector(CommentPinDetailViewController.actionSavedThisPin(_:)),
             //                                                forControlEvents: .TouchUpInside)
             
             buttonDeleteOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
@@ -173,7 +173,7 @@ extension CommentPinViewController {
             buttonDeleteOnCommentDetail.clipsToBounds = true
             buttonDeleteOnCommentDetail.alpha = 0.0
             buttonDeleteOnCommentDetail.addTarget(self,
-                                                  action: #selector(CommentPinViewController.actionDeleteThisPin(_:)),
+                                                  action: #selector(CommentPinDetailViewController.actionDeleteThisPin(_:)),
                                                   for: .touchUpInside)
             
             buttonReportOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
@@ -183,7 +183,7 @@ extension CommentPinViewController {
             buttonReportOnCommentDetail.clipsToBounds = true
             buttonReportOnCommentDetail.alpha = 0.0
             buttonReportOnCommentDetail.addTarget(self,
-                                                  action: #selector(CommentPinViewController.actionReportThisPin(_:)),
+                                                  action: #selector(CommentPinDetailViewController.actionReportThisPin(_:)),
                                                   for: .touchUpInside)
             
             
