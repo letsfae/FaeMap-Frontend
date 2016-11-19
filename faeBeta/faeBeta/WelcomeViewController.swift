@@ -177,11 +177,11 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     //MARK: helper
     func loginButtonTapped()
     {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
+        let controller = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     func jumpToSignUp() {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
+        let controller = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
 }

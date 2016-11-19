@@ -135,12 +135,12 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let authstate = CLLocationManager.authorizationStatus()
         
         if(authstate != CLAuthorizationStatus.authorizedAlways){
-            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
+            let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
             self.navigationController?.pushViewController(vc, animated: true)
         }else{
             let notificationType = UIApplication.shared.currentUserNotificationSettings
             if notificationType?.types == UIUserNotificationType() {
-                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
+                self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
             }else{
                 self.dismiss(animated: true, completion: nil)
             }

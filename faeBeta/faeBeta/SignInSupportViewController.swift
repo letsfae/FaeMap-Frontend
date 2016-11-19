@@ -185,7 +185,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         }else{
             postToURL("reset_login/code/verify", parameter: ["email": emailTextField.text! as AnyObject, "code": verificationCodeView.displayValue as AnyObject], authentication: nil, completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
-                        let controller = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
+                        let controller = UIStoryboard(name: "Login",bundle: nil).instantiateViewController(withIdentifier: "SignInSupportNewPassViewController") as! SignInSupportNewPassViewController
                         controller.email = self.emailTextField.text!
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)

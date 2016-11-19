@@ -77,7 +77,7 @@ class EnableLocationViewController: UIViewController {
         if(authstate == CLAuthorizationStatus.authorizedAlways){
             timer.invalidate()
             if (notificationType?.types == UIUserNotificationType() && self.navigationController != nil) {
-                self.navigationController?.pushViewController(UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
+                self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
             }else{
                 self.dismiss(animated: true, completion: nil)
             }

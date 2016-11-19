@@ -79,7 +79,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterConfirm() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterConfirmViewController") as! RegisterConfirmViewController
+        let vc = UIStoryboard(name: "Register", bundle: nil) .instantiateViewController(withIdentifier: "RegisterConfirmViewController") as! RegisterConfirmViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
