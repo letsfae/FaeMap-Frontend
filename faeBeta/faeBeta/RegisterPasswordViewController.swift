@@ -76,7 +76,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterInfo() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
+        let vc = UIStoryboard(name: "Register", bundle: nil) .instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
         vc.faeUser = faeUser
         self.navigationController?.pushViewController(vc, animated: false)
     }

@@ -54,12 +54,14 @@ extension FaeMapViewController {
     func jumpToMoodAvatar() {
         animationMoreHide(nil)
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController")as! MoodAvatarViewController
+        vc.modalPresentationStyle = .overCurrentContext
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToNameCard() {
         animationMoreHide(nil)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardViewController")as! NameCardViewController
+        vc.modalPresentationStyle = .overCurrentContext
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Log In View Controller-->
+        <scene sceneID="el1-YT-hlC">
+            <objects>
+                <viewController storyboardIdentifier="LogInViewController" id="H8S-Qb-JiS" customClass="LogInViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="stI-Fu-AUa"/>
+                        <viewControllerLayoutGuide type="bottom" id="e7K-eE-qeR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="j5E-fc-cg8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GWW-Eu-VMY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-405" y="-1852"/>
+        </scene>
+        <!--Sign In Support View Controller-->
+        <scene sceneID="NAu-tx-uWZ">
+            <objects>
+                <viewController storyboardIdentifier="SignInSupportViewController" id="4EY-IM-h6W" customClass="SignInSupportViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="PoI-oB-kYb"/>
+                        <viewControllerLayoutGuide type="bottom" id="tlP-Tr-afB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8UG-bW-7S7">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N61-rg-8UO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="324" y="-1852"/>
+        </scene>
+        <!--Sign In Support New Pass View Controller-->
+        <scene sceneID="EtE-Nt-lZB">
+            <objects>
+                <viewController storyboardIdentifier="SignInSupportNewPassViewController" id="hrz-kh-4I2" customClass="SignInSupportNewPassViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qDw-Qg-fEn"/>
+                        <viewControllerLayoutGuide type="bottom" id="Zbt-Xu-4dI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Fh4-St-oah">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="syx-CG-kUY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1107" y="-1851"/>
+        </scene>
+        <!--Sign In Support Code View Controller-->
+        <scene sceneID="tFA-BR-4tD">
+            <objects>
+                <viewController storyboardIdentifier="SignInSupportCodeViewController" id="Vhn-Si-T6I" customClass="SignInSupportCodeViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LdE-Zq-fWb"/>
+                        <viewControllerLayoutGuide type="bottom" id="z4K-uW-WeL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Jrr-h4-Jzr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fpU-VP-QFG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1836" y="-1851"/>
+        </scene>
+    </scenes>
+</document>

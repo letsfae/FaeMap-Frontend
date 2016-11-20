@@ -93,7 +93,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     func loginButtonTapped() {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
+        let controller = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -107,7 +107,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterUsername() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
+        let vc = UIStoryboard(name: "Register", bundle: nil) .instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
         vc.faeUser = faeUser!
         self.navigationController?.pushViewController(vc, animated: false)
     }

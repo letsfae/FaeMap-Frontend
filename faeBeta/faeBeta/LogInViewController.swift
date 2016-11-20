@@ -194,7 +194,7 @@ class LogInViewController: UIViewController {
     
     func supportButtonTapped()
     {
-        let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SignInSupportViewController") as! SignInSupportViewController
+        let controller = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "SignInSupportViewController") as! SignInSupportViewController
         self.navigationController?.pushViewController(controller, animated: true)
     }
     

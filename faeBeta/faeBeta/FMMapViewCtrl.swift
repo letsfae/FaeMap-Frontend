@@ -11,12 +11,6 @@ import GoogleMaps
 import SwiftyJSON
 
 extension FaeMapViewController: GMSMapViewDelegate {
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        if openUserPinActive {
-            self.hideOpenUserPinAnimation()
-            openUserPinActive = false
-        }
-    }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         //        print("Cur-Zoom Level: \(mapView.camera.zoom)")
@@ -76,7 +70,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
             let currentZoomLevel = faeMapView.camera.zoom
             let powFactor: Double = Double(21 - currentZoomLevel)
             let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+            // This update also includes updating for user pins updating
             self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         }
         
         //        let mapTop = CGPointMake(0, 0)
@@ -104,6 +100,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             if abs(currentZoomLevel-preZoomLevel) >= 1 {
                 print("DEBUG: Zoom level diff >= 1")
                 self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+                self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                 return
             }
              */
@@ -115,9 +112,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 coorOffset = pow(coorOffset, 0.5)*111
                 if coorOffset > coorDistance {
                     print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
-                    mapView.clear()
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     self.previousPosition = currentPosition
+                    if !self.canDoNextUserUpdate {
+                        return
+                    }
+                    mapView.clear()
+                    self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     return
                 }
                 else {
@@ -132,15 +133,27 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
     }
     
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        if openUserPinActive {
+            self.hideOpenUserPinAnimation()
+            self.canDoNextUserUpdate = true
+            openUserPinActive = false
+        }
+    }
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if marker.userData == nil {
+            return false
+        }
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
         let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
-        mapView.animate (to: camera)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
+                self.canDoNextUserUpdate = false
+                mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
                     self.currentViewingUserId = userid
                     loadUserPinInformation("\(userid)")
@@ -149,9 +162,10 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 return true
             }
             if type == "comment" {
-                if self.canOpenAnotherPin == false {
+                if !self.canOpenAnotherPin {
                     return true
                 }
+                mapView.animate (to: camera)
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
                 if let commentIDGet = pinComment["comment_id"].int {

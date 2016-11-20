@@ -186,6 +186,9 @@
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
+		B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86849781DE0E3BB0016FC6E /* Register.storyboard */; };
+		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
+		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B8840E1C1DB6A8C6009CFF00 /* MapToCPDSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
@@ -435,6 +438,9 @@
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		B86849791DE0E3BB0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Register.storyboard; sourceTree = "<group>"; };
+		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
+		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCPDSegue.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
@@ -783,6 +789,9 @@
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
+				B868497D1DE0E4FF0016FC6E /* Login.storyboard */,
+				B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */,
+				B86849781DE0E3BB0016FC6E /* Register.storyboard */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
@@ -1170,6 +1179,7 @@
 				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
+				B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */,
 				DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */,
 				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
@@ -1184,10 +1194,12 @@
 				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
+				B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */,
 				B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 				B0C0CAB11D422E1400E2E251 /* NameCardAddTableViewCell.xib in Resources */,
+				B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */,
 				B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
 				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
@@ -1398,7 +1410,6 @@
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
-				DCF1EBD01DA317AA0066B3ED /* chatHTTPClient.swift in Sources */,
 				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
@@ -1472,6 +1483,22 @@
 				B0A2ACA51CE3A3C7002E0C9D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		B86849781DE0E3BB0016FC6E /* Register.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B86849791DE0E3BB0016FC6E /* Base */,
+			);
+			name = Register.storyboard;
+			sourceTree = "<group>";
+		};
+		B868497D1DE0E4FF0016FC6E /* Login.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B868497E1DE0E4FF0016FC6E /* Base */,
+			);
+			name = Login.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
