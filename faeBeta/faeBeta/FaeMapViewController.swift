@@ -134,6 +134,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var markerBackFromCommentDetail = GMSMarker() // Marker saved for back from comment pin detail view
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
     var canDoNextUserUpdate = true // Prevent updating user on map more than once
+                                   // Or, prevent user pin change its ramdom place if clicking on it
     var commentIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
     var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var buttonCloseUserPinSubview: UIButton! // button to close user pin view
@@ -141,7 +142,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var previousZoomLevel: Float = 0 // previous zoom level to check if map should reload pins
     var previousPosition: CLLocationCoordinate2D!
-    var canLoadMapPin = true
+    var canLoadMapPin = true // if can load map pin when zoom level is valid for updating
     
     // System Functions
     override func viewDidLoad() {
@@ -216,6 +217,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         let powFactor: Double = Double(21 - currentZoomLevel)
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
         if userStatus != 5  {
             loadPositionAnimateImage()

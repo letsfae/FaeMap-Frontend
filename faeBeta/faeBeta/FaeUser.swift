@@ -252,7 +252,6 @@ class FaeUser : NSObject {
             self.clearKeyValue()
             if(status/100==2){
                 //get successfully
-                print(message!)
                 if let mess = message as? NSDictionary{
                     if (mess["email"]) != nil{
                         if let useremail = mess["email"] as? String{
