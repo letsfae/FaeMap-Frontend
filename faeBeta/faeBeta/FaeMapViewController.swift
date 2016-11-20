@@ -38,7 +38,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var currentLongitude: CLLocationDegrees = -118.2854081
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
-    var willAppearFirstLoad = false
+    var didLoadFirstLoad = false
     var startUpdatingLocation = false
     
     // Unread Messages Label
@@ -165,9 +165,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
         let emptyArrayList = [Int]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-        
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        didLoadFirstLoad = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -181,11 +181,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
             jumpToLocationEnable()
         }
-        willAppearFirstLoad = true
         getSelfAccountInfo()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
-        self.actionSelfPosition(self.buttonSelfPosition)
+        if userStatus != 5  {
+            loadPositionAnimateImage()
+            getSelfAccountInfo()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -210,12 +212,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // Testing back from background
     func appBackFromBackground() {
         print("App back from background!")
-        self.actionSelfPosition(self.buttonSelfPosition)
         let currentZoomLevel = faeMapView.camera.zoom
         let powFactor: Double = Double(21 - currentZoomLevel)
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
+        if userStatus != 5  {
+            loadPositionAnimateImage()
+            getSelfAccountInfo()
+        }
     }
     
     func jumpToLocationEnable() {
@@ -248,13 +253,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Map Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if willAppearFirstLoad {
+        if didLoadFirstLoad {
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
             self.faeMapView.camera = camera
-            self.willAppearFirstLoad = false
+            self.didLoadFirstLoad = false
             self.startUpdatingLocation = true
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
