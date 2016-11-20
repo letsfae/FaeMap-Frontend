@@ -49,6 +49,19 @@ class CreateCommentPinViewController: UIViewController {
     // MARK: -- Count Number of Characters
     var labelCountChars: UILabel!
     
+    // MARK: -- uiview containers to hold two toolbars
+    var uiviewSelectLocation: UIView!
+    var uiviewMoreOptions: UIView!
+    
+    var labelCreateCommentPinTitle: UILabel! // Create comment pin title
+    var labelCommentPinMoreOptions: UILabel! // Title of comment pin options when creating
+    
+    var uiviewDuration: UIView!
+    var uiviewInterRadius: UIView!
+    var uiviewPinPromot: UIView!
+    
+    var buttonBack: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateCommentPinView()

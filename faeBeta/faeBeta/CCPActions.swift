@@ -12,6 +12,24 @@ import CoreLocation
 
 extension CreateCommentPinViewController {
     
+    func actionShowOrHideMoreOptions(_ sender: UIButton) {
+        let toValue = CGFloat(sender.tag)
+        let fromValue = 1.0-toValue
+        
+        UIView.animate(withDuration: 0.4) {
+            self.textViewForCommentPin.alpha = fromValue
+            self.uiviewSelectLocation.alpha = fromValue
+            self.uiviewMoreOptions.alpha = fromValue
+            self.labelCreateCommentPinTitle.alpha = fromValue
+            self.buttonCommentSubmit.alpha = fromValue
+            self.labelCommentPinMoreOptions.alpha = toValue
+            self.uiviewDuration.alpha = toValue
+            self.uiviewInterRadius.alpha = toValue
+            self.uiviewPinPromot.alpha = toValue
+            self.buttonBack.alpha = toValue
+        }
+    }
+    
     func actionFinishEditing(_ sender: UIButton) {
         textViewForCommentPin.endEditing(true)
         textViewForCommentPin.resignFirstResponder()

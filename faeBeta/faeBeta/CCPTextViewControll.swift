@@ -23,11 +23,13 @@ extension CreateCommentPinViewController: UITextViewDelegate {
                 buttonCommentSubmit.isEnabled = true
                 lableTextViewPlaceholder.isHidden = true
                 buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1.0)
+                buttonCommentSubmit.setTitleColor(UIColor.white, for: UIControlState())
             }
             else {
                 buttonCommentSubmit.isEnabled = false
                 lableTextViewPlaceholder.isHidden = false
-                buttonCommentSubmit.backgroundColor = UIColor.lightGray
+                buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
+                buttonCommentSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
             }
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             var numlineOnDevice = 3
