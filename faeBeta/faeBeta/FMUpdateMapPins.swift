@@ -30,7 +30,6 @@ extension FaeMapViewController {
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins(radius: Int) {
         self.faeMapView.clear()
-        self.updateTimerForSelfLoc(radius: radius)
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()

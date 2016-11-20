@@ -111,14 +111,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 var coorOffset = pow(latitudeOffset, 2.0) + pow(longitudeOffset, 2.0)
                 coorOffset = pow(coorOffset, 0.5)*111
                 if coorOffset > coorDistance {
-                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
-                    self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     self.previousPosition = currentPosition
+                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
                     if !self.canDoNextUserUpdate {
                         return
                     }
                     mapView.clear()
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+                    self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     return
                 }
                 else {
