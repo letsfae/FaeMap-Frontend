@@ -22,7 +22,7 @@ extension CommentPinDetailViewController {
         if sender.tag == 1 && commentIDCommentPinDetailView != "-999" {
             buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
             if animatingHeart != nil {
-                animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+                animatingHeart.image = nil
             }
             unlikeThisPin("comment", pinID: commentIDCommentPinDetailView)
             print("debug animating sender.tag 1")
@@ -219,8 +219,6 @@ extension CommentPinDetailViewController {
                 print("DEBUG RELOAD DATA")
                 print(self.dictCommentsOnCommentDetail.count)
                 self.numberOfCommentTableCells = self.dictCommentsOnCommentDetail.count
-                self.tableCommentsForComment.frame.size.height += 140
-                self.commentDetailFullBoardScrollView.contentSize.height += 140
                 //// Will figure out the UI presentation later
                 /**
                 var offset = self.commentDetailFullBoardScrollView.contentOffset
@@ -228,9 +226,6 @@ extension CommentPinDetailViewController {
                 self.commentDetailFullBoardScrollView.setContentOffset(offset, animated: true)
                 **/
             }
-            let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-            self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
-            self.tableCommentsForComment.frame.size.height = newHeight
             self.tableCommentsForComment.reloadData()
             self.tableViewPeople.reloadData()
         }
