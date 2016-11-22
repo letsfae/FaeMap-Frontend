@@ -3,7 +3,7 @@ platform :ios, ‘9.0’
 use_frameworks!
 
 target 'faeBeta' do
-	pod 'Alamofire’, '~> 4.0'
+	pod 'Alamofire’, '~> 4.1’
     pod 'SwiftyJSON'
 	pod 'SDWebImage', '~>3.8’
 	pod 'Firebase/Storage'
@@ -14,7 +14,6 @@ target 'faeBeta' do
 	pod 'Firebase/RemoteConfig'
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
-	pod 'Backendless-ios-SDK'
 	pod 'KTCenterFlowLayout'
 	pod 'GooglePlaces'
 	pod 'GoogleMaps'

@@ -19,8 +19,9 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak fileprivate var photoImageView: UIImageView!
     @IBOutlet weak fileprivate var chosenIndicatorImageView: UIImageView!
     
-    @IBOutlet weak var videoDurationLabel: UILabel!
+    @IBOutlet weak private var videoDurationLabel: UILabel!
     @IBOutlet weak fileprivate var videoIndicatorView: UIView!
+    @IBOutlet weak private var cameraIconImageView: UIImageView!
     @IBOutlet weak fileprivate var videoDurationLabelLength: NSLayoutConstraint!
     @IBOutlet weak fileprivate var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
     
@@ -36,6 +37,8 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         photoImageView.image = nil
         deselectCell()
         self.videoIndicatorView.alpha = 0
+        self.cameraIconImageView.alpha = 0
+        self.videoDurationLabelDistanceToLeft.priority = 1000
     }
     
     //MARK: - select & deselect cell
@@ -69,6 +72,7 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         let secondString = (duration % 60) < 9 ? "0\(duration % 60)" : "\(duration % 60)"
         let minString = duration / 60
         self.videoIndicatorView.alpha = 1
+        self.cameraIconImageView.alpha = 1
         self.videoDurationLabel.text =  "\(minString):\(secondString)"
         if(minString / 10 == 0){
             videoDurationLabelLength.constant = 35
@@ -76,6 +80,14 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
             videoDurationLabelLength.constant = 40
         }
         self.layoutSubviews()
+    }
+    
+    func setGifLabel()
+    {
+        self.videoIndicatorView.alpha = 1
+        
+        self.videoDurationLabel.text =  "GIF"
+        self.videoDurationLabelDistanceToLeft.priority = 800
     }
     
     // given a PHAsset, request the image and populate the cell with the image
