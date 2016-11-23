@@ -222,8 +222,6 @@ extension CommentPinDetailViewController {
                 //// Will figure out the UI presentation later
                 /**
                 var offset = self.commentDetailFullBoardScrollView.contentOffset
-                offset.y = self.commentDetailFullBoardScrollView.contentSize.height + self.commentDetailFullBoardScrollView.contentInset.bottom - self.commentDetailFullBoardScrollView.bounds.size.height
-                self.commentDetailFullBoardScrollView.setContentOffset(offset, animated: true)
                 **/
             }
             self.tableCommentsForComment.reloadData()

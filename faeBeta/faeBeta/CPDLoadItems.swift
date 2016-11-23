@@ -267,15 +267,6 @@ extension CommentPinDetailViewController {
         
         loadAnotherToolbar()
         loadPeopleTable()
-        
-        //        // ScrollView at 65
-        //        commentDetailFullBoardScrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 228))
-        //        uiviewCommentPinDetail.addSubview(commentDetailFullBoardScrollView)
-        //        commentDetailFullBoardScrollView.isScrollEnabled = false
-        //        commentDetailFullBoardScrollView.contentSize.height = 228
-        //        commentDetailFullBoardScrollView.showsVerticalScrollIndicator = false
-        //        commentDetailFullBoardScrollView.delaysContentTouches = false
-        //        commentDetailFullBoardScrollView.delegate = self
     }
     
     private func loadNavigationBar() {

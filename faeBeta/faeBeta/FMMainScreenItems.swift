@@ -14,10 +14,18 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
+        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
         self.view = faeMapView
+        do {
+            // Set the map style by passing a valid JSON string.
+            faeMapView.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
+        } catch {
+            NSLog("The style definition could not be loaded: \(error)")
+        }
+
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()

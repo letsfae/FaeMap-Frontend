@@ -51,7 +51,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
-    var commentDetailFullBoardScrollView: UIScrollView!
     var commentIDCommentPinDetailView: String = "-999"
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
@@ -134,6 +133,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var firstLoadInputToolBar = true
+    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +149,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
+        loadInputToolBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -317,12 +318,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         if sender.tag == 1 {
             tableViewPeople.isHidden = true
             tableCommentsForComment.isHidden = false
-            commentDetailFullBoardScrollView.contentSize.height = tableCommentsForComment.frame.size.height + 281
         }
         else if sender.tag == 3 {
             tableViewPeople.isHidden = false
             tableCommentsForComment.isHidden = true
-            commentDetailFullBoardScrollView.contentSize.height = tableViewPeople.frame.size.height + 281
         }
         let tag = CGFloat(sender.tag)
         let centerAtOneThird = screenWidth / 4
@@ -540,8 +539,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     // MARK: - send messages
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
-            commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: realText)
+            commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
+        self.replyToUser = ""
         self.inputToolbar.contentView.textView.text = ""
         self.lableTextViewPlaceholder.isHidden = false
         self.inputToolbar.contentView.textView.resignFirstResponder()
@@ -617,8 +617,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.showKeyboard()
     }
     
-    
-    
     //MARK: - observe key path
     override func observeValue(forKeyPath keyPath: String?,
                                          of object: Any?,
@@ -641,7 +639,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        self.inputToolbar.contentView.textView.resignFirstResponder()
+        if inputToolbar != nil {
+            self.inputToolbar.contentView.textView.resignFirstResponder()
+        }
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }

@@ -41,28 +41,22 @@ extension CommentPinDetailViewController {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeTo - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeTo
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeTo - 28
                 })
             }
             else {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeFrom - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeFrom
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeFrom - 28
                 })
             }
             if uiviewCommentPinDetail.frame.size.height == 255 {
                 textviewCommentPinDetail.isScrollEnabled = true
-                commentDetailFullBoardScrollView.isScrollEnabled = false
                 buttonCommentPinDetailDragToLargeSize.tag = 0
-                commentDetailFullBoardScrollView.contentSize.height = 255
             }
             if uiviewCommentPinDetail.frame.size.height == screenHeight - 65 {
                 textviewCommentPinDetail.isScrollEnabled = false
-                commentDetailFullBoardScrollView.isScrollEnabled = true
                 buttonCommentPinDetailDragToLargeSize.tag = 1
                 let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
                 self.tableCommentsForComment.frame.size.height = newHeight
             }
             
@@ -71,7 +65,6 @@ extension CommentPinDetailViewController {
             if location.y >= 306 {
                 self.draggingButtonSubview.center.y = location.y - 65
                 self.uiviewCommentPinDetail.frame.size.height = location.y + 14 - 65
-                self.commentDetailFullBoardScrollView.frame.size.height = location.y + 14 - 65
             }
         }
     }
@@ -338,7 +331,6 @@ extension CommentPinDetailViewController {
             })
             return
         }
-        loadInputToolBar()
         sender.tag = 1
         if buttonCommentPinDetailDragToLargeSize.tag == 1 {
             if inputToolbar != nil {

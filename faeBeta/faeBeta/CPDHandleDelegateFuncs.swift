@@ -64,13 +64,14 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     func showActionSheetWithTimer(_ timer: Timer) {
         if let usernameInfo = timer.userInfo as? Dictionary<String, AnyObject> {
             let userN = usernameInfo["argumentInt"] as! String
+            self.replyToUser = "<a>@\(userN)</a> "
             let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
             menu.view.tintColor = colorFae
             let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
                 self.loadInputToolBar()
                 self.inputToolbar.isHidden = false
                 self.subviewInputToolBar.isHidden = false
-                self.inputToolbar.contentView.textView.text = "@\(userN) "
+                self.inputToolbar.contentView.textView.text = ""
                 self.inputToolbar.contentView.textView.becomeFirstResponder()
                 self.lableTextViewPlaceholder.isHidden = true
             }
