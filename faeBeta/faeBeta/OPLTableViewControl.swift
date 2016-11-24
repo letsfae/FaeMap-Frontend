@@ -49,7 +49,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
                 }
                 if let latitudeInfo = commentInfoJSON["geolocation"]["latitude"].double {
                     if let longitudeInfo = commentInfoJSON["geolocation"]["longitude"].double {
-                        cell.location = CLLocationCoordinate2DMake(latitudeInfo+0.001, longitudeInfo)
+                        cell.location = CLLocationCoordinate2DMake(latitudeInfo+0.00155, longitudeInfo)
                     }
                 }
                 cell.deleteButton.isEnabled = true

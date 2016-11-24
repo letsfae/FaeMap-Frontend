@@ -12,6 +12,7 @@ import SwiftyJSON
 extension CommentPinDetailViewController {
     // Load comment pin detail window
     func loadCommentPinDetailWindow() {
+        
         loadNavigationBar()
         
         // Table comments for comment
@@ -23,9 +24,11 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.register(CPCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.isScrollEnabled = true
         tableCommentsForComment.tableFooterView = UIView()
+        tableCommentsForComment.layer.zPosition = 109
         //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
         //                tableCommentsForComment.layer.borderWidth = 1.0
         self.view.addSubview(tableCommentsForComment)
+        tableCommentsForComment.center.y -= screenHeight
         
         // Dragging button
         draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 28))
@@ -36,6 +39,7 @@ extension CommentPinDetailViewController {
         draggingButtonSubview.layer.shadowOpacity = 0.3
         draggingButtonSubview.layer.shadowRadius = 10.0
         draggingButtonSubview.layer.zPosition = 109
+        draggingButtonSubview.center.y -= screenHeight
         
         uiviewCommentPinUnderLine02 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         uiviewCommentPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
@@ -274,6 +278,7 @@ extension CommentPinDetailViewController {
         subviewNavigation.backgroundColor = UIColor.white
         self.view.addSubview(subviewNavigation)
         subviewNavigation.layer.zPosition = 101
+        subviewNavigation.center.y -= screenHeight
         
         // Line at y = 64
         uiviewCommentPinUnderLine01 = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))

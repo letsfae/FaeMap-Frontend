@@ -190,7 +190,6 @@
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
-		B8840E1C1DB6A8C6009CFF00 /* MapToCPDSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
 		B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */; };
@@ -442,7 +441,6 @@
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
-		B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapToCPDSegue.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
 		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDButtonActions.swift; sourceTree = "<group>"; };
@@ -1067,7 +1065,6 @@
 				B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */,
 				B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */,
 				DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */,
-				B8840E1B1DB6A8C6009CFF00 /* MapToCPDSegue.swift */,
 				B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */,
 			);
 			name = CommentPinExtension;
@@ -1371,7 +1368,6 @@
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
-				B8840E1C1DB6A8C6009CFF00 /* MapToCPDSegue.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */,

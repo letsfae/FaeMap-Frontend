@@ -201,15 +201,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.navigationBar.isTranslucent = false
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "mapToCommentPinDetail" {
-            if let commentPinDetailVC = segue.destination as? CommentPinDetailViewController {
-                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
-                commentPinDetailVC.delegate = self
-            }
-        }
-    }
-    
     // Testing back from background
     func appBackFromBackground() {
         print("App back from background!")

@@ -148,7 +148,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
+        var camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
@@ -165,14 +165,15 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 if !self.canOpenAnotherPin {
                     return true
                 }
-                mapView.animate (to: camera)
+                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00155, longitude: longitude, zoom: 17)
+                mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
                 if let commentIDGet = pinComment["comment_id"].int {
                     commentIdToPassBySegue = commentIDGet
                     var openedPinListArray = [Int]()
                     openedPinListArray.append(commentIDGet)
-                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+//                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
                     marker.zIndex = 2
                     if let listArray = readByKey("openedPinList") {
                         openedPinListArray.removeAll()
@@ -184,7 +185,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
                 }
                 self.markerBackFromCommentDetail = marker
-                self.performSegue(withIdentifier: "mapToCommentPinDetail", sender: self)
+                let commentPinDetailVC = CommentPinDetailViewController()
+                commentPinDetailVC.modalPresentationStyle = .overCurrentContext
+                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
+                commentPinDetailVC.delegate = self
+                self.present(commentPinDetailVC, animated: false, completion: {
+                    self.canOpenAnotherPin = true
+                })
                 return true
             }
         }

@@ -42,7 +42,6 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
             })
         }
         if !back {
-            self.delegate?.dismissMarkerShadow(true)
             self.dismiss(animated: false, completion: nil)
         }
     }

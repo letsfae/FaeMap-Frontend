@@ -134,22 +134,39 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var firstLoadInputToolBar = true
     var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
+    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
+    var commentPinIcon: UIImageView! // Icon to indicate pin type is comment
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
-        loadCommentPinDetailWindow()
         loadTransparentButtonBackToMap()
+        loadCommentPinDetailWindow()
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
         if commentIDCommentPinDetailView != "-999" {
             getSeveralInfo()
         }
+        commentPinIcon = UIImageView(frame: CGRect(x: 185, y: 479, width: 60, height: 80))
+        commentPinIcon.image = UIImage(named: "markerCommentPinHeavyShadow")
+        commentPinIcon.center.x = screenWidth/2
+        commentPinIcon.contentMode = .scaleAspectFit
+        commentPinIcon.layer.zPosition = 50
+        commentPinIcon.alpha = 0
+        self.view.addSubview(commentPinIcon)
     }
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
-        loadInputToolBar()
+        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.subviewNavigation.frame.origin.y = 0
+            self.tableCommentsForComment.frame.origin.y = 65
+            self.draggingButtonSubview.frame.origin.y = 292
+            self.grayBackButton.alpha = 1
+            self.commentPinIcon.alpha = 1
+            }, completion: { (done: Bool) in
+                
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,10 +188,12 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     }
     
     func loadTransparentButtonBackToMap() {
-        let subviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.view.addSubview(subviewBackToMap)
-        self.view.sendSubview(toBack: subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: .touchUpInside)
+        grayBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        grayBackButton.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.3)
+        grayBackButton.alpha = 0
+        self.view.addSubview(grayBackButton)
+        self.view.sendSubview(toBack: grayBackButton)
+        grayBackButton.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: .touchUpInside)
     }
     
     func loadInputToolBar() {
