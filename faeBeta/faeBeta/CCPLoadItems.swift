@@ -35,7 +35,7 @@ extension CreateCommentPinViewController {
         uiviewCreateCommentPin.addGestureRecognizer(tapToDismissKeyboard)
         
         let imageCreateCommentPin = UIImageView(frame: CGRect(x: 166, y: 36, width: 84, height: 91))
-        imageCreateCommentPin.image = UIImage(named: "comment_pin_main_create")
+        imageCreateCommentPin.image = UIImage(named: "commentPinTitleImage")
         uiviewCreateCommentPin.addSubview(imageCreateCommentPin)
         
         labelCreateCommentPinTitle = UILabel(frame: CGRect(x: 109, y: 146, width: 196, height: 27))
@@ -49,14 +49,14 @@ extension CreateCommentPinViewController {
         NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         let buttonBackToPinSelection = UIButton()
-        buttonBackToPinSelection.setImage(UIImage(named: "comment_main_back"), for: UIControlState())
+        buttonBackToPinSelection.setImage(UIImage(named: "backToPinMenu"), for: UIControlState())
         uiviewCreateCommentPin.addSubview(buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonBackToPinSelection)
         buttonBackToPinSelection.addTarget(self, action: #selector(CreateCommentPinViewController.actionBackToPinSelections(_:)), for: UIControlEvents.touchUpInside)
         
         let buttonCloseCreateComment = UIButton()
-        buttonCloseCreateComment.setImage(UIImage(named: "comment_main_close"), for: UIControlState())
+        buttonCloseCreateComment.setImage(UIImage(named: "closePinCreation"), for: UIControlState())
         uiviewCreateCommentPin.addSubview(buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonCloseCreateComment)
@@ -69,13 +69,13 @@ extension CreateCommentPinViewController {
         NSLayoutConstraint(item: uiviewSelectLocation, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         let imageSelectLocation_1 = UIImageView()
-        imageSelectLocation_1.image = UIImage(named: "pin_select_location_1")
+        imageSelectLocation_1.image = UIImage(named: "pinSelectLocation01")
         uiviewSelectLocation.addSubview(imageSelectLocation_1)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-0-[v0(25)]", options: [], views: imageSelectLocation_1)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageSelectLocation_1)
         
         let imageSelectLocation_2 = UIImageView()
-        imageSelectLocation_2.image = UIImage(named: "pin_select_location_2")
+        imageSelectLocation_2.image = UIImage(named: "pinSelectLocation02")
         uiviewSelectLocation.addSubview(imageSelectLocation_2)
         uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageSelectLocation_2)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
@@ -123,7 +123,7 @@ extension CreateCommentPinViewController {
         uiviewToolBar.addConstraintsWithFormat("V:[v0(22)]-14-|", options: [], views: buttonOpenFaceGesPanel)
         
         buttonFinishEdit = UIButton()
-        buttonFinishEdit.setImage(UIImage(named: "CCPFinish"), for: UIControlState())
+        buttonFinishEdit.setImage(UIImage(named: "finishEditing"), for: UIControlState())
         uiviewToolBar.addSubview(buttonFinishEdit)
         uiviewToolBar.addConstraintsWithFormat("H:[v0(49)]-14-|", options: [], views: buttonFinishEdit)
         uiviewToolBar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
@@ -151,7 +151,7 @@ extension CreateCommentPinViewController {
         uiviewMoreOptions.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageMoreOptions_1)
         
         let imageMoreOptions_2 = UIImageView()
-        imageMoreOptions_2.image = UIImage(named: "pin_select_location_2")
+        imageMoreOptions_2.image = UIImage(named: "pinSelectLocation02")
         uiviewMoreOptions.addSubview(imageMoreOptions_2)
         uiviewMoreOptions.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageMoreOptions_2)
         uiviewMoreOptions.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageMoreOptions_2)

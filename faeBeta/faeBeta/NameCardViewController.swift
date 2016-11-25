@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import SDWebImage
 
-class NameCardViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class NameCardViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     let screenWidth = UIScreen.main.bounds.width

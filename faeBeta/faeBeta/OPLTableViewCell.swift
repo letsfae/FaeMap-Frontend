@@ -71,7 +71,7 @@ class OPLTableViewCell: UITableViewCell {
     
     func loadButton() {
         deleteButton = UIButton(frame: CGRect(x: 341, y: 14, width: 100, height: 48))
-        let imageDelete = UIImage(named: "comment_pin_delete")
+        let imageDelete = UIImage(named: "openPinListDelete")
         deleteButton.setImage(imageDelete, for: UIControlState())
         self.addSubview(deleteButton)
         self.addConstraintsWithFormat("H:[v0(100)]-(-27)-|", options: [], views: deleteButton)

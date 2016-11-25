@@ -59,7 +59,7 @@ extension FaeMapViewController {
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
-                        pinMap.icon = UIImage(named: "comment_pin_marker")
+                        pinMap.icon = UIImage(named: "commentPinMarker")
                         pinMap.zIndex = 0
                     }
                 }

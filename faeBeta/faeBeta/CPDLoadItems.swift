@@ -271,6 +271,7 @@ extension CommentPinDetailViewController {
         
         loadAnotherToolbar()
         loadPeopleTable()
+        loadPinCtrlButton()
     }
     
     private func loadNavigationBar() {
@@ -388,5 +389,37 @@ extension CommentPinDetailViewController {
         
         threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: comments, people)
         
+    }
+    
+    func loadPinCtrlButton() {
+        commentPinIcon = UIButton(frame: CGRect(x: 185, y: 477, width: 60, height: 80))
+        commentPinIcon.setImage(UIImage(named: "markerCommentPinHeavyShadow"), for: UIControlState())
+        commentPinIcon.center.x = screenWidth/2
+        commentPinIcon.center.y = 510
+        commentPinIcon.layer.zPosition = 50
+        commentPinIcon.alpha = 0
+        self.view.addSubview(commentPinIcon)
+        
+        buttonPrevPin = UIButton(frame: CGRect(x: 15, y: 477, width: 52, height: 52))
+        buttonPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
+        buttonPrevPin.layer.zPosition = 60
+        buttonPrevPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        buttonPrevPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        buttonPrevPin.layer.shadowOpacity = 0.6
+        buttonPrevPin.layer.shadowRadius = 3.0
+        buttonPrevPin.alpha = 0
+        self.view.addSubview(buttonPrevPin)
+        
+        buttonNextPin = UIButton(frame: CGRect(x: 399, y: 477, width: 52, height: 52))
+        buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
+        buttonNextPin.layer.zPosition = 60
+        buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        buttonNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        buttonNextPin.layer.shadowOpacity = 0.6
+        buttonNextPin.layer.shadowRadius = 3.0
+        buttonNextPin.alpha = 0
+        self.view.addSubview(buttonNextPin)
+        self.view.addConstraintsWithFormat("H:[v0(52)]-15-|", options: [], views: buttonNextPin)
+        self.view.addConstraintsWithFormat("V:|-477-[v0(52)]", options: [], views: buttonNextPin)
     }
 }

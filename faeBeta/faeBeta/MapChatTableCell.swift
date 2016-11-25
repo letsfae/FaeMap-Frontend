@@ -26,7 +26,6 @@ class MapChatTableCell: UITableViewCell {
     
     func loadCellContent() {
         let imageUserAvatar = UIImageView(frame: CGRect(x: 9, y: 8, width: 60, height: 60))
-        imageUserAvatar.image = UIImage(named: "avatar_expand_no")
         addSubview(imageUserAvatar)
         
         let labelUserName = UILabel(frame: CGRect(x: 87, y: 18, width: 133, height: 22))

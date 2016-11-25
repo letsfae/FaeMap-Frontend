@@ -148,7 +148,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
-        var camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
@@ -165,8 +165,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 if !self.canOpenAnotherPin {
                     return true
                 }
-                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00155, longitude: longitude, zoom: 17)
-                mapView.camera = camera
+//                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00155, longitude: longitude, zoom: 17)
+//                mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
                 if let commentIDGet = pinComment["comment_id"].int {
@@ -188,6 +188,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 let commentPinDetailVC = CommentPinDetailViewController()
                 commentPinDetailVC.modalPresentationStyle = .overCurrentContext
                 commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
+                commentPinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
                 commentPinDetailVC.delegate = self
                 self.present(commentPinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true

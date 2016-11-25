@@ -181,6 +181,11 @@
 		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
 		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */; };
+		B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90C31DE7DB01005B6F38 /* CreateMomentPinViewController.swift */; };
+		B84C90C71DE7DBF6005B6F38 /* CMPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90C61DE7DBF6005B6F38 /* CMPLoadItems.swift */; };
+		B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */; };
+		B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */; };
+		B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */; };
 		B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */; };
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
@@ -190,6 +195,7 @@
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
+		B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
 		B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */; };
@@ -432,6 +438,11 @@
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
 		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		B84C90C31DE7DB01005B6F38 /* CreateMomentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMomentPinViewController.swift; sourceTree = "<group>"; };
+		B84C90C61DE7DBF6005B6F38 /* CMPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPLoadItems.swift; sourceTree = "<group>"; };
+		B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTextViewControll.swift; sourceTree = "<group>"; };
+		B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPActions.swift; sourceTree = "<group>"; };
+		B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPSelectLocation.swift; sourceTree = "<group>"; };
 		B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewControl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
@@ -441,6 +452,7 @@
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
+		B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPImageDelegateCtrl.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
 		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDButtonActions.swift; sourceTree = "<group>"; };
@@ -995,6 +1007,27 @@
 			name = SPLExtension;
 			sourceTree = "<group>";
 		};
+		B84C90C21DE7DAD5005B6F38 /* CreateMomentPin */ = {
+			isa = PBXGroup;
+			children = (
+				B84C90C31DE7DB01005B6F38 /* CreateMomentPinViewController.swift */,
+				B84C90C51DE7DBCF005B6F38 /* CMPExtension */,
+			);
+			name = CreateMomentPin;
+			sourceTree = "<group>";
+		};
+		B84C90C51DE7DBCF005B6F38 /* CMPExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B84C90C61DE7DBF6005B6F38 /* CMPLoadItems.swift */,
+				B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */,
+				B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */,
+				B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */,
+				B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */,
+			);
+			name = CMPExtension;
+			sourceTree = "<group>";
+		};
 		B84E1A5C1DCBE1F1000E29B9 /* OpenedPinListExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -1038,6 +1071,7 @@
 			children = (
 				B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */,
 				B8744BE31DB877A1005809DA /* PinMenuExtension */,
+				B84C90C21DE7DAD5005B6F38 /* CreateMomentPin */,
 				B81563851DDB987600BF85A1 /* CreateCommentPin */,
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
@@ -1281,6 +1315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */,
 				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
@@ -1322,6 +1357,7 @@
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */,
+				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
 				B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
@@ -1332,6 +1368,7 @@
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
 				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
+				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1397,6 +1434,7 @@
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
 				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
@@ -1431,11 +1469,13 @@
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
+				B84C90C71DE7DBF6005B6F38 /* CMPLoadItems.swift in Sources */,
 				B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
+				B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,

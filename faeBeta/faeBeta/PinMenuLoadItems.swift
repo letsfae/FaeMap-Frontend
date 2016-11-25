@@ -46,6 +46,9 @@ extension PinMenuViewController {
          buttonSell    = createMenuButton(buttonCenterX_2, y: buttonCenterY_3, picName: "submit_sell")
          buttonLive    = createMenuButton(buttonCenterX_3, y: buttonCenterY_3, picName: "submit_live")
          */
+        buttonMedia.addTarget(self,
+                                action: #selector(PinMenuViewController.actionCreateMediaPin(_:)),
+                                for: .touchUpInside)
         buttonComment.addTarget(self,
                                 action: #selector(PinMenuViewController.actionCreateCommentPin(_:)),
                                 for: .touchUpInside)

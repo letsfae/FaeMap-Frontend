@@ -62,7 +62,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // MARK: -- Map Chat
     var mapChatSubview: UIButton!
     var mapChatWindow: UIView!
-    var mapChatClose: UIButton!
     var labelMapChat: UILabel!
     var mapChatTable = UITableView()
     

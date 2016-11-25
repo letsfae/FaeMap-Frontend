@@ -31,7 +31,7 @@ extension FaeMapViewController {
         locManager.startUpdatingLocation()
         
         // Default is true, if true, panGesture could not be detected
-        self.faeMapView.settings.consumesGesturesInView = false
+//        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -161,7 +161,7 @@ extension FaeMapViewController {
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
-                            pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.icon = UIImage(named: "commentPinMarker")
                             pinShowOnMap.zIndex = 0
                         }
                     }

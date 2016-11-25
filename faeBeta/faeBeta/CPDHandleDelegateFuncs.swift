@@ -22,7 +22,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
         self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-        self.uiviewCommentPinDetail.center.y += screenHeight
+        self.tableCommentsForComment.center.y += screenHeight
         self.commentIDCommentPinDetailView = "\(commentID)"
         if commentIDCommentPinDetailView != "-999" {
             getSeveralInfo()

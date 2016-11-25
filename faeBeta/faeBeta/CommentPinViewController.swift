@@ -15,6 +15,8 @@ protocol CommentPinDetailDelegate: class {
     func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
     func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int)
+    // Animate the selected marker
+    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
 }
 
 class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
@@ -116,26 +118,20 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
     var buttonImagePicker : UIButton!
-    
     var toolbarContentView: FAEChatToolBarContentView!
     
-    // FullboardScrollView and TableViewCommentsOnComments control
-    var switchedToFullboard = true
-    
-    // Another dragging button for UI effect
-    var draggingButtonSubview: UIView!
-    
-    // Timer for animating heart
-    var animatingHeartTimer: Timer!
-    
-    // Timer for touching pin comment cell
-    var touchToReplyTimer: Timer!
-    
+    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnComments control
+    var draggingButtonSubview: UIView! // Another dragging button for UI effect
+    var animatingHeartTimer: Timer! // Timer for animating heart
+    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var firstLoadInputToolBar = true
     var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
     var grayBackButton: UIButton! // Background gray button, alpha = 0.3
-    var commentPinIcon: UIImageView! // Icon to indicate pin type is comment
+    var commentPinIcon: UIButton! // Icon to indicate pin type is comment
+    var selectedMarkerPosition: CLLocationCoordinate2D!
+    var buttonPrevPin: UIButton!
+    var buttonNextPin: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,25 +143,21 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         if commentIDCommentPinDetailView != "-999" {
             getSeveralInfo()
         }
-        commentPinIcon = UIImageView(frame: CGRect(x: 185, y: 479, width: 60, height: 80))
-        commentPinIcon.image = UIImage(named: "markerCommentPinHeavyShadow")
-        commentPinIcon.center.x = screenWidth/2
-        commentPinIcon.contentMode = .scaleAspectFit
-        commentPinIcon.layer.zPosition = 50
-        commentPinIcon.alpha = 0
-        self.view.addSubview(commentPinIcon)
     }
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
+        self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
         UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForComment.frame.origin.y = 65
             self.draggingButtonSubview.frame.origin.y = 292
             self.grayBackButton.alpha = 1
             self.commentPinIcon.alpha = 1
+            self.buttonPrevPin.alpha = 1
+            self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-                
+//            self.loadInputToolBar()
         })
     }
     

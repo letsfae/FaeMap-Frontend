@@ -291,11 +291,13 @@ extension CommentPinDetailViewController {
         }
         controlBoard.removeFromSuperview()
         UIView.animate(withDuration: 0.583, animations: ({
-            self.subviewNavigation.center.y -= self.subviewNavigation.frame.size.height
+            self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForComment.center.y -= screenHeight
             self.draggingButtonSubview.center.y -= screenHeight
             self.grayBackButton.alpha = 0
             self.commentPinIcon.alpha = 0
+            self.buttonPrevPin.alpha = 0
+            self.buttonNextPin.alpha = 0
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)

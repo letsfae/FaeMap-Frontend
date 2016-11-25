@@ -47,8 +47,6 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     var buttonTopRight: UIButton!
     var buttonBottomLeft: UIButton!
     var buttonBottomRight: UIButton!
-    
-    var imagePinOnMap: UIImageView!
 
     //MARK: - life cycle
     
@@ -94,10 +92,6 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
         startUpdatingLocation = true
-        
-        imagePinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-19, y: screenHeight/2-41, width: 46, height: 50))
-        imagePinOnMap.image = UIImage(named: "comment_pin_image")
-        imagePinOnMap.isHidden = true
         
         // load address
         viewAddress = UIView(frame: CGRect(x: 0, y: screenHeight - 91, width: screenWidth, height: 125))
