@@ -78,7 +78,6 @@ class PhotoPicker {
         }
     }
     
-    
     /// clean up every selected photo
     func cleanup(){
         videoAsset = nil

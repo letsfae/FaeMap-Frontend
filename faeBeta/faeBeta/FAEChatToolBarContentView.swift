@@ -71,7 +71,12 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc optional func sendGifData(_ data: Data)
 }
 
+enum FAEChatToolBarContentType: UInt32 {
 
+    case sticker = 1
+    case photo = 2
+    case audio = 4
+}
 
 /// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
 class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
@@ -105,6 +110,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     fileprivate var recordShow = false // false: not open the record view
     fileprivate var audioRecorderContentView: AudioRecorderView!
     
+    //initialize marker
+    private var photoInitialized = false
+    private var stickerInitialized = false
+    private var audioInitialized = false
+    
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
     weak var inputToolbar: JSQMessagesInputToolbarCustom!// IMPORTANT: need to set toolbar to use the whole function
@@ -113,7 +123,6 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     override init(frame: CGRect)
     {
         super.init(frame: frame)
-        setup()
     }
     
     required init?(coder aDecoder: NSCoder)
@@ -123,7 +132,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     
     /// setup UI and funcs
-    fileprivate func setup()
+    ///
+    /// - Parameter type: this is an enum with all type of content you want to intialize.
+    /// you should create this viraible like:         
+    /// let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
+
+    func setup(_ type : UInt32)
     {
         // sticker view
         func initializeStickerView() {
@@ -131,6 +145,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             stickerPicker.sendStickerDelegate = self
             self.addSubview(stickerPicker)
             stickerPicker.isHidden = true
+            
+            stickerInitialized = true
         }
         
         //quick image picker
@@ -165,6 +181,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             moreImageButton.isHidden = true
 
             updateSendButtonStatus()
+            
+            photoInitialized = true
         }
         
         //MARK: voice helper function
@@ -176,12 +194,21 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             self.addSubview(audioRecorderContentView)
             
             audioRecorderContentView.isHidden = true
+            
+            audioInitialized = true
         }
         
         self.backgroundColor = UIColor.white
-        initializeStickerView()
-        initializePhotoQuickPicker()
-        setupRecorder()
+        
+        if (type & FAEChatToolBarContentType.sticker.rawValue > 0) && !stickerInitialized{
+            initializeStickerView()
+        }
+        if (type & FAEChatToolBarContentType.photo.rawValue > 0) && !photoInitialized{
+            initializePhotoQuickPicker()
+        }
+        if (type & FAEChatToolBarContentType.audio.rawValue > 0) && !audioInitialized{
+            setupRecorder()
+        }
     }
     
     // MARK: - show different content
@@ -207,6 +234,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func showStikcer()
     {
+        assert(stickerPicker != nil, "You must call setup() before call showSticker!")
         self.isHidden = false
         //show stick view, and dismiss all other views, like keyboard and photoes preview
         if !stickerViewShow {
@@ -233,6 +261,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func showLibrary()
     {
+        assert(photoQuickCollectionView != nil, "You must call setup() before call showLibrary!")
         self.isHidden = false
         if !imageQuickPickerShow {
             self.photoQuickCollectionView?.reloadData()
@@ -282,6 +311,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     func showRecord() {
+        assert(audioRecorderContentView != nil, "You must call setup() before call showRecord!")
+
         self.isHidden = false
 
         if !recordShow {
@@ -308,17 +339,23 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     /// close all content
     func closeAll()
     {
-        stickerPicker.isHidden = true
+        if stickerPicker != nil{
+            stickerPicker.isHidden = true
+        }
         stickerViewShow = false
         
-        photoQuickCollectionView.isHidden = true
-        moreImageButton.isHidden = true
-        quickSendImageButton.isHidden = true
+        if photoQuickCollectionView != nil{
+            photoQuickCollectionView.isHidden = true
+            moreImageButton.isHidden = true
+            quickSendImageButton.isHidden = true
+        }
         imageQuickPickerShow = false
         
+        if audioRecorderContentView != nil{
         audioRecorderContentView.isHidden = true
-        recordShow = false
         audioRecorderContentView.switchToRecordMode()
+        }
+        recordShow = false
     }
     
     // MARK: - helper
@@ -326,17 +363,21 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // reload the photo album, called after take new photos
     func reloadPhotoAlbum()
     {
-        photoPicker.getSmartAlbum()
-        self.photoQuickCollectionView.reloadData()
+        if let photoPicker = photoPicker{
+            photoPicker.getSmartAlbum()
+            self.photoQuickCollectionView.reloadData()
+        }
     }
     
     // remove all selected photos, clean up the select frames
     func cleanUpSelectedPhotos(){
-        photoPicker.cleanup()
-        // use main queue to reload data to avoid problem
-        DispatchQueue.main.async(execute: {
-            self.photoQuickCollectionView.reloadData()
-        });
+        if let photoPicker = photoPicker{
+            photoPicker.cleanup()
+            // use main queue to reload data to avoid problem
+            DispatchQueue.main.async(execute: {
+                self.photoQuickCollectionView.reloadData()
+            });
+        }
     }
 
     // this is the method to handle the number at the top right of the cell
@@ -423,9 +464,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                             return
                         }
                         
-//                        let resources = PHAssetResource.assetResources(for: asset)
-//                        let orgFilename = (resources[0]).originalFilename;
-//                        if orgFilename.lowercased().contains(".gif") {
+                        let resources = PHAssetResource.assetResources(for: asset)
+                        let orgFilename = (resources[0]).originalFilename;
+                        if orgFilename.lowercased().contains(".gif") {
                             let imageManager = PHCachingImageManager()
                             let options = PHImageRequestOptions()
                             options.resizeMode = .fast
@@ -434,7 +475,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                                     self.photoPicker.gifAssetDict[asset] = data
                                 }
                             })
-//                        }else{
+                        }
+//                        else{
                             photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                             photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                             let count = self.photoPicker.indexImageDict.count

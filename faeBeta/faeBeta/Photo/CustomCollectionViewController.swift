@@ -188,10 +188,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         if(photoPicker.videoAsset != nil){
             sendVideoFromQuickPicker()
         }
-        else if (photoPicker.gifAssetDict.count != 0){
-            if sendGifFromQuickPicker() {
-                return
-            }
+        else if (photoPicker.gifAssetDict.count != 0 && sendGifFromQuickPicker()){
+            
         }
         else{
             var images = [UIImage]()
@@ -326,9 +324,9 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                         return
                     }
                     
-//                    let resources = PHAssetResource.assetResources(for: asset)
-//                    let orgFilename = (resources[0]).originalFilename;
-//                    if orgFilename.lowercased().contains(".gif") {
+                    let resources = PHAssetResource.assetResources(for: asset)
+                    let orgFilename = (resources[0]).originalFilename;
+                    if orgFilename.lowercased().contains(".gif") {
                         let imageManager = PHCachingImageManager()
                         let options = PHImageRequestOptions()
                         options.resizeMode = .fast
@@ -337,7 +335,8 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                                 self.photoPicker.gifAssetDict[asset] = data
                             }
                         })
-//                    }else{
+                    }
+//                        else{
                         photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
                         photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
                         let count = self.photoPicker.indexImageDict.count
