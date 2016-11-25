@@ -24,7 +24,7 @@ extension ChatViewController: OutgoingMessageProtocol{
             outgoingMessage = OutgoingMessage(message: text, senderId: user_id.stringValue , senderName: username! , date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             
         }
-        if let pic = picture {
+        else if let pic = picture {
             // send picture message
             
             if let imageData = compressImageToData(pic){
@@ -34,14 +34,14 @@ extension ChatViewController: OutgoingMessageProtocol{
             }
         }
         
-        if let sti = sticker {
+        else if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
             outgoingMessage = OutgoingMessage(message: "[Sticker]", picture: imageData!, senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         
-        if let loc = location {
+        else if let loc = location {
             // send location message
             let lat : NSNumber = NSNumber(value: loc.coordinate.latitude as Double)
             let lon : NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
@@ -49,13 +49,16 @@ extension ChatViewController: OutgoingMessageProtocol{
             outgoingMessage = OutgoingMessage(message: "[Location]", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
-        if let audio = audio {
+        else if let audio = audio {
             //create outgoing-message object
             outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
-        if let video = video {
+        else if let video = video {
             outgoingMessage = OutgoingMessage(message: "[Video]", video: video,snapImage: snapImage! ,senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
+        }
+        else if let snapImage = snapImage{
+            outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "gif" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         //play message sent sound
@@ -84,6 +87,10 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     func sendAudioData(_ data: Data) {
         sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil, videoDuration: 0)
+    }
+    
+    func sendGifData(_ data: Data){
+        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : data, audio: nil, video: nil, videoDuration: 0)
     }
     
     //MARK: Load Message

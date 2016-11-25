@@ -40,6 +40,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     func sendImages(_ images:[UIImage])
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
+    @objc optional func sendGifData(_ data: Data)
 }
 
 // this view controller is used to show image from one album, it has a table view for you to switch albums
@@ -186,7 +187,13 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     @objc private func sendImages() {
         if(photoPicker.videoAsset != nil){
             sendVideoFromQuickPicker()
-        }else{
+        }
+        else if (photoPicker.gifAssetDict.count != 0){
+            if sendGifFromQuickPicker() {
+                return
+            }
+        }
+        else{
             var images = [UIImage]()
             for i in 0..<photoPicker.indexImageDict.count
             {
@@ -195,6 +202,17 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             imageDelegate.sendImages(images)
         }
         cancelSend()
+    }
+    
+    private func sendGifFromQuickPicker() -> Bool
+    {
+        if self.imageDelegate.sendGifData != nil{
+            for data in photoPicker.gifAssetDict.values {
+                self.imageDelegate.sendGifData!(data)
+            }
+            return true
+        }
+        return false
     }
     
     fileprivate func sendVideoFromQuickPicker()
@@ -305,20 +323,37 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                     if(photoPicker.videoAsset != nil){
                         showAlertView(withWarning: "You can't select photo with video")
                         return
+                    }else if(photoPicker.gifAssetDict.count > 0){
+                        showAlertView(withWarning: "You can't select Image with GIF")
+                        return
                     }
-                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                    let count = self.photoPicker.indexImageDict.count
                     
-                    let highQRequestOption = PHImageRequestOptions()
-                    highQRequestOption.resizeMode = .none
-                    highQRequestOption.deliveryMode = .highQualityFormat //high pixel
-                    highQRequestOption.isSynchronous = true
-                    PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
-                        self.photoPicker.indexImageDict[count] = result
-                    }
+//                    let resources = PHAssetResource.assetResources(for: asset)
+//                    let orgFilename = (resources[0]).originalFilename;
+//                    if orgFilename.lowercased().contains(".gif") {
+                        let imageManager = PHCachingImageManager()
+                        let options = PHImageRequestOptions()
+                        options.resizeMode = .fast
+                        imageManager.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
+                            if let data = imageData{
+                                self.photoPicker.gifAssetDict[asset] = data
+                            }
+                        })
+//                    }else{
+                        photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                        photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                        let count = self.photoPicker.indexImageDict.count
+                        
+                        let highQRequestOption = PHImageRequestOptions()
+                        highQRequestOption.resizeMode = .none
+                        highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                        highQRequestOption.isSynchronous = true
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
+                            self.photoPicker.indexImageDict[count] = result
+                        }
+//                    }
                 }else{
-                    if(self.photoPicker.indexImageDict.count != 0){
+                    if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
                         showAlertView(withWarning: "You can't select video while selecting photos")
                         return
                     }else if(self.photoPicker.videoAsset != nil){
@@ -389,6 +424,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         if let duration = photoPicker.assetDurationDict[asset]{
             cell.setVideoDurationLabel(withDuration: duration)
         }
+        let resources = PHAssetResource.assetResources(for: asset)
+        let orgFilename = (resources[0]).originalFilename;
+        if orgFilename.lowercased().contains(".gif") {
+            cell.setGifLabel()
+        }
+        
         cell.loadImage(asset, requestOption: requestOption)
         if photoPicker.assetIndexDict[asset] != nil {
             cell.selectCell(photoPicker.assetIndexDict[asset]!)

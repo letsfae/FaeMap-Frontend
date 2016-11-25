@@ -29,6 +29,7 @@ class PhotoPicker {
     var indexImageDict = [Int: UIImage]() // a dic storing all the UIImages of photo selected. This will not be updated if user's selecting video
     
     var assetDurationDict = [PHAsset : Int]()// a dic store the duration for every video
+    var gifAssetDict = [PHAsset: Data]()
     
     var videoAsset: AVAsset? = nil // the selected video's AVAsset
     var videoImage: UIImage? = nil // the selected video's preview image
@@ -56,7 +57,7 @@ class PhotoPicker {
             
         })
         calculateVideoDuration()
-
+        
     }
     
     fileprivate func calculateVideoDuration(){
@@ -73,6 +74,19 @@ class PhotoPicker {
                         }
                     }
                 }
+                
+//                let resources = PHAssetResource.assetResources(for: asset)
+//                let orgFilename = (resources[0]).originalFilename;
+//                if orgFilename.contains(".gif") {
+//                    let imageManager = PHCachingImageManager()
+//                    let options = PHImageRequestOptions()
+//                    options.resizeMode = .fast
+//                    imageManager.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
+//                        if let data = imageData{
+//                            self.gifAssetDict[asset] = data
+//                        }
+//                    })
+//                }
             }
         }
     }

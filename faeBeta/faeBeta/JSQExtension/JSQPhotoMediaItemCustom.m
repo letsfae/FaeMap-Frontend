@@ -71,7 +71,7 @@
         return nil;
     }
     
-    if (self.cachedImageView == nil) {
+//    if (self.cachedImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:self.image];
         imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
@@ -82,7 +82,7 @@
         imageView.opaque = NO;
         [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         self.cachedImageView = imageView;
-    }
+//    }
     
     return self.cachedImageView;
 }
