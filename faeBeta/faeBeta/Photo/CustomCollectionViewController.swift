@@ -389,6 +389,11 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
                 photoPicker.indexImageDict.removeValue(forKey: deselectedIndex)
                 shiftChosenFrameFromIndex(deselectedIndex + 1)
             }
+            
+            if let _ = photoPicker.gifAssetDict[asset]{
+                photoPicker.gifAssetDict.removeAll()
+            }
+            
             photoPicker.videoAsset = nil
             photoPicker.videoImage = nil
         }
