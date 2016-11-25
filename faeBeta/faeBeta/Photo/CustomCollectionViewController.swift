@@ -254,9 +254,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
     }
     
     @objc private func cancelSend() {
-        photoPicker.indexAssetDict.removeAll()
-        photoPicker.assetIndexDict.removeAll()
-        photoPicker.indexImageDict.removeAll()
+        photoPicker.cleanup()
 
         _ = self.navigationController?.popViewController(animated: true)
     }

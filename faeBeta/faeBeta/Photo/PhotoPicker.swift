@@ -74,20 +74,18 @@ class PhotoPicker {
                         }
                     }
                 }
-                
-//                let resources = PHAssetResource.assetResources(for: asset)
-//                let orgFilename = (resources[0]).originalFilename;
-//                if orgFilename.contains(".gif") {
-//                    let imageManager = PHCachingImageManager()
-//                    let options = PHImageRequestOptions()
-//                    options.resizeMode = .fast
-//                    imageManager.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
-//                        if let data = imageData{
-//                            self.gifAssetDict[asset] = data
-//                        }
-//                    })
-//                }
             }
         }
+    }
+    
+    
+    /// clean up every selected photo
+    func cleanup(){
+        videoAsset = nil
+        videoImage = nil
+        indexAssetDict.removeAll()
+        assetIndexDict.removeAll()
+        indexImageDict.removeAll()
+        gifAssetDict.removeAll()
     }
 }
