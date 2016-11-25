@@ -53,9 +53,8 @@
                             <constraint firstItem="sYV-Wb-kpm" firstAttribute="centerY" secondItem="V7f-6a-1nz" secondAttribute="centerY" id="7Ci-cr-W7M"/>
                             <constraint firstAttribute="height" constant="26" id="NDj-Gt-PQK"/>
                             <constraint firstItem="sYV-Wb-kpm" firstAttribute="leading" secondItem="V7f-6a-1nz" secondAttribute="leading" constant="12" id="SLt-x7-RKY"/>
+                            <constraint firstItem="u4i-yG-HBV" firstAttribute="leading" secondItem="V7f-6a-1nz" secondAttribute="leading" constant="38" id="Wo4-0a-x70"/>
                             <constraint firstAttribute="trailing" secondItem="u4i-yG-HBV" secondAttribute="trailing" constant="8" id="aAB-tB-lTc"/>
-                            <constraint firstItem="u4i-yG-HBV" firstAttribute="leading" secondItem="V7f-6a-1nz" secondAttribute="leading" priority="900" constant="8" id="gNH-uV-Y8s"/>
-                            <constraint firstItem="u4i-yG-HBV" firstAttribute="leading" secondItem="sYV-Wb-kpm" secondAttribute="trailing" constant="8" id="qRS-bg-bGj"/>
                             <constraint firstItem="u4i-yG-HBV" firstAttribute="centerY" secondItem="V7f-6a-1nz" secondAttribute="centerY" id="tTO-hH-WkP"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -82,7 +81,7 @@
                 <outlet property="chosenIndicatorImageView" destination="Pnv-C7-Ghb" id="qWT-b3-NGK"/>
                 <outlet property="photoImageView" destination="TNM-ls-4zQ" id="7Vf-Ti-Ynv"/>
                 <outlet property="videoDurationLabel" destination="u4i-yG-HBV" id="iZR-eL-TbC"/>
-                <outlet property="videoDurationLabelDistanceToLeft" destination="qRS-bg-bGj" id="8u0-uj-3MM"/>
+                <outlet property="videoDurationLabelDistanceToLeft" destination="Wo4-0a-x70" id="pdu-ql-gas"/>
                 <outlet property="videoDurationLabelLength" destination="teN-Wz-pd1" id="dKj-aT-qeM"/>
                 <outlet property="videoIndicatorView" destination="V7f-6a-1nz" id="CMr-0R-meQ"/>
             </connections>

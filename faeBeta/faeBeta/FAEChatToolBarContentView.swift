@@ -390,7 +390,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 if let duration = photoPicker.assetDurationDict[asset]{
                     cell.setVideoDurationLabel(withDuration: duration)
                 }
-                else if photoPicker.gifAssetDict[asset] != nil {
+                let resources = PHAssetResource.assetResources(for: asset)
+                let orgFilename = (resources[0]).originalFilename;
+                if orgFilename.lowercased().contains(".gif") {
                     cell.setGifLabel()
                 }
                 cell.loadImage(asset, requestOption: requestOption)

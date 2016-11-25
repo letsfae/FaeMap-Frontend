@@ -389,6 +389,12 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         if let duration = photoPicker.assetDurationDict[asset]{
             cell.setVideoDurationLabel(withDuration: duration)
         }
+        let resources = PHAssetResource.assetResources(for: asset)
+        let orgFilename = (resources[0]).originalFilename;
+        if orgFilename.lowercased().contains(".gif") {
+            cell.setGifLabel()
+        }
+        
         cell.loadImage(asset, requestOption: requestOption)
         if photoPicker.assetIndexDict[asset] != nil {
             cell.selectCell(photoPicker.assetIndexDict[asset]!)

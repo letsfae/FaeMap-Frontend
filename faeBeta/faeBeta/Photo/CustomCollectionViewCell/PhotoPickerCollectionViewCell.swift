@@ -38,7 +38,9 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         deselectCell()
         self.videoIndicatorView.alpha = 0
         self.cameraIconImageView.alpha = 0
-        self.videoDurationLabelDistanceToLeft.priority = 1000
+        if let constraint = self.videoDurationLabelDistanceToLeft{
+            constraint.constant = 38
+        }
     }
     
     //MARK: - select & deselect cell
@@ -79,15 +81,25 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         }else{
             videoDurationLabelLength.constant = 40
         }
+        if let constraint = self.videoDurationLabelDistanceToLeft{
+            constraint.constant = 38
+        }
+        self.setNeedsUpdateConstraints()
+
         self.layoutSubviews()
     }
     
     func setGifLabel()
     {
         self.videoIndicatorView.alpha = 1
-        
+        self.cameraIconImageView.alpha = 0
+
         self.videoDurationLabel.text =  "GIF"
-        self.videoDurationLabelDistanceToLeft.priority = 800
+        if let constraint = self.videoDurationLabelDistanceToLeft{
+            constraint.constant = 8
+        }
+        self.layoutSubviews()
+
     }
     
     // given a PHAsset, request the image and populate the cell with the image
