@@ -149,7 +149,7 @@ extension ChatViewController {
         
         let object = objects[indexPath.row]
         
-        if object["type"] as! String == "picture" {
+        if object["type"] as! String == "picture" || object["type"] as! String == "gif" {
             
             let message = messages[indexPath.row]
             

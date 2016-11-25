@@ -67,6 +67,8 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc optional func endEdit()
     
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
+    
+    @objc optional func sendGifData(_ data: Data)
 }
 
 
@@ -421,20 +423,42 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         if(photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can't select photo with video")
                             return
+                        }else if(photoPicker.gifAssetDict.count > 0){
+                            self.delegate.showAlertView(withWarning: "You can't select Image with GIF")
+                            return
                         }
-                        photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                        photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                        let count = self.photoPicker.indexImageDict.count
                         
-                        let highQRequestOption = PHImageRequestOptions()
-                        highQRequestOption.resizeMode = .none
-                        highQRequestOption.deliveryMode = .highQualityFormat //high pixel
-                        highQRequestOption.isSynchronous = true
-                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
-                            self.photoPicker.indexImageDict[count] = result
-                        }
-                    }else{
-                        if(self.photoPicker.indexImageDict.count != 0){
+//                        let resources = PHAssetResource.assetResources(for: asset)
+//                        let orgFilename = (resources[0]).originalFilename;
+//                        if orgFilename.lowercased().contains(".gif") {
+                            let imageManager = PHCachingImageManager()
+                            let options = PHImageRequestOptions()
+                            options.resizeMode = .fast
+                            imageManager.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
+                                if let data = imageData{
+                                    self.photoPicker.gifAssetDict[asset] = data
+                                }
+                            })
+//                        }else{
+                            photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                            photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                            let count = self.photoPicker.indexImageDict.count
+                            
+                            let highQRequestOption = PHImageRequestOptions()
+                            highQRequestOption.resizeMode = .none
+                            highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                            highQRequestOption.isSynchronous = true
+                            PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
+                                self.photoPicker.indexImageDict[count] = result
+                            }
+//                        }
+                    }
+                        
+                        
+                        
+                    // if is selecting video
+                    else{
+                        if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
                             self.delegate.showAlertView(withWarning: "You can't select video while selecting photos")
                             return
                         }else if(self.photoPicker.videoAsset != nil){
@@ -467,10 +491,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else {
                 cell.deselectCell()
                 if let deselectedIndex = photoPicker.assetIndexDict[asset]{
-                photoPicker.assetIndexDict.removeValue(forKey: asset)
-                photoPicker.indexAssetDict.removeValue(forKey: deselectedIndex)
-                photoPicker.indexImageDict.removeValue(forKey: deselectedIndex)
-                shiftChosenFrameFromIndex(deselectedIndex + 1)
+                    photoPicker.assetIndexDict.removeValue(forKey: asset)
+                    photoPicker.indexAssetDict.removeValue(forKey: deselectedIndex)
+                    photoPicker.indexImageDict.removeValue(forKey: deselectedIndex)
+                    shiftChosenFrameFromIndex(deselectedIndex + 1)
+                }
+                
+                if let _ = photoPicker.gifAssetDict[asset]{
+                    photoPicker.gifAssetDict.removeAll()
                 }
                 photoPicker.videoAsset = nil
                 photoPicker.videoImage = nil
@@ -554,6 +582,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         if(photoPicker.videoAsset != nil){
             sendVideoFromQuickPicker()
             return
+        }else if (photoPicker.gifAssetDict.count != 0){
+            if sendGifFromQuickPicker() {
+                return
+            }
         }
         var images = [UIImage]()
 
@@ -562,6 +594,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             images.append(photoPicker.indexImageDict[i]!)
         }
         self.delegate.sendImages(images)
+    }
+    
+    private func sendGifFromQuickPicker() -> Bool
+    {
+        if self.delegate.sendGifData != nil{
+            for data in photoPicker.gifAssetDict.values {
+                self.delegate.sendGifData!(data)
+            }
+            return true
+        }
+        return false
     }
     
     fileprivate func sendVideoFromQuickPicker()

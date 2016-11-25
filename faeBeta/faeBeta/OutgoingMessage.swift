@@ -62,6 +62,8 @@ class OutgoingMessage {
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "video" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
     
+    // outgoing message for gif
+    
     func sendMessage(_ chatRoomId : String, withUser user: FaeWithUser) {
         
         let item = self.messageDictionary

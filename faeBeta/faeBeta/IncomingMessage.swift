@@ -54,6 +54,10 @@ class IncomingMessage {
             message = createVideoMessage(dictionary)
         }
         
+        if type == "gif"{
+            message = createGifMessage(dictionary)
+        }
+        
         if type != nil && message == nil
         {
             dictionary.setValue("[Current version does not support this message type, please update your app!]", forKey: "message")
@@ -97,7 +101,8 @@ class IncomingMessage {
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
     }
     
-    private func createPictureMessage(_ item : NSDictionary) -> JSQMessage {
+    private func createPictureMessage(_ item : NSDictionary) -> JSQMessage
+    {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().date(from: (item["date"] as? String)!)
@@ -114,6 +119,23 @@ class IncomingMessage {
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
     
+    private func createGifMessage(_ item : NSDictionary) -> JSQMessage
+    {
+        let name = item["senderName"] as? String
+        let userId = item["senderId"] as? String
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
+        
+        let mediaItem = JSQPhotoMediaItemCustom(image: nil)
+        
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        
+        gifFromData(item) { (image) in
+            mediaItem?.image = image
+            self.collectionView.reloadData()
+        }
+
+        return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
+    }
     
     // create incoming audio message
     private func createAudioMessage(_ item : NSDictionary) -> JSQMessage {
@@ -195,7 +217,17 @@ class IncomingMessage {
             result(image)
         }
     }
-    
+        
+    private func gifFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
+        var image : UIImage?
+        
+        if let decodedData = Data(base64Encoded: (item["picture"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+            
+            image = UIImage.gif(data: decodedData)
+            result(image)
+        }
+    }
+        
     private func voiceFromData(_ item : NSDictionary, result : (_ voiceData : Data?) -> Void) {
         
         if let decodedData = Data(base64Encoded: (item["audio"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
