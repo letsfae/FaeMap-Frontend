@@ -560,7 +560,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showFullAlbum()
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
-        let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "CustomCollectionViewController")as! CustomCollectionViewController
+        let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }

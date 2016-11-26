@@ -42,7 +42,7 @@
 		B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */; };
 		B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */; };
 		B064EEC21D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */; };
-		B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */; };
+		B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEB91D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift */; };
 		B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */; };
 		B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */; };
 		B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEBD1D6E0CEA00C078F5 /* PhotoPicker.swift */; };
@@ -287,7 +287,7 @@
 		B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutgoingMessage.swift; sourceTree = "<group>"; };
 		B064EEB51D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		B064EEB61D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FullPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
-		B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
+		B064EEB91D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullAlbumCollectionViewController.swift; sourceTree = "<group>"; };
 		B064EEBB1D6E0CEA00C078F5 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		B064EEBC1D6E0CEA00C078F5 /* AlbumTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumTableViewCell.xib; sourceTree = "<group>"; };
 		B064EEBD1D6E0CEA00C078F5 /* PhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
@@ -573,7 +573,7 @@
 			children = (
 				DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */,
 				B064EEB41D6E0CEA00C078F5 /* CustomCollectionViewCell */,
-				B064EEB91D6E0CEA00C078F5 /* CustomCollectionViewController.swift */,
+				B064EEB91D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift */,
 				B064EEBA1D6E0CEA00C078F5 /* CustomTableViewCell */,
 				B064EEBD1D6E0CEA00C078F5 /* PhotoPicker.swift */,
 				B064EEBE1D6E0CEA00C078F5 /* SmartAlbum.swift */,
@@ -1363,7 +1363,7 @@
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
 				B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
-				B064EECB1D6E0CEA00C078F5 /* CustomCollectionViewController.swift in Sources */,
+				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
 				B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1671,7 +1671,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1683,8 +1683,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7c41c52b-905c-4b27-80d6-09b90ecb4e7c";
-				PROVISIONING_PROFILE_SPECIFIER = fae.ios.faeMap;
+				PROVISIONING_PROFILE = "20ec3703-ea0d-444b-8dd0-21ece3f1d127";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: fae.ios.faeMap";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SUPPRESS_WARNINGS = NO;

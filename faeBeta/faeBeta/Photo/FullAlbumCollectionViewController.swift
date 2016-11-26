@@ -45,7 +45,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // this view controller is used to show image from one album, it has a table view for you to switch albums
 
-class CustomCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
+class FullAlbumCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: - properties
     private var photoPicker : PhotoPicker!
@@ -126,7 +126,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
         let centerView = UIView(frame: CGRect(x: 0,y: 0,width: 200,height: 30))
         showTableButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
         showTableButton.titleLabel?.text = ""
-        showTableButton.addTarget(self, action: #selector(CustomCollectionViewController.showAlbumTable), for: .touchUpInside)
+        showTableButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.showAlbumTable), for: .touchUpInside)
         
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
         self.navigationController?.navigationBar.barTintColor = UIColor.white
@@ -174,7 +174,7 @@ class CustomCollectionViewController: UICollectionViewController, UICollectionVi
             quitButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
             quitButton.backgroundColor = UIColor(red: 58 / 255, green: 51 / 255, blue: 51 / 255, alpha: 0.5)
             self.view.addSubview(quitButton)
-            quitButton.addTarget(self, action: #selector(CustomCollectionViewController.dismissAlbumTable), for: .touchUpInside)
+            quitButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.dismissAlbumTable), for: .touchUpInside)
             self.view.addSubview(tableViewAlbum)
             tableViewAlbum.setContentOffset(CGPoint.zero, animated: true)
         } else {

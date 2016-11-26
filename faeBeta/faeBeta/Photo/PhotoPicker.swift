@@ -57,7 +57,6 @@ class PhotoPicker {
             
         })
         calculateVideoDuration()
-        
     }
     
     fileprivate func calculateVideoDuration(){
