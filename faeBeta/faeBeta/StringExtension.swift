@@ -59,4 +59,35 @@ extension String {
         // convert to required string
         return "Invalid Date"
     }
+    
+    func formatPinCommentsContent() -> NSMutableAttributedString {
+        
+        let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
+        let regularColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        
+//        var content = "<a>@maplestory06</a> comment and like testing"
+        var username = ""
+        var endIndex = 0
+        
+        if let match = self.range(of: "(?<=<a>@)[^.]+(?=</a>)", options: .regularExpression) {
+            username = "@\(self.substring(with: match))"
+            endIndex = username.characters.count + 8
+        }
+        else {
+            print("parse formatPinCommentsContent fails")
+        }
+        
+        let index = self.index(self.startIndex, offsetBy: endIndex)
+        let restContent = " \(self.substring(from: index))"
+        
+        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: colorFae]
+        let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
+        
+        let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
+        let regularString = NSMutableAttributedString(string: restContent, attributes: attrsRegular)
+        
+        usernameString.append(regularString)
+        
+        return usernameString
+    }
 }

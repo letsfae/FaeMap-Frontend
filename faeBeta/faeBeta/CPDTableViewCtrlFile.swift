@@ -23,7 +23,7 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         else if tableView == tableViewPeople{
             return dictPeopleOfCommentDetail.count
         }
-        else{
+        else {
             return 0
         }
     }
@@ -48,7 +48,8 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
                 cell.labelTimestamp.text = date
             }
             if let content = dictCell["content"].string {
-                cell.textViewComment.text = content
+                let attributedContent = content.formatPinCommentsContent()
+                cell.textViewComment.attributedText = attributedContent
             }
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero

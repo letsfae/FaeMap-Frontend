@@ -15,6 +15,8 @@ protocol CommentPinDetailDelegate: class {
     func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
     func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int)
+    // Animate the selected marker
+    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
 }
 
 class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
@@ -51,7 +53,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
-    var commentDetailFullBoardScrollView: UIScrollView!
     var commentIDCommentPinDetailView: String = "-999"
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
@@ -75,7 +76,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
     var anotherRedSlidingLine: UIView!
-    var subviewWhite: UIView!
+    var subviewNavigation: UIView!
     var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
@@ -105,8 +106,8 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
-    fileprivate var isObservingInputTextView = false
-    fileprivate var inputTextViewContext = 0
+    var isObservingInputTextView = false
+    var inputTextViewContext = 0
     var inputTextViewMaximumHeight:CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
@@ -117,31 +118,81 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
     var buttonImagePicker : UIButton!
-    
     var toolbarContentView: FAEChatToolBarContentView!
     
-    // FullboardScrollView and TableViewCommentsOnComments control
-    var switchedToFullboard = true
-    
-    // Another dragging button for UI effect
-    var draggingButtonSubview: UIView!
-    
-    // Timer for animating heart
-    var animatingHeartTimer: Timer!
-    
-    // Timer for touching pin comment cell
-    var touchToReplyTimer: Timer!
+    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnComments control
+    var draggingButtonSubview: UIView! // Another dragging button for UI effect
+    var animatingHeartTimer: Timer! // Timer for animating heart
+    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
+    var subviewInputToolBar: UIView! // subview to hold input toolbar
+    var firstLoadInputToolBar = true
+    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
+    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
+    var commentPinIcon: UIButton! // Icon to indicate pin type is comment
+    var selectedMarkerPosition: CLLocationCoordinate2D!
+    var buttonPrevPin: UIButton!
+    var buttonNextPin: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
-        loadCommentPinDetailWindow()
         loadTransparentButtonBackToMap()
+        loadCommentPinDetailWindow()
         commentIDCommentPinDetailView = "\(commentIdSentBySegue)"
         if commentIDCommentPinDetailView != "-999" {
             getSeveralInfo()
         }
+    }
+    
+    override func viewDidAppear(_ animated:Bool) {
+        super.viewDidAppear(animated)
+        self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
+        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.subviewNavigation.frame.origin.y = 0
+            self.tableCommentsForComment.frame.origin.y = 65
+            self.draggingButtonSubview.frame.origin.y = 292
+            self.grayBackButton.alpha = 1
+            self.commentPinIcon.alpha = 1
+            self.buttonPrevPin.alpha = 1
+            self.buttonNextPin.alpha = 1
+            }, completion: { (done: Bool) in
+//            self.loadInputToolBar()
+        })
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if inputToolbar != nil {
+            closeToolbarContentView()
+            removeObservers()
+        }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    func getSeveralInfo() {
+        getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
+        getCommentInfo()
+        getPinComments("comment", pinID: commentIDCommentPinDetailView, sendMessageFlag: false)
+    }
+    
+    func loadTransparentButtonBackToMap() {
+        grayBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        grayBackButton.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.3)
+        grayBackButton.alpha = 0
+        self.view.addSubview(grayBackButton)
+        self.view.sendSubview(toBack: grayBackButton)
+        grayBackButton.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: .touchUpInside)
+    }
+    
+    func loadInputToolBar() {
+        if !firstLoadInputToolBar {
+            return
+        }
+        firstLoadInputToolBar = false
         setupInputToolbar()
         setupToolbarContentView()
         addObservers()
@@ -161,37 +212,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.view.addConstraint(toolbarDistanceToBottom)
             self.view.setNeedsUpdateConstraints()
         }
+        adjustInputToolbarHeightConstraint(byDelta: -90) // A tricky way to set the toolbarHeight to default
     }
     
-    override func viewDidAppear(_ animated:Bool) {
-        adjustInputToolbarHeightConstraint(byDelta: -90)// A tricky way to set the toolbarHeight to default
-        super.viewDidAppear(animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        closeToolbarContentView()
-        removeObservers()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    func getSeveralInfo() {
-        getPinAttributeNum("comment", pinID: commentIDCommentPinDetailView)
-        getCommentInfo()
-        getPinComments("comment", pinID: commentIDCommentPinDetailView, sendMessageFlag: false)
-    }
-    
-    func loadTransparentButtonBackToMap() {
-        let subviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.view.addSubview(subviewBackToMap)
-        self.view.sendSubview(toBack: subviewBackToMap)
-        subviewBackToMap.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: .touchUpInside)
-    }
-    
-    fileprivate func addObservers() {
+    func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name:NSNotification.Name.UIKeyboardDidShow, object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -207,7 +231,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.isObservingInputTextView = true
     }
     
-    fileprivate func removeObservers() {
+    func removeObservers() {
         NotificationCenter.default.removeObserver(self)
         if (!self.isObservingInputTextView) {
             return;
@@ -217,7 +241,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.isObservingInputTextView = false
     }
     
-    fileprivate func setupInputToolbar()
+    func setupInputToolbar()
     {
         func loadInputBarComponent() {
             
@@ -269,7 +293,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
                 button.autoresizingMask = [.flexibleTopMargin]
             }
         }
-        inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight - 90, width: screenWidth, height: 90))
+        inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight-90, width: screenWidth, height: 90))
         inputToolbar.contentView.textView.delegate = self
         inputToolbar.contentView.textView.tintColor = colorFae
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
@@ -281,12 +305,18 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         inputToolbar.contentView.textView.addSubview(lableTextViewPlaceholder)
         
         inputToolbar.maximumHeight = 128
-        self.uiviewCommentPinDetail.addSubview(inputToolbar)
+        subviewInputToolBar = UIView(frame: CGRect(x: 0, y: screenHeight-90, width: screenWidth, height: 90))
+        subviewInputToolBar.backgroundColor = UIColor.white
+        self.view.addSubview(subviewInputToolBar)
+        subviewInputToolBar.layer.zPosition = 120
+        self.view.addSubview(inputToolbar)
+        inputToolbar.layer.zPosition = 121
         loadInputBarComponent()
         inputToolbar.isHidden = true
+        subviewInputToolBar.isHidden = true
     }
     
-    fileprivate func setupToolbarContentView() {
+    func setupToolbarContentView() {
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
@@ -299,12 +329,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         if sender.tag == 1 {
             tableViewPeople.isHidden = true
             tableCommentsForComment.isHidden = false
-            commentDetailFullBoardScrollView.contentSize.height = tableCommentsForComment.frame.size.height + 281
         }
         else if sender.tag == 3 {
             tableViewPeople.isHidden = false
             tableCommentsForComment.isHidden = true
-            commentDetailFullBoardScrollView.contentSize.height = tableViewPeople.frame.size.height + 281
         }
         let tag = CGFloat(sender.tag)
         let centerAtOneThird = screenWidth / 4
@@ -476,7 +504,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
-    fileprivate func resetToolbarButtonIcon()
+    func resetToolbarButtonIcon()
     {
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
@@ -487,7 +515,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
-    fileprivate func closeToolbarContentView() {
+    func closeToolbarContentView() {
         resetToolbarButtonIcon()
         moveDownInputBar()
         toolbarContentView.closeAll()
@@ -522,8 +550,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     // MARK: - send messages
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
-            commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: realText)
+            commentThisPin("comment", pinID: commentIDCommentPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
+        self.replyToUser = ""
         self.inputToolbar.contentView.textView.text = ""
         self.lableTextViewPlaceholder.isHidden = false
         self.inputToolbar.contentView.textView.resignFirstResponder()
@@ -563,7 +592,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     
     func endEdit() {
         self.view.endEditing(true)
-        self.inputToolbar.contentView.textView.resignFirstResponder()
+        if inputToolbar != nil {
+            self.inputToolbar.contentView.textView.resignFirstResponder()
+        }
     }
     
     //MARK: - TEXTVIEW delegate
@@ -597,8 +628,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.showKeyboard()
     }
     
-    
-    
     //MARK: - observe key path
     override func observeValue(forKeyPath keyPath: String?,
                                          of object: Any?,
@@ -621,16 +650,18 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        self.inputToolbar.contentView.textView.resignFirstResponder()
+        if inputToolbar != nil {
+            self.inputToolbar.contentView.textView.resignFirstResponder()
+        }
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
-        if commentDetailFullBoardScrollView.contentOffset.y >= 226 {
+        if tableCommentsForComment.contentOffset.y >= 227 {
             if self.controlBoard != nil {
                 self.controlBoard.isHidden = false
             }
         }
-        if commentDetailFullBoardScrollView.contentOffset.y < 226 {
+        if tableCommentsForComment.contentOffset.y < 227 {
             if self.controlBoard != nil {
                 self.controlBoard.isHidden = true
             }

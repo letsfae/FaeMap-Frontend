@@ -27,8 +27,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelega
     func dismissMarkerShadow(_ dismiss: Bool) {
         print("back from comment pin detail")
         if dismiss {
-            self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
-            self.markerBackFromCommentDetail.zIndex = 0
+//            self.markerBackFromCommentDetail.icon = UIImage(named: "commentPinMarker")
+//            self.markerBackFromCommentDetail.zIndex = 0
         }
         else {
             self.markerBackFromCommentDetail.map = nil
@@ -40,11 +40,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelega
         print("DEBUG: Delegate pass commentID")
         print(commentID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.markerBackFromCommentDetail.icon = UIImage(named: "comment_pin_marker")
-        self.markerBackFromCommentDetail.zIndex = 0
+//        self.markerBackFromCommentDetail.icon = UIImage(named: "commentPinMarker")
+//        self.markerBackFromCommentDetail.zIndex = 0
         if let marker = self.mapCommentPinsDic[commentID] {
-            self.markerBackFromCommentDetail = marker
-            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+//            self.markerBackFromCommentDetail = marker
+//            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
             marker.zIndex = 2
             self.commentIDFromOpenedPinCell = -999
         }
@@ -56,6 +56,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelega
             self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
             self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         }
+        self.faeMapView.animate(to: camera)
+    }
+    // CommentPinDetailDelegate
+    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
     }
     

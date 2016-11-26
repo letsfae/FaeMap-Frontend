@@ -14,16 +14,24 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
+        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
         self.view = faeMapView
+        do {
+            // Set the map style by passing a valid JSON string.
+            faeMapView.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
+        } catch {
+            NSLog("The style definition could not be loaded: \(error)")
+        }
+
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
         
         // Default is true, if true, panGesture could not be detected
-        self.faeMapView.settings.consumesGesturesInView = false
+//        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -153,7 +161,7 @@ extension FaeMapViewController {
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
-                            pinShowOnMap.icon = UIImage(named: "comment_pin_marker")
+                            pinShowOnMap.icon = UIImage(named: "commentPinMarker")
                             pinShowOnMap.zIndex = 0
                         }
                     }

@@ -41,28 +41,22 @@ extension CommentPinDetailViewController {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeTo - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeTo
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeTo - 28
                 })
             }
             else {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.draggingButtonSubview.frame.origin.y = self.commentPinSizeFrom - 28
                     self.uiviewCommentPinDetail.frame.size.height = self.commentPinSizeFrom
-                    self.commentDetailFullBoardScrollView.frame.size.height = self.commentPinSizeFrom - 28
                 })
             }
             if uiviewCommentPinDetail.frame.size.height == 255 {
                 textviewCommentPinDetail.isScrollEnabled = true
-                commentDetailFullBoardScrollView.isScrollEnabled = false
                 buttonCommentPinDetailDragToLargeSize.tag = 0
-                commentDetailFullBoardScrollView.contentSize.height = 255
             }
             if uiviewCommentPinDetail.frame.size.height == screenHeight - 65 {
                 textviewCommentPinDetail.isScrollEnabled = false
-                commentDetailFullBoardScrollView.isScrollEnabled = true
                 buttonCommentPinDetailDragToLargeSize.tag = 1
                 let newHeight = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-                self.commentDetailFullBoardScrollView.contentSize.height = newHeight + 281
                 self.tableCommentsForComment.frame.size.height = newHeight
             }
             
@@ -71,7 +65,6 @@ extension CommentPinDetailViewController {
             if location.y >= 306 {
                 self.draggingButtonSubview.center.y = location.y - 65
                 self.uiviewCommentPinDetail.frame.size.height = location.y + 14 - 65
-                self.commentDetailFullBoardScrollView.frame.size.height = location.y + 14 - 65
             }
         }
     }
@@ -92,8 +85,9 @@ extension CommentPinDetailViewController {
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .overCurrentContext
             self.present(openedPinListVC, animated: false, completion: {
-                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-                self.uiviewCommentPinDetail.center.y -= screenHeight
+                self.subviewNavigation.center.y -= self.subviewNavigation.frame.size.height
+                self.tableCommentsForComment.center.y -= screenHeight
+                self.draggingButtonSubview.center.y -= screenHeight
             })
         }
     }
@@ -291,14 +285,21 @@ extension CommentPinDetailViewController {
     
     func actionBackToMap(_ sender: UIButton) {
         endEdit()
-        inputToolbar.isHidden = true
+        if inputToolbar != nil {
+            self.inputToolbar.isHidden = true
+            self.subviewInputToolBar.isHidden = true
+        }
         controlBoard.removeFromSuperview()
         UIView.animate(withDuration: 0.583, animations: ({
-            self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
-            self.uiviewCommentPinDetail.center.y -= screenHeight+150
+            self.subviewNavigation.center.y -= screenHeight
+            self.tableCommentsForComment.center.y -= screenHeight
+            self.draggingButtonSubview.center.y -= screenHeight
+            self.grayBackButton.alpha = 0
+            self.commentPinIcon.alpha = 0
+            self.buttonPrevPin.alpha = 0
+            self.buttonNextPin.alpha = 0
         }), completion: { (done: Bool) in
             if done {
-                self.delegate?.dismissMarkerShadow(true)
                 self.dismiss(animated: false, completion: nil)
             }
         })
@@ -310,19 +311,22 @@ extension CommentPinDetailViewController {
             endEdit()
             sender.tag = 0
             buttonCommentPinDetailDragToLargeSize.tag = 0
-            self.inputToolbar.isHidden = true
+            if inputToolbar != nil {
+                self.inputToolbar.isHidden = true
+                self.subviewInputToolBar.isHidden = true
+            }
             textviewCommentPinDetail.isScrollEnabled = true
-            commentDetailFullBoardScrollView.isScrollEnabled = false
-            self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 65
-            self.uiviewCommentPinDetail.frame.size.height = screenHeight - 65
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
-                self.draggingButtonSubview.frame.origin.y = 227
-                self.commentDetailFullBoardScrollView.contentSize.height = 281
-                self.commentDetailFullBoardScrollView.frame.size.height = 228
-                self.commentDetailFullBoardScrollView.scrollToTop()
-                self.uiviewCommentPinDetail.frame.size.height = 255
+                self.draggingButtonSubview.frame.origin.y = 292
+                self.tableCommentsForComment.scrollToTop()
+                self.tableCommentsForComment.frame.size.height = 227
+                self.uiviewCommentPinDetail.frame.size.height = 281
+                self.textviewCommentPinDetail.frame.size.height = 100
+                self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
+                self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
+                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -332,32 +336,28 @@ extension CommentPinDetailViewController {
         }
         sender.tag = 1
         if buttonCommentPinDetailDragToLargeSize.tag == 1 {
-            self.inputToolbar.isHidden = false
-            self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 65 - 90
-            self.uiviewCommentPinDetail.frame.size.height = screenHeight - 65
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 65
+            if inputToolbar != nil {
+                self.inputToolbar.isHidden = false
+                self.subviewInputToolBar.isHidden = false
+            }
+            self.tableCommentsForComment.frame.size.height = screenHeight - 65 - 90
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
         }
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
-        let newHeightComments = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-        let newHeightPeople = CGFloat(76 * self.dictPeopleOfCommentDetail.count)
-        self.commentDetailFullBoardScrollView.contentSize.height = newHeightComments + 281
-        self.tableCommentsForComment.frame.size.height = newHeightComments
-        self.tableViewPeople.frame.size.height = newHeightPeople
         textviewCommentPinDetail.isScrollEnabled = false
-        commentDetailFullBoardScrollView.isScrollEnabled = true
+        if inputToolbar != nil {
+            self.inputToolbar.isHidden = false
+            self.subviewInputToolBar.isHidden = false
+        }
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 65
-            // -65 for header, -27 for dragging button
-            self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 65
-            self.uiviewCommentPinDetail.frame.size.height = screenHeight - 65
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
+            self.tableCommentsForComment.frame.size.height = screenHeight - 65 - 90
             if numLines > 4 {
-                // 420 is table height, 281 is fixed
-                self.commentDetailFullBoardScrollView.contentSize.height += diffHeight
-                self.tableCommentsForComment.frame.size.height += diffHeight
+                self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
                 self.uiviewCommentDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
@@ -365,9 +365,7 @@ extension CommentPinDetailViewController {
             }
         }), completion: { (done: Bool) in
             if done {
-                self.inputToolbar.isHidden = false
-                self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 65 - 90
-                self.uiviewCommentPinDetail.frame.size.height = screenHeight - 65
+                
             }
         })
     }
@@ -378,15 +376,17 @@ extension CommentPinDetailViewController {
             sender.tag = 0
             buttonCommentPinAddComment.tag = 0
             textviewCommentPinDetail.isScrollEnabled = true
-            commentDetailFullBoardScrollView.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
-                self.draggingButtonSubview.frame.origin.y = 227
-                self.commentDetailFullBoardScrollView.contentSize.height = 281
-                self.commentDetailFullBoardScrollView.frame.size.height = 228
-                self.commentDetailFullBoardScrollView.scrollToTop()
-                self.uiviewCommentPinDetail.frame.size.height = 255
+                self.draggingButtonSubview.frame.origin.y = 292
+                self.tableCommentsForComment.scrollToTop()
+                self.tableCommentsForComment.frame.size.height = 227
+                self.uiviewCommentPinDetail.frame.size.height = 281
+                self.textviewCommentPinDetail.frame.size.height = 100
+                self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
+                self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
+                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -397,24 +397,14 @@ extension CommentPinDetailViewController {
         sender.tag = 1
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
-        let newHeightComments = CGFloat(140 * self.dictCommentsOnCommentDetail.count)
-        let newHeightPeople = CGFloat(76 * self.dictPeopleOfCommentDetail.count)
-        self.commentDetailFullBoardScrollView.contentSize.height = newHeightComments + 281
-        self.tableCommentsForComment.frame.size.height = newHeightComments
-        self.tableViewPeople.frame.size.height = newHeightPeople
         textviewCommentPinDetail.isScrollEnabled = false
-        commentDetailFullBoardScrollView.isScrollEnabled = true
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 93
-            // -65 for header, -27 for dragging button
-            self.commentDetailFullBoardScrollView.frame.size.height = screenHeight - 93
-            self.uiviewCommentPinDetail.frame.size.height = screenHeight - 65
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 28
+            self.tableCommentsForComment.frame.size.height = screenHeight - 93
             if numLines > 4 {
-                // 420 is table height, 281 is fixed
-                self.commentDetailFullBoardScrollView.contentSize.height += diffHeight
-                self.tableCommentsForComment.frame.size.height += diffHeight
+                self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
                 self.uiviewCommentDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
@@ -431,6 +421,7 @@ extension CommentPinDetailViewController {
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = colorFae
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
+            self.loadInputToolBar()
             self.inputToolbar.isHidden = false
             self.inputToolbar.contentView.textView.text = "@\(username) "
             self.inputToolbar.contentView.textView.becomeFirstResponder()

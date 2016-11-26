@@ -62,7 +62,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // MARK: -- Map Chat
     var mapChatSubview: UIButton!
     var mapChatWindow: UIView!
-    var mapChatClose: UIButton!
     var labelMapChat: UILabel!
     var mapChatTable = UITableView()
     
@@ -199,15 +198,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewWillDisappear(_ animated: Bool) {
         // Need a Comment Clearance??????
         self.navigationController?.navigationBar.isTranslucent = false
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "mapToCommentPinDetail" {
-            if let commentPinDetailVC = segue.destination as? CommentPinDetailViewController {
-                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
-                commentPinDetailVC.delegate = self
-            }
-        }
     }
     
     // Testing back from background

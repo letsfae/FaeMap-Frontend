@@ -21,8 +21,8 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, commentID: Int) {
         self.delegate?.animateToCameraFromCommentPinDetailView(coordinate, commentID: commentID)
         self.backJustOnce = true
-        self.subviewWhite.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-        self.uiviewCommentPinDetail.center.y += screenHeight
+        self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+        self.tableCommentsForComment.center.y += screenHeight
         self.commentIDCommentPinDetailView = "\(commentID)"
         if commentIDCommentPinDetailView != "-999" {
             getSeveralInfo()
@@ -32,7 +32,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     func backFromOpenedPinList(_ back: Bool) {
         if back {
             backJustOnce = true
-            subviewWhite.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+            subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
             UIView.animate(withDuration: 0.583, animations:({
                 self.uiviewCommentPinDetail.center.y += screenHeight
             }), completion: { (done: Bool) in
@@ -42,13 +42,14 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
             })
         }
         if !back {
-            self.delegate?.dismissMarkerShadow(true)
             self.dismiss(animated: false, completion: nil)
         }
     }
     
     func showActionSheetFromCommentPinCell(_ username: String) {
-        self.inputToolbar.contentView.textView.resignFirstResponder()
+        if inputToolbar != nil {
+            self.inputToolbar.contentView.textView.resignFirstResponder()
+        }
         let infoDict: [String: AnyObject] = ["argumentInt": username as AnyObject]
         touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(CommentPinDetailViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
     }
@@ -62,11 +63,14 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     func showActionSheetWithTimer(_ timer: Timer) {
         if let usernameInfo = timer.userInfo as? Dictionary<String, AnyObject> {
             let userN = usernameInfo["argumentInt"] as! String
+            self.replyToUser = "<a>@\(userN)</a> "
             let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
             menu.view.tintColor = colorFae
             let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
+                self.loadInputToolBar()
                 self.inputToolbar.isHidden = false
-                self.inputToolbar.contentView.textView.text = "@\(userN) "
+                self.subviewInputToolBar.isHidden = false
+                self.inputToolbar.contentView.textView.text = ""
                 self.inputToolbar.contentView.textView.becomeFirstResponder()
                 self.lableTextViewPlaceholder.isHidden = true
             }
