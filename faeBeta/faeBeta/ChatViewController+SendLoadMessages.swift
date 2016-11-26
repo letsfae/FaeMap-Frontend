@@ -95,9 +95,9 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: Load Message
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
-    func loadMessage() {
-        
-        ref.child(chatRoomId).queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded) { (snapshot : FIRDataSnapshot) in
+    func loadMessages(){
+        roomRef = ref.child(chatRoomId)
+        roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
                 // becasue the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
@@ -123,23 +123,13 @@ extension ChatViewController: OutgoingMessageProtocol{
             }
         }
         
-        // for futher usage. may allow the user to drawback or modify message
-//        ref.child(chatRoomId).observe(.childChanged) { (snapshot : FIRDataSnapshot) in
-//            
-//        }
-//        
-//        ref.child(chatRoomId).observe(.childRemoved) { (snapshot : FIRDataSnapshot) in
-//            
-//        }
-        
-        ref.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
+        roomRef?.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot : FIRDataSnapshot) in
             //this function will run only once
             self.insertMessages()
             self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
             self.scrollToBottom(true)
         }
-        
     }
     
     func loadPreviousMessages(){
