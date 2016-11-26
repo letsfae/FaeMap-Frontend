@@ -13,9 +13,11 @@ import CoreLocation
 extension CreateMomentPinViewController {
     
     func actionTakeMedia(_ sender: UIButton) {
-        self.imagePicker.sourceType = .photoLibrary
-        self.imagePicker.modalPresentationStyle = .overCurrentContext
-        self.present(self.imagePicker, animated: false, completion: nil)
+        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+        imagePicker.imageDelegate = self
+
+        self.present(nav, animated: true, completion: nil)
     }
     
     func actionShowMoreOptions(_ sender: UIButton) {

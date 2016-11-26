@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         addNewMediaToSubmit(image: image)
         dismiss(animated: true, completion: nil)
@@ -31,5 +31,9 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     
     func reArrangePhotos() {
         
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        print("Debug sendImages")
     }
 }

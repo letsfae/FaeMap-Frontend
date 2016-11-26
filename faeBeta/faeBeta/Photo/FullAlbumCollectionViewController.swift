@@ -255,6 +255,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         photoPicker.cleanup()
 
         _ = self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc private func dismissAlbumTable() {
@@ -399,6 +400,9 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if(photoPicker.cameraRoll == nil){
+            photoPicker.getSmartAlbum()
+        }
         return photoPicker.currentAlbum.albumContent.count
     }
     

@@ -15,7 +15,7 @@ private enum SERVERTYPE {
 }
 
 // change this to .production to switch to production mode
-private let server = SERVERTYPE.production
+private let server = SERVERTYPE.development
 
 var baseURL : String{
     get{
