@@ -128,7 +128,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var firstLoadInputToolBar = true
     var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
     var grayBackButton: UIButton! // Background gray button, alpha = 0.3
-    var commentPinIcon: UIButton! // Icon to indicate pin type is comment
+    var commentPinIcon: UIImageView! // Icon to indicate pin type is comment
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
@@ -157,7 +157,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-//            self.loadInputToolBar()
+            self.loadInputToolBar()
         })
     }
     

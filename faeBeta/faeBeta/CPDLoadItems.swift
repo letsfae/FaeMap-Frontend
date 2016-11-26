@@ -392,8 +392,9 @@ extension CommentPinDetailViewController {
     }
     
     func loadPinCtrlButton() {
-        commentPinIcon = UIButton(frame: CGRect(x: 185, y: 477, width: 60, height: 80))
-        commentPinIcon.setImage(UIImage(named: "markerCommentPinHeavyShadow"), for: UIControlState())
+        commentPinIcon = UIImageView(frame: CGRect(x: 185, y: 477, width: 60, height: 80))
+        commentPinIcon.image = UIImage(named: "markerCommentPinHeavyShadow")
+        commentPinIcon.contentMode = .scaleAspectFit
         commentPinIcon.center.x = screenWidth/2
         commentPinIcon.center.y = 510
         commentPinIcon.layer.zPosition = 50
