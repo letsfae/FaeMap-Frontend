@@ -23,7 +23,8 @@ public var headerDeviceToken: Data!
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
 {
     //MARK: - properties
-    let ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
+    var ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
+    var roomRef : FIRDatabaseReference?
     var messages : [JSQMessage] = []
     var objects : [NSDictionary] = []//
     var loaded : [NSDictionary] = []// load dict from firebase that this chat room all message
@@ -134,11 +135,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //update recent
         closeToolbarContentView()
         removeObservers()
-        ref.removeAllObservers()//firebase : remove all the Listener (firebase default)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
     }
@@ -153,26 +154,34 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.inputToolbar.contentView.textView.delegate = self
         
         //load firebase messages
-        loadMessage()
+        loadMessages()
         // Do any additional setup after loading the view.
         loadInputBarComponent()
         
         self.inputToolbar.contentView.textView.placeHolder = "Type Something..."
         self.inputToolbar.contentView.backgroundColor = UIColor.white
         self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
+        setupToolbarContentView()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
         super.viewWillAppear(true)
+        
         addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
-        setupToolbarContentView()
     }
     
+    override func willMove(toParentViewController parent: UIViewController?) {
+        
+        if(parent == nil && chatRoomId != nil){
+            roomRef?.removeAllObservers()
+        }
+    }
     // MARK: - setup
     
     private func navigationBarSet() {

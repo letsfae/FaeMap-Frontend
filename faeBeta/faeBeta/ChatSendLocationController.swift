@@ -11,7 +11,7 @@ import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
-protocol LocationSendDelegate {
+protocol LocationSendDelegate: class {
     func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : Data)
 }
 
@@ -24,7 +24,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     var heightFactor : CGFloat = 667 / 736
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
-    var locationDelegate : LocationSendDelegate!
+    weak var locationDelegate : LocationSendDelegate!
     
     // MARK: -- Location
     var currentLatitude: CLLocationDegrees = 34.0205378

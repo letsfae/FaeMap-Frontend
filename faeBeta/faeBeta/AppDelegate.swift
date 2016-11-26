@@ -35,10 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
         
-        FIRApp.configure()
-        
+        FIRApp.configure()        
         FIRDatabase.database().persistenceEnabled = true
-        
         
         return true
     }
