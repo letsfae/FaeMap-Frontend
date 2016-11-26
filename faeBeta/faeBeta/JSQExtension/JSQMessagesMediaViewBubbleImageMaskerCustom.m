@@ -27,7 +27,7 @@
 
 - (instancetype)init
 {
-    return [self initWithBubbleImageFactory:[[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:[UIImage jsq_bubbleCompactTaillessImage] capInsets:UIEdgeInsetsZero]];
+    return [self initWithBubbleImageFactory:[[JSQMessagesBubbleImageFactoryCustom alloc] init]];
 }
 
 - (instancetype)initWithBubbleImageFactory:(JSQMessagesBubbleImageFactoryCustom *)bubbleImageFactory
