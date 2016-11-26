@@ -94,7 +94,7 @@ class YourSecondClass: UIViewController, FirstViewControllerDelegate {
 Last, call delegate function directly in YourFirstClass, and function details will be excuted in YourSecondClass
 ```Swift
 class YourFirstClass: UIViewController {
-    var delegate: FirstViewControllerDelegate?
+    weak var delegate: FirstViewControllerDelegate?
     func viewDidLoad() {
         super.viewDidLoad()
         // In thie following way, someFunction will be called and arg1-3 will be passed to YourFirstClass
