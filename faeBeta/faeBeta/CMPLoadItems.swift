@@ -10,9 +10,6 @@ import UIKit
 
 extension CreateMomentPinViewController {
     func loadCreateMediaPinView() {
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        
         uiviewCreateMediaPin = UIView(frame: self.view.bounds)
         uiviewCreateMediaPin.alpha = 0.0
         self.view.addSubview(uiviewCreateMediaPin)

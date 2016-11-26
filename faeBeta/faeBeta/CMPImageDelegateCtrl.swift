@@ -8,15 +8,7 @@
 
 import UIKit
 
-extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        addNewMediaToSubmit(image: image)
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
+extension CreateMomentPinViewController: SendMutipleImagesDelegate {
     
     func addNewMediaToSubmit(image: UIImage) {
         let newMedia = UIImageView(frame: CGRect(x:107, y: 200, width:200, height:200))
@@ -35,5 +27,12 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     
     func sendImages(_ images: [UIImage]) {
         print("Debug sendImages")
+        for image in images {
+            addNewMediaToSubmit(image: image)
+        }
+    }
+    
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
+        print("Debug sendVideo")
     }
 }
