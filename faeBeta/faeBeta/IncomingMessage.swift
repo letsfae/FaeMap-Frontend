@@ -90,12 +90,12 @@ class IncomingMessage {
         let latitude = item["latitude"] as? Double
         let longitude = item["longitude"] as? Double
         
-        var mediaItem = JSQLocationMediaItemCustom()
-    
         let location = CLLocation(latitude: latitude!, longitude: longitude!)
+        let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
         self.snapShotFromData(item) { (image) in
-            mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: image)
+            mediaItem?.cachedMapSnapshotImage = image
         }
         
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
@@ -176,11 +176,13 @@ class IncomingMessage {
             duration = item["videoDuration"] as! Int
         }
         let mediaItem = JSQVideoMediaItemCustom(fileURL:URL(string:""),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
         videoFromData(item) { (videoURL) in
             self.snapShotFromData(item) { (image) in
                 mediaItem?.fileURL = videoURL!
                 mediaItem?.snapImage = image
+
                 self.collectionView.reloadData()
             }
 

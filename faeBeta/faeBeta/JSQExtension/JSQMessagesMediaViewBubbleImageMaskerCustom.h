@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class JSQMessagesBubbleImageFactory;
+@class JSQMessagesBubbleImageFactoryCustom;
 
 /**
  *  An instance of `JSQMessagesMediaViewBubbleImageMasker` is an object that masks
@@ -35,7 +35,7 @@
 /**
  *  Returns the bubble image factory that the masker uses to mask media views.
  */
-@property (strong, nonatomic, readonly) JSQMessagesBubbleImageFactory *bubbleImageFactory;
+@property (strong, nonatomic, readonly) JSQMessagesBubbleImageFactoryCustom *bubbleImageFactory;
 
 /**
  *  Creates and returns a new instance of `JSQMessagesMediaViewBubbleImageMasker`
@@ -61,7 +61,7 @@
  *  @see JSQMessagesBubbleImageFactory.
  *  @see JSQMessagesBubbleImage.
  */
-- (instancetype)initWithBubbleImageFactory:(JSQMessagesBubbleImageFactory *)bubbleImageFactory NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithBubbleImageFactory:(JSQMessagesBubbleImageFactoryCustom *)bubbleImageFactory NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Applies an outgoing bubble image mask to the specified mediaView.
