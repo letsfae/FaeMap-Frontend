@@ -18,7 +18,6 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
         newMedia.center.x = screenWidth / 2
         newMedia.layer.cornerRadius = 20
         uiviewCreateMediaPin.addSubview(newMedia)
-        selectedMediaArray.append(newMedia)
     }
     
     func reArrangePhotos() {
@@ -28,8 +27,10 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
     func sendImages(_ images: [UIImage]) {
         print("Debug sendImages")
         for image in images {
-            addNewMediaToSubmit(image: image)
+            selectedMediaArray.append(image)
         }
+        collectionViewMedia.isHidden = false
+        collectionViewMedia.reloadData()
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {

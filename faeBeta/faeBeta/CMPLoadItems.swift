@@ -28,6 +28,21 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: buttonSelectMedia)
         buttonSelectMedia.addTarget(self, action: #selector(CreateMomentPinViewController.actionTakeMedia(_:)), for: .touchUpInside)
         
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 200, height: 200)
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 49
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: 307, height: 200), collectionViewLayout: layout)
+        collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.isHidden = true
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        uiviewCreateMediaPin.addSubview(collectionViewMedia)
+        
         textViewForMediaPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
         textViewForMediaPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewForMediaPin.textColor = UIColor.white

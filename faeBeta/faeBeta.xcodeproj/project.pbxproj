@@ -174,6 +174,8 @@
 		B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */; };
 		B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */; };
 		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
+		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
+		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
 		B82712DC1DD44B2B00A631DD /* ImageProcessingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
@@ -432,6 +434,8 @@
 		B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLMapMethods.swift; sourceTree = "<group>"; };
 		B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLSearchBarMethods.swift; sourceTree = "<group>"; };
 		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
+		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
+		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
 		B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingFunctions.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
@@ -1027,6 +1031,8 @@
 				B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */,
 				B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */,
 				B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */,
+				B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */,
+				B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */,
 			);
 			name = CMPExtension;
 			sourceTree = "<group>";
@@ -1347,6 +1353,7 @@
 				B8A3BF5E1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift in Sources */,
 				B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
+				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
@@ -1401,6 +1408,7 @@
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
+				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
