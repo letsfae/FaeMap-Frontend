@@ -35,6 +35,17 @@ extension PinMenuViewController {
         })
     }
     
+    func actionCreateChatPin(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
+            self.uiviewPinSelections.alpha = 0.0
+        }), completion: { (done: Bool) in
+            let createMediaPinVC = CreateChatPinViewController()
+            createMediaPinVC.modalPresentationStyle = .overCurrentContext
+            createMediaPinVC.delegate = self
+            self.present(createMediaPinVC, animated: false, completion: nil)
+        })
+    }
+    
     func actionCloseSubmitPins(_ sender: UIButton!) {
         self.dismiss(animated: false, completion: nil)
     }

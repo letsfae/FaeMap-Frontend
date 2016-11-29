@@ -233,6 +233,8 @@
 		DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
+		DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */; };
+		DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C8E1DED7B7700B516E9 /* CreateChatPinViewController.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
@@ -499,6 +501,8 @@
 		DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
+		DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinBaseViewController.swift; sourceTree = "<group>"; };
+		DCEB8C8E1DED7B7700B516E9 /* CreateChatPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChatPinViewController.swift; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
@@ -1074,6 +1078,8 @@
 			children = (
 				B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */,
 				B8744BE31DB877A1005809DA /* PinMenuExtension */,
+				DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */,
+				DCB8816E1DEA547A00AF2FAE /* CreateChatPin */,
 				B84C90C21DE7DAD5005B6F38 /* CreateMomentPin */,
 				B81563851DDB987600BF85A1 /* CreateCommentPin */,
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
@@ -1129,6 +1135,14 @@
 				CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		DCB8816E1DEA547A00AF2FAE /* CreateChatPin */ = {
+			isa = PBXGroup;
+			children = (
+				DCEB8C8E1DED7B7700B516E9 /* CreateChatPinViewController.swift */,
+			);
+			name = CreateChatPin;
 			sourceTree = "<group>";
 		};
 		DCBE69091DB60EED00BFF46C /* Audio */ = {
@@ -1374,6 +1388,7 @@
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
@@ -1429,6 +1444,7 @@
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
