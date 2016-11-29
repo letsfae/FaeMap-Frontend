@@ -140,6 +140,29 @@ extension CreateMomentPinViewController {
         
         loadAddDescriptionButton()
         loadMoreOptionsButton()
+        loadAnonymousButton()
+    }
+    
+    func loadAnonymousButton() {
+        uiviewAnonymous = UIView()
+        uiviewCreateMediaPin.addSubview(uiviewAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(134)]-14-|", options: [], views: uiviewAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: uiviewAnonymous)
+        
+        let buttonAnonymous = UIButton()
+        buttonAnonymous.setImage(UIImage(named: ""), for: UIControlState())
+        uiviewAnonymous.addSubview(buttonAnonymous)
+        uiviewAnonymous.addConstraintsWithFormat("H:|-0-[v0(22)]", options: [], views: buttonAnonymous)
+        uiviewAnonymous.addConstraintsWithFormat("V:|-0-[v0(22)]", options: [], views: buttonAnonymous)
+        
+        let labelAnonymous = UILabel()
+        labelAnonymous.text = "Anonymous"
+        labelAnonymous.textColor = UIColor.white
+        labelAnonymous.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelAnonymous.textAlignment = .center
+        uiviewAnonymous.addSubview(labelAnonymous)
+        uiviewAnonymous.addConstraintsWithFormat("H:[v0(100)]-0-|", options: [], views: labelAnonymous)
+        uiviewAnonymous.addConstraintsWithFormat("V:|-0-[v0(25)]", options: [], views: labelAnonymous)
     }
     
     func loadKeyboardToolBar() {

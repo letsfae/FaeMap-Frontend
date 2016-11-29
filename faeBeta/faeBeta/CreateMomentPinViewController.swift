@@ -59,6 +59,7 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     var labelCreateMediaPinTitle: UILabel! // Create Media pin title
     var labelMediaPinMoreOptions: UILabel! // Title of Media pin options when creating
     var labelMediaPinAddDes: UILabel! // Title of Media pin options when creating
+    var uiviewAnonymous: UIView!
     
     var uiviewDuration: UIView!
     var uiviewInterRadius: UIView!

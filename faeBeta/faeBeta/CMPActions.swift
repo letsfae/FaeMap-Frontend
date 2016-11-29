@@ -27,6 +27,12 @@ extension CreateMomentPinViewController {
             self.uiviewAddDescription.alpha = 0
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
+            self.collectionViewMedia.alpha = 0
+            self.uiviewAnonymous.alpha = 0
+            if !self.buttonSelectMedia.isHidden {
+                self.buttonSelectMedia.alpha = 0
+                self.buttonTakeMedia.alpha = 0
+            }
             
             self.labelMediaPinMoreOptions.alpha = 1
             self.uiviewDuration.alpha = 1
@@ -44,6 +50,11 @@ extension CreateMomentPinViewController {
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
+            self.uiviewAnonymous.alpha = 0
+            if !self.buttonSelectMedia.isHidden {
+                self.buttonSelectMedia.alpha = 0
+                self.buttonTakeMedia.alpha = 0
+            }
             
             self.labelMediaPinAddDes.alpha = 1
             self.buttonBack.alpha = 1
@@ -59,6 +70,11 @@ extension CreateMomentPinViewController {
             self.labelCreateMediaPinTitle.alpha = 1
             self.buttonMediaSubmit.alpha = 1
             self.collectionViewMedia.alpha = 1
+            self.uiviewAnonymous.alpha = 1
+            if !self.buttonSelectMedia.isHidden {
+                self.buttonSelectMedia.alpha = 1
+                self.buttonTakeMedia.alpha = 1
+            }
             
             self.labelMediaPinMoreOptions.alpha = 0
             self.uiviewDuration.alpha = 0
@@ -90,6 +106,25 @@ extension CreateMomentPinViewController {
         self.dismiss(animated: false, completion: {
             self.delegate?.closePinMenuCMP(close: true)
         })
+    }
+    
+    func actionSubmitMedia(_ sender: UIButton) {
+        if sender.tag == 0 {
+            return
+        }
+        sender.tag = 0
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+        uiviewCreateMediaPin.addSubview(activityIndicator)
+        uiviewCreateMediaPin.bringSubview(toFront: activityIndicator)
+        activityIndicator.startAnimating()
+        uploadingFile(image: selectedMediaArray[0],
+                      count: 0,
+                      total: selectedMediaArray.count,
+                      fileIDs: "")
     }
     
     private func uploadingFile(image: UIImage, count: Int, total: Int, fileIDs: String) {
@@ -130,7 +165,7 @@ extension CreateMomentPinViewController {
         
         let mediaContent = textViewForMediaPin.text
         if mediaContent == "" {
-            // handle missing text
+            showAlert(title: "Add Description", message: "")
             return
         }
         
@@ -155,7 +190,7 @@ extension CreateMomentPinViewController {
         postSingleMedia.postMoment{(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
-                // Handle failure
+                self.showAlert(title: "Post Moment Failed", message: "Please try agian")
                 print("[submitMediaPin] status is not 2XX")
                 return
             }
@@ -181,22 +216,10 @@ extension CreateMomentPinViewController {
         }
     }
     
-    func actionSubmitMedia(_ sender: UIButton) {
-        if sender.tag == 0 {
-            return
-        }
-        sender.tag = 0
-        activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .whiteLarge
-        activityIndicator.center = view.center
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
-        uiviewCreateMediaPin.addSubview(activityIndicator)
-        uiviewCreateMediaPin.bringSubview(toFront: activityIndicator)
-        activityIndicator.startAnimating()
-        uploadingFile(image: selectedMediaArray[0],
-                      count: 0,
-                      total: selectedMediaArray.count,
-                      fileIDs: "")
+    private func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: "Add Description", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
