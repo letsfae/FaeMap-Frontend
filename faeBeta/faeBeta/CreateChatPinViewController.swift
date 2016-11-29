@@ -26,6 +26,9 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     }
     
 
+    override func submitButtonTapped(_ sender: UIButton) {
+        print("test")
+    }
     /*
     // MARK: - Navigation
 
