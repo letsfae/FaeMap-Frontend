@@ -26,6 +26,61 @@ import SDWebImage
  }*/
 // not use anymore
 
+func postMomentToURL(_ className: String, parameter:[String: Any]?, authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+    let URL = baseURL + "/" + className
+    
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Accept": headerAccept,
+    ]
+    
+    if authentication != nil{
+        for(key,value) in authentication! {
+            headers[key] = value as? String
+        }
+    }
+    
+    if parameter != nil{
+        let imageData = parameter!["file"] as! Data
+        
+        Alamofire.upload(
+            multipartFormData: { (multipartFormData) in
+            multipartFormData.append(imageData, withName: "file", fileName: "momentImage.jpg", mimeType: "image/jpeg")
+            multipartFormData.append(("image".data(using: .utf8))!, withName: "type")
+            },
+            usingThreshold: 100,
+            to: URL,
+            method: .post,
+            headers: headers,
+            encodingCompletion: { (encodingResult) in
+                switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseJSON { response in
+                        print(response.response.debugDescription)
+                        if response.response != nil{
+                            if let resMess = response.result.value {
+                                completion(response.response!.statusCode, resMess)
+                            }
+                            else{
+                                completion(response.response!.statusCode, "no Json body")
+                            }
+                        }
+                        else{
+                            completion(-500, "Internet error")
+                        }
+                        
+                    }
+                case .failure(let encodingError):
+                    completion(-400, "failure")
+                    print(encodingError)
+                }
+        })
+        
+    }
+    
+}
+
 func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
@@ -58,15 +113,15 @@ func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:
                         print(response.response.debugDescription)
                         if response.response != nil{
                             if let resMess = response.result.value {
-                                completion(response.response!.statusCode,resMess)
+                                completion(response.response!.statusCode, resMess)
                             }
                             else{
                                 //                            MARK: bug here
-                                completion(response.response!.statusCode,"no Json body")
+                                completion(response.response!.statusCode, "no Json body")
                             }
                         }
                         else{
-                            completion(-500,"Internet error")
+                            completion(-500, "Internet error")
                         }
                         
                     }

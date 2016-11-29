@@ -202,9 +202,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         cancelSend()
     }
     
-    private func sendGifFromQuickPicker() -> Bool
-    {
-        if self.imageDelegate.sendGifData != nil{
+    private func sendGifFromQuickPicker() -> Bool {
+        if self.imageDelegate.sendGifData != nil {
             for data in photoPicker.gifAssetDict.values {
                 self.imageDelegate.sendGifData!(data)
             }

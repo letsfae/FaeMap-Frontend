@@ -37,17 +37,19 @@ extension CreateMomentPinViewController {
     }
     
     func actionShowAddDes(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.4) {
-            self.uiviewSelectLocation.alpha = 0
-            self.uiviewMoreOptions.alpha = 0
-            self.uiviewAddDescription.alpha = 0
-            self.labelCreateMediaPinTitle.alpha = 0
-            self.buttonMediaSubmit.alpha = 0
-            
-            self.labelMediaPinAddDes.alpha = 1
-            self.buttonBack.alpha = 1
-            self.textViewForMediaPin.alpha = 1
-        }
+        let toPoint = CGPoint(x: 391, y: 0)
+        collectionViewMedia.setContentOffset(toPoint, animated: true)
+//        UIView.animate(withDuration: 0.4) {
+//            self.uiviewSelectLocation.alpha = 0
+//            self.uiviewMoreOptions.alpha = 0
+//            self.uiviewAddDescription.alpha = 0
+//            self.labelCreateMediaPinTitle.alpha = 0
+//            self.buttonMediaSubmit.alpha = 0
+//            
+//            self.labelMediaPinAddDes.alpha = 1
+//            self.buttonBack.alpha = 1
+//            self.textViewForMediaPin.alpha = 1
+//        }
     }
     
     func actionBack(_ sender: UIButton) {
@@ -91,6 +93,21 @@ extension CreateMomentPinViewController {
     }
     
     func actionSubmitMedia(_ sender: UIButton) {
+        
+        let mediaImage = FaeImage()
+        mediaImage.image = selectedMediaArray[0]
+        mediaImage.faeUploadFileTypeImage { (status:Int, message:Any?) in
+            //            print(code)
+            //            print(message)
+            if status / 100 == 2 {
+                print(message)
+                print("Successfully upload Image File Fails")
+            } else {
+                print("Fail to upload Image File")
+            }
+        }
+        
+        /*
         let postSingleMedia = FaeMap()
         
         var submitLatitude = selectedLatitude
@@ -137,5 +154,6 @@ extension CreateMomentPinViewController {
                 print("Post Media Fail")
             }
         }
+    */
     }
 }
