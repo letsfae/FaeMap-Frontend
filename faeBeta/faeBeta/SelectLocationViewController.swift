@@ -50,6 +50,7 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     var customSearchController: CustomSearchController!
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
+    var pinType = "comment"
     
     var resultTableWidth: CGFloat {
         if UIScreen.main.bounds.width == 414 { // 5.5

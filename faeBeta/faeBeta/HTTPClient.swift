@@ -43,11 +43,11 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
     
     if parameter != nil{
         let imageData = parameter!["file"] as! Data
-        
+        let mediaType = parameter!["type"] as! String
         Alamofire.upload(
             multipartFormData: { (multipartFormData) in
             multipartFormData.append(imageData, withName: "file", fileName: "momentImage.jpg", mimeType: "image/jpeg")
-            multipartFormData.append(("image".data(using: .utf8))!, withName: "type")
+            multipartFormData.append((mediaType.data(using: .utf8))!, withName: "type")
             },
             usingThreshold: 100,
             to: URL,

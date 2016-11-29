@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PinMenuDelegate: class {
-    func sendPinGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
 }
 
 class PinMenuViewController: UIViewController {

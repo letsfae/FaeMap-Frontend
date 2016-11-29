@@ -68,10 +68,14 @@ func compressImage(_ image:UIImage)->Data{
 class FaeImage : NSObject{ // it is ok to upload
 
     var image: UIImage!
+    var type: String!
     
-    func faeUploadFileTypeImage(_ completion: @escaping (Int, Any?) -> Void) {
+    func faeUploadFile(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
-            completion(-400, "you need to save image first" as AnyObject?)
+            completion(-400, "Error: Need to save image first" as AnyObject?)
+        }
+        else if type == nil {
+            completion(-400, "Error: Need to specify file type first" as AnyObject?)
         }
         else{
             let file = compressImage(image)
@@ -80,7 +84,7 @@ class FaeImage : NSObject{ // it is ok to upload
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postMomentToURL("files", parameter: ["file": file as AnyObject, "type": "image" as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
+                postMomentToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
                     completion(code, message)
                 })
             })

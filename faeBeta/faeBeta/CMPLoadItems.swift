@@ -133,6 +133,7 @@ extension CreateMomentPinViewController {
         buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
         buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
+        buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonMediaSubmit)

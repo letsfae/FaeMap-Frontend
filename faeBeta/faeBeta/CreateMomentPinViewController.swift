@@ -71,6 +71,10 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     var selectedMediaArray = [UIImage]()
     var collectionViewMedia: UICollectionView!
     
+    var anonymous = "false"
+    
+    var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateMediaPinView()
