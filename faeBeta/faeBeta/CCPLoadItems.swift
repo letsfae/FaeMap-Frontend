@@ -102,6 +102,8 @@ extension CreateCommentPinViewController {
         buttonCommentSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
         uiviewCreateCommentPin.addSubview(buttonCommentSubmit)
+        buttonCommentSubmit.adjustsImageWhenDisabled = false
+        buttonCommentSubmit.isEnabled = false
         buttonCommentSubmit.addTarget(self, action: #selector(CreateCommentPinViewController.actionSubmitComment(_:)), for: .touchUpInside)
         self.view.addSubview(uiviewCreateCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonCommentSubmit)
@@ -109,6 +111,18 @@ extension CreateCommentPinViewController {
         
         loadMoreOptionsButton()
         loadMoreOptionsItems()
+        loadAnonymousButton()
+    }
+    
+    private func loadAnonymousButton() {
+        buttonAnonymous = UIButton()
+        buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
+        buttonAnonymous.adjustsImageWhenHighlighted = false
+        buttonAnonymous.tag = 0
+        buttonAnonymous.addTarget(self, action: #selector(self.actionAnonymous(_:)), for: .touchUpInside)
+        uiviewCreateCommentPin.addSubview(buttonAnonymous)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(134)]-14-|", options: [], views: buttonAnonymous)
+        uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
     func loadKeyboardToolBar() {

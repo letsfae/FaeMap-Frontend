@@ -66,14 +66,16 @@ func compressImage(_ image:UIImage)->Data{
     }
 }
 class FaeImage : NSObject{ // it is ok to upload
-//    var keyValue = [String:AnyObject]()
-    var image : UIImage!
-//    var imageView: UIImageView!
-    
 
-    func faeUploadImageInBackground(_ completion:@escaping (Int,Any?)->Void){
+    var image: UIImage!
+    var type: String!
+    
+    func faeUploadFile(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
-            completion(-400,"you need to save image first" as AnyObject?)
+            completion(-400, "Error: Need to save image first" as AnyObject?)
+        }
+        else if type == nil {
+            completion(-400, "Error: Need to specify file type first" as AnyObject?)
         }
         else{
             let file = compressImage(image)
@@ -82,12 +84,31 @@ class FaeImage : NSObject{ // it is ok to upload
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postImageToURL("files/users/avatar", parameter: ["avatar":file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
-                    completion(code,message)
+                postMomentToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
+                    completion(code, message)
                 })
             })
         }
     }
+
+    func faeUploadImageInBackground(_ completion: @escaping (Int, Any?) -> Void) {
+        if image == nil {
+            completion(-400, "you need to save image first" as AnyObject?)
+        }
+        else {
+            let file = compressImage(image)
+            let seconds = 1.0
+            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+            
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                postImageToURL("files/users/avatar", parameter: ["avatar": file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
+                    completion(code, message)
+                })
+            })
+        }
+    }
+    
     func faeUploadCoverImageInBackground(_ completion:@escaping (Int,Any?)->Void){
         if image == nil {
             completion(-400,"you need to save image first" as AnyObject?)
@@ -105,7 +126,6 @@ class FaeImage : NSObject{ // it is ok to upload
             })
         }
     }
-    
 }
 
 extension UIImageView {

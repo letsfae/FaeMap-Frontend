@@ -144,7 +144,7 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: nil
      */
-    func logOut(_ completion:@escaping (Int,Any?)->Void){//clear the login token is enough
+    func logOut(_ completion:@escaping (Int,Any?) -> Void) {//clear the login token is enough
         let headerToken = headerAuthentication()//this code may set is_Login to 1
         self.clearLogInInfo()
         deleteFromURL("authentication", parameter: [:], authentication: headerToken ) { (status:Int, message:Any?) in

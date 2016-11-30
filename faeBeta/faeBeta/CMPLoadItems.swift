@@ -28,6 +28,21 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: buttonSelectMedia)
         buttonSelectMedia.addTarget(self, action: #selector(CreateMomentPinViewController.actionTakeMedia(_:)), for: .touchUpInside)
         
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 200, height: 200)
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 49
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 200), collectionViewLayout: layout)
+        collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.isHidden = true
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        uiviewCreateMediaPin.addSubview(collectionViewMedia)
+        
         textViewForMediaPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
         textViewForMediaPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewForMediaPin.textColor = UIColor.white
@@ -118,12 +133,27 @@ extension CreateMomentPinViewController {
         buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
         buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
+        buttonMediaSubmit.adjustsImageWhenDisabled = false
+        buttonMediaSubmit.isEnabled = false
+        buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonMediaSubmit)
         
         loadAddDescriptionButton()
         loadMoreOptionsButton()
+        loadAnonymousButton()
+    }
+    
+    func loadAnonymousButton() {
+        buttonAnonymous = UIButton()
+        buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
+        buttonAnonymous.tag = 0
+        buttonAnonymous.adjustsImageWhenHighlighted = false
+        buttonAnonymous.addTarget(self, action: #selector(self.actionAnonymous(_:)), for: .touchUpInside)
+        uiviewCreateMediaPin.addSubview(buttonAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(134)]-14-|", options: [], views: buttonAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
     func loadKeyboardToolBar() {

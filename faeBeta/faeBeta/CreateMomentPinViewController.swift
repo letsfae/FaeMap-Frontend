@@ -15,7 +15,7 @@ protocol CreateMediaPinDelegate: class {
     func closePinMenuCMP(close: Bool)
 }
 
-class CreateMomentPinViewController: UIViewController {
+class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     
     weak var delegate: CreateMediaPinDelegate?
     
@@ -59,16 +59,17 @@ class CreateMomentPinViewController: UIViewController {
     var labelCreateMediaPinTitle: UILabel! // Create Media pin title
     var labelMediaPinMoreOptions: UILabel! // Title of Media pin options when creating
     var labelMediaPinAddDes: UILabel! // Title of Media pin options when creating
+    var buttonAnonymous: UIButton!
     
     var uiviewDuration: UIView!
     var uiviewInterRadius: UIView!
     var uiviewPinPromot: UIView!
-    
     var imagePicker: UIImagePickerController!
-    
     var buttonBack: UIButton!
-    
-    var selectedMediaArray = [UIImageView]()
+    var selectedMediaArray = [UIImage]()
+    var collectionViewMedia: UICollectionView!
+    var anonymous = false
+    var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +115,12 @@ class CreateMomentPinViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == collectionViewMedia {
+            print(collectionViewMedia.contentOffset.x)
+        }
     }
     
 }

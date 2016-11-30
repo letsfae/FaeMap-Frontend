@@ -22,7 +22,7 @@ extension SelectLocationViewController {
         locManager.startUpdatingLocation()
         
         imagePinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
-        imagePinOnMap.image = UIImage(named: "commentMarkerWhenCreated")
+        imagePinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")
         self.view.addSubview(imagePinOnMap)
         // Default is true, if true, panGesture could not be detected
         self.mapSelectLocation.settings.consumesGesturesInView = false

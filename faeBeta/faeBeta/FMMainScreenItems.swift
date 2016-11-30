@@ -113,11 +113,16 @@ extension FaeMapViewController {
     }
     
     // Animation for pin logo
-    func animatePinWhenItIsCreated(_ commentID: String) {
+    func animatePinWhenItIsCreated(pinID: String, type: String) {
         tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 167, height: 178))
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2-25.5)
         tempMarker.center = mapCenter
-        tempMarker.image = UIImage(named: "commentMarkerWhenCreated")
+        if type == "comment" {
+            tempMarker.image = UIImage(named: "commentMarkerWhenCreated")
+        }
+        else if type == "media" {
+            tempMarker.image = UIImage(named: "momentMarkerWhenCreated")
+        }
         self.view.addSubview(tempMarker)
         markerMask = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(markerMask)
@@ -127,7 +132,7 @@ extension FaeMapViewController {
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
-                    self.loadMarkerWithCommentID(commentID, tempMaker: self.tempMarker)
+                    self.loadMarkerWithCommentID(pinID: pinID, type: type, tempMaker: self.tempMarker)
                 }
         })
     }
@@ -137,14 +142,14 @@ extension FaeMapViewController {
         markerMask.removeFromSuperview()
     }
     
-    func loadMarkerWithCommentID(_ commentID: String, tempMaker: UIImageView) {
+    func loadMarkerWithCommentID(pinID: String, type: String, tempMaker: UIImageView) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "200")
-        loadPinsByZoomLevel.whereKey("type", value: "comment")
+        loadPinsByZoomLevel.whereKey("type", value: type)
         loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
@@ -152,18 +157,21 @@ extension FaeMapViewController {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
-                    if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
-                        if commentID != "\(commentIDInfo)" {
+                    if let commentIDInfo = mapInfoJSON[i]["\(type)_id"].int {
+                        if pinID != "\(commentIDInfo)" {
                             continue
                         }
-                        pinData["comment_id"] = commentIDInfo as AnyObject?
+                        pinData["\(type)_id"] = commentIDInfo as AnyObject?
                     }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
                             pinShowOnMap.icon = UIImage(named: "commentPinMarker")
-                            pinShowOnMap.zIndex = 0
                         }
+                        else if typeInfo == "media" {
+                            pinShowOnMap.icon = UIImage(named: "momentPinMarker")
+                        }
+                        pinShowOnMap.zIndex = 0
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo as AnyObject?
