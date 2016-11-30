@@ -272,6 +272,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             myPositionOutsideMarker_2.center = selfPositionToPoint
             myPositionOutsideMarker_1.center = selfPositionToPoint
             myPositionIcon.center = selfPositionToPoint
+            self.myPositionIcon.isHidden = false
+            self.myPositionOutsideMarker_1.isHidden = false
+            self.myPositionOutsideMarker_2.isHidden = false
+            self.myPositionOutsideMarker_3.isHidden = false
         }
     }
 
