@@ -193,34 +193,6 @@ extension CommentPinDetailViewController {
         
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: buttonCommentDetailViewComments, buttonCommentDetailViewPeople)
         
-        /*
-        // Label of Vote Count
-        labelCommentPinVoteCount = UILabel()
-        labelCommentPinVoteCount.text = ""
-        labelCommentPinVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        labelCommentPinVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        labelCommentPinVoteCount.textAlignment = .Center
-        uiviewCommentPinDetailMainButtons.addSubview(labelCommentPinVoteCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelCommentPinVoteCount)
-        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelCommentPinVoteCount)
-        */
-        
-//        // Button 3: Comment Pin DownVote
-//        buttonCommentPinDownVote = UIButton()
-//        buttonCommentPinDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), forState: .Normal)
-//        buttonCommentPinDownVote.addTarget(self, action: #selector(CommentPinDetailViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinDownVote)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonCommentPinDownVote)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinDownVote)
-//        
-//        // Button 4: Comment Pin UpVote
-//        buttonCommentPinUpVote = UIButton()
-//        buttonCommentPinUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), forState: .Normal)
-//        buttonCommentPinUpVote.addTarget(self, action: #selector(CommentPinDetailViewController.actionUpvoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//        uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinUpVote)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonCommentPinUpVote)
-//        uiviewCommentPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonCommentPinUpVote)
-        
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
         imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
@@ -250,14 +222,6 @@ extension CommentPinDetailViewController {
         uiviewCommentPinDetail.addSubview(labelCommentPinTimestamp)
         uiviewCommentPinDetail.addConstraintsWithFormat("H:|-80-[v0(200)]", options: [], views: labelCommentPinTimestamp)
         uiviewCommentPinDetail.addConstraintsWithFormat("V:|-40-[v0(27)]", options: [], views: labelCommentPinTimestamp)
-        
-        // Cancel all the touch down delays for uibutton caused by tableview's subviews
-//        for view in self.tableCommentsForComment.subviews {
-//            if view is UIScrollView {
-//                (view as? UIScrollView)!.delaysContentTouches = false
-//                break
-//            }
-//        }
         
         // image view appears when saved pin button pressed
         imageViewSaved = UIImageView()

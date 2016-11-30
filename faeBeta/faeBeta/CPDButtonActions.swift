@@ -97,7 +97,7 @@ extension CommentPinDetailViewController {
         endEdit()
         if buttonMoreOnCommentCellExpanded == false {
             buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-            buttonFakeTransparentClosingView.layer.zPosition = 101
+            buttonFakeTransparentClosingView.layer.zPosition = 110
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
                                                        action: #selector(CommentPinDetailViewController.actionToCloseOtherViews(_:)),
@@ -125,13 +125,13 @@ extension CommentPinDetailViewController {
             
             moreButtonDetailSubview = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
             moreButtonDetailSubview.image = UIImage(named: moreOptionBackgroundImage)
-            moreButtonDetailSubview.layer.zPosition = 102
+            moreButtonDetailSubview.layer.zPosition = 111
             self.view.addSubview(moreButtonDetailSubview)
             
             // --> Not for 11.01 Dev
             //            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
             //            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
-            //            buttonShareOnCommentDetail.layer.zPosition = 103
+            //            buttonShareOnCommentDetail.layer.zPosition = 111
             //            self.view.addSubview(buttonShareOnCommentDetail)
             //            buttonShareOnCommentDetail.clipsToBounds = true
             //            buttonShareOnCommentDetail.alpha = 0.0
@@ -141,7 +141,7 @@ extension CommentPinDetailViewController {
             
             buttonEditOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
             buttonEditOnCommentDetail.setImage(UIImage(named: "buttonEditOnCommentDetail"), for: UIControlState())
-            buttonEditOnCommentDetail.layer.zPosition = 103
+            buttonEditOnCommentDetail.layer.zPosition = 111
             self.view.addSubview(buttonEditOnCommentDetail)
             buttonEditOnCommentDetail.clipsToBounds = true
             buttonEditOnCommentDetail.alpha = 0.0
@@ -152,7 +152,7 @@ extension CommentPinDetailViewController {
             // --> Not for 11.01 Dev
             //            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
             //            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
-            //            buttonSaveOnCommentDetail.layer.zPosition = 103
+            //            buttonSaveOnCommentDetail.layer.zPosition = 111
             //            self.view.addSubview(buttonSaveOnCommentDetail)
             //            buttonSaveOnCommentDetail.clipsToBounds = true
             //            buttonSaveOnCommentDetail.alpha = 0.0
@@ -162,7 +162,7 @@ extension CommentPinDetailViewController {
             
             buttonDeleteOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
             buttonDeleteOnCommentDetail.setImage(UIImage(named: "buttonDeleteOnCommentDetail"), for: UIControlState())
-            buttonDeleteOnCommentDetail.layer.zPosition = 103
+            buttonDeleteOnCommentDetail.layer.zPosition = 111
             self.view.addSubview(buttonDeleteOnCommentDetail)
             buttonDeleteOnCommentDetail.clipsToBounds = true
             buttonDeleteOnCommentDetail.alpha = 0.0
@@ -172,7 +172,7 @@ extension CommentPinDetailViewController {
             
             buttonReportOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
             buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), for: UIControlState())
-            buttonReportOnCommentDetail.layer.zPosition = 103
+            buttonReportOnCommentDetail.layer.zPosition = 111
             self.view.addSubview(buttonReportOnCommentDetail)
             buttonReportOnCommentDetail.clipsToBounds = true
             buttonReportOnCommentDetail.alpha = 0.0
@@ -239,14 +239,8 @@ extension CommentPinDetailViewController {
             deleteCommentPin.deleteCommentById(self.commentIDCommentPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete comment")
-                    UIView.animate(withDuration: 0.583, animations: ({
-                        self.uiviewCommentPinDetail.center.y -= screenHeight
-                    }), completion: { (done: Bool) in
-                        if done {
-                            self.delegate?.dismissMarkerShadow(false)
-                            self.dismiss(animated: false, completion: nil)
-                        }
-                    })
+                    self.actionBackToMap(self.buttonCommentPinBackToMap)
+                    self.delegate?.dismissMarkerShadow(false)
                 }
                 else {
                     print("Fail to delete comment")
