@@ -60,4 +60,9 @@ extension UIColor
     {
         return UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1)
     }
+    
+    class func faeAppTextViewPlaceHolderGrayColor() -> UIColor
+    {
+        return UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+    }
 }

@@ -239,6 +239,7 @@
 		DCEB8C971DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCEB8C951DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib */; };
 		DCEB8C9A1DEE65CA00B516E9 /* CreatePinOptionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */; };
 		DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */; };
+		DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */; };
 		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
@@ -511,6 +512,7 @@
 		DCEB8C951DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreatePinOptionsTableViewCell.xib; sourceTree = "<group>"; };
 		DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinOptionsTableView.swift; sourceTree = "<group>"; };
 		DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CreateChatPinViewController+TableViewDelegate.swift"; sourceTree = "<group>"; };
+		DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinTextView.swift; sourceTree = "<group>"; };
 		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
@@ -1166,6 +1168,7 @@
 		DCEB8C901DEE3BB100B516E9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				DCEB8C9D1DEEB26E00B516E9 /* CreatePinTextView */,
 				DCEB8C911DEE3BE600B516E9 /* CreatePinOptionsTableView */,
 				DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */,
 			);
@@ -1188,6 +1191,14 @@
 				DCEB8C951DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib */,
 			);
 			name = CreatePinOptionsTableViewCell;
+			sourceTree = "<group>";
+		};
+		DCEB8C9D1DEEB26E00B516E9 /* CreatePinTextView */ = {
+			isa = PBXGroup;
+			children = (
+				DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */,
+			);
+			name = CreatePinTextView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1511,6 +1522,7 @@
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
+				DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,

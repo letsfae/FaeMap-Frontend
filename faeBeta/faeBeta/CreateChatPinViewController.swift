@@ -23,6 +23,9 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     private var createChatPinOptionsView: UITableView!
     
+    private var createChatPinTextView: CreatePinTextView!
+    
+    
     enum OptionViewMode{
         case pin
         case bubble
@@ -110,7 +113,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         func createInputTextField()
         {
             createChatPinTextField = UITextField()
-            createChatPinTextField.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppShadowGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
+            createChatPinTextField.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
 
             createChatPinTextField.backgroundColor = UIColor.clear
             createChatPinTextField.textColor = UIColor.white
@@ -126,6 +129,16 @@ class CreateChatPinViewController: CreatePinBaseViewController {
             createChatPinTextField.inputAccessoryView = inputToolbar
         }
         
+        func createInputTextView()
+        {
+            createChatPinTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
+            createChatPinTextView.placeHolder = "Say Something…"
+            createChatPinMainView.addSubview(createChatPinTextView)
+//            createChatPinMainView.addConstraintsWithFormat("V:[v0]-20-[v1]", options: [], views: createChatPinTextView)
+//            NSLayoutConstraint(item: createChatPinTextView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+            createChatPinTextView.alpha = 0
+        }
+        
         createMainView()
         
         createSwitchButton()
@@ -133,6 +146,8 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         createImagePlaceHolder()
         
         createInputTextField()
+        
+        createInputTextView()
         
     }
     
@@ -163,6 +178,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinTextField.alpha = 1
         self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
         self.createChatPinOptionsView.reloadData()
+        self.createChatPinTextView.alpha = 0
     }
     
     @objc private func switchButtonRightTapped(_ sender: UIButton)
@@ -175,7 +191,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinTextField.alpha = 0
         self.createChatPinOptionsView.reloadData()
         self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
-        
+        self.createChatPinTextView.alpha = 1
     }
     
     @objc private func createChatPinImageButtonTapped(_ sender: UIButton)
