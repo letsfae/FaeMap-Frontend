@@ -42,9 +42,14 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
             buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
             buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
         }
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
         print("Debug sendVideo")
+    }
+    
+    func cancel() {
+        UIApplication.shared.statusBarStyle = .lightContent
     }
 }

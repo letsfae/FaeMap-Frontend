@@ -23,6 +23,7 @@ extension CreateMomentPinViewController {
         
         buttonSelectMedia = UIButton(frame: CGRect(x: 241, y: 268, width: 65, height: 65))
         buttonSelectMedia.setImage(UIImage(named: "momentPinSelectMoment"), for: UIControlState())
+        buttonSelectMedia.tag = 1
         uiviewCreateMediaPin.addSubview(buttonSelectMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(65)]-109-|", options: [], views: buttonSelectMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: buttonSelectMedia)

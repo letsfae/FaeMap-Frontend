@@ -26,11 +26,17 @@ extension CreateMomentPinViewController {
     }
     
     func actionTakeMedia(_ sender: UIButton) {
-        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-        imagePicker.imageDelegate = self
-
-        self.present(nav, animated: true, completion: nil)
+        if sender.tag == 0 {
+            
+        }
+        else {
+            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            imagePicker.imageDelegate = self
+            self.present(nav, animated: true, completion: {
+                UIApplication.shared.statusBarStyle = .default
+            })
+        }
     }
     
     func actionShowMoreOptions(_ sender: UIButton) {

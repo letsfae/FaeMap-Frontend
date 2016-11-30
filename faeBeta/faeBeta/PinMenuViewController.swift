@@ -50,7 +50,7 @@ class PinMenuViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         loadBlurAndPinSelection()
-        UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     override func viewDidAppear(_ animated: Bool) {
