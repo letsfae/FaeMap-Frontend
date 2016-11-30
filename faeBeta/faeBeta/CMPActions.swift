@@ -12,6 +12,19 @@ import CoreLocation
 
 extension CreateMomentPinViewController {
     
+    func actionAnonymous(_ sender: UIButton) {
+        if sender.tag == 0 {
+            sender.tag = 1
+            sender.setImage(UIImage(named: "anonymousClicked"), for: UIControlState())
+            anonymous = true
+        }
+        else {
+            sender.tag = 0
+            sender.setImage(UIImage(named: "anonymousUnclicked"), for: UIControlState())
+            anonymous = false
+        }
+    }
+    
     func actionTakeMedia(_ sender: UIButton) {
         let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
         let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
@@ -28,7 +41,7 @@ extension CreateMomentPinViewController {
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.uiviewAnonymous.alpha = 0
+            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -50,7 +63,7 @@ extension CreateMomentPinViewController {
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.uiviewAnonymous.alpha = 0
+            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -70,7 +83,7 @@ extension CreateMomentPinViewController {
             self.labelCreateMediaPinTitle.alpha = 1
             self.buttonMediaSubmit.alpha = 1
             self.collectionViewMedia.alpha = 1
-            self.uiviewAnonymous.alpha = 1
+            self.buttonAnonymous.alpha = 1
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 1
                 self.buttonTakeMedia.alpha = 1
@@ -185,7 +198,7 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("description", value: mediaContent)
         postSingleMedia.whereKey("interaction_radius", value: "99999999")
         postSingleMedia.whereKey("duration", value: "180")
-        postSingleMedia.whereKey("anonymous", value: anonymous)
+        postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
         
         postSingleMedia.postMoment{(status: Int, message: Any?) in
             let getMessage = JSON(message!)

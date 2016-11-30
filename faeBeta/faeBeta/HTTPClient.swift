@@ -10,22 +10,6 @@ import UIKit
 import Alamofire
 import SDWebImage
 
-/*
- do {
- let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
- // here "jsonData" is the dictionary encoded in JSON data
- } catch let error as NSError {
- print(error)
- }
- 
- do {
- let decoded = try NSJSONSerialization.JSONObjectWithData(jsonData, options: []) as? [String:String]
- // here "decoded" is the dictionary decoded from JSON data
- } catch let error as NSError {
- print(error)
- }*/
-// not use anymore
-
 func postMomentToURL(_ className: String, parameter:[String: Any]?, authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
     
@@ -81,7 +65,7 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
     
 }
 
-func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
+func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,

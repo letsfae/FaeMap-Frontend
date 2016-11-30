@@ -12,6 +12,19 @@ import CoreLocation
 
 extension CreateCommentPinViewController {
     
+    func actionAnonymous(_ sender: UIButton) {
+        if sender.tag == 0 {
+            sender.tag = 1
+            sender.setImage(UIImage(named: "anonymousClicked"), for: UIControlState())
+            anonymous = true
+        }
+        else {
+            sender.tag = 0
+            sender.setImage(UIImage(named: "anonymousUnclicked"), for: UIControlState())
+            anonymous = false
+        }
+    }
+    
     func actionShowOrHideMoreOptions(_ sender: UIButton) {
         let toValue = CGFloat(sender.tag)
         let fromValue = 1.0-toValue
@@ -22,6 +35,8 @@ extension CreateCommentPinViewController {
             self.uiviewMoreOptions.alpha = fromValue
             self.labelCreateCommentPinTitle.alpha = fromValue
             self.buttonCommentSubmit.alpha = fromValue
+            self.buttonAnonymous.alpha = fromValue
+            
             self.labelCommentPinMoreOptions.alpha = toValue
             self.uiviewDuration.alpha = toValue
             self.uiviewInterRadius.alpha = toValue
@@ -74,6 +89,7 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("content", value: commentContent)
         postSingleComment.whereKey("interaction_radius", value: "99999999")
         postSingleComment.whereKey("duration", value: "180")
+        postSingleComment.whereKey("anonymous", value: "\(anonymous)")
         
         postSingleComment.postComment{(status: Int, message: Any?) in
             if let getMessage = message as? NSDictionary{

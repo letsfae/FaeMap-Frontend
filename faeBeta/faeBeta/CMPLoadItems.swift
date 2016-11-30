@@ -133,6 +133,8 @@ extension CreateMomentPinViewController {
         buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
         buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
+        buttonMediaSubmit.adjustsImageWhenDisabled = false
+        buttonMediaSubmit.isEnabled = false
         buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)
@@ -144,25 +146,14 @@ extension CreateMomentPinViewController {
     }
     
     func loadAnonymousButton() {
-        uiviewAnonymous = UIView()
-        uiviewCreateMediaPin.addSubview(uiviewAnonymous)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(134)]-14-|", options: [], views: uiviewAnonymous)
-        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: uiviewAnonymous)
-        
-        let buttonAnonymous = UIButton()
-        buttonAnonymous.setImage(UIImage(named: ""), for: UIControlState())
-        uiviewAnonymous.addSubview(buttonAnonymous)
-        uiviewAnonymous.addConstraintsWithFormat("H:|-0-[v0(22)]", options: [], views: buttonAnonymous)
-        uiviewAnonymous.addConstraintsWithFormat("V:|-0-[v0(22)]", options: [], views: buttonAnonymous)
-        
-        let labelAnonymous = UILabel()
-        labelAnonymous.text = "Anonymous"
-        labelAnonymous.textColor = UIColor.white
-        labelAnonymous.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelAnonymous.textAlignment = .center
-        uiviewAnonymous.addSubview(labelAnonymous)
-        uiviewAnonymous.addConstraintsWithFormat("H:[v0(100)]-0-|", options: [], views: labelAnonymous)
-        uiviewAnonymous.addConstraintsWithFormat("V:|-0-[v0(25)]", options: [], views: labelAnonymous)
+        buttonAnonymous = UIButton()
+        buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
+        buttonAnonymous.tag = 0
+        buttonAnonymous.adjustsImageWhenHighlighted = false
+        buttonAnonymous.addTarget(self, action: #selector(self.actionAnonymous(_:)), for: .touchUpInside)
+        uiviewCreateMediaPin.addSubview(buttonAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(134)]-14-|", options: [], views: buttonAnonymous)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
     func loadKeyboardToolBar() {

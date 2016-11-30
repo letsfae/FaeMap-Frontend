@@ -59,21 +59,16 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     var labelCreateMediaPinTitle: UILabel! // Create Media pin title
     var labelMediaPinMoreOptions: UILabel! // Title of Media pin options when creating
     var labelMediaPinAddDes: UILabel! // Title of Media pin options when creating
-    var uiviewAnonymous: UIView!
+    var buttonAnonymous: UIButton!
     
     var uiviewDuration: UIView!
     var uiviewInterRadius: UIView!
     var uiviewPinPromot: UIView!
-    
     var imagePicker: UIImagePickerController!
-    
     var buttonBack: UIButton!
-    
     var selectedMediaArray = [UIImage]()
     var collectionViewMedia: UICollectionView!
-    
-    var anonymous = "false"
-    
+    var anonymous = false
     var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
