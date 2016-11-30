@@ -14,10 +14,10 @@ protocol CreatePinBaseDelegate: class {
 }
 
 
-class CreatePinBaseViewController: UIViewController {
+class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
     //MARK: - properties
     weak var delegate : CreatePinBaseDelegate!
-    private var submitButton: UIButton!
+    var submitButton: UIButton!
     var titleImageView: UIImageView!
     var titleLabel: UILabel!
     
@@ -37,6 +37,7 @@ class CreatePinBaseViewController: UIViewController {
         super.viewDidLoad()
         setupBaseUI()
         addObservers()
+        loadKeyboardToolBar()
         // Do any additional setup after loading the view.
     }
 
@@ -112,7 +113,6 @@ class CreatePinBaseViewController: UIViewController {
     private func loadKeyboardToolBar() {
         inputToolbar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 50))
         inputToolbar.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
-        self.view.addSubview(inputToolbar)
         
         buttonOpenFaceGesPanel = UIButton()
         buttonOpenFaceGesPanel.setImage(UIImage(named: "faceGesture"), for: UIControlState())
@@ -125,7 +125,7 @@ class CreatePinBaseViewController: UIViewController {
         inputToolbar.addSubview(buttonFinishEdit)
         inputToolbar.addConstraintsWithFormat("H:[v0(49)]-14-|", options: [], views: buttonFinishEdit)
         inputToolbar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
-        buttonFinishEdit.addTarget(self, action: #selector(CreateCommentPinViewController.actionFinishEditing(_:)), for: .touchUpInside)
+        buttonFinishEdit.addTarget(self, action: #selector(self.actionFinishEditing(_:)), for: .touchUpInside)
         
         labelCountChars = UILabel(frame: CGRect(x: screenWidth-43, y: screenHeight, width: 29, height: 20))
         labelCountChars.text = "200"
@@ -138,6 +138,8 @@ class CreatePinBaseViewController: UIViewController {
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
+        self.view.addGestureRecognizer(tapToDismissKeyboard)
     }
     
     //MARK: - button actions
@@ -175,6 +177,11 @@ class CreatePinBaseViewController: UIViewController {
         
     }
     
+    func actionFinishEditing(_ sender:UIButton)
+    {
+        self.view.endEditing(true)
+    }
+    
     //MARK: - keyboard show/hide
     
     func keyboardWillShow(_ notification:Notification) {
@@ -192,5 +199,15 @@ class CreatePinBaseViewController: UIViewController {
 //            self.inputToolbar.frame.origin.y = screenHeight
 //            self.labelCountChars.frame.origin.y = screenHeight
 //        })
+    }
+    
+    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    //MARK: - textfield delegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
