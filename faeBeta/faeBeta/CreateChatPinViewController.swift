@@ -23,6 +23,14 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     private var createChatPinOptionsView: UITableView!
     
+    enum OptionViewMode{
+        case pin
+        case bubble
+        case more
+    }
+    
+    var optionViewMode: OptionViewMode = .pin
+    
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,11 +138,11 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     private func setupCreateChatPinOptionsView()
     {
-        createChatPinOptionsView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        createChatPinOptionsView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
         
         self.view.addSubview(createChatPinOptionsView)
-        self.view.addConstraintsWithFormat("H:|-[v0]-|", options: [], views: createChatPinOptionsView)
-        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsView, submitButton)
+//        self.view.addConstraintsWithFormat("H:|-[v0]-|", options: [], views: createChatPinOptionsView)
+//        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsView, submitButton)
         
         createChatPinOptionsView.delegate = self
         createChatPinOptionsView.dataSource = self        
@@ -149,11 +157,25 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     @objc private func switchButtonLeftTapped(_ sender: UIButton)
     {
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
+        optionViewMode = .pin
+        self.createChatPinImageImageView.alpha = 1
+        self.createChatPinImageButton.alpha = 1
+        self.createChatPinTextField.alpha = 1
+        self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
+        self.createChatPinOptionsView.reloadData()
     }
     
     @objc private func switchButtonRightTapped(_ sender: UIButton)
     {
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_bubble")
+        optionViewMode = .bubble
+
+        self.createChatPinImageImageView.alpha = 0
+        self.createChatPinImageButton.alpha = 0
+        self.createChatPinTextField.alpha = 0
+        self.createChatPinOptionsView.reloadData()
+        self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
+        
     }
     
     @objc private func createChatPinImageButtonTapped(_ sender: UIButton)

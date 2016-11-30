@@ -9,7 +9,7 @@
 import UIKit
 
 class CreatePinOptionsTableView: UITableView {
-    static let cellHeight = 69
+    static let cellHeight:CGFloat = 69
     static let cellReuseIdentifier = "cell"
     init(frame: CGRect){
         super.init(frame: frame, style: .plain)
@@ -25,6 +25,7 @@ class CreatePinOptionsTableView: UITableView {
         self.rowHeight = CGFloat(20 * 2 + 29)
         self.backgroundColor = UIColor.clear
         self.separatorColor = UIColor.clear
+        self.isScrollEnabled = false
         register(UINib(nibName: "CreatePinOptionsTableViewCell", bundle: nil ), forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
     }
 }
