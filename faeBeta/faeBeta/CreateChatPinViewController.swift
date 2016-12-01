@@ -198,7 +198,29 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     @objc private func createChatPinImageButtonTapped(_ sender: UIButton)
     {
+        let alertC = FAEAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
+        var action = UIAlertAction(title: "Camera", style: .default, handler: {
+            Action in
+            
+            }
+        )
+        alertC.addAction(action)
+
+        action = UIAlertAction(title: "Albums", style: .default, handler: {
+            Action in
+            
+            }
+        )
+        alertC.addAction(action)
+
+        action = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            Action in
+            
+            }
+        )
+        alertC.addAction(action)
         
+        self.present(alertC, animated: true, completion: nil)
     }
     
 
