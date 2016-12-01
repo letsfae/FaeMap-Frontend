@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegate {
+extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegate, CreatePinBaseDelegate {
     // CCP
     func backFromCCP(back: Bool) {
         if back {

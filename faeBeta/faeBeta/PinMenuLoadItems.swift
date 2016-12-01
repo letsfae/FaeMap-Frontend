@@ -52,6 +52,10 @@ extension PinMenuViewController {
         buttonComment.addTarget(self,
                                 action: #selector(PinMenuViewController.actionCreateCommentPin(_:)),
                                 for: .touchUpInside)
+        buttonChats.addTarget(self,
+                                action: #selector(PinMenuViewController.actionCreateChatPin(_:)),
+                                for: .touchUpInside)
+        
         
         // initial position of labels for cool animation
         let labelCenterX_1: CGFloat = 31/414 * screenWidth
