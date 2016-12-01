@@ -47,7 +47,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     private func setupBasicUI()
     {
         self.titleImageView.image = #imageLiteral(resourceName: "chatPinTitleImage")
-        self.titleLabel.isHidden = true
+        self.titleLabel.text = ""
         setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65))
     }
 
@@ -223,15 +223,46 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.present(alertC, animated: true, completion: nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // MARK: - helper
+    func switchToDescription()
+    {
+        let textView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+        textView.placeHolder = "Add Description..."
+        self.view.addSubview(textView)
+        textView.alpha = 0
+        textView.inputAccessoryView = inputToolbar
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.createChatPinMainView.alpha = 0
+            self.createChatPinOptionsView.alpha = 0
+            textView.alpha = 1
+            self.titleLabel.text = "Add Description"
+            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
+        }, completion:{
+            Complete in
+            textView.becomeFirstResponder()
+        })
     }
-    */
+    
+    func switchToMoreOptions()
+    {
+        optionViewMode = .more
+        let moreOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
+        moreOptionsTableView.delegate = self
+        moreOptionsTableView.dataSource = self
+        self.view.addSubview(moreOptionsTableView)
+        moreOptionsTableView.alpha = 0
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.createChatPinMainView.alpha = 0
+            self.createChatPinOptionsView.alpha = 0
+            moreOptionsTableView.alpha = 1
+            self.titleLabel.text = "More Options"
+            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
+        }, completion:{
+            Complete in
+        })
+    }
 
 }

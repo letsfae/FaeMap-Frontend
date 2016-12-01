@@ -29,21 +29,5 @@ class FAEAlertController: UIAlertController {
         let attributedTitle = NSAttributedString(string:self.title!, attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         self.setValue(attributedTitle, forKey: "attributedTitle")
     }
-    
-//    override func addAction(_ action: UIAlertAction)
-//    {
-//        action.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
-//    }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
