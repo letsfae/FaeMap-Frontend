@@ -134,9 +134,8 @@ class CreateChatPinViewController: CreatePinBaseViewController {
             createChatPinTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
             createChatPinTextView.placeHolder = "Say Something…"
             createChatPinMainView.addSubview(createChatPinTextView)
-//            createChatPinMainView.addConstraintsWithFormat("V:[v0]-20-[v1]", options: [], views: createChatPinTextView)
-//            NSLayoutConstraint(item: createChatPinTextView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
             createChatPinTextView.alpha = 0
+            createChatPinTextView.inputAccessoryView = inputToolbar
         }
         
         createMainView()
@@ -160,7 +159,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
 //        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsView, submitButton)
         
         createChatPinOptionsView.delegate = self
-        createChatPinOptionsView.dataSource = self        
+        createChatPinOptionsView.dataSource = self
     }
     
     //MARK: - button actions
@@ -171,8 +170,10 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     @objc private func switchButtonLeftTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
         optionViewMode = .pin
+        
         self.createChatPinImageImageView.alpha = 1
         self.createChatPinImageButton.alpha = 1
         self.createChatPinTextField.alpha = 1
@@ -183,6 +184,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     @objc private func switchButtonRightTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_bubble")
         optionViewMode = .bubble
 
