@@ -7,16 +7,7 @@
 //
 
 import Foundation
-/*
- // after login all the information will be store in here.
- // UTF 8 str from original
- // NSData! type returned (optional)
- 
- // Base64 encode UTF 8 string
- // fromRaw(0) is equivalent to objc 'base64EncodedStringWithOptions:0'
- // Notice the unwrapping given the NSData! optional
- // NSString! returned (optional)
- */
+
 class FaePinAction : NSObject {
     var keyValue = [String:AnyObject]()
     
@@ -25,11 +16,11 @@ class FaePinAction : NSObject {
     }
     
     func clearKeyValue()->Void{
-        self.keyValue = [String:AnyObject]()
+        self.keyValue = [String: AnyObject]()
     }
     
     // Comment this pin
-    func commentThisPin(_ type: String?, commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func commentThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         postToURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
@@ -37,7 +28,7 @@ class FaePinAction : NSObject {
     }
     
     // Like this pin
-    func likeThisPin(_ type: String?, commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func likeThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         postToURL("pins/"+type!+"/"+commentId!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
@@ -45,17 +36,17 @@ class FaePinAction : NSObject {
     }
     
     // Unlike this pin
-    func unlikeThisPin(_ type: String?, commentID: String?, completion:@escaping (Int, Any?) -> Void) {
+    func unlikeThisPin(_ type: String?, commentID: String?, completion: @escaping (Int, Any?) -> Void) {
         if commentID != nil{
             deleteFromURL("pins/"+type!+"/"+commentID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
-                completion(status,message)
+                completion(status, message)
             }
         }
     }
     
     // Save this pin
-    func saveThisPin(_ type: String?, commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func saveThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         postToURL("pins/"+type!+"/"+commentId!+"/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
@@ -63,22 +54,31 @@ class FaePinAction : NSObject {
     }
     
     // Get pin's attribute
-    func getPinAttribute(_ type: String?, commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func getPinAttribute(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && commentId != nil {
             getFromURL("pins/"+type!+"/"+commentId!+"/attribute", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
-                completion(status,message)
+                completion(status, message)
             }
         }
     }
     
     // Get pin's comments
-    func getPinComments(_ type: String?, commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func getPinComments(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && commentId != nil {
             getFromURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
-                completion(status,message)
+                completion(status, message)
             }
+        }
+    }
+    
+    func votePinComments(pinCommentId: String?, completion: @escaping (Int, Any?) -> Void) {
+        if pinCommentId != nil {
+            postToURL("pins/comments/\(pinCommentId!)/vote", parameter: keyValue, authentication: headerAuthentication(), completion: { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            })
         }
     }
     

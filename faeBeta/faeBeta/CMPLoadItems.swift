@@ -146,6 +146,10 @@ extension CreateMomentPinViewController {
         loadAnonymousButton()
     }
     
+    private func loadAddMediaButton() {
+        
+    }
+    
     private func loadAnonymousButton() {
         buttonAnonymous = UIButton()
         buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
@@ -157,7 +161,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
-    private func loadKeyboardToolBar() {
+    func loadKeyboardToolBar() {
         uiviewToolBar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 50))
         uiviewToolBar.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
         self.view.addSubview(uiviewToolBar)

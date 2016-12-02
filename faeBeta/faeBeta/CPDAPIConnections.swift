@@ -186,7 +186,7 @@ extension CommentPinDetailViewController {
                     var dicCell = [String: AnyObject]()
                     var userID = -999
                     var latestDate = "NULL"
-                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].string {
+                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
                         dicCell["pin_comment_id"] = pin_comment_id as AnyObject?
                     }
                     
@@ -203,12 +203,16 @@ extension CommentPinDetailViewController {
                         dicCell["date"] = date.formatFaeDate() as AnyObject?
                         latestDate = date.formatFaeDate()
                     }
-                    if let timezone_type = commentsOfCommentJSON[i]["created_at"]["timezone_type"].int {
-                        dicCell["timezone_type"] = timezone_type as AnyObject?
+                    if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
+                        dicCell["vote_up_count"] = vote_up_count as AnyObject?
                     }
-                    if let timezone = commentsOfCommentJSON[i]["created_at"]["timezone"].string {
-                        dicCell["timezone"] = timezone as AnyObject?
+                    if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
+                        dicCell["vote_down_count"] = vote_down_count as AnyObject?
                     }
+                    if let voteType = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
+                        dicCell["vote_type"] = voteType as AnyObject?
+                    }
+                    
                     self.dictCommentsOnCommentDetail.insert(dicCell, at: 0)
                     if userID != -999 {
                         self.dictPeopleOfCommentDetail[userID] = latestDate

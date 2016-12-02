@@ -33,6 +33,20 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
             let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinCommentsCell", for: indexPath) as! CPCommentsCell
             cell.delegate = self
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
+            if let pinCommentID = dictCell["pin_comment_id"].int {
+                print("[tableCommentsForComment] pinComment: \(pinCommentID)")
+                cell.pinCommentId = pinCommentID
+            }
+            if let voteType = dictCell["vote_type"].string {
+                if voteType == "up" {
+                    cell.voteType = .up
+                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
+                }
+                else if voteType == "down" {
+                    cell.voteType = .down
+                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+                }
+            }
             if let userID = dictCell["user_id"].int {
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(userID)") {(status, message) in
