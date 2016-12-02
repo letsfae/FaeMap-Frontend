@@ -71,6 +71,13 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     var anonymous = false
     var activityIndicator: UIActivityIndicatorView!
     
+    enum MediaEditMode {
+        case delete
+        case tap
+    }
+    var mediaEditMode: MediaEditMode = .tap
+    var tappedCellTag = -999
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateMediaPinView()

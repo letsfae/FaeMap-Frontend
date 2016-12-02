@@ -35,7 +35,7 @@ extension CreateMomentPinViewController {
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 49
         
-        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 200), collectionViewLayout: layout)
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: 307, height: 200), collectionViewLayout: layout)
         collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
         collectionViewMedia.delegate = self
         collectionViewMedia.dataSource = self
@@ -146,7 +146,7 @@ extension CreateMomentPinViewController {
         loadAnonymousButton()
     }
     
-    func loadAnonymousButton() {
+    private func loadAnonymousButton() {
         buttonAnonymous = UIButton()
         buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
         buttonAnonymous.tag = 0
@@ -157,7 +157,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
-    func loadKeyboardToolBar() {
+    private func loadKeyboardToolBar() {
         uiviewToolBar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 50))
         uiviewToolBar.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
         self.view.addSubview(uiviewToolBar)

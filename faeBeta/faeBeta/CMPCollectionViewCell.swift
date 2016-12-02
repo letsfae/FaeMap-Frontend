@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol CMPCellDelegate: class {
+    func hideOtherCellOptions(tag: Int)
+}
+
 class CMPCollectionViewCell: UICollectionViewCell {
+    
+    weak var delegate: CMPCellDelegate?
     
     var media: UIImageView!
     var uiviewOptions: UIView!
@@ -60,7 +66,7 @@ class CMPCollectionViewCell: UICollectionViewCell {
     }
     
     func showOptions(_ sender: UIButton) {
-        print("DEBUG")
+        self.delegate?.hideOtherCellOptions(tag: sender.tag)
         uiviewOptions.isHidden = false
     }
     
