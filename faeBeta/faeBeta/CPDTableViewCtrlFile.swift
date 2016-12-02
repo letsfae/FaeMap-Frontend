@@ -47,6 +47,11 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
                     cell.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
                 }
             }
+            if let upVoteCount = dictCell["vote_up_count"].int {
+                if let downVoteCount = dictCell["vote_down_count"].int {
+                    cell.labelVoteCount.text = "\(upVoteCount-downVoteCount)"
+                }
+            }
             if let userID = dictCell["user_id"].int {
                 let getUserName = FaeUser()
                 getUserName.getOthersProfile("\(userID)") {(status, message) in

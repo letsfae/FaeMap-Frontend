@@ -204,9 +204,11 @@ extension CommentPinDetailViewController {
                         latestDate = date.formatFaeDate()
                     }
                     if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
+                        print("[getPinComments] upVoteCount: \(vote_up_count)")
                         dicCell["vote_up_count"] = vote_up_count as AnyObject?
                     }
                     if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
+                        print("[getPinComments] downVoteCount: \(vote_down_count)")
                         dicCell["vote_down_count"] = vote_down_count as AnyObject?
                     }
                     if let voteType = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
