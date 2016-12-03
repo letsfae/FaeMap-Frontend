@@ -206,7 +206,7 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
         
-        postSingleMedia.postMoment {(status: Int, message: Any?) in
+        postSingleMedia.postPin(type: "media") {(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
                 self.showAlert(title: "Post Moment Failed", message: "Please try agian")
@@ -217,7 +217,7 @@ extension CreateMomentPinViewController {
             if let mediaID = getMessage["media_id"].int {
                 print("Have Post Media")
                 let getJustPostedMedia = FaeMap()
-                getJustPostedMedia.getMoment("\(mediaID)"){(status: Int, message: Any?) in
+                getJustPostedMedia.getPin(type: "media", pinId: "\(mediaID)"){(status: Int, message: Any?) in
                     print("[submitMediaPin] get media_id: \(mediaID) of this posted comment")
                     let latDouble = Double(submitLatitude!)
                     let longDouble = Double(submitLongitude!)

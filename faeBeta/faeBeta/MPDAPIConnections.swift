@@ -237,7 +237,7 @@ extension MomentPinDetailViewController {
     
     func getPinInfo() {
         let getCommentById = FaeMap()
-        getCommentById.getMoment(pinIDPinDetailView) {(status: Int, message: Any?) in
+        getCommentById.getPin(type: "media", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let userid = commentInfoJSON["user_id"].int {
                 print(user_id)

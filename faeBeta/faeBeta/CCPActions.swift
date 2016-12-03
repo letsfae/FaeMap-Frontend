@@ -91,12 +91,12 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("duration", value: "180")
         postSingleComment.whereKey("anonymous", value: "\(anonymous)")
         
-        postSingleComment.postComment {(status: Int, message: Any?) in
+        postSingleComment.postPin(type: "comment") {(status: Int, message: Any?) in
             if let getMessage = message as? NSDictionary{
                 print("Have Post Comment")
                 if let getMessageID = getMessage["comment_id"] {
                     let getJustPostedComment = FaeMap()
-                    getJustPostedComment.getComment("\(getMessageID)"){(status: Int, message: Any?) in
+                    getJustPostedComment.getPin(type: "comment", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
                         print("Have got comment_id of this posted comment")
                         let latDouble = Double(submitLatitude!)
                         let longDouble = Double(submitLongitude!)

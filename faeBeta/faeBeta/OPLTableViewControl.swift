@@ -34,8 +34,8 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             cell.pinID = pinID
             cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
-            // Bug
-            getCommentById.getComment("\(pinID)") {(status: Int, message: Any?) in
+            // Bug: Currently, just comment
+            getCommentById.getPin(type: "comment", pinId: "\(pinID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
                 if let userid = commentInfoJSON["user_id"].int {
                     let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"

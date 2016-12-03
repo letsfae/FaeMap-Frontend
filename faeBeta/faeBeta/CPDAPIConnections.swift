@@ -237,7 +237,7 @@ extension CommentPinDetailViewController {
     
     func getCommentInfo() {
         let getCommentById = FaeMap()
-        getCommentById.getComment(pinIDCommentPinDetailView) {(status: Int, message: Any?) in
+        getCommentById.getPin(type: "comment", pinId: pinIDCommentPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let userid = commentInfoJSON["user_id"].int {
                 print(user_id)
