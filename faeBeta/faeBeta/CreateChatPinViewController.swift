@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreateChatPinViewController: CreatePinBaseViewController {
+class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationViewControllerDelegate {
     //MARK: - properties
     private var createChatPinMainView: UIView!
     private var switchButtonContentView: UIView!
@@ -21,12 +21,17 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     private var createChatPinTextField: UITextField!
     
-    private var createChatPinOptionsView: CreatePinOptionsTableView!
+    private var createChatPinOptionsTableView: CreatePinOptionsTableView!
     
     private var bubbleTextView: CreatePinTextView!
     
     private var descriptionTextView: CreatePinTextView!
     private var moreOptionsTableView: CreatePinOptionsTableView!
+    
+    //pin location
+    private var selectedLatitude: String!
+    private var selectedLongitude: String!
+    var labelSelectLocationContent: String!
     
     enum OptionViewMode{
         case pin
@@ -41,7 +46,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         super.viewDidLoad()
         setupBasicUI()
         setupCreateChatPinMainView()
-        setupCreateChatPinOptionsView()
+        setupcreateChatPinOptionsTableView()
         // Do any additional setup after loading the view.
     }
     
@@ -152,16 +157,16 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         
     }
     
-    private func setupCreateChatPinOptionsView()
+    private func setupcreateChatPinOptionsTableView()
     {
-        createChatPinOptionsView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
+        createChatPinOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
         
-        self.view.addSubview(createChatPinOptionsView)
-//        self.view.addConstraintsWithFormat("H:|-[v0]-|", options: [], views: createChatPinOptionsView)
-//        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsView, submitButton)
+        self.view.addSubview(createChatPinOptionsTableView)
+//        self.view.addConstraintsWithFormat("H:|-[v0]-|", options: [], views: createChatPinOptionsTableView)
+//        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsTableView, submitButton)
         
-        createChatPinOptionsView.delegate = self
-        createChatPinOptionsView.dataSource = self
+        createChatPinOptionsTableView.delegate = self
+        createChatPinOptionsTableView.dataSource = self
     }
     
     //MARK: - button actions
@@ -181,8 +186,8 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinImageImageView.alpha = 1
         self.createChatPinImageButton.alpha = 1
         self.createChatPinTextField.alpha = 1
-        self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
-        self.createChatPinOptionsView.reloadData()
+        self.createChatPinOptionsTableView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
+        self.createChatPinOptionsTableView.reloadData()
         self.bubbleTextView.alpha = 0
     }
     
@@ -195,8 +200,8 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinImageImageView.alpha = 0
         self.createChatPinImageButton.alpha = 0
         self.createChatPinTextField.alpha = 0
-        self.createChatPinOptionsView.reloadData()
-        self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
+        self.createChatPinOptionsTableView.reloadData()
+        self.createChatPinOptionsTableView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
         self.bubbleTextView.alpha = 1
     }
     
@@ -227,6 +232,13 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.present(alertC, animated: true, completion: nil)
     }
     
+    func actionSelectLocation() {
+        let selectLocationVC = SelectLocationViewController()
+        selectLocationVC.modalPresentationStyle = .overCurrentContext
+        selectLocationVC.delegate = self
+        self.present(selectLocationVC, animated: false, completion: nil)
+    }
+    
     // MARK: - helper
     func switchToDescription()
     {
@@ -242,7 +254,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.createChatPinMainView.alpha = 0
-            self.createChatPinOptionsView.alpha = 0
+            self.createChatPinOptionsTableView.alpha = 0
             self.descriptionTextView.alpha = 1
             self.titleLabel.text = "Add Description"
             self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
@@ -263,7 +275,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.createChatPinMainView.alpha = 1
-            self.createChatPinOptionsView.alpha = 1
+            self.createChatPinOptionsTableView.alpha = 1
             if self.descriptionTextView != nil {
                 self.descriptionTextView.alpha = 0
             }
@@ -290,7 +302,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.createChatPinMainView.alpha = 0
-            self.createChatPinOptionsView.alpha = 0
+            self.createChatPinOptionsTableView.alpha = 0
             self.moreOptionsTableView.alpha = 1
             self.titleLabel.text = "More Options"
             self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
@@ -298,5 +310,16 @@ class CreateChatPinViewController: CreatePinBaseViewController {
             Complete in
         })
     }
-
+    
+    //MARK: - SelectLocationViewControllerDelegate
+    func sendAddress(_ value: String) {
+        labelSelectLocationContent = value
+        createChatPinOptionsTableView.reloadData()
+    }
+    
+    func sendGeoInfo(_ latitude: String, longitude: String) {
+        selectedLatitude = latitude
+        selectedLongitude = longitude
+        createChatPinOptionsTableView.reloadData()
+    }
 }
