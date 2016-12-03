@@ -36,7 +36,7 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "500000")
-        loadPinsByZoomLevel.whereKey("type", value: "comment")
+        loadPinsByZoomLevel.whereKey("type", value: "media,comment")
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
             if status/100 != 2 || message == nil {
@@ -48,7 +48,7 @@ extension FaeMapViewController {
                 eachTimer.invalidate()
             }
             self.NSTimerDisplayMarkerArray.removeAll()
-            self.mapCommentPinsDic.removeAll()
+            self.mapPinsDic.removeAll()
             if mapInfoJSON.count <= 0 {
                 return
             }
@@ -56,22 +56,29 @@ extension FaeMapViewController {
                 let pinMap = GMSMarker()
                 pinMap.zIndex = 1
                 var pinData = [String: AnyObject]()
+                var type = "comment"
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
-                        pinMap.icon = UIImage(named: "commentPinMarker")
-                        pinMap.zIndex = 0
+                        pinMap.icon = #imageLiteral(resourceName: "commentPinMarker")
+                        type = "comment"
                     }
+                    else if typeInfo == "media" {
+                        pinMap.icon = #imageLiteral(resourceName: "momentPinMarker")
+                        type = "media"
+                    }
+                    pinMap.zIndex = 0
                 }
-                if let commentIDInfo = mapInfoJSON[i]["comment_id"].int {
-                    pinData["comment_id"] = commentIDInfo as AnyObject?
-                    self.mapCommentPinsDic[commentIDInfo] = pinMap
-                    if self.commentIDFromOpenedPinCell == commentIDInfo {
-                        print("TESTing far away from")
-                        self.markerBackFromCommentDetail = pinMap
-                        pinMap.icon = UIImage(named: "markerCommentPinHeavyShadow")
+                if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
+                    pinData["\(type)_id"] = pinIDInfo as AnyObject?
+                    self.mapPinsDic[pinIDInfo] = pinMap
+                    /*
+                    if self.pinIDFromOpenedPinCell == pinIDInfo {
+                        self.markerBackFromPinDetail = pinMap
+                        pinMap.icon = UIImage(named: "")
                         pinMap.zIndex = 2
                     }
+                     */
                 }
                 if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                     pinData["user_id"] = userIDInfo as AnyObject?

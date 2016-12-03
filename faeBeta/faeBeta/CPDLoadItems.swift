@@ -21,7 +21,7 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.dataSource = self
         tableCommentsForComment.allowsSelection = false
         tableCommentsForComment.delaysContentTouches = true
-        tableCommentsForComment.register(CPCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
+        tableCommentsForComment.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForComment.isScrollEnabled = true
         tableCommentsForComment.tableFooterView = UIView()
         tableCommentsForComment.layer.zPosition = 109

@@ -108,6 +108,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var collectionPhotos : UICollectionView!
     var buttonChat : UIButton!
     var buttonMore : UIButton!
+    // Wang Yanxiang
     var tagName = [String]()
     var tagButtonSet = [UIButton]()
     var selectedButtonSet = [UIButton]()
@@ -122,19 +123,19 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     let tagHeight : CGFloat = 18
     var openUserPinActive = false
     var currentViewingUserId = 1
-    
+    // end of WYX
     //
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
-    var mapCommentPinsDic = [Int: GMSMarker]() // Map Comment Pin
-    var commentIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
+    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin
+    var pinIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var markerMask: UIView! // mask to prevent UI action
     var NSTimerDisplayMarkerArray = [Timer]()
-    var markerBackFromCommentDetail = GMSMarker() // Marker saved for back from comment pin detail view
+    var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
     var canDoNextUserUpdate = true // Prevent updating user on map more than once
                                    // Or, prevent user pin change its ramdom place if clicking on it
-    var commentIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
+    var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
     var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var buttonCloseUserPinSubview: UIButton! // button to close user pin view
     var timerUpdateSelfLocation: Timer! // timer to renew update user pins

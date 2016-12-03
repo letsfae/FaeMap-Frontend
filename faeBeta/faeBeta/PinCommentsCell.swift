@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol CPCommentsCellDelegate: class {
-    func showActionSheetFromCommentPinCell(_ username: String) // Reply to this user
-    func cancelTouchToReplyTimerFromCommentPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+protocol PinCommentsCellDelegate: class {
+    func showActionSheetFromPinCell(_ username: String) // Reply to this user
+    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
 }
 
-class CPCommentsCell: UITableViewCell, UITextViewDelegate {
+class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
-    weak var delegate: CPCommentsCellDelegate?
+    weak var delegate: PinCommentsCellDelegate?
     var imageViewAvatar: UIImageView!
     var labelUsername: UILabel!
     var labelTimestamp: UILabel!
@@ -28,7 +28,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     var buttonUpVote: UIButton!
     var buttonDownVote: UIButton!
     var buttonReply: UIButton!
-    var pinCommentId = -999
+    var pinID = -999
     enum VoteType {
         case null
         case up
@@ -48,8 +48,8 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     func loadCellContent() {
         
         self.buttonForWholeCell = UIButton()
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchDown)
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
+        self.buttonForWholeCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
+        self.buttonForWholeCell.addTarget(self, action: #selector(self.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
         self.addSubview(buttonForWholeCell)
         self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
         self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
@@ -124,7 +124,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
         // Add Comment
         self.buttonReply = UIButton()
         self.buttonReply.setImage(UIImage(named: "commentPinForwardHollow"), for: UIControlState())
-        self.buttonReply.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchUpInside)
+        self.buttonReply.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonReply)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonReply)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonReply)
@@ -132,24 +132,24 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     
     func showActionSheet(_ sender: UIButton) {
         if let username = labelUsername.text {
-            self.delegate?.showActionSheetFromCommentPinCell(username)
+            self.delegate?.showActionSheetFromPinCell(username)
         }
     }
     
     func cancelTouchToReplyTimer(_ sender: UIButton) {
-        self.delegate?.cancelTouchToReplyTimerFromCommentPinCell(true)
+        self.delegate?.cancelTouchToReplyTimerFromPinCell(true)
     }
     
     func upVoteThisComment(_ sender: UIButton) {
-        if voteType == .up || pinCommentId == -999 {
+        if voteType == .up || pinID == -999 {
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
         buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
         let upVote = FaePinAction()
         upVote.whereKey("vote", value: "up")
-        upVote.votePinComments(pinCommentId: "\(pinCommentId)") { (status: Int, message: Any?) in
-            print("[upVoteThisComment] pinCommentId: \(self.pinCommentId)")
+        upVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
+            print("[upVoteThisComment] pinID: \(self.pinID)")
             if status / 100 == 2 {
                 self.voteType = .up
                 print("[upVoteThisComment] Successfully upvote this pin comment")
@@ -172,14 +172,14 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func downVoteThisComment(_ sender: UIButton) {
-        if voteType == .down || pinCommentId == -999 {
+        if voteType == .down || pinID == -999 {
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
         buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
         let downVote = FaePinAction()
         downVote.whereKey("vote", value: "down")
-        downVote.votePinComments(pinCommentId: "\(pinCommentId)") { (status: Int, message: Any?) in
+        downVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.voteType = .down
                 print("[upVoteThisComment] Successfully downvote this pin comment")

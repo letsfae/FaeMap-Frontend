@@ -1,8 +1,8 @@
 //
-//  CommentPinDetailHandleDelegateFuncs.swift
+//  MPDHandleDelegateFuncs.swift
 //  faeBeta
 //
-//  Created by Yue on 11/6/16.
+//  Created by Yue on 12/2/16.
 //  Copyright © 2016 fae. All rights reserved.
 //
 
@@ -10,21 +10,15 @@ import Foundation
 import UIKit
 import CoreLocation
 
-extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
-    
-    func reloadCommentContent() {
-        if pinIDCommentPinDetailView != "-999" {
-            getSeveralInfo()
-        }
-    }
+extension MomentPinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
     
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-        self.tableCommentsForComment.center.y += screenHeight
-        self.pinIDCommentPinDetailView = "\(pinID)"
-        if pinIDCommentPinDetailView != "-999" {
+        self.tableCommentsForPin.center.y += screenHeight
+        self.pinIDPinDetailView = "\(pinID)"
+        if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
@@ -34,7 +28,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
             backJustOnce = true
             subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
             UIView.animate(withDuration: 0.583, animations:({
-                self.uiviewCommentPinDetail.center.y += screenHeight
+                self.uiviewPinDetail.center.y += screenHeight
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -75,7 +69,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
                 self.lableTextViewPlaceholder.isHidden = true
             }
             let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-                self.actionReportThisPin(self.buttonReportOnCommentDetail)
+                self.actionReportThisPin(self.buttonReportOnPinDetail)
             }
             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
                 
@@ -87,3 +81,4 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
         }
     }
 }
+

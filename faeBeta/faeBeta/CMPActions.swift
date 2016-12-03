@@ -206,10 +206,11 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
         
-        postSingleMedia.postMoment{(status: Int, message: Any?) in
+        postSingleMedia.postMoment {(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
                 self.showAlert(title: "Post Moment Failed", message: "Please try agian")
+                self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] status is not 2XX")
                 return
             }
@@ -230,6 +231,7 @@ extension CreateMomentPinViewController {
             }
             else {
                 self.buttonMediaSubmit.tag = 1
+                self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] Cannot get media ID")
             }
         }

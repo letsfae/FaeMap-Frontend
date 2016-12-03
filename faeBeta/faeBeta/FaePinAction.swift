@@ -20,25 +20,25 @@ class FaePinAction : NSObject {
     }
     
     // Comment this pin
-    func commentThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        postToURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func commentThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        postToURL("pins/"+type!+"/"+pinID!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
     // Like this pin
-    func likeThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        postToURL("pins/"+type!+"/"+commentId!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func likeThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        postToURL("pins/"+type!+"/"+pinID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
     // Unlike this pin
-    func unlikeThisPin(_ type: String?, commentID: String?, completion: @escaping (Int, Any?) -> Void) {
-        if commentID != nil{
-            deleteFromURL("pins/"+type!+"/"+commentID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func unlikeThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if pinID != nil{
+            deleteFromURL("pins/"+type!+"/"+pinID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -46,17 +46,17 @@ class FaePinAction : NSObject {
     }
     
     // Save this pin
-    func saveThisPin(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        postToURL("pins/"+type!+"/"+commentId!+"/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func saveThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        postToURL("pins/"+type!+"/"+pinID!+"/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
     // Get pin's attribute
-    func getPinAttribute(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        if type != nil && commentId != nil {
-            getFromURL("pins/"+type!+"/"+commentId!+"/attribute", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func getPinAttribute(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if type != nil && pinID != nil {
+            getFromURL("pins/"+type!+"/"+pinID!+"/attribute", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -64,34 +64,30 @@ class FaePinAction : NSObject {
     }
     
     // Get pin's comments
-    func getPinComments(_ type: String?, commentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        if type != nil && commentId != nil {
-            getFromURL("pins/"+type!+"/"+commentId!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+    func getPinComments(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if type != nil && pinID != nil {
+            getFromURL("pins/"+type!+"/"+pinID!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
         }
     }
     
-    func votePinComments(pinCommentId: String?, completion: @escaping (Int, Any?) -> Void) {
-        if pinCommentId != nil {
-            postToURL("pins/comments/\(pinCommentId!)/vote", parameter: keyValue, authentication: headerAuthentication(), completion: { (status: Int, message: Any?) in
+    func votePinComments(pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if pinID != nil {
+            postToURL("pins/comments/\(pinID!)/vote", parameter: keyValue, authentication: headerAuthentication(), completion: { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             })
         }
     }
     
-    
-    
-    
-//    func deleteCommentById(commentId:String?, completion:(Int,AnyObject?)->Void){
-//        if commentId != nil{
-//            deleteFromURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
-//                //                print("delete comment by id")
-//                self.clearKeyValue()
-//                completion(status,message)
-//            }
-//        }
-//    }
+    func deletePinById(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if type != nil && pinId != nil{
+            deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
 }

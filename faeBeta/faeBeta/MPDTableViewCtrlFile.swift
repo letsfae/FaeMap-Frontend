@@ -1,15 +1,15 @@
 //
-//  TableViewDelegateFile.swift
+//  MPDTableViewCtrlFile.swift
 //  faeBeta
 //
-//  Created by Yue on 10/15/16.
+//  Created by Yue on 12/2/16.
 //  Copyright © 2016 fae. All rights reserved.
 //
 
 import UIKit
 import SwiftyJSON
 
-extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSource {
+extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -17,11 +17,11 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == tableCommentsForComment {
-            return dictCommentsOnCommentDetail.count
+        if tableView == tableCommentsForPin {
+            return dictCommentsOnPinDetail.count
         }
         else if tableView == tableViewPeople{
-            return dictPeopleOfCommentDetail.count
+            return dictPeopleOfPinDetail.count
         }
         else {
             return 0
@@ -29,12 +29,12 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == self.tableCommentsForComment {
+        if tableView == self.tableCommentsForPin {
             let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinCommentsCell", for: indexPath) as! PinCommentsCell
             cell.delegate = self
-            let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
+            let dictCell = JSON(dictCommentsOnPinDetail[indexPath.row])
             if let pinID = dictCell["pin_comment_id"].int {
-                print("[tableCommentsForComment] pinComment: \(pinID)")
+                print("[tableCommentsForPin] pinComment: \(pinID)")
                 cell.pinID = pinID
             }
             if let voteType = dictCell["vote_type"].string {
@@ -76,8 +76,8 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         }
         else if tableView == self.tableViewPeople {
             let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinPeopleCell", for: indexPath) as! OPLTableViewCell
-            let userID = Array(dictPeopleOfCommentDetail.keys)[indexPath.row]
-            let latestDate = dictPeopleOfCommentDetail[userID]
+            let userID = Array(dictPeopleOfPinDetail.keys)[indexPath.row]
+            let latestDate = dictPeopleOfPinDetail[userID]
             let getUserName = FaeUser()
             
             getUserName.getOthersProfile("\(userID)") {(status, message) in
@@ -102,7 +102,7 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == self.tableCommentsForComment {
+        if tableView == self.tableCommentsForPin {
             return 140
         }
         if tableView == self.tableViewPeople {
@@ -114,7 +114,7 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == self.tableCommentsForComment {
+        if tableView == self.tableCommentsForPin {
             let cell = tableView.cellForRow(at: indexPath) as! PinCommentsCell
             if let usernameInCell = cell.labelUsername.text {
                 self.actionShowActionSheet(usernameInCell)
@@ -125,3 +125,4 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         }
     }
 }
+

@@ -91,7 +91,7 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("duration", value: "180")
         postSingleComment.whereKey("anonymous", value: "\(anonymous)")
         
-        postSingleComment.postComment{(status: Int, message: Any?) in
+        postSingleComment.postComment {(status: Int, message: Any?) in
             if let getMessage = message as? NSDictionary{
                 print("Have Post Comment")
                 if let getMessageID = getMessage["comment_id"] {
@@ -103,7 +103,7 @@ extension CreateCommentPinViewController {
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendCommentGeoInfo(commentID: "\(getMessageID)", latitude: lat, longitude: long)
+                            self.delegate?.sendCommentGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long)
                         })
                     }
                 }

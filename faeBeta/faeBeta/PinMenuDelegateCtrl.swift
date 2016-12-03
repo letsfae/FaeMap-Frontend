@@ -24,9 +24,9 @@ extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegat
         }
     }
     // CCP
-    func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    func sendCommentGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.sendPinGeoInfo(pinID: commentID, type: "comment", latitude: latitude, longitude: longitude)
+            self.delegate?.sendPinGeoInfo(pinID: pinID, type: "comment", latitude: latitude, longitude: longitude)
         })
     }
     // CMP

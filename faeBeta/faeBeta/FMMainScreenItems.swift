@@ -132,7 +132,7 @@ extension FaeMapViewController {
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
-                    self.loadMarkerWithCommentID(pinID: pinID, type: type, tempMaker: self.tempMarker)
+                    self.loadMarkerWithpinID(pinID: pinID, type: type, tempMaker: self.tempMarker)
                 }
         })
     }
@@ -142,7 +142,7 @@ extension FaeMapViewController {
         markerMask.removeFromSuperview()
     }
     
-    func loadMarkerWithCommentID(pinID: String, type: String, tempMaker: UIImageView) {
+    func loadMarkerWithpinID(pinID: String, type: String, tempMaker: UIImageView) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -157,11 +157,11 @@ extension FaeMapViewController {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
-                    if let commentIDInfo = mapInfoJSON[i]["\(type)_id"].int {
-                        if pinID != "\(commentIDInfo)" {
+                    if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
+                        if pinID != "\(pinIDInfo)" {
                             continue
                         }
-                        pinData["\(type)_id"] = commentIDInfo as AnyObject?
+                        pinData["\(type)_id"] = pinIDInfo as AnyObject?
                     }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?

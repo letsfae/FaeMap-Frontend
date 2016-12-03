@@ -30,11 +30,12 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         if tableView == self.tableOpenedPin {
             let cell = tableView.dequeueReusableCell(withIdentifier: "openedPinCell", for: indexPath) as! OPLTableViewCell
             cell.delegate = self
-            let commentID = openedPinListArray[indexPath.row]
-            cell.commentID = commentID
+            let pinID = openedPinListArray[indexPath.row]
+            cell.pinID = pinID
             cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
-            getCommentById.getComment("\(commentID)") {(status: Int, message: Any?) in
+            // Bug
+            getCommentById.getComment("\(pinID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
                 if let userid = commentInfoJSON["user_id"].int {
                     let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"

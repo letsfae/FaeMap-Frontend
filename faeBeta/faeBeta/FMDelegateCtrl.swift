@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 
-extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelegate, PinMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
@@ -23,33 +23,33 @@ extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelega
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
     }
     
-    // CommentPinDetailDelegate
+    // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
         print("back from comment pin detail")
         if dismiss {
-//            self.markerBackFromCommentDetail.icon = UIImage(named: "commentPinMarker")
-//            self.markerBackFromCommentDetail.zIndex = 0
+//            self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
+//            self.markerBackFromPinDetail.zIndex = 0
         }
         else {
-            self.markerBackFromCommentDetail.map = nil
+            self.markerBackFromPinDetail.map = nil
         }
     }
     
-    // CommentPinDetailDelegate
-    func animateToCameraFromCommentPinDetailView(_ coordinate: CLLocationCoordinate2D, commentID: Int) {
-        print("DEBUG: Delegate pass commentID")
-        print(commentID)
+    // PinDetailDelegate
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+        print("DEBUG: Delegate pass pinID")
+        print(pinID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-//        self.markerBackFromCommentDetail.icon = UIImage(named: "commentPinMarker")
-//        self.markerBackFromCommentDetail.zIndex = 0
-        if let marker = self.mapCommentPinsDic[commentID] {
-//            self.markerBackFromCommentDetail = marker
+//        self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
+//        self.markerBackFromPinDetail.zIndex = 0
+        if let marker = self.mapPinsDic[pinID] {
+//            self.markerBackFromPinDetail = marker
 //            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
             marker.zIndex = 2
-            self.commentIDFromOpenedPinCell = -999
+            self.pinIDFromOpenedPinCell = -999
         }
         else {
-            self.commentIDFromOpenedPinCell = commentID
+            self.pinIDFromOpenedPinCell = pinID
             let currentZoomLevel = faeMapView.camera.zoom
             let powFactor: Double = Double(21 - currentZoomLevel)
             let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
@@ -58,7 +58,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, CommentPinDetailDelega
         }
         self.faeMapView.animate(to: camera)
     }
-    // CommentPinDetailDelegate
+    // PinDetailDelegate
     func animateToSelectedMarker(coordinate: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)

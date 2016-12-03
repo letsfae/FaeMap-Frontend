@@ -213,13 +213,13 @@ extension CommentPinDetailViewController {
     }
     
     func actionEditComment(_ sender: UIButton!) {
-        if commentIdSentBySegue == -999 {
+        if pinIdSentBySegue == -999 {
             return
         }
         let editCommentPinVC = EditCommentPinViewController()
         editCommentPinVC.delegate = self
         editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
-        editCommentPinVC.commentID = "\(commentIdSentBySegue)"
+        editCommentPinVC.pinID = "\(pinIdSentBySegue)"
         self.present(editCommentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
@@ -235,8 +235,8 @@ extension CommentPinDetailViewController {
         let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted from both the Map and Mapboards, no one can find it anymore. All the comments and replies will also be removed.", preferredStyle: UIAlertControllerStyle.alert)
         let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
-            let deleteCommentPin = FaeMap()
-            deleteCommentPin.deleteCommentById(self.commentIDCommentPinDetailView) {(status: Int, message: Any?) in
+            let deleteCommentPin = FaePinAction()
+            deleteCommentPin.deletePinById(type: "comment", pinId: self.pinIDCommentPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete comment")
                     self.actionBackToMap(self.buttonCommentPinBackToMap)
@@ -258,8 +258,8 @@ extension CommentPinDetailViewController {
     
     // When clicking save button in comment pin detail window's more options button
     func actionSavedThisPin(_ sender: UIButton) {
-        if commentIDCommentPinDetailView != "-999" {
-            saveThisPin("comment", pinID: commentIDCommentPinDetailView)
+        if pinIDCommentPinDetailView != "-999" {
+            saveThisPin("comment", pinID: pinIDCommentPinDetailView)
         }
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
         UIView.animate(withDuration: 0.5, animations: ({
