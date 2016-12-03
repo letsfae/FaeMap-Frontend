@@ -403,7 +403,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if(photoPicker.cameraRoll == nil){
             photoPicker.getSmartAlbum()
         }
-        return photoPicker.currentAlbum.albumContent.count
+        return photoPicker.currentAlbum != nil ? photoPicker.currentAlbum.albumContent.count : 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

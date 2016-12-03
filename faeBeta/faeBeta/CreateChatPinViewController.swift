@@ -21,10 +21,12 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     
     private var createChatPinTextField: UITextField!
     
-    private var createChatPinOptionsView: UITableView!
+    private var createChatPinOptionsView: CreatePinOptionsTableView!
     
-    private var createChatPinTextView: CreatePinTextView!
+    private var bubbleTextView: CreatePinTextView!
     
+    private var descriptionTextView: CreatePinTextView!
+    private var moreOptionsTableView: CreatePinOptionsTableView!
     
     enum OptionViewMode{
         case pin
@@ -131,11 +133,11 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         
         func createInputTextView()
         {
-            createChatPinTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
-            createChatPinTextView.placeHolder = "Say Something…"
-            createChatPinMainView.addSubview(createChatPinTextView)
-            createChatPinTextView.alpha = 0
-            createChatPinTextView.inputAccessoryView = inputToolbar
+            bubbleTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
+            bubbleTextView.placeHolder = "Say Something…"
+            createChatPinMainView.addSubview(bubbleTextView)
+            bubbleTextView.alpha = 0
+            bubbleTextView.inputAccessoryView = inputToolbar
         }
         
         createMainView()
@@ -165,7 +167,9 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     //MARK: - button actions
     override func submitButtonTapped(_ sender: UIButton)
     {
-        print("test")
+        if(optionViewMode == .more){
+            leaveDescription()
+        }
     }
     
     @objc private func switchButtonLeftTapped(_ sender: UIButton)
@@ -179,7 +183,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinTextField.alpha = 1
         self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
         self.createChatPinOptionsView.reloadData()
-        self.createChatPinTextView.alpha = 0
+        self.bubbleTextView.alpha = 0
     }
     
     @objc private func switchButtonRightTapped(_ sender: UIButton)
@@ -193,7 +197,7 @@ class CreateChatPinViewController: CreatePinBaseViewController {
         self.createChatPinTextField.alpha = 0
         self.createChatPinOptionsView.reloadData()
         self.createChatPinOptionsView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
-        self.createChatPinTextView.alpha = 1
+        self.bubbleTextView.alpha = 1
     }
     
     @objc private func createChatPinImageButtonTapped(_ sender: UIButton)
@@ -226,38 +230,68 @@ class CreateChatPinViewController: CreatePinBaseViewController {
     // MARK: - helper
     func switchToDescription()
     {
-        let textView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
-        textView.placeHolder = "Add Description..."
-        self.view.addSubview(textView)
-        textView.alpha = 0
-        textView.inputAccessoryView = inputToolbar
+        if (descriptionTextView == nil) {
+            descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+            descriptionTextView.placeHolder = "Add Description..."
+            descriptionTextView.inputAccessoryView = inputToolbar
+            self.view.addSubview(descriptionTextView)
+        }
+        descriptionTextView.alpha = 0
+        optionViewMode = .more
         
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.createChatPinMainView.alpha = 0
             self.createChatPinOptionsView.alpha = 0
-            textView.alpha = 1
+            self.descriptionTextView.alpha = 1
             self.titleLabel.text = "Add Description"
             self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
         }, completion:{
             Complete in
-            textView.becomeFirstResponder()
+            self.descriptionTextView.becomeFirstResponder()
+        })
+    }
+    
+    func leaveDescription()
+    {
+        optionViewMode = .pin
+
+        if self.descriptionTextView != nil {
+            self.descriptionTextView.resignFirstResponder()
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.createChatPinMainView.alpha = 1
+            self.createChatPinOptionsView.alpha = 1
+            if self.descriptionTextView != nil {
+                self.descriptionTextView.alpha = 0
+            }
+            if self.moreOptionsTableView != nil{
+                self.moreOptionsTableView.alpha = 0
+            }
+            self.titleLabel.text = ""
+            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65))
+        }, completion:{
+            Complete in
         })
     }
     
     func switchToMoreOptions()
     {
         optionViewMode = .more
-        let moreOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
-        moreOptionsTableView.delegate = self
-        moreOptionsTableView.dataSource = self
-        self.view.addSubview(moreOptionsTableView)
+        if moreOptionsTableView == nil {
+            moreOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
+            moreOptionsTableView.delegate = self
+            moreOptionsTableView.dataSource = self
+            self.view.addSubview(moreOptionsTableView)
+        }
         moreOptionsTableView.alpha = 0
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.createChatPinMainView.alpha = 0
             self.createChatPinOptionsView.alpha = 0
-            moreOptionsTableView.alpha = 1
+            self.moreOptionsTableView.alpha = 1
             self.titleLabel.text = "More Options"
             self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
         }, completion:{
