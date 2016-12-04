@@ -103,11 +103,13 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         {
             
             createChatPinImageImageView = UIImageView(image: #imageLiteral(resourceName: "createChatPinImagePlaceHolder"))
-            createChatPinImageImageView.contentMode = .scaleToFill
+            createChatPinImageImageView.layer.cornerRadius = 50
+            createChatPinImageImageView.contentMode = .scaleAspectFill
             createChatPinMainView.addSubview(createChatPinImageImageView)
-            createChatPinMainView.addConstraintsWithFormat("V:[v0]-30-[v1(100)]", options: [], views: switchButtonContentView, createChatPinImageImageView)
-            createChatPinMainView.addConstraintsWithFormat("H:[v0(100)]", options: [], views: createChatPinMainView)
-            NSLayoutConstraint(item: createChatPinImageImageView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+            createChatPinImageImageView.frame = CGRect(x: (screenWidth - 100) / 2, y: 60, width: 100, height: 100)
+//            createChatPinMainView.addConstraintsWithFormat("V:[v0]-30-[v1(100)]", options: [], views: switchButtonContentView, createChatPinImageImageView)
+//            createChatPinMainView.addConstraintsWithFormat("H:[v0(100)]", options: [], views: createChatPinMainView)
+//            NSLayoutConstraint(item: createChatPinImageImageView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
             
             createChatPinImageButton = UIButton()
             createChatPinMainView.addSubview(createChatPinImageButton)
@@ -329,6 +331,20 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
+    private func setPinImageView(withImage image:UIImage?){
+        if let image = image {
+            createChatPinImageImageView.image = image
+            createChatPinImageImageView.layer.borderWidth = 3
+            createChatPinImageImageView.layer.borderColor = UIColor.white.cgColor
+            createChatPinImageImageView.layer.masksToBounds = true
+        }
+        else{
+            createChatPinImageImageView.image = #imageLiteral(resourceName: "createChatPinImagePlaceHolder")
+            createChatPinImageImageView.layer.borderWidth = 0
+            createChatPinImageImageView.layer.masksToBounds = false
+        }
+    }
+    
     //MARK: - SelectLocationViewControllerDelegate
     func sendAddress(_ value: String) {
         labelSelectLocationContent = value
@@ -343,9 +359,9 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     //MARK: - SendMutipleImagesDelegate
     func sendImages(_ images: [UIImage]) {
-        print("Debug sendImages")
+        assert(images.count == 1, "The number of image in the array should be exactly one!")
         for image in images {
-//            addNewMediaToSubmit(image: image)
+            setPinImageView(withImage: image)
         }
     }
     
