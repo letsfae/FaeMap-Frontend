@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationViewControllerDelegate {
+class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationViewControllerDelegate, SendMutipleImagesDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     //MARK: - properties
     private var createChatPinMainView: UIView!
     private var switchButtonContentView: UIView!
@@ -210,14 +210,14 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         let alertC = FAEAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
         var action = UIAlertAction(title: "Camera", style: .default, handler: {
             Action in
-            
+                self.showCamera()
             }
         )
         alertC.addAction(action)
 
         action = UIAlertAction(title: "Albums", style: .default, handler: {
             Action in
-            
+                self.actionSelectMedia()
             }
         )
         alertC.addAction(action)
@@ -232,11 +232,27 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         self.present(alertC, animated: true, completion: nil)
     }
     
-    func actionSelectLocation() {
+    func actionSelectLocation()
+    {
         let selectLocationVC = SelectLocationViewController()
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         self.present(selectLocationVC, animated: false, completion: nil)
+    }
+    
+    func actionSelectMedia() {
+        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+        imagePicker.imageDelegate = self
+        
+        self.present(nav, animated: true, completion: nil)
+    }
+    
+    func showCamera()
+    {
+        view.endEditing(true)
+        let camera = Camera(delegate_: self)
+        camera.presentPhotoCamera(self, canEdit: false)
     }
     
     // MARK: - helper
@@ -321,5 +337,22 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         selectedLatitude = latitude
         selectedLongitude = longitude
         createChatPinOptionsTableView.reloadData()
+    }
+    
+    //MARK: - SendMutipleImagesDelegate
+    func sendImages(_ images: [UIImage]) {
+        print("Debug sendImages")
+        for image in images {
+//            addNewMediaToSubmit(image: image)
+        }
+    }
+    
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
+        print("Debug sendVideo")
+    }
+    
+    //MARK: -  UIImagePickerController
+    // handle events after user took a photo/video
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
     }
 }
