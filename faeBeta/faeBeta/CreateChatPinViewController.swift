@@ -244,7 +244,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
         let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
         imagePicker.imageDelegate = self
-        
+        imagePicker.maximumSelectedPhotoNum = 1
         self.present(nav, animated: true, completion: nil)
     }
     

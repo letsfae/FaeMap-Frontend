@@ -71,9 +71,26 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     private var tableViewAlbumVisible = false // true: displaying the album table
 
     //send image delegate
-    
     weak var imageDelegate : SendMutipleImagesDelegate!
 
+    //the maximum number of photos selected at the same time, should be 0-10
+    private var _maximumSelectedPhotoNum: Int = 10
+    var maximumSelectedPhotoNum: Int{
+        get{
+            return _maximumSelectedPhotoNum
+        }
+        set{
+            if newValue <= 0 {
+                _maximumSelectedPhotoNum = 1
+            }else if newValue > 10{
+                _maximumSelectedPhotoNum = 10
+            }else{
+                _maximumSelectedPhotoNum = newValue
+            }
+        }
+    }
+    
+    
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -313,8 +330,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.row] as! PHAsset
         
         if !cell.photoSelected {
-            if photoPicker.indexAssetDict.count == 10 {
-                showAlertView(withWarning: "You can only select up to 10 images at the same time")
+            if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
+                showAlertView(withWarning: "You can only select up to \(maximumSelectedPhotoNum) images at the same time")
             } else {
                 if(asset.mediaType == .image){
                     if(photoPicker.videoAsset != nil){
