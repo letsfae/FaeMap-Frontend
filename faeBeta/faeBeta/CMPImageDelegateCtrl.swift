@@ -18,7 +18,6 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
         newMedia.center.x = screenWidth / 2
         newMedia.layer.cornerRadius = 20
         uiviewCreateMediaPin.addSubview(newMedia)
-        selectedMediaArray.append(newMedia)
     }
     
     func reArrangePhotos() {
@@ -26,13 +25,31 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
     }
     
     func sendImages(_ images: [UIImage]) {
-        print("Debug sendImages")
         for image in images {
-            addNewMediaToSubmit(image: image)
+            selectedMediaArray.append(image)
         }
+        collectionViewMedia.isHidden = false
+        buttonTakeMedia.isHidden = true
+        buttonSelectMedia.isHidden = true
+        collectionViewMedia.reloadData()
+//        collectionViewMedia.scrollToItem(at: IndexPath(row: selectedMediaArray.count-1, section: 0),
+//                                          at: .right,
+//                                          animated: false)
+        let toPoint = CGPoint(x: 391, y: 0)
+        collectionViewMedia.setContentOffset(toPoint, animated: false)
+        if !selectedMediaArray.isEmpty {
+            buttonMediaSubmit.isEnabled = true
+            buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+            buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
+        }
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
         print("Debug sendVideo")
+    }
+    
+    func cancel() {
+        UIApplication.shared.statusBarStyle = .lightContent
     }
 }

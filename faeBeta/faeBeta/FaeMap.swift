@@ -30,8 +30,25 @@ class FaeMap: NSObject {
             completion(status, message)
         }
     }
-
-    // Comments
+    
+    // Moment
+    func postMoment(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("medias", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getMoment(_ momentId: String?, completion: @escaping (Int, Any?) -> Void){
+        if momentId != nil{
+            getFromURL("medias/"+momentId!, parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
+    // Comment
     func postComment(_ completion:@escaping (Int, Any?) -> Void) {
         postToURL("comments", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
             self.clearKeyValue()

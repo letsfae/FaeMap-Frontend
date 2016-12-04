@@ -41,6 +41,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     func sendImages(_ images:[UIImage])
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
     @objc optional func sendGifData(_ data: Data)
+    @objc optional func cancel()
 }
 
 // this view controller is used to show image from one album, it has a table view for you to switch albums
@@ -219,9 +220,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         cancelSend()
     }
     
-    private func sendGifFromQuickPicker() -> Bool
-    {
-        if self.imageDelegate.sendGifData != nil{
+    private func sendGifFromQuickPicker() -> Bool {
+        if self.imageDelegate.sendGifData != nil {
             for data in photoPicker.gifAssetDict.values {
                 self.imageDelegate.sendGifData!(data)
             }
@@ -272,6 +272,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         photoPicker.cleanup()
 
         _ = self.navigationController?.popViewController(animated: true)
+        self.imageDelegate.cancel?()
         self.dismiss(animated: true, completion: nil)
     }
     

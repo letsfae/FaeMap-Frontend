@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PinMenuDelegate: class {
-    func sendPinGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
 }
 
 class PinMenuViewController: UIViewController {
@@ -50,6 +50,7 @@ class PinMenuViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         loadBlurAndPinSelection()
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +60,11 @@ class PinMenuViewController: UIViewController {
             self.blurViewMap.alpha = 1.0
             }, completion: nil)
         pinSelectionShowAnimation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.statusBarStyle = .default
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {

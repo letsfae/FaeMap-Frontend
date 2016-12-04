@@ -56,6 +56,9 @@ class CreateCommentPinViewController: UIViewController {
     var labelCreateCommentPinTitle: UILabel! // Create comment pin title
     var labelCommentPinMoreOptions: UILabel! // Title of comment pin options when creating
     
+    var buttonAnonymous: UIButton!
+    var anonymous = false
+    
     var uiviewDuration: UIView!
     var uiviewInterRadius: UIView!
     var uiviewPinPromot: UIView!
