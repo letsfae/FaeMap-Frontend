@@ -237,6 +237,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         let selectLocationVC = SelectLocationViewController()
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
+        selectLocationVC.pinType = "chat"
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     
