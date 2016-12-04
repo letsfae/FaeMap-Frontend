@@ -167,7 +167,6 @@
 		B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */; };
 		B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */; };
 		B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638C1DDBA36900BF85A1 /* CCPActions.swift */; };
-		B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */; };
 		B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */; };
 		B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */; };
 		B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563961DDBF7E500BF85A1 /* SPLActions.swift */; };
@@ -176,6 +175,8 @@
 		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
+		B82767501DF3B39400CFB912 /* MPDCVControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* MPDCVControl.swift */; };
+		B82767521DF3BD6200CFB912 /* MPDCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
@@ -441,7 +442,6 @@
 		B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPLoadItems.swift; sourceTree = "<group>"; };
 		B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPTextViewControll.swift; sourceTree = "<group>"; };
 		B815638C1DDBA36900BF85A1 /* CCPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPActions.swift; sourceTree = "<group>"; };
-		B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLLoadItems.swift; sourceTree = "<group>"; };
 		B81563961DDBF7E500BF85A1 /* SPLActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLActions.swift; sourceTree = "<group>"; };
@@ -450,6 +450,8 @@
 		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
+		B827674F1DF3B39400CFB912 /* MPDCVControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCVControl.swift; sourceTree = "<group>"; };
+		B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCollectionViewCell.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
@@ -1015,7 +1017,6 @@
 				B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */,
 				B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */,
 				B815638C1DDBA36900BF85A1 /* CCPActions.swift */,
-				B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */,
 				B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */,
 			);
 			name = CCPExtension;
@@ -1101,6 +1102,8 @@
 				B8612E3C1DF24E3D0092C606 /* MPDAPIConnections.swift */,
 				B8612E3E1DF24FB90092C606 /* MPDTableViewCtrlFile.swift */,
 				B8612E401DF2504E0092C606 /* MPDInputToolbar.swift */,
+				B827674F1DF3B39400CFB912 /* MPDCVControl.swift */,
+				B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */,
 			);
 			name = MomentPinExtension;
 			sourceTree = "<group>";
@@ -1479,10 +1482,10 @@
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */,
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
+				B82767501DF3B39400CFB912 /* MPDCVControl.swift in Sources */,
 				B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
-				B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
@@ -1550,6 +1553,7 @@
 				B8612E391DF249DC0092C606 /* MPDLoadItems.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
+				B82767521DF3BD6200CFB912 /* MPDCollectionViewCell.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,

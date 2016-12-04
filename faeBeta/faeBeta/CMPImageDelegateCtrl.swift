@@ -29,14 +29,23 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
             selectedMediaArray.append(image)
         }
         collectionViewMedia.isHidden = false
-        buttonTakeMedia.isHidden = true
-        buttonSelectMedia.isHidden = true
+        if selectedMediaArray.count == 1 {
+            collectionViewMedia.frame.origin.x = 107
+            collectionViewMedia.frame.size.width = 200
+        }
+        else {
+            collectionViewMedia.frame.origin.x = 0
+            collectionViewMedia.frame.size.width = 307
+        }
+        buttonTakeMedia.alpha = 0
+        buttonSelectMedia.alpha = 0
+        buttonAddMedia.alpha = 1
+        buttonAddMedia.tag = 0
+        buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
         collectionViewMedia.reloadData()
-//        collectionViewMedia.scrollToItem(at: IndexPath(row: selectedMediaArray.count-1, section: 0),
-//                                          at: .right,
-//                                          animated: false)
-        let toPoint = CGPoint(x: 391, y: 0)
-        collectionViewMedia.setContentOffset(toPoint, animated: false)
+        collectionViewMedia.scrollToItem(at: IndexPath(row: selectedMediaArray.count-1, section: 0),
+                                          at: .right,
+                                          animated: false)
         if !selectedMediaArray.isEmpty {
             buttonMediaSubmit.isEnabled = true
             buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)

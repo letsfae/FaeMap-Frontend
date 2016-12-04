@@ -144,10 +144,18 @@ extension CreateMomentPinViewController {
         loadAddDescriptionButton()
         loadMoreOptionsButton()
         loadAnonymousButton()
+        loadAddMediaButton()
     }
     
     private func loadAddMediaButton() {
-        
+        buttonAddMedia = UIButton()
+        buttonAddMedia.tag = 0
+        buttonAddMedia.alpha = 0
+        buttonAddMedia.setImage(#imageLiteral(resourceName: "momentAddMedia"), for: .normal)
+        buttonAddMedia.addTarget(self, action: #selector(self.actionAddMedia(_:)), for: .touchUpInside)
+        uiviewCreateMediaPin.addSubview(buttonAddMedia)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(88)]-0-|", options: [], views: buttonAddMedia)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:|-200-[v0(200)]", options: [], views: buttonAddMedia)
     }
     
     private func loadAnonymousButton() {

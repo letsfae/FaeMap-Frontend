@@ -12,6 +12,28 @@ import CoreLocation
 
 extension CreateMomentPinViewController {
     
+    func actionAddMedia(_ sender: UIButton) { // Add or Cancel Adding
+        if sender.tag == 0 {
+            let angle: CGFloat = (-45 * 3.14 / 180.0) as CGFloat
+            sender.tag = 1
+            UIView.animate(withDuration: 0.5) {
+                self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: angle)
+                self.collectionViewMedia.center.x -= 249
+                self.buttonTakeMedia.alpha = 1
+                self.buttonSelectMedia.alpha = 1
+            }
+        }
+        else {
+            sender.tag = 0
+            UIView.animate(withDuration: 0.5) {
+                self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
+                self.collectionViewMedia.center.x += 249
+                self.buttonTakeMedia.alpha = 0
+                self.buttonSelectMedia.alpha = 0
+            }
+        }
+    }
+    
     func actionAnonymous(_ sender: UIButton) {
         if sender.tag == 0 {
             sender.tag = 1

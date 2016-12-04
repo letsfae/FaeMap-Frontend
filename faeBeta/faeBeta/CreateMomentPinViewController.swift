@@ -15,7 +15,7 @@ protocol CreateMediaPinDelegate: class {
     func closePinMenuCMP(close: Bool)
 }
 
-class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
+class CreateMomentPinViewController: UIViewController {
     
     weak var delegate: CreateMediaPinDelegate?
     
@@ -71,12 +71,14 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     var anonymous = false
     var activityIndicator: UIActivityIndicatorView!
     
-    enum MediaEditMode {
-        case delete
-        case tap
+    enum Direction {
+        case left
+        case right
     }
-    var mediaEditMode: MediaEditMode = .tap
-    var tappedCellTag = -999
+    var direction: Direction = .right
+    
+    var buttonAddMedia: UIButton!
+    var lastContentOffset: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,11 +125,4 @@ class CreateMomentPinViewController: UIViewController, UIScrollViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == collectionViewMedia {
-            print(collectionViewMedia.contentOffset.x)
-        }
-    }
-    
 }

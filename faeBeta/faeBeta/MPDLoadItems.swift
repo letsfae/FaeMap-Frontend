@@ -25,8 +25,6 @@ extension MomentPinDetailViewController {
         tableCommentsForPin.isScrollEnabled = true
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
         self.view.addSubview(tableCommentsForPin)
         tableCommentsForPin.center.y -= screenHeight
         
@@ -89,7 +87,25 @@ extension MomentPinDetailViewController {
         textviewPinDetail.isEditable = false
         textviewPinDetail.textContainerInset = UIEdgeInsets.zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
+        textviewPinDetail.isHidden = true
         uiviewPinDetail.addSubview(textviewPinDetail)
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 95, height: 95)
+        layout.scrollDirection = .horizontal
+        
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95),
+                                               collectionViewLayout: layout)
+//        collectionViewMedia.
+        collectionViewMedia.register(MPDCollectionViewCell.self, forCellWithReuseIdentifier: "mediaCell")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        uiviewPinDetail.addSubview(collectionViewMedia)
         
         // ----
         // Main buttons' container of pin detail

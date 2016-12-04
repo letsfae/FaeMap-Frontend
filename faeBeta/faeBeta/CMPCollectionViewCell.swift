@@ -9,7 +9,9 @@
 import UIKit
 
 protocol CMPCellDelegate: class {
-    func hideOtherCellOptions(tag: Int)
+    func hideOtherCellOptions(cell: CMPCollectionViewCell)
+    func deleteCell(cell: CMPCollectionViewCell)
+    func showFullImage(cell: CMPCollectionViewCell)
 }
 
 class CMPCollectionViewCell: UICollectionViewCell {
@@ -58,19 +60,29 @@ class CMPCollectionViewCell: UICollectionViewCell {
         
         buttonShowFullImage = UIButton(frame: CGRect(x: 35, y: 68, width: 64, height: 64))
         buttonShowFullImage.setImage(UIImage(named: "momentFullImage"), for: UIControlState())
+        buttonShowFullImage.addTarget(self, action: #selector(self.showThisImage(_:)), for: .touchUpInside)
         uiviewOptions.addSubview(buttonShowFullImage)
         
         buttonDeleteImage = UIButton(frame: CGRect(x: 100, y: 66, width: 66, height: 68))
         buttonDeleteImage.setImage(UIImage(named: "momentDeleteImage"), for: UIControlState())
+        buttonDeleteImage.addTarget(self, action: #selector(self.deleteThisCell(_:)), for: .touchUpInside)
         uiviewOptions.addSubview(buttonDeleteImage)
     }
     
     func showOptions(_ sender: UIButton) {
-        self.delegate?.hideOtherCellOptions(tag: sender.tag)
+        self.delegate?.hideOtherCellOptions(cell: self)
         uiviewOptions.isHidden = false
     }
     
     func hideOptions(_ sender: UIButton) {
         uiviewOptions.isHidden = true
+    }
+    
+    func deleteThisCell(_ sender: UIButton) {
+        self.delegate?.deleteCell(cell: self)
+    }
+    
+    func showThisImage(_ sender: UIButton) {
+        self.delegate?.showFullImage(cell: self)
     }
 }

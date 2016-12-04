@@ -17,7 +17,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         //        print("Pre-Zoom Level: \(previousZoomLevel)")
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
-        let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
+        let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
         if userStatus == 5 {
             self.faeMapView.isMyLocationEnabled = true

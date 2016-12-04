@@ -123,6 +123,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
+    var collectionViewMedia: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
