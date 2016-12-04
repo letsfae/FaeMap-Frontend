@@ -47,7 +47,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         case .pin:
             switch indexPath.row{
             case CreateChatPinNormalOptions.AddDescription.rawValue:
-                cell.setupCell(withTitle: "Add Description", leadingIcon: #imageLiteral(resourceName: "addDescription"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
+                cell.setupCell(withTitle: (descriptionTextView != nil && descriptionTextView.text != "" ) ? descriptionTextView.text! : "Add Description", leadingIcon: #imageLiteral(resourceName: "addDescription"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinNormalOptions.ChooseLocation.rawValue:
                 cell.setupCell(withTitle: labelSelectLocationContent ?? "Choose Location", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))
@@ -79,7 +79,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
                 cell.setupCell(withTitle: "Add Tags", leadingIcon: #imageLiteral(resourceName: "addTagsIcon"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinMoreOptions.RoomCapacity.rawValue:
-                cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "RoomCapacityIcon"), trailingText: "50", trailingIcon: nil)
+                cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "roomCapacityIcon"), trailingText: "50", trailingIcon: nil)
                 break
             case CreateChatPinMoreOptions.DurationOnMap.rawValue:
                 cell.setupCell(withTitle: "Duration On Map", leadingIcon: #imageLiteral(resourceName: "durationIcon"), trailingText: "1D", trailingIcon: nil)

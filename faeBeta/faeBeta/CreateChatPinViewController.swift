@@ -25,7 +25,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     private var bubbleTextView: CreatePinTextView!
     
-    private var descriptionTextView: CreatePinTextView!
+    var descriptionTextView: CreatePinTextView!
     private var moreOptionsTableView: CreatePinOptionsTableView!
     
     //pin location
@@ -293,6 +293,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             Void in
             self.createChatPinMainView.alpha = 1
             self.createChatPinOptionsTableView.alpha = 1
+            self.createChatPinOptionsTableView.reloadData()
             if self.descriptionTextView != nil {
                 self.descriptionTextView.alpha = 0
             }
