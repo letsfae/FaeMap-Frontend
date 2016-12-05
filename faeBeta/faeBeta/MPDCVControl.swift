@@ -16,7 +16,6 @@ extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == collectionViewMedia {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "mediaCell", for: indexPath) as! MPDCollectionViewCell
-            cell.media.image = #imageLiteral(resourceName: "Rectangle 103")
             return cell
         }
         else {

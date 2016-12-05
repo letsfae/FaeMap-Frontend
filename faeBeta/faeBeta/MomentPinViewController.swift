@@ -123,7 +123,8 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    var collectionViewMedia: UICollectionView!
+    var collectionViewMedia: UICollectionView! // container to display pin's media
+    var fileIdArray = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

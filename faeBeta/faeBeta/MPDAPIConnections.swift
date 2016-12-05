@@ -248,6 +248,15 @@ extension MomentPinDetailViewController {
                     self.thisIsMyPin = false
                 }
             }
+            let fileIDs = commentInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
+            for fileID in fileIDs {
+                if fileID != nil {
+                    print("[getPinInfo] fileID: \(fileID)")
+                    self.fileIdArray.append(fileID!)
+                }
+            }
+            print("[getPinInfo] fileIDs: \(self.fileIdArray)")
+            print("[getPinInfo] fileIDs append done!")
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
