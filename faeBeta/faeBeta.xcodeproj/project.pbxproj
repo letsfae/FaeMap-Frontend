@@ -177,6 +177,7 @@
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
 		B82767501DF3B39400CFB912 /* MPDCVControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* MPDCVControl.swift */; };
 		B82767521DF3BD6200CFB912 /* MPDCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */; };
+		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
@@ -452,6 +453,7 @@
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
 		B827674F1DF3B39400CFB912 /* MPDCVControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCVControl.swift; sourceTree = "<group>"; };
 		B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCollectionViewCell.swift; sourceTree = "<group>"; };
+		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
@@ -941,6 +943,7 @@
 				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				B09E49B31D9626140075EE45 /* AutoLayout.swift */,
+				B82767531DF5DD2E00CFB912 /* Database.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1466,6 +1469,7 @@
 				B8612E3F1DF24FB90092C606 /* MPDTableViewCtrlFile.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
+				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,

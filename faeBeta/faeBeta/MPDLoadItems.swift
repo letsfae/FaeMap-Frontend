@@ -99,7 +99,6 @@ extension MomentPinDetailViewController {
         
         collectionViewMedia = UICollectionView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95),
                                                collectionViewLayout: layout)
-//        collectionViewMedia.
         collectionViewMedia.register(MPDCollectionViewCell.self, forCellWithReuseIdentifier: "mediaCell")
         collectionViewMedia.delegate = self
         collectionViewMedia.dataSource = self
