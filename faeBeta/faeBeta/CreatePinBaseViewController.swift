@@ -104,10 +104,11 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
         createAnonymousButton()
     }
     
-    func setSubmitButton(withTitle title: String, backgroundColor color: UIColor)
+    func setSubmitButton(withTitle title: String, backgroundColor color: UIColor, isEnabled enabled: Bool)
     {
         submitButton.setTitle(title, for: UIControlState())
-        submitButton.backgroundColor = color
+        submitButton.backgroundColor = color.withAlphaComponent(enabled ? 1 : 0.65)
+        submitButton.isEnabled = enabled
     }
     
     private func loadKeyboardToolBar() {

@@ -55,7 +55,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     {
         self.titleImageView.image = #imageLiteral(resourceName: "chatPinTitleImage")
         self.titleLabel.text = ""
-        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65))
+        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : false)
     }
 
     private func setupCreateChatPinMainView()
@@ -276,7 +276,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.createChatPinOptionsTableView.alpha = 0
             self.descriptionTextView.alpha = 1
             self.titleLabel.text = "Add Description"
-            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
+            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: true)
         }, completion:{
             Complete in
             self.descriptionTextView.becomeFirstResponder()
@@ -303,7 +303,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                 self.moreOptionsTableView.alpha = 0
             }
             self.titleLabel.text = ""
-            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65))
+            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: false)
         }, completion:{
             Complete in
         })
@@ -325,12 +325,15 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.createChatPinOptionsTableView.alpha = 0
             self.moreOptionsTableView.alpha = 1
             self.titleLabel.text = "More Options"
-            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1))
+            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: true)
         }, completion:{
             Complete in
         })
     }
     
+    /// This is a method to set the image for createChatPinImageImageView
+    ///
+    /// - Parameter image: the image for createChatPinImageImageView, if nil, then use default image(the placeholder)
     private func setPinImageView(withImage image:UIImage?){
         if let image = image {
             createChatPinImageImageView.image = image
@@ -343,6 +346,13 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             createChatPinImageImageView.layer.borderWidth = 0
             createChatPinImageImageView.layer.masksToBounds = false
         }
+        updateSubmitButton()
+    }
+    
+    func updateSubmitButton()
+    {
+        let enabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
+        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : enabled)
     }
     
     //MARK: - SelectLocationViewControllerDelegate
@@ -372,5 +382,12 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     //MARK: -  UIImagePickerController
     // handle events after user took a photo/video
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    }
+    
+    //MARK: - text field delegate
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == createChatPinTextField {
+            updateSubmitButton()
+        }
     }
 }
