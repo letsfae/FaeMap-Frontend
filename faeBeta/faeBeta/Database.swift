@@ -13,6 +13,7 @@ class Media: Object {
     dynamic var picture: NSData? = nil
     dynamic var video: NSData? = nil
 }
+
 class MomengPin: Object {
     dynamic var mediaId = -999
     let medias = List<Media>()

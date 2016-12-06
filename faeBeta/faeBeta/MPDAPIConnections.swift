@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import SDWebImage
+import RealmSwift
 
 extension MomentPinDetailViewController {
     // Like comment pin

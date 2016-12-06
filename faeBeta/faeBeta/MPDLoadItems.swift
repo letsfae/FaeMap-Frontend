@@ -90,10 +90,8 @@ extension MomentPinDetailViewController {
         textviewPinDetail.isHidden = true
         uiviewPinDetail.addSubview(textviewPinDetail)
         
-        let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 95, height: 95)
         layout.scrollDirection = .horizontal
-        
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 10
         

@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
+import RealmSwift
 
 class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
@@ -125,6 +126,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonNextPin: UIButton!
     var collectionViewMedia: UICollectionView! // container to display pin's media
     var fileIdArray = [Int]()
+    var layout = UICollectionViewFlowLayout()
     
     override func viewDidLoad() {
         super.viewDidLoad()

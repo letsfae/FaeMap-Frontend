@@ -17,23 +17,10 @@ extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == collectionViewMedia {
-            NSLog("[cellForItemAt] \(indexPath.row)")
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "mediaCell", for: indexPath) as! MPDCollectionViewCell
             
-            Realm.Configuration.defaultConfiguration = Realm.Configuration(
-                schemaVersion: 1,
-                migrationBlock: { migration, oldSchemaVersion in
-                    if (oldSchemaVersion < 1) {
-                        // The enumerateObjects(ofType:_:) method iterates
-                        // over every Person object stored in the Realm file
-                        migration.enumerateObjects(ofType: Media.className()) { oldObject, newObject in
-                            newObject!["fileId"] = oldObject!["fildId"] as! Int
-                        }
-                    }
-            })
-            
             let realm = try! Realm()
-            let mediaRealm = realm.objects(Media.self).filter("fileId == \(self.fileIdArray[indexPath.row])")
+            let mediaRealm = realm.objects(Media.self).filter("fileId == \(self.fileIdArray[indexPath.row]) AND picture != nil")
             if mediaRealm.count >= 1 {
                 if let media = mediaRealm.first {
                     let picture = UIImage.sd_image(with: media.picture as Data!)
