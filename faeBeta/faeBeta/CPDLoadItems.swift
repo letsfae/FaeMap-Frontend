@@ -22,7 +22,7 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.allowsSelection = false
         tableCommentsForComment.delaysContentTouches = true
         tableCommentsForComment.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        tableCommentsForComment.isScrollEnabled = true
+        tableCommentsForComment.isScrollEnabled = false
         tableCommentsForComment.tableFooterView = UIView()
         tableCommentsForComment.layer.zPosition = 109
         //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor

@@ -74,7 +74,7 @@ extension CreateMomentPinViewController {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
             }
-            
+            self.buttonAddMedia.alpha = 0
             self.labelMediaPinMoreOptions.alpha = 1
             self.uiviewDuration.alpha = 1
             self.uiviewInterRadius.alpha = 1
@@ -96,7 +96,7 @@ extension CreateMomentPinViewController {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
             }
-            
+            self.buttonAddMedia.alpha = 0
             self.labelMediaPinAddDes.alpha = 1
             self.buttonBack.alpha = 1
             self.textViewForMediaPin.alpha = 1
@@ -112,11 +112,16 @@ extension CreateMomentPinViewController {
             self.buttonMediaSubmit.alpha = 1
             self.collectionViewMedia.alpha = 1
             self.buttonAnonymous.alpha = 1
-            if !self.buttonSelectMedia.isHidden {
+            if self.selectedMediaArray.count > 0 {
+                self.buttonAddMedia.alpha = 1
+                self.buttonSelectMedia.alpha = 0
+                self.buttonTakeMedia.alpha = 0
+            }
+            else if self.selectedMediaArray.count == 0 {
                 self.buttonSelectMedia.alpha = 1
                 self.buttonTakeMedia.alpha = 1
+                self.buttonAddMedia.alpha = 0
             }
-            
             self.labelMediaPinMoreOptions.alpha = 0
             self.uiviewDuration.alpha = 0
             self.uiviewInterRadius.alpha = 0

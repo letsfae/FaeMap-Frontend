@@ -22,7 +22,7 @@ extension MomentPinDetailViewController {
         tableCommentsForPin.allowsSelection = false
         tableCommentsForPin.delaysContentTouches = true
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        tableCommentsForPin.isScrollEnabled = true
+        tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
         self.view.addSubview(tableCommentsForPin)

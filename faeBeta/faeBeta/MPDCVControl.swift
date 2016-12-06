@@ -10,15 +10,27 @@ import UIKit
 import SDWebImage
 import RealmSwift
 
-extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.fileIdArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == collectionViewMedia {
+            print("[cellForItemAt]")
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "mediaCell", for: indexPath) as! MPDCollectionViewCell
-            
+            if mediaMode == .small {
+                UIView.animate(withDuration: 0.5, animations: {
+                    cell.media.frame.size.width = 95
+                    cell.media.frame.size.height = 95
+                })
+            }
+            else {
+                UIView.animate(withDuration: 0.7, animations: {
+                    cell.media.frame.size.width = 160
+                    cell.media.frame.size.height = 160
+                })
+            }
             let realm = try! Realm()
             let mediaRealm = realm.objects(Media.self).filter("fileId == \(self.fileIdArray[indexPath.row]) AND picture != nil")
             if mediaRealm.count >= 1 {
@@ -50,10 +62,74 @@ extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionV
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        cell.alpha = 0
-        UIView.animate(withDuration: 0.3) {
-            cell.alpha = 1
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if collectionView == collectionViewMedia {
+//            UIView.animate(withDuration: 0.583) {
+//                if self.mediaMode == .large {
+//                    cell.frame.size.width = 160
+//                    cell.frame.size.height = 160
+//                }
+//                else {
+//                    cell.frame.size.width = 95
+//                    cell.frame.size.height = 95
+//                }
+//            }
+//        }
+//    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == tableCommentsForPin {
+            if inputToolbar != nil {
+                self.inputToolbar.contentView.textView.resignFirstResponder()
+            }
+            if touchToReplyTimer != nil {
+                touchToReplyTimer.invalidate()
+            }
+            if tableCommentsForPin.contentOffset.y >= 227 {
+                if self.controlBoard != nil {
+                    self.controlBoard.isHidden = false
+                }
+            }
+            if tableCommentsForPin.contentOffset.y < 227 {
+                if self.controlBoard != nil {
+                    self.controlBoard.isHidden = true
+                }
+            }
+        }
+        if scrollView == collectionViewMedia {
+            print(collectionViewMedia.contentOffset.x)
+            if direction == .left && (self.lastContentOffset < scrollView.contentOffset.x) {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.collectionViewMedia.frame.origin.x = 0
+                    self.collectionViewMedia.frame.size.width = screenWidth
+                })
+            }
+            else if direction == .right && (self.lastContentOffset > scrollView.contentOffset.x) {
+                UIView.animate(withDuration: 0.1, animations: {
+                    if self.mediaMode == .small {
+                        self.collectionViewMedia.frame.origin.x = 15
+                        self.collectionViewMedia.frame.size.width = screenWidth - 15
+                    }
+                    else {
+                        self.collectionViewMedia.frame.origin.x = 27
+                        self.collectionViewMedia.frame.size.width = screenWidth - 27
+                    }
+                })
+            }
+            self.lastContentOffset = scrollView.contentOffset.x
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == collectionViewMedia {
+            if direction == .right {
+                print("[scrollViewDidEndDecelerating] direction: right")
+                direction = .left
+            }
+            else if direction == .left {
+                print("[scrollViewDidEndDecelerating] direction: left")
+                direction = .right
+            }
         }
     }
 }

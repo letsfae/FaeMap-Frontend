@@ -26,6 +26,9 @@ class MPDCollectionViewCell: UICollectionViewCell {
         media.clipsToBounds = true
         media.layer.cornerRadius = 13.5
         media.contentMode = .scaleAspectFill
+        media.tag = 1
         self.addSubview(media)
+//        self.addConstraintsWithFormat("H:|[v0]|", options: [], views: media)
+//        self.addConstraintsWithFormat("V:|[v0]|", options: [], views: media)
     }
 }
