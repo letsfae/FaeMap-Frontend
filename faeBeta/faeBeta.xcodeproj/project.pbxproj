@@ -167,7 +167,6 @@
 		B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */; };
 		B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */; };
 		B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638C1DDBA36900BF85A1 /* CCPActions.swift */; };
-		B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */; };
 		B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */; };
 		B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */; };
 		B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563961DDBF7E500BF85A1 /* SPLActions.swift */; };
@@ -176,7 +175,9 @@
 		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
-		B82712DC1DD44B2B00A631DD /* ImageProcessingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */; };
+		B82767501DF3B39400CFB912 /* MPDCVControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* MPDCVControl.swift */; };
+		B82767521DF3BD6200CFB912 /* MPDCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */; };
+		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
@@ -193,6 +194,13 @@
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
+		B8612E351DF202680092C606 /* MomentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E341DF202680092C606 /* MomentPinViewController.swift */; };
+		B8612E371DF20B180092C606 /* MPDButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E361DF20B180092C606 /* MPDButtonActions.swift */; };
+		B8612E391DF249DC0092C606 /* MPDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E381DF249DC0092C606 /* MPDLoadItems.swift */; };
+		B8612E3B1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E3A1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift */; };
+		B8612E3D1DF24E3D0092C606 /* MPDAPIConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E3C1DF24E3D0092C606 /* MPDAPIConnections.swift */; };
+		B8612E3F1DF24FB90092C606 /* MPDTableViewCtrlFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E3E1DF24FB90092C606 /* MPDTableViewCtrlFile.swift */; };
+		B8612E411DF2504E0092C606 /* MPDInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E401DF2504E0092C606 /* MPDInputToolbar.swift */; };
 		B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86849781DE0E3BB0016FC6E /* Register.storyboard */; };
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
@@ -225,7 +233,7 @@
 		DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */; };
 		DC3D105A1DC2B1AC0011C772 /* CPDInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */; };
 		DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
-		DC477A5F1DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */; };
+		DC477A5F1DB2A8EE008A2041 /* PinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */; };
 		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
 		DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
 		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
@@ -435,7 +443,6 @@
 		B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPLoadItems.swift; sourceTree = "<group>"; };
 		B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPTextViewControll.swift; sourceTree = "<group>"; };
 		B815638C1DDBA36900BF85A1 /* CCPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPActions.swift; sourceTree = "<group>"; };
-		B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81563911DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLLoadItems.swift; sourceTree = "<group>"; };
 		B81563961DDBF7E500BF85A1 /* SPLActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLActions.swift; sourceTree = "<group>"; };
@@ -444,7 +451,9 @@
 		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
-		B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingFunctions.swift; sourceTree = "<group>"; };
+		B827674F1DF3B39400CFB912 /* MPDCVControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCVControl.swift; sourceTree = "<group>"; };
+		B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDCollectionViewCell.swift; sourceTree = "<group>"; };
+		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
@@ -461,6 +470,13 @@
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		B8612E341DF202680092C606 /* MomentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentPinViewController.swift; sourceTree = "<group>"; };
+		B8612E361DF20B180092C606 /* MPDButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDButtonActions.swift; sourceTree = "<group>"; };
+		B8612E381DF249DC0092C606 /* MPDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDLoadItems.swift; sourceTree = "<group>"; };
+		B8612E3A1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDHandleDelegateFuncs.swift; sourceTree = "<group>"; };
+		B8612E3C1DF24E3D0092C606 /* MPDAPIConnections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDAPIConnections.swift; sourceTree = "<group>"; };
+		B8612E3E1DF24FB90092C606 /* MPDTableViewCtrlFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDTableViewCtrlFile.swift; sourceTree = "<group>"; };
+		B8612E401DF2504E0092C606 /* MPDInputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDInputToolbar.swift; sourceTree = "<group>"; };
 		B86849791DE0E3BB0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Register.storyboard; sourceTree = "<group>"; };
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
@@ -496,7 +512,7 @@
 		DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDInputToolbar.swift; sourceTree = "<group>"; };
 		DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQVideoMediaItemCustom.h; sourceTree = "<group>"; };
 		DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQVideoMediaItemCustom.m; sourceTree = "<group>"; };
-		DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPCommentsCell.swift; sourceTree = "<group>"; };
+		DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinCommentsCell.swift; sourceTree = "<group>"; };
 		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
 		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
 		DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItemCustom.h; sourceTree = "<group>"; };
@@ -927,6 +943,7 @@
 				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				B09E49B31D9626140075EE45 /* AutoLayout.swift */,
+				B82767531DF5DD2E00CFB912 /* Database.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -980,6 +997,7 @@
 				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B8D5EEC41DB840BC00C62628 /* PinMenu */,
+				B8612E321DF201A60092C606 /* MomentPinDetail */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
 				B8F633651DCA649D00C9A079 /* Support */,
@@ -1002,7 +1020,6 @@
 				B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */,
 				B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */,
 				B815638C1DDBA36900BF85A1 /* CCPActions.swift */,
-				B815638E1DDBCED900BF85A1 /* CCPDelegateCtrl.swift */,
 				B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */,
 			);
 			name = CCPExtension;
@@ -1070,6 +1087,30 @@
 			name = MainScreenSearch;
 			sourceTree = "<group>";
 		};
+		B8612E321DF201A60092C606 /* MomentPinDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B8612E341DF202680092C606 /* MomentPinViewController.swift */,
+				B8612E331DF201BF0092C606 /* MomentPinExtension */,
+			);
+			name = MomentPinDetail;
+			sourceTree = "<group>";
+		};
+		B8612E331DF201BF0092C606 /* MomentPinExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B8612E361DF20B180092C606 /* MPDButtonActions.swift */,
+				B8612E381DF249DC0092C606 /* MPDLoadItems.swift */,
+				B8612E3A1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift */,
+				B8612E3C1DF24E3D0092C606 /* MPDAPIConnections.swift */,
+				B8612E3E1DF24FB90092C606 /* MPDTableViewCtrlFile.swift */,
+				B8612E401DF2504E0092C606 /* MPDInputToolbar.swift */,
+				B827674F1DF3B39400CFB912 /* MPDCVControl.swift */,
+				B82767511DF3BD6200CFB912 /* MPDCollectionViewCell.swift */,
+			);
+			name = MomentPinExtension;
+			sourceTree = "<group>";
+		};
 		B8744BE31DB877A1005809DA /* PinMenuExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -1118,14 +1159,13 @@
 		B8E819591DB3251C00D418D1 /* CommentPinExtension */ = {
 			isa = PBXGroup;
 			children = (
-				DC477A5E1DB2A8EE008A2041 /* CPCommentsCell.swift */,
+				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
 				B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */,
 				B8A3BF5D1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift */,
 				B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */,
 				B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */,
 				B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */,
 				DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */,
-				B82712DB1DD44B2B00A631DD /* ImageProcessingFunctions.swift */,
 			);
 			name = CommentPinExtension;
 			sourceTree = "<group>";
@@ -1422,15 +1462,18 @@
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
-				B82712DC1DD44B2B00A631DD /* ImageProcessingFunctions.swift in Sources */,
 				B8A3BF5E1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
 				B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */,
+				B8612E3D1DF24E3D0092C606 /* MPDAPIConnections.swift in Sources */,
+				B8612E3F1DF24FB90092C606 /* MPDTableViewCtrlFile.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
+				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
+				B8612E3B1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift in Sources */,
 				B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */,
 				B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */,
 				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
@@ -1443,10 +1486,10 @@
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */,
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
+				B82767501DF3B39400CFB912 /* MPDCVControl.swift in Sources */,
 				B8E8195B1DB3255000D418D1 /* CPDTableViewCtrlFile.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
-				B815638F1DDBCED900BF85A1 /* CCPDelegateCtrl.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
@@ -1463,11 +1506,12 @@
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */,
 				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
-				DC477A5F1DB2A8EE008A2041 /* CPCommentsCell.swift in Sources */,
+				DC477A5F1DB2A8EE008A2041 /* PinCommentsCell.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
+				B8612E371DF20B180092C606 /* MPDButtonActions.swift in Sources */,
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
@@ -1510,11 +1554,14 @@
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
+				B8612E391DF249DC0092C606 /* MPDLoadItems.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
+				B82767521DF3BD6200CFB912 /* MPDCollectionViewCell.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				B8612E411DF2504E0092C606 /* MPDInputToolbar.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
@@ -1557,6 +1604,7 @@
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
+				B8612E351DF202680092C606 /* MomentPinViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
@@ -1731,7 +1779,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
@@ -1760,7 +1808,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",

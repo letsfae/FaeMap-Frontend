@@ -17,7 +17,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         //        print("Pre-Zoom Level: \(previousZoomLevel)")
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
-        let angle:CGFloat = ((360.0 - direction) * 3.14/180.0) as CGFloat
+        let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
         if userStatus == 5 {
             self.faeMapView.isMyLocationEnabled = true
@@ -161,7 +161,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 self.showOpenUserPinAnimation(latitude: latitude, longitude: longitude)
                 return true
             }
-            if type == "comment" {
+            if type == "comment" || type == "media" {
                 if !self.canOpenAnotherPin {
                     return true
                 }
@@ -169,30 +169,42 @@ extension FaeMapViewController: GMSMapViewDelegate {
 //                mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
-                if let commentIDGet = pinComment["comment_id"].int {
-                    commentIdToPassBySegue = commentIDGet
+                if let pinIDGet = pinComment["\(type)_id"].int {
+                    pinIdToPassBySegue = pinIDGet
                     var openedPinListArray = [Int]()
-                    openedPinListArray.append(commentIDGet)
+                    openedPinListArray.append(pinIDGet)
 //                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
                     marker.zIndex = 2
                     if let listArray = readByKey("openedPinList") {
                         openedPinListArray.removeAll()
                         openedPinListArray = listArray as! [Int]
-                        if openedPinListArray.contains(commentIDGet) == false {
-                            openedPinListArray.append(commentIDGet)
+                        if openedPinListArray.contains(pinIDGet) == false {
+                            openedPinListArray.append(pinIDGet)
                         }
                     }
                     self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
                 }
-                self.markerBackFromCommentDetail = marker
-                let commentPinDetailVC = CommentPinDetailViewController()
-                commentPinDetailVC.modalPresentationStyle = .overCurrentContext
-                commentPinDetailVC.commentIdSentBySegue = commentIdToPassBySegue
-                commentPinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
-                commentPinDetailVC.delegate = self
-                self.present(commentPinDetailVC, animated: false, completion: {
-                    self.canOpenAnotherPin = true
-                })
+                self.markerBackFromPinDetail = marker
+                if type == "media" {
+                    let pinDetailVC = MomentPinDetailViewController()
+                    pinDetailVC.modalPresentationStyle = .overCurrentContext
+                    pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
+                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.delegate = self
+                    self.present(pinDetailVC, animated: false, completion: {
+                        self.canOpenAnotherPin = true
+                    })
+                }
+                else if type == "comment" {
+                    let pinDetailVC = CommentPinDetailViewController()
+                    pinDetailVC.modalPresentationStyle = .overCurrentContext
+                    pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
+                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.delegate = self
+                    self.present(pinDetailVC, animated: false, completion: {
+                        self.canOpenAnotherPin = true
+                    })
+                }
                 return true
             }
             else if type.contains("chat"){

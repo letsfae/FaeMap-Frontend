@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 
 protocol CreateCommentPinDelegate: class {
-    func sendCommentGeoInfo(commentID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func sendCommentGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
     func backFromCCP(back: Bool)
     func closePinMenu(close: Bool)
 }

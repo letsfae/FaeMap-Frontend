@@ -66,16 +66,17 @@ class FaeMap: NSObject {
         }
     }
     
-    // Comment
-    func postComment(_ completion:@escaping (Int, Any?) -> Void) {
-        postToURL("comments", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
-            self.clearKeyValue()
-            completion(status, message)
+    func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
+        if type != nil && pinId != nil {
+            getFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
         }
     }
     
     func updateComment(_ commentId: String?, completion:@escaping (Int, Any?) -> Void) {
-        if commentId != nil{
+        if commentId != nil {
             postToURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
@@ -83,29 +84,18 @@ class FaeMap: NSObject {
         }
     }
     
-    func getComment(_ commentId: String?, completion: @escaping (Int, Any?) -> Void){
-        if commentId != nil{
-            getFromURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+    func getUserAllPinWithType(type: String?, userId: String?, completion: @escaping (Int, Any?) -> Void) {
+        if type != nil && userId != nil {
+            getFromURL("\(type!)s/users/\(userId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
         }
     }
     
-    func getUserAllComments(_ userId:String?, completion: @escaping (Int, Any?) -> Void) {
-        if userId != nil{
-            //            print(userTokenEncode)
-            getFromURL("comments/users/"+userId!, parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
-                self.clearKeyValue()
-                completion(status, message)
-            }
-        }
-    }
-    
-    func deleteCommentById(_ commentId: String?, completion:@escaping (Int, Any?) -> Void) {
-        if commentId != nil{
-            deleteFromURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-                //                print("delete comment by id")
+    func deletePin(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if type != nil && pinId != nil {
+            deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }

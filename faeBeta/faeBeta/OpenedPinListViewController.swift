@@ -15,7 +15,7 @@ protocol OpenedPinListViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
     func backFromOpenedPinList(_ back: Bool)
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, commentID: Int)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int)
 }
 
 class OpenedPinListViewController: UIViewController {
@@ -167,19 +167,6 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
         subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
         NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .centerX, relatedBy: .equal, toItem: self.subviewWhite, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func getAndSetUserAvatar(_ userAvatar: UIImageView, userID: Int) {
-        let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
-        let block = {(image: UIImage?, error: Error?, cacheType: SDImageCacheType, imageURL: URL?) -> Void in
-            // completion code here
-            if userAvatar.image != nil {
-                let croppedImage = self.cropToBounds(userAvatar.image!)
-                userAvatar.image = croppedImage
-            }
-        }
-        
-        userAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(named: "defaultMan"), options: [], completed: block)
     }
     
     func cropToBounds(_ image: UIImage) -> UIImage {

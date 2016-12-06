@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol CPCommentsCellDelegate: class {
-    func showActionSheetFromCommentPinCell(_ username: String) // Reply to this user
-    func cancelTouchToReplyTimerFromCommentPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+protocol PinCommentsCellDelegate: class {
+    func showActionSheetFromPinCell(_ username: String) // Reply to this user
+    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
 }
 
-class CPCommentsCell: UITableViewCell, UITextViewDelegate {
+class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
-    weak var delegate: CPCommentsCellDelegate?
+    weak var delegate: PinCommentsCellDelegate?
     var imageViewAvatar: UIImageView!
     var labelUsername: UILabel!
     var labelTimestamp: UILabel!
@@ -27,10 +27,14 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     var textViewComment: UITextView!
     var buttonUpVote: UIButton!
     var buttonDownVote: UIButton!
-//    var buttonLike: UIButton!
     var buttonReply: UIButton!
-    
-    let screenWidth = UIScreen.main.bounds.width
+    var pinID = -999
+    enum VoteType {
+        case null
+        case up
+        case down
+    }
+    var voteType: VoteType = .null
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,8 +48,8 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     func loadCellContent() {
         
         self.buttonForWholeCell = UIButton()
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchDown)
-        self.buttonForWholeCell.addTarget(self, action: #selector(CPCommentsCell.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
+        self.buttonForWholeCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
+        self.buttonForWholeCell.addTarget(self, action: #selector(self.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
         self.addSubview(buttonForWholeCell)
         self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
         self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
@@ -88,7 +92,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
         // Main buttons container
         self.uiviewCommentActionButtons = UIView()
         self.addSubview(uiviewCommentActionButtons)
-        self.addConstraintsWithFormat("H:|-0-[v0(\(self.screenWidth))]", options: [], views: uiviewCommentActionButtons)
+        self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewCommentActionButtons)
         self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: uiviewCommentActionButtons)
         
         // Label of Vote Count
@@ -104,7 +108,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
         // DownVote
         self.buttonDownVote = UIButton()
         self.buttonDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), for: .normal)
-//        self.buttonDownVote.addTarget(self, action: #selector(FaeMapViewController.actionDownVoteThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonDownVote.addTarget(self, action: #selector(self.downVoteThisComment(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonDownVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonDownVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonDownVote)
@@ -112,7 +116,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
         // UpVote
         self.buttonUpVote = UIButton()
         self.buttonUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), for: .normal)
-//        self.buttonUpVote.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.buttonUpVote.addTarget(self, action: #selector(self.upVoteThisComment(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonUpVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonUpVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonUpVote)
@@ -120,8 +124,7 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
         // Add Comment
         self.buttonReply = UIButton()
         self.buttonReply.setImage(UIImage(named: "commentPinForwardHollow"), for: UIControlState())
-//        self.buttonShare.addTarget(self, action: #selector(FaeMapViewController.actionReplyToThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonReply.addTarget(self, action: #selector(CPCommentsCell.showActionSheet(_:)), for: .touchUpInside)
+        self.buttonReply.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonReply)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonReply)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonReply)
@@ -129,41 +132,72 @@ class CPCommentsCell: UITableViewCell, UITextViewDelegate {
     
     func showActionSheet(_ sender: UIButton) {
         if let username = labelUsername.text {
-            self.delegate?.showActionSheetFromCommentPinCell(username)
+            self.delegate?.showActionSheetFromPinCell(username)
         }
     }
     
     func cancelTouchToReplyTimer(_ sender: UIButton) {
-        self.delegate?.cancelTouchToReplyTimerFromCommentPinCell(true)
+        self.delegate?.cancelTouchToReplyTimerFromPinCell(true)
+    }
+    
+    func upVoteThisComment(_ sender: UIButton) {
+        if voteType == .up || pinID == -999 {
+            return
+        }
+        buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
+        buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+        let upVote = FaePinAction()
+        upVote.whereKey("vote", value: "up")
+        upVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
+            print("[upVoteThisComment] pinID: \(self.pinID)")
+            if status / 100 == 2 {
+                self.voteType = .up
+                print("[upVoteThisComment] Successfully upvote this pin comment")
+            }
+            else if status == 400 {
+                print("[upVoteThisComment] Already upvote this pin comment")
+            }
+            else {
+                if self.voteType == .down {
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+                }
+                else if self.voteType == .null {
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                }
+                print("[upVoteThisComment] Fail to upvote this pin comment")
+            }
+        }
+    }
+    
+    func downVoteThisComment(_ sender: UIButton) {
+        if voteType == .down || pinID == -999 {
+            return
+        }
+        buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
+        buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+        let downVote = FaePinAction()
+        downVote.whereKey("vote", value: "down")
+        downVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                self.voteType = .down
+                print("[upVoteThisComment] Successfully downvote this pin comment")
+            }
+            else if status == 400 {
+                print("[upVoteThisComment] Already downvote this pin comment")
+            }
+            else {
+                if self.voteType == .up {
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                }
+                else if self.voteType == .null {
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                }
+                print("[upVoteThisComment] Fail to downvote this pin comment")
+            }
+        }
     }
 }
-
-/*
- // Comment Pin Like
- self.buttonLike = UIButton()
- self.buttonLike.setImage(UIImage(named: "commentPinLikeHollow"), forState: .Normal)
- //        self.buttonLike.addTarget(self, action: #selector(FaeMapViewController.actionLikeThisComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
- self.uiviewCommentActionButtons.addSubview(buttonLike)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonLike)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonLike)
- 
- // Label of Like Count
- self.labelLikeCount = UILabel()
- self.labelLikeCount.text = "0"
- self.labelLikeCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
- self.labelLikeCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
- self.labelLikeCount.textAlignment = .right
- self.uiviewCommentActionButtons.addSubview(labelLikeCount)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelLikeCount)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelLikeCount)
- 
- // Label of Share Count
- self.labelShareCount = UILabel()
- self.labelShareCount.text = "0"
- self.labelShareCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
- self.labelShareCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
- self.labelShareCount.textAlignment = .right
- self.uiviewCommentActionButtons.addSubview(labelShareCount)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelShareCount)
- self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelShareCount)
- */

@@ -12,7 +12,7 @@ import GoogleMaps
 import GooglePlaces
 import Firebase
 import FirebaseDatabase
-
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
     let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
     let VERSION_NUM = "v1"
-    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -38,11 +37,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()        
         FIRDatabase.database().persistenceEnabled = true
         
+        // Config Realm Database
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { migration, oldSchemaVersion in
+                
+        })
+        
         return true
     }
+    
     func openSettings() {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
+    
     func popUpEnableLocationViewController() {
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         
@@ -50,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController!.present(vc, animated: true, completion:nil)
         
     }
+    
     func popUpWelcomeView() {
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
@@ -57,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController!.present(vc, animated: true, completion:nil)
         
     }
+    
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         UIApplication.shared.registerForRemoteNotifications()
         /*
@@ -69,6 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          print("Notification enabled")
          }*/
     }
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         var token: String = ""
         for i in 0..<deviceToken.count {
@@ -77,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         headerDeviceID = token
         print("Device ID: ", headerDeviceID)
     }
+    
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
         if identifier == "answerAction" {
             
@@ -88,6 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         UIApplication.shared.applicationIconBadgeNumber += 1
     }
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
         if error._code == 3010 {//work at simulate do nothing here
@@ -109,6 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
+    
     func runSync() {
         if is_Login == 0 {
             print("not log in, sync fail")
@@ -163,7 +177,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              print("Notification enabled")
              }*/
         }
-        
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -235,10 +248,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
-//
-//extension NSData {
-//    func hexString() -> String {
-//        return map { String(format: "%02hhx", $0) }.joined()
-//    }
-//}
-

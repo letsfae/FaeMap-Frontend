@@ -12,6 +12,28 @@ import CoreLocation
 
 extension CreateMomentPinViewController {
     
+    func actionAddMedia(_ sender: UIButton) { // Add or Cancel Adding
+        if sender.tag == 0 {
+            let angle: CGFloat = (-45 * 3.14 / 180.0) as CGFloat
+            sender.tag = 1
+            UIView.animate(withDuration: 0.5) {
+                self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: angle)
+                self.collectionViewMedia.center.x -= 249
+                self.buttonTakeMedia.alpha = 1
+                self.buttonSelectMedia.alpha = 1
+            }
+        }
+        else {
+            sender.tag = 0
+            UIView.animate(withDuration: 0.5) {
+                self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
+                self.collectionViewMedia.center.x += 249
+                self.buttonTakeMedia.alpha = 0
+                self.buttonSelectMedia.alpha = 0
+            }
+        }
+    }
+    
     func actionAnonymous(_ sender: UIButton) {
         if sender.tag == 0 {
             sender.tag = 1
@@ -206,17 +228,18 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
         
-        postSingleMedia.postMoment{(status: Int, message: Any?) in
+        postSingleMedia.postPin(type: "media") {(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
                 self.showAlert(title: "Post Moment Failed", message: "Please try agian")
+                self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] status is not 2XX")
                 return
             }
             if let mediaID = getMessage["media_id"].int {
                 print("Have Post Media")
                 let getJustPostedMedia = FaeMap()
-                getJustPostedMedia.getMoment("\(mediaID)"){(status: Int, message: Any?) in
+                getJustPostedMedia.getPin(type: "media", pinId: "\(mediaID)"){(status: Int, message: Any?) in
                     print("[submitMediaPin] get media_id: \(mediaID) of this posted comment")
                     let latDouble = Double(submitLatitude!)
                     let longDouble = Double(submitLongitude!)
@@ -230,6 +253,7 @@ extension CreateMomentPinViewController {
             }
             else {
                 self.buttonMediaSubmit.tag = 1
+                self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] Cannot get media ID")
             }
         }

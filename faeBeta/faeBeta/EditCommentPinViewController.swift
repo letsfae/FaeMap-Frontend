@@ -28,7 +28,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
     var textViewUpdateComment: UITextView!
     var lableTextViewPlaceholder: UILabel!
     
-    var commentID = ""
+    var pinID = ""
     var previousCommentContent = ""
     
     override func viewDidLoad() {
@@ -115,7 +115,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         else {
             let updateComment = FaeMap()
             updateComment.whereKey("content", value: textViewUpdateComment.text)
-            updateComment.updateComment(commentID) {(status: Int, message: Any?) in
+            updateComment.updateComment(pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Success -> Update Comment")
                     self.delegate?.reloadCommentContent()
