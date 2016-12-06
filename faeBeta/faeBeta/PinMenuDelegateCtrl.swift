@@ -49,4 +49,10 @@ extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegat
             self.delegate?.sendPinGeoInfo(pinID: mediaID, type: "media", latitude: latitude, longitude: longitude)
         })
     }
+    
+    func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        self.dismiss(animated: false, completion: {
+            self.delegate?.sendPinGeoInfo(pinID: chatID, type: "chat_room", latitude: latitude, longitude: longitude)
+        })
+    }
 }

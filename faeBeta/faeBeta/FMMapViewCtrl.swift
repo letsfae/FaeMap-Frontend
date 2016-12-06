@@ -195,6 +195,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 })
                 return true
             }
+            else if type.contains("chat"){
+                
+            }
         }
         return true
     }

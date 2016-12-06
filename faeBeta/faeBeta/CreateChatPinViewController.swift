@@ -29,6 +29,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     private var moreOptionsTableView: CreatePinOptionsTableView!
     
     //pin location
+    private var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
     private var selectedLatitude: String!
     private var selectedLongitude: String!
     var labelSelectLocationContent: String!
@@ -176,6 +177,49 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     {
         if(optionViewMode == .more){
             leaveDescription()
+        }else if (optionViewMode == .pin){
+            
+            let postSingleChatPin = FaeMap()
+            
+            var submitLatitude = selectedLatitude
+            var submitLongitude = selectedLongitude
+            
+//            let commentContent = descriptionTextView.text
+            
+            if labelSelectLocationContent == "Current Location" {
+                submitLatitude = "\(currentLocation.coordinate.latitude)"
+                submitLongitude = "\(currentLocation.coordinate.longitude)"
+            }
+            
+            postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
+            postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
+//            postSingleChatPin.whereKey("content", value: commentContent)
+            postSingleChatPin.whereKey("interaction_radius", value: "99999999")
+            postSingleChatPin.whereKey("duration", value: "1440")
+            postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
+            
+            postSingleChatPin.postChatPin {(status: Int, message: Any?) in
+                if let getMessage = message as? NSDictionary{
+                    if let getMessageID = getMessage["chat_room_id"] {
+                        let getJustPostedChatPin = FaeMap()
+                        getJustPostedChatPin.getChatPin("\(getMessageID)"){(status: Int, message: Any?) in
+                            let latDouble = Double(submitLatitude!)
+                            let longDouble = Double(submitLongitude!)
+                            let lat = CLLocationDegrees(latDouble!)
+                            let long = CLLocationDegrees(longDouble!)
+                            self.dismiss(animated: false, completion: {
+                                self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
+                            })
+                        }
+                    }
+                    else {
+                        print("Cannot get comment_id of this posted comment")
+                    }
+                }
+                else {
+                    print("Post Comment Fail")
+                }
+            }
         }
     }
     
@@ -256,6 +300,11 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         view.endEditing(true)
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
+    }
+    
+    //MARK: - location
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        currentLocation = manager.location
     }
     
     // MARK: - helper

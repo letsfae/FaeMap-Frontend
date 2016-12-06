@@ -8,9 +8,11 @@
 
 import UIKit
 
-protocol CreatePinBaseDelegate: class {
+@objc protocol CreatePinBaseDelegate {
     func backFromCMP(back: Bool)
     func closePinMenuCMP(close: Bool)
+    @objc optional func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+
 }
 
 

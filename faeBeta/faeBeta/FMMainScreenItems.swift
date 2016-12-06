@@ -123,6 +123,9 @@ extension FaeMapViewController {
         else if type == "media" {
             tempMarker.image = UIImage(named: "momentMarkerWhenCreated")
         }
+        else if type == "chat_room"{
+            tempMarker.image = UIImage(named: "chatMarkerWhenCreated")
+        }
         self.view.addSubview(tempMarker)
         markerMask = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(markerMask)
@@ -170,6 +173,9 @@ extension FaeMapViewController {
                         }
                         else if typeInfo == "media" {
                             pinShowOnMap.icon = UIImage(named: "momentPinMarker")
+                        }
+                        else if typeInfo.contains("chat") {
+                            pinShowOnMap.icon = UIImage(named: "chatPinMarker")
                         }
                         pinShowOnMap.zIndex = 0
                     }
