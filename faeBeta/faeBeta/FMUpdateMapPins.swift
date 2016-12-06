@@ -36,7 +36,7 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "500000")
-        loadPinsByZoomLevel.whereKey("type", value: "comment,chat_room")
+        loadPinsByZoomLevel.whereKey("type", value: "comment,chat_room,media")
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
             if status/100 != 2 || message == nil {
@@ -66,7 +66,13 @@ extension FaeMapViewController {
                     else if typeInfo.contains("chat"){
                         pinMap.icon = UIImage(named: "chatPinMarker")
                         pinMap.zIndex = 0
+                        type = "chat_room"
                     }
+                    else if typeInfo == "media" {
+                        pinMap.icon = #imageLiteral(resourceName: "momentPinMarker")
+                        type = "media"
+                    }
+                    pinMap.zIndex = 0
                 }
                 if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                     pinData["\(type)_id"] = pinIDInfo as AnyObject?

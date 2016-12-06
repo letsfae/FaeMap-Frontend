@@ -28,10 +28,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     var descriptionTextView: CreatePinTextView!
     private var moreOptionsTableView: CreatePinOptionsTableView!
     
-    //pin location
-    private var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
-    private var selectedLatitude: String!
-    private var selectedLongitude: String!
     var labelSelectLocationContent: String!
     
     enum OptionViewMode{
@@ -186,7 +182,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             
 //            let commentContent = descriptionTextView.text
             
-            if labelSelectLocationContent == "Current Location" {
+            if labelSelectLocationContent == nil || labelSelectLocationContent == "" {
                 submitLatitude = "\(currentLocation.coordinate.latitude)"
                 submitLongitude = "\(currentLocation.coordinate.longitude)"
             }
@@ -198,11 +194,11 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             postSingleChatPin.whereKey("duration", value: "1440")
             postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
             
-            postSingleChatPin.postChatPin {(status: Int, message: Any?) in
+            postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
                 if let getMessage = message as? NSDictionary{
                     if let getMessageID = getMessage["chat_room_id"] {
                         let getJustPostedChatPin = FaeMap()
-                        getJustPostedChatPin.getChatPin("\(getMessageID)"){(status: Int, message: Any?) in
+                        getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
                             let latDouble = Double(submitLatitude!)
                             let longDouble = Double(submitLongitude!)
                             let lat = CLLocationDegrees(latDouble!)
@@ -300,11 +296,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         view.endEditing(true)
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
-    }
-    
-    //MARK: - location
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = manager.location
     }
     
     // MARK: - helper

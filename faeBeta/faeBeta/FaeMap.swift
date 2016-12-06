@@ -31,35 +31,9 @@ class FaeMap: NSObject {
         }
     }
     
-    // ChatPin
-    func postChatPin(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("chat_rooms", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
-            self.clearKeyValue()
-            completion(status, message)
-        }
-    }
-    
-    func getChatPin(_ chatId: String?, completion: @escaping (Int, Any?) -> Void){
-        if let chatId = chatId{
-            getFromURL("chat_rooms/"+chatId, parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
-                self.clearKeyValue()
-                completion(status, message)
-            }
-        }
-
-    }
-    
-    // Moment
-    func postMoment(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("medias", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
-            self.clearKeyValue()
-            completion(status, message)
-        }
-    }
-    
-    func getMoment(_ momentId: String?, completion: @escaping (Int, Any?) -> Void){
-        if momentId != nil{
-            getFromURL("medias/"+momentId!, parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+    func postPin(type: String?, completion: @escaping (Int, Any?) -> Void) {
+        if type != nil {
+            postToURL("\(type!)s", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }

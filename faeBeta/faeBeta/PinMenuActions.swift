@@ -39,10 +39,11 @@ extension PinMenuViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
-            let createMediaPinVC = CreateChatPinViewController()
-            createMediaPinVC.modalPresentationStyle = .overCurrentContext
-            createMediaPinVC.delegate = self
-            self.present(createMediaPinVC, animated: false, completion: nil)
+            let createChatPinVC = CreateChatPinViewController()
+            createChatPinVC.modalPresentationStyle = .overCurrentContext
+            createChatPinVC.delegate = self
+            createChatPinVC.currentLocation = CLLocation(latitude: self.currentLatitude, longitude: self.currentLongitude)
+            self.present(createChatPinVC, animated: false, completion: nil)
         })
     }
     

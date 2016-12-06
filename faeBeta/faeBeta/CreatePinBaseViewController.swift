@@ -33,6 +33,11 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
     var buttonFinishEdit: UIButton!
     var labelCountChars: UILabel!
     
+    //pin location
+    var selectedLatitude: String!
+    var selectedLongitude: String!
+    var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
+    
     //MARK: - life cycles
     override func viewDidLoad()
     {
