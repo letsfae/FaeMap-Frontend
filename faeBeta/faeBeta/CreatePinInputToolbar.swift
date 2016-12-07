@@ -10,6 +10,7 @@ import UIKit
 
 protocol CreatePinInputToolbarDelegate: class {
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
+    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
 }
 
 class CreatePinInputToolbar: UIView {
@@ -25,9 +26,25 @@ class CreatePinInputToolbar: UIView {
         set{
             _numberOfCharactersEntered = newValue
             labelCountChars.text = "\(maximumNumberOfCharacters - _numberOfCharactersEntered)"
+            countCharsLabelHidden = false
         }
         get{
             return _numberOfCharactersEntered
+        }
+    }
+    
+    private var _countCharsLabelHidden: Bool = false
+    var countCharsLabelHidden: Bool{
+        get{
+            return _countCharsLabelHidden
+        }
+        set{
+            _countCharsLabelHidden = newValue
+            if(_countCharsLabelHidden){
+                labelCountChars.alpha = 0
+            }else{
+                labelCountChars.alpha = 1
+            }
         }
     }
     
@@ -36,7 +53,7 @@ class CreatePinInputToolbar: UIView {
     //MARK: - init
     init()
     {
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 100))
+        super.init(frame: CGRect(x: 0, y: screenHeight-100, width: screenWidth, height: 100))
         setup()
     }
     
@@ -66,6 +83,8 @@ class CreatePinInputToolbar: UIView {
         self.addSubview(buttonOpenFaceGesPanel)
         self.addConstraintsWithFormat("H:|-15-[v0(23)]", options: [], views: buttonOpenFaceGesPanel)
         self.addConstraintsWithFormat("V:[v0(22)]-14-|", options: [], views: buttonOpenFaceGesPanel)
+        buttonOpenFaceGesPanel.addTarget(self, action: #selector(self.emojiButtonTapped(_:)), for: .touchUpInside)
+
         
         buttonFinishEdit = UIButton()
         buttonFinishEdit.setImage(UIImage(named: "finishEditing"), for: UIControlState())
@@ -89,4 +108,10 @@ class CreatePinInputToolbar: UIView {
     {
         self.delegate?.inputToolbarFinishButtonTapped(inputToolbar:self)
     }
+    
+    func emojiButtonTapped(_ sender: UIButton)
+    {
+        self.delegate?.inputToolbarEmojiButtonTapped(inputToolbar:self)
+    }
 }
+

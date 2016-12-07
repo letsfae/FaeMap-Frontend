@@ -132,7 +132,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             createChatPinMainView.addConstraintsWithFormat("H:[v0(300)]", options: [], views: createChatPinTextField)
             NSLayoutConstraint(item: createChatPinTextField, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
             createChatPinTextField.delegate = self
-            createChatPinTextField.inputAccessoryView = inputToolbar
         }
         
         func createInputTextView()
@@ -141,7 +140,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             bubbleTextView.placeHolder = "Say Something…"
             createChatPinMainView.addSubview(bubbleTextView)
             bubbleTextView.alpha = 0
-            bubbleTextView.inputAccessoryView = inputToolbar
             bubbleTextView.observerDelegate = self
         }
         
@@ -305,7 +303,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         if (descriptionTextView == nil) {
             descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             descriptionTextView.placeHolder = "Add Description..."
-            descriptionTextView.inputAccessoryView = inputToolbar
             descriptionTextView.observerDelegate = self
             self.view.addSubview(descriptionTextView)
         }
@@ -427,6 +424,11 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - text field delegate
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == createChatPinTextField {
+            inputToolbar.countCharsLabelHidden = true
+        }
+    }
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == createChatPinTextField {
             updateSubmitButton()

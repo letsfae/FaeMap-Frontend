@@ -37,17 +37,20 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var selectedLatitude: String!
     var selectedLongitude: String!
     var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
-    
+        
     //MARK: - life cycles
     override func viewDidLoad()
     {
         super.viewDidLoad()
         setupBaseUI()
         addObservers()
-        loadKeyboardToolBar()
-        // Do any additional setup after loading the view.
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadKeyboardToolBar()
+    }
+    
     //MARK: - setup
     private func setupBaseUI()
     {
@@ -121,6 +124,10 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     private func loadKeyboardToolBar() {
         inputToolbar = CreatePinInputToolbar()
         inputToolbar.delegate = self
+        self.view.addSubview(inputToolbar)
+        
+        inputToolbar.alpha = 0
+        self.view.layoutIfNeeded()
     }
     
     private func addObservers() {
@@ -171,6 +178,10 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         self.view.endEditing(true)
     }
     
+    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
+        
+    }
+    
     //MARK: - CreatePinTextViewDelegate
     func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
     {
@@ -182,20 +193,25 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     //MARK: - keyboard show/hide
     
     func keyboardWillShow(_ notification:Notification) {
-//        let info = notification.userInfo!
-//        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-//        
-//        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-//            self.inputToolbar.frame.origin.y = screenHeight - keyboardFrame.height - 50
-//            self.labelCountChars.frame.origin.y = screenHeight - keyboardFrame.height - 81
-//        })
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        inputToolbar.alpha = 1
+//        self.view.bringSubview(toFront: inputToolbar)
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+            Void in
+            self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
+        }, completion: nil)
     }
     
-    func keyboardWillHide(_ notification:Notification) {
-//        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-//            self.inputToolbar.frame.origin.y = screenHeight
-//            self.labelCountChars.frame.origin.y = screenHeight
-//        })
+    func keyboardWillHide(_ notification: Notification){
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+            Void in
+            self.inputToolbar.frame.origin.y = screenHeight - 100
+            self.inputToolbar.alpha = 0
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {

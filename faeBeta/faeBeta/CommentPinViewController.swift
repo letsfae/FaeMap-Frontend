@@ -442,7 +442,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = -keyboardHeight
-            self.view.setNeedsUpdateConstraints()
+            self.view.layoutIfNeeded()
         }, completion: nil)
     }
     
@@ -454,7 +454,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = 0
-            self.view.setNeedsUpdateConstraints()
+            self.view.layoutIfNeeded()
         }, completion: nil)
     }
     

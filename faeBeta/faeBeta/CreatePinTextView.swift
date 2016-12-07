@@ -98,9 +98,6 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
             return false
         }
         let countChars = textView.text.characters.count + (text.characters.count - range.length)
-//        if countChars <= 200 {
-//            self.labelCountChars.text = "\(200-countChars)"
-//        }
         return countChars <= 200
     }
 }
