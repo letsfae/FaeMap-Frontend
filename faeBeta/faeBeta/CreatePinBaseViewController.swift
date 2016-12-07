@@ -16,7 +16,7 @@ import UIKit
 }
 
 
-class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
+class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate {
     //MARK: - properties
     weak var delegate : CreatePinBaseDelegate!
     var submitButton: UIButton!
@@ -28,7 +28,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
     var isAnonymous: Bool = false
     
     //input toolbar
-    var inputToolbar: UIView!
+    var inputToolbar: CreatePinInputToolbar!
     var buttonOpenFaceGesPanel: UIButton!
     var buttonFinishEdit: UIButton!
     var labelCountChars: UILabel!
@@ -119,28 +119,8 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadKeyboardToolBar() {
-        inputToolbar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 50))
-        inputToolbar.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
-        
-        buttonOpenFaceGesPanel = UIButton()
-        buttonOpenFaceGesPanel.setImage(UIImage(named: "faceGesture"), for: UIControlState())
-        inputToolbar.addSubview(buttonOpenFaceGesPanel)
-        inputToolbar.addConstraintsWithFormat("H:|-15-[v0(23)]", options: [], views: buttonOpenFaceGesPanel)
-        inputToolbar.addConstraintsWithFormat("V:[v0(22)]-14-|", options: [], views: buttonOpenFaceGesPanel)
-        
-        buttonFinishEdit = UIButton()
-        buttonFinishEdit.setImage(UIImage(named: "finishEditing"), for: UIControlState())
-        inputToolbar.addSubview(buttonFinishEdit)
-        inputToolbar.addConstraintsWithFormat("H:[v0(49)]-14-|", options: [], views: buttonFinishEdit)
-        inputToolbar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
-        buttonFinishEdit.addTarget(self, action: #selector(self.actionFinishEditing(_:)), for: .touchUpInside)
-        
-        labelCountChars = UILabel(frame: CGRect(x: screenWidth-43, y: screenHeight, width: 29, height: 20))
-        labelCountChars.text = "200"
-        labelCountChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        labelCountChars.textAlignment = .right
-        labelCountChars.textColor = UIColor.white
-        self.view.addSubview(labelCountChars)
+        inputToolbar = CreatePinInputToolbar()
+        inputToolbar.delegate = self
     }
     
     private func addObservers() {
@@ -186,7 +166,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    func actionFinishEditing(_ sender:UIButton)
+    func inputToolbar(_ inputToolbar: CreatePinInputToolbar, finishButtonTapped finishButton: UIButton)
     {
         self.view.endEditing(true)
     }

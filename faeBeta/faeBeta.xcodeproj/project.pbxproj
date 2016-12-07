@@ -241,6 +241,7 @@
 		DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
 		DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */; };
 		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
+		DC79E1571DF7C72800DA20E0 /* CreatePinInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79E1561DF7C72800DA20E0 /* CreatePinInputToolbar.swift */; };
 		DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
@@ -525,6 +526,7 @@
 		DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellOutgoingCustom.m; sourceTree = "<group>"; };
 		DC74CE251DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellIncomingCustom.xib; sourceTree = "<group>"; };
 		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
+		DC79E1561DF7C72800DA20E0 /* CreatePinInputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinInputToolbar.swift; sourceTree = "<group>"; };
 		DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
@@ -1194,6 +1196,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		DC79E1551DF7C6D300DA20E0 /* CreatePinInputToolbar */ = {
+			isa = PBXGroup;
+			children = (
+				DC79E1561DF7C72800DA20E0 /* CreatePinInputToolbar.swift */,
+			);
+			name = CreatePinInputToolbar;
+			sourceTree = "<group>";
+		};
 		DCB8816E1DEA547A00AF2FAE /* CreateChatPin */ = {
 			isa = PBXGroup;
 			children = (
@@ -1215,9 +1225,10 @@
 		DCEB8C901DEE3BB100B516E9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */,
+				DC79E1551DF7C6D300DA20E0 /* CreatePinInputToolbar */,
 				DCEB8C9D1DEEB26E00B516E9 /* CreatePinTextView */,
 				DCEB8C911DEE3BE600B516E9 /* CreatePinOptionsTableView */,
-				DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1601,6 +1612,7 @@
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B8C7410D1DB7100C0020E4E7 /* CPDLoadItems.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
+				DC79E1571DF7C72800DA20E0 /* CreatePinInputToolbar.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
