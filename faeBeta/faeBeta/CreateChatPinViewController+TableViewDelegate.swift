@@ -47,7 +47,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         case .pin:
             switch indexPath.row{
             case CreateChatPinNormalOptions.AddDescription.rawValue:
-                cell.setupCell(withTitle: (descriptionTextView != nil && descriptionTextView.text != "" ) ? descriptionTextView.text! : "Add Description", leadingIcon: #imageLiteral(resourceName: "addDescription"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
+                cell.setupCell(withTitle: ((descriptionTextView != nil && descriptionTextView.text != "" ) ? descriptionTextView.text! : "Add Description"), leadingIcon: #imageLiteral(resourceName: "addDescription"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinNormalOptions.ChooseLocation.rawValue:
                 cell.setupCell(withTitle: labelSelectLocationContent ?? "Choose Location", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))

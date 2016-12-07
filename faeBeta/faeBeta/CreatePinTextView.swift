@@ -8,9 +8,13 @@
 
 import UIKit
 
+protocol CreatePinTextViewDelegate:class {
+    func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
+}
+
 class CreatePinTextView: UITextView, UITextViewDelegate {
     private var lableTextViewPlaceholder: UILabel!
-    
+    weak var observerDelegate: CreatePinTextViewDelegate!
     var placeHolder: String? {
         get{
             return lableTextViewPlaceholder.text
@@ -44,6 +48,11 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.addSubview(lableTextViewPlaceholder)
     }
 
+    func textViewDidBeginEditing(_ textView: UITextView)
+    {
+        self.observerDelegate?.textView(self, numberOfCharactersEntered: textView.text.characters.count)
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         let spacing = CharacterSet.whitespacesAndNewlines
         
@@ -79,6 +88,8 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         else if numLines > numlineOnDevice {
             textView.isScrollEnabled = true
         }
+        
+        self.observerDelegate?.textView(self, numberOfCharactersEntered: textView.text.characters.count)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

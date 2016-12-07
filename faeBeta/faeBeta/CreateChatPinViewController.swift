@@ -142,6 +142,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             createChatPinMainView.addSubview(bubbleTextView)
             bubbleTextView.alpha = 0
             bubbleTextView.inputAccessoryView = inputToolbar
+            bubbleTextView.observerDelegate = self
         }
         
         createMainView()
@@ -305,6 +306,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             descriptionTextView.placeHolder = "Add Description..."
             descriptionTextView.inputAccessoryView = inputToolbar
+            descriptionTextView.observerDelegate = self
             self.view.addSubview(descriptionTextView)
         }
         descriptionTextView.alpha = 0

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CreatePinInputToolbarDelegate: class {
-    func inputToolbar(_ inputToolbar: CreatePinInputToolbar, finishButtonTapped finishButton: UIButton)
+    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
 }
 
 class CreatePinInputToolbar: UIView {
@@ -18,6 +18,18 @@ class CreatePinInputToolbar: UIView {
     private var buttonOpenFaceGesPanel: UIButton!
     private var buttonFinishEdit: UIButton!
     private var labelCountChars: UILabel!
+    
+    var maximumNumberOfCharacters: Int = 200
+    private var _numberOfCharactersEntered: Int = 0
+    var numberOfCharactersEntered: Int{
+        set{
+            _numberOfCharactersEntered = newValue
+            labelCountChars.text = "\(maximumNumberOfCharacters - _numberOfCharactersEntered)"
+        }
+        get{
+            return _numberOfCharactersEntered
+        }
+    }
     
     weak var delegate:CreatePinInputToolbarDelegate!
     
@@ -63,7 +75,7 @@ class CreatePinInputToolbar: UIView {
         buttonFinishEdit.addTarget(self, action: #selector(self.finishEditButtonTapped(_:)), for: .touchUpInside)
         
         labelCountChars = UILabel(frame: CGRect(x: screenWidth-43, y: screenHeight, width: 29, height: 20))
-        labelCountChars.text = "200"
+        labelCountChars.text = "\(maximumNumberOfCharacters)"
         labelCountChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         labelCountChars.textAlignment = .right
         labelCountChars.textColor = UIColor.white
@@ -75,6 +87,6 @@ class CreatePinInputToolbar: UIView {
     //MARK: - button actions
     func finishEditButtonTapped(_ sender: UIButton)
     {
-        self.delegate?.inputToolbar(self, finishButtonTapped: sender)
+        self.delegate?.inputToolbarFinishButtonTapped(inputToolbar:self)
     }
 }

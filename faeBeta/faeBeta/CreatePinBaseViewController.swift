@@ -16,7 +16,7 @@ import UIKit
 }
 
 
-class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate {
+class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate {
     //MARK: - properties
     weak var delegate : CreatePinBaseDelegate!
     var submitButton: UIButton!
@@ -165,10 +165,18 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     {
         
     }
-    
-    func inputToolbar(_ inputToolbar: CreatePinInputToolbar, finishButtonTapped finishButton: UIButton)
+    //MARK: - CreatePinInputToolbarDelegate
+    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {
         self.view.endEditing(true)
+    }
+    
+    //MARK: - CreatePinTextViewDelegate
+    func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
+    {
+        if(inputToolbar != nil){
+            inputToolbar.numberOfCharactersEntered = num
+        }
     }
     
     //MARK: - keyboard show/hide
