@@ -16,7 +16,7 @@ import UIKit
 }
 
 
-class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate {
+class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate, SendStickerDelegate {
     //MARK: - properties
     weak var delegate : CreatePinBaseDelegate!
     var submitButton: UIButton!
@@ -139,6 +139,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     
     private func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
+        emojiView.sendStickerDelegate = self
         self.view.addSubview(emojiView)
     }
     
@@ -259,6 +260,75 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         return false
     }
     
+    //MARK: - sendSticker Delegate
+    
+    func sendStickerWithImageName(_ name : String)
+    {
+        // do nothing here, won't send sticker
+    }
+    func appendEmojiWithImageName(_ name: String)
+    {
+        if let previousFirstResponder = previousFirstResponder
+        {
+            if previousFirstResponder is UITextView{
+                let textView = previousFirstResponder as! UITextView
+                textView.text = textView.text as String + "[\(name)]"
+            }else if previousFirstResponder is UITextField{
+                let textField = previousFirstResponder as! UITextField
+                textField.text = textField.text! as String + "[\(name)]"
+            }
+        }
+    }
+    func deleteEmoji()
+    {
+        if let previousFirstResponder = previousFirstResponder
+        {
+            var previous = ""
+            if previousFirstResponder is UITextView{
+                let textView = previousFirstResponder as! UITextView
+                previous = textView.text
+            }else if previousFirstResponder is UITextField{
+                let textField = previousFirstResponder as! UITextField
+                previous = textField.text!
+            }
+            
+            var finalString = ""
+
+            
+            if previous.characters.count > 0 && previous.characters.last != "]"{
+                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
+            }else if previous.characters.count > 0 && previous.characters.last == "]"{
+                var i = 1
+                var findEmoji = false
+                while( i <= previous.characters.count){
+                    if previous.characters[previous.characters.index(previous.endIndex, offsetBy: -i )] == "[" {
+                        let between = previous.substring(with:
+                            previous.characters.index(previous.endIndex, offsetBy: -(i-1)) ..< previous.characters.index(previous.endIndex, offsetBy: -1 ))
+                        if (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between))!{
+                            findEmoji = true
+                            break
+                        }
+                    }
+                    i += 1
+                }
+                
+                if findEmoji{
+                    finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -i ))
+                }else{
+                    finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
+                }
+                
+
+            }
+            if previousFirstResponder is UITextView{
+                let textView = previousFirstResponder as! UITextView
+                textView.text = finalString
+            }else if previousFirstResponder is UITextField{
+                let textField = previousFirstResponder as! UITextField
+                textField.text = finalString
+            }
+        }
+    }
     //MARK: - helper
     func showEmojiViewAnimated(animated: Bool)
     {
