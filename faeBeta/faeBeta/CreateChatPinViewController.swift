@@ -424,7 +424,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - text field delegate
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    override func textFieldDidBeginEditing(_ textField: UITextField) {
+        super.textFieldDidBeginEditing(textField)
         if textField == createChatPinTextField {
             inputToolbar.countCharsLabelHidden = true
         }

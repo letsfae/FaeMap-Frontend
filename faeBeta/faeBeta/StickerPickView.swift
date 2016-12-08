@@ -33,6 +33,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     private var historyDict : [String : Int]!
     //most recently stick sorted by frequently and show in the second stickTabView
     
+    private var isInEmojiOnlyMode: Bool = false
+    
     //MARK: - init
     override init(frame : CGRect) {
         super.init(frame: frame)
@@ -40,11 +42,34 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         configureHistoryPage()
         configureScrollView()
         configurePageController()
-        configureTabView()
+        configureTabView(emojiOnly: false)
         stickerTabView.switcher = self
         currentScrollView.delegate = self
 
         switchSticker(3)
+    }
+    
+    init(frame : CGRect, emojiOnly : Bool){
+        super.init(frame: frame)
+        self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
+        if(!emojiOnly){
+            isInEmojiOnlyMode = false
+            configureHistoryPage()
+            configureScrollView()
+            configurePageController()
+            configureTabView(emojiOnly: false)
+            stickerTabView.switcher = self
+            currentScrollView.delegate = self
+            
+            switchSticker(3)
+        }else{
+            isInEmojiOnlyMode = true
+            configureScrollViewLite()
+            configurePageController()
+            configureTabView(emojiOnly: true)
+//            stickerTabView.switcher = self
+            currentScrollView.delegate = self
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,6 +90,14 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.addSubview(view)
     }
     
+    private func configureScrollViewLite(){
+        let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
+        prepareAlbum(view, name: "faeEmoji")
+        attachButton(view)
+        currentScrollView = view
+        self.addSubview(view)
+    }
+    
     private func configureHistoryPage() {
         loadHistoryFromStorage()
     }
@@ -80,8 +113,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.addSubview(pageControl)
     }
     
-    private func configureTabView() {
-        stickerTabView = StickerTabView(frame: CGRect(x: 0, y: 231, width: self.frame.width, height: 40))
+    private func configureTabView(emojiOnly: Bool) {
+        stickerTabView = StickerTabView(frame: CGRect(x: 0, y: 231, width: self.frame.width, height: 40), emojiOnly: emojiOnly)
         self.addSubview(stickerTabView)
     }
     
@@ -132,10 +165,10 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     func sendSticker(album: String, index : Int) {
         if let albumSet = StickerInfoStrcut.stickerDictionary[album] {
             if(album == "faeEmoji"){
-                sendStickerDelegate.appendEmojiWithImageName(albumSet[index])
+                sendStickerDelegate?.appendEmojiWithImageName(albumSet[index])
             }else{
                 print("the name of sticker is : \(albumSet[index])")
-                sendStickerDelegate.sendStickerWithImageName(albumSet[index])
+                sendStickerDelegate?.sendStickerWithImageName(albumSet[index])
             }
         } else {
             print("cannot find that image")
@@ -158,15 +191,23 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         let baseOffset = CGFloat(pages) * screenWidth
         let page = Int(round((currentScrollView.contentOffset.x - baseOffset) / currentScrollView.frame.size.width))
         if(page < 0){
-            let currentName = currentScrollView.currentAlbum.albumName
-            self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1]
-            updatePageControl()
-            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)!])
+            if(!isInEmojiOnlyMode){
+                let currentName = currentScrollView.currentAlbum.albumName
+                self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1]
+                updatePageControl()
+                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)!])
+            }else{
+                pageControl.currentPage = 0
+            }
         }else if (page >= pageControl.numberOfPages){
-            let currentName = currentScrollView.currentAlbum.albumName
-            self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1]
-            updatePageControl()
-            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 2])
+            if(!isInEmojiOnlyMode){
+                let currentName = currentScrollView.currentAlbum.albumName
+                self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1]
+                updatePageControl()
+                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 2])
+            }else{
+                pageControl.currentPage = pageControl.numberOfPages - 1
+            }
         }else{
             pageControl.currentPage = page
         }

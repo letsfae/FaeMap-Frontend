@@ -79,10 +79,10 @@ class CreatePinInputToolbar: UIView {
         
         
         buttonOpenFaceGesPanel = UIButton()
-        buttonOpenFaceGesPanel.setImage(UIImage(named: "faceGesture"), for: UIControlState())
+        buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
         self.addSubview(buttonOpenFaceGesPanel)
-        self.addConstraintsWithFormat("H:|-15-[v0(23)]", options: [], views: buttonOpenFaceGesPanel)
-        self.addConstraintsWithFormat("V:[v0(22)]-14-|", options: [], views: buttonOpenFaceGesPanel)
+        self.addConstraintsWithFormat("H:|-14-[v0(29)]", options: [], views: buttonOpenFaceGesPanel)
+        self.addConstraintsWithFormat("V:[v0(29)]-11-|", options: [], views: buttonOpenFaceGesPanel)
         buttonOpenFaceGesPanel.addTarget(self, action: #selector(self.emojiButtonTapped(_:)), for: .touchUpInside)
 
         
@@ -112,6 +112,15 @@ class CreatePinInputToolbar: UIView {
     func emojiButtonTapped(_ sender: UIButton)
     {
         self.delegate?.inputToolbarEmojiButtonTapped(inputToolbar:self)
+    }
+    
+    //MARK: - helper
+    func switchToEmojiMode(){
+        buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "keyboardIcon_filled"), for: UIControlState())
+    }
+    
+    func switchToKeyboardMode(){
+        buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
     }
 }
 

@@ -37,7 +37,13 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var selectedLatitude: String!
     var selectedLongitude: String!
     var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
-        
+    
+    //emoji
+    var isShowingEmoji: Bool = false
+    var emojiView: StickerPickView!
+    
+    var previousFirstResponder: AnyObject? = nil
+    
     //MARK: - life cycles
     override func viewDidLoad()
     {
@@ -49,6 +55,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         loadKeyboardToolBar()
+        loadEmojiView()
     }
     
     //MARK: - setup
@@ -130,12 +137,17 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         self.view.layoutIfNeeded()
     }
     
+    private func loadEmojiView(){
+        emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
+        self.view.addSubview(emojiView)
+    }
+    
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
-        tapToDismissKeyboard.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapToDismissKeyboard)
+//        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
+//        tapToDismissKeyboard.cancelsTouchesInView = false
+//        self.view.addGestureRecognizer(tapToDismissKeyboard)
     }
     
     //MARK: - button actions
@@ -176,10 +188,22 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {
         self.view.endEditing(true)
+        if(isShowingEmoji){
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: true)
+        }
     }
     
     func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
-        
+        if(!isShowingEmoji){
+            isShowingEmoji = true
+            self.view.endEditing(true)
+            showEmojiViewAnimated(animated: true)
+        }else{
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: false)
+            _ = self.previousFirstResponder?.becomeFirstResponder()
+        }
     }
     
     //MARK: - CreatePinTextViewDelegate
@@ -188,39 +212,85 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         if(inputToolbar != nil){
             inputToolbar.numberOfCharactersEntered = num
         }
+        self.previousFirstResponder = textView
     }
     
     //MARK: - keyboard show/hide
     
-    func keyboardWillShow(_ notification:Notification) {
+    func keyboardWillShow(_ notification:Notification)
+    {
+        
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         inputToolbar.alpha = 1
-//        self.view.bringSubview(toFront: inputToolbar)
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
         }, completion: nil)
     }
     
-    func keyboardWillHide(_ notification: Notification){
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-            Void in
-            self.inputToolbar.frame.origin.y = screenHeight - 100
-            self.inputToolbar.alpha = 0
-            self.view.layoutIfNeeded()
-        }, completion: nil)
+    func keyboardWillHide(_ notification: Notification)
+    {
+        if(!isShowingEmoji){
+            UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+                Void in
+                self.inputToolbar.frame.origin.y = screenHeight - 100
+                self.inputToolbar.alpha = 0
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+        }
     }
     
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer)
+    {
         self.view.endEditing(true)
     }
     
     //MARK: - textfield delegate
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.previousFirstResponder = textField
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
         self.view.endEditing(true)
         return false
+    }
+    
+    //MARK: - helper
+    func showEmojiViewAnimated(animated: Bool)
+    {
+        if(animated){
+            UIView.animate(withDuration: 0.3, animations: {
+                self.inputToolbar.frame.origin.y = screenHeight - 271 - 100
+                self.emojiView.frame.origin.y = screenHeight - 271
+            }, completion: { (Completed) in
+                self.inputToolbar.switchToEmojiMode()
+            })
+        }else{
+            self.inputToolbar.frame.origin.y = screenHeight - 271 - 100
+            self.emojiView.frame.origin.y = screenHeight - 271
+            self.inputToolbar.switchToEmojiMode()
+        }
+    }
+    
+    func hideEmojiViewAnimated(animated: Bool)
+    {
+        if(animated){
+            UIView.animate(withDuration: 0.3, animations: {
+                self.inputToolbar.frame.origin.y = screenHeight - 100
+                self.inputToolbar.alpha = 0
+                self.emojiView.frame.origin.y = screenHeight
+            }, completion: { (Completed) in
+                self.inputToolbar.switchToKeyboardMode()
+            })
+        }else{
+            self.inputToolbar.frame.origin.y = screenHeight - 100
+            self.inputToolbar.alpha = 0
+            self.emojiView.frame.origin.y = screenHeight
+            self.inputToolbar.switchToKeyboardMode()
+        }
     }
 }
