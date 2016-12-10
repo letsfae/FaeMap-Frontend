@@ -586,30 +586,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func deleteEmoji()
     {
         if inputToolbar != nil{
-            var previous = inputToolbar.contentView.textView.text
-            if previous?.characters.count > 0 && previous?.characters.last != "]"{
-                inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -1 ))!)
-            }else if previous?.characters.count > 0 && previous?.characters.last == "]"{
-                var i = 1
-                var findEmoji = false
-                while( i <= (previous?.characters.count)!){
-                    if previous?.characters[(previous?.characters.index((previous?.endIndex)!, offsetBy: -i ))!] == "[" {
-                        let between = previous?.substring(with:
-                            previous!.characters.index((previous?.endIndex)!, offsetBy: -(i-1)) ..< previous!.characters.index((previous?.endIndex)!, offsetBy: -1 ))
-                        if between != nil && (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between!))!{
-                            findEmoji = true
-                            break
-                        }
-                    }
-                    i += 1
-                }
-                
-                if findEmoji{
-                    inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -i ))!)
-                }else{
-                    inputToolbar.contentView.textView.text = previous?.substring(to: (previous?.characters.index((previous?.endIndex)!, offsetBy: -1 ))!)
-                }
-            }
+            let previous = inputToolbar.contentView.textView.text!
+            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
         }
     }
     

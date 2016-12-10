@@ -90,4 +90,36 @@ extension String {
         
         return usernameString
     }
+    
+    func stringByDeletingLastEmoji() -> String
+    {
+        var previous = self
+        var finalString = ""
+        
+        
+        if previous.characters.count > 0 && previous.characters.last != "]"{
+            finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
+        }else if previous.characters.count > 0 && previous.characters.last == "]"{
+            var i = 1
+            var findEmoji = false
+            while( i <= previous.characters.count){
+                if previous.characters[previous.characters.index(previous.endIndex, offsetBy: -i )] == "[" {
+                    let between = previous.substring(with:
+                        previous.characters.index(previous.endIndex, offsetBy: -(i-1)) ..< previous.characters.index(previous.endIndex, offsetBy: -1 ))
+                    if (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between))!{
+                        findEmoji = true
+                        break
+                    }
+                }
+                i += 1
+            }
+            
+            if findEmoji{
+                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -i ))
+            }else{
+                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
+            }
+        }
+        return finalString
+    }
 }

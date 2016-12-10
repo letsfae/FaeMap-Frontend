@@ -211,7 +211,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
     {
         if(inputToolbar != nil){
-            inputToolbar.numberOfCharactersEntered = num
+            inputToolbar.numberOfCharactersEntered = max(0,num)
         }
         self.previousFirstResponder = textView
     }
@@ -270,9 +270,10 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     {
         if let previousFirstResponder = previousFirstResponder
         {
-            if previousFirstResponder is UITextView{
-                let textView = previousFirstResponder as! UITextView
+            if previousFirstResponder is CreatePinTextView{
+                let textView = previousFirstResponder as! CreatePinTextView
                 textView.text = textView.text as String + "[\(name)]"
+                textView.textViewDidChange(textView)
             }else if previousFirstResponder is UITextField{
                 let textField = previousFirstResponder as! UITextField
                 textField.text = textField.text! as String + "[\(name)]"
@@ -292,37 +293,11 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
                 previous = textField.text!
             }
             
-            var finalString = ""
-
-            
-            if previous.characters.count > 0 && previous.characters.last != "]"{
-                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
-            }else if previous.characters.count > 0 && previous.characters.last == "]"{
-                var i = 1
-                var findEmoji = false
-                while( i <= previous.characters.count){
-                    if previous.characters[previous.characters.index(previous.endIndex, offsetBy: -i )] == "[" {
-                        let between = previous.substring(with:
-                            previous.characters.index(previous.endIndex, offsetBy: -(i-1)) ..< previous.characters.index(previous.endIndex, offsetBy: -1 ))
-                        if (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between))!{
-                            findEmoji = true
-                            break
-                        }
-                    }
-                    i += 1
-                }
-                
-                if findEmoji{
-                    finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -i ))
-                }else{
-                    finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
-                }
-                
-
-            }
-            if previousFirstResponder is UITextView{
-                let textView = previousFirstResponder as! UITextView
+            let finalString = previous.stringByDeletingLastEmoji()
+            if previousFirstResponder is CreatePinTextView{
+                let textView = previousFirstResponder as! CreatePinTextView
                 textView.text = finalString
+                textView.textViewDidChange(textView)
             }else if previousFirstResponder is UITextField{
                 let textField = previousFirstResponder as! UITextField
                 textField.text = finalString
