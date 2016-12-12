@@ -131,6 +131,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         case .more:
             switch indexPath.row {
             case CreateChatPinMoreOptions.AddTags.rawValue:
+                swtichToAddTags()
                 break
             case CreateChatPinMoreOptions.RoomCapacity.rawValue:
                 break

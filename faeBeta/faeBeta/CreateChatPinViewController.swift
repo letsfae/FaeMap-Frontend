@@ -26,6 +26,9 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     private var bubbleTextView: CreatePinTextView!
     
     var descriptionTextView: CreatePinTextView!
+    
+    var addTagsTextView: CreatePinTextView!
+    
     private var moreOptionsTableView: CreatePinOptionsTableView!
     
     var labelSelectLocationContent: String!
@@ -365,6 +368,26 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.moreOptionsTableView.alpha = 1
             self.titleLabel.text = "More Options"
             self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: true)
+        }, completion:{
+            Complete in
+        })
+    }
+    
+    func swtichToAddTags()
+    {
+        if (addTagsTextView == nil) {
+            addTagsTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+            addTagsTextView.placeHolder = "Add Tags to promote your pin in searches..."
+            addTagsTextView.observerDelegate = self
+            self.view.addSubview(addTagsTextView)
+        }
+        addTagsTextView.alpha = 0
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.moreOptionsTableView.alpha = 0
+            self.titleLabel.text = "Add Tags"
+            self.addTagsTextView.alpha = 1
         }, completion:{
             Complete in
         })
