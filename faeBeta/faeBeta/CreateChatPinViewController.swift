@@ -27,7 +27,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     var descriptionTextView: CreatePinTextView!
     
-    var addTagsTextView: CreatePinTextView!
+    var addTagsTextView: CreatePinAddTagsTextView!
     
     private var moreOptionsTableView: CreatePinOptionsTableView!
     
@@ -376,7 +376,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     func swtichToAddTags()
     {
         if (addTagsTextView == nil) {
-            addTagsTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+            addTagsTextView = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             addTagsTextView.placeHolder = "Add Tags to promote your pin in searches..."
             addTagsTextView.observerDelegate = self
             self.view.addSubview(addTagsTextView)
@@ -390,6 +390,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.addTagsTextView.alpha = 1
         }, completion:{
             Complete in
+            self.addTagsTextView.appendNewTags(tagName: "Hello")
         })
     }
     
