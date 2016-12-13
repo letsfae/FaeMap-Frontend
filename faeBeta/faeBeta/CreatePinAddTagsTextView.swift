@@ -23,7 +23,7 @@ class CreatePinAddTagsTextView: CreatePinTextView {
         
         var image: UIImage? = nil
         
-        UIGraphicsBeginImageContext(label.frame.size)
+        UIGraphicsBeginImageContext(CGSize(width:label.frame.size.width * 4, height: label.frame.size.height * 4))
         label.layer.render(in: UIGraphicsGetCurrentContext()!)
         if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
             image = screenShotImage
