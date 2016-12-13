@@ -29,7 +29,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins(radius: Int) {
-        self.faeMapView.clear()
+        clearMap(type: "pin")
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -44,10 +44,7 @@ extension FaeMapViewController {
                 return
             }
             let mapInfoJSON = JSON(message!)
-            for eachTimer in self.NSTimerDisplayMarkerArray {
-                eachTimer.invalidate()
-            }
-            self.NSTimerDisplayMarkerArray.removeAll()
+
             self.mapPinsDic.removeAll()
             if mapInfoJSON.count <= 0 {
                 return
@@ -57,14 +54,18 @@ extension FaeMapViewController {
                 pinMap.zIndex = 1
                 var pinData = [String: AnyObject]()
                 var type = "comment"
+                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                icon.contentMode = .scaleAspectFit
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
-                        pinMap.icon = #imageLiteral(resourceName: "commentPinMarker")
+                        icon.image = #imageLiteral(resourceName: "commentPinMarker")
+                        pinMap.iconView = icon
                         type = "comment"
                     }
                     else if typeInfo == "media" {
-                        pinMap.icon = #imageLiteral(resourceName: "momentPinMarker")
+                        icon.image = #imageLiteral(resourceName: "momentPinMarker")
+                        pinMap.iconView = icon
                         type = "media"
                     }
                     pinMap.zIndex = 0
@@ -102,20 +103,15 @@ extension FaeMapViewController {
                 }
                 pinMap.userData = pinData
                 // Delay 0-3 seconds, randomly
-                let delay: Double = Double(arc4random_uniform(300)) / 100
-                let timerInfoDict: [String: AnyObject] = ["argumentInt": pinMap]
-                let timer = Timer.scheduledTimer(timeInterval: TimeInterval(delay), target: self, selector: #selector(FaeMapViewController.editTimerToDisplayMarker(_:)), userInfo: timerInfoDict, repeats: false)
-                self.NSTimerDisplayMarkerArray.append(timer)
+                let delay: Double = Double(arc4random_uniform(200)) / 100
+                pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+                pinMap.map = self.faeMapView
+                self.mapPinsArray.append(pinMap)
+                UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    icon.frame.size.width = 48
+                    icon.frame.size.height = 51
+                    }, completion: nil)
             }
-        }
-    }
-    
-    func editTimerToDisplayMarker(_ timer: Timer) {
-        if let userInfo = timer.userInfo as? Dictionary<String, AnyObject> {
-            let marker = userInfo["argumentInt"] as! GMSMarker
-            marker.appearAnimation = kGMSMarkerAnimationPop
-            marker.groundAnchor = CGPoint(x: 0.5, y: 1)
-            marker.map = self.faeMapView
         }
     }
     
@@ -124,9 +120,7 @@ extension FaeMapViewController {
         if !startUpdatingLocation || !canDoNextUserUpdate {
             return
         }
-        for everyUser in self.mapUserPinsDic {
-            everyUser.map = nil
-        }
+        clearMap(type: "user")
         canDoNextUserUpdate = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
@@ -144,14 +138,6 @@ extension FaeMapViewController {
             let mapUserInfoJSON = JSON(message!)
             if mapUserInfoJSON.count <= 0 {
                 return
-            }
-            // Fading animation for user pin
-            func userPinAnimation(userPin: GMSMarker) {
-                let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-                fadeAnimation.fromValue = 0.0
-                fadeAnimation.toValue = 1.0
-                fadeAnimation.duration = 1
-                userPin.layer.add(fadeAnimation, forKey: "Opacity")
             }
             for i in 0...(mapUserInfoJSON.count-1) {
                 var userIDinGetMapUser = -999
@@ -200,11 +186,19 @@ extension FaeMapViewController {
                         if let miniAvatar = userProfile["mini_avatar"].int {
                             self.mapUserPinsDic.append(pinUser)
                             pinUser.userData = pinData
-                            pinUser.icon = UIImage(named: "mapAvatar_\(miniAvatar+1)")
-                            userPinAnimation(userPin: pinUser)
+                            let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+                            icon.image = UIImage(named: "mapAvatar_\(miniAvatar+1)")
+                            icon.contentMode = .scaleAspectFit
+                            icon.alpha = 0
+                            pinUser.iconView = icon
                             pinUser.zIndex = 1
                             pinUser.map = self.faeMapView
                             self.canDoNextUserUpdate = true
+                            // Delay 0-1 seconds, randomly
+                            let delay: Double = Double(arc4random_uniform(100)) / 100
+                            UIView.animate(withDuration: 1, delay: delay, animations: {
+                                icon.alpha = 1
+                            })
                         }
                     }
                 }

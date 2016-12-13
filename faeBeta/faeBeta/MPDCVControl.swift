@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import IDMPhotoBrowser
 import RealmSwift
 
 extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
@@ -37,6 +38,7 @@ extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionV
                 if let media = mediaRealm.first {
                     let picture = UIImage.sd_image(with: media.picture as Data!)
                     cell.media.image = picture
+                    self.displayMediaArray.append(picture!)
                     print("[cellForItemAt] \(indexPath.row) read from Realm done!")
                 }
             }
@@ -62,20 +64,13 @@ extension MomentPinDetailViewController: UICollectionViewDelegate, UICollectionV
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if collectionView == collectionViewMedia {
-//            UIView.animate(withDuration: 0.583) {
-//                if self.mediaMode == .large {
-//                    cell.frame.size.width = 160
-//                    cell.frame.size.height = 160
-//                }
-//                else {
-//                    cell.frame.size.width = 95
-//                    cell.frame.size.height = 95
-//                }
-//            }
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == collectionViewMedia {
+            let photos = IDMPhoto.photos(withImages: [displayMediaArray[indexPath.row]])
+            let browser = IDMPhotoBrowser(photos: photos)
+            self.present(browser!, animated: true, completion: nil)
+        }
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == tableCommentsForPin {

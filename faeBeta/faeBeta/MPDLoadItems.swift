@@ -20,13 +20,13 @@ extension MomentPinDetailViewController {
         tableCommentsForPin.delegate = self
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
-        tableCommentsForPin.delaysContentTouches = true
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
         tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
         self.view.addSubview(tableCommentsForPin)
         tableCommentsForPin.center.y -= screenHeight
+        tableCommentsForPin.delaysContentTouches = false
         
         // Dragging button
         draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 28))

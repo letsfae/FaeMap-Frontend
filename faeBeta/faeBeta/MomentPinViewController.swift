@@ -127,6 +127,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var collectionViewMedia: UICollectionView! // container to display pin's media
     var fileIdArray = [Int]()
     var layout = UICollectionViewFlowLayout()
+    var displayMediaArray = [UIImage]()
     
     enum MediaMode {
         case small

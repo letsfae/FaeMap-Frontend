@@ -12,6 +12,37 @@ import SwiftyJSON
 
 extension FaeMapViewController: GMSMapViewDelegate {
     
+    func clearMap(type: String) {
+        if type == "all" || type == "pin" {
+            for marker in mapPinsArray {
+                print("[clearMap] outside")
+                UIView.animate(withDuration: 0.5, animations: {
+                    if marker.iconView != nil {
+                        print("[clearMap] inside")
+                        marker.iconView?.alpha = 0
+                    }
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                })
+            }
+        }
+        
+        if type == "all" || type == "user" {
+            for marker in mapUserPinsDic {
+                print("[clearMap] outside")
+                UIView.animate(withDuration: 0.5, animations: {
+                    if marker.iconView != nil {
+                        print("[clearMap] inside")
+                        marker.iconView?.alpha = 0
+                    }
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                })
+            }
+        }
+        
+    }
+    
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         //        print("Cur-Zoom Level: \(mapView.camera.zoom)")
         //        print("Pre-Zoom Level: \(previousZoomLevel)")
@@ -60,7 +91,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         
         if mapView.camera.zoom < 11 && !canLoadMapPin {
-            mapView.clear()
+            clearMap(type: "all")
             canLoadMapPin = true
             return
         }
@@ -116,7 +147,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if !self.canDoNextUserUpdate {
                         return
                     }
-                    mapView.clear()
+                    self.clearMap(type: "all")
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     return
@@ -129,7 +160,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         else {
             timerUpdateSelfLocation.invalidate()
             timerLoadRegionPins.invalidate()
-            mapView.clear()
+            clearMap(type: "all")
         }
     }
     

@@ -78,7 +78,7 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
-  - IDMPhotoBrowser (1.9.1):
+  - IDMPhotoBrowser (1.10):
     - DACircularProgress
     - pop
     - SDWebImage
@@ -133,7 +133,7 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
-  IDMPhotoBrowser: 35e8ba559a88f2a8be4ae04d7fd424665344ba06
+  IDMPhotoBrowser: 818fbaf9f801d16ca881ab0a076d81e063a48faa
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
@@ -143,6 +143,6 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: 38a8ea2006779c0fc4c310cb2ee8195327740faf
 
-PODFILE CHECKSUM: 884b26bf6c3f8d9d65074b966a741c2def7c458e
+PODFILE CHECKSUM: 8ec2572aebd6e789fba139e53a6a7eca1ecd9353
 
 COCOAPODS: 1.2.0.beta.1

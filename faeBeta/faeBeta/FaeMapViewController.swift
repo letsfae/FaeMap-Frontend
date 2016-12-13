@@ -126,11 +126,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // end of WYX
     //
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
-    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin
+    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin Dictionary
+    var mapPinsArray = [GMSMarker]() // Map Comment Pin Array
     var pinIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var markerMask: UIView! // mask to prevent UI action
-    var NSTimerDisplayMarkerArray = [Timer]()
     var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
     var canDoNextUserUpdate = true // Prevent updating user on map more than once
