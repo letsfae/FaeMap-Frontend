@@ -90,19 +90,13 @@ extension MomentPinDetailViewController {
         textviewPinDetail.isHidden = true
         uiviewPinDetail.addSubview(textviewPinDetail)
         
-        layout.itemSize = CGSize(width: 95, height: 95)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 10
-        
-        collectionViewMedia = UICollectionView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95),
-                                               collectionViewLayout: layout)
-        collectionViewMedia.register(MPDCollectionViewCell.self, forCellWithReuseIdentifier: "mediaCell")
-        collectionViewMedia.delegate = self
-        collectionViewMedia.dataSource = self
-        collectionViewMedia.backgroundColor = UIColor.clear
-        collectionViewMedia.showsHorizontalScrollIndicator = false
-        uiviewPinDetail.addSubview(collectionViewMedia)
+        scrollViewMedia = UIScrollView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95))
+        scrollViewMedia.delegate = self
+        scrollViewMedia.contentSize = CGSize(width: screenWidth-15, height: 95)
+        scrollViewMedia.isScrollEnabled = true
+        scrollViewMedia.backgroundColor = UIColor.clear
+        scrollViewMedia.showsHorizontalScrollIndicator = false
+        uiviewPinDetail.addSubview(scrollViewMedia)
         
         // ----
         // Main buttons' container of pin detail

@@ -256,7 +256,7 @@ extension MomentPinDetailViewController {
                     self.fileIdArray.append(fileID!)
                 }
             }
-            self.collectionViewMedia.reloadData()
+            self.loadMedias()
             print("[getPinInfo] fileIDs: \(self.fileIdArray)")
             print("[getPinInfo] fileIDs append done!")
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {

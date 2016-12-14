@@ -124,10 +124,10 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    var collectionViewMedia: UICollectionView! // container to display pin's media
+    var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
-    var layout = UICollectionViewFlowLayout()
     var displayMediaArray = [UIImage]()
+    var imageViewMediaArray = [UIImageView]()
     
     enum MediaMode {
         case small

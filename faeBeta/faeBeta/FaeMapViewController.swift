@@ -153,7 +153,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if is_Login == 0 {
             self.jumpToWelcomeView(animated: false)
         }
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
+        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         myPositionIconFirstLoaded = true
         _ = getUserStatus()
         loadMapView()

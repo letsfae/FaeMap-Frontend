@@ -367,9 +367,7 @@ extension MomentPinDetailViewController {
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             mediaMode = .small
-            layout.itemSize = CGSize(width: 95, height: 95)
-            layout.minimumLineSpacing = 10
-            collectionViewMedia.reloadData()
+            zoomMedia(.small)
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -377,11 +375,6 @@ extension MomentPinDetailViewController {
                 self.tableCommentsForPin.scrollToTop()
                 self.tableCommentsForPin.frame.size.height = 227
                 self.uiviewPinDetail.frame.size.height = 281
-                self.collectionViewMedia.frame.origin.x = 15
-                if self.collectionViewMedia.frame.size.width != screenWidth {
-                    self.collectionViewMedia.frame.size.width = screenWidth - 15
-                }
-                self.collectionViewMedia.frame.size.height = 95
                 self.textviewPinDetail.frame.size.height = 100
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
@@ -399,19 +392,12 @@ extension MomentPinDetailViewController {
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
         mediaMode = .large
-        layout.itemSize = CGSize(width: 160, height: 160)
-        layout.minimumLineSpacing = 18
-        collectionViewMedia.reloadData()
+        zoomMedia(.large)
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
-            self.collectionViewMedia.frame.origin.x = 27
-            if self.collectionViewMedia.frame.size.width != screenWidth {
-                self.collectionViewMedia.frame.size.width = screenWidth - 27
-            }
-            self.collectionViewMedia.frame.size.height += 65
             self.uiviewPinDetail.frame.size.height += 65
             self.textviewPinDetail.frame.size.height += 65
             self.uiviewPinDetailThreeButtons.center.y += 65

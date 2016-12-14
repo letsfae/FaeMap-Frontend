@@ -210,10 +210,6 @@ extension CreateMomentPinViewController {
     private func submitMediaPin(fileIDs: String) {
         
         let mediaContent = textViewForMediaPin.text
-        if mediaContent == "" {
-            showAlert(title: "Add Description", message: "")
-            return
-        }
         
         let postSingleMedia = FaeMap()
         
@@ -228,7 +224,9 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("file_ids", value: fileIDs)
         postSingleMedia.whereKey("geo_latitude", value: submitLatitude)
         postSingleMedia.whereKey("geo_longitude", value: submitLongitude)
-        postSingleMedia.whereKey("description", value: mediaContent)
+        if mediaContent != "" {
+            postSingleMedia.whereKey("description", value: mediaContent)
+        }
         postSingleMedia.whereKey("interaction_radius", value: "99999999")
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
