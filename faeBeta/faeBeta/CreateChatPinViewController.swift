@@ -459,4 +459,14 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             updateSubmitButton()
         }
     }
+    
+    //MARK: - add tags related
+    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
+        if !(previousFirstResponder is CreatePinAddTagsTextView){
+            super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
+        }else{
+            addTagsTextView.appendNewTags(tagName: "USC")
+        }
+    }
+    
 }

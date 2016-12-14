@@ -79,7 +79,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
                 cell.setupCell(withTitle: "Add Tags", leadingIcon: #imageLiteral(resourceName: "addTagsIcon"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinMoreOptions.RoomCapacity.rawValue:
-                cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "roomCapacityIcon"), trailingText: "50", trailingIcon: nil)
+                cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "RoomCapacityIcon"), trailingText: "50", trailingIcon: nil)
                 break
             case CreateChatPinMoreOptions.DurationOnMap.rawValue:
                 cell.setupCell(withTitle: "Duration On Map", leadingIcon: #imageLiteral(resourceName: "durationIcon"), trailingText: "1D", trailingIcon: nil)
