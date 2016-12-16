@@ -8,13 +8,45 @@
 
 import UIKit
 
-class CreatePinAddTagsTextView: CreatePinTextView {
+class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
+    
+    var tagNames =  [String]()
+    
+    override init(frame: CGRect, textContainer: NSTextContainer?) {
+        super.init(frame: frame, textContainer: textContainer)
+        self.layoutManager.delegate = self
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.layoutManager.delegate = self
 
+    }
+//
+//    func setup()
+//    {
+//        self.attributedText.
+//    }
+    
+    func addLastInputTag()
+    {
+        var str = String(self.text.characters.filter() { $0 <= "~" })
+        str = str.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        let remain = self.attributedText.attributedSubstring(from: NSMakeRange(0, tagNames.count))
+        self.attributedText = remain
+        
+        if str.characters.count > 0{
+            appendNewTags(tagName: str)
+        }
+
+    }
     
     func appendNewTags(tagName: String){
         let attributtedString = self.attributedText.mutableCopy() as? NSMutableAttributedString ?? NSMutableAttributedString()
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
+//        attributtedString.addAttributes([NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!], range: NSMakeRange(0,attributtedString.length))
 
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
         label.attributedText = NSAttributedString(string:tagName, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
         label.numberOfLines = 1
         
@@ -44,7 +76,7 @@ class CreatePinAddTagsTextView: CreatePinTextView {
         
         let attachment = NSTextAttachment()
         attachment.image = image
-        attachment.bounds = CGRect(x: 0, y: 0, width: size.width + 13, height: size.height)
+        attachment.bounds = CGRect(x: 0, y: -10, width: size.width + 13, height: size.height)
         
         let tagString = NSAttributedString(attachment: attachment)
         attributtedString.append(tagString)
@@ -52,6 +84,23 @@ class CreatePinAddTagsTextView: CreatePinTextView {
         self.isScrollEnabled = false
         self.attributedText = attributtedString
         self.isScrollEnabled = true
+        tagNames.append(tagName)
+        
+        self.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        self.textColor = UIColor.white
+    }
+    
+    func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
+        return 12
+    }
+    
+    override func caretRect(for position: UITextPosition) -> CGRect {
+        var originalRect = super.caretRect(for: position)
+        originalRect.size.height = self.font!.pointSize - self.font!.descender
+        // "descender" is expressed as a negative value,
+        // so to add its height you must subtract its value
+        
+        return originalRect
     }
 
 }

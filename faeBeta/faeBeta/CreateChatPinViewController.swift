@@ -465,7 +465,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         if !(previousFirstResponder is CreatePinAddTagsTextView){
             super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
         }else{
-            addTagsTextView.appendNewTags(tagName: "USC")
+            addTagsTextView.addLastInputTag()
         }
     }
     
