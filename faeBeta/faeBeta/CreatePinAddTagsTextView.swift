@@ -22,16 +22,15 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         self.layoutManager.delegate = self
 
     }
-//
-//    func setup()
-//    {
-//        self.attributedText.
-//    }
     
     func addLastInputTag()
     {
         var str = String(self.text.characters.filter() { $0 <= "~" })
         str = str.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        if str.characters.count == 0{
+            return
+        }
         
         let remain = self.attributedText.attributedSubstring(from: NSMakeRange(0, tagNames.count))
         self.attributedText = remain
@@ -39,7 +38,6 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         if str.characters.count > 0{
             appendNewTags(tagName: str)
         }
-
     }
     
     func appendNewTags(tagName: String){
@@ -99,7 +97,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         originalRect.size.height = self.font!.pointSize - self.font!.descender
         // "descender" is expressed as a negative value,
         // so to add its height you must subtract its value
-        
+        originalRect.origin.y = originalRect.origin.y + 5
         return originalRect
     }
 
