@@ -491,21 +491,6 @@ class FaeUser : NSObject {
      *         5:invisible
      */
     func setSelfStatus(_ completion: @escaping (Int, Any?) -> Void) {
-        /*
-         * not working for the commented codes
-        if keyValue["status"] != nil {
-            userStatus = keyValue["status"] as? Int
-            print("DEBUG: user status")
-            print(userStatus)
-        } else {
-            completion(-400, "no status number found")
-        }
-        if keyValue["message"] != nil {
-            userStatusMessage = keyValue["message"] as? String
-        } else {
-            completion(-400, "no message found")
-        }
-        */
         postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
             completion(status,message)
         }

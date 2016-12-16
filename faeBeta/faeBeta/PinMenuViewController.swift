@@ -55,9 +55,8 @@ class PinMenuViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        blurViewMap.isHidden = false
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.blurViewMap.alpha = 1.0
+        UIView.animate(withDuration: 0.35, delay: 0, options: .curveEaseOut, animations: {
+            self.blurViewMap.effect = UIBlurEffect(style: .dark)
             }, completion: nil)
         pinSelectionShowAnimation()
     }

@@ -114,7 +114,7 @@ extension FaeMapViewController {
     
     // Animation for pin logo
     func animatePinWhenItIsCreated(pinID: String, type: String) {
-        tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 167, height: 178))
+        tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 120, height: 128))
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2-25.5)
         tempMarker.center = mapCenter
         if type == "comment" {
@@ -138,6 +138,7 @@ extension FaeMapViewController {
     }
     
     func removeTempMarker() {
+        print("[removeTempMarker] func called")
         tempMarker.removeFromSuperview()
         markerMask.removeFromSuperview()
     }
@@ -150,28 +151,32 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "200")
         loadPinsByZoomLevel.whereKey("type", value: type)
-        loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
+        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
+                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
+                    icon.contentMode = .scaleAspectFit
+                    if let typeInfo = mapInfoJSON[i]["type"].string {
+                        pinData["type"] = typeInfo as AnyObject?
+                        if typeInfo == "comment" {
+                            icon.image = #imageLiteral(resourceName: "commentPinMarker")
+                            pinShowOnMap.iconView = icon
+                        }
+                        else if typeInfo == "media" {
+                            icon.image = #imageLiteral(resourceName: "momentPinMarker")
+                            pinShowOnMap.iconView = icon
+                        }
+                        pinShowOnMap.zIndex = 0
+                    }
                     if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                         if pinID != "\(pinIDInfo)" {
                             continue
                         }
                         pinData["\(type)_id"] = pinIDInfo as AnyObject?
-                    }
-                    if let typeInfo = mapInfoJSON[i]["type"].string {
-                        pinData["type"] = typeInfo as AnyObject?
-                        if typeInfo == "comment" {
-                            pinShowOnMap.icon = UIImage(named: "commentPinMarker")
-                        }
-                        else if typeInfo == "media" {
-                            pinShowOnMap.icon = UIImage(named: "momentPinMarker")
-                        }
-                        pinShowOnMap.zIndex = 0
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo as AnyObject?
@@ -188,9 +193,11 @@ extension FaeMapViewController {
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
                     pinShowOnMap.userData = pinData
+                    pinShowOnMap.groundAnchor = CGPoint(x: 0.5, y: 1)
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
-                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
+                    self.mapPinsArray.append(pinShowOnMap)
+                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.removeTempMarker), userInfo: nil, repeats: false)
                 }
             }
         }

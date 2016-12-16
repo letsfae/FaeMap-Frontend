@@ -70,7 +70,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
         textFieldDisplayName.placeholder = "Display Name"
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
-        textFieldDisplayName.tintColor = UIColor.red
+        textFieldDisplayName.tintColor = UIColor.faeAppRedColor()
+        textFieldDisplayName.textColor = UIColor.faeAppRedColor()
+        textFieldDisplayName.textAlignment = .center
         textFieldDisplayName.addTarget(self, action: #selector(self.displayNameValueChanged(_:)), for: .editingChanged)
         textFieldDisplayName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         textFieldDisplayName.autocorrectionType = .no
@@ -95,24 +97,52 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.view.addSubview(activityIndicator)
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
+        uploadProfileAvatar()
+    }
+    
+    func uploadProfileAvatar() {
         let avatar = FaeImage()
         avatar.image = imageViewAvatar.image
         avatar.faeUploadImageInBackground { (code: Int, message: Any?) in
             if code / 100 == 2 {
-                self.activityIndicator.stopAnimating()
-                self.textFieldDisplayName.resignFirstResponder()
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.dimBackground.alpha = 0
-                }) { (done: Bool) in
-                    if done {
-                        self.dismiss(animated: false, completion: nil)
-                    }
-                }
-            } else {
+                self.modifyDisplayName()
+            }
+            else {
                 print("[uploadProfileAvatar] fail")
+                self.activityIndicator.stopAnimating()
+                self.showAlert(title: "Upload Profile Avatar Failed", message: "Please try again")
+                return
             }
         }
-        
+    }
+    
+    func modifyDisplayName() {
+        let user = FaeUser()
+        if let displayName = textFieldDisplayName.text {
+            if displayName == "" {
+                self.activityIndicator.stopAnimating()
+                self.showAlert(title: "Please Enter Display Name", message: "try again")
+                return
+            }
+            user.whereKey("nick_name", value: displayName)
+            user.updateNameCard { (status:Int, objects:Any?) in
+                if status / 100 == 2 {
+                    self.activityIndicator.stopAnimating()
+                    self.textFieldDisplayName.resignFirstResponder()
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.dimBackground.alpha = 0
+                    }) { (done: Bool) in
+                        if done {
+                            self.dismiss(animated: false, completion: nil)
+                        }
+                    }
+                }
+                else {
+                    self.activityIndicator.stopAnimating()
+                    self.showAlert(title: "Tried to Change Display Name but Failed", message: "Please try again")
+                }
+            }
+        }
     }
     
     func displayNameValueChanged(_ sender: UITextField) {
@@ -152,6 +182,13 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.imageViewAvatar.image = image
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: "Add Description", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
 }

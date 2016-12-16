@@ -15,10 +15,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
     func clearMap(type: String) {
         if type == "all" || type == "pin" {
             for marker in mapPinsArray {
-                print("[clearMap] outside")
                 UIView.animate(withDuration: 0.5, animations: {
                     if marker.iconView != nil {
-                        print("[clearMap] inside")
                         marker.iconView?.alpha = 0
                     }
                     }, completion: {(done: Bool) in
@@ -29,10 +27,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
         
         if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
-                print("[clearMap] outside")
                 UIView.animate(withDuration: 0.5, animations: {
                     if marker.iconView != nil {
-                        print("[clearMap] inside")
                         marker.iconView?.alpha = 0
                     }
                     }, completion: {(done: Bool) in

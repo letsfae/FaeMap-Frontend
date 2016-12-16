@@ -234,7 +234,7 @@ extension CreateMomentPinViewController {
         postSingleMedia.postPin(type: "media") {(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
-                self.showAlert(title: "Post Moment Failed", message: "Please try agian")
+                self.showAlert(title: "Post Moment Failed", message: "Please try again")
                 self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] status is not 2XX")
                 return

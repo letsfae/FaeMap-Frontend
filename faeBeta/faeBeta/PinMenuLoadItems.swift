@@ -12,12 +12,10 @@ extension PinMenuViewController {
     
     // MARK: -- Init blur view and pin selections
     func loadBlurAndPinSelection() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        blurViewMap = UIVisualEffectView(effect: blurEffect)
+        blurViewMap = UIVisualEffectView()
         blurViewMap.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         self.view.addSubview(blurViewMap)
         loadPinSelections()
-        blurViewMap.alpha = 0.0
     }
     
     // MARK: -- Pins Creating Selections View
@@ -106,7 +104,7 @@ extension PinMenuViewController {
         buttonClosePinBlurView.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         uiviewPinSelections.addSubview(buttonClosePinBlurView)
         
-        blurViewMap.addSubview(uiviewPinSelections)
+        blurViewMap.contentView.addSubview(uiviewPinSelections)
     }
     
     private func createMenuButton(_ x: CGFloat, y: CGFloat, picName: String) -> UIButton {
