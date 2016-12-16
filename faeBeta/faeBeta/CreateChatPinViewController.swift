@@ -430,6 +430,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         if addTagsTextView != nil {
             addTagsTextView.resignFirstResponder()
         }
+        self.moreOptionsTableView.reloadData()
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.moreOptionsTableView.alpha = 1

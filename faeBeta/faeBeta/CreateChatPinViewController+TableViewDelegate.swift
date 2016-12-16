@@ -76,7 +76,15 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         case .more:
             switch indexPath.row {
             case CreateChatPinMoreOptions.AddTags.rawValue:
-                cell.setupCell(withTitle: "Add Tags", leadingIcon: #imageLiteral(resourceName: "addTagsIcon"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
+                var tagsString = "Add Tags"
+                if(addTagsTextView != nil && addTagsTextView.tagNames.count != 0){
+                    tagsString = ""
+                    for tag in addTagsTextView.tagNames{
+                        tagsString.append("\(tag), ")
+                    }
+                    tagsString = tagsString.substring(to: tagsString.characters.index(tagsString.endIndex, offsetBy: -2))
+                }
+                cell.setupCell(withTitle: tagsString, leadingIcon: #imageLiteral(resourceName: "addTagsIcon"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinMoreOptions.RoomCapacity.rawValue:
                 cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "RoomCapacityIcon"), trailingText: "50", trailingIcon: nil)
