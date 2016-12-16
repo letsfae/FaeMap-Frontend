@@ -9,7 +9,7 @@
 import UIKit
 
 class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
-    
+    //MARK: - properties
     var tagNames =  [String]()
     {
         didSet{
@@ -17,6 +17,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         }
     }
     
+    //MARK: - life cycles
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         self.layoutManager.delegate = self
@@ -28,6 +29,9 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
 
     }
     
+    //MARK: - add tags
+    
+    /// abstract the user's input from textView add call appendNewTags()
     func addLastInputTag()
     {
         var str = String(self.text.characters.filter() { $0 <= "~" })
@@ -45,6 +49,10 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         }
     }
     
+    
+    /// create an UIImage with the tag's name and add it into the textView
+    ///
+    /// - Parameter tagName: the name of the tag
     func appendNewTags(tagName: String){
         let attributtedString = self.attributedText.mutableCopy() as? NSMutableAttributedString ?? NSMutableAttributedString()
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
@@ -54,7 +62,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         //calculate the size of the image
         label.sizeToFit()
         var size = label.frame.size
-        label.frame = CGRect(x: 0, y: 0, width: size.width + 18, height: size.height + 8)
+        label.frame = CGRect(x: 0, y: 0, width: min(size.width + 18, 280), height: size.height + 8)
         label.textAlignment = .center
         size = label.frame.size
         
@@ -62,7 +70,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         label.attributedText = NSAttributedString(string:tagName, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 48)!])
         label.sizeToFit()
         var size2 = label.frame.size
-        label.frame = CGRect(x: 0, y: 0, width: size2.width + 48, height: size2.height + 22)
+        label.frame = CGRect(x: 0, y: 0, width: min(size2.width + 48, 750), height: size2.height + 22)
         label.layer.borderWidth = 4
         label.layer.borderColor = UIColor.white.cgColor
         label.layer.cornerRadius = 24
@@ -93,6 +101,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
 
     }
     
+    //MARK: - NSLayoutManagerDelegate
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
         return 12
     }
@@ -107,6 +116,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         return originalRect
     }
     
+    //MARK: - textView delegate
     override func textViewDidBeginEditing(_ textView: UITextView)
     {
         self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
@@ -133,6 +143,4 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         }
         return super.textView(textView, shouldChangeTextIn:range, replacementText: text)
     }
-    
-
 }
