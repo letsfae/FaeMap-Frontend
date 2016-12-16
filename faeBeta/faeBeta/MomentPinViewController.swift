@@ -92,10 +92,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
     
-    // People table
-    var tableViewPeople: UITableView!
-    var dictPeopleOfPinDetail = [Int: String]()
-    
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     var isObservingInputTextView = false
@@ -336,11 +332,9 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.isHidden = true
             tableCommentsForPin.isHidden = false
         }
         else if sender.tag == 3 {
-            tableViewPeople.isHidden = false
             tableCommentsForPin.isHidden = true
         }
         let tag = CGFloat(sender.tag)

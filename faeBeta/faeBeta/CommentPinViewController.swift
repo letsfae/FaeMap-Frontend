@@ -100,10 +100,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
     
-    // People table
-    var tableViewPeople: UITableView!
-    var dictPeopleOfCommentDetail = [Int: String]()
-    
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     var isObservingInputTextView = false
@@ -157,7 +153,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-            //		self.loadInputToolBar()
+            		self.loadInputToolBar()
         })
     }
     
@@ -327,11 +323,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.isHidden = true
             tableCommentsForComment.isHidden = false
         }
         else if sender.tag == 3 {
-            tableViewPeople.isHidden = false
             tableCommentsForComment.isHidden = true
         }
         let tag = CGFloat(sender.tag)

@@ -177,31 +177,24 @@ extension CommentPinDetailViewController {
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnCommentDetail.removeAll()
-        dictPeopleOfCommentDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
                     var dicCell = [String: AnyObject]()
-                    var userID = -999
-                    var latestDate = "NULL"
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
                         dicCell["pin_comment_id"] = pin_comment_id as AnyObject?
                     }
                     
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
                         dicCell["user_id"] = user_id as AnyObject?
-                        if !self.dictPeopleOfCommentDetail.keys.contains(user_id) {
-                            userID = user_id
-                        }
                     }
                     if let content = commentsOfCommentJSON[i]["content"].string {
                         dicCell["content"] = content as AnyObject?
                     }
                     if let date = commentsOfCommentJSON[i]["created_at"].string {
                         dicCell["date"] = date.formatFaeDate() as AnyObject?
-                        latestDate = date.formatFaeDate()
                     }
                     if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
                         print("[getPinComments] upVoteCount: \(vote_up_count)")
@@ -216,9 +209,6 @@ extension CommentPinDetailViewController {
                     }
                     
                     self.dictCommentsOnCommentDetail.insert(dicCell, at: 0)
-                    if userID != -999 {
-                        self.dictPeopleOfCommentDetail[userID] = latestDate
-                    }
                 }
             }
             if sendMessageFlag {
@@ -231,7 +221,6 @@ extension CommentPinDetailViewController {
                 **/
             }
             self.tableCommentsForComment.reloadData()
-            self.tableViewPeople.reloadData()
         }
     }
     

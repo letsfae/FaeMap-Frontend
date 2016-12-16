@@ -241,7 +241,6 @@ extension MomentPinDetailViewController {
         imageViewSaved.alpha = 0.0
         
         loadAnotherToolbar()
-        loadPeopleTable()
         loadPinCtrlButton()
     }
     
@@ -293,20 +292,6 @@ extension MomentPinDetailViewController {
         subviewNavigation.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelPinTitle)
         subviewNavigation.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelPinTitle)
         NSLayoutConstraint(item: labelPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func loadPeopleTable() {
-        tableViewPeople = UITableView(frame: CGRect(x: 0, y: 281, width: screenWidth, height: 0))
-        tableViewPeople.delegate = self
-        tableViewPeople.dataSource = self
-        tableViewPeople.allowsSelection = false
-        tableViewPeople.delaysContentTouches = false
-        tableViewPeople.register(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
-        tableViewPeople.isScrollEnabled = false
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
-        uiviewPinDetail.addSubview(tableViewPeople)
-        tableViewPeople.isHidden = true
     }
     
     func loadAnotherToolbar() {
