@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+/// This is a subclass of CreatePinTextView, used to put in tagss
 class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
     //MARK: - properties
     var tagNames =  [String]()

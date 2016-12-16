@@ -13,6 +13,7 @@ protocol CreatePinTextViewDelegate:class {
 }
 
 class CreatePinTextView: UITextView, UITextViewDelegate {
+    //MARK: - properties
     private var labelTextViewPlaceholder: UILabel!
     weak var observerDelegate: CreatePinTextViewDelegate!
     var placeHolder: String? {
@@ -25,6 +26,7 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         }
     }
     
+    //MARK: - life cycles
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setup()
@@ -34,6 +36,7 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         setup()
     }
     
+    //MARK: - setup
     private func setup(){
         self.font = UIFont(name: "AvenirNext-Regular", size: 20)
         self.textColor = UIColor.white
@@ -49,6 +52,7 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.addSubview(labelTextViewPlaceholder)
     }
 
+    //MARK: - UITextViewDelegate
     func textViewDidBeginEditing(_ textView: UITextView)
     {
         self.observerDelegate?.textView(self, numberOfCharactersEntered: textView.text.characters.count)
