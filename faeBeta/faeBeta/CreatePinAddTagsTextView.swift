@@ -11,6 +11,11 @@ import UIKit
 class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
     
     var tagNames =  [String]()
+    {
+        didSet{
+            self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
+        }
+    }
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -42,8 +47,6 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
     
     func appendNewTags(tagName: String){
         let attributtedString = self.attributedText.mutableCopy() as? NSMutableAttributedString ?? NSMutableAttributedString()
-//        attributtedString.addAttributes([NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!], range: NSMakeRange(0,attributtedString.length))
-
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
         label.attributedText = NSAttributedString(string:tagName, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
         label.numberOfLines = 1
@@ -74,7 +77,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         
         let attachment = NSTextAttachment()
         attachment.image = image
-        attachment.bounds = CGRect(x: 0, y: -10, width: size.width + 13, height: size.height)
+        attachment.bounds = CGRect(x: 0, y: -11, width: size.width + 13, height: size.height)
         
         let tagString = NSAttributedString(attachment: attachment)
         attributtedString.append(tagString)
@@ -86,19 +89,33 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         
         self.font = UIFont(name: "AvenirNext-Regular", size: 20)
         self.textColor = UIColor.white
+        self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
+
     }
     
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
         return 12
     }
     
-    override func caretRect(for position: UITextPosition) -> CGRect {
+    override func caretRect(for position: UITextPosition) -> CGRect
+    {
         var originalRect = super.caretRect(for: position)
         originalRect.size.height = self.font!.pointSize - self.font!.descender
         // "descender" is expressed as a negative value,
         // so to add its height you must subtract its value
         originalRect.origin.y = originalRect.origin.y + (tagNames.count != 0 ? 5 : 0)
         return originalRect
+    }
+    
+    override func textViewDidBeginEditing(_ textView: UITextView)
+    {
+        self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
+    }
+    
+    override func textViewDidChange(_ textView: UITextView)
+    {
+        super.textViewDidChange(textView)
+        self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
     }
 
 }

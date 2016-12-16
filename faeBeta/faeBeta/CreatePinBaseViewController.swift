@@ -12,9 +12,7 @@ import UIKit
     func backFromCMP(back: Bool)
     func closePinMenuCMP(close: Bool)
     @objc optional func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
-
 }
-
 
 class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate, SendStickerDelegate {
     //MARK: - properties
@@ -43,6 +41,14 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var emojiView: StickerPickView!
     
     var previousFirstResponder: AnyObject? = nil
+    
+    //specificView
+    enum CreatePinSpecificViewOptions {
+        case description
+        case moreOptionsTable
+        case addTags
+    }
+    var currentViewingContent: CreatePinSpecificViewOptions!
     
     //MARK: - life cycles
     override func viewDidLoad()

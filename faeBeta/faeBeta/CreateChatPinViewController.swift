@@ -174,7 +174,17 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     override func submitButtonTapped(_ sender: UIButton)
     {
         if(optionViewMode == .more){
-            leaveDescription()
+            switch currentViewingContent! {
+            case .description:
+                leaveDescription()
+                break
+            case .moreOptionsTable:
+                leaveMoreOptions()
+                break
+            case .addTags:
+                leaveAddTags()
+                break
+            }
         }else if (optionViewMode == .pin){
             
             let postSingleChatPin = FaeMap()
@@ -303,6 +313,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     // MARK: - helper
     func switchToDescription()
     {
+        self.currentViewingContent = .description
         if (descriptionTextView == nil) {
             descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             descriptionTextView.placeHolder = "Add Description..."
@@ -341,9 +352,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             if self.descriptionTextView != nil {
                 self.descriptionTextView.alpha = 0
             }
-            if self.moreOptionsTableView != nil{
-                self.moreOptionsTableView.alpha = 0
-            }
             self.titleLabel.text = ""
             self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: false)
         }, completion:{
@@ -353,6 +361,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     func switchToMoreOptions()
     {
+        self.currentViewingContent = .moreOptionsTable
         optionViewMode = .more
         if moreOptionsTableView == nil {
             moreOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
@@ -373,8 +382,30 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
+    func leaveMoreOptions()
+    {
+        optionViewMode = .pin
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.createChatPinMainView.alpha = 1
+            self.createChatPinOptionsTableView.alpha = 1
+            self.createChatPinOptionsTableView.reloadData()
+
+            if self.moreOptionsTableView != nil{
+                self.moreOptionsTableView.alpha = 0
+            }
+            
+            self.titleLabel.text = ""
+            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: false)
+        }, completion:{
+            Complete in
+        })
+    }
+    
     func swtichToAddTags()
     {
+        self.currentViewingContent = .addTags
         if (addTagsTextView == nil) {
             addTagsTextView = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             addTagsTextView.placeHolder = "Add Tags to promote your pin in searches..."
@@ -382,7 +413,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.view.addSubview(addTagsTextView)
         }
         addTagsTextView.alpha = 0
-        
+        inputToolbar.mode = .tag
         UIView.animate(withDuration: 0.3, animations: {
             Void in
             self.moreOptionsTableView.alpha = 0
@@ -391,6 +422,25 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         }, completion:{
             Complete in
         })
+    }
+    
+    func leaveAddTags()
+    {
+        self.currentViewingContent = .moreOptionsTable
+        if addTagsTextView != nil {
+            addTagsTextView.resignFirstResponder()
+        }
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.moreOptionsTableView.alpha = 1
+            self.titleLabel.text = "More Options"
+            self.addTagsTextView.alpha = 0
+        }, completion:{
+            Complete in
+            self.inputToolbar.mode = .emoji
+        })
+        
+        
     }
     
     /// This is a method to set the image for createChatPinImageImageView
@@ -418,49 +468,57 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - SelectLocationViewControllerDelegate
-    func sendAddress(_ value: String) {
+    func sendAddress(_ value: String)
+    {
         labelSelectLocationContent = value
         createChatPinOptionsTableView.reloadData()
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String) {
+    func sendGeoInfo(_ latitude: String, longitude: String)
+    {
         selectedLatitude = latitude
         selectedLongitude = longitude
         createChatPinOptionsTableView.reloadData()
     }
     
     //MARK: - SendMutipleImagesDelegate
-    func sendImages(_ images: [UIImage]) {
+    func sendImages(_ images: [UIImage])
+    {
         assert(images.count == 1, "The number of image in the array should be exactly one!")
         for image in images {
             setPinImageView(withImage: image)
         }
     }
     
-    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
+    {
         print("Debug sendVideo")
     }
     
     //MARK: -  UIImagePickerController
     // handle events after user took a photo/video
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
     }
     
     //MARK: - text field delegate
-    override func textFieldDidBeginEditing(_ textField: UITextField) {
+    override func textFieldDidBeginEditing(_ textField: UITextField)
+    {
         super.textFieldDidBeginEditing(textField)
         if textField == createChatPinTextField {
             inputToolbar.countCharsLabelHidden = true
         }
     }
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField)
+    {
         if textField == createChatPinTextField {
             updateSubmitButton()
         }
     }
     
     //MARK: - add tags related
-    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
+    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
+    {
         if !(previousFirstResponder is CreatePinAddTagsTextView){
             super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
         }else{

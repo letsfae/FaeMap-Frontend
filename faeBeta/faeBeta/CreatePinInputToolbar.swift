@@ -13,19 +13,38 @@ protocol CreatePinInputToolbarDelegate: class {
     func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
 }
 
-class CreatePinInputToolbar: UIView {
+enum CreatePinInputToolbarMode {
+    case emoji
+    case tag
+}
 
+class CreatePinInputToolbar: UIView {
+    
     //MARK: - properties
     private var buttonOpenFaceGesPanel: UIButton!
     private var buttonFinishEdit: UIButton!
     private var labelCountChars: UILabel!
     
-    var maximumNumberOfCharacters: Int = 200
+    var maximumNumberOfCharacters: Int
+    {
+        get{
+            if _mode == .emoji{
+                return 200
+            }else {
+                return 5
+            }
+        }
+    }
+    
     private var _numberOfCharactersEntered: Int = 0
     var numberOfCharactersEntered: Int{
         set{
             _numberOfCharactersEntered = newValue
-            labelCountChars.text = "\(maximumNumberOfCharacters - _numberOfCharactersEntered)"
+            if _mode == .emoji{
+                labelCountChars.text = "\(maximumNumberOfCharacters - _numberOfCharactersEntered)"
+            }else if _mode == .tag{
+                labelCountChars.text = "\(_numberOfCharactersEntered)/\(maximumNumberOfCharacters)"
+            }
             countCharsLabelHidden = false
         }
         get{
@@ -44,6 +63,27 @@ class CreatePinInputToolbar: UIView {
                 labelCountChars.alpha = 0
             }else{
                 labelCountChars.alpha = 1
+            }
+        }
+    }
+    private var _mode: CreatePinInputToolbarMode = .emoji
+    var mode: CreatePinInputToolbarMode {
+        get{
+            return _mode
+        }
+        set{
+            _mode = newValue
+            switch newValue {
+            case .emoji:
+                buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
+                buttonOpenFaceGesPanel.setTitle("", for: UIControlState())
+                break
+            case .tag:
+                buttonOpenFaceGesPanel.setAttributedTitle(
+                    NSAttributedString(string:"Add", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!]),
+                                                          for: UIControlState())
+                buttonOpenFaceGesPanel.setImage(nil, for: UIControlState())
+                break
             }
         }
     }
@@ -79,9 +119,10 @@ class CreatePinInputToolbar: UIView {
         
         
         buttonOpenFaceGesPanel = UIButton()
+        buttonOpenFaceGesPanel.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
         self.addSubview(buttonOpenFaceGesPanel)
-        self.addConstraintsWithFormat("H:|-14-[v0(29)]", options: [], views: buttonOpenFaceGesPanel)
+        self.addConstraintsWithFormat("H:|-14-[v0(45)]", options: [], views: buttonOpenFaceGesPanel)
         self.addConstraintsWithFormat("V:[v0(29)]-11-|", options: [], views: buttonOpenFaceGesPanel)
         buttonOpenFaceGesPanel.addTarget(self, action: #selector(self.emojiButtonTapped(_:)), for: .touchUpInside)
 
