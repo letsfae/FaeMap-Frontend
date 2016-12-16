@@ -87,7 +87,8 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.observerDelegate?.textView(self, numberOfCharactersEntered: textView.text.characters.count)
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
+    {
         if (text == "\n")  {
             self.resignFirstResponder()
             return false

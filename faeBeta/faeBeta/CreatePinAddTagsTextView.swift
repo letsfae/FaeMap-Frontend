@@ -117,5 +117,22 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         super.textViewDidChange(textView)
         self.observerDelegate?.textView(self, numberOfCharactersEntered: tagNames.count)
     }
+    
+    override func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text != ""
+        {
+            return super.textView(textView, shouldChangeTextIn:range, replacementText: text) && tagNames.count < 5 && range.location >= tagNames.count
+        }else{
+            if range.location < tagNames.count{
+                var length = range.length
+                while(length > 0 && tagNames.count > range.location){
+                    tagNames.remove(at: range.location)
+                    length -= 1
+                }
+            }
+        }
+        return super.textView(textView, shouldChangeTextIn:range, replacementText: text)
+    }
+    
 
 }
