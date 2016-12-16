@@ -139,6 +139,7 @@ extension FaeMapViewController {
                 userBirthday = birthday
             }
             if let gender = selfUserInfoJSON["gender"].string {
+                print("[getSelfAccountInfo] gender: \(gender)")
                 userUserGender = gender
             }
             if let userName = selfUserInfoJSON["user_name"].string {

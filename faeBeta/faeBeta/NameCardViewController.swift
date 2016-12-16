@@ -382,6 +382,7 @@ extension NameCardViewController {
 
         self.imagePicker.dismiss(animated: true, completion: nil)
     }
+    
     func showPhotoSelected(_ sender: Int) {
         //if sender = 0 show profile
         self.imagePick = sender

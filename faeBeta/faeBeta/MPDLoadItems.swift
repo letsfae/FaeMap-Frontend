@@ -202,7 +202,7 @@ extension MomentPinDetailViewController {
         
         // Comment Pin User Avatar
         imagePinUserAvatar = UIImageView()
-        imagePinUserAvatar.image = UIImage(named: "defaultMan")
+        imagePinUserAvatar.image = UIImage(named: "defaultMen")
         imagePinUserAvatar.layer.cornerRadius = 25
         imagePinUserAvatar.clipsToBounds = true
         imagePinUserAvatar.contentMode = .scaleAspectFill

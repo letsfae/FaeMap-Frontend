@@ -38,6 +38,7 @@ extension CommentPinDetailViewController {
         draggingButtonSubview.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         draggingButtonSubview.layer.shadowOpacity = 0.3
         draggingButtonSubview.layer.shadowRadius = 10.0
+        draggingButtonSubview.layer.shouldRasterize = true
         draggingButtonSubview.layer.zPosition = 109
         draggingButtonSubview.center.y -= screenHeight
         
@@ -195,7 +196,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
-        imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
+        imageCommentPinUserAvatar.image = UIImage(named: "defaultMen")
         imageCommentPinUserAvatar.layer.cornerRadius = 25
         imageCommentPinUserAvatar.clipsToBounds = true
         imageCommentPinUserAvatar.contentMode = .scaleAspectFill

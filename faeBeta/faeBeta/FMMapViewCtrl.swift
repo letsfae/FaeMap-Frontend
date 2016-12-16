@@ -166,7 +166,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if openUserPinActive {
-            self.hideOpenUserPinAnimation()
+            UIView.animate(withDuration: 0.25, animations: {
+                self.uiViewNameCard.alpha = 0
+            })
             self.canDoNextUserUpdate = true
             openUserPinActive = false
         }
@@ -179,7 +181,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.0012, longitude: longitude, zoom: 17)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
@@ -187,9 +189,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
                     self.currentViewingUserId = userid
-                    loadUserPinInformation("\(userid)")
+//                    loadUserPinInformation("\(userid)")
+                    UIView.animate(withDuration: 0.25, animations: {
+                        self.uiViewNameCard.alpha = 1
+                    })
+                    self.openUserPinActive = true
                 }
-                self.showOpenUserPinAnimation(latitude: latitude, longitude: longitude)
+//                self.showOpenUserPinAnimation(latitude: latitude, longitude: longitude)
                 return true
             }
             if type == "comment" || type == "media" {

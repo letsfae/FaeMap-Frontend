@@ -144,6 +144,21 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var previousPosition: CLLocationCoordinate2D!
     var canLoadMapPin = true // if can load map pin when zoom level is valid for updating
     
+    // Map Namecard
+    var uiViewNameCard: UIView!
+    var imageCover: UIImageView!
+    var imageBackground: UIImageView!
+    var imageAvatarNameCard: UIImageView!
+    var imageGenderMen: UIImageView!
+    var buttonTalk: UIButton!
+    var labelNameTag: UILabel!
+    var labelChat: UILabel!
+    var buttonFavorite: UIButton!
+    var buttonInfo: UIButton!
+    var buttonEmoji: UIButton!
+    var imageOneLine: UIImageView!
+    var labelTitle: UILabel!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -160,7 +175,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadTransparentNavBarItems()
         loadButton()
         loadMore()
-        loadNamecard()
+        loadNameCard()
         loadPositionAnimateImage()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
@@ -182,13 +197,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
             jumpToLocationEnable()
         }
-        getSelfAccountInfo()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         if userStatus != 5  {
             loadPositionAnimateImage()
-            getSelfAccountInfo()
         }
+        getSelfAccountInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {

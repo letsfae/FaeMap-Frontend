@@ -89,7 +89,6 @@
 		B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2E1D5E435200356705 /* MapChatTableCell.swift */; };
 		B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */; };
-		B0714D671D5E435200356705 /* FMOpenUserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D331D5E435200356705 /* FMOpenUserPin.swift */; };
 		B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D341D5E435200356705 /* RightSlideWindow.swift */; };
 		B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D351D5E435200356705 /* FMMapTableDelegate.swift */; };
 		B0714D701D5E435200356705 /* FMUnreadChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */; };
@@ -180,6 +179,8 @@
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
+		B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */; };
+		B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */; };
 		B842E51B1DB7372C006E2FB4 /* CommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */; };
 		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */; };
@@ -352,7 +353,6 @@
 		B0714D2E1D5E435200356705 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
-		B0714D331D5E435200356705 /* FMOpenUserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMOpenUserPin.swift; sourceTree = "<group>"; };
 		B0714D341D5E435200356705 /* RightSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D351D5E435200356705 /* FMMapTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapTableDelegate.swift; sourceTree = "<group>"; };
 		B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUnreadChatTableView.swift; sourceTree = "<group>"; };
@@ -456,6 +456,8 @@
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
+		B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapNameCard.swift; sourceTree = "<group>"; };
+		B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTimeLoginViewController.swift; sourceTree = "<group>"; };
 		B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentPinViewController.swift; sourceTree = "<group>"; };
 		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -671,13 +673,13 @@
 				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
 				B0714D351D5E435200356705 /* FMMapTableDelegate.swift */,
-				B0714D331D5E435200356705 /* FMOpenUserPin.swift */,
 				B0714D361D5E435200356705 /* FMUnreadChatTableView.swift */,
 				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
 				B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */,
 				B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
 				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
+				B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -991,6 +993,7 @@
 			isa = PBXGroup;
 			children = (
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
+				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
@@ -1000,7 +1003,6 @@
 				B8612E321DF201A60092C606 /* MomentPinDetail */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
-				B8F633651DCA649D00C9A079 /* Support */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1168,13 +1170,6 @@
 				DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */,
 			);
 			name = CommentPinExtension;
-			sourceTree = "<group>";
-		};
-		B8F633651DCA649D00C9A079 /* Support */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Support;
 			sourceTree = "<group>";
 		};
 		D5475357A73CFA1EFAD8018A /* Pods */ = {
@@ -1464,6 +1459,7 @@
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				B8A3BF5E1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
+				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */,
 				B8612E3D1DF24E3D0092C606 /* MPDAPIConnections.swift in Sources */,
 				B8612E3F1DF24FB90092C606 /* MPDTableViewCtrlFile.swift in Sources */,
@@ -1515,7 +1511,6 @@
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
-				B0714D671D5E435200356705 /* FMOpenUserPin.swift in Sources */,
 				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
@@ -1620,6 +1615,7 @@
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
+				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,
 				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,

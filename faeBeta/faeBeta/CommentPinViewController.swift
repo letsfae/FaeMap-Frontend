@@ -157,7 +157,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-            self.loadInputToolBar()
+            //		self.loadInputToolBar()
         })
     }
     

@@ -52,21 +52,21 @@ extension FaeMapViewController {
     }
     
     func jumpToMoodAvatar() {
-        animationMoreHide(nil)
+        animationMoreHide(dimBackgroundMoreButton)
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController")as! MoodAvatarViewController
         vc.modalPresentationStyle = .overCurrentContext
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToNameCard() {
-        animationMoreHide(nil)// new add
+        animationMoreHide(dimBackgroundMoreButton)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardViewController")as! NameCardViewController
         vc.modalPresentationStyle = .overCurrentContext
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToMyFaeMainPage() {
-        animationMoreHide(nil)// new add
+        animationMoreHide(dimBackgroundMoreButton)// new add
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController")as! MyFaeMainPageViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -196,13 +196,16 @@ extension FaeMapViewController {
         }))
     }
     
-    func animationMoreHide(_ sender: UIButton!) {
+    func animationMoreHide(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2, animations:({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x - self.tableViewWeight
             self.dimBackgroundMoreButton.alpha = 0.0
         }), completion: { (done: Bool) in
             if done {
-
+                if self.dimBackgroundMoreButton.tag == 1 {
+                    self.dimBackgroundMoreButton.tag = 0
+                    self.invisibleMode()
+                }
             }
         })
     }
@@ -233,6 +236,8 @@ extension FaeMapViewController {
                             self.myPositionIcon.isHidden = true
                         }
                     }
+                    self.dimBackgroundMoreButton.tag = 1
+                    self.animationMoreHide(self.dimBackgroundMoreButton)
                 }
                 else {
                     print("Fail to switch to invisible")
