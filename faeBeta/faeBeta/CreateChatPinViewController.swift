@@ -390,7 +390,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             self.addTagsTextView.alpha = 1
         }, completion:{
             Complete in
-            self.addTagsTextView.appendNewTags(tagName: "Hello")
         })
     }
     

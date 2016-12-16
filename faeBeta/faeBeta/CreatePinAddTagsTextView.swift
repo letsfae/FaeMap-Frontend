@@ -97,7 +97,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         originalRect.size.height = self.font!.pointSize - self.font!.descender
         // "descender" is expressed as a negative value,
         // so to add its height you must subtract its value
-        originalRect.origin.y = originalRect.origin.y + 5
+        originalRect.origin.y = originalRect.origin.y + (tagNames.count != 0 ? 5 : 0)
         return originalRect
     }
 

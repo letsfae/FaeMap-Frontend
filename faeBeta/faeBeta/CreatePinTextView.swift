@@ -13,14 +13,15 @@ protocol CreatePinTextViewDelegate:class {
 }
 
 class CreatePinTextView: UITextView, UITextViewDelegate {
-    private var lableTextViewPlaceholder: UILabel!
+    private var labelTextViewPlaceholder: UILabel!
     weak var observerDelegate: CreatePinTextViewDelegate!
     var placeHolder: String? {
         get{
-            return lableTextViewPlaceholder.text
+            return labelTextViewPlaceholder.text
         }
         set{
-            lableTextViewPlaceholder.text = newValue
+            labelTextViewPlaceholder.text = newValue
+            labelTextViewPlaceholder.sizeToFit()
         }
     }
     
@@ -40,12 +41,12 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.tintColor = UIColor.white
         self.delegate = self
         self.isScrollEnabled = false
-
-        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 171, height: 27))
-        lableTextViewPlaceholder.numberOfLines = 0
-        lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        lableTextViewPlaceholder.textColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        self.addSubview(lableTextViewPlaceholder)
+        self.clipsToBounds = false
+        labelTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 290, height: 47))
+        labelTextViewPlaceholder.numberOfLines = 2
+        labelTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        labelTextViewPlaceholder.textColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        self.addSubview(labelTextViewPlaceholder)
     }
 
     func textViewDidBeginEditing(_ textView: UITextView)
@@ -57,16 +58,10 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         let spacing = CharacterSet.whitespacesAndNewlines
         
         if textView.text.trimmingCharacters(in: spacing).isEmpty == false {
-//            buttonCommentSubmit.isEnabled = true
-            lableTextViewPlaceholder.isHidden = true
-//            buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1.0)
-//            buttonCommentSubmit.setTitleColor(UIColor.white, for: UIControlState())
+            labelTextViewPlaceholder.isHidden = true
         }
         else {
-//            buttonCommentSubmit.isEnabled = false
-            lableTextViewPlaceholder.isHidden = false
-//            buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
-//            buttonCommentSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
+            labelTextViewPlaceholder.isHidden = false
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
         var numlineOnDevice = 3
