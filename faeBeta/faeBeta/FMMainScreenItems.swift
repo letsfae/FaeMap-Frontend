@@ -31,7 +31,7 @@ extension FaeMapViewController {
         locManager.startUpdatingLocation()
         
         // Default is true, if true, panGesture could not be detected
-//        self.faeMapView.settings.consumesGesturesInView = false
+        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons

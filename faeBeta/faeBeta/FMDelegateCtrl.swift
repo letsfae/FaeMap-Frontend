@@ -26,6 +26,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
         print("back from comment pin detail")
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        self.renewSelfLocation()
         if dismiss {
 //            self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
 //            self.markerBackFromPinDetail.zIndex = 0

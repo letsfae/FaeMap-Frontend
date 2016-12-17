@@ -58,7 +58,7 @@ extension CommentPinDetailViewController {
         //        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(CommentPinDetailViewController.panActionCommentPinDetailDrag(_:)))
         //        buttonCommentPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
         loadTableHeader()
-//        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
+        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
         loadAnotherToolbar()
         loadPinCtrlButton()
     }

@@ -16,7 +16,7 @@ extension FaeMapViewController {
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
     func updateTimerForLoadRegionPin(radius: Int) {
@@ -24,7 +24,7 @@ extension FaeMapViewController {
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
     }
     
     // MARK: -- Load Pins based on the Current Region Camera
@@ -110,7 +110,17 @@ extension FaeMapViewController {
                 UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
                     icon.frame.size.width = 48
                     icon.frame.size.height = 51
-                    }, completion: nil)
+                }, completion: {(done: Bool) in
+                    if done {
+                        pinMap.iconView = nil
+                        if type == "comment" {
+                            pinMap.icon = #imageLiteral(resourceName: "commentPinMarker")
+                        }
+                        else if type == "media" {
+                            pinMap.icon = #imageLiteral(resourceName: "momentPinMarker")
+                        }
+                    }
+                })
             }
         }
     }

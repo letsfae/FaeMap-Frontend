@@ -219,6 +219,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 }
                 self.markerBackFromPinDetail = marker
                 if type == "media" {
+                    timerUpdateSelfLocation.invalidate()
+                    self.clearMap(type: "user")
                     let pinDetailVC = MomentPinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
@@ -229,6 +231,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     })
                 }
                 else if type == "comment" {
+                    timerUpdateSelfLocation.invalidate()
+                    self.clearMap(type: "user")
                     let pinDetailVC = CommentPinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue

@@ -279,6 +279,7 @@ extension MomentPinDetailViewController {
             self.subviewInputToolBar.isHidden = true
         }
         controlBoard.removeFromSuperview()
+        self.delegate?.dismissMarkerShadow(true)
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight
@@ -305,6 +306,7 @@ extension MomentPinDetailViewController {
                 self.subviewInputToolBar.isHidden = true
             }
             textviewPinDetail.isScrollEnabled = true
+            tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -336,6 +338,7 @@ extension MomentPinDetailViewController {
         let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
         textviewPinDetail.isScrollEnabled = false
+        tableCommentsForPin.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
