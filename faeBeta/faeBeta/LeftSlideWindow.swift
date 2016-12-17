@@ -113,14 +113,12 @@ extension FaeMapViewController {
         
         
         imageViewAvatarMore = UIImageView(frame: CGRect(x: (tableViewWeight - 91) / 2,y: 36,width: 91,height: 91))
-//        imageViewAvatarMore.layer.cornerRadius = 81 / 2
         imageViewAvatarMore.layer.cornerRadius = 91 / 2
         imageViewAvatarMore.layer.masksToBounds = true
         imageViewAvatarMore.clipsToBounds = true
         imageViewAvatarMore.layer.borderWidth = 5
         imageViewAvatarMore.layer.borderColor = UIColor.white.cgColor
         imageViewAvatarMore.contentMode = .scaleAspectFill
-//        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         if user_id != nil {
             let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
             imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
@@ -128,8 +126,7 @@ extension FaeMapViewController {
         viewHeaderForMore.addSubview(imageViewAvatarMore)
         
         buttonImagePicker = UIButton(frame: CGRect(x: (tableViewWeight - 91) / 2, y: 36, width: 91, height: 91))
-//        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.showPhotoSelected), forControlEvents: .TouchUpInside)
-        buttonImagePicker.addTarget(self, action: #selector(FaeMapViewController.jumpToMyFaeMainPage), for: .touchUpInside)
+        buttonImagePicker.addTarget(self, action: #selector(self.jumpToMyFaeMainPage), for: .touchUpInside)
         viewHeaderForMore.addSubview(buttonImagePicker)
         
         labelMoreName = UILabel(frame: CGRect(x: (tableViewWeight - 180) / 2,y: 134,width: 180,height: 27))
@@ -148,13 +145,10 @@ extension FaeMapViewController {
         viewHeaderForMore.addSubview(labelMoreName)
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-//        arrayNameCard[imageIndex] = image
         imageViewAvatarMore.image = image
         let avatar = FaeImage()
         avatar.image = image
         avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
-//            print(code)
-//            print(message)
             if code / 100 == 2 {
                 self.imageViewAvatarMore.image = image
             } else {

@@ -14,11 +14,12 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func updateNameCard(withUserId: Int) {
+        buttonChat.tag = withUserId
         let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
         imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         let userNameCard = FaeUser()
         userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
-            if(status / 100 == 2){
+            if(status / 100 == 2) {
                 print("[updateNameCard] \(message!)")
                 let profileInfo = JSON(message!)
                 if let canShowGender = profileInfo["show_gender"].bool {
@@ -44,6 +45,7 @@ extension FaeMapViewController {
         if user_id != nil {
             let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
             imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            buttonChat.tag = Int(user_id)
         }
         else {
             return
@@ -119,9 +121,10 @@ extension FaeMapViewController {
         imageGenderMen.image = UIImage(named: "GenderMen")
         self.uiViewNameCard.addSubview(imageGenderMen)
         
-        buttonTalk = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
-        buttonTalk.setImage(UIImage(named: "Talk"), for: .normal)
-        self.uiViewNameCard.addSubview(buttonTalk)
+        buttonChat = UIButton(frame: CGRect(x: 120.5*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
+        buttonChat.setImage(#imageLiteral(resourceName: "chatFromMap"), for: .normal)
+        self.uiViewNameCard.addSubview(buttonChat)
+        buttonChat.addTarget(self, action: #selector(self.buttonChatAction(_:)), for: .touchUpInside)
         
         labelDisplayName = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 165*screenWidthFactor, width: 186*screenWidthFactor, height: 25*screenWidthFactor))
         labelDisplayName.text = ""
@@ -145,13 +148,51 @@ extension FaeMapViewController {
         buttonFavorite.setImage(UIImage(named: "Favorite"), for: .normal)
         self.uiViewNameCard.addSubview(buttonFavorite)
         
-        buttonInfo = UIButton(frame: CGRect(x: 120.5*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
-        buttonInfo.setImage(UIImage(named: "Info"), for: .normal)
+        buttonInfo = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
+        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCard"), for: .normal)
         self.uiViewNameCard.addSubview(buttonInfo)
         
         buttonEmoji = UIButton(frame: CGRect(x: 198*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
         buttonEmoji.setImage(UIImage(named: "Emoji"), for: .normal)
         self.uiViewNameCard.addSubview(buttonEmoji)
+    }
+    
+    func buttonChatAction(_ sender: UIButton) {
+        let withUserId: NSNumber = NSNumber(value: sender.tag)
+        
+        //First get chatroom id
+        getFromURL("chats/users/\(user_id.stringValue)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            var resultJson1 = JSON([])
+            if(status / 100 == 2){
+                resultJson1 = JSON(result!)
+            }
+            // then get with user name
+            getFromURL("users/\(withUserId.stringValue)/profile", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+                if(status / 100 == 2){
+                    let resultJson2 = JSON(result!)
+                    var chat_id: String?
+                    
+                    if let id = resultJson1["chat_id"].number{
+                        chat_id = id.stringValue
+                    }
+                    if let withUserName = resultJson2["user_name"].string {
+                        self.startChat(chat_id ,withUserId: withUserId, withUserName: withUserName)
+                    }else{
+                        self.startChat(chat_id, withUserId: withUserId, withUserName: nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func startChat(_ chat_id: String? ,withUserId: NSNumber, withUserName: String?){
+        let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
+        
+        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
+        chatVC.chat_id = chat_id
+        let withUserName = withUserName ?? "Chat"
+        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func invisibleMode() {

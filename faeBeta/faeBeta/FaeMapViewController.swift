@@ -82,32 +82,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelWindbellTableTitle: UILabel!
     var tableviewWindbell = UITableView()
     
-    // Open User Pin View
-    var uiviewDialog : UIView!
-    var uiviewCard : UIView!
-    var uiviewFunction : UIView!
-    var uiviewTag : UIView!
-    var buttonFollow : UIButton!
-    var buttonShare : UIButton!
-    var buttonKeep : UIButton!
-    var buttonReport : UIButton!
-    var collectionViewPhotos : UICollectionView!
-    var cellPhotos = "cellPhotos"
-    var imageViewLeft : UIImageView!
-    var imageViewRight : UIImageView!
-    var imageViewGender : UIImageView!
-    var imageview : UIImageView!
-    var imageviewNamecardAvatar : UIImageView!
-    var imageviewNamecardGender : UIImageView!
-    var imageviewUserPinBackground : UIImageView!
-    var labelNamecardName : UILabel!
-    var labelNamecardDescription : UILabel!
-    var labelNamecardAge : UILabel!
-    var viewLine : UIView!
-    var viewLine2 : UIView!
-    var collectionPhotos : UICollectionView!
-    var buttonChat : UIButton!
-    var buttonMore : UIButton!
     // Wang Yanxiang
     var openUserPinActive = false
     // end of WYX
@@ -137,7 +111,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var imageBackground: UIImageView!
     var imageAvatarNameCard: UIImageView!
     var imageGenderMen: UIImageView!
-    var buttonTalk: UIButton!
+    var buttonChat: UIButton!
     var labelNameTag: UILabel!
     var labelShortIntro: UILabel!
     var buttonFavorite: UIButton!
