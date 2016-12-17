@@ -184,14 +184,12 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 self.canDoNextUserUpdate = false
                 mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
-                    self.currentViewingUserId = userid
-//                    loadUserPinInformation("\(userid)")
+                    self.updateNameCard(withUserId: userid)
                     UIView.animate(withDuration: 0.25, animations: {
                         self.uiViewNameCard.alpha = 1
                     })
                     self.openUserPinActive = true
                 }
-//                self.showOpenUserPinAnimation(latitude: latitude, longitude: longitude)
                 return true
             }
             if type == "comment" || type == "media" {

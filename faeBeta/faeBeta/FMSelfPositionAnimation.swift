@@ -74,7 +74,7 @@ extension FaeMapViewController {
         self.myPositionOutsideMarker_1.isHidden = true
         self.myPositionOutsideMarker_2.isHidden = true
         self.myPositionOutsideMarker_3.isHidden = true
-        //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.myPositionIcon.addTarget(self, action: #selector(self.getSelfNameCard(_:)), for: .touchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
         myPositionAnimation()

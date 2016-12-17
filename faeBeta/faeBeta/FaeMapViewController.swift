@@ -109,20 +109,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var buttonChat : UIButton!
     var buttonMore : UIButton!
     // Wang Yanxiang
-    var tagName = [String]()
-    var tagButtonSet = [UIButton]()
-    var selectedButtonSet = [UIButton]()
-    var tagLength = [CGFloat]()
-    var tagColor = [UIColor]()
-    var tagTitle = [NSMutableAttributedString]()
-    let exlength : CGFloat = 8
-    let selectedInterval : CGFloat = 11
-    let maxLength : CGFloat = 320
-    let lineInterval : CGFloat = 25.7
-    let intervalInLine : CGFloat = 13.8
-    let tagHeight : CGFloat = 18
     var openUserPinActive = false
-    var currentViewingUserId = 1
     // end of WYX
     //
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
@@ -152,12 +139,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var imageGenderMen: UIImageView!
     var buttonTalk: UIButton!
     var labelNameTag: UILabel!
-    var labelChat: UILabel!
+    var labelShortIntro: UILabel!
     var buttonFavorite: UIButton!
     var buttonInfo: UIButton!
     var buttonEmoji: UIButton!
     var imageOneLine: UIImageView!
-    var labelTitle: UILabel!
+    var labelDisplayName: UILabel!
     
     // System Functions
     override func viewDidLoad() {

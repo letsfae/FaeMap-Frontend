@@ -449,14 +449,14 @@ class FaeUser : NSObject {
     }
     
     func getNamecardOfSpecificUser(_ otherUser: String, completion:@escaping (Int, Any?) -> Void){
-        getFromURL("users/"+otherUser+"/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            completion(status, message);
+        getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+            completion(status, message)
         }
     }
     
     func getSelfNamecard(_ completion:@escaping (Int, Any?) -> Void){
         getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            completion(status, message);
+            completion(status, message)
         }
     }
 
@@ -471,7 +471,7 @@ class FaeUser : NSObject {
     
     func getAllTags(_ completion:@escaping (Int,Any?)->Void){
         getFromURL("users/name_card/tags", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            completion(status,message);
+            completion(status,message)
         }
     }
 

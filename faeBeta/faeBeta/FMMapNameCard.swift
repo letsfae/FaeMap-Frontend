@@ -7,8 +7,76 @@
 //
 
 import UIKit
+import SDWebImage
+import SwiftyJSON
+import GoogleMaps
 
 extension FaeMapViewController {
+    
+    func updateNameCard(withUserId: Int) {
+        let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
+        imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+        let userNameCard = FaeUser()
+        userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
+            if(status / 100 == 2){
+                print("[updateNameCard] \(message!)")
+                let profileInfo = JSON(message!)
+                if let canShowGender = profileInfo["show_gender"].bool {
+                    print("[updateNameCard] canShowGender: \(canShowGender)")
+                }
+                if let canShowAge = profileInfo["show_age"].bool {
+                    print("[updateNameCard] canShowAge: \(canShowAge)")
+                }
+                if let displayName = profileInfo["nick_name"].string{
+                    self.labelDisplayName.text = displayName
+                }
+                if let shortIntro = profileInfo["short_intro"].string{
+                    self.labelShortIntro.text = shortIntro
+                }
+                if let age = profileInfo["age"].int {
+                    print("[updateNameCard] age: \(age)")
+                }
+            }
+        }
+    }
+    
+    func getSelfNameCard(_ sender: UIButton) {
+        if user_id != nil {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+            imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+        }
+        else {
+            return
+        }
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+0.0012, longitude: currentLongitude, zoom: 17)
+        faeMapView.animate (to: camera)
+        UIView.animate(withDuration: 0.25, animations: {
+            self.uiViewNameCard.alpha = 1
+        })
+        self.openUserPinActive = true
+        let userNameCard = FaeUser()
+        userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
+            if(status / 100 == 2){
+                print("[updateNameCard] \(message!)")
+                let profileInfo = JSON(message!)
+                if let canShowGender = profileInfo["show_gender"].bool {
+                    print("[updateNameCard] canShowGender: \(canShowGender)")
+                }
+                if let canShowAge = profileInfo["show_age"].bool {
+                    print("[updateNameCard] canShowAge: \(canShowAge)")
+                }
+                if let displayName = profileInfo["nick_name"].string{
+                    self.labelDisplayName.text = displayName
+                }
+                if let shortIntro = profileInfo["short_intro"].string{
+                    self.labelShortIntro.text = shortIntro
+                }
+                if let age = profileInfo["age"].int {
+                    print("[updateNameCard] age: \(age)")
+                }
+            }
+        }
+    }
     
     func loadNameCard() {
         uiViewNameCard = UIView(frame: CGRect(x: 73*screenWidthFactor, y: 158*screenWidthFactor, width:268*screenWidthFactor, height: 293*screenWidthFactor))
@@ -22,13 +90,23 @@ extension FaeMapViewController {
         uiViewNameCard.layer.shadowRadius = 25
         self.view.addSubview(uiViewNameCard)
         uiViewNameCard.alpha = 0
+        uiViewNameCard.layer.zPosition = 999
         
         imageCover = UIImageView(frame: CGRect(x: 0, y:0, width:268*screenWidthFactor, height: 125*screenWidthFactor))
         imageCover.image = UIImage(named: "Cover")
         self.uiViewNameCard.addSubview(imageCover)
         
         imageAvatarNameCard = UIImageView(frame: CGRect(x: 103*screenWidthFactor, y: 88*screenWidthFactor, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
-        imageAvatarNameCard.image = UIImage(named: "AvatarMen")
+        imageAvatarNameCard.layer.cornerRadius = 31*screenWidthFactor
+        imageAvatarNameCard.layer.borderColor = UIColor.white.cgColor
+        imageAvatarNameCard.layer.borderWidth = 6
+        imageAvatarNameCard.image = #imageLiteral(resourceName: "defaultMen")
+        imageAvatarNameCard.contentMode = .scaleAspectFill
+        imageAvatarNameCard.clipsToBounds = true
+        imageAvatarNameCard.layer.shadowColor = UIColor.gray.cgColor
+        imageAvatarNameCard.layer.shadowOffset = CGSize.zero
+        imageAvatarNameCard.layer.shadowOpacity = 0.75
+        imageAvatarNameCard.layer.shadowRadius = 3
         self.uiViewNameCard.addSubview(imageAvatarNameCard)
         
         imageGenderMen = UIImageView(frame: CGRect(x: 15*screenWidthFactor, y: 134*screenWidthFactor, width: 28*screenWidthFactor, height: 18*screenWidthFactor))
@@ -39,17 +117,19 @@ extension FaeMapViewController {
         buttonTalk.setImage(UIImage(named: "Talk"), for: .normal)
         self.uiViewNameCard.addSubview(buttonTalk)
         
-        labelTitle = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 165*screenWidthFactor, width: 186*screenWidthFactor, height: 25*screenWidthFactor))
-        labelTitle.text = "LinLinLinLinLinLinLinLin"
-        labelTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 18*screenWidthFactor)
-        labelTitle.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.uiViewNameCard.addSubview(labelTitle)
+        labelDisplayName = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 165*screenWidthFactor, width: 186*screenWidthFactor, height: 25*screenWidthFactor))
+        labelDisplayName.text = "LinLinLinLinLinLinLinLin"
+        labelDisplayName.textAlignment = .center
+        labelDisplayName.font = UIFont(name: "AvenirNext-DemiBold", size: 18*screenWidthFactor)
+        labelDisplayName.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        self.uiViewNameCard.addSubview(labelDisplayName)
         
-        labelChat = UILabel(frame: CGRect(x: 49*screenWidthFactor, y: 191*screenWidthFactor, width: 171*screenWidthFactor, height: 18*screenWidthFactor))
-        labelChat.text = "Let’s Chat Let’s Chat Let’s Chat"
-        labelChat.font = UIFont(name: "AvenirNext-Medium", size: 13*screenWidthFactor)
-        labelChat.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
-        self.uiViewNameCard.addSubview(labelChat)
+        labelShortIntro = UILabel(frame: CGRect(x: 49*screenWidthFactor, y: 191*screenWidthFactor, width: 171*screenWidthFactor, height: 18*screenWidthFactor))
+        labelShortIntro.text = "Let’s Chat Let’s Chat Let’s Chat"
+        labelShortIntro.textAlignment = .center
+        labelShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13*screenWidthFactor)
+        labelShortIntro.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
+        self.uiViewNameCard.addSubview(labelShortIntro)
         
         imageOneLine = UIImageView(frame: CGRect(x: 0*screenWidthFactor, y: 222.5*screenWidthFactor, width: 268*screenWidthFactor, height: 1*screenWidthFactor))
         imageOneLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1.0)
