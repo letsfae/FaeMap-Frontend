@@ -96,18 +96,24 @@ extension FaeMapViewController {
         imageCover.image = UIImage(named: "Cover")
         self.uiViewNameCard.addSubview(imageCover)
         
-        imageAvatarNameCard = UIImageView(frame: CGRect(x: 103*screenWidthFactor, y: 88*screenWidthFactor, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
+        let baseView = UIView(frame: CGRect(x: 103*screenWidthFactor, y: 88*screenWidthFactor, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
+        baseView.backgroundColor = UIColor.clear
+        baseView.layer.cornerRadius = 31*screenWidthFactor
+        baseView.layer.borderColor = UIColor.white.cgColor
+        baseView.layer.borderWidth = 6
+        baseView.layer.shadowColor = UIColor.gray.cgColor
+        baseView.layer.shadowOffset = CGSize.zero
+        baseView.layer.shadowOpacity = 0.75
+        baseView.layer.shadowRadius = 3
+        imageAvatarNameCard = UIImageView(frame: CGRect(x: 0, y: 0, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
         imageAvatarNameCard.layer.cornerRadius = 31*screenWidthFactor
         imageAvatarNameCard.layer.borderColor = UIColor.white.cgColor
         imageAvatarNameCard.layer.borderWidth = 6
         imageAvatarNameCard.image = #imageLiteral(resourceName: "defaultMen")
         imageAvatarNameCard.contentMode = .scaleAspectFill
-        imageAvatarNameCard.clipsToBounds = true
-        imageAvatarNameCard.layer.shadowColor = UIColor.gray.cgColor
-        imageAvatarNameCard.layer.shadowOffset = CGSize.zero
-        imageAvatarNameCard.layer.shadowOpacity = 0.75
-        imageAvatarNameCard.layer.shadowRadius = 3
-        self.uiViewNameCard.addSubview(imageAvatarNameCard)
+        imageAvatarNameCard.layer.masksToBounds = true
+        self.uiViewNameCard.addSubview(baseView)
+        baseView.addSubview(imageAvatarNameCard)
         
         imageGenderMen = UIImageView(frame: CGRect(x: 15*screenWidthFactor, y: 134*screenWidthFactor, width: 28*screenWidthFactor, height: 18*screenWidthFactor))
         imageGenderMen.image = UIImage(named: "GenderMen")

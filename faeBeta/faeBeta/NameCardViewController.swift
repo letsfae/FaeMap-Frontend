@@ -265,18 +265,22 @@ extension NameCardViewController {
         viewNameCardDescr.layer.cornerRadius = 15
         viewHeaderBackground.addSubview(viewNameCardDescr)
         
-        imageViewDescrProfile = UIImageView(frame: CGRect(x: (268 - 61) / 2, y: 96 - 119, width: 61, height: 61))
+        let baseView = UIView(frame: CGRect(x: (268 - 61) / 2, y: 96 - 119, width: 61, height: 61))
+        baseView.backgroundColor = UIColor.clear
+        baseView.layer.cornerRadius = 30.5
+        baseView.layer.borderColor = UIColor.white.cgColor
+        baseView.layer.borderWidth = 5
+        baseView.layer.shadowColor = UIColor.gray.cgColor
+        baseView.layer.shadowOffset = CGSize.zero
+        baseView.layer.shadowOpacity = 0.75
+        baseView.layer.shadowRadius = 5
+        imageViewDescrProfile = UIImageView(frame: CGRect(x: 0, y: 0, width: 61, height: 61))
         imageViewDescrProfile.layer.cornerRadius = 61 / 2
         imageViewDescrProfile.layer.masksToBounds = true
-        imageViewDescrProfile.clipsToBounds = true
         imageViewDescrProfile.layer.borderWidth = 5
         imageViewDescrProfile.layer.borderColor = UIColor.white.cgColor
-        imageViewDescrProfile.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-        imageViewDescrProfile.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        imageViewDescrProfile.layer.shadowOpacity = 0.3
-        imageViewDescrProfile.layer.shadowRadius = 5.0
-        imageViewDescrProfile.contentMode = .scaleAspectFill
-        viewNameCardDescr.addSubview(imageViewDescrProfile)
+        viewNameCardDescr.addSubview(baseView)
+        baseView.addSubview(imageViewDescrProfile)
         if user_id != nil {
             let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
             print(user_id)

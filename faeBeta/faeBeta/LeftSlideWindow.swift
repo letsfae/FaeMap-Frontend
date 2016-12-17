@@ -119,10 +119,10 @@ extension FaeMapViewController {
         imageViewAvatarMore.clipsToBounds = true
         imageViewAvatarMore.layer.borderWidth = 5
         imageViewAvatarMore.layer.borderColor = UIColor.white.cgColor
+        imageViewAvatarMore.contentMode = .scaleAspectFill
 //        imageViewAvatarMore.image = UIImage(named: "myAvatorLin")
         if user_id != nil {
-        let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
-            print(user_id)
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
             imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
         viewHeaderForMore.addSubview(imageViewAvatarMore)
@@ -186,8 +186,8 @@ extension FaeMapViewController {
     func animationMoreShow(_ sender: UIButton!) {
         updateName()
         if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
-            self.imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+            imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
         }
         UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
