@@ -118,14 +118,14 @@ extension FaeMapViewController {
         self.uiViewNameCard.addSubview(buttonTalk)
         
         labelDisplayName = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 165*screenWidthFactor, width: 186*screenWidthFactor, height: 25*screenWidthFactor))
-        labelDisplayName.text = "LinLinLinLinLinLinLinLin"
+        labelDisplayName.text = ""
         labelDisplayName.textAlignment = .center
         labelDisplayName.font = UIFont(name: "AvenirNext-DemiBold", size: 18*screenWidthFactor)
         labelDisplayName.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         self.uiViewNameCard.addSubview(labelDisplayName)
         
         labelShortIntro = UILabel(frame: CGRect(x: 49*screenWidthFactor, y: 191*screenWidthFactor, width: 171*screenWidthFactor, height: 18*screenWidthFactor))
-        labelShortIntro.text = "Let’s Chat Let’s Chat Let’s Chat"
+        labelShortIntro.text = ""
         labelShortIntro.textAlignment = .center
         labelShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13*screenWidthFactor)
         labelShortIntro.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
