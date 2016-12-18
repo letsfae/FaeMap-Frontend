@@ -149,8 +149,9 @@ extension FaeMapViewController {
         self.uiViewNameCard.addSubview(buttonFavorite)
         
         buttonInfo = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
-        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCard"), for: .normal)
+        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
         self.uiViewNameCard.addSubview(buttonInfo)
+        buttonInfo.addTarget(self, action: #selector(self.showNameCardOptions(_:)), for: .touchUpInside)
         
         buttonEmoji = UIButton(frame: CGRect(x: 198*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
         buttonEmoji.setImage(UIImage(named: "Emoji"), for: .normal)
@@ -159,7 +160,6 @@ extension FaeMapViewController {
     
     func buttonChatAction(_ sender: UIButton) {
         let withUserId: NSNumber = NSNumber(value: sender.tag)
-        
         //First get chatroom id
         getFromURL("chats/users/\(user_id.stringValue)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             var resultJson1 = JSON([])
@@ -303,5 +303,83 @@ extension FaeMapViewController {
         print("Create an account")
     }
     
+    func showNameCardOptions(_ sender: UIButton) {
+        var thisIsMe = false
+        if sender.tag == Int(user_id) {
+            thisIsMe = true
+        }
+        buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        self.view.addSubview(buttonFakeTransparentClosingView)
+        buttonFakeTransparentClosingView.addTarget(self, action: #selector(self.hideNameCardOptions(_:)), for: .touchUpInside)
+        let subviewXBefore: CGFloat = 243 / 414 * screenWidth
+        let subviewYBefore: CGFloat = 151 / 414 * screenWidth
+        let subviewXAfter: CGFloat = 79 / 414 * screenWidth
+        let subviewYAfter: CGFloat = subviewYBefore
+        let subviewWidthAfter: CGFloat = 164 / 414 * screenWidth
+        let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
+        let firstButtonX: CGFloat = 103 / 414 * screenWidth
+        let secondButtonX: CGFloat = 172 / 414 * screenWidth
+        let buttonY: CGFloat = 191 / 414 * screenWidth
+        let buttonWidth: CGFloat = 44 / 414 * screenWidth
+        let buttonHeight: CGFloat = 51 / 414 * screenWidth
+        
+        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
+        
+        nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        nameCardMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
+        self.uiViewNameCard.addSubview(nameCardMoreOptions)
+        
+        shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        shareNameCard.setImage(#imageLiteral(resourceName: "buttonShareOnCommentDetail"), for: .normal)
+        self.uiViewNameCard.addSubview(shareNameCard)
+        shareNameCard.clipsToBounds = true
+        shareNameCard.alpha = 0.0
+//        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
+        
+        editNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        editNameCard.setImage(#imageLiteral(resourceName: "buttonEditOnCommentDetail"), for: .normal)
+        self.uiViewNameCard.addSubview(editNameCard)
+        editNameCard.clipsToBounds = true
+        editNameCard.alpha = 0.0
+//        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
+        
+        reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        reportNameCard.setImage(#imageLiteral(resourceName: "buttonReportOnCommentDetail"), for: .normal)
+        self.uiViewNameCard.addSubview(reportNameCard)
+        reportNameCard.clipsToBounds = true
+        reportNameCard.alpha = 0.0
+//        reportNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionReportThisPin(_:)), for: .touchUpInside)
+        
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.nameCardMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, width: subviewWidthAfter, height: subviewHeightAfter)
+            self.shareNameCard.frame = CGRect(x: firstButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+            self.shareNameCard.alpha = 1.0
+            if thisIsMe {
+                self.editNameCard.alpha = 1.0
+                self.editNameCard.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+            }
+            else {
+                self.reportNameCard.alpha = 1.0
+                self.reportNameCard.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+            }
+        }))
+    }
     
+    func hideNameCardOptions(_ sender: UIButton) {
+        let subviewXBefore: CGFloat = 243 / 414 * screenWidth
+        let subviewYBefore: CGFloat = 151 / 414 * screenWidth
+        let buttonY: CGFloat = 191 / 414 * screenWidth
+        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+            self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+            self.reportNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+            self.shareNameCard.alpha = 1.0
+            self.editNameCard.alpha = 1.0
+            self.reportNameCard.alpha = 1.0
+        }), completion: {(done: Bool) in
+            self.buttonFakeTransparentClosingView.removeFromSuperview()
+        })
+    }
 }
