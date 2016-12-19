@@ -40,19 +40,12 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         titleLabel.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 25)
         titleLabel.textAlignment = .center
-        titleLabel.text = "All Good to Go!"
+        titleLabel.text = "Welcome to Fae!"
         
         let imageView = UIImageView(frame: CGRect(x: 30, y: viewHeight * 185/736.0, width: viewWidth - 60, height: (viewWidth - 60) * 300/351.0))
         imageView.image = UIImage(named: "FaePic")
-        
-        let titleLabel1 = UILabel(frame: CGRect(x: 0, y: viewHeight * 500/736.0, width: viewWidth, height: 35))
-        titleLabel1.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
-        titleLabel1.font = UIFont(name: "AvenirNext-Medium", size: 25)
-        titleLabel1.textAlignment = .center
-        titleLabel1.text = "Welcome to Fae!"
-        
-        let finishButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 131 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
-        //        finishButton.setImage(UIImage(named: "FinishButton"), forState: .Normal)
+
+        let finishButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         finishButton.layer.cornerRadius = 25 * screenHeightFactor
         finishButton.layer.masksToBounds = true
         finishButton.center.x = screenWidth / 2
@@ -64,37 +57,62 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         finishButton.addTarget(self, action: #selector(self.finishButtonPressed), for: .touchUpInside)
         
         
-        let termsOfServiceLabel = UILabel(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 50))
+        let termsOfServiceLabel = UILabel(frame: CGRect(x: 0, y: 514 * screenHeightFactor, width: screenWidth, height: 50))
         termsOfServiceLabel.numberOfLines = 2
         termsOfServiceLabel.textAlignment = .center
         
-        let myString = "By signing up, you agree to Fae's Terms of Service \n and Privacy Policy."
-        let myAttribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let myString = "I agree to Fae's Terms of Service\nand Privacy Policy."
+        let myAttribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         let myAttrString = NSMutableAttributedString(string: myString, attributes: myAttribute)
-        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0), range: NSRange(location: 0, length: 61))
+        myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255.0, green: 138/255.0, blue: 138/255.0, alpha: 1.0), range: NSRange(location: 0, length: myString.characters.count))
         
         
-        let myRange1 = NSRange(location: 34, length: 16)
-        let myRange2 = NSRange(location: 57, length: 14)
+        let myRange1 = NSRange(location: 17, length: 16)
+        let myRange2 = NSRange(location: 38, length: 14)
         
         myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253/255.0, green: 114/255.0, blue: 109/255.0, alpha: 1.0), range: myRange1)
         myAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253/255.0, green: 114/255.0, blue: 109/255.0, alpha: 1.0), range: myRange2)
         
         
-        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange1)
-        myAttrString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 13)!, range: myRange2)
-        
+        myAttrString.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-Bold", size: 16)!, range: myRange1)
+        myAttrString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 16)!, range: myRange2)
         
         termsOfServiceLabel.attributedText = myAttrString
+        
+        let termOfServiceButton = UIButton(frame: CGRect(x: 0, y: 0, width: 140, height: 25))
+        termOfServiceButton.center = CGPoint(x: screenWidth / 2 + 60, y: termsOfServiceLabel.frame.origin.y + 13)
+        termOfServiceButton.addTarget(self, action: #selector(self.termOfServiceButtonTapped(_:)), for: .touchUpInside)
+        
+        let privacyPolicyButton = UIButton(frame: CGRect(x: 0, y: 0, width: 110, height: 25))
+        privacyPolicyButton.center = CGPoint(x: screenWidth / 2 + 13, y: termsOfServiceLabel.frame.origin.y + 37)
+        privacyPolicyButton.addTarget(self, action: #selector(self.privacyPolicyButtonTapped(_:)), for: .touchUpInside)
         
         view.addSubview(backButton)
         view.addSubview(titleLabel)
         view.addSubview(imageView)
         view.addSubview(finishButton)
-        view.addSubview(titleLabel1)
         view.addSubview(termsOfServiceLabel)
+        view.addSubview(termOfServiceButton)
+        view.addSubview(privacyPolicyButton)
+        
         view.bringSubview(toFront: backButton)
         
+    }
+    
+    func termOfServiceButtonTapped(_ sender: UIButton)
+    {
+        let vc = TermsOfServiceViewController()
+        self.present(vc, animated: true, completion: {
+            completed in
+        })
+    }
+    
+    func privacyPolicyButtonTapped(_ sender: UIButton)
+    {
+        let vc = PrivacyPolicyViewController()
+        self.present(vc, animated: true, completion: {
+            completed in
+        })
     }
     
     override func backButtonPressed() {

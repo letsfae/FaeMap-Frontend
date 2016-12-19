@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,11 +17,10 @@
                         <viewControllerLayoutGuide type="bottom" id="icB-90-KZr"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="MZL-w5-hAN">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S8X-E3-ygg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -33,11 +35,10 @@
                         <viewControllerLayoutGuide type="bottom" id="nq1-z5-2GL"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3P7-f7-JGK">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGU-bu-C3z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -52,11 +53,10 @@
                         <viewControllerLayoutGuide type="bottom" id="7ZX-m0-s5s"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="HGj-PE-FyG">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYc-rL-trm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -71,11 +71,10 @@
                         <viewControllerLayoutGuide type="bottom" id="JZ5-Vo-8vA"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7KY-ah-VBR">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zRW-Ia-yw6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -90,11 +89,10 @@
                         <viewControllerLayoutGuide type="bottom" id="o2n-Ao-hg9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g8y-O9-Kgs">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d8Y-ij-TXi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -103,17 +101,16 @@
         <!--Register Confirm View Controller-->
         <scene sceneID="1hP-TK-S0U">
             <objects>
-                <viewController storyboardIdentifier="RegisterConfirmViewController" id="Sbb-Pi-X7Y" customClass="RegisterConfirmViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RegisterConfirmViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Sbb-Pi-X7Y" customClass="RegisterConfirmViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ZPN-XF-s4Z"/>
                         <viewControllerLayoutGuide type="bottom" id="vEN-BH-gUk"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="f9f-ye-bLq">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dae-6C-7Xs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

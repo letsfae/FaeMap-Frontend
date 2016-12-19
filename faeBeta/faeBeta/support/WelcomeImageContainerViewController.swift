@@ -59,23 +59,13 @@ class WelcomeImageContainerViewController: UIViewController {
             description = "Explore any City in the World\nand instantly get involved!"
             break
         case 4:
-            title = "Always Secure"
-            description = "Our system protects your privacy\nso you can focus on having fun!"
+            title = "Secure"
+            description = "Our Shadow Security System\nalways protects your Privacy!"
             break
         default:
             break
         }
         self.containerView.populateContentContainer(imageName, title: title, description: description)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

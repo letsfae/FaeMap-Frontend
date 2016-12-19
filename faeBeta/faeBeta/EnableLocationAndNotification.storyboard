@@ -1,47 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Notification Enable View Controller-->
-        <scene sceneID="dWW-jl-0Ml">
+        <!--Enable Location View Controller-->
+        <scene sceneID="bbR-29-YAc">
             <objects>
-                <viewController storyboardIdentifier="NotificationEnableViewController" id="UVB-F3-5Pq" customClass="NotificationEnableViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EnableLocationViewController" id="QVE-x6-18Z" customClass="EnableLocationViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nfd-CK-G8k"/>
-                        <viewControllerLayoutGuide type="bottom" id="eUr-tF-eHw"/>
+                        <viewControllerLayoutGuide type="top" id="mcO-iK-MTE"/>
+                        <viewControllerLayoutGuide type="bottom" id="mTT-oI-Syw"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="za8-FI-we2">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <view key="view" contentMode="scaleToFill" id="0Oh-dD-bET">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Whz-g5-UjZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RjF-yB-v8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2001" y="163"/>
+            <point key="canvasLocation" x="4107" y="-1128"/>
         </scene>
-        <!--Location Enable View Controller-->
-        <scene sceneID="wz1-RP-l5N">
+        <!--Enable Notification View Controller-->
+        <scene sceneID="RZR-pM-UnG">
             <objects>
-                <viewController storyboardIdentifier="LocationEnableViewController" id="spc-cB-UyW" customClass="LocationEnableViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EnableNotificationViewController" id="XZx-yD-l8q" customClass="EnableNotificationViewController" customModule="faeBeta" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="6CA-5u-4oP"/>
-                        <viewControllerLayoutGuide type="bottom" id="aO5-nP-hLy"/>
+                        <viewControllerLayoutGuide type="top" id="VgX-Cb-fd6"/>
+                        <viewControllerLayoutGuide type="bottom" id="4Wr-J0-PMa"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="t7o-sC-jgW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <view key="view" contentMode="scaleToFill" id="Kgp-J6-cXc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4_7.fullscreen"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P25-jM-gD9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pua-uJ-Pij" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1086" y="161"/>
+            <point key="canvasLocation" x="4935" y="-1124"/>
         </scene>
     </scenes>
 </document>

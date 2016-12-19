@@ -244,6 +244,8 @@
 		DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */; };
 		DC79E1571DF7C72800DA20E0 /* CreatePinInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79E1561DF7C72800DA20E0 /* CreatePinInputToolbar.swift */; };
 		DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */; };
+		DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */; };
+		DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */; };
@@ -530,6 +532,8 @@
 		DC74CE261DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesCollectionViewCellOutgoingCustom.xib; sourceTree = "<group>"; };
 		DC79E1561DF7C72800DA20E0 /* CreatePinInputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinInputToolbar.swift; sourceTree = "<group>"; };
 		DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
+		DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
+		DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
 		DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinBaseViewController.swift; sourceTree = "<group>"; };
@@ -860,21 +864,11 @@
 				B064EF281D74ECCF00C078F5 /* Keyboard */,
 				B0714DF01D62513300356705 /* Support */,
 				B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */,
-				B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */,
-				B064EF241D74EB7300C078F5 /* RegisterBaseViewController.swift */,
-				B0714DF71D62520900356705 /* RegisterNameViewController.swift */,
-				B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */,
-				B0714DFF1D62525A00356705 /* RegisterUsernameViewController.swift */,
-				B0714E031D62527E00356705 /* RegisterPasswordViewController.swift */,
-				B0714E071D62529C00356705 /* RegisterInfoViewController.swift */,
-				B0714E0B1D6252D400356705 /* RegisterConfirmViewController.swift */,
-				B0714E0F1D6252FC00356705 /* EnableLocationViewController.swift */,
-				B0714E131D62530E00356705 /* EnableNotificationViewController.swift */,
-				B0714E171D62534A00356705 /* LogInViewController.swift */,
-				B0714E1B1D62537300356705 /* SignInSupportViewController.swift */,
-				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
-				B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */,
-				B064EF221D7207DB00C078F5 /* FinishViewController.swift */,
+				DC9F45391E07996100128444 /* Term&Policy */,
+				DC9F45351E078BA100128444 /* SignUp */,
+				DC9F45361E078BDF00128444 /* Location&Notification */,
+				DC9F45371E078C1000128444 /* Login */,
+				DC9F45381E078CEF00128444 /* Unused */,
 			);
 			name = SignIn;
 			sourceTree = "<group>";
@@ -1206,6 +1200,58 @@
 			name = CreatePinInputToolbar;
 			sourceTree = "<group>";
 		};
+		DC9F45351E078BA100128444 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				B064EF241D74EB7300C078F5 /* RegisterBaseViewController.swift */,
+				B0714DF71D62520900356705 /* RegisterNameViewController.swift */,
+				B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */,
+				B0714DFF1D62525A00356705 /* RegisterUsernameViewController.swift */,
+				B0714E031D62527E00356705 /* RegisterPasswordViewController.swift */,
+				B0714E071D62529C00356705 /* RegisterInfoViewController.swift */,
+				B0714E0B1D6252D400356705 /* RegisterConfirmViewController.swift */,
+			);
+			name = SignUp;
+			sourceTree = "<group>";
+		};
+		DC9F45361E078BDF00128444 /* Location&Notification */ = {
+			isa = PBXGroup;
+			children = (
+				B0714E0F1D6252FC00356705 /* EnableLocationViewController.swift */,
+				B0714E131D62530E00356705 /* EnableNotificationViewController.swift */,
+			);
+			name = "Location&Notification";
+			sourceTree = "<group>";
+		};
+		DC9F45371E078C1000128444 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B0714E171D62534A00356705 /* LogInViewController.swift */,
+				B0714E1B1D62537300356705 /* SignInSupportViewController.swift */,
+				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		DC9F45381E078CEF00128444 /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */,
+				B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */,
+				B064EF221D7207DB00C078F5 /* FinishViewController.swift */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		DC9F45391E07996100128444 /* Term&Policy */ = {
+			isa = PBXGroup;
+			children = (
+				DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */,
+				DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */,
+			);
+			name = "Term&Policy";
+			sourceTree = "<group>";
+		};
 		DCB8816E1DEA547A00AF2FAE /* CreateChatPin */ = {
 			isa = PBXGroup;
 			children = (
@@ -1485,6 +1531,7 @@
 				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
+				DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
 				B8612E3B1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift in Sources */,
@@ -1509,6 +1556,7 @@
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
 				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
+				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,

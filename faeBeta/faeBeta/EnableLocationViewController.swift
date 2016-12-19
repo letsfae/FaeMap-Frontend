@@ -45,12 +45,13 @@ class EnableLocationViewController: UIViewController {
         descriptionLabel.textAlignment = .center
         view.addSubview(descriptionLabel)
         
-        infoLabel = UILabel(frame: CGRect(x: 15,y: 605 * screenHeightFactor,width: screenWidth - 30,height: 18))
-        infoLabel.attributedText = NSAttributedString(string:"Fae’s Ninja System always protects your location.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
+        infoLabel = UILabel(frame: CGRect(x: 15,y: screenHeight - 20 - 36,width: screenWidth - 30,height: 36))
+        infoLabel.numberOfLines = 2
+        infoLabel.attributedText = NSAttributedString(string:"Fae Map’s Shadow Security System always\nprotects your location.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
         infoLabel.textAlignment = .center
         self.view.addSubview(infoLabel)
         
-        enableLocationButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        enableLocationButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         enableLocationButton.center.x = screenWidth / 2
         enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         enableLocationButton.layer.cornerRadius = 25 * screenHeightFactor
