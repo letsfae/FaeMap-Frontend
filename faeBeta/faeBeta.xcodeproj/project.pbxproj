@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
+		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
+		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
@@ -263,6 +265,8 @@
 		5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB0AB1BF8CA20B4039D774D /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlidingMenuViewController.swift; sourceTree = "<group>"; };
+		8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindowCell.swift; sourceTree = "<group>"; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
 		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
@@ -580,6 +584,15 @@
 				7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
+			isa = PBXGroup;
+			children = (
+				8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */,
+				8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */,
+			);
+			name = LeftSlidingMenu;
 			sourceTree = "<group>";
 		};
 		B00EC3EC1D2F539000AD9673 /* FAE cell */ = {
@@ -992,6 +1005,7 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
@@ -1467,6 +1481,7 @@
 				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
+				8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
 				B8612E3B1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift in Sources */,
@@ -1550,6 +1565,7 @@
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B8612E391DF249DC0092C606 /* MPDLoadItems.swift in Sources */,
+				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
@@ -1715,7 +1731,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1756,7 +1772,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
