@@ -14,8 +14,6 @@ import SwiftyJSON
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
     // MARK: -- Common Used Vars and Constants
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     let navigationBarHeight : CGFloat = 20
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
@@ -115,7 +113,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelNameTag: UILabel!
     var labelShortIntro: UILabel!
     var buttonFavorite: UIButton!
-    var buttonInfo: UIButton!
+    var buttonOptions: UIButton!
     var buttonEmoji: UIButton!
     var imageOneLine: UIImageView!
     var labelDisplayName: UILabel!
@@ -124,6 +122,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var reportNameCard: UIButton!
     var editNameCard: UIButton!
     var buttonFakeTransparentClosingView: UIButton!
+    var buttonClosingOptionsInNameCard: UIButton!
     
     // System Functions
     override func viewDidLoad() {

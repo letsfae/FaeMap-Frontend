@@ -15,7 +15,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
     func clearMap(type: String) {
         if type == "all" || type == "pin" {
             for marker in mapPinsArray {
-                UIView.animate(withDuration: 0.5, animations: {
+                let delay: Double = Double(arc4random_uniform(100)) / 100
+                UIView.animate(withDuration: 0.5, delay: delay, animations: {
                     if marker.iconView != nil {
                         marker.iconView?.alpha = 0
                     }
@@ -27,7 +28,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
         
         if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
-                UIView.animate(withDuration: 0.5, animations: {
+                let delay: Double = Double(arc4random_uniform(100)) / 100
+                UIView.animate(withDuration: 0.5, delay: delay, animations: {
                     if marker.iconView != nil {
                         marker.iconView?.alpha = 0
                     }
@@ -162,9 +164,6 @@ extension FaeMapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if openUserPinActive {
-            UIView.animate(withDuration: 0.25, animations: {
-                self.uiViewNameCard.alpha = 0
-            })
             self.canDoNextUserUpdate = true
             openUserPinActive = false
         }
@@ -186,7 +185,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 if let userid = pinLoc["user_id"].int {
                     self.updateNameCard(withUserId: userid)
                     UIView.animate(withDuration: 0.25, animations: {
-                        self.uiViewNameCard.alpha = 1
+                        self.buttonFakeTransparentClosingView.alpha = 1
                     })
                     self.openUserPinActive = true
                 }

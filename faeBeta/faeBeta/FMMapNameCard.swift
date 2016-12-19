@@ -81,6 +81,12 @@ extension FaeMapViewController {
     }
     
     func loadNameCard() {
+        buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        self.view.addSubview(buttonFakeTransparentClosingView)
+        buttonFakeTransparentClosingView.layer.zPosition = 998
+        buttonFakeTransparentClosingView.alpha = 0
+        buttonFakeTransparentClosingView.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
+        
         uiViewNameCard = UIView(frame: CGRect(x: 73*screenWidthFactor, y: 158*screenWidthFactor, width:268*screenWidthFactor, height: 293*screenWidthFactor))
         imageBackground = UIImageView(frame: CGRect(x: 0*screenWidthFactor, y: 0*screenWidthFactor, width:268*screenWidthFactor, height: 293*screenWidthFactor))
         imageBackground.image = UIImage(named: "NameCard")
@@ -90,9 +96,12 @@ extension FaeMapViewController {
         uiViewNameCard.layer.shadowOffset = CGSize.zero
         uiViewNameCard.layer.shadowOpacity = 1
         uiViewNameCard.layer.shadowRadius = 25
-        self.view.addSubview(uiViewNameCard)
-        uiViewNameCard.alpha = 0
-        uiViewNameCard.layer.zPosition = 999
+        self.buttonFakeTransparentClosingView.addSubview(uiViewNameCard)
+        
+        buttonClosingOptionsInNameCard = UIButton(frame: CGRect(x: 0, y: 0, width:268*screenWidthFactor, height: 293*screenWidthFactor))
+        self.uiViewNameCard.addSubview(buttonClosingOptionsInNameCard)
+        buttonClosingOptionsInNameCard.isHidden = true
+        buttonClosingOptionsInNameCard.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
         
         imageCover = UIImageView(frame: CGRect(x: 0, y:0, width:268*screenWidthFactor, height: 125*screenWidthFactor))
         imageCover.image = UIImage(named: "Cover")
@@ -148,14 +157,20 @@ extension FaeMapViewController {
         buttonFavorite.setImage(UIImage(named: "Favorite"), for: .normal)
         self.uiViewNameCard.addSubview(buttonFavorite)
         
-        buttonInfo = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
-        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
-        self.uiViewNameCard.addSubview(buttonInfo)
-        buttonInfo.addTarget(self, action: #selector(self.showNameCardOptions(_:)), for: .touchUpInside)
+        buttonOptions = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
+        buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
+        self.uiViewNameCard.addSubview(buttonOptions)
+        buttonOptions.addTarget(self, action: #selector(self.showNameCardOptions(_:)), for: .touchUpInside)
         
         buttonEmoji = UIButton(frame: CGRect(x: 198*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
         buttonEmoji.setImage(UIImage(named: "Emoji"), for: .normal)
         self.uiViewNameCard.addSubview(buttonEmoji)
+        
+        buttonClosingOptionsInNameCard = UIButton(frame: CGRect(x: 0, y: 0, width:268*screenWidthFactor, height: 293*screenWidthFactor))
+        self.uiViewNameCard.addSubview(buttonClosingOptionsInNameCard)
+        buttonClosingOptionsInNameCard.isHidden = true
+        buttonClosingOptionsInNameCard.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
+        
     }
     
     func buttonChatAction(_ sender: UIButton) {
@@ -304,13 +319,12 @@ extension FaeMapViewController {
     }
     
     func showNameCardOptions(_ sender: UIButton) {
+        buttonClosingOptionsInNameCard.isHidden = false
+        buttonFakeTransparentClosingView.tag = 1
         var thisIsMe = false
         if sender.tag == Int(user_id) {
             thisIsMe = true
         }
-        buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.view.addSubview(buttonFakeTransparentClosingView)
-        buttonFakeTransparentClosingView.addTarget(self, action: #selector(self.hideNameCardOptions(_:)), for: .touchUpInside)
         let subviewXBefore: CGFloat = 243 / 414 * screenWidth
         let subviewYBefore: CGFloat = 151 / 414 * screenWidth
         let subviewXAfter: CGFloat = 79 / 414 * screenWidth
@@ -323,7 +337,7 @@ extension FaeMapViewController {
         let buttonWidth: CGFloat = 44 / 414 * screenWidth
         let buttonHeight: CGFloat = 51 / 414 * screenWidth
         
-        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
+        buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
         
         nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
         nameCardMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
@@ -365,21 +379,28 @@ extension FaeMapViewController {
         }))
     }
     
-    func hideNameCardOptions(_ sender: UIButton) {
-        let subviewXBefore: CGFloat = 243 / 414 * screenWidth
-        let subviewYBefore: CGFloat = 151 / 414 * screenWidth
-        let buttonY: CGFloat = 191 / 414 * screenWidth
-        buttonInfo.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
+    func hideNameCard(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
-            self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
-            self.reportNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
-            self.shareNameCard.alpha = 1.0
-            self.editNameCard.alpha = 1.0
-            self.reportNameCard.alpha = 1.0
+            if sender == self.buttonFakeTransparentClosingView {
+                self.buttonFakeTransparentClosingView.alpha = 0
+            }
+            if sender.tag == 1 || sender == self.buttonClosingOptionsInNameCard {
+                self.buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
+                self.buttonClosingOptionsInNameCard.isHidden = true
+                sender.tag = 0
+                let subviewXBefore: CGFloat = 243 / 414 * screenWidth
+                let subviewYBefore: CGFloat = 151 / 414 * screenWidth
+                let buttonY: CGFloat = 191 / 414 * screenWidth
+                self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+                self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+                self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+                self.reportNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+                self.shareNameCard.alpha = 0
+                self.editNameCard.alpha = 0
+                self.reportNameCard.alpha = 0
+            }
         }), completion: {(done: Bool) in
-            self.buttonFakeTransparentClosingView.removeFromSuperview()
+            self.canDoNextUserUpdate = true
         })
     }
 }
