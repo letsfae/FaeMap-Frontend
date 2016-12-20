@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import SDWebImage
+import RealmSwift
 
 //MARK: show left slide window
 extension FaeMapViewController {
@@ -177,16 +178,6 @@ extension FaeMapViewController {
         self.present(menu,animated:true,completion: nil)
     }
     func animationMoreShow(_ sender: UIButton!) {
-//        updateName()
-//        if user_id != nil {
-//            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
-//            imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
-//        }
-//        UIView.animate(withDuration: 0.25, animations: ({
-//            self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
-//            self.dimBackgroundMoreButton.alpha = 0.7
-//            self.dimBackgroundMoreButton.layer.opacity = 0.7
-//        }))
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)
@@ -294,7 +285,7 @@ extension FaeMapViewController {
         return -999
     }
     
-    func updateName() {
+    func updateSelfInfo() {
         let updateNickName = FaeUser()
         updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
             if(status / 100 == 2){
@@ -302,7 +293,24 @@ extension FaeMapViewController {
                 if let str = nickNameInfo["nick_name"].string{
                     nickname = str
                 }
-                self.labelMoreName.text = nickname
+            }
+        }
+        let realm = try! Realm()
+        let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
+        if selfInfoRealm.count == 0 {
+            if user_id != nil {
+                imageViewAvatarMore = UIImageView()
+                let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+                imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                    if image != nil {
+                        let selfInfoRealm = SelfInformation()
+                        selfInfoRealm.currentUserID = Int(user_id)
+                        selfInfoRealm.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
+                        try! realm.write {
+                            realm.add(selfInfoRealm)
+                        }
+                    }
+                })
             }
         }
     }

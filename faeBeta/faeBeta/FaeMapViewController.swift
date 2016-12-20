@@ -149,8 +149,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         didLoadFirstLoad = true
+        updateSelfInfo()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
