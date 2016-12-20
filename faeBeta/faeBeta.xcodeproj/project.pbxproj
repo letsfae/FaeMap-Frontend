@@ -237,6 +237,11 @@
 		DC477A5F1DB2A8EE008A2041 /* PinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */; };
 		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
 		DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
+		DC73AF511E09B51400C542C3 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC73AF4C1E09B51400C542C3 /* GoogleToolboxForMac.framework */; };
+		DC73AF521E09B51400C542C3 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC73AF4D1E09B51400C542C3 /* GTMSessionFetcher.framework */; };
+		DC73AF531E09B51400C542C3 /* KTCenterFlowLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC73AF4E1E09B51400C542C3 /* KTCenterFlowLayout.framework */; };
+		DC73AF541E09B51400C542C3 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC73AF4F1E09B51400C542C3 /* Realm.framework */; };
+		DC73AF551E09B51400C542C3 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC73AF501E09B51400C542C3 /* RealmSwift.framework */; };
 		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
 		DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1C1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m */; };
 		DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE1E1DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m */; };
@@ -246,6 +251,7 @@
 		DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */; };
 		DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */; };
 		DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */; };
+		DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
 		DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */; };
 		DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */; };
@@ -522,6 +528,11 @@
 		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
 		DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItemCustom.h; sourceTree = "<group>"; };
 		DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItemCustom.m; sourceTree = "<group>"; };
+		DC73AF4C1E09B51400C542C3 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = "../../../../Library/Developer/Xcode/DerivedData/faeBeta-dtfurexdikfebtfxxrbrsdaqvdir/Build/Products/Debug-iphoneos/GoogleToolboxForMac/GoogleToolboxForMac.framework"; sourceTree = "<group>"; };
+		DC73AF4D1E09B51400C542C3 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = "../../../../Library/Developer/Xcode/DerivedData/faeBeta-dtfurexdikfebtfxxrbrsdaqvdir/Build/Products/Debug-iphoneos/GTMSessionFetcher/GTMSessionFetcher.framework"; sourceTree = "<group>"; };
+		DC73AF4E1E09B51400C542C3 /* KTCenterFlowLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KTCenterFlowLayout.framework; path = "../../../../Library/Developer/Xcode/DerivedData/faeBeta-dtfurexdikfebtfxxrbrsdaqvdir/Build/Products/Debug-iphoneos/KTCenterFlowLayout/KTCenterFlowLayout.framework"; sourceTree = "<group>"; };
+		DC73AF4F1E09B51400C542C3 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = "../../../../Library/Developer/Xcode/DerivedData/faeBeta-dtfurexdikfebtfxxrbrsdaqvdir/Build/Products/Debug-iphoneos/Realm/Realm.framework"; sourceTree = "<group>"; };
+		DC73AF501E09B51400C542C3 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = "../../../../Library/Developer/Xcode/DerivedData/faeBeta-dtfurexdikfebtfxxrbrsdaqvdir/Build/Products/Debug-iphoneos/RealmSwift/RealmSwift.framework"; sourceTree = "<group>"; };
 		DC74CE161DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellCustom.h; sourceTree = "<group>"; };
 		DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCellCustom.m; sourceTree = "<group>"; };
 		DC74CE1B1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewCellIncomingCustom.h; sourceTree = "<group>"; };
@@ -534,6 +545,7 @@
 		DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
 		DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
 		DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
+		DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+bullet.swift"; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		DCBE690C1DB60F6E00BFF46C /* AudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderView.xib; sourceTree = "<group>"; };
 		DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinBaseViewController.swift; sourceTree = "<group>"; };
@@ -554,6 +566,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC73AF511E09B51400C542C3 /* GoogleToolboxForMac.framework in Frameworks */,
+				DC73AF521E09B51400C542C3 /* GTMSessionFetcher.framework in Frameworks */,
+				DC73AF531E09B51400C542C3 /* KTCenterFlowLayout.framework in Frameworks */,
+				DC73AF541E09B51400C542C3 /* Realm.framework in Frameworks */,
+				DC73AF551E09B51400C542C3 /* RealmSwift.framework in Frameworks */,
 				86721A5F1D8FB5EE006BDE27 /* Alamofire.framework in Frameworks */,
 				86721A601D8FB5EE006BDE27 /* DACircularProgress.framework in Frameworks */,
 				86721A611D8FB5EE006BDE27 /* IDMPhotoBrowser.framework in Frameworks */,
@@ -572,6 +589,11 @@
 		011919C07ABA312DB42AF81B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DC73AF4C1E09B51400C542C3 /* GoogleToolboxForMac.framework */,
+				DC73AF4D1E09B51400C542C3 /* GTMSessionFetcher.framework */,
+				DC73AF4E1E09B51400C542C3 /* KTCenterFlowLayout.framework */,
+				DC73AF4F1E09B51400C542C3 /* Realm.framework */,
+				DC73AF501E09B51400C542C3 /* RealmSwift.framework */,
 				86721A531D8FB5EE006BDE27 /* Alamofire.framework */,
 				86721A541D8FB5EE006BDE27 /* DACircularProgress.framework */,
 				86721A551D8FB5EE006BDE27 /* IDMPhotoBrowser.framework */,
@@ -1248,6 +1270,7 @@
 			children = (
 				DC9F453A1E079AF400128444 /* TermsOfServiceViewController.swift */,
 				DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */,
+				DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */,
 			);
 			name = "Term&Policy";
 			sourceTree = "<group>";
@@ -1590,6 +1613,7 @@
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
+				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
