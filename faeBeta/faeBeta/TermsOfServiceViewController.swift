@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TermsOfServiceViewController: UIViewController {
+class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +76,14 @@ class TermsOfServiceViewController: UIViewController {
         scrollView.addSubview(textView)
         
         scrollView.contentSize.height = CGFloat(123) + textView.frame.size.height
+        scrollView.indicatorStyle = .white
+        scrollView.delegate = self
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let indicator = scrollView.subviews.last as? UIImageView {
+            indicator.backgroundColor = UIColor.faeAppRedColor()
+        }
     }
     
     private func contentString() -> NSAttributedString
