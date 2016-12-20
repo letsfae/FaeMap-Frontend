@@ -139,7 +139,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
-        loadMore()
+//        loadMore()
         loadNameCard()
         loadPositionAnimateImage()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)

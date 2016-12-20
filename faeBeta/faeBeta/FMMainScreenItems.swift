@@ -40,7 +40,7 @@ extension FaeMapViewController {
         buttonLeftTop = UIButton()
         buttonLeftTop.setImage(UIImage(named: "mainScreenMore"), for: UIControlState())
         self.view.addSubview(buttonLeftTop)
-        buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
+        buttonLeftTop.addTarget(self, action: #selector(self.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
         buttonLeftTop.layer.zPosition = 500

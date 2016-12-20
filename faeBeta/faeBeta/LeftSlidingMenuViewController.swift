@@ -23,15 +23,34 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         loadLeftWindow()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.5, animations: {
+            self.buttonBackground.alpha = 1
+            self.uiViewLeftWindow.center.x += 290
+        }, completion: nil)
+    }
+    
+    func actionCloseMenu(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.buttonBackground.alpha = 0
+            self.uiViewLeftWindow.center.x -= 290
+        }) { (done: Bool) in
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
+    
     func loadLeftWindow () {
         buttonBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         buttonBackground.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
-        buttonBackground.addTarget(self, action: #selector(self.hideLeftWindow(_:)), for: .touchUpInside)
+        buttonBackground.addTarget(self, action: #selector(self.actionCloseMenu(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBackground)
+        buttonBackground.alpha = 0
         
         uiViewLeftWindow = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight))
         uiViewLeftWindow.backgroundColor = UIColor.white
-        self.buttonBackground.addSubview(uiViewLeftWindow)
+        self.view.addSubview(uiViewLeftWindow)
+        uiViewLeftWindow.center.x -= 290
         
         imageLeftSlideWindowUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
         imageLeftSlideWindowUp.image = UIImage(named: "leftWindowbackground")
@@ -43,7 +62,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         
         label = UILabel(frame: CGRect(x: 116, y: 142, width: 58, height: 27))
         label.text = "Lin Lin"
-        let attributedString = NSMutableAttributedString(string: label.text!)//加入! 的目的是
+        let attributedString = NSMutableAttributedString(string: label.text!)
         attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.21), range: NSRange(location: 0, length: attributedString.length))
         label.attributedText = attributedString
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -110,12 +129,4 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 67
     }
-    
-    func hideLeftWindow (_ sender: UIButton) {
-        UIView.animate(withDuration: 0.4, animations: {
-            self.uiViewLeftWindow.center.x -= self.buttonBackground.frame.size.width
-            self.buttonBackground.alpha = 0
-        })
-    }
-
 }

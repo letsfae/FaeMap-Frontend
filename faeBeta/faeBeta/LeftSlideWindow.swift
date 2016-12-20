@@ -111,7 +111,6 @@ extension FaeMapViewController {
         buttonMoreRight.addTarget(self, action: #selector(FaeMapViewController.jumpToNameCard), for: .touchUpInside)
         viewHeaderForMore.addSubview(buttonMoreRight)
         
-        
         imageViewAvatarMore = UIImageView(frame: CGRect(x: (tableViewWeight - 91) / 2,y: 36,width: 91,height: 91))
         imageViewAvatarMore.layer.cornerRadius = 91 / 2
         imageViewAvatarMore.layer.masksToBounds = true
@@ -178,16 +177,19 @@ extension FaeMapViewController {
         self.present(menu,animated:true,completion: nil)
     }
     func animationMoreShow(_ sender: UIButton!) {
-        updateName()
-        if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
-            imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
-        }
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
-            self.dimBackgroundMoreButton.alpha = 0.7
-            self.dimBackgroundMoreButton.layer.opacity = 0.7
-        }))
+//        updateName()
+//        if user_id != nil {
+//            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+//            imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
+//        }
+//        UIView.animate(withDuration: 0.25, animations: ({
+//            self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x + self.tableViewWeight
+//            self.dimBackgroundMoreButton.alpha = 0.7
+//            self.dimBackgroundMoreButton.layer.opacity = 0.7
+//        }))
+        let leftMenuVC = LeftSlidingMenuViewController()
+        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        self.present(leftMenuVC, animated: false, completion: nil)
     }
     
     func animationMoreHide(_ sender: UIButton) {

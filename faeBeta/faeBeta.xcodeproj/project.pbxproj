@@ -589,8 +589,8 @@
 		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
 			isa = PBXGroup;
 			children = (
-				8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */,
 				8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */,
+				8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */,
 			);
 			name = LeftSlidingMenu;
 			sourceTree = "<group>";
@@ -1005,11 +1005,11 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
+				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
 				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
