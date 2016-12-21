@@ -34,7 +34,10 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var animatingHeart: UIImageView!
     var boolPinLiked = false
     var buttonBackToPinLists: UIButton!
-    var buttonPinDetailViewActive: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var buttonPinDetailViewComments: UIButton!
     var buttonPinDetailViewPeople: UIButton!
     var buttonPinAddComment: UIButton!
@@ -333,14 +336,15 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableCommentsForPin.isHidden = false
+//            tableCommentsForPin.isHidden = false
         }
         else if sender.tag == 3 {
-            tableCommentsForPin.isHidden = true
+//            tableCommentsForPin.isHidden = true
         }
         let tag = CGFloat(sender.tag)
-        let centerAtOneThird = screenWidth / 4
-        let targetCenter = CGFloat(tag * centerAtOneThird)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
+        print("[animationRedSlidingLine] did slide")
         UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter

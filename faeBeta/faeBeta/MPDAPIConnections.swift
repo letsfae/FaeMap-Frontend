@@ -171,7 +171,6 @@ extension MomentPinDetailViewController {
             if let comments = mapInfoJSON["comments"].int {
                 self.labelPinCommentsCount.text = "\(comments)"
                 self.numberOfCommentTableCells = comments
-                self.tableCommentsForPin.reloadData()
             }
         }
     }
@@ -221,7 +220,6 @@ extension MomentPinDetailViewController {
                  var offset = self.commentDetailFullBoardScrollView.contentOffset
                  **/
             }
-            self.tableCommentsForPin.reloadData()
         }
     }
     

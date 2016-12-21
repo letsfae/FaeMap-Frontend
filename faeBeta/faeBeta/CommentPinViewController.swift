@@ -42,7 +42,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var animatingHeart: UIImageView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinLists: UIButton!
-    var buttonCommentDetailViewActive: UIButton!
+    var buttonCommentDetailViewFeelings: UIButton!
     var buttonCommentDetailViewComments: UIButton!
     var buttonCommentDetailViewPeople: UIButton!
     var buttonCommentPinAddComment: UIButton!
@@ -323,14 +323,14 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableCommentsForComment.isHidden = false
+//            tableCommentsForComment.isHidden = false
         }
         else if sender.tag == 3 {
-            tableCommentsForComment.isHidden = true
+//            tableCommentsForComment.isHidden = true
         }
         let tag = CGFloat(sender.tag)
-        let centerAtOneThird = screenWidth / 4
-        let targetCenter = CGFloat(tag * centerAtOneThird)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
         UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter

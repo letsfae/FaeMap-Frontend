@@ -357,7 +357,7 @@ extension MomentPinDetailViewController {
             }
         }), completion: { (done: Bool) in
             if done {
-                
+                self.tableCommentsForPin.reloadData()
             }
         })
     }
@@ -408,7 +408,7 @@ extension MomentPinDetailViewController {
             self.uiviewPinDetailMainButtons.center.y += 65
         }), completion: { (done: Bool) in
             if done {
-                
+                self.tableCommentsForPin.reloadData()
             }
         })
     }
