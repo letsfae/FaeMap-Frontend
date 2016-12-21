@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,29 +17,28 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="zwt-h4-EgE">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="282" id="6yv-cG-WNk"/>
-                                    <constraint firstAttribute="height" constant="243" id="HA8-4I-Q5K" userLabel="height = 235"/>
-                                </constraints>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="LaunchScreenBig" translatesAutoresizingMaskIntoConstraints="NO" id="5qV-Ua-nA5">
+                                <rect key="frame" x="0.0" y="28" width="414" height="708"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="zwt-h4-EgE" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Efu-lH-W4d"/>
-                            <constraint firstItem="zwt-h4-EgE" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="198" id="vpF-7Z-2V5"/>
+                            <constraint firstAttribute="trailing" secondItem="5qV-Ua-nA5" secondAttribute="trailing" id="8iL-96-PaS"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="5qV-Ua-nA5" secondAttribute="bottom" id="BYS-sc-eht"/>
+                            <constraint firstItem="5qV-Ua-nA5" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="23" id="l3J-WR-C1U"/>
+                            <constraint firstItem="5qV-Ua-nA5" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="wP6-pV-6Cu"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="50.625" y="373.94366197183098"/>
+            <point key="canvasLocation" x="49.275362318840585" y="373.36956521739131"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen" width="275" height="232"/>
+        <image name="LaunchScreenBig" width="414" height="713"/>
     </resources>
 </document>
