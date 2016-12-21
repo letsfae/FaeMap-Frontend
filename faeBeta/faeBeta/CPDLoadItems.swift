@@ -49,7 +49,7 @@ extension CommentPinDetailViewController {
         
         buttonCommentPinDetailDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
         buttonCommentPinDetailDragToLargeSize.backgroundColor = UIColor.white
-        buttonCommentPinDetailDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), for: UIControlState())
+        buttonCommentPinDetailDragToLargeSize.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(CommentPinDetailViewController.actionDraggingThisComment(_:)), for: .touchUpInside)
         self.draggingButtonSubview.addSubview(buttonCommentPinDetailDragToLargeSize)
         buttonCommentPinDetailDragToLargeSize.center.x = screenWidth/2
@@ -101,7 +101,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin Like
         buttonCommentPinLike = UIButton()
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+        buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
         buttonCommentPinLike.addTarget(self, action: #selector(CommentPinDetailViewController.actionLikeThisComment(_:)), for: [.touchUpInside, .touchUpOutside])
         buttonCommentPinLike.addTarget(self, action: #selector(CommentPinDetailViewController.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinLike)
@@ -112,7 +112,7 @@ extension CommentPinDetailViewController {
         
         // Add Comment
         buttonCommentPinAddComment = UIButton()
-        buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), for: UIControlState())
+        buttonCommentPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: UIControlState())
         buttonCommentPinAddComment.addTarget(self, action: #selector(CommentPinDetailViewController.actionReplyToThisComment(_:)), for: .touchUpInside)
         buttonCommentPinAddComment.tag = 0
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinAddComment)
@@ -170,7 +170,9 @@ extension CommentPinDetailViewController {
         
         // "Comments" of this uiview
         buttonCommentDetailViewComments = UIButton()
-        buttonCommentDetailViewComments.setImage(UIImage(named: "commentDetailThreeButtonComments"), for: UIControlState())
+        buttonCommentDetailViewComments.setTitle("Talk Talk", for: .normal)
+        buttonCommentDetailViewComments.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        buttonCommentDetailViewComments.titleLabel?.textColor = UIColor.faeAppInputTextGrayColor()
         buttonCommentDetailViewComments.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), for: UIControlEvents.touchUpInside)
         uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewComments)
         buttonCommentDetailViewComments.tag = 1
@@ -252,7 +254,7 @@ extension CommentPinDetailViewController {
         
         // Back to Map
         buttonCommentPinBackToMap = UIButton()
-        buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), for: UIControlState())
+        buttonCommentPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
         buttonCommentPinBackToMap.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonCommentPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
@@ -261,7 +263,7 @@ extension CommentPinDetailViewController {
         
         // Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
-        buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), for: UIControlState())
+        buttonBackToCommentPinLists.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
         buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinDetailViewController.actionGoToList(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonBackToCommentPinLists)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
@@ -269,7 +271,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin Option
         buttonOptionOfCommentPin = UIButton()
-        buttonOptionOfCommentPin.setImage(UIImage(named: "commentPinOption"), for: UIControlState())
+        buttonOptionOfCommentPin.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
         buttonOptionOfCommentPin.addTarget(self, action: #selector(CommentPinDetailViewController.showCommentPinMoreButtonDetails(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonOptionOfCommentPin)
         subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: buttonOptionOfCommentPin)
@@ -321,7 +323,9 @@ extension CommentPinDetailViewController {
         
         // "Comments" of this uiview
         let comments = UIButton()
-        comments.setImage(UIImage(named: "commentDetailThreeButtonComments"), for: UIControlState())
+        comments.setTitle("Talk Talk", for: .normal)
+        comments.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        comments.titleLabel?.textColor = UIColor.faeAppInputTextGrayColor()
         comments.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(comments)
         comments.tag = 1

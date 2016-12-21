@@ -135,6 +135,7 @@ extension FaeMapViewController {
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
+                    self.markerMask.removeFromSuperview()
                     self.loadMarkerWithpinID(pinID: pinID, type: type, tempMaker: self.tempMarker)
                 }
         })
@@ -143,7 +144,6 @@ extension FaeMapViewController {
     func removeTempMarker() {
         print("[removeTempMarker] func called")
         tempMarker.removeFromSuperview()
-        markerMask.removeFromSuperview()
     }
     
     func loadMarkerWithpinID(pinID: String, type: String, tempMaker: UIImageView) {

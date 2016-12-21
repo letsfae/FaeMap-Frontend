@@ -75,7 +75,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     weak var imageDelegate : SendMutipleImagesDelegate!
 
     //the maximum number of photos selected at the same time, should be 0-10
-    private var _maximumSelectedPhotoNum: Int = 10
+    var _maximumSelectedPhotoNum: Int = 10
     var maximumSelectedPhotoNum: Int{
         get{
             return _maximumSelectedPhotoNum

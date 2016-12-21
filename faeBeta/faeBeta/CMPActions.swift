@@ -52,9 +52,15 @@ extension CreateMomentPinViewController {
             
         }
         else {
+            let numMediaLeft = 5 - selectedMediaArray.count
+            if numMediaLeft == 0 {
+                self.showAlert(title: "Up to 5 pictures can be uploaded at the same time", message: "please try again")
+                return
+            }
             let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
             let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
             imagePicker.imageDelegate = self
+            imagePicker._maximumSelectedPhotoNum = numMediaLeft
             self.present(nav, animated: true, completion: {
                 UIApplication.shared.statusBarStyle = .default
             })

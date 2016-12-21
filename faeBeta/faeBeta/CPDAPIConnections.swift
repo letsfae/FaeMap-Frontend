@@ -20,7 +20,7 @@ extension CommentPinDetailViewController {
         }
         
         if sender.tag == 1 && pinIDCommentPinDetailView != "-999" {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+            buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
@@ -32,7 +32,7 @@ extension CommentPinDetailViewController {
         }
         
         if sender.tag == 0 && pinIDCommentPinDetailView != "-999" {
-            buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+            buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
             likeThisPin("comment", pinID: pinIDCommentPinDetailView)
             print("debug animating sender.tag 0")
@@ -43,7 +43,7 @@ extension CommentPinDetailViewController {
     
     func actionHoldingLikeButton(_ sender: UIButton) {
         endEdit()
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+        buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
         animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinDetailViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
@@ -53,10 +53,10 @@ extension CommentPinDetailViewController {
             return
         }
         
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+        buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
         
         if animatingHeart != nil {
-            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         }
         
         if pinIDCommentPinDetailView != "-999" {
@@ -66,9 +66,9 @@ extension CommentPinDetailViewController {
     
     // Down vote comment pin
     func actionDownVoteThisComment(_ sender: UIButton) {
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+        buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
         if animatingHeart != nil {
-            animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         }
         if pinIDCommentPinDetailView != "-999" {
             unlikeThisPin("comment", pinID: pinIDCommentPinDetailView)
@@ -239,17 +239,17 @@ extension CommentPinDetailViewController {
             }
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
-                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+                    self.buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
                     self.buttonCommentPinLike.tag = 0
                     if self.animatingHeart != nil {
-                        self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
                     }
                 }
                 else {
-                    self.buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+                    self.buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
                     self.buttonCommentPinLike.tag = 1
                     if self.animatingHeart != nil {
-                        self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
+                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
                     }
                 }
             }

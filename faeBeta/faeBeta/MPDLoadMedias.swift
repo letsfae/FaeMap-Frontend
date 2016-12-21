@@ -14,8 +14,8 @@ import SDWebImage
 extension MomentPinDetailViewController {
     func loadMedias() {
         for index in 0...fileIdArray.count-1 {
-            let imageView = UIImageView(frame: CGRect(x: 105*index, y:0, width:95, height:95))
-            imageView.contentMode = .scaleToFill
+            let imageView = UIImageView(frame: CGRect(x: 105*index, y: 0, width: 95, height: 95))
+            imageView.contentMode = .scaleAspectFill
             imageView.layer.cornerRadius = 13.5
             imageView.clipsToBounds = true
             imageViewMediaArray.append(imageView)

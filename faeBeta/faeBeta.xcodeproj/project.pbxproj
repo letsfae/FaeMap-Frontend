@@ -1565,6 +1565,7 @@
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */,
+				8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
 				B815638D1DDBA36900BF85A1 /* CCPActions.swift in Sources */,
 				B8612E3B1DF24CF90092C606 /* MPDHandleDelegateFuncs.swift in Sources */,

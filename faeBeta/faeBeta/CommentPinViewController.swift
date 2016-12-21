@@ -390,7 +390,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     func animateHeart() {
         buttonCommentPinLike.tag = 0
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
-        animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         animatingHeart.layer.zPosition = 108
         uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
         
