@@ -26,6 +26,7 @@ class CreatePinOptionsTableViewCell: UITableViewCell {
         leadingIconImageView.image = leadingIcon
         trailingLabel.text = trailingText
         trailingIconImageView.image = trailingIcon
+        leadingIconImageView.contentMode = .scaleAspectFit
     }
     
     
