@@ -68,13 +68,13 @@ extension FaeMapViewController {
         myPositionOutsideMarker_2.layer.zPosition = 0
         self.view.addSubview(myPositionOutsideMarker_3)
         myPositionOutsideMarker_3.layer.zPosition = 0
-        myPositionIcon = UIButton(frame: CGRect(x: screenWidth/2-20, y: screenHeight/2-20, width: 40, height: 40))
+        myPositionIcon = UIButton(frame: CGRect(x: screenWidth/2-22, y: screenHeight/2-22, width: 44, height: 44))
         myPositionIcon.adjustsImageWhenHighlighted = false
         self.myPositionIcon.isHidden = true
         self.myPositionOutsideMarker_1.isHidden = true
         self.myPositionOutsideMarker_2.isHidden = true
         self.myPositionOutsideMarker_3.isHidden = true
-        //        myPositionIcon.addTarget(self, action: #selector(FaeMapViewController.showOpenUserPinAnimation(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.myPositionIcon.addTarget(self, action: #selector(self.getSelfNameCard(_:)), for: .touchUpInside)
         self.view.addSubview(myPositionIcon)
         myPositionIcon.layer.zPosition = 0
         myPositionAnimation()
@@ -84,7 +84,7 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionOutsideMarker_1 != nil {
                 self.myPositionOutsideMarker_1.alpha = 0.0
-                self.myPositionOutsideMarker_1.frame = CGRect(x: self.screenWidth/2-60, y: self.screenHeight/2-60, width: 120, height: 120)
+                self.myPositionOutsideMarker_1.frame = CGRect(x: screenWidth/2-60, y: screenHeight/2-60, width: 120, height: 120)
             }
         }), completion: nil)
         
@@ -97,7 +97,7 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionOutsideMarker_2 != nil {
                 self.myPositionOutsideMarker_2.alpha = 0.0
-                self.myPositionOutsideMarker_2.frame = CGRect(x: self.screenWidth/2-60, y: self.screenHeight/2-60, width: 120, height: 120)
+                self.myPositionOutsideMarker_2.frame = CGRect(x: screenWidth/2-60, y: screenHeight/2-60, width: 120, height: 120)
             }
         }), completion: nil)
         
@@ -110,7 +110,7 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionOutsideMarker_3 != nil {
                 self.myPositionOutsideMarker_3.alpha = 0.0
-                self.myPositionOutsideMarker_3.frame = CGRect(x: self.screenWidth/2-60, y: self.screenHeight/2-60, width: 120, height: 120)
+                self.myPositionOutsideMarker_3.frame = CGRect(x: screenWidth/2-60, y: screenHeight/2-60, width: 120, height: 120)
             }
         }), completion: nil)
         
@@ -139,6 +139,7 @@ extension FaeMapViewController {
                 userBirthday = birthday
             }
             if let gender = selfUserInfoJSON["gender"].string {
+                print("[getSelfAccountInfo] gender: \(gender)")
                 userUserGender = gender
             }
             if let userName = selfUserInfoJSON["user_name"].string {

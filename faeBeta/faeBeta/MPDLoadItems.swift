@@ -20,13 +20,13 @@ extension MomentPinDetailViewController {
         tableCommentsForPin.delegate = self
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
-        tableCommentsForPin.delaysContentTouches = true
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        tableCommentsForPin.isScrollEnabled = true
+        tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
         self.view.addSubview(tableCommentsForPin)
         tableCommentsForPin.center.y -= screenHeight
+        tableCommentsForPin.delaysContentTouches = false
         
         // Dragging button
         draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 28))
@@ -90,19 +90,13 @@ extension MomentPinDetailViewController {
         textviewPinDetail.isHidden = true
         uiviewPinDetail.addSubview(textviewPinDetail)
         
-        layout.itemSize = CGSize(width: 95, height: 95)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 10
-        
-        collectionViewMedia = UICollectionView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95),
-                                               collectionViewLayout: layout)
-        collectionViewMedia.register(MPDCollectionViewCell.self, forCellWithReuseIdentifier: "mediaCell")
-        collectionViewMedia.delegate = self
-        collectionViewMedia.dataSource = self
-        collectionViewMedia.backgroundColor = UIColor.clear
-        collectionViewMedia.showsHorizontalScrollIndicator = false
-        uiviewPinDetail.addSubview(collectionViewMedia)
+        scrollViewMedia = UIScrollView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95))
+        scrollViewMedia.delegate = self
+        scrollViewMedia.contentSize = CGSize(width: screenWidth-15, height: 95)
+        scrollViewMedia.isScrollEnabled = true
+        scrollViewMedia.backgroundColor = UIColor.clear
+        scrollViewMedia.showsHorizontalScrollIndicator = false
+        uiviewPinDetail.addSubview(scrollViewMedia)
         
         // ----
         // Main buttons' container of pin detail
@@ -208,7 +202,7 @@ extension MomentPinDetailViewController {
         
         // Comment Pin User Avatar
         imagePinUserAvatar = UIImageView()
-        imagePinUserAvatar.image = UIImage(named: "defaultMan")
+        imagePinUserAvatar.image = UIImage(named: "defaultMen")
         imagePinUserAvatar.layer.cornerRadius = 25
         imagePinUserAvatar.clipsToBounds = true
         imagePinUserAvatar.contentMode = .scaleAspectFill
@@ -247,7 +241,6 @@ extension MomentPinDetailViewController {
         imageViewSaved.alpha = 0.0
         
         loadAnotherToolbar()
-        loadPeopleTable()
         loadPinCtrlButton()
     }
     
@@ -299,20 +292,6 @@ extension MomentPinDetailViewController {
         subviewNavigation.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelPinTitle)
         subviewNavigation.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelPinTitle)
         NSLayoutConstraint(item: labelPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func loadPeopleTable() {
-        tableViewPeople = UITableView(frame: CGRect(x: 0, y: 281, width: screenWidth, height: 0))
-        tableViewPeople.delegate = self
-        tableViewPeople.dataSource = self
-        tableViewPeople.allowsSelection = false
-        tableViewPeople.delaysContentTouches = false
-        tableViewPeople.register(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
-        tableViewPeople.isScrollEnabled = false
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
-        uiviewPinDetail.addSubview(tableViewPeople)
-        tableViewPeople.isHidden = true
     }
     
     func loadAnotherToolbar() {

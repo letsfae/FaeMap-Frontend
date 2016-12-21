@@ -12,6 +12,35 @@ import SwiftyJSON
 
 extension FaeMapViewController: GMSMapViewDelegate {
     
+    func clearMap(type: String) {
+        if type == "all" || type == "pin" {
+            for marker in mapPinsArray {
+                let delay: Double = Double(arc4random_uniform(100)) / 100
+                UIView.animate(withDuration: 0.5, delay: delay, animations: {
+                    if marker.iconView != nil {
+                        marker.iconView?.alpha = 0
+                    }
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                })
+            }
+        }
+        
+        if type == "all" || type == "user" {
+            for marker in mapUserPinsDic {
+                let delay: Double = Double(arc4random_uniform(100)) / 100
+                UIView.animate(withDuration: 0.5, delay: delay, animations: {
+                    if marker.iconView != nil {
+                        marker.iconView?.alpha = 0
+                    }
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                })
+            }
+        }
+        
+    }
+    
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         //        print("Cur-Zoom Level: \(mapView.camera.zoom)")
         //        print("Pre-Zoom Level: \(previousZoomLevel)")
@@ -60,7 +89,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         
         if mapView.camera.zoom < 11 && !canLoadMapPin {
-            mapView.clear()
+            clearMap(type: "all")
             canLoadMapPin = true
             return
         }
@@ -116,7 +145,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if !self.canDoNextUserUpdate {
                         return
                     }
-                    mapView.clear()
+                    self.clearMap(type: "all")
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     return
@@ -129,13 +158,12 @@ extension FaeMapViewController: GMSMapViewDelegate {
         else {
             timerUpdateSelfLocation.invalidate()
             timerLoadRegionPins.invalidate()
-            mapView.clear()
+            clearMap(type: "all")
         }
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if openUserPinActive {
-            self.hideOpenUserPinAnimation()
             self.canDoNextUserUpdate = true
             openUserPinActive = false
         }
@@ -148,17 +176,19 @@ extension FaeMapViewController: GMSMapViewDelegate {
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.001, longitude: longitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.0012, longitude: longitude, zoom: 17)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
                 self.canDoNextUserUpdate = false
                 mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
-                    self.currentViewingUserId = userid
-                    loadUserPinInformation("\(userid)")
+                    self.updateNameCard(withUserId: userid)
+                    UIView.animate(withDuration: 0.25, animations: {
+                        self.buttonFakeTransparentClosingView.alpha = 1
+                    })
+                    self.openUserPinActive = true
                 }
-                self.showOpenUserPinAnimation(latitude: latitude, longitude: longitude)
                 return true
             }
             if type == "comment" || type == "media" {
@@ -186,6 +216,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 }
                 self.markerBackFromPinDetail = marker
                 if type == "media" {
+                    timerUpdateSelfLocation.invalidate()
+                    self.clearMap(type: "user")
                     let pinDetailVC = MomentPinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
@@ -196,6 +228,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     })
                 }
                 else if type == "comment" {
+                    timerUpdateSelfLocation.invalidate()
+                    self.clearMap(type: "user")
                     let pinDetailVC = CommentPinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue

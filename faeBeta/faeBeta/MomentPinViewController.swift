@@ -11,7 +11,7 @@ import SwiftyJSON
 import CoreLocation
 import RealmSwift
 
-class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
     
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
@@ -92,10 +92,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
     
-    // People table
-    var tableViewPeople: UITableView!
-    var dictPeopleOfPinDetail = [Int: String]()
-    
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     var isObservingInputTextView = false
@@ -124,9 +120,24 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    var collectionViewMedia: UICollectionView! // container to display pin's media
+    var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
-    var layout = UICollectionViewFlowLayout()
+    var displayMediaArray = [UIImage]()
+    var imageViewMediaArray = [UIImageView]()
+    
+    enum MediaMode {
+        case small
+        case large
+    }
+    var mediaMode: MediaMode = .small
+    
+    enum Direction {
+        case left
+        case right
+    }
+    var direction: Direction = .left
+    var lastContentOffset: CGFloat = 0
+    var beforeScrollingOffset: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -322,11 +333,9 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.isHidden = true
             tableCommentsForPin.isHidden = false
         }
         else if sender.tag == 3 {
-            tableViewPeople.isHidden = false
             tableCommentsForPin.isHidden = true
         }
         let tag = CGFloat(sender.tag)
@@ -640,25 +649,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
             
             if toolbarHeightConstraint != nil {
                 self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
-            }
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if inputToolbar != nil {
-            self.inputToolbar.contentView.textView.resignFirstResponder()
-        }
-        if touchToReplyTimer != nil {
-            touchToReplyTimer.invalidate()
-        }
-        if tableCommentsForPin.contentOffset.y >= 227 {
-            if self.controlBoard != nil {
-                self.controlBoard.isHidden = false
-            }
-        }
-        if tableCommentsForPin.contentOffset.y < 227 {
-            if self.controlBoard != nil {
-                self.controlBoard.isHidden = true
             }
         }
     }

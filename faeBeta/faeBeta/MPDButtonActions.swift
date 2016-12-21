@@ -279,6 +279,7 @@ extension MomentPinDetailViewController {
             self.subviewInputToolBar.isHidden = true
         }
         controlBoard.removeFromSuperview()
+        self.delegate?.dismissMarkerShadow(true)
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight
@@ -305,6 +306,7 @@ extension MomentPinDetailViewController {
                 self.subviewInputToolBar.isHidden = true
             }
             textviewPinDetail.isScrollEnabled = true
+            tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -336,6 +338,7 @@ extension MomentPinDetailViewController {
         let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
         textviewPinDetail.isScrollEnabled = false
+        tableCommentsForPin.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
@@ -365,6 +368,9 @@ extension MomentPinDetailViewController {
             sender.tag = 0
             buttonPinAddComment.tag = 0
             textviewPinDetail.isScrollEnabled = true
+            tableCommentsForPin.isScrollEnabled = false
+            mediaMode = .small
+            zoomMedia(.small)
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -384,21 +390,22 @@ extension MomentPinDetailViewController {
             return
         }
         sender.tag = 1
-        let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
-        let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
+//        let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
+//        let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
         textviewPinDetail.isScrollEnabled = false
+        tableCommentsForPin.isScrollEnabled = true
+        mediaMode = .large
+        zoomMedia(.large)
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
-            if numLines > 4 {
-                self.uiviewPinDetail.frame.size.height += diffHeight
-                self.textviewPinDetail.frame.size.height += diffHeight
-                self.uiviewPinDetailThreeButtons.center.y += diffHeight
-                self.uiviewPinDetailGrayBlock.center.y += diffHeight
-                self.uiviewPinDetailMainButtons.center.y += diffHeight
-            }
+            self.uiviewPinDetail.frame.size.height += 65
+            self.textviewPinDetail.frame.size.height += 65
+            self.uiviewPinDetailThreeButtons.center.y += 65
+            self.uiviewPinDetailGrayBlock.center.y += 65
+            self.uiviewPinDetailMainButtons.center.y += 65
         }), completion: { (done: Bool) in
             if done {
                 

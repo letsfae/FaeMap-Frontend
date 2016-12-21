@@ -284,6 +284,7 @@ extension CommentPinDetailViewController {
             self.subviewInputToolBar.isHidden = true
         }
         controlBoard.removeFromSuperview()
+        self.delegate?.dismissMarkerShadow(true)
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForComment.center.y -= screenHeight
@@ -310,6 +311,7 @@ extension CommentPinDetailViewController {
                 self.subviewInputToolBar.isHidden = true
             }
             textviewCommentPinDetail.isScrollEnabled = true
+            tableCommentsForComment.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
@@ -341,6 +343,7 @@ extension CommentPinDetailViewController {
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
         textviewCommentPinDetail.isScrollEnabled = false
+        tableCommentsForComment.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
@@ -370,6 +373,7 @@ extension CommentPinDetailViewController {
             sender.tag = 0
             buttonCommentPinAddComment.tag = 0
             textviewCommentPinDetail.isScrollEnabled = true
+            tableCommentsForComment.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
@@ -392,6 +396,7 @@ extension CommentPinDetailViewController {
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
         textviewCommentPinDetail.isScrollEnabled = false
+        tableCommentsForComment.isScrollEnabled = true
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0

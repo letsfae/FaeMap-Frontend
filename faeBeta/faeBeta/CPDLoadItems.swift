@@ -22,7 +22,7 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.allowsSelection = false
         tableCommentsForComment.delaysContentTouches = true
         tableCommentsForComment.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        tableCommentsForComment.isScrollEnabled = true
+        tableCommentsForComment.isScrollEnabled = false
         tableCommentsForComment.tableFooterView = UIView()
         tableCommentsForComment.layer.zPosition = 109
         //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
@@ -38,6 +38,7 @@ extension CommentPinDetailViewController {
         draggingButtonSubview.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         draggingButtonSubview.layer.shadowOpacity = 0.3
         draggingButtonSubview.layer.shadowRadius = 10.0
+        draggingButtonSubview.layer.shouldRasterize = true
         draggingButtonSubview.layer.zPosition = 109
         draggingButtonSubview.center.y -= screenHeight
         
@@ -56,16 +57,18 @@ extension CommentPinDetailViewController {
         buttonCommentPinDetailDragToLargeSize.tag = 0
         //        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(CommentPinDetailViewController.panActionCommentPinDetailDrag(_:)))
         //        buttonCommentPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
-        
+        loadTableHeader()
+        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
+        loadAnotherToolbar()
+        loadPinCtrlButton()
+    }
+    
+    private func loadTableHeader() {
         // Header
         uiviewCommentPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 281))
         uiviewCommentPinDetail.backgroundColor = UIColor.white
-        uiviewCommentPinDetail.layer.zPosition = 100
-        self.view.addSubview(uiviewCommentPinDetail)
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CommentPinDetailViewController.tapOutsideToDismissKeyboard(_:)))
         uiviewCommentPinDetail.addGestureRecognizer(tapToDismissKeyboard)
-        
-        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
         
         // ----
         // Textview width based on different resolutions
@@ -174,19 +177,19 @@ extension CommentPinDetailViewController {
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewComments)
         
         /*
-        // "Active" of this uiview
-        buttonCommentDetailViewActive = UIButton()
-        buttonCommentDetailViewActive.setImage(UIImage(named: "commentDetailThreeButtonActive"), forState: .Normal)
-        buttonCommentDetailViewActive.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewActive)
-        buttonCommentDetailViewActive.tag = 3
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewActive)
-        */
+         // "Active" of this uiview
+         buttonCommentDetailViewActive = UIButton()
+         buttonCommentDetailViewActive.setImage(UIImage(named: "commentDetailThreeButtonActive"), forState: .Normal)
+         buttonCommentDetailViewActive.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+         uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewActive)
+         buttonCommentDetailViewActive.tag = 3
+         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewActive)
+         */
         
         // "People" of this uiview
         buttonCommentDetailViewPeople = UIButton()
-//        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
-//        buttonCommentDetailViewPeople.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        //        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
+        //        buttonCommentDetailViewPeople.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewPeople)
         buttonCommentDetailViewPeople.tag = 3
         uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewPeople)
@@ -195,7 +198,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
-        imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
+        imageCommentPinUserAvatar.image = UIImage(named: "defaultMen")
         imageCommentPinUserAvatar.layer.cornerRadius = 25
         imageCommentPinUserAvatar.clipsToBounds = true
         imageCommentPinUserAvatar.contentMode = .scaleAspectFill
@@ -232,10 +235,6 @@ extension CommentPinDetailViewController {
         NSLayoutConstraint(item: imageViewSaved, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         imageViewSaved.layer.zPosition = 104
         imageViewSaved.alpha = 0.0
-        
-        loadAnotherToolbar()
-        loadPeopleTable()
-        loadPinCtrlButton()
     }
     
     private func loadNavigationBar() {
@@ -286,20 +285,6 @@ extension CommentPinDetailViewController {
         subviewNavigation.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
         subviewNavigation.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
         NSLayoutConstraint(item: labelCommentPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func loadPeopleTable() {
-        tableViewPeople = UITableView(frame: CGRect(x: 0, y: 281, width: screenWidth, height: 0))
-        tableViewPeople.delegate = self
-        tableViewPeople.dataSource = self
-        tableViewPeople.allowsSelection = false
-        tableViewPeople.delaysContentTouches = false
-        tableViewPeople.register(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
-        tableViewPeople.isScrollEnabled = false
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
-        uiviewCommentPinDetail.addSubview(tableViewPeople)
-        tableViewPeople.isHidden = true
     }
     
     func loadAnotherToolbar() {

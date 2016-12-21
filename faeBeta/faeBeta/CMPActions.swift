@@ -74,7 +74,7 @@ extension CreateMomentPinViewController {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
             }
-            
+            self.buttonAddMedia.alpha = 0
             self.labelMediaPinMoreOptions.alpha = 1
             self.uiviewDuration.alpha = 1
             self.uiviewInterRadius.alpha = 1
@@ -96,7 +96,7 @@ extension CreateMomentPinViewController {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
             }
-            
+            self.buttonAddMedia.alpha = 0
             self.labelMediaPinAddDes.alpha = 1
             self.buttonBack.alpha = 1
             self.textViewForMediaPin.alpha = 1
@@ -112,11 +112,16 @@ extension CreateMomentPinViewController {
             self.buttonMediaSubmit.alpha = 1
             self.collectionViewMedia.alpha = 1
             self.buttonAnonymous.alpha = 1
-            if !self.buttonSelectMedia.isHidden {
+            if self.selectedMediaArray.count > 0 {
+                self.buttonAddMedia.alpha = 1
+                self.buttonSelectMedia.alpha = 0
+                self.buttonTakeMedia.alpha = 0
+            }
+            else if self.selectedMediaArray.count == 0 {
                 self.buttonSelectMedia.alpha = 1
                 self.buttonTakeMedia.alpha = 1
+                self.buttonAddMedia.alpha = 0
             }
-            
             self.labelMediaPinMoreOptions.alpha = 0
             self.uiviewDuration.alpha = 0
             self.uiviewInterRadius.alpha = 0
@@ -205,10 +210,6 @@ extension CreateMomentPinViewController {
     private func submitMediaPin(fileIDs: String) {
         
         let mediaContent = textViewForMediaPin.text
-        if mediaContent == "" {
-            showAlert(title: "Add Description", message: "")
-            return
-        }
         
         let postSingleMedia = FaeMap()
         
@@ -223,7 +224,9 @@ extension CreateMomentPinViewController {
         postSingleMedia.whereKey("file_ids", value: fileIDs)
         postSingleMedia.whereKey("geo_latitude", value: submitLatitude)
         postSingleMedia.whereKey("geo_longitude", value: submitLongitude)
-        postSingleMedia.whereKey("description", value: mediaContent)
+        if mediaContent != "" {
+            postSingleMedia.whereKey("description", value: mediaContent)
+        }
         postSingleMedia.whereKey("interaction_radius", value: "99999999")
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
@@ -231,7 +234,7 @@ extension CreateMomentPinViewController {
         postSingleMedia.postPin(type: "media") {(status: Int, message: Any?) in
             let getMessage = JSON(message!)
             if status / 100 != 2 {
-                self.showAlert(title: "Post Moment Failed", message: "Please try agian")
+                self.showAlert(title: "Post Moment Failed", message: "Please try again")
                 self.activityIndicator.stopAnimating()
                 print("[submitMediaPin] status is not 2XX")
                 return

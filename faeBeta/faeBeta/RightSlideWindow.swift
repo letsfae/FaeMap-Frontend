@@ -47,11 +47,15 @@ extension FaeMapViewController {
     }
     
     func animationWindBellShow(_ sender: UIButton!) {
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.uiviewWindBell.center.x = self.uiviewWindBell.center.x - 311
-            self.dimBackgroundWindBell.alpha = 0.7
-            self.dimBackgroundWindBell.layer.opacity = 0.7
-        }))
+        let firstTimeLoginVC = FirstTimeLoginViewController()
+        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
+        self.present(firstTimeLoginVC, animated: false, completion: nil)
+        
+//        UIView.animate(withDuration: 0.25, animations: ({
+//            self.uiviewWindBell.center.x = self.uiviewWindBell.center.x - 311
+//            self.dimBackgroundWindBell.alpha = 0.7
+//            self.dimBackgroundWindBell.layer.opacity = 0.7
+//        }))
     }
     
     func animationWindBellHide(_ sender: UIButton!) {
