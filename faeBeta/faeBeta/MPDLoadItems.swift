@@ -340,7 +340,7 @@ extension MomentPinDetailViewController {
         let threeButtonsContainer = UIView(frame: CGRect(x: 0, y: 12, width: screenWidth, height: 42))
         self.controlBoard.addSubview(threeButtonsContainer)
         
-        let widthOfThreeButtons = screenWidth / 2
+        let widthOfThreeButtons = screenWidth / 3
         
         // Three buttons bottom sliding red line
         anotherRedSlidingLine = UIView(frame: CGRect(x: 0, y: 52, width: widthOfThreeButtons, height: 2))
@@ -355,7 +355,7 @@ extension MomentPinDetailViewController {
         labelComments.textAlignment = .center
         labelComments.font = UIFont(name: "AvenirNext-Medium", size: 16)
         threeButtonsContainer.addSubview(labelComments)
-        let comments = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        let comments = UIButton()
         comments.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(comments)
         comments.tag = 1
@@ -369,7 +369,7 @@ extension MomentPinDetailViewController {
         labelFeelings.textAlignment = .center
         labelFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
         threeButtonsContainer.addSubview(labelFeelings)
-        let feelings = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        let feelings = UIButton()
         feelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(feelings)
         feelings.tag = 3
@@ -383,7 +383,7 @@ extension MomentPinDetailViewController {
         labelPeople.textAlignment = .center
         labelPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
         threeButtonsContainer.addSubview(labelPeople)
-        let people = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        let people = UIButton()
         people.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(people)
         people.tag = 5

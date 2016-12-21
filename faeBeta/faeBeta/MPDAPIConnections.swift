@@ -85,6 +85,7 @@ extension MomentPinDetailViewController {
                     print("Successfully comment this comment pin!")
                     self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
                     self.getPinComments("media", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
+                    self.tableCommentsForPin.reloadData()
                 }
                 else {
                     print("Fail to comment this comment pin!")
