@@ -18,28 +18,29 @@ import Foundation
  // NSString! returned (optional)
  */
 class FaeUser : NSObject {
-    var keyValue = [String:AnyObject]()
-    override init (){
-        //local storage
-        //        self.isLogin = false
-        //        self.userToken = ""
+    var keyValue = [String: AnyObject]()
+    override init () {
+
     }
-    func whereKey(_ key:String, value:String)->Void{
+    
+    func whereKey(_ key: String, value: String) -> Void{
         keyValue[key]=value as AnyObject?
     }
-    func whereKeyInt(_ key:String, value:Int)->Void{
-        keyValue[key]=value as AnyObject?
+    
+    func whereKeyInt(_ key: String, value: Int) -> Void{
+        keyValue[key] = value as AnyObject?
     }
-    func clearKeyValue()->Void{
-        self.keyValue = [String:AnyObject]()
+    
+    func clearKeyValue() -> Void{
+        self.keyValue = [String: AnyObject]()
     }
     
     /* faeuser sign up function
      Required parameters: password, email, user_name, first_name, last_name, birthday, gender
      Optional parameters: nil
      */
-    func signUpInBackground(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
+    func signUpInBackground(_ completion:@escaping (Int, Any?) -> Void) {
+        postToURL("users", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             if(status / 100 == 2 ) {
                 //success
                 self.saveUserSignUpInfo()
@@ -48,18 +49,18 @@ class FaeUser : NSObject {
                 //fail
             }
             //self.clearKeyValue()
-            completion(status,message);
+            completion(status, message);
         }
     }
     
     func saveUserSignUpInfo(){
         let shareAPI = LocalStorageManager()
-        userEmail = keyValue["email"]as! String
-        userPassword = keyValue["password"]as! String
-        userFirstname = keyValue["first_name"]as? String
-        userLastname = keyValue["last_name"]as? String
-        userBirthday = keyValue["birthday"]as? String
-        let gender = keyValue["gender"]as! String
+        userEmail = keyValue["email"] as! String
+        userPassword = keyValue["password"] as! String
+        userFirstname = keyValue["first_name"] as? String
+        userLastname = keyValue["last_name"] as? String
+        userBirthday = keyValue["birthday"] as? String
+        let gender = keyValue["gender"] as! String
         if gender == "male" {
             userGender = 0
         }else {
@@ -79,14 +80,13 @@ class FaeUser : NSObject {
      Optional parameters: device_id, is_mobile
      */
     
-    func logInBackground(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("authentication", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
-            if(status / 100 == 2 ){//success
+    func logInBackground(_ completion:@escaping (Int, Any?)->Void){
+        postToURL("authentication", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
+            if(status / 100 == 2 ) {//success
                 self.processToken(message!)
-                self.getSelfProfile{(status:Int, message:Any?) in
+                self.getSelfProfile{(status: Int, message: Any?) in
                     if let message = (message as? NSDictionary) {
                         if (message["email"]) != nil{
-                            //userEmail
                             userEmail = message["email"] as? String
                             username = message["user_name"] as? String
                             userFirstname = message["first_name"] as? String
@@ -99,12 +99,12 @@ class FaeUser : NSObject {
                         }
                     }
                 }
-                //get account info
             }
-            else{//failure
+            else {
+            
             }
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
             
             // WARNING: this code should be deleted afterward, it's here just to test chat function
             postToURL("chats", parameter: ["receiver_id": "1" as AnyObject, "message": "Hi there, I just registered. Let's chat!" as AnyObject, "type": "text" as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
@@ -113,7 +113,7 @@ class FaeUser : NSObject {
     }
     
     // process return information after logging in
-    func processToken(_ message:Any)->Void{
+    func processToken(_ message: Any) -> Void{
         if let message = message as? NSDictionary {
             let str = message["token"] as! String
             let session = message["session_id"] as! NSNumber
@@ -144,11 +144,10 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: nil
      */
-    func logOut(_ completion:@escaping (Int,Any?) -> Void) {//clear the login token is enough
+    func logOut(_ completion:@escaping (Int, Any?) -> Void) {//clear the login token is enough
         let headerToken = headerAuthentication()//this code may set is_Login to 1
         self.clearLogInInfo()
-        deleteFromURL("authentication", parameter: [:], authentication: headerToken ) { (status:Int, message:Any?) in
-            
+        deleteFromURL("authentication", parameter: [:], authentication: headerToken ) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 //success
             }
@@ -175,11 +174,11 @@ class FaeUser : NSObject {
      Required parameters: email
      Optional parameters: nil
      */
-    func checkEmailExistence(_ completion:@escaping (Int,Any?)->Void){
+    func checkEmailExistence(_ completion:@escaping (Int, Any?) -> Void){
         if let email = keyValue["email"] as? String{
-            getFromURL("existence/email/"+email, parameter:keyValue, authentication: nil){ (status:Int, message:Any?) in
+            getFromURL("existence/email/"+email, parameter:keyValue, authentication: nil){ (status: Int, message: Any?) in
                 //self.clearKeyValue()
-                completion(status,message);
+                completion(status, message);
             }
         }
     }
@@ -188,13 +187,13 @@ class FaeUser : NSObject {
      Required parameters: username
      Optional parameters: nil
      */
-    func checkUserExistence(_ completion:@escaping (Int,Any?)->Void){
+    func checkUserExistence(_ completion:@escaping (Int, Any?) -> Void){
         if let username = keyValue["user_name"] as? String{
-            getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status:Int, message:Any?) in
+            getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status: Int, message: Any?) in
 
 //                print(message)
                 //self.clearKeyValue()
-                completion(status,message);
+                completion(status, message);
             }
         }
     }
@@ -204,11 +203,11 @@ class FaeUser : NSObject {
      Required parameters: email
      Optional parameters: nil
      */
-    func sendCodeToEmail(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
+    func sendCodeToEmail(_ completion:@escaping (Int, Any?)->Void){
+        postToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
 //            print(message)
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     
@@ -216,7 +215,7 @@ class FaeUser : NSObject {
      Required parameters: email, code
      Optional parameters: nil
      */
-    func validateCode(_ completion:@escaping (Int,Any?)->Void){
+    func validateCode(_ completion:@escaping (Int, Any?)->Void){
         postToURL("reset_login/code/verify", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
             
 //            print(message)

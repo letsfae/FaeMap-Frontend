@@ -17,9 +17,6 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     var imageCurrentAvatar: UIImageView!
     var labelCurrentAvatar: UILabel!
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    
     let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Rigth Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
     
     var faeGray = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)

@@ -137,6 +137,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     }
     var direction: Direction = .left
     var lastContentOffset: CGFloat = 0
+    var beforeScrollingOffset: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()

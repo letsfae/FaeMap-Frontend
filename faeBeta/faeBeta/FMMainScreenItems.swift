@@ -158,17 +158,13 @@ extension FaeMapViewController {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
-                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
-                    icon.contentMode = .scaleAspectFit
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
-                            icon.image = #imageLiteral(resourceName: "commentPinMarker")
-                            pinShowOnMap.iconView = icon
+                            pinShowOnMap.icon = #imageLiteral(resourceName: "commentPinMarker")
                         }
                         else if typeInfo == "media" {
-                            icon.image = #imageLiteral(resourceName: "momentPinMarker")
-                            pinShowOnMap.iconView = icon
+                            pinShowOnMap.icon = #imageLiteral(resourceName: "momentPinMarker")
                         }
                         pinShowOnMap.zIndex = 0
                     }

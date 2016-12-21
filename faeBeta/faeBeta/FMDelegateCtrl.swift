@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 
-extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
@@ -39,7 +39,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.markerBackFromPinDetail.map = nil
         }
     }
-    
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
         print("DEBUG: Delegate pass pinID")
@@ -68,12 +67,55 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
     }
-    
+
     // PinMenuDelegate
     // Back from pin menu view controller
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
+    }
+    
+    // LeftSlidingMenuDelegate
+    func userInvisible(isOn: Bool) {
+        if !isOn {
+            self.faeMapView.isMyLocationEnabled = false
+            self.renewSelfLocation()
+            if userStatus != 5  {
+                loadPositionAnimateImage()
+                getSelfAccountInfo()
+            }
+            return
+        }
+        if userStatus == 5 {
+            self.invisibleMode()
+            self.faeMapView.isMyLocationEnabled = true
+            if self.myPositionOutsideMarker_1 != nil {
+                self.myPositionOutsideMarker_1.isHidden = true
+            }
+            if self.myPositionOutsideMarker_2 != nil {
+                self.myPositionOutsideMarker_2.isHidden = true
+            }
+            if self.myPositionOutsideMarker_3 != nil {
+                self.myPositionOutsideMarker_3.isHidden = true
+            }
+            if self.myPositionIcon != nil {
+                self.myPositionIcon.isHidden = true
+            }
+        }
+    }
+    // LeftSlidingMenuDelegate
+    func jumpToMoodAvatar() {
+        let moodAvatarVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController") as! MoodAvatarViewController
+        moodAvatarVC.modalPresentationStyle = .overCurrentContext
+        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
+    }
+    // LeftSlidingMenuDelegate
+    func logOutInLeftMenu() {
+        self.jumpToWelcomeView(animated: true)
+    }
+    // LeftSlidingMenuDelegate
+    func jumpToFaeUserMainPage() {
+        self.jumpToMyFaeMainPage()
     }
 }

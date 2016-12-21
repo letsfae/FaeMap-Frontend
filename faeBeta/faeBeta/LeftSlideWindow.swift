@@ -13,80 +13,31 @@ import RealmSwift
 
 //MARK: show left slide window
 extension FaeMapViewController {
-    func loadMore() {
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
-        dimBackgroundMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        dimBackgroundMoreButton.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
-        dimBackgroundMoreButton.alpha = 0.0
-        self.view.addSubview(dimBackgroundMoreButton)
-        dimBackgroundMoreButton.layer.zPosition = 599
-        dimBackgroundMoreButton.addTarget(self, action: #selector(FaeMapViewController.animationMoreHide(_:)), for: UIControlEvents.touchUpInside)
-        
-        let leftSwipe = UISwipeGestureRecognizer(target: self,
-                                                 action: #selector(FaeMapViewController.animationMoreHide(_:)))
-        leftSwipe.direction = .left
-        
-        uiviewMoreButton = UIView(frame: CGRect(x: -tableViewWeight, y: 0, width: tableViewWeight, height: screenHeight))
-        uiviewMoreButton.backgroundColor = UIColor.white
-        uiviewMoreButton.layer.zPosition = 600
-        uiviewMoreButton.addGestureRecognizer(leftSwipe)
-        self.view.addSubview(uiviewMoreButton)
-        
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-
-        //initial tableview
-        tableviewMore = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWeight, height: screenHeight), style: .grouped)
-        tableviewMore.delegate = self
-        tableviewMore.dataSource = self
-        tableviewMore.register(UINib(nibName: "MoreVisibleTableViewCell",bundle: nil), forCellReuseIdentifier: cellTableViewMore)
-        tableviewMore.backgroundColor = UIColor.clear
-        tableviewMore.separatorColor = UIColor.clear
-        tableviewMore.rowHeight = 60
-//        tableviewMore.scrollEnabled = falsey
-        tableviewMore.alwaysBounceVertical = false
-        self.tableviewMore.bounces = false
-        
-        uiviewMoreButton.addSubview(tableviewMore)
-        addHeaderViewForMore()
-    }
-    
-    func jumpToMoodAvatar() {
-        animationMoreHide(dimBackgroundMoreButton)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController")as! MoodAvatarViewController
-        vc.modalPresentationStyle = .overCurrentContext
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
     func jumpToNameCard() {
-        animationMoreHide(dimBackgroundMoreButton)// new add
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardViewController")as! NameCardViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NameCardViewController") as! NameCardViewController
         vc.modalPresentationStyle = .overCurrentContext
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToMyFaeMainPage() {
-        animationMoreHide(dimBackgroundMoreButton)// new add
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController")as! MyFaeMainPageViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController") as! MyFaeMainPageViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToAccount(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "FaeAccountViewController")as! FaeAccountViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "FaeAccountViewController") as! FaeAccountViewController
         self.navigationController?.pushViewController(vc, animated: true)
         
     }
     func jumpToMyPins(){
-        
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyPinsViewController")as! MyPinsViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyPinsViewController") as! MyPinsViewController
         self.navigationController?.pushViewController(vc, animated: true)
 
     }
     func jumpTowelcomeVC() {
         //        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
         //        self.presentViewController(vc, animated: true, completion: nil)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -167,7 +118,7 @@ extension FaeMapViewController {
         let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .camera
             menu.removeFromParentViewController()
-            self.present(self.imagePicker,animated:true,completion:nil)
+            self.present(self.imagePicker, animated:true, completion:nil)
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             
@@ -179,74 +130,15 @@ extension FaeMapViewController {
     }
     func animationMoreShow(_ sender: UIButton!) {
         let leftMenuVC = LeftSlidingMenuViewController()
+        if let displayName = nickname {
+            leftMenuVC.displayName = displayName
+        }
+        else {
+            leftMenuVC.displayName = "someone"
+        }
+        leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)
-    }
-    
-    func animationMoreHide(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.2, animations:({
-            self.uiviewMoreButton.center.x = self.uiviewMoreButton.center.x - self.tableViewWeight
-            self.dimBackgroundMoreButton.alpha = 0.0
-        }), completion: { (done: Bool) in
-            if done {
-                if self.dimBackgroundMoreButton.tag == 1 {
-                    self.dimBackgroundMoreButton.tag = 0
-                    self.invisibleMode()
-                }
-            }
-        })
-    }
-    
-    func switchToInvisibleOrOnline(_ sender: UISwitch) {
-        let switchToInvisible = FaeUser()
-        if (sender.isOn == true){
-            print("sender.on")
-            switchToInvisible.whereKey("status", value: "5")
-            switchToInvisible.setSelfStatus({ (status, message) in
-                if status / 100 == 2 {
-                    userStatus = 5
-                    let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(userStatus, forKey: "userStatus")
-                    print("Successfully switch to invisible")
-                    if userStatus == 5 {
-                        self.faeMapView.isMyLocationEnabled = true
-                        if self.myPositionOutsideMarker_1 != nil {
-                            self.myPositionOutsideMarker_1.isHidden = true
-                        }
-                        if self.myPositionOutsideMarker_2 != nil {
-                            self.myPositionOutsideMarker_2.isHidden = true
-                        }
-                        if self.myPositionOutsideMarker_3 != nil {
-                            self.myPositionOutsideMarker_3.isHidden = true
-                        }
-                        if self.myPositionIcon != nil {
-                            self.myPositionIcon.isHidden = true
-                        }
-                    }
-                    self.dimBackgroundMoreButton.tag = 1
-                    self.animationMoreHide(self.dimBackgroundMoreButton)
-                }
-                else {
-                    print("Fail to switch to invisible")
-                }
-            })
-        }
-        else{
-            print("sender.off")
-            switchToInvisible.whereKey("status", value: "1")
-            switchToInvisible.setSelfStatus({ (status, message) in
-                if status / 100 == 2 {
-                    userStatus = 1
-                    self.actionSelfPosition(self.buttonSelfPosition)
-                    let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(userStatus, forKey: "userStatus")
-                    print("Successfully switch to online")
-                }
-                else {
-                    print("Fail to switch to online")
-                }
-            })
-        }
     }
     
     func userIsInactive() {
@@ -295,10 +187,10 @@ extension FaeMapViewController {
                 }
             }
         }
-        let realm = try! Realm()
-        let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
-        if selfInfoRealm.count == 0 {
-            if user_id != nil {
+        if user_id != nil {
+            let realm = try! Realm()
+            let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
+            if selfInfoRealm.count == 0 {
                 imageViewAvatarMore = UIImageView()
                 let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
                 imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in

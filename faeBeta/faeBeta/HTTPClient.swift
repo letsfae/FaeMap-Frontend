@@ -231,8 +231,6 @@ func postToURL(_ className:String, parameter:[String:Any]?, authentication:[Stri
     
     // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
-        
-
         Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
             .responseJSON{response in
                 //print(response.response!.statusCode)
@@ -258,7 +256,6 @@ func postToURL(_ className:String, parameter:[String:Any]?, authentication:[Stri
         }
     }
 }
-
 
 func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
     //print(parameter)
@@ -318,7 +315,7 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
 
 }
 
-func deleteFromURL(_ className:String,parameter:[String:Any] , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
+func deleteFromURL(_ className:String, parameter: [String: Any] , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "Accept": headerAccept,
@@ -330,7 +327,7 @@ func deleteFromURL(_ className:String,parameter:[String:Any] , authentication:[S
         completion(500,"we must get the authentication number" as AnyObject?)
     }
     if authentication != nil {
-        for(key,value) in authentication! {
+        for(key, value) in authentication! {
             headers[key] = value as? String
         }
     }
@@ -356,8 +353,8 @@ func deleteFromURL(_ className:String,parameter:[String:Any] , authentication:[S
 
 }
 
-func putToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
-    let URL = baseURL + "/" + className
+func putToURL(_ className:String, parameter: [String: Any]? , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void) {
+    let URL = "\(baseURL)/\(className)"
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
@@ -396,7 +393,6 @@ func putToURL(_ className:String,parameter:[String:Any]? , authentication:[Strin
     }
     
 }
-
 
 //utf-5 encode
 func utf8Encode(_ inputString:String)->String{

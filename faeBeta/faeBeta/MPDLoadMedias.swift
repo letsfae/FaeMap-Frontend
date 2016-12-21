@@ -45,6 +45,7 @@ extension MomentPinDetailViewController {
                 })
             }
         }
+        self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 105 - 10, height: 95)
     }
     
     func zoomMedia(_ type: MediaMode) {
@@ -62,9 +63,11 @@ extension MomentPinDetailViewController {
                 self.imageViewMediaArray[index].frame.size.width = CGFloat(width)
                 self.imageViewMediaArray[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
-                self.scrollViewMedia.contentSize = CGSize(width: screenWidth-CGFloat(inset), height: CGFloat(width))
             })
-            
         }
+        UIView.animate(withDuration: 0.583) { 
+            self.scrollViewMedia.frame.origin.x = CGFloat(inset)
+        }
+        self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width+space) - space), height: CGFloat(width))
     }
 }
