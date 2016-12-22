@@ -195,7 +195,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func jumpToLocationEnable() {
-        let locEnableVC: UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         self.present(locEnableVC, animated: true, completion: nil)
     }
     
