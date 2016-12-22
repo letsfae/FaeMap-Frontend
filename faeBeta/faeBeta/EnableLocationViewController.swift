@@ -34,7 +34,7 @@ class EnableLocationViewController: UIViewController {
         imageView.image = UIImage(named: "EnableLocationImage")
         self.view.addSubview(imageView)
         
-        titleLabel = UILabel(frame: CGRect(x: 15,y: 469 * screenHeightFactor,width: screenWidth - 30,height: 27))
+        titleLabel = UILabel(frame: CGRect(x: 15,y: 460 * screenHeightFactor,width: screenWidth - 30,height: 27))
         titleLabel.attributedText = NSAttributedString(string:"Location Access", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
@@ -84,15 +84,5 @@ class EnableLocationViewController: UIViewController {
             }
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+
 }
