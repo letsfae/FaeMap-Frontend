@@ -157,10 +157,5 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         tableView.deselectRow(at: indexPath, animated: true)
 
     }
-//
-//    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-//        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-//        return false
-//    }
-    
+
 }
