@@ -194,7 +194,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         //ATTENTION: Temporary comment it here because it's not used for now
 //        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
-    
+        
+        let leftButton = UIBarButtonItem(image: #imageLiteral(resourceName: "navigationBack"), style: .plain, target: self.navigationController, action: #selector(self.navigationController?.popViewController(animated:)))
+        
+        self.navigationItem.leftBarButtonItem = leftButton
+        
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = withUser!.userName
         titleLabel.textAlignment = .center
