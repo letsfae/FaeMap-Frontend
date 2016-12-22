@@ -883,7 +883,6 @@
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
 				B868497D1DE0E4FF0016FC6E /* Login.storyboard */,
-				B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */,
 				B86849781DE0E3BB0016FC6E /* Register.storyboard */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
@@ -1244,6 +1243,7 @@
 		DC9F45361E078BDF00128444 /* Location&Notification */ = {
 			isa = PBXGroup;
 			children = (
+				B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */,
 				B0714E0F1D6252FC00356705 /* EnableLocationViewController.swift */,
 				B0714E131D62530E00356705 /* EnableNotificationViewController.swift */,
 			);

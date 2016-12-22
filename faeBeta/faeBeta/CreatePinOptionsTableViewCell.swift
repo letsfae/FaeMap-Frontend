@@ -17,7 +17,7 @@ class CreatePinOptionsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = UIColor.clear
-        // Initialization code
+        self.selectionStyle = .none
     }
 
     func setupCell(withTitle title: String?, leadingIcon: UIImage?, trailingText: String?, trailingIcon: UIImage?)
@@ -26,8 +26,6 @@ class CreatePinOptionsTableViewCell: UITableViewCell {
         leadingIconImageView.image = leadingIcon
         trailingLabel.text = trailingText
         trailingIconImageView.image = trailingIcon
+        leadingIconImageView.contentMode = .center
     }
-    
-    
-    
 }

@@ -34,7 +34,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs your permission to use the camera</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>we always need location</string>
+	<string>Fae Map is a Social Map Platform, it needs to use Location to work.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>we need location</string>
 	<key>NSMicrophoneUsageDescription</key>

@@ -13,6 +13,7 @@ class EnableNotificationViewController: UIViewController {
     fileprivate var titleLabel: UILabel!
     fileprivate var descriptionLabel: UILabel!
     fileprivate var enableNotificationButton: UIButton!
+    fileprivate var notNowButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +32,7 @@ class EnableNotificationViewController: UIViewController {
         imageView.image = UIImage(named: "EnableNotificationImage")
         self.view.addSubview(imageView)
         
-        titleLabel = UILabel(frame: CGRect(x: 15,y: 469 * screenHeightFactor,width: screenWidth - 30,height: 54))
+        titleLabel = UILabel(frame: CGRect(x: 15,y: 460 * screenHeightFactor,width: screenWidth - 30,height: 54))
 
         titleLabel.numberOfLines = 2
         titleLabel.attributedText = NSAttributedString(string:"Help your Windbell in delivering\nimportant notifications!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
@@ -41,7 +42,7 @@ class EnableNotificationViewController: UIViewController {
         titleLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(titleLabel)
         
-        descriptionLabel = UILabel(frame: CGRect(x: 15,y: 547 * screenHeightFactor ,width: screenWidth - 30,height: 44))
+        descriptionLabel = UILabel(frame: CGRect(x: 15,y: 535 * screenHeightFactor ,width: screenWidth - 30,height: 44))
         descriptionLabel.numberOfLines = 2
         descriptionLabel.attributedText = NSAttributedString(string:"Take full advantage of Fae’s Real-Time\nPlatform & Never miss out on Anything!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         descriptionLabel.textAlignment = .center
@@ -56,6 +57,12 @@ class EnableNotificationViewController: UIViewController {
         enableNotificationButton.backgroundColor = UIColor.faeAppRedColor()
         enableNotificationButton.addTarget(self, action: #selector(EnableNotificationViewController.enableNotificationButtonTapped), for: .touchUpInside)
         self.view.addSubview(enableNotificationButton)
+        
+        notNowButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 38 * screenHeightFactor - 18, width: 60, height: 18))
+        notNowButton.center.x = screenWidth / 2
+        notNowButton.setAttributedTitle(NSAttributedString(string: "Not Now", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for:UIControlState())
+        notNowButton.addTarget(self, action: #selector(self.notNowButtonTapped), for: .touchUpInside)
+        self.view.addSubview(notNowButton)
     }
     
     func enableNotificationButtonTapped()
@@ -66,14 +73,10 @@ class EnableNotificationViewController: UIViewController {
         }
         self.dismiss(animated: true, completion: nil)
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
+    func notNowButtonTapped()
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
     
 }

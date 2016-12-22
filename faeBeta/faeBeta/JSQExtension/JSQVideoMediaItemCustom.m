@@ -110,14 +110,14 @@
         videoIndicatorView.backgroundColor = [[UIColor alloc] initWithRed:58.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:0.8];
         
         UIImage *cameraIcon = [UIImage imageNamed:@"cameraIconFilled_white"];
-        UIImageView* cameraIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(125, 8, 18, 12)];
+        UIImageView* cameraIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(25, 8, 18, 12)];
         cameraIconImageView.image = cameraIcon;
         [videoIndicatorView addSubview:cameraIconImageView];
         
         NSString *secondString = (self.videoDuration % 60) < 9 ? [NSString stringWithFormat:@"0%d", self.videoDuration % 60 ] : [NSString stringWithFormat:@"%d", self.videoDuration % 60 ];
         NSString *minString = [NSString stringWithFormat:@"%d", self.videoDuration / 60 ];
         NSString *durationString = [NSString stringWithFormat:@"%@:%@", minString, secondString];
-        UILabel * durationLabel = [[UILabel alloc] initWithFrame:CGRectMake(155, 5, 36, 18)];
+        UILabel * durationLabel = [[UILabel alloc] initWithFrame:CGRectMake(51, 5, 36, 18)];
         durationLabel.attributedText = [[NSAttributedString alloc] initWithString:durationString attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0f] , NSForegroundColorAttributeName: [UIColor whiteColor]}];
         durationLabel.textAlignment = NSTextAlignmentLeft;
         [videoIndicatorView addSubview:durationLabel];

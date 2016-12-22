@@ -11,7 +11,7 @@ import Photos
 // this class uses Photo framework that Apple provide to load all media item in user album
 // the result is grouped by smart album feature in iOS.
 // you can check the groups by switching album in choose photo screen
-class PhotoPicker {
+final class PhotoPicker {
     
     class var shared:PhotoPicker {
         struct Singleton {
