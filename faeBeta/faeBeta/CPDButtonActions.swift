@@ -322,7 +322,7 @@ extension CommentPinDetailViewController {
                 self.textviewCommentPinDetail.frame.size.height = 100
                 self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
+                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -356,7 +356,7 @@ extension CommentPinDetailViewController {
             if numLines > 4 {
                 self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
-                self.uiviewCommentDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
                 self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
             }
@@ -384,7 +384,7 @@ extension CommentPinDetailViewController {
                 self.textviewCommentPinDetail.frame.size.height = 100
                 self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
+                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -405,7 +405,7 @@ extension CommentPinDetailViewController {
             if numLines > 4 {
                 self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
-                self.uiviewCommentDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
                 self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
             }

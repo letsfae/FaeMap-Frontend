@@ -29,50 +29,50 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonReportOnPinDetail: UIButton!
     
     // New Moment Pin Popup Window
-    var numberOfCommentTableCells: Int = 0
-    var dictCommentsOnPinDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
+    var anotherRedSlidingLine: UIView!
     var boolPinLiked = false
     var buttonBackToPinLists: UIButton!
-    var buttonPinDetailViewFeelings: UIButton!
-    var labelPinDetailViewComments: UILabel!
-    var labelPinDetailViewFeelings: UILabel!
-    var labelPinDetailViewPeople: UILabel!
-    var buttonPinDetailViewComments: UIButton!
-    var buttonPinDetailViewPeople: UIButton!
+    var buttonMoreOnPinCellExpanded = false
+    var buttonOptionOfPin: UIButton!
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
     var buttonPinDetailDragToLargeSize: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
     var buttonPinDownVote: UIButton!
     var buttonPinLike: UIButton!
     var buttonPinUpVote: UIButton!
-    var buttonMoreOnPinCellExpanded = false
-    var buttonOptionOfPin: UIButton!
-    var pinIDPinDetailView: String = "-999"
-    var pinDetailLiked = false
-    var pinDetailShowed = false
+    var dictCommentsOnPinDetail = [[String: AnyObject]]()
     var imagePinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelPinCommentsCount: UILabel!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var labelPinLikeCount: UILabel!
     var labelPinTimestamp: UILabel!
     var labelPinTitle: UILabel!
     var labelPinUserName: UILabel!
     var labelPinVoteCount: UILabel!
+    var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
+    var numberOfCommentTableCells: Int = 0
+    var pinDetailLiked = false
+    var pinDetailShowed = false
+    var pinIDPinDetailView: String = "-999"
+    var subviewNavigation: UIView!
     var tableCommentsForPin: UITableView!
     var textviewPinDetail: UITextView!
-    var uiviewPinDetailThreeButtons: UIView!
+    var uiviewGrayBaseLine: UIView!
     var uiviewPinDetail: UIView!
     var uiviewPinDetailGrayBlock: UIView!
     var uiviewPinDetailMainButtons: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewPinUnderLine01: UIView!
     var uiviewPinUnderLine02: UIView!
-    var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
-    var anotherRedSlidingLine: UIView!
-    var subviewNavigation: UIView!
-    var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
     var pinSizeFrom: CGFloat = 0

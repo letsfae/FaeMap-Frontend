@@ -37,14 +37,16 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonReportOnCommentDetail: UIButton!
     
     // New Comment Pin Popup Window
-    var numberOfCommentTableCells: Int = 0
-    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
+    var anotherRedSlidingLine: UIView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinLists: UIButton!
-    var buttonCommentDetailViewFeelings: UIButton!
-    var buttonCommentDetailViewComments: UIButton!
-    var buttonCommentDetailViewPeople: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var buttonCommentPinAddComment: UIButton!
     var buttonCommentPinBackToMap: UIButton!
     var buttonCommentPinDetailDragToLargeSize: UIButton!
@@ -53,9 +55,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
-    var pinIDCommentPinDetailView: String = "-999"
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
+    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var imageCommentPinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelCommentPinCommentsCount: UILabel!
@@ -64,10 +66,14 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
+    var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
+    var numberOfCommentTableCells: Int = 0
+    var pinIDCommentPinDetailView: String = "-999"
+    var subviewNavigation: UIView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
-    var uiviewCommentDetailThreeButtons: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewCommentPinDetail: UIView!
     var uiviewCommentPinDetailGrayBlock: UIView!
     var uiviewCommentPinDetailMainButtons: UIView!
@@ -75,9 +81,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
-    var anotherRedSlidingLine: UIView!
-    var subviewNavigation: UIView!
-    var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
     var commentPinSizeFrom: CGFloat = 0

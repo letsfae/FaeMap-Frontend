@@ -154,6 +154,7 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "200")
         loadPinsByZoomLevel.whereKey("type", value: type)
+        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
@@ -176,9 +177,11 @@ extension FaeMapViewController {
                     }
                     if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                         if pinID != "\(pinIDInfo)" {
+                            print("[loadMarkerWithpinID] not found pinID")
                             continue
                         }
                         pinData["\(type)_id"] = pinIDInfo as AnyObject?
+                        print("[loadMarkerWithpinID] found pinID")
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo as AnyObject?

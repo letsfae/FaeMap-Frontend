@@ -37,11 +37,11 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
             if let voteType = dictCell["vote_type"].string {
                 if voteType == "up" {
                     cell.voteType = .up
-                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
+                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
                 }
                 else if voteType == "down" {
                     cell.voteType = .down
-                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
             }
             if let upVoteCount = dictCell["vote_up_count"].int {

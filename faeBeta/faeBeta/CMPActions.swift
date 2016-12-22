@@ -269,7 +269,7 @@ extension CreateMomentPinViewController {
     }
     
     private func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: "Add Description", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)

@@ -27,6 +27,7 @@ extension MomentPinDetailViewController {
         self.view.addSubview(tableCommentsForPin)
         tableCommentsForPin.center.y -= screenHeight
         tableCommentsForPin.delaysContentTouches = false
+        tableCommentsForPin.showsVerticalScrollIndicator = false
         
         // Dragging button
         draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 28))

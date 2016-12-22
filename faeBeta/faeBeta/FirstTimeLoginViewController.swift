@@ -110,7 +110,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             else {
                 print("[uploadProfileAvatar] fail")
                 self.activityIndicator.stopAnimating()
-                self.showAlert(title: "Upload Profile Avatar Failed", message: "Please try again")
+                self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again")
                 return
             }
         }
@@ -139,7 +139,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                 }
                 else {
                     self.activityIndicator.stopAnimating()
-                    self.showAlert(title: "Tried to Change Display Name but Failed", message: "Please try again")
+                    self.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again")
                 }
             }
         }
@@ -185,7 +185,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: "Add Description", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
