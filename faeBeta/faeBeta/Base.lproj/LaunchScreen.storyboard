@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,16 +21,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="LaunchScreenBig" translatesAutoresizingMaskIntoConstraints="NO" id="5qV-Ua-nA5">
-                                <rect key="frame" x="0.0" y="28" width="414" height="708"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenFullSize" translatesAutoresizingMaskIntoConstraints="NO" id="wPo-fK-oAk">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="5qV-Ua-nA5" secondAttribute="trailing" id="8iL-96-PaS"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="5qV-Ua-nA5" secondAttribute="bottom" id="BYS-sc-eht"/>
-                            <constraint firstItem="5qV-Ua-nA5" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="23" id="l3J-WR-C1U"/>
-                            <constraint firstItem="5qV-Ua-nA5" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="wP6-pV-6Cu"/>
+                            <constraint firstItem="wPo-fK-oAk" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailingMargin" constant="20" id="7Hg-Y4-wzT"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="wPo-fK-oAk" secondAttribute="bottom" id="D7i-Sq-adP"/>
+                            <constraint firstItem="wPo-fK-oAk" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="Kdx-LH-PO9"/>
+                            <constraint firstItem="wPo-fK-oAk" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-20" id="epk-6s-8v5"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -39,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreenBig" width="414" height="713"/>
+        <image name="launchScreenFullSize" width="414" height="736"/>
     </resources>
 </document>
