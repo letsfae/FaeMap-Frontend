@@ -87,7 +87,7 @@ extension CreateCommentPinViewController {
         labelSelectLocationContent.textColor = UIColor.white
         uiviewSelectLocation.addSubview(labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelSelectLocationContent)
+        uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
@@ -154,7 +154,7 @@ extension CreateCommentPinViewController {
     private func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateCommentPin.addSubview(uiviewMoreOptions)
-        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewMoreOptions)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(29)]-141-|", options: [], views: uiviewMoreOptions)
         NSLayoutConstraint(item: uiviewMoreOptions, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         

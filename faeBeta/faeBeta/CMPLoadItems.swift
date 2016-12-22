@@ -102,7 +102,7 @@ extension CreateMomentPinViewController {
         let imageSelectLocation_1 = UIImageView()
         imageSelectLocation_1.image = UIImage(named: "pinSelectLocation01")
         uiviewSelectLocation.addSubview(imageSelectLocation_1)
-        uiviewSelectLocation.addConstraintsWithFormat("H:|-0-[v0(25)]", options: [], views: imageSelectLocation_1)
+        uiviewSelectLocation.addConstraintsWithFormat("H:|-2-[v0(25)]", options: [], views: imageSelectLocation_1)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageSelectLocation_1)
         
         let imageSelectLocation_2 = UIImageView()
@@ -118,7 +118,7 @@ extension CreateMomentPinViewController {
         labelSelectLocationContent.textColor = UIColor.white
         uiviewSelectLocation.addSubview(labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelSelectLocationContent)
+        uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
@@ -198,7 +198,7 @@ extension CreateMomentPinViewController {
     private func loadAddDescriptionButton() {
         uiviewAddDescription = UIView()
         uiviewCreateMediaPin.addSubview(uiviewAddDescription)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(295)]", options: [], views: uiviewAddDescription)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewAddDescription)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(29)]-277-|", options: [], views: uiviewAddDescription)
         NSLayoutConstraint(item: uiviewAddDescription, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -221,7 +221,7 @@ extension CreateMomentPinViewController {
         labelAddDesContent.textColor = UIColor.white
         uiviewAddDescription.addSubview(labelAddDesContent)
         uiviewAddDescription.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelAddDesContent)
-        uiviewAddDescription.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelAddDesContent)
+        uiviewAddDescription.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelAddDesContent)
         
         let buttonAddDes = UIButton()
         uiviewAddDescription.addSubview(buttonAddDes)
@@ -247,7 +247,7 @@ extension CreateMomentPinViewController {
     private func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateMediaPin.addSubview(uiviewMoreOptions)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewMoreOptions)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(29)]-141-|", options: [], views: uiviewMoreOptions)
         NSLayoutConstraint(item: uiviewMoreOptions, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -270,7 +270,7 @@ extension CreateMomentPinViewController {
         labelMoreOptionsContent.textColor = UIColor.white
         uiviewMoreOptions.addSubview(labelMoreOptionsContent)
         uiviewMoreOptions.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelMoreOptionsContent)
-        uiviewMoreOptions.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelMoreOptionsContent)
+        uiviewMoreOptions.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelMoreOptionsContent)
         
         let buttonMoreOptions = UIButton()
         uiviewMoreOptions.addSubview(buttonMoreOptions)

@@ -18,9 +18,7 @@ protocol MainScreenSearchDelegate: class {
 class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
     weak var delegate: MainScreenSearchDelegate?
-    
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     let fontColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
     
@@ -69,13 +67,13 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         loadFunctionButtons()
         loadTableView()
         loadCustomSearchController()
+        loadNavBarUnderLine()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
             self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
-//            self.blurViewMainScreenSearch.alpha = 1.0
             self.blurViewMainScreenSearch.effect = UIBlurEffect(style: .light)
         }), completion: { (done: Bool) in
             if done {
@@ -88,11 +86,21 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         super.didReceiveMemoryWarning()
     }
     
+    func loadNavBarUnderLine() {
+        let uiviewUnderLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        uiviewUnderLine.layer.borderWidth = screenWidth
+        uiviewUnderLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
+        uiviewUnderLine.layer.zPosition = 5
+        self.searchBarSubview.addSubview(uiviewUnderLine)
+    }
+    
     func loadBlurView() {
         blurViewMainScreenSearch = UIVisualEffectView()
         blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-//        blurViewMainScreenSearch.alpha = 0.0
         self.view.addSubview(blurViewMainScreenSearch)
+        let buttonBackToMapSubview = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        blurViewMainScreenSearch.addSubview(buttonBackToMapSubview)
+        buttonBackToMapSubview.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
     }
     
     func loadFunctionButtons() {
@@ -102,7 +110,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         self.searchBarSubview.center.y -= self.searchBarSubview.frame.size.height
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.searchBarSubview.addSubview(backSubviewButton)
-        backSubviewButton.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
+        backSubviewButton.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
         backSubviewButton.layer.zPosition = 0
         
         let viewToHideLeftSideSearchBar = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 64))
