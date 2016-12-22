@@ -31,7 +31,7 @@ extension FaeMapViewController {
         locManager.startUpdatingLocation()
         
         // Default is true, if true, panGesture could not be detected
-//        self.faeMapView.settings.consumesGesturesInView = false
+        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -40,7 +40,7 @@ extension FaeMapViewController {
         buttonLeftTop = UIButton()
         buttonLeftTop.setImage(UIImage(named: "mainScreenMore"), for: UIControlState())
         self.view.addSubview(buttonLeftTop)
-        buttonLeftTop.addTarget(self, action: #selector(FaeMapViewController.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
+        buttonLeftTop.addTarget(self, action: #selector(self.animationMoreShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
         buttonLeftTop.layer.zPosition = 500
@@ -59,7 +59,7 @@ extension FaeMapViewController {
         buttonRightTop = UIButton()
         buttonRightTop.setImage(UIImage(named: "mainScreenWindBell"), for: UIControlState())
         self.view.addSubview(buttonRightTop)
-//        buttonRightTop.addTarget(self, action: #selector(FaeMapViewController.animationWindBellShow(_:)), for: UIControlEvents.touchUpInside)
+        buttonRightTop.addTarget(self, action: #selector(self.animationWindBellShow(_:)), for: UIControlEvents.touchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
         
@@ -114,7 +114,7 @@ extension FaeMapViewController {
     
     // Animation for pin logo
     func animatePinWhenItIsCreated(pinID: String, type: String) {
-        tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 167, height: 178))
+        tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 120, height: 128))
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2-25.5)
         tempMarker.center = mapCenter
         if type == "comment" {
@@ -135,14 +135,15 @@ extension FaeMapViewController {
             self.tempMarker.center = mapCenter
             }, completion: { (done: Bool) in
                 if done {
+                    self.markerMask.removeFromSuperview()
                     self.loadMarkerWithpinID(pinID: pinID, type: type, tempMaker: self.tempMarker)
                 }
         })
     }
     
     func removeTempMarker() {
+        print("[removeTempMarker] func called")
         tempMarker.removeFromSuperview()
-        markerMask.removeFromSuperview()
     }
     
     func loadMarkerWithpinID(pinID: String, type: String, tempMaker: UIImageView) {
@@ -153,31 +154,34 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "200")
         loadPinsByZoomLevel.whereKey("type", value: type)
-        loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
+        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
+        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
             if mapInfoJSON.count > 0 {
                 for i in 0...(mapInfoJSON.count-1) {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
-                    if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
-                        if pinID != "\(pinIDInfo)" {
-                            continue
-                        }
-                        pinData["\(type)_id"] = pinIDInfo as AnyObject?
-                    }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
-                            pinShowOnMap.icon = UIImage(named: "commentPinMarker")
+                            pinShowOnMap.icon = #imageLiteral(resourceName: "commentPinMarker")
                         }
                         else if typeInfo == "media" {
-                            pinShowOnMap.icon = UIImage(named: "momentPinMarker")
+                            pinShowOnMap.icon = #imageLiteral(resourceName: "momentPinMarker")
                         }
                         else if typeInfo.contains("chat") {
                             pinShowOnMap.icon = UIImage(named: "chatPinMarker")
                         }
                         pinShowOnMap.zIndex = 0
+                    }
+                    if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
+                        if pinID != "\(pinIDInfo)" {
+                            print("[loadMarkerWithpinID] not found pinID")
+                            continue
+                        }
+                        pinData["\(type)_id"] = pinIDInfo as AnyObject?
+                        print("[loadMarkerWithpinID] found pinID")
                     }
                     if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                         pinData["user_id"] = userIDInfo as AnyObject?
@@ -194,9 +198,11 @@ extension FaeMapViewController {
                         pinShowOnMap.position.longitude = longitudeInfo
                     }
                     pinShowOnMap.userData = pinData
+                    pinShowOnMap.groundAnchor = CGPoint(x: 0.5, y: 1)
                     pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
                     pinShowOnMap.map = self.faeMapView
-                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(FaeMapViewController.removeTempMarker), userInfo: nil, repeats: false)
+                    self.mapPinsArray.append(pinShowOnMap)
+                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.removeTempMarker), userInfo: nil, repeats: false)
                 }
             }
         }

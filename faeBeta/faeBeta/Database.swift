@@ -18,3 +18,8 @@ class MomengPin: Object {
     dynamic var mediaId = -999
     let medias = List<Media>()
 }
+
+class SelfInformation: Object {
+    dynamic var currentUserID = -999
+    dynamic var avatar: NSData? = nil
+}

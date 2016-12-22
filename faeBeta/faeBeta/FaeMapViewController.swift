@@ -14,8 +14,6 @@ import SwiftyJSON
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
     // MARK: -- Common Used Vars and Constants
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     let navigationBarHeight : CGFloat = 20
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
@@ -32,13 +30,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var buttonCancelSelectLocation: UIButton!
     
     // MARK: -- Location
-    var currentLocation: CLLocation!
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
+    var currentLocation: CLLocation!
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var didLoadFirstLoad = false
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
-    var didLoadFirstLoad = false
     var startUpdatingLocation = false
     
     // Unread Messages Label
@@ -66,83 +64,64 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapChatTable = UITableView()
     
     // More table view
-    var tableviewMore = UITableView()
     let cellTableViewMore = "celltableviewmore1"
-    var viewHeaderForMore : UIView!
-    var imageViewBackgroundMore : UIImageView!
+    let tableViewWeight : CGFloat = 290
+    var buttonImagePicker : UIButton!
     var buttonMoreLeft : UIButton!
     var buttonMoreRight : UIButton!
-    var imageViewAvatarMore : UIImageView!
-    var labelMoreName : UILabel!
-    let tableViewWeight : CGFloat = 290
     var imagePicker : UIImagePickerController! // MARK: new var Wenye
-    var buttonImagePicker : UIButton!
+    var imageViewAvatarMore : UIImageView!
+    var imageViewBackgroundMore : UIImageView!
+    var labelMoreName : UILabel!
+    var tableviewMore = UITableView()
+    var viewHeaderForMore : UIView!
     
     // Windbell table view
     var labelWindbellTableTitle: UILabel!
     var tableviewWindbell = UITableView()
     
-    // Open User Pin View
-    var uiviewDialog : UIView!
-    var uiviewCard : UIView!
-    var uiviewFunction : UIView!
-    var uiviewTag : UIView!
-    var buttonFollow : UIButton!
-    var buttonShare : UIButton!
-    var buttonKeep : UIButton!
-    var buttonReport : UIButton!
-    var collectionViewPhotos : UICollectionView!
-    var cellPhotos = "cellPhotos"
-    var imageViewLeft : UIImageView!
-    var imageViewRight : UIImageView!
-    var imageViewGender : UIImageView!
-    var imageview : UIImageView!
-    var imageviewNamecardAvatar : UIImageView!
-    var imageviewNamecardGender : UIImageView!
-    var imageviewUserPinBackground : UIImageView!
-    var labelNamecardName : UILabel!
-    var labelNamecardDescription : UILabel!
-    var labelNamecardAge : UILabel!
-    var viewLine : UIView!
-    var viewLine2 : UIView!
-    var collectionPhotos : UICollectionView!
-    var buttonChat : UIButton!
-    var buttonMore : UIButton!
     // Wang Yanxiang
-    var tagName = [String]()
-    var tagButtonSet = [UIButton]()
-    var selectedButtonSet = [UIButton]()
-    var tagLength = [CGFloat]()
-    var tagColor = [UIColor]()
-    var tagTitle = [NSMutableAttributedString]()
-    let exlength : CGFloat = 8
-    let selectedInterval : CGFloat = 11
-    let maxLength : CGFloat = 320
-    let lineInterval : CGFloat = 25.7
-    let intervalInLine : CGFloat = 13.8
-    let tagHeight : CGFloat = 18
     var openUserPinActive = false
-    var currentViewingUserId = 1
     // end of WYX
     //
-    var mapUserPinsDic = [GMSMarker]() // Map User Pin
-    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin
-    var pinIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
-    var tempMarker: UIImageView! // temp marker, it is a UIImageView
-    var markerMask: UIView! // mask to prevent UI action
-    var NSTimerDisplayMarkerArray = [Timer]()
-    var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
-    var canDoNextUserUpdate = true // Prevent updating user on map more than once
-                                   // Or, prevent user pin change its ramdom place if clicking on it
-    var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
-    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var buttonCloseUserPinSubview: UIButton! // button to close user pin view
-    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var timerLoadRegionPins: Timer! // timer to renew map pins
-    var previousZoomLevel: Float = 0 // previous zoom level to check if map should reload pins
-    var previousPosition: CLLocationCoordinate2D!
+    var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var canLoadMapPin = true // if can load map pin when zoom level is valid for updating
+    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    var mapPinsArray = [GMSMarker]() // Map Comment Pin Array
+    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin Dictionary
+    var mapUserPinsDic = [GMSMarker]() // Map User Pin
+    var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
+    var markerMask: UIView! // mask to prevent UI action
+    var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
+    var pinIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
+    var previousPosition: CLLocationCoordinate2D!
+    var previousZoomLevel: Float = 0 // previous zoom level to check if map should reload pins
+    var tempMarker: UIImageView! // temp marker, it is a UIImageView
+    var timerLoadRegionPins: Timer! // timer to renew map pins
+    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
+    
+    // Map Namecard
+    var buttonChat: UIButton!
+    var buttonClosingOptionsInNameCard: UIButton!
+    var buttonEmoji: UIButton!
+    var buttonFakeTransparentClosingView: UIButton!
+    var buttonFavorite: UIButton!
+    var buttonOptions: UIButton!
+    var editNameCard: UIButton!
+    var imageAvatarNameCard: UIImageView!
+    var imageBackground: UIImageView!
+    var imageCover: UIImageView!
+    var imageGenderMen: UIImageView!
+    var imageOneLine: UIImageView!
+    var labelDisplayName: UILabel!
+    var labelNameTag: UILabel!
+    var labelShortIntro: UILabel!
+    var nameCardMoreOptions: UIImageView!
+    var reportNameCard: UIButton!
+    var shareNameCard: UIButton!
+    var uiViewNameCard: UIView!
     
     // System Functions
     override func viewDidLoad() {
@@ -153,14 +132,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if is_Login == 0 {
             self.jumpToWelcomeView(animated: false)
         }
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1 )
+        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         myPositionIconFirstLoaded = true
         _ = getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
         loadButton()
-        loadMore()
-        loadNamecard()
+        loadNameCard()
         loadPositionAnimateImage()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
@@ -169,8 +147,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         didLoadFirstLoad = true
+        updateSelfInfo()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
@@ -182,13 +161,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
             jumpToLocationEnable()
         }
-        getSelfAccountInfo()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         if userStatus != 5  {
             loadPositionAnimateImage()
-            getSelfAccountInfo()
         }
+        getSelfAccountInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -217,12 +195,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func jumpToLocationEnable() {
-        let locEnableVC: UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
+        let locEnableVC: UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         self.present(locEnableVC, animated: true, completion: nil)
     }
     
     func jumpToWelcomeView(animated: Bool){
-        let welcomeVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        let welcomeVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
         self.present(welcomeVC, animated: animated, completion: nil)
     }
     
@@ -265,18 +243,20 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         
         if let location = locations.last {
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
-            myPositionOutsideMarker_3.center = selfPositionToPoint
-            myPositionOutsideMarker_2.center = selfPositionToPoint
-            myPositionOutsideMarker_1.center = selfPositionToPoint
-            myPositionIcon.center = selfPositionToPoint
-            self.myPositionIcon.isHidden = false
-            self.myPositionOutsideMarker_1.isHidden = false
-            self.myPositionOutsideMarker_2.isHidden = false
-            self.myPositionOutsideMarker_3.isHidden = false
+            if myPositionOutsideMarker_3 != nil {
+                let latitude = location.coordinate.latitude
+                let longitude = location.coordinate.longitude
+                let position = CLLocationCoordinate2DMake(latitude, longitude)
+                let selfPositionToPoint = faeMapView.projection.point(for: position)
+                myPositionOutsideMarker_3.center = selfPositionToPoint
+                myPositionOutsideMarker_2.center = selfPositionToPoint
+                myPositionOutsideMarker_1.center = selfPositionToPoint
+                myPositionIcon.center = selfPositionToPoint
+                self.myPositionIcon.isHidden = false
+                self.myPositionOutsideMarker_1.isHidden = false
+                self.myPositionOutsideMarker_2.isHidden = false
+                self.myPositionOutsideMarker_3.isHidden = false
+            }
         }
     }
 

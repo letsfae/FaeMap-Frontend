@@ -73,9 +73,10 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.25, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
-            self.blurViewMainScreenSearch.alpha = 1.0
+//            self.blurViewMainScreenSearch.alpha = 1.0
+            self.blurViewMainScreenSearch.effect = UIBlurEffect(style: .light)
         }), completion: { (done: Bool) in
             if done {
                 self.customSearchController.customSearchBar.becomeFirstResponder()
@@ -88,10 +89,9 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func loadBlurView() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        blurViewMainScreenSearch = UIVisualEffectView(effect: blurEffect)
+        blurViewMainScreenSearch = UIVisualEffectView()
         blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        blurViewMainScreenSearch.alpha = 0.0
+//        blurViewMainScreenSearch.alpha = 0.0
         self.view.addSubview(blurViewMainScreenSearch)
     }
     

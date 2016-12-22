@@ -20,9 +20,6 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         if tableView == tableCommentsForComment {
             return dictCommentsOnCommentDetail.count
         }
-        else if tableView == tableViewPeople{
-            return dictPeopleOfCommentDetail.count
-        }
         else {
             return 0
         }
@@ -40,11 +37,11 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
             if let voteType = dictCell["vote_type"].string {
                 if voteType == "up" {
                     cell.voteType = .up
-                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
+                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
                 }
                 else if voteType == "down" {
                     cell.voteType = .down
-                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
             }
             if let upVoteCount = dictCell["vote_up_count"].int {
@@ -74,25 +71,6 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
             cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
-        else if tableView == self.tableViewPeople {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinPeopleCell", for: indexPath) as! OPLTableViewCell
-            let userID = Array(dictPeopleOfCommentDetail.keys)[indexPath.row]
-            let latestDate = dictPeopleOfCommentDetail[userID]
-            let getUserName = FaeUser()
-            
-            getUserName.getOthersProfile("\(userID)") {(status, message) in
-                let userProfile = JSON(message!)
-                if let username = userProfile["user_name"].string {
-                    cell.content.text = "\(username)"
-                    cell.time.text = latestDate
-                }
-            }
-            cell.deleteButton.isHidden = true
-            cell.jumpToDetail.isHidden = true
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
-            return cell
-        }
         else {
             let cell = UITableViewCell()
             cell.separatorInset = UIEdgeInsets.zero
@@ -105,9 +83,6 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         if tableView == self.tableCommentsForComment {
             return 140
         }
-        if tableView == self.tableViewPeople {
-            return 76
-        }
         else{
             return 0
         }
@@ -119,9 +94,6 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
             if let usernameInCell = cell.labelUsername.text {
                 self.actionShowActionSheet(usernameInCell)
             }
-        }
-        if tableView == self.tableViewPeople {
-            
         }
     }
 }

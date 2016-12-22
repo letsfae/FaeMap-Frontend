@@ -284,6 +284,7 @@ extension CommentPinDetailViewController {
             self.subviewInputToolBar.isHidden = true
         }
         controlBoard.removeFromSuperview()
+        self.delegate?.dismissMarkerShadow(true)
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForComment.center.y -= screenHeight
@@ -310,6 +311,7 @@ extension CommentPinDetailViewController {
                 self.subviewInputToolBar.isHidden = true
             }
             textviewCommentPinDetail.isScrollEnabled = true
+            tableCommentsForComment.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
@@ -320,7 +322,7 @@ extension CommentPinDetailViewController {
                 self.textviewCommentPinDetail.frame.size.height = 100
                 self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
+                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -341,6 +343,7 @@ extension CommentPinDetailViewController {
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
         textviewCommentPinDetail.isScrollEnabled = false
+        tableCommentsForComment.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
@@ -353,7 +356,7 @@ extension CommentPinDetailViewController {
             if numLines > 4 {
                 self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
-                self.uiviewCommentDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
                 self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
             }
@@ -370,6 +373,7 @@ extension CommentPinDetailViewController {
             sender.tag = 0
             buttonCommentPinAddComment.tag = 0
             textviewCommentPinDetail.isScrollEnabled = true
+            tableCommentsForComment.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToCommentPinLists.alpha = 1.0
                 self.buttonCommentPinBackToMap.alpha = 0.0
@@ -380,7 +384,7 @@ extension CommentPinDetailViewController {
                 self.textviewCommentPinDetail.frame.size.height = 100
                 self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewCommentDetailThreeButtons.frame.origin.y = 239
+                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
                 if done {
                     
@@ -392,6 +396,7 @@ extension CommentPinDetailViewController {
         let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
         let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
         textviewCommentPinDetail.isScrollEnabled = false
+        tableCommentsForComment.isScrollEnabled = true
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0
@@ -400,7 +405,7 @@ extension CommentPinDetailViewController {
             if numLines > 4 {
                 self.uiviewCommentPinDetail.frame.size.height += diffHeight
                 self.textviewCommentPinDetail.frame.size.height += diffHeight
-                self.uiviewCommentDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
                 self.uiviewCommentPinDetailGrayBlock.center.y += diffHeight
                 self.uiviewCommentPinDetailMainButtons.center.y += diffHeight
             }

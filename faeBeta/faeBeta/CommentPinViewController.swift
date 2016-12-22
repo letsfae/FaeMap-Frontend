@@ -37,14 +37,16 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonReportOnCommentDetail: UIButton!
     
     // New Comment Pin Popup Window
-    var numberOfCommentTableCells: Int = 0
-    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
+    var anotherRedSlidingLine: UIView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinLists: UIButton!
-    var buttonCommentDetailViewActive: UIButton!
-    var buttonCommentDetailViewComments: UIButton!
-    var buttonCommentDetailViewPeople: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var buttonCommentPinAddComment: UIButton!
     var buttonCommentPinBackToMap: UIButton!
     var buttonCommentPinDetailDragToLargeSize: UIButton!
@@ -53,9 +55,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
-    var pinIDCommentPinDetailView: String = "-999"
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
+    var dictCommentsOnCommentDetail = [[String: AnyObject]]()
     var imageCommentPinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelCommentPinCommentsCount: UILabel!
@@ -64,10 +66,14 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
+    var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
+    var numberOfCommentTableCells: Int = 0
+    var pinIDCommentPinDetailView: String = "-999"
+    var subviewNavigation: UIView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
-    var uiviewCommentDetailThreeButtons: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewCommentPinDetail: UIView!
     var uiviewCommentPinDetailGrayBlock: UIView!
     var uiviewCommentPinDetailMainButtons: UIView!
@@ -75,9 +81,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
-    var anotherRedSlidingLine: UIView!
-    var subviewNavigation: UIView!
-    var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
     var commentPinSizeFrom: CGFloat = 0
@@ -99,10 +102,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
-    
-    // People table
-    var tableViewPeople: UITableView!
-    var dictPeopleOfCommentDetail = [Int: String]()
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
@@ -157,7 +156,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-            self.loadInputToolBar()
+            		self.loadInputToolBar()
         })
     }
     
@@ -327,16 +326,14 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.isHidden = true
-            tableCommentsForComment.isHidden = false
+//            tableCommentsForComment.isHidden = false
         }
         else if sender.tag == 3 {
-            tableViewPeople.isHidden = false
-            tableCommentsForComment.isHidden = true
+//            tableCommentsForComment.isHidden = true
         }
         let tag = CGFloat(sender.tag)
-        let centerAtOneThird = screenWidth / 4
-        let targetCenter = CGFloat(tag * centerAtOneThird)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
         UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter
@@ -396,7 +393,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     func animateHeart() {
         buttonCommentPinLike.tag = 0
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
-        animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         animatingHeart.layer.zPosition = 108
         uiviewCommentPinDetailMainButtons.addSubview(animatingHeart)
         

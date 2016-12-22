@@ -20,9 +20,6 @@ extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSou
         if tableView == tableCommentsForPin {
             return dictCommentsOnPinDetail.count
         }
-        else if tableView == tableViewPeople{
-            return dictPeopleOfPinDetail.count
-        }
         else {
             return 0
         }
@@ -74,25 +71,6 @@ extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSou
             cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
-        else if tableView == self.tableViewPeople {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinPeopleCell", for: indexPath) as! OPLTableViewCell
-            let userID = Array(dictPeopleOfPinDetail.keys)[indexPath.row]
-            let latestDate = dictPeopleOfPinDetail[userID]
-            let getUserName = FaeUser()
-            
-            getUserName.getOthersProfile("\(userID)") {(status, message) in
-                let userProfile = JSON(message!)
-                if let username = userProfile["user_name"].string {
-                    cell.content.text = "\(username)"
-                    cell.time.text = latestDate
-                }
-            }
-            cell.deleteButton.isHidden = true
-            cell.jumpToDetail.isHidden = true
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
-            return cell
-        }
         else {
             let cell = UITableViewCell()
             cell.separatorInset = UIEdgeInsets.zero
@@ -105,9 +83,6 @@ extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSou
         if tableView == self.tableCommentsForPin {
             return 140
         }
-        if tableView == self.tableViewPeople {
-            return 76
-        }
         else{
             return 0
         }
@@ -119,9 +94,6 @@ extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSou
             if let usernameInCell = cell.labelUsername.text {
                 self.actionShowActionSheet(usernameInCell)
             }
-        }
-        if tableView == self.tableViewPeople {
-            
         }
     }
 }

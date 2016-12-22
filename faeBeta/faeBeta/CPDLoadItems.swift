@@ -22,11 +22,10 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.allowsSelection = false
         tableCommentsForComment.delaysContentTouches = true
         tableCommentsForComment.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
-        tableCommentsForComment.isScrollEnabled = true
+        tableCommentsForComment.isScrollEnabled = false
         tableCommentsForComment.tableFooterView = UIView()
         tableCommentsForComment.layer.zPosition = 109
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
+        tableCommentsForComment.showsVerticalScrollIndicator = false
         self.view.addSubview(tableCommentsForComment)
         tableCommentsForComment.center.y -= screenHeight
         
@@ -38,6 +37,7 @@ extension CommentPinDetailViewController {
         draggingButtonSubview.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         draggingButtonSubview.layer.shadowOpacity = 0.3
         draggingButtonSubview.layer.shadowRadius = 10.0
+        draggingButtonSubview.layer.shouldRasterize = true
         draggingButtonSubview.layer.zPosition = 109
         draggingButtonSubview.center.y -= screenHeight
         
@@ -48,7 +48,7 @@ extension CommentPinDetailViewController {
         
         buttonCommentPinDetailDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
         buttonCommentPinDetailDragToLargeSize.backgroundColor = UIColor.white
-        buttonCommentPinDetailDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), for: UIControlState())
+        buttonCommentPinDetailDragToLargeSize.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         buttonCommentPinDetailDragToLargeSize.addTarget(self, action: #selector(CommentPinDetailViewController.actionDraggingThisComment(_:)), for: .touchUpInside)
         self.draggingButtonSubview.addSubview(buttonCommentPinDetailDragToLargeSize)
         buttonCommentPinDetailDragToLargeSize.center.x = screenWidth/2
@@ -56,16 +56,18 @@ extension CommentPinDetailViewController {
         buttonCommentPinDetailDragToLargeSize.tag = 0
         //        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(CommentPinDetailViewController.panActionCommentPinDetailDrag(_:)))
         //        buttonCommentPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
-        
+        loadTableHeader()
+        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
+        loadAnotherToolbar()
+        loadPinCtrlButton()
+    }
+    
+    private func loadTableHeader() {
         // Header
         uiviewCommentPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 281))
         uiviewCommentPinDetail.backgroundColor = UIColor.white
-        uiviewCommentPinDetail.layer.zPosition = 100
-        self.view.addSubview(uiviewCommentPinDetail)
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CommentPinDetailViewController.tapOutsideToDismissKeyboard(_:)))
         uiviewCommentPinDetail.addGestureRecognizer(tapToDismissKeyboard)
-        
-        tableCommentsForComment.tableHeaderView = uiviewCommentPinDetail
         
         // ----
         // Textview width based on different resolutions
@@ -98,7 +100,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin Like
         buttonCommentPinLike = UIButton()
-        buttonCommentPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+        buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
         buttonCommentPinLike.addTarget(self, action: #selector(CommentPinDetailViewController.actionLikeThisComment(_:)), for: [.touchUpInside, .touchUpOutside])
         buttonCommentPinLike.addTarget(self, action: #selector(CommentPinDetailViewController.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinLike)
@@ -109,7 +111,7 @@ extension CommentPinDetailViewController {
         
         // Add Comment
         buttonCommentPinAddComment = UIButton()
-        buttonCommentPinAddComment.setImage(UIImage(named: "commentPinAddComment"), for: UIControlState())
+        buttonCommentPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: UIControlState())
         buttonCommentPinAddComment.addTarget(self, action: #selector(CommentPinDetailViewController.actionReplyToThisComment(_:)), for: .touchUpInside)
         buttonCommentPinAddComment.tag = 0
         uiviewCommentPinDetailMainButtons.addSubview(buttonCommentPinAddComment)
@@ -146,56 +148,77 @@ extension CommentPinDetailViewController {
         
         // ----
         // View to hold three buttons
-        uiviewCommentDetailThreeButtons = UIView(frame: CGRect(x: 0, y: 239, width: screenWidth, height: 42))
-        uiviewCommentPinDetail.addSubview(uiviewCommentDetailThreeButtons)
+        uiviewPinDetailThreeButtons = UIView(frame: CGRect(x: 0, y: 239, width: screenWidth, height: 42))
+        uiviewCommentPinDetail.addSubview(uiviewPinDetailThreeButtons)
         
         // Three buttons bottom gray line
         uiviewGrayBaseLine = UIView()
         uiviewGrayBaseLine.layer.borderWidth = 1.0
         uiviewGrayBaseLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-        uiviewCommentDetailThreeButtons.addSubview(uiviewGrayBaseLine)
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewGrayBaseLine)
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: uiviewGrayBaseLine)
+        uiviewPinDetailThreeButtons.addSubview(uiviewGrayBaseLine)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewGrayBaseLine)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: uiviewGrayBaseLine)
         
-        let widthOfThreeButtons = screenWidth / 2
+        let widthOfThreeButtons = screenWidth / 3
         
         // Three buttons bottom sliding red line
         uiviewRedSlidingLine = UIView(frame: CGRect(x: 0, y: 40, width: widthOfThreeButtons, height: 2))
         uiviewRedSlidingLine.layer.borderWidth = 1.0
         uiviewRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).cgColor
-        uiviewCommentDetailThreeButtons.addSubview(uiviewRedSlidingLine)
+        uiviewPinDetailThreeButtons.addSubview(uiviewRedSlidingLine)
         
-        // "Comments" of this uiview
-        buttonCommentDetailViewComments = UIButton()
-        buttonCommentDetailViewComments.setImage(UIImage(named: "commentDetailThreeButtonComments"), for: UIControlState())
-        buttonCommentDetailViewComments.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), for: UIControlEvents.touchUpInside)
-        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewComments)
-        buttonCommentDetailViewComments.tag = 1
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewComments)
+        // "Talk Talk" of this uiview
+        labelPinDetailViewComments = UILabel()
+        labelPinDetailViewComments.text = "Talk Talk"
+        labelPinDetailViewComments.textColor = UIColor.faeAppInputTextGrayColor()
+        labelPinDetailViewComments.textAlignment = .center
+        labelPinDetailViewComments.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewPinDetailThreeButtons.addSubview(labelPinDetailViewComments)
         
-        /*
-        // "Active" of this uiview
-        buttonCommentDetailViewActive = UIButton()
-        buttonCommentDetailViewActive.setImage(UIImage(named: "commentDetailThreeButtonActive"), forState: .Normal)
-        buttonCommentDetailViewActive.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewActive)
-        buttonCommentDetailViewActive.tag = 3
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewActive)
-        */
+        buttonPinDetailViewComments = UIButton()
+        buttonPinDetailViewComments.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewPinDetailThreeButtons.addSubview(buttonPinDetailViewComments)
+        buttonPinDetailViewComments.tag = 1
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelPinDetailViewComments)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonPinDetailViewComments)
+        
+        
+        // "Feelings" of this uiview
+        labelPinDetailViewFeelings = UILabel()
+        labelPinDetailViewFeelings.text = "Feelings"
+        labelPinDetailViewFeelings.textColor = UIColor.faeAppInputTextGrayColor()
+        labelPinDetailViewFeelings.textAlignment = .center
+        labelPinDetailViewFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewPinDetailThreeButtons.addSubview(labelPinDetailViewFeelings)
+        
+        buttonPinDetailViewFeelings = UIButton()
+        buttonPinDetailViewFeelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewPinDetailThreeButtons.addSubview(buttonPinDetailViewFeelings)
+        buttonPinDetailViewFeelings.tag = 3
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelPinDetailViewFeelings)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonPinDetailViewFeelings)
+        
         
         // "People" of this uiview
-        buttonCommentDetailViewPeople = UIButton()
-//        buttonCommentDetailViewPeople.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
-//        buttonCommentDetailViewPeople.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        uiviewCommentDetailThreeButtons.addSubview(buttonCommentDetailViewPeople)
-        buttonCommentDetailViewPeople.tag = 3
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonCommentDetailViewPeople)
+        labelPinDetailViewPeople = UILabel()
+        labelPinDetailViewPeople.text = "People"
+        labelPinDetailViewPeople.textColor = UIColor.faeAppInputTextGrayColor()
+        labelPinDetailViewPeople.textAlignment = .center
+        labelPinDetailViewPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewPinDetailThreeButtons.addSubview(labelPinDetailViewPeople)
+        buttonPinDetailViewPeople = UIButton()
+        buttonPinDetailViewPeople.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewPinDetailThreeButtons.addSubview(buttonPinDetailViewPeople)
+        buttonPinDetailViewPeople.tag = 5
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelPinDetailViewPeople)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: buttonPinDetailViewPeople)
         
-        uiviewCommentDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: buttonCommentDetailViewComments, buttonCommentDetailViewPeople)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: labelPinDetailViewComments, labelPinDetailViewFeelings, labelPinDetailViewPeople)
+        uiviewPinDetailThreeButtons.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: buttonPinDetailViewComments, buttonPinDetailViewFeelings, buttonPinDetailViewPeople)
         
         // Comment Pin User Avatar
         imageCommentPinUserAvatar = UIImageView()
-        imageCommentPinUserAvatar.image = UIImage(named: "defaultMan")
+        imageCommentPinUserAvatar.image = UIImage(named: "defaultMen")
         imageCommentPinUserAvatar.layer.cornerRadius = 25
         imageCommentPinUserAvatar.clipsToBounds = true
         imageCommentPinUserAvatar.contentMode = .scaleAspectFill
@@ -232,10 +255,6 @@ extension CommentPinDetailViewController {
         NSLayoutConstraint(item: imageViewSaved, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         imageViewSaved.layer.zPosition = 104
         imageViewSaved.alpha = 0.0
-        
-        loadAnotherToolbar()
-        loadPeopleTable()
-        loadPinCtrlButton()
     }
     
     private func loadNavigationBar() {
@@ -253,7 +272,7 @@ extension CommentPinDetailViewController {
         
         // Back to Map
         buttonCommentPinBackToMap = UIButton()
-        buttonCommentPinBackToMap.setImage(UIImage(named: "commentPinBackToMap"), for: UIControlState())
+        buttonCommentPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
         buttonCommentPinBackToMap.addTarget(self, action: #selector(CommentPinDetailViewController.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonCommentPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)
@@ -262,7 +281,7 @@ extension CommentPinDetailViewController {
         
         // Back to Comment Pin List
         buttonBackToCommentPinLists = UIButton()
-        buttonBackToCommentPinLists.setImage(UIImage(named: "commentPinBackToList"), for: UIControlState())
+        buttonBackToCommentPinLists.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
         buttonBackToCommentPinLists.addTarget(self, action: #selector(CommentPinDetailViewController.actionGoToList(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonBackToCommentPinLists)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToCommentPinLists)
@@ -270,7 +289,7 @@ extension CommentPinDetailViewController {
         
         // Comment Pin Option
         buttonOptionOfCommentPin = UIButton()
-        buttonOptionOfCommentPin.setImage(UIImage(named: "commentPinOption"), for: UIControlState())
+        buttonOptionOfCommentPin.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
         buttonOptionOfCommentPin.addTarget(self, action: #selector(CommentPinDetailViewController.showCommentPinMoreButtonDetails(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonOptionOfCommentPin)
         subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: buttonOptionOfCommentPin)
@@ -286,20 +305,6 @@ extension CommentPinDetailViewController {
         subviewNavigation.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelCommentPinTitle)
         subviewNavigation.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinTitle)
         NSLayoutConstraint(item: labelCommentPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func loadPeopleTable() {
-        tableViewPeople = UITableView(frame: CGRect(x: 0, y: 281, width: screenWidth, height: 0))
-        tableViewPeople.delegate = self
-        tableViewPeople.dataSource = self
-        tableViewPeople.allowsSelection = false
-        tableViewPeople.delaysContentTouches = false
-        tableViewPeople.register(OPLTableViewCell.self, forCellReuseIdentifier: "commentPinPeopleCell")
-        tableViewPeople.isScrollEnabled = false
-        //                tableCommentsForComment.layer.borderColor = UIColor.blackColor().CGColor
-        //                tableCommentsForComment.layer.borderWidth = 1.0
-        uiviewCommentPinDetail.addSubview(tableViewPeople)
-        tableViewPeople.isHidden = true
     }
     
     func loadAnotherToolbar() {
@@ -326,7 +331,7 @@ extension CommentPinDetailViewController {
         let threeButtonsContainer = UIView(frame: CGRect(x: 0, y: 12, width: screenWidth, height: 42))
         self.controlBoard.addSubview(threeButtonsContainer)
         
-        let widthOfThreeButtons = screenWidth / 2
+        let widthOfThreeButtons = screenWidth / 3
         
         // Three buttons bottom sliding red line
         anotherRedSlidingLine = UIView(frame: CGRect(x: 0, y: 52, width: widthOfThreeButtons, height: 2))
@@ -334,25 +339,50 @@ extension CommentPinDetailViewController {
         anotherRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).cgColor
         self.controlBoard.addSubview(anotherRedSlidingLine)
         
-        // "Comments" of this uiview
-        let comments = UIButton()
-        comments.setImage(UIImage(named: "commentDetailThreeButtonComments"), for: UIControlState())
-        comments.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), for: .touchUpInside)
+        // "Talk Talk" of this uiview
+        let labelComments = UILabel()
+        labelComments.text = "Talk Talk"
+        labelComments.textColor = UIColor.faeAppInputTextGrayColor()
+        labelComments.textAlignment = .center
+        labelComments.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(labelComments)
+        let comments = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        comments.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(comments)
         comments.tag = 1
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelComments)
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: comments)
         
+        // "Feelings" of this uiview
+        let labelFeelings = UILabel()
+        labelFeelings.text = "Feelings"
+        labelFeelings.textColor = UIColor.faeAppInputTextGrayColor()
+        labelFeelings.textAlignment = .center
+        labelFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(labelFeelings)
+        let feelings = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        feelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        threeButtonsContainer.addSubview(feelings)
+        feelings.tag = 3
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelFeelings)
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: feelings)
         
         // "People" of this uiview
-        let people = UIButton()
-//        people.setImage(UIImage(named: "commentDetailThreeButtonPeople"), forState: .Normal)
-//        people.addTarget(self, action: #selector(CommentPinDetailViewController.animationRedSlidingLine(_:)), forControlEvents: .TouchUpInside)
+        let labelPeople = UILabel()
+        labelPeople.text = "People"
+        labelPeople.textColor = UIColor.faeAppInputTextGrayColor()
+        labelPeople.textAlignment = .center
+        labelPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(labelPeople)
+        let people = UIButton(frame: CGRect(x: 0, y: 0, width: widthOfThreeButtons, height: 42))
+        people.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(people)
-        people.tag = 3
+        people.tag = 5
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelPeople)
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: people)
         
-        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]", options: [], views: comments, people)
-        
+        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: labelComments, labelFeelings, labelPeople)
+        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: comments, feelings, people)
     }
     
     func loadPinCtrlButton() {

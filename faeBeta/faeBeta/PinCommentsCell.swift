@@ -107,7 +107,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         
         // DownVote
         self.buttonDownVote = UIButton()
-        self.buttonDownVote.setImage(UIImage(named: "commentPinDownVoteGray"), for: .normal)
+        self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         self.buttonDownVote.addTarget(self, action: #selector(self.downVoteThisComment(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonDownVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonDownVote)
@@ -115,7 +115,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         
         // UpVote
         self.buttonUpVote = UIButton()
-        self.buttonUpVote.setImage(UIImage(named: "commentPinUpVoteGray"), for: .normal)
+        self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         self.buttonUpVote.addTarget(self, action: #selector(self.upVoteThisComment(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonUpVote)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonUpVote)
@@ -123,7 +123,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
  
         // Add Comment
         self.buttonReply = UIButton()
-        self.buttonReply.setImage(UIImage(named: "commentPinForwardHollow"), for: UIControlState())
+        self.buttonReply.setImage(#imageLiteral(resourceName: "pinCommentReply"), for: UIControlState())
         self.buttonReply.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
         self.uiviewCommentActionButtons.addSubview(buttonReply)
         self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonReply)
@@ -144,8 +144,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         if voteType == .up || pinID == -999 {
             return
         }
-        buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
-        buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+        buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+        buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         let upVote = FaePinAction()
         upVote.whereKey("vote", value: "up")
         upVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
@@ -159,12 +159,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             }
             else {
                 if self.voteType == .down {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
                 else if self.voteType == .null {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 print("[upVoteThisComment] Fail to upvote this pin comment")
             }
@@ -175,8 +175,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         if voteType == .down || pinID == -999 {
             return
         }
-        buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
-        buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteRed"), for: .normal)
+        buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+        buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
         let downVote = FaePinAction()
         downVote.whereKey("vote", value: "down")
         downVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
@@ -189,12 +189,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             }
             else {
                 if self.voteType == .up {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteRed"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 else if self.voteType == .null {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "commentPinUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "commentPinDownVoteGray"), for: .normal)
+                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 print("[upVoteThisComment] Fail to downvote this pin comment")
             }

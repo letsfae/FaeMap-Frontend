@@ -11,7 +11,7 @@ import SwiftyJSON
 import CoreLocation
 import RealmSwift
 
-class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
     
     let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
@@ -29,47 +29,50 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonReportOnPinDetail: UIButton!
     
     // New Moment Pin Popup Window
-    var numberOfCommentTableCells: Int = 0
-    var dictCommentsOnPinDetail = [[String: AnyObject]]()
     var animatingHeart: UIImageView!
+    var anotherRedSlidingLine: UIView!
     var boolPinLiked = false
     var buttonBackToPinLists: UIButton!
-    var buttonPinDetailViewActive: UIButton!
-    var buttonPinDetailViewComments: UIButton!
-    var buttonPinDetailViewPeople: UIButton!
+    var buttonMoreOnPinCellExpanded = false
+    var buttonOptionOfPin: UIButton!
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
     var buttonPinDetailDragToLargeSize: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
     var buttonPinDownVote: UIButton!
     var buttonPinLike: UIButton!
     var buttonPinUpVote: UIButton!
-    var buttonMoreOnPinCellExpanded = false
-    var buttonOptionOfPin: UIButton!
-    var pinIDPinDetailView: String = "-999"
-    var pinDetailLiked = false
-    var pinDetailShowed = false
+    var dictCommentsOnPinDetail = [[String: AnyObject]]()
     var imagePinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelPinCommentsCount: UILabel!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var labelPinLikeCount: UILabel!
     var labelPinTimestamp: UILabel!
     var labelPinTitle: UILabel!
     var labelPinUserName: UILabel!
     var labelPinVoteCount: UILabel!
+    var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
+    var numberOfCommentTableCells: Int = 0
+    var pinDetailLiked = false
+    var pinDetailShowed = false
+    var pinIDPinDetailView: String = "-999"
+    var subviewNavigation: UIView!
     var tableCommentsForPin: UITableView!
     var textviewPinDetail: UITextView!
-    var uiviewPinDetailThreeButtons: UIView!
+    var uiviewGrayBaseLine: UIView!
     var uiviewPinDetail: UIView!
     var uiviewPinDetailGrayBlock: UIView!
     var uiviewPinDetailMainButtons: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewPinUnderLine01: UIView!
     var uiviewPinUnderLine02: UIView!
-    var uiviewGrayBaseLine: UIView!
     var uiviewRedSlidingLine: UIView!
-    var anotherRedSlidingLine: UIView!
-    var subviewNavigation: UIView!
-    var lableTextViewPlaceholder: UILabel!
     
     // For Dragging
     var pinSizeFrom: CGFloat = 0
@@ -91,10 +94,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     
     // A duplicate ControlBoard to hold
     var controlBoard: UIView!
-    
-    // People table
-    var tableViewPeople: UITableView!
-    var dictPeopleOfPinDetail = [Int: String]()
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
@@ -124,9 +123,24 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    var collectionViewMedia: UICollectionView! // container to display pin's media
+    var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
-    var layout = UICollectionViewFlowLayout()
+    var displayMediaArray = [UIImage]()
+    var imageViewMediaArray = [UIImageView]()
+    
+    enum MediaMode {
+        case small
+        case large
+    }
+    var mediaMode: MediaMode = .small
+    
+    enum Direction {
+        case left
+        case right
+    }
+    var direction: Direction = .left
+    var lastContentOffset: CGFloat = 0
+    var beforeScrollingOffset: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -322,16 +336,15 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     func animationRedSlidingLine(_ sender: UIButton) {
         endEdit()
         if sender.tag == 1 {
-            tableViewPeople.isHidden = true
-            tableCommentsForPin.isHidden = false
+//            tableCommentsForPin.isHidden = false
         }
         else if sender.tag == 3 {
-            tableViewPeople.isHidden = false
-            tableCommentsForPin.isHidden = true
+//            tableCommentsForPin.isHidden = true
         }
         let tag = CGFloat(sender.tag)
-        let centerAtOneThird = screenWidth / 4
-        let targetCenter = CGFloat(tag * centerAtOneThird)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
+        print("[animationRedSlidingLine] did slide")
         UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter
@@ -391,7 +404,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     func animateHeart() {
         buttonPinLike.tag = 0
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
-        animatingHeart.image = UIImage(named: "commentPinLikeFull")
+        animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         animatingHeart.layer.zPosition = 108
         uiviewPinDetailMainButtons.addSubview(animatingHeart)
         
@@ -640,25 +653,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
             
             if toolbarHeightConstraint != nil {
                 self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
-            }
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if inputToolbar != nil {
-            self.inputToolbar.contentView.textView.resignFirstResponder()
-        }
-        if touchToReplyTimer != nil {
-            touchToReplyTimer.invalidate()
-        }
-        if tableCommentsForPin.contentOffset.y >= 227 {
-            if self.controlBoard != nil {
-                self.controlBoard.isHidden = false
-            }
-        }
-        if tableCommentsForPin.contentOffset.y < 227 {
-            if self.controlBoard != nil {
-                self.controlBoard.isHidden = true
             }
         }
     }

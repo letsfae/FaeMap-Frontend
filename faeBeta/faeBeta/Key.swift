@@ -75,7 +75,7 @@ class Key: NSObject {//  singleton class
     var arrayNameCard = [Int:UIImage]()
     
     let imageDefaultCover = UIImage(named: "defaultCover")
-    let imageDefaultMale = UIImage(named: "defaultMan")
+    let imageDefaultMale = UIImage(named: "defaultMen")
     let imageDefaultFemale = UIImage(named: "defaultWomen")
 
     class var sharedInstance: Key {

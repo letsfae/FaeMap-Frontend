@@ -21,7 +21,7 @@ extension MomentPinDetailViewController {
         }
         
         if sender.tag == 1 && pinIDPinDetailView != "-999" {
-            buttonPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
@@ -33,7 +33,7 @@ extension MomentPinDetailViewController {
         }
         
         if sender.tag == 0 && pinIDPinDetailView != "-999" {
-            buttonPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
             likeThisPin("media", pinID: pinIDPinDetailView)
             print("debug animating sender.tag 0")
@@ -44,7 +44,7 @@ extension MomentPinDetailViewController {
     
     func actionHoldingLikeButton(_ sender: UIButton) {
         endEdit()
-        buttonPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
         animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinDetailViewController.animateHeart), userInfo: nil, repeats: true)
     }
     
@@ -54,10 +54,10 @@ extension MomentPinDetailViewController {
             return
         }
         
-        buttonPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
         
         if animatingHeart != nil {
-            animatingHeart.image = UIImage(named: "commentPinLikeFull")
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         }
         
         if pinIDPinDetailView != "-999" {
@@ -67,9 +67,9 @@ extension MomentPinDetailViewController {
     
     // Down vote comment pin
     func actionDownVoteThisComment(_ sender: UIButton) {
-        buttonPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
         if animatingHeart != nil {
-            animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         }
         if pinIDPinDetailView != "-999" {
             unlikeThisPin("media", pinID: pinIDPinDetailView)
@@ -85,6 +85,7 @@ extension MomentPinDetailViewController {
                     print("Successfully comment this comment pin!")
                     self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
                     self.getPinComments("media", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
+                    self.tableCommentsForPin.reloadData()
                 }
                 else {
                     print("Fail to comment this comment pin!")
@@ -171,38 +172,30 @@ extension MomentPinDetailViewController {
             if let comments = mapInfoJSON["comments"].int {
                 self.labelPinCommentsCount.text = "\(comments)"
                 self.numberOfCommentTableCells = comments
-                self.tableCommentsForPin.reloadData()
             }
         }
     }
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnPinDetail.removeAll()
-        dictPeopleOfPinDetail.removeAll()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
                 for i in 0...(commentsOfCommentJSON.count-1) {
                     var dicCell = [String: AnyObject]()
-                    var userID = -999
-                    var latestDate = "NULL"
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
                         dicCell["pin_comment_id"] = pin_comment_id as AnyObject?
                     }
                     
                     if let user_id = commentsOfCommentJSON[i]["user_id"].int {
                         dicCell["user_id"] = user_id as AnyObject?
-                        if !self.dictPeopleOfPinDetail.keys.contains(user_id) {
-                            userID = user_id
-                        }
                     }
                     if let content = commentsOfCommentJSON[i]["content"].string {
                         dicCell["content"] = content as AnyObject?
                     }
                     if let date = commentsOfCommentJSON[i]["created_at"].string {
                         dicCell["date"] = date.formatFaeDate() as AnyObject?
-                        latestDate = date.formatFaeDate()
                     }
                     if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
                         print("[getPinComments] upVoteCount: \(vote_up_count)")
@@ -217,9 +210,6 @@ extension MomentPinDetailViewController {
                     }
                     
                     self.dictCommentsOnPinDetail.insert(dicCell, at: 0)
-                    if userID != -999 {
-                        self.dictPeopleOfPinDetail[userID] = latestDate
-                    }
                 }
             }
             if sendMessageFlag {
@@ -231,8 +221,6 @@ extension MomentPinDetailViewController {
                  var offset = self.commentDetailFullBoardScrollView.contentOffset
                  **/
             }
-            self.tableCommentsForPin.reloadData()
-            self.tableViewPeople.reloadData()
         }
     }
     
@@ -256,22 +244,22 @@ extension MomentPinDetailViewController {
                     self.fileIdArray.append(fileID!)
                 }
             }
-            self.collectionViewMedia.reloadData()
+            self.loadMedias()
             print("[getPinInfo] fileIDs: \(self.fileIdArray)")
             print("[getPinInfo] fileIDs append done!")
             if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
-                    self.buttonPinLike.setImage(UIImage(named: "commentPinLikeHollow"), for: UIControlState())
+                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
                     self.buttonPinLike.tag = 0
                     if self.animatingHeart != nil {
-                        self.animatingHeart.image = UIImage(named: "commentPinLikeHollow")
+                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
                     }
                 }
                 else {
-                    self.buttonPinLike.setImage(UIImage(named: "commentPinLikeFull"), for: UIControlState())
+                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
                     self.buttonPinLike.tag = 1
                     if self.animatingHeart != nil {
-                        self.animatingHeart.image = UIImage(named: "commentPinLikeFull")
+                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
                     }
                 }
             }
