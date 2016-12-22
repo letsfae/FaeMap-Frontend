@@ -95,7 +95,7 @@ extension CreateMomentPinViewController {
         
         uiviewSelectLocation = UIView()
         uiviewCreateMediaPin.addSubview(uiviewSelectLocation)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewSelectLocation)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewSelectLocation)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(29)]-209-|", options: [], views: uiviewSelectLocation)
         NSLayoutConstraint(item: uiviewSelectLocation, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -108,17 +108,17 @@ extension CreateMomentPinViewController {
         let imageSelectLocation_2 = UIImageView()
         imageSelectLocation_2.image = UIImage(named: "pinSelectLocation02")
         uiviewSelectLocation.addSubview(imageSelectLocation_2)
-        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageSelectLocation_2)
+        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-0-|", options: [], views: imageSelectLocation_2)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
         
         labelSelectLocationContent = UILabel()
-        labelSelectLocationContent.text = "Current Location"
+        labelSelectLocationContent.text = "Choose Location"
         labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelSelectLocationContent.textAlignment = .left
         labelSelectLocationContent.textColor = UIColor.white
         uiviewSelectLocation.addSubview(labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
+        uiviewSelectLocation.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelSelectLocationContent)
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
@@ -198,20 +198,20 @@ extension CreateMomentPinViewController {
     private func loadAddDescriptionButton() {
         uiviewAddDescription = UIView()
         uiviewCreateMediaPin.addSubview(uiviewAddDescription)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewAddDescription)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(295)]", options: [], views: uiviewAddDescription)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(29)]-277-|", options: [], views: uiviewAddDescription)
         NSLayoutConstraint(item: uiviewAddDescription, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         let imageAddDes_1 = UIImageView()
         imageAddDes_1.image = UIImage(named: "addDescription")
         uiviewAddDescription.addSubview(imageAddDes_1)
-        uiviewAddDescription.addConstraintsWithFormat("H:|-0-[v0(29)]", options: [], views: imageAddDes_1)
-        uiviewAddDescription.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageAddDes_1)
+        uiviewAddDescription.addConstraintsWithFormat("H:|-1-[v0(27)]", options: [], views: imageAddDes_1)
+        uiviewAddDescription.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: imageAddDes_1)
         
         let imageAddDes_2 = UIImageView()
         imageAddDes_2.image = UIImage(named: "plusIcon")
         uiviewAddDescription.addSubview(imageAddDes_2)
-        uiviewAddDescription.addConstraintsWithFormat("H:[v0(16)]-7.5-|", options: [], views: imageAddDes_2)
+        uiviewAddDescription.addConstraintsWithFormat("H:[v0(16)]-0-|", options: [], views: imageAddDes_2)
         uiviewAddDescription.addConstraintsWithFormat("V:|-7-[v0(16)]", options: [], views: imageAddDes_2)
         
         let labelAddDesContent = UILabel()
@@ -221,7 +221,7 @@ extension CreateMomentPinViewController {
         labelAddDesContent.textColor = UIColor.white
         uiviewAddDescription.addSubview(labelAddDesContent)
         uiviewAddDescription.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelAddDesContent)
-        uiviewAddDescription.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelAddDesContent)
+        uiviewAddDescription.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelAddDesContent)
         
         let buttonAddDes = UIButton()
         uiviewAddDescription.addSubview(buttonAddDes)
@@ -247,7 +247,7 @@ extension CreateMomentPinViewController {
     private func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateMediaPin.addSubview(uiviewMoreOptions)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewMoreOptions)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(29)]-141-|", options: [], views: uiviewMoreOptions)
         NSLayoutConstraint(item: uiviewMoreOptions, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -260,7 +260,7 @@ extension CreateMomentPinViewController {
         let imageMoreOptions_2 = UIImageView()
         imageMoreOptions_2.image = UIImage(named: "pinSelectLocation02")
         uiviewMoreOptions.addSubview(imageMoreOptions_2)
-        uiviewMoreOptions.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageMoreOptions_2)
+        uiviewMoreOptions.addConstraintsWithFormat("H:[v0(10.5)]-0-|", options: [], views: imageMoreOptions_2)
         uiviewMoreOptions.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageMoreOptions_2)
         
         let labelMoreOptionsContent = UILabel()
@@ -270,7 +270,7 @@ extension CreateMomentPinViewController {
         labelMoreOptionsContent.textColor = UIColor.white
         uiviewMoreOptions.addSubview(labelMoreOptionsContent)
         uiviewMoreOptions.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelMoreOptionsContent)
-        uiviewMoreOptions.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelMoreOptionsContent)
+        uiviewMoreOptions.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelMoreOptionsContent)
         
         let buttonMoreOptions = UIButton()
         uiviewMoreOptions.addSubview(buttonMoreOptions)

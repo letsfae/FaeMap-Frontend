@@ -64,7 +64,7 @@ extension CreateCommentPinViewController {
         
         uiviewSelectLocation = UIView()
         uiviewCreateCommentPin.addSubview(uiviewSelectLocation)
-        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewSelectLocation)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewSelectLocation)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(29)]-209-|", options: [], views: uiviewSelectLocation)
         NSLayoutConstraint(item: uiviewSelectLocation, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -77,17 +77,17 @@ extension CreateCommentPinViewController {
         let imageSelectLocation_2 = UIImageView()
         imageSelectLocation_2.image = UIImage(named: "pinSelectLocation02")
         uiviewSelectLocation.addSubview(imageSelectLocation_2)
-        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageSelectLocation_2)
+        uiviewSelectLocation.addConstraintsWithFormat("H:[v0(10.5)]-0-|", options: [], views: imageSelectLocation_2)
         uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
         
         labelSelectLocationContent = UILabel()
-        labelSelectLocationContent.text = "Current Location"
+        labelSelectLocationContent.text = "Choose Location"
         labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelSelectLocationContent.textAlignment = .left
         labelSelectLocationContent.textColor = UIColor.white
         uiviewSelectLocation.addSubview(labelSelectLocationContent)
         uiviewSelectLocation.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelSelectLocationContent)
-        uiviewSelectLocation.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelSelectLocationContent)
+        uiviewSelectLocation.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelSelectLocationContent)
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
@@ -154,7 +154,7 @@ extension CreateCommentPinViewController {
     private func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateCommentPin.addSubview(uiviewMoreOptions)
-        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewMoreOptions)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(29)]-141-|", options: [], views: uiviewMoreOptions)
         NSLayoutConstraint(item: uiviewMoreOptions, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
@@ -167,7 +167,7 @@ extension CreateCommentPinViewController {
         let imageMoreOptions_2 = UIImageView()
         imageMoreOptions_2.image = UIImage(named: "pinSelectLocation02")
         uiviewMoreOptions.addSubview(imageMoreOptions_2)
-        uiviewMoreOptions.addConstraintsWithFormat("H:[v0(10.5)]-7.5-|", options: [], views: imageMoreOptions_2)
+        uiviewMoreOptions.addConstraintsWithFormat("H:[v0(10.5)]-0-|", options: [], views: imageMoreOptions_2)
         uiviewMoreOptions.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageMoreOptions_2)
         
         let labelMoreOptionsContent = UILabel()
@@ -177,7 +177,7 @@ extension CreateCommentPinViewController {
         labelMoreOptionsContent.textColor = UIColor.white
         uiviewMoreOptions.addSubview(labelMoreOptionsContent)
         uiviewMoreOptions.addConstraintsWithFormat("H:|-42-[v0(209)]", options: [], views: labelMoreOptionsContent)
-        uiviewMoreOptions.addConstraintsWithFormat("V:|-4-[v0(25)]", options: [], views: labelMoreOptionsContent)
+        uiviewMoreOptions.addConstraintsWithFormat("V:|-2-[v0(25)]", options: [], views: labelMoreOptionsContent)
         
         let buttonMoreOptions = UIButton()
         uiviewMoreOptions.addSubview(buttonMoreOptions)
