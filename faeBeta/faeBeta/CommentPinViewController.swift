@@ -344,27 +344,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         })
     }
     
-    // Hide comment pin more options' button
-    func hideCommentPinMoreButtonDetails() {
-        buttonMoreOnCommentCellExpanded = false
-        let subviewXBefore: CGFloat = 400 / 414 * screenWidth
-        let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonShareOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonEditOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonSaveOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonDeleteOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonReportOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonShareOnPinDetail.alpha = 0.0
-            self.buttonEditOnPinDetail.alpha = 0.0
-            self.buttonSaveOnPinDetail.alpha = 0.0
-            self.buttonDeleteOnPinDetail.alpha = 0.0
-            self.buttonReportOnPinDetail.alpha = 0.0
-        }))
-        buttonFakeTransparentClosingView.removeFromSuperview()
-    }
-    
     // Disable a button, make it unclickable
     func disableTheButton(_ button: UIButton) {
         let origImage = button.imageView?.image

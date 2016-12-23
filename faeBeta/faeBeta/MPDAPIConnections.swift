@@ -115,12 +115,64 @@ extension MomentPinDetailViewController {
         saveThisPin.whereKey("", value: "")
         if pinIDPinDetailView != "-999" {
             saveThisPin.saveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
-                if status == 201 {
+                if status / 100 == 2 {
                     print("Successfully save this comment pin!")
+                    self.getPinSavedState()
                     self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    UIView.animate(withDuration: 0.5, animations: ({
+                        self.imageViewSaved.alpha = 1.0
+                    }), completion: { (done: Bool) in
+                        if done {
+                            UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
+                                self.imageViewSaved.alpha = 0.0
+                            }, completion: nil)
+                        }
+                    })
                 }
                 else {
                     print("Fail to save this comment pin!")
+                }
+            }
+        }
+    }
+    
+    func unsaveThisPin(_ type: String, pinID: String) {
+        let unsaveThisPin = FaePinAction()
+        unsaveThisPin.whereKey("", value: "")
+        if pinIDPinDetailView != "-999" {
+            unsaveThisPin.unsaveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully unsave this comment pin!")
+                    self.getPinSavedState()
+                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    UIView.animate(withDuration: 0.5, animations: ({
+                        self.imageViewSaved.alpha = 1.0
+                    }), completion: { (done: Bool) in
+                        if done {
+                            UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
+                                self.imageViewSaved.alpha = 0.0
+                            }, completion: nil)
+                        }
+                    })
+                }
+                else {
+                    print("Fail to unsave this comment pin!")
+                }
+            }
+        }
+    }
+    
+    // Have read this pin
+    func readThisPin(_ type: String, pinID: String) {
+        let readThisPin = FaePinAction()
+        readThisPin.whereKey("", value: "")
+        if pinIDPinDetailView != "-999" {
+            readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully read this comment pin!")
+                }
+                else {
+                    print("Fail to read this comment pin!")
                 }
             }
         }
@@ -257,6 +309,16 @@ extension MomentPinDetailViewController {
                     }
                 }
             }
+            if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
+                if isSaved == false {
+                    self.isSavedByMe = false
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+                }
+                else {
+                    self.isSavedByMe = true
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
+                }
+            }
             if let toGetUserName = commentInfoJSON["user_id"].int {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
@@ -273,6 +335,23 @@ extension MomentPinDetailViewController {
             }
             if let content = commentInfoJSON["content"].string {
                 self.textviewPinDetail.text = "\(content)"
+            }
+        }
+    }
+    
+    func getPinSavedState() {
+        let getPinSavedState = FaeMap()
+        getPinSavedState.getPin(type: "media", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+            let commentInfoJSON = JSON(message!)
+            if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
+                if isSaved == false {
+                    self.isSavedByMe = false
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+                }
+                else {
+                    self.isSavedByMe = true
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
+                }
             }
         }
     }

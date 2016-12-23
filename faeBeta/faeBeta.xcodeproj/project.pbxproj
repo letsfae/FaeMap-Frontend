@@ -211,6 +211,7 @@
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */; };
+		B883AE5B1E0DDD9C00D2E3CE /* MPDMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B883AE5A1E0DDD9C00D2E3CE /* MPDMoreOptions.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
 		B8A3BF561DD0672F00288C3B /* CPDButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */; };
@@ -503,6 +504,7 @@
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPImageDelegateCtrl.swift; sourceTree = "<group>"; };
+		B883AE5A1E0DDD9C00D2E3CE /* MPDMoreOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPDMoreOptions.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
 		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScreenFactor.swift; path = support/ScreenFactor.swift; sourceTree = "<group>"; };
 		B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDButtonActions.swift; sourceTree = "<group>"; };
@@ -1150,6 +1152,7 @@
 				B8612E401DF2504E0092C606 /* MPDInputToolbar.swift */,
 				B827674F1DF3B39400CFB912 /* MPDScrollCtrl.swift */,
 				B8DDC63F1E00A23B00BBB7F1 /* MPDLoadMedias.swift */,
+				B883AE5A1E0DDD9C00D2E3CE /* MPDMoreOptions.swift */,
 			);
 			name = MomentPinExtension;
 			sourceTree = "<group>";
@@ -1665,6 +1668,7 @@
 				B8612E391DF249DC0092C606 /* MPDLoadItems.swift in Sources */,
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
+				B883AE5B1E0DDD9C00D2E3CE /* MPDMoreOptions.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,

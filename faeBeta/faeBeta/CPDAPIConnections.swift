@@ -14,7 +14,6 @@ extension CommentPinDetailViewController {
     // Like comment pin
     func actionLikeThisComment(_ sender: UIButton) {
         endEdit()
-        
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
         }
@@ -155,6 +154,22 @@ extension CommentPinDetailViewController {
                 }
                 else {
                     print("Fail to unsave this comment pin!")
+                }
+            }
+        }
+    }
+    
+    // Have read this pin
+    func readThisPin(_ type: String, pinID: String) {
+        let readThisPin = FaePinAction()
+        readThisPin.whereKey("", value: "")
+        if pinIDPinDetailView != "-999" {
+            readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully read this comment pin!")
+                }
+                else {
+                    print("Fail to read this comment pin!")
                 }
             }
         }

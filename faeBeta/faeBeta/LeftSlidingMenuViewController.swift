@@ -248,6 +248,15 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func readRealmData() {
+        
+        if user_id != nil {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+            imageAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                
+            })
+        }
+        
+        /* Disable realm usage for avatar until backend provide interface
         let realm = try! Realm()
         let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
         if selfInfoRealm.count >= 1 {
@@ -271,6 +280,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 })
             }
         }
+         */
     }
     
     func switchToInvisibleOrOnline(_ sender: UISwitch) {

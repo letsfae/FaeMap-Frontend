@@ -55,10 +55,20 @@ class FaePinAction : NSObject {
         }
     }
     
-    // Save this pin
+    // Unsave this pin
     func unsaveThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && pinID != nil {
             deleteFromURL("pins/\(type!)/\(pinID!)/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
+    // Have read this pin
+    func haveReadThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if type != nil && pinID != nil {
+            postToURL("pins/\(type!)/\(pinID!)/read", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }

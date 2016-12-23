@@ -140,6 +140,8 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var lastContentOffset: CGFloat = 0
     var beforeScrollingOffset: CGFloat = 0
     
+    var isSavedByMe = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -351,27 +353,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
                 
             }
         })
-    }
-    
-    // Hide pin more options' button
-    func hidePinMoreButtonDetails() {
-        buttonMoreOnPinCellExpanded = false
-        let subviewXBefore: CGFloat = 400 / 414 * screenWidth
-        let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            //            self.buttonShareOnPinDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            //            self.buttonSaveOnPinDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            self.buttonEditOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonDeleteOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonReportOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            //            self.buttonShareOnPinDetail.alpha = 0.0
-            //            self.buttonSaveOnCommentDetail.alpha = 0.0
-            self.buttonEditOnPinDetail.alpha = 0.0
-            self.buttonDeleteOnPinDetail.alpha = 0.0
-            self.buttonReportOnPinDetail.alpha = 0.0
-        }))
-        buttonFakeTransparentClosingView.removeFromSuperview()
     }
     
     // Disable a button, make it unclickable
