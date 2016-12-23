@@ -595,6 +595,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                                change: [NSKeyValueChangeKey : Any]?,
                                context: UnsafeMutableRawPointer?)
     {
+        super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         let textView = object as! UITextView
         if (textView == self.inputToolbar.contentView.textView && keyPath! == "text") {
 
