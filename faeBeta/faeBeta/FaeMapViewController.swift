@@ -156,14 +156,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined){
-            print("Not Authorised")
-            self.locManager.requestAlwaysAuthorization()
-        }
-        
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
-            jumpToLocationEnable()
-        }
+        checkLocationEnablibity()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         if userStatus != 5  {
@@ -183,9 +176,22 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.navigationBar.isTranslucent = false
     }
     
+    // Check if location is enabled
+    func checkLocationEnablibity() {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            print("Not Authorised")
+            self.locManager.requestAlwaysAuthorization()
+        }
+        
+        else if CLLocationManager.authorizationStatus() == .denied {
+            jumpToLocationEnable()
+        }
+    }
+    
     // Testing back from background
     func appBackFromBackground() {
         print("App back from background!")
+        checkLocationEnablibity()
         let currentZoomLevel = faeMapView.camera.zoom
         let powFactor: Double = Double(21 - currentZoomLevel)
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
@@ -193,6 +199,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
         if userStatus != 5  {
+            print("[appBackFromBackground] testing delay")
             loadPositionAnimateImage()
             getSelfAccountInfo()
         }
