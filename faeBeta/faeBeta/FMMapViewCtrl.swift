@@ -184,6 +184,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
                     self.updateNameCard(withUserId: userid)
+                    
                     UIView.animate(withDuration: 0.25, animations: {
                         self.buttonFakeTransparentClosingView.alpha = 1
                     })

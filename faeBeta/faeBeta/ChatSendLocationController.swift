@@ -22,7 +22,6 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     
     var widthFactor : CGFloat = 375 / 414
     var heightFactor : CGFloat = 667 / 736
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     weak var locationDelegate : LocationSendDelegate!
     
@@ -144,7 +143,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     func configureCustomSearchController() {
         searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: colorFae, searchBarTintColor: UIColor.white)
+        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
         customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
@@ -182,7 +181,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         buttonSetLocationOnMap = UIButton(frame: CGRect(x: 0, y: screenHeight - 65 * heightFactor, width: screenWidth, height: 65 * heightFactor))
         buttonSetLocationOnMap.setTitle("Send Location", for: UIControlState())
         buttonSetLocationOnMap.setTitle("Send Location", for: .highlighted)
-        buttonSetLocationOnMap.setTitleColor(colorFae, for: UIControlState())
+        buttonSetLocationOnMap.setTitleColor(UIColor.faeAppRedColor(), for: UIControlState())
         buttonSetLocationOnMap.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)

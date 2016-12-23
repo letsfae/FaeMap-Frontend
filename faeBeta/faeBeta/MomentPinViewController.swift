@@ -13,8 +13,6 @@ import RealmSwift
 
 class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
     
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
-    
     // Delegate of this class
     weak var delegate: PinDetailDelegate?
     
@@ -304,7 +302,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
         }
         inputToolbar = JSQMessagesInputToolbarCustom(frame: CGRect(x: 0, y: screenHeight-90, width: screenWidth, height: 90))
         inputToolbar.contentView.textView.delegate = self
-        inputToolbar.contentView.textView.tintColor = colorFae
+        inputToolbar.contentView.textView.tintColor = UIColor.faeAppRedColor()
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
         inputToolbar.contentView.textView.delaysContentTouches = false
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 7, y: 3, width: 200, height: 27))

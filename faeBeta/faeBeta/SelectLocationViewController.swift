@@ -22,7 +22,6 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     var mapSelectLocation: GMSMapView!
 

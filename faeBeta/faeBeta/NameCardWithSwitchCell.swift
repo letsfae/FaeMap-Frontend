@@ -10,7 +10,6 @@ import UIKit
 
 class NameCardWithSwitchCell: UITableViewCell {
     
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     var labelDes: UILabel!
     var cellSwitch: UISwitch!
     
@@ -25,7 +24,7 @@ class NameCardWithSwitchCell: UITableViewCell {
         self.addSubview(cellSwitch)
         self.addConstraintsWithFormat("H:[v0(39)]-30-|", options: [], views: cellSwitch)
         self.addConstraintsWithFormat("V:|-16-[v0(23)]", options: [], views: cellSwitch)
-        cellSwitch.onTintColor = colorFae
+        cellSwitch.onTintColor = UIColor.faeAppRedColor()
         cellSwitch.addTarget(self, action: #selector(self.switchAction(_:)), for: .valueChanged)
     }
     

@@ -33,8 +33,6 @@ class VerificationPhoneViewController: UIViewController {
     
     var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
     
-    let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-    
     let colorDisableButton = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
     
     let warmGray = UIColor(red: 155.0 / 255.0, green: 155.0 / 255.0, blue: 155.0 / 255.0, alpha: 1.0)
@@ -170,7 +168,7 @@ class VerificationPhoneViewController: UIViewController {
             } else {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 60)
             }
-            textVerificationCode[i].textColor = colorFae
+            textVerificationCode[i].textColor = UIColor.faeAppRedColor()
             textVerificationCode[i].textAlignment = .center
             let attributedString = NSMutableAttributedString(string: "\(i)")
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.6), range: NSRange(location: 0, length: attributedString.length))
@@ -188,7 +186,7 @@ class VerificationPhoneViewController: UIViewController {
     }
     
     func enableButton(_ button : UIButton) {
-        button.backgroundColor = colorFae
+        button.backgroundColor = UIColor.faeAppRedColor()
         button.isEnabled = true
     }
     

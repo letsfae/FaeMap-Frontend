@@ -96,10 +96,7 @@ class FaeAccountViewController: UIViewController {
     
     var TextFieldDummy = UITextField(frame: CGRect.zero)
     
-    let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-    
     let colorDisableButton = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
-    let ColorFae = UIColor(red: 248/255, green: 90/255, blue: 90/255, alpha: 1)
     let ColorFaeOrange = UIColor(red: 252.0 / 255.0, green: 155.0 / 255.0, blue: 43.0 / 255.0, alpha: 1.0)
     let ColorFaeYellow = UIColor(red: 247.0 / 255.0, green: 200.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
     
@@ -277,8 +274,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
         textPassWordCheck.font = UIFont(name: "Avenir Next", size: 20)
         textPassWordCheck.addTarget(self, action: #selector(FaeAccountViewController.passwordFieldDidChange), for: UIControlEvents.editingChanged)
         textPassWordCheck.isSecureTextEntry = true
-        textPassWordCheck.textColor = colorFae
-        textPassWordCheck.tintColor = colorFae
+        textPassWordCheck.textColor = UIColor.faeAppRedColor()
+        textPassWordCheck.tintColor = UIColor.faeAppRedColor()
         textPassWordCheck.delegate = self
         textPassWordCheck.becomeFirstResponder()
         popUpDialogView.addSubview(textPassWordCheck)
@@ -418,14 +415,12 @@ extension FaeAccountViewController : UITextFieldDelegate{
         textPassword = PasswordTexField(frame: CGRect(x: 81, y: 84, width: 230, height: 25))
         let passwordPlaceholder = NSAttributedString(string: "New Password", attributes: [NSForegroundColorAttributeName : UIColor.gray])
         textPassword.attributedPlaceholder = passwordPlaceholder
-        //        textPasswordAgain.textColor = ColorFae
         textPassword.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         popUpDialogView.addSubview(textPassword)
         
         textPasswordAgain = PasswordAgainTextField(frame: CGRect(x: 81, y: 148, width: 230, height: 25))
         let passwordAgainPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.gray])
         textPasswordAgain.attributedPlaceholder = passwordAgainPlaceholder;
-        //        textPasswordAgain.textColor = ColorFae
         textPasswordAgain.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         popUpDialogView.addSubview(textPasswordAgain)
         
@@ -514,7 +509,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
             } else {
                 textVerificationCode[i].font = UIFont(name: "AvenirNext-Regular", size: 50)
             }
-            textVerificationCode[i].textColor = colorFae
+            textVerificationCode[i].textColor = UIColor.faeAppRedColor()
             textVerificationCode[i].textAlignment = .center
             let attributedString = NSMutableAttributedString(string: "\(i)")
             attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.6), range: NSRange(location: 0, length: attributedString.length))
@@ -563,7 +558,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
     func passwordIsFocus() {
         print("password is focused")
         imagePassword.image = UIImage(named: "password_red")
-        inLineViewPassword.layer.borderColor = ColorFae.cgColor
+        inLineViewPassword.layer.borderColor = UIColor.faeAppRedColor().cgColor
         textPassword.rightViewMode = .whileEditing
         passwordIsChanged()
         imageCheckPassword.isHidden = true
@@ -582,8 +577,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
             labelPasswordHint.isHidden = false
         } else if (passwordVerification(textPassword.text!)){
             imagePassword.image = UIImage(named: "password_red")
-            inLineViewPassword.layer.borderColor = ColorFae.cgColor
-            textPassword.textColor = ColorFae
+            inLineViewPassword.layer.borderColor = UIColor.faeAppRedColor().cgColor
+            textPassword.textColor = UIColor.faeAppRedColor()
             labelPasswordHint.isHidden = true
             passwordValidated = true
         } else {
@@ -627,8 +622,8 @@ extension FaeAccountViewController : UITextFieldDelegate{
     
     func passwordAgainIsFocus() {
         imagePasswordAgain.image = UIImage(named: "conf_password_red")
-        inLineViewPasswordAgain.layer.borderColor = ColorFae.cgColor
-        textPasswordAgain.textColor = ColorFae
+        inLineViewPasswordAgain.layer.borderColor = UIColor.faeAppRedColor().cgColor
+        textPasswordAgain.textColor = UIColor.faeAppRedColor()
         if(!isValidPasswordAgain()) {
             imageCheckPasswordAgain.isHidden = true
             passwordAgainValidated = false
@@ -919,7 +914,7 @@ extension FaeAccountViewController {
     }
     
     func enableButton(_ button : UIButton) {
-        button.backgroundColor = colorFae
+        button.backgroundColor = UIColor.faeAppRedColor()
         button.isEnabled = true
     }
     

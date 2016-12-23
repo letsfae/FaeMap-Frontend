@@ -34,8 +34,6 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     
     var faeGray = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
     
-    let colorFae = UIColor(red: 249.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1.0)
-    
     let colorDisableButton = UIColor(red: 255.0 / 255.0, green: 160.0 / 255.0, blue: 160.0 / 255.0, alpha: 1.0)
     
     var tap : UITapGestureRecognizer!
@@ -87,7 +85,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
         textPhoneNumber.placeholder = "Phone Number"
         textPhoneNumber.becomeFirstResponder()
         textPhoneNumber.keyboardType = .numberPad
-        textPhoneNumber.tintColor = colorFae
+        textPhoneNumber.tintColor = UIColor.faeAppRedColor()
         textPhoneNumber.addTarget(self, action: #selector(PhoneConnectViewController.checkValidation), for: .editingChanged)
         self.view.addSubview(textPhoneNumber)
     }
@@ -98,7 +96,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     }
     
     func enableButton(_ button : UIButton) {
-        button.backgroundColor = colorFae
+        button.backgroundColor = UIColor.faeAppRedColor()
         button.isEnabled = true
     }
     

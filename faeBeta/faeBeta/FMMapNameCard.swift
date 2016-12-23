@@ -15,6 +15,9 @@ extension FaeMapViewController {
     
     func updateNameCard(withUserId: Int) {
         buttonChat.tag = withUserId
+        buttonOptions.tag = withUserId
+        buttonShowSelfOnMap.isHidden = true
+        buttonFavorite.isHidden = false
         let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
         imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         let userNameCard = FaeUser()
@@ -42,6 +45,9 @@ extension FaeMapViewController {
     }
     
     func getSelfNameCard(_ sender: UIButton) {
+        buttonOptions.tag = Int(user_id)
+        buttonShowSelfOnMap.isHidden = false
+        buttonFavorite.isHidden = true
         if user_id != nil {
             let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
             imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
@@ -53,7 +59,7 @@ extension FaeMapViewController {
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+0.0012, longitude: currentLongitude, zoom: 17)
         faeMapView.animate (to: camera)
         UIView.animate(withDuration: 0.25, animations: {
-            self.uiViewNameCard.alpha = 1
+            self.buttonFakeTransparentClosingView.alpha = 1
         })
         self.openUserPinActive = true
         let userNameCard = FaeUser()
@@ -157,6 +163,11 @@ extension FaeMapViewController {
         buttonFavorite.setImage(UIImage(named: "Favorite"), for: .normal)
         self.uiViewNameCard.addSubview(buttonFavorite)
         
+        buttonShowSelfOnMap = UIButton(frame: CGRect(x: 43*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
+        buttonShowSelfOnMap.setImage(#imageLiteral(resourceName: "showSelfWaveToOthers"), for: .normal)
+        self.uiViewNameCard.addSubview(buttonShowSelfOnMap)
+        buttonShowSelfOnMap.isHidden = true
+        
         buttonOptions = UIButton(frame: CGRect(x: 221*screenWidthFactor, y: 134*screenWidthFactor, width: 32*screenWidthFactor, height: 18*screenWidthFactor))
         buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
         self.uiViewNameCard.addSubview(buttonOptions)
@@ -210,119 +221,12 @@ extension FaeMapViewController {
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func invisibleMode() {
-        let dimBackgroundInvisibleMode = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        dimBackgroundInvisibleMode.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
-        dimBackgroundInvisibleMode.alpha = 0
-        dimBackgroundInvisibleMode.layer.zPosition = 599
-        self.view.addSubview(dimBackgroundInvisibleMode)
-        dimBackgroundInvisibleMode.addTarget(self, action: #selector(FaeMapViewController.invisibleModeDimClicked(_:)), for: UIControlEvents.touchUpInside)
-        
-        let uiViewInvisibleMode = UIView(frame:CGRect(x: 62*screenWidthFactor, y: 155*screenWidthFactor, width: 290*screenWidthFactor, height: 380*screenWidthFactor))
-        uiViewInvisibleMode.backgroundColor = UIColor.white
-        uiViewInvisibleMode.layer.cornerRadius = 16*screenWidthFactor
-        dimBackgroundInvisibleMode.addSubview(uiViewInvisibleMode)
-        
-        let labelTitleInvisible = UILabel(frame: CGRect(x: 73*screenWidthFactor, y: 27*screenWidthFactor, width: 144*screenWidthFactor, height: 44*screenWidthFactor))
-        labelTitleInvisible.text = "You're now in\n Invisible Mode!"
-        labelTitleInvisible.font = UIFont(name: "AvenirNext-Medium", size: 16*screenWidthFactor)
-        labelTitleInvisible.numberOfLines = 0
-        labelTitleInvisible.textAlignment = NSTextAlignment.center
-        labelTitleInvisible.textColor = UIColor(red: 89/255, green: 89.0/255, blue: 89.0/255, alpha: 1.0)
-        uiViewInvisibleMode.addSubview(labelTitleInvisible)
-        
-        let imageAvatarInvisible = UIImageView(frame: CGRect(x: 89*screenWidthFactor, y: 87*screenWidthFactor, width: 117*screenWidthFactor, height: 139*screenWidthFactor))
-        imageAvatarInvisible.image = UIImage(named: "InvisibleMode")
-        uiViewInvisibleMode.addSubview(imageAvatarInvisible)
-        
-        let labelNoteInvisible = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 236*screenWidthFactor, width: 209*screenWidthFactor, height: 66*screenWidthFactor))
-        labelNoteInvisible.numberOfLines = 0
-        labelNoteInvisible.text = "You are Hidden,\nNo one can see you and you\ncan't be discovered"
-        labelNoteInvisible.textAlignment = NSTextAlignment.center
-        labelNoteInvisible.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
-        labelNoteInvisible.font = UIFont(name: "AvenirNext-Medium", size: 16*screenWidthFactor)
-        uiViewInvisibleMode.addSubview(labelNoteInvisible)
-        
-        let buttonInvisibleGotIt = UIButton(frame: CGRect(x: 41*screenWidthFactor, y:315*screenWidthFactor, width: 209*screenWidthFactor, height: 40*screenWidthFactor))
-        buttonInvisibleGotIt.setTitle("Got it!", for: .normal)
-        buttonInvisibleGotIt.titleLabel?.font = UIFont(name:"AvenirNext-DemiBold", size:16*screenWidthFactor)
-        buttonInvisibleGotIt.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
-        buttonInvisibleGotIt.layer.cornerRadius = 20*screenWidthFactor
-        buttonInvisibleGotIt.addTarget(self, action: #selector(self.invisibleModeGotItClicked(_:)), for: .touchUpInside)
-        uiViewInvisibleMode.addSubview(buttonInvisibleGotIt)
-        
-        UIView.animate(withDuration: 0.3) { 
-            dimBackgroundInvisibleMode.alpha = 1
-        }
-    }
-    
-    func invisibleModeDimClicked (_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: ({
-            sender.alpha = 0
-        })) { (done: Bool) in
-            sender.removeFromSuperview()
-        }
-    }
-    
-    func invisibleModeGotItClicked (_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: ({
-            sender.superview?.superview?.alpha = 0
-        })) { (done: Bool) in
-            sender.superview?.superview?.removeFromSuperview()
-        }
-    }
-    
-    func guestMode()    {
-        let uiViewGuestMode = UIView(frame:CGRect(x: 62*screenWidthFactor, y: 155*screenWidthFactor, width: 290*screenWidthFactor, height: 380*screenWidthFactor))
-        uiViewGuestMode.backgroundColor = UIColor.white
-        uiViewGuestMode.layer.cornerRadius = 16*screenWidthFactor
-        self.view.addSubview(uiViewGuestMode)
-        
-        let labelTitleGuest = UILabel(frame: CGRect(x: 73*screenWidthFactor, y: 27*screenWidthFactor, width: 144*screenWidthFactor, height: 44*screenWidthFactor))
-        labelTitleGuest.text = "You are currently in\n Guest Mode!"
-        labelTitleGuest.numberOfLines = 0
-        labelTitleGuest.textAlignment = NSTextAlignment.center
-        labelTitleGuest.textColor = UIColor(red: 89/255, green: 89.0/255, blue: 89.0/255, alpha: 1.0)
-        labelTitleGuest.font = UIFont(name: "AvenirNext-Medium",size: 16*screenWidthFactor)
-        uiViewGuestMode.addSubview(labelTitleGuest)
-        
-        let imageAvatarGuest = UIImageView(frame: CGRect(x: 55*screenWidthFactor, y: 101*screenWidthFactor, width: 180*screenWidthFactor, height: 139*screenWidthFactor))
-        imageAvatarGuest.image = UIImage(named: "GuestMode")
-        uiViewGuestMode.addSubview(imageAvatarGuest)
-        
-        let buttonGuestLogIn = UIButton(frame: CGRect(x: 40*screenWidthFactor, y: 263*screenWidthFactor, width:210*screenWidthFactor, height: 40*screenWidthFactor))
-        buttonGuestLogIn.setTitle("Log In", for: .normal)
-        buttonGuestLogIn.layer.cornerRadius = 20*screenWidthFactor
-        buttonGuestLogIn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16*screenWidthFactor)
-        buttonGuestLogIn.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
-        buttonGuestLogIn.addTarget(self, action: #selector(self.buttonGuestLogInClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestLogIn)
-        
-        let buttonGuestCreateCount = UIButton(frame: CGRect(x: 40*screenWidthFactor, y: 315*screenWidthFactor, width: 210*screenWidthFactor, height: 40*screenWidthFactor))
-        buttonGuestCreateCount.setTitle("Create a Fae Count", for: .normal)
-        buttonGuestCreateCount.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 16*screenWidthFactor)
-        buttonGuestCreateCount.setTitleColor(UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0), for: .normal)
-        //buttonGuestCreateCount.titleLabel?.textColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0) 改变不了button title的颜色
-        buttonGuestCreateCount.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).cgColor
-        buttonGuestCreateCount.layer.cornerRadius = 20*screenWidthFactor
-        buttonGuestCreateCount.backgroundColor = UIColor.white
-        buttonGuestCreateCount.layer.borderWidth = 2.5
-        buttonGuestCreateCount.addTarget(self, action: #selector(self.buttonGuestCreateCountClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestCreateCount)
-    }
-    
-    func buttonGuestLogInClicked(_ sender: UIButton) {
-        print("guest log in")
-    }
-    func buttonGuestCreateCountClicked(_ sender: UIButton) {
-        print("Create an account")
-    }
-    
     func showNameCardOptions(_ sender: UIButton) {
         buttonClosingOptionsInNameCard.isHidden = false
         buttonFakeTransparentClosingView.tag = 1
         var thisIsMe = false
         if sender.tag == Int(user_id) {
+            print("[showNameCardOptions] this is me")
             thisIsMe = true
         }
         let subviewXBefore: CGFloat = 243 / 414 * screenWidth

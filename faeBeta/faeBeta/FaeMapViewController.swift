@@ -15,7 +15,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Common Used Vars and Constants
     let navigationBarHeight : CGFloat = 20
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     // MARK: -- Map main screen Objects
     var faeMapView: GMSMapView!
@@ -109,6 +108,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var buttonFakeTransparentClosingView: UIButton!
     var buttonFavorite: UIButton!
     var buttonOptions: UIButton!
+    var buttonShowSelfOnMap: UIButton!
     var editNameCard: UIButton!
     var imageAvatarNameCard: UIImageView!
     var imageBackground: UIImageView!
@@ -167,6 +167,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             loadPositionAnimateImage()
         }
         getSelfAccountInfo()
+        buttonFakeTransparentClosingView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -62,7 +62,6 @@ extension String {
     
     func formatPinCommentsContent() -> NSMutableAttributedString {
         
-        let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
         let regularColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         
 //        var content = "<a>@maplestory06</a> comment and like testing"
@@ -80,7 +79,7 @@ extension String {
         let index = self.index(self.startIndex, offsetBy: endIndex)
         let restContent = " \(self.substring(from: index))"
         
-        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: colorFae]
+        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
         let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)

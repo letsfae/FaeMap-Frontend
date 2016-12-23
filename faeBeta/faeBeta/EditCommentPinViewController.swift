@@ -19,7 +19,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
     
     var buttonCancel: UIButton!
     var buttonSave: UIButton!
@@ -98,7 +97,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         textViewUpdateComment.textContainerInset = UIEdgeInsets.zero
         textViewUpdateComment.indicatorStyle = UIScrollViewIndicatorStyle.white
         self.view.addSubview(textViewUpdateComment)
-        UITextView.appearance().tintColor = colorFae
+        UITextView.appearance().tintColor = UIColor.faeAppRedColor()
     }
     
     func actionCancelCommentPinEditing(_ sender: UIButton) {

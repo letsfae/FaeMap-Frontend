@@ -65,7 +65,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
             let userN = usernameInfo["argumentInt"] as! String
             self.replyToUser = "<a>@\(userN)</a> "
             let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-            menu.view.tintColor = colorFae
+            menu.view.tintColor = UIColor.faeAppRedColor()
             let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
                 self.loadInputToolBar()
                 self.inputToolbar.isHidden = false

@@ -18,9 +18,6 @@ protocol MainScreenSearchDelegate: class {
 class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
     weak var delegate: MainScreenSearchDelegate?
-
-    let colorFae = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
-    let fontColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
     
     var mapSelectLocation: GMSMapView!
     var imagePinOnMap: UIImageView!
@@ -130,13 +127,13 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         customSearchController = CustomSearchController(searchResultsController: self,
                                                         searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
                                                         searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
-                                                        searchBarTextColor: fontColor,
+                                                        searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
                                                         searchBarTintColor: UIColor.white)
         customSearchController.customSearchBar.placeholder = "Search Fae Map                                         "
         customSearchController.customDelegate = self
         customSearchController.customSearchBar.layer.borderWidth = 2.0
         customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
-        customSearchController.customSearchBar.tintColor = colorFae
+        customSearchController.customSearchBar.tintColor = UIColor.faeAppRedColor()
         
         searchBarSubview.addSubview(customSearchController.customSearchBar)
         searchBarSubview.backgroundColor = UIColor.white

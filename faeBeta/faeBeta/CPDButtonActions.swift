@@ -418,7 +418,7 @@ extension CommentPinDetailViewController {
     
     func actionShowActionSheet(_ username: String) {
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-        menu.view.tintColor = colorFae
+        menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
             self.loadInputToolBar()
             self.inputToolbar.isHidden = false
