@@ -21,26 +21,27 @@ class LeftSlideWindowCell: UITableViewCell {
     
     func loadItem() {
         imageLeft = UIImageView()
+        imageLeft.contentMode = .scaleAspectFill
+        imageLeft.clipsToBounds = true
         self.addSubview(imageLeft)
-        self.addConstraintsWithFormat("H:|-26-[v0(28)]", options: [], views: imageLeft)
-        self.addConstraintsWithFormat("V:|-22-[v0(28)]", options: [], views: imageLeft)
-        
+        self.addConstraintsWithFormat("H:|-25-[v0(28)]", options: [], views: imageLeft)
+        self.addConstraintsWithFormat("V:|-20-[v0(28)]", options: [], views: imageLeft)
+
         labelMiddle = UILabel()
         labelMiddle.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelMiddle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha:1)
         self.addSubview(labelMiddle)
         self.addConstraintsWithFormat("H:|-68-[v0(143.65)]", options: [], views: labelMiddle)
-        self.addConstraintsWithFormat("V:|-23-[v0(28)]", options: [], views: labelMiddle)
+        self.addConstraintsWithFormat("V:|-21-[v0(28)]", options: [], views: labelMiddle)
         
         switchRight = UISwitch(frame: CGRect(x: 0, y: 0, width: 39, height: 23))
         switchRight.isHidden = true
         switchRight.isOn = false
         switchRight.onTintColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        switchRight.transform = CGAffineTransform(scaleX: 39/51, y: 23/31) //因为switch的原大小为 51,31，现在需要把它改成39.23
-        //switchRight.onTintColor
+        switchRight.transform = CGAffineTransform(scaleX: 39/51, y: 23/31)
         self.addSubview(switchRight)
         self.addConstraintsWithFormat("H:[v0(39)]-23-|", options: [], views: switchRight)
-        self.addConstraintsWithFormat("V:|-22-[v0(23)]", options: [], views: switchRight)
+        self.addConstraintsWithFormat("V:|-20-[v0(23)]", options: [], views: switchRight)
         
     }
     
