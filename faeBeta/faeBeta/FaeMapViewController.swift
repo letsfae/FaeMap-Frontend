@@ -122,6 +122,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var reportNameCard: UIButton!
     var shareNameCard: UIButton!
     var uiViewNameCard: UIView!
+    var labelUserAge: UILabel!
+    var uiviewUserGender: UIView!
+    var imageUserGender: UIImageView!
     
     // System Functions
     override func viewDidLoad() {

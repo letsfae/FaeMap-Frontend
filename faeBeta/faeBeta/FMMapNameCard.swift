@@ -132,10 +132,6 @@ extension FaeMapViewController {
         self.uiViewNameCard.addSubview(baseView)
         baseView.addSubview(imageAvatarNameCard)
         
-        imageGenderMen = UIImageView(frame: CGRect(x: 15*screenWidthFactor, y: 134*screenWidthFactor, width: 28*screenWidthFactor, height: 18*screenWidthFactor))
-        imageGenderMen.image = UIImage(named: "GenderMen")
-        self.uiViewNameCard.addSubview(imageGenderMen)
-        
         buttonChat = UIButton(frame: CGRect(x: 120.5*screenWidthFactor, y: 235*screenWidthFactor, width: 27*screenWidthFactor, height: 27*screenWidthFactor))
         buttonChat.setImage(#imageLiteral(resourceName: "chatFromMap"), for: .normal)
         self.uiViewNameCard.addSubview(buttonChat)
@@ -177,11 +173,22 @@ extension FaeMapViewController {
         buttonEmoji.setImage(UIImage(named: "Emoji"), for: .normal)
         self.uiViewNameCard.addSubview(buttonEmoji)
         
+        loadGenderAge()
+        
         buttonClosingOptionsInNameCard = UIButton(frame: CGRect(x: 0, y: 0, width:268*screenWidthFactor, height: 293*screenWidthFactor))
         self.uiViewNameCard.addSubview(buttonClosingOptionsInNameCard)
         buttonClosingOptionsInNameCard.isHidden = true
         buttonClosingOptionsInNameCard.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
-        
+    }
+    
+    func loadGenderAge() {
+        uiviewUserGender = UIView(frame: CGRect(x: 15*screenWidthFactor, y: 134*screenWidthFactor, width: 28*screenWidthFactor, height: 18*screenWidthFactor))
+        uiviewUserGender.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1)
+        uiviewUserGender.layer.cornerRadius = 9*screenHeightFactor
+        uiViewNameCard.addSubview(uiviewUserGender)
+        imageUserGender = UIImageView(frame: CGRect(x: 9*screenWidthFactor, y: 3*screenWidthFactor, width: 10*screenWidthFactor, height: 12*screenWidthFactor))
+        imageUserGender.image = #imageLiteral(resourceName: "userGenderMale")
+        uiviewUserGender.addSubview(imageUserGender)
     }
     
     func buttonChatAction(_ sender: UIButton) {
