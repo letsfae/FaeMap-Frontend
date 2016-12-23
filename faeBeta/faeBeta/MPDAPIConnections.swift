@@ -153,12 +153,6 @@ extension MomentPinDetailViewController {
             if let _ = mapInfoJSON["saves"].int {
                 
             }
-            if let _ = mapInfoJSON["type"].string {
-                
-            }
-            if let _ = mapInfoJSON["pin_id"].string {
-                
-            }
             if let comments = mapInfoJSON["comments"].int {
                 self.labelPinCommentsCount.text = "\(comments)"
             }

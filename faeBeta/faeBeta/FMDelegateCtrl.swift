@@ -46,20 +46,20 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
 //        self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
 //        self.markerBackFromPinDetail.zIndex = 0
-        if let marker = self.mapPinsDic[pinID] {
-//            self.markerBackFromPinDetail = marker
-//            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
-            marker.zIndex = 2
-            self.pinIDFromOpenedPinCell = -999
-        }
-        else {
-            self.pinIDFromOpenedPinCell = pinID
-            let currentZoomLevel = faeMapView.camera.zoom
-            let powFactor: Double = Double(21 - currentZoomLevel)
-            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        }
+//        if let marker = self.mapPinsDic[pinID] {
+////            self.markerBackFromPinDetail = marker
+////            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+//            marker.zIndex = 2
+//            self.pinIDFromOpenedPinCell = -999
+//        }
+//        else {
+//            self.pinIDFromOpenedPinCell = pinID
+//            let currentZoomLevel = faeMapView.camera.zoom
+//            let powFactor: Double = Double(21 - currentZoomLevel)
+//            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+//            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+//            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+//        }
         self.faeMapView.animate(to: camera)
     }
     // PinDetailDelegate

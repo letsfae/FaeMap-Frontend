@@ -22,7 +22,7 @@ class OpenedPinListViewController: UIViewController {
     
     var delegate: OpenedPinListViewControllerDelegate?
 
-    var buttonBackToCommentPinDetail: UIButton!
+    var buttonBackToMap: UIButton!
     var buttonSubviewBackToMap: UIButton!
     var buttonCommentPinListClear: UIButton!
     var buttonCommentPinListDragToLargeSize: UIButton!
@@ -109,10 +109,6 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.addSubview(tableOpenedPin)
         tableOpenedPin.isScrollEnabled = false
         
-        print("DEBUG: opened pin list height")
-        print(tableHeight)
-        print(subviewTableHeight)
-        
         if tableHeight >= subviewTableHeight {
             
         }
@@ -124,16 +120,16 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addSubview(uiviewCommentPinListUnderLine01)
         
         // Button: Back to Comment Detail
-        buttonBackToCommentPinDetail = UIButton()
-        buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), for: UIControlState())
-        buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), for: .touchUpInside)
-        subviewWhite.addSubview(buttonBackToCommentPinDetail)
-        subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToCommentPinDetail)
-        subviewWhite.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToCommentPinDetail)
+        buttonBackToMap = UIButton()
+        buttonBackToMap.setImage(#imageLiteral(resourceName: "openedPinBackToMap"), for: UIControlState())
+        buttonBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+        subviewWhite.addSubview(buttonBackToMap)
+        subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToMap)
+        subviewWhite.addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: buttonBackToMap)
         
         // Button: Clear Comment Pin List
         buttonCommentPinListClear = UIButton()
-        buttonCommentPinListClear.setImage(UIImage(named: "commentPinListClear"), for: UIControlState())
+        buttonCommentPinListClear.setImage(#imageLiteral(resourceName: "openedPinClear"), for: UIControlState())
         buttonCommentPinListClear.addTarget(self, action: #selector(OpenedPinListViewController.actionClearCommentPinList(_:)), for: .touchUpInside)
         subviewWhite.addSubview(buttonCommentPinListClear)
         subviewWhite.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
@@ -151,7 +147,7 @@ class OpenedPinListViewController: UIViewController {
         
         // Button: Drag to larger
         buttonCommentPinListDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
-        buttonCommentPinListDragToLargeSize.setImage(UIImage(named: "commentPinDetailDragToLarge"), for: UIControlState())
+        buttonCommentPinListDragToLargeSize.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(OpenedPinListViewController.actionDraggingThisList(_:)), for: .touchUpInside)
         draggingButtonSubview.addSubview(buttonCommentPinListDragToLargeSize)
 //        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(OpenedPinListViewController.panActionCommentPinListDrag(_:)))

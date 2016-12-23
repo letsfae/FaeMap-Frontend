@@ -18,17 +18,20 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
         }
     }
     
+    // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForComment.center.y += screenHeight
+        self.draggingButtonSubview.center.y += screenHeight
         self.pinIDCommentPinDetailView = "\(pinID)"
         if pinIDCommentPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
     
+    // OpenedPinListViewControllerDelegate
     func backFromOpenedPinList(_ back: Bool) {
         if back {
             backJustOnce = true

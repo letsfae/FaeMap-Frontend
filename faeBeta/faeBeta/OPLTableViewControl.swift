@@ -37,10 +37,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             // Bug: Currently, just comment
             getCommentById.getPin(type: "comment", pinId: "\(pinID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
-                if let userid = commentInfoJSON["user_id"].int {
-                    let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
-                    cell.imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
-                }
+                cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinComment")
                 print(commentInfoJSON)
                 if let time = commentInfoJSON["created_at"].string {
                     cell.time.text = time.formatFaeDate()
