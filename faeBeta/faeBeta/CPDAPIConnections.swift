@@ -19,22 +19,22 @@ extension CommentPinDetailViewController {
             animatingHeartTimer.invalidate()
         }
         
-        if sender.tag == 1 && pinIDCommentPinDetailView != "-999" {
+        if sender.tag == 1 && pinIDPinDetailView != "-999" {
             buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
-            unlikeThisPin("comment", pinID: pinIDCommentPinDetailView)
+            unlikeThisPin("comment", pinID: pinIDPinDetailView)
             print("debug animating sender.tag 1")
             print(sender.tag)
             sender.tag = 0
             return
         }
         
-        if sender.tag == 0 && pinIDCommentPinDetailView != "-999" {
+        if sender.tag == 0 && pinIDPinDetailView != "-999" {
             buttonCommentPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
-            likeThisPin("comment", pinID: pinIDCommentPinDetailView)
+            likeThisPin("comment", pinID: pinIDPinDetailView)
             print("debug animating sender.tag 0")
             print(sender.tag)
             sender.tag = 1
@@ -59,8 +59,8 @@ extension CommentPinDetailViewController {
             animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         }
         
-        if pinIDCommentPinDetailView != "-999" {
-            likeThisPin("comment", pinID: pinIDCommentPinDetailView)
+        if pinIDPinDetailView != "-999" {
+            likeThisPin("comment", pinID: pinIDPinDetailView)
         }
     }
     
@@ -70,20 +70,20 @@ extension CommentPinDetailViewController {
         if animatingHeart != nil {
             animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         }
-        if pinIDCommentPinDetailView != "-999" {
-            unlikeThisPin("comment", pinID: pinIDCommentPinDetailView)
+        if pinIDPinDetailView != "-999" {
+            unlikeThisPin("comment", pinID: pinIDPinDetailView)
         }
     }
     
     func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
-        if pinIDCommentPinDetailView != "-999" {
+        if pinIDPinDetailView != "-999" {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully comment this comment pin!")
-                    self.getPinAttributeNum("comment", pinID: self.pinIDCommentPinDetailView)
-                    self.getPinComments("comment", pinID: self.pinIDCommentPinDetailView, sendMessageFlag: true)
+                    self.getPinAttributeNum("comment", pinID: self.pinIDPinDetailView)
+                    self.getPinComments("comment", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
                 }
                 else {
                     print("Fail to comment this comment pin!")
@@ -95,11 +95,11 @@ extension CommentPinDetailViewController {
     func likeThisPin(_ type: String, pinID: String) {
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
-        if pinIDCommentPinDetailView != "-999" {
+        if pinIDPinDetailView != "-999" {
             likeThisPin.likeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("[likeThisPin] Successfully like this comment pin!")
-                    self.getPinAttributeNum("comment", pinID: self.pinIDCommentPinDetailView)
+                    self.getPinAttributeNum("comment", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to like this comment pin!")
@@ -111,11 +111,21 @@ extension CommentPinDetailViewController {
     func saveThisPin(_ type: String, pinID: String) {
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
-        if pinIDCommentPinDetailView != "-999" {
+        if pinIDPinDetailView != "-999" {
             saveThisPin.saveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
-                if status == 201 {
+                if status / 100 == 2 {
                     print("Successfully save this comment pin!")
-                    self.getPinAttributeNum("comment", pinID: self.pinIDCommentPinDetailView)
+                    self.getPinSavedState()
+                    self.getPinAttributeNum("comment", pinID: self.pinIDPinDetailView)
+                    UIView.animate(withDuration: 0.5, animations: ({
+                        self.imageViewSaved.alpha = 1.0
+                    }), completion: { (done: Bool) in
+                        if done {
+                            UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
+                                self.imageViewSaved.alpha = 0.0
+                            }, completion: nil)
+                        }
+                    })
                 }
                 else {
                     print("Fail to save this comment pin!")
@@ -124,14 +134,40 @@ extension CommentPinDetailViewController {
         }
     }
     
+    func unsaveThisPin(_ type: String, pinID: String) {
+        let unsaveThisPin = FaePinAction()
+        unsaveThisPin.whereKey("", value: "")
+        if pinIDPinDetailView != "-999" {
+            unsaveThisPin.unsaveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully unsave this comment pin!")
+                    self.getPinSavedState()
+                    self.getPinAttributeNum("comment", pinID: self.pinIDPinDetailView)
+                    UIView.animate(withDuration: 0.5, animations: ({
+                        self.imageViewSaved.alpha = 1.0
+                    }), completion: { (done: Bool) in
+                        if done {
+                            UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
+                                self.imageViewSaved.alpha = 0.0
+                            }, completion: nil)
+                        }
+                    })
+                }
+                else {
+                    print("Fail to unsave this comment pin!")
+                }
+            }
+        }
+    }
+    
     func unlikeThisPin(_ type: String, pinID: String) {
         let unlikeThisPin = FaePinAction()
         unlikeThisPin.whereKey("", value: "")
-        if pinIDCommentPinDetailView != "-999" {
+        if pinIDPinDetailView != "-999" {
             unlikeThisPin.unlikeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status/100 == 2 {
                     print("Successfully unlike this comment pin!")
-                    self.getPinAttributeNum("comment", pinID: self.pinIDCommentPinDetailView)
+                    self.getPinAttributeNum("comment", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to unlike this comment pin!")
@@ -224,9 +260,9 @@ extension CommentPinDetailViewController {
         }
     }
     
-    func getCommentInfo() {
+    func getPinInfo() {
         let getCommentById = FaeMap()
-        getCommentById.getPin(type: "comment", pinId: pinIDCommentPinDetailView) {(status: Int, message: Any?) in
+        getCommentById.getPin(type: "comment", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let userid = commentInfoJSON["user_id"].int {
                 print(user_id)
@@ -253,6 +289,16 @@ extension CommentPinDetailViewController {
                     }
                 }
             }
+            if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
+                if isSaved == false {
+                    self.isSavedByMe = false
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+                }
+                else {
+                    self.isSavedByMe = true
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
+                }
+            }
             if let toGetUserName = commentInfoJSON["user_id"].int {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imageCommentPinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
@@ -269,6 +315,23 @@ extension CommentPinDetailViewController {
             }
             if let content = commentInfoJSON["content"].string {
                 self.textviewCommentPinDetail.text = "\(content)"
+            }
+        }
+    }
+    
+    func getPinSavedState() {
+        let getPinSavedState = FaeMap()
+        getPinSavedState.getPin(type: "comment", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+            let commentInfoJSON = JSON(message!)
+            if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
+                if isSaved == false {
+                    self.isSavedByMe = false
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+                }
+                else {
+                    self.isSavedByMe = true
+                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
+                }
             }
         }
     }

@@ -28,11 +28,11 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var pinIdSentBySegue: Int = -999
     
     // Pin options
-    var buttonShareOnCommentDetail: UIButton!
-    var buttonEditOnCommentDetail: UIButton!
-    var buttonSaveOnCommentDetail: UIButton!
-    var buttonDeleteOnCommentDetail: UIButton!
-    var buttonReportOnCommentDetail: UIButton!
+    var buttonShareOnPinDetail: UIButton!
+    var buttonEditOnPinDetail: UIButton!
+    var buttonSaveOnPinDetail: UIButton!
+    var buttonDeleteOnPinDetail: UIButton!
+    var buttonReportOnPinDetail: UIButton!
     
     // New Comment Pin Popup Window
     var animatingHeart: UIImageView!
@@ -67,7 +67,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var numberOfCommentTableCells: Int = 0
-    var pinIDCommentPinDetailView: String = "-999"
+    var pinIDPinDetailView: String = "-999"
     var subviewNavigation: UIView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
@@ -130,14 +130,16 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
     
+    var isSavedByMe = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadCommentPinDetailWindow()
-        pinIDCommentPinDetailView = "\(pinIdSentBySegue)"
-        if pinIDCommentPinDetailView != "-999" {
+        pinIDPinDetailView = "\(pinIdSentBySegue)"
+        if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
@@ -154,7 +156,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
-            		self.loadInputToolBar()
+                self.loadInputToolBar()
         })
     }
     
@@ -171,9 +173,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     }
     
     func getSeveralInfo() {
-        getPinAttributeNum("comment", pinID: pinIDCommentPinDetailView)
-        getCommentInfo()
-        getPinComments("comment", pinID: pinIDCommentPinDetailView, sendMessageFlag: false)
+        getPinAttributeNum("comment", pinID: pinIDPinDetailView)
+        getPinInfo()
+        getPinComments("comment", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func loadTransparentButtonBackToMap() {
@@ -349,16 +351,16 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         let subviewYBefore: CGFloat = 57 / 414 * screenWidth
         UIView.animate(withDuration: 0.25, animations: ({
             self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-//            self.buttonShareOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-//            self.buttonSaveOnCommentDetail.frame = CGRectMake(subviewXBefore, subviewYBefore, 0, 0)
-            self.buttonEditOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonDeleteOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonReportOnCommentDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-//            self.buttonShareOnCommentDetail.alpha = 0.0
-//            self.buttonSaveOnCommentDetail.alpha = 0.0
-            self.buttonEditOnCommentDetail.alpha = 0.0
-            self.buttonDeleteOnCommentDetail.alpha = 0.0
-            self.buttonReportOnCommentDetail.alpha = 0.0
+            self.buttonShareOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonEditOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonSaveOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonDeleteOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonReportOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.buttonShareOnPinDetail.alpha = 0.0
+            self.buttonEditOnPinDetail.alpha = 0.0
+            self.buttonSaveOnPinDetail.alpha = 0.0
+            self.buttonDeleteOnPinDetail.alpha = 0.0
+            self.buttonReportOnPinDetail.alpha = 0.0
         }))
         buttonFakeTransparentClosingView.removeFromSuperview()
     }
@@ -545,7 +547,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     // MARK: - send messages
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
-            commentThisPin("comment", pinID: pinIDCommentPinDetailView, text: "\(self.replyToUser)\(realText)")
+            commentThisPin("comment", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
         self.replyToUser = ""
         self.inputToolbar.contentView.textView.text = ""

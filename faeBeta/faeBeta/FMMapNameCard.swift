@@ -119,16 +119,16 @@ extension FaeMapViewController {
         imageCover.image = UIImage(named: "Cover")
         self.uiViewNameCard.addSubview(imageCover)
         
-        let baseView = UIView(frame: CGRect(x: 103*screenWidthFactor, y: 88*screenWidthFactor, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
+        let baseView = UIView(frame: CGRect(x: 97*screenWidthFactor, y: 82*screenWidthFactor, width: 74*screenWidthFactor, height: 74*screenWidthFactor))
         baseView.backgroundColor = UIColor.clear
-        baseView.layer.cornerRadius = 31*screenWidthFactor
+        baseView.layer.cornerRadius = 74*screenWidthFactor
         baseView.layer.borderColor = UIColor.white.cgColor
         baseView.layer.borderWidth = 6
         baseView.layer.shadowColor = UIColor.gray.cgColor
         baseView.layer.shadowOffset = CGSize.zero
         baseView.layer.shadowOpacity = 0.75
         baseView.layer.shadowRadius = 3
-        imageAvatarNameCard = UIImageView(frame: CGRect(x: 0, y: 0, width: 62*screenWidthFactor, height: 62*screenWidthFactor))
+        imageAvatarNameCard = UIImageView(frame: CGRect(x: 0, y: 0, width: 74*screenWidthFactor, height: 74*screenWidthFactor))
         imageAvatarNameCard.layer.cornerRadius = 31*screenWidthFactor
         imageAvatarNameCard.layer.borderColor = UIColor.white.cgColor
         imageAvatarNameCard.layer.borderWidth = 6

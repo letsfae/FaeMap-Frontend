@@ -248,12 +248,12 @@ extension CommentPinDetailViewController {
         
         // image view appears when saved pin button pressed
         imageViewSaved = UIImageView()
-        imageViewSaved.image = UIImage(named: "imageSavedThisPin")
+        imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
         view.addSubview(imageViewSaved)
         view.addConstraintsWithFormat("H:[v0(182)]", options: [], views: imageViewSaved)
         view.addConstraintsWithFormat("V:|-107-[v0(58)]", options: [], views: imageViewSaved)
         NSLayoutConstraint(item: imageViewSaved, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        imageViewSaved.layer.zPosition = 104
+        imageViewSaved.layer.zPosition = 200
         imageViewSaved.alpha = 0.0
     }
     

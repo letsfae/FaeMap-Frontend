@@ -162,6 +162,7 @@
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
 		B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B80078701E0DBEBE00F70102 /* CPDMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B800786F1E0DBEBE00F70102 /* CPDMoreOptions.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
 		B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */; };
@@ -453,6 +454,7 @@
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B800786F1E0DBEBE00F70102 /* CPDMoreOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPDMoreOptions.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
 		B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuLoadItems.swift; sourceTree = "<group>"; };
@@ -1207,6 +1209,7 @@
 				B8C741101DB710C60020E4E7 /* CPDAPIConnections.swift */,
 				B8E8195A1DB3255000D418D1 /* CPDTableViewCtrlFile.swift */,
 				DC3D10591DC2B1AC0011C772 /* CPDInputToolbar.swift */,
+				B800786F1E0DBEBE00F70102 /* CPDMoreOptions.swift */,
 			);
 			name = CommentPinExtension;
 			sourceTree = "<group>";
@@ -1585,6 +1588,7 @@
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
+				B80078701E0DBEBE00F70102 /* CPDMoreOptions.swift in Sources */,
 				B8C741111DB710C60020E4E7 /* CPDAPIConnections.swift in Sources */,
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
 				B82767501DF3B39400CFB912 /* MPDScrollCtrl.swift in Sources */,

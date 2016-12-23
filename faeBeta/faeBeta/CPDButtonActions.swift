@@ -69,12 +69,7 @@ extension CommentPinDetailViewController {
         }
     }
     
-    // Close more options button when it is open, the subview is under it
-    func actionToCloseOtherViews(_ sender: UIButton) {
-        if buttonMoreOnCommentCellExpanded == true {
-            hideCommentPinMoreButtonDetails()
-        }
-    }
+    
     
     // Back to comment pin list window when in detail window
     func actionGoToList(_ sender: UIButton!) {
@@ -92,190 +87,6 @@ extension CommentPinDetailViewController {
         }
     }
     
-    // Show more options button in comment pin detail window
-    func showCommentPinMoreButtonDetails(_ sender: UIButton!) {
-        endEdit()
-        if buttonMoreOnCommentCellExpanded == false {
-            buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-            buttonFakeTransparentClosingView.layer.zPosition = 110
-            self.view.addSubview(buttonFakeTransparentClosingView)
-            buttonFakeTransparentClosingView.addTarget(self,
-                                                       action: #selector(CommentPinDetailViewController.actionToCloseOtherViews(_:)),
-                                                       for: .touchUpInside)
-            let subviewXBefore: CGFloat = 400 / 414 * screenWidth
-            let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-            var subviewXAfter: CGFloat = 171 / 414 * screenWidth
-            let subviewYAfter: CGFloat = 57 / 414 * screenWidth
-            var subviewWidthAfter: CGFloat = 229 / 414 * screenWidth
-            let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
-            let firstButtonX: CGFloat = 192 / 414 * screenWidth
-            let secondButtonX: CGFloat = 262 / 414 * screenWidth
-            let thirdButtonX: CGFloat = 332 / 414 * screenWidth
-            let buttonY: CGFloat = 97 / 414 * screenWidth
-            let buttonWidth: CGFloat = 44 / 414 * screenWidth
-            let buttonHeight: CGFloat = 51 / 414 * screenWidth
-            
-            var moreOptionBackgroundImage = "moreButtonDetailSubview"
-            
-            if thisIsMyPin == false {
-                subviewXAfter = 308 / 414 * screenWidth
-                subviewWidthAfter = 92 / 414 * screenWidth
-                moreOptionBackgroundImage = "moreButtonDetailSubviewNotMyPin"
-            }
-            
-            moreButtonDetailSubview = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            moreButtonDetailSubview.image = UIImage(named: moreOptionBackgroundImage)
-            moreButtonDetailSubview.layer.zPosition = 111
-            self.view.addSubview(moreButtonDetailSubview)
-            
-            // --> Not for 11.01 Dev
-            //            buttonShareOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
-            //            buttonShareOnCommentDetail.setImage(UIImage(named: "buttonShareOnCommentDetail"), forState: .Normal)
-            //            buttonShareOnCommentDetail.layer.zPosition = 111
-            //            self.view.addSubview(buttonShareOnCommentDetail)
-            //            buttonShareOnCommentDetail.clipsToBounds = true
-            //            buttonShareOnCommentDetail.alpha = 0.0
-            //            buttonShareOnCommentDetail.addTarget(self,
-            //                                                 action: #selector(CommentPinDetailViewController.actionShareComment(_:)),
-            //                                                 forControlEvents: .TouchUpInside)
-            
-            buttonEditOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            buttonEditOnCommentDetail.setImage(UIImage(named: "buttonEditOnCommentDetail"), for: UIControlState())
-            buttonEditOnCommentDetail.layer.zPosition = 111
-            self.view.addSubview(buttonEditOnCommentDetail)
-            buttonEditOnCommentDetail.clipsToBounds = true
-            buttonEditOnCommentDetail.alpha = 0.0
-            buttonEditOnCommentDetail.addTarget(self,
-                                                action: #selector(CommentPinDetailViewController.actionEditComment(_:)),
-                                                for: .touchUpInside)
-            
-            // --> Not for 11.01 Dev
-            //            buttonSaveOnCommentDetail = UIButton(frame: CGRectMake(subviewXBefore, subviewYBefore, 0, 0))
-            //            buttonSaveOnCommentDetail.setImage(UIImage(named: "buttonSaveOnCommentDetail"), forState: .Normal)
-            //            buttonSaveOnCommentDetail.layer.zPosition = 111
-            //            self.view.addSubview(buttonSaveOnCommentDetail)
-            //            buttonSaveOnCommentDetail.clipsToBounds = true
-            //            buttonSaveOnCommentDetail.alpha = 0.0
-            //            buttonSaveOnCommentDetail.addTarget(self,
-            //                                                action: #selector(CommentPinDetailViewController.actionSavedThisPin(_:)),
-            //                                                forControlEvents: .TouchUpInside)
-            
-            buttonDeleteOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            buttonDeleteOnCommentDetail.setImage(UIImage(named: "buttonDeleteOnCommentDetail"), for: UIControlState())
-            buttonDeleteOnCommentDetail.layer.zPosition = 111
-            self.view.addSubview(buttonDeleteOnCommentDetail)
-            buttonDeleteOnCommentDetail.clipsToBounds = true
-            buttonDeleteOnCommentDetail.alpha = 0.0
-            buttonDeleteOnCommentDetail.addTarget(self,
-                                                  action: #selector(CommentPinDetailViewController.actionDeleteThisPin(_:)),
-                                                  for: .touchUpInside)
-            
-            buttonReportOnCommentDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            buttonReportOnCommentDetail.setImage(UIImage(named: "buttonReportOnCommentDetail"), for: UIControlState())
-            buttonReportOnCommentDetail.layer.zPosition = 111
-            self.view.addSubview(buttonReportOnCommentDetail)
-            buttonReportOnCommentDetail.clipsToBounds = true
-            buttonReportOnCommentDetail.alpha = 0.0
-            buttonReportOnCommentDetail.addTarget(self,
-                                                  action: #selector(CommentPinDetailViewController.actionReportThisPin(_:)),
-                                                  for: .touchUpInside)
-            
-            
-            UIView.animate(withDuration: 0.25, animations: ({
-                self.moreButtonDetailSubview.frame = CGRect(x: subviewXAfter,
-                    y: subviewYAfter,
-                    width: subviewWidthAfter,
-                    height: subviewHeightAfter)
-                //                self.buttonShareOnCommentDetail.frame = CGRectMake(firstButtonX, buttonY, buttonWidth, buttonHeight)
-                self.buttonEditOnCommentDetail.frame = CGRect(x: firstButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                //                self.buttonSaveOnCommentDetail.frame = CGRectMake(secondButtonX, buttonY, buttonWidth, buttonHeight)
-                self.buttonDeleteOnCommentDetail.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.buttonReportOnCommentDetail.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                //                self.buttonShareOnCommentDetail.alpha = 1.0
-                //                self.buttonSaveOnCommentDetail.alpha = 1.0
-                if self.thisIsMyPin == true {
-                    self.buttonEditOnCommentDetail.alpha = 1.0
-                    self.buttonDeleteOnCommentDetail.alpha = 1.0
-                }
-                self.buttonReportOnCommentDetail.alpha = 1.0
-            }))
-            buttonMoreOnCommentCellExpanded = true
-        }
-        else {
-            hideCommentPinMoreButtonDetails()
-        }
-    }
-    
-    // When clicking share button in comment pin detail window's more options button
-    func actionShareComment(_ sender: UIButton!) {
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
-        print("Share Clicks!")
-    }
-    
-    func actionEditComment(_ sender: UIButton!) {
-        if pinIdSentBySegue == -999 {
-            return
-        }
-        let editCommentPinVC = EditCommentPinViewController()
-        editCommentPinVC.delegate = self
-        editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
-        editCommentPinVC.pinID = "\(pinIdSentBySegue)"
-        self.present(editCommentPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
-    }
-    
-    func actionReportThisPin(_ sender: UIButton!) {
-        let reportCommentPinVC = ReportCommentPinViewController()
-        reportCommentPinVC.reportType = 0
-        self.present(reportCommentPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
-    }
-    
-    func actionDeleteThisPin(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted from both the Map and Mapboards, no one can find it anymore. All the comments and replies will also be removed.", preferredStyle: UIAlertControllerStyle.alert)
-        let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive) { (result : UIAlertAction) -> Void in
-            print("Delete")
-            let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "comment", pinId: self.pinIDCommentPinDetailView) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully delete comment")
-                    self.actionBackToMap(self.buttonCommentPinBackToMap)
-                    self.delegate?.dismissMarkerShadow(false)
-                }
-                else {
-                    print("Fail to delete comment")
-                }
-            }
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-            print("Cancel Deleting")
-        }
-        alertController.addAction(cancelAction)
-        alertController.addAction(deleteAction)
-        self.present(alertController, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
-    }
-    
-    // When clicking save button in comment pin detail window's more options button
-    func actionSavedThisPin(_ sender: UIButton) {
-        if pinIDCommentPinDetailView != "-999" {
-            saveThisPin("comment", pinID: pinIDCommentPinDetailView)
-        }
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
-        UIView.animate(withDuration: 0.5, animations: ({
-            self.imageViewSaved.alpha = 1.0
-        }), completion: { (done: Bool) in
-            if done {
-                UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
-                    self.imageViewSaved.alpha = 0.0
-                    }, completion: { (done: Bool) in
-                        if done {
-                            
-                        }
-                })
-            }
-        })
-    }
     
     func actionBackToMap(_ sender: UIButton) {
         endEdit()
@@ -427,7 +238,7 @@ extension CommentPinDetailViewController {
             self.lableTextViewPlaceholder.isHidden = true
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-            self.actionReportThisPin(self.buttonReportOnCommentDetail)
+            self.actionReportThisPin(self.buttonReportOnPinDetail)
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             

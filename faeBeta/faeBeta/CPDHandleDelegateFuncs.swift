@@ -13,7 +13,7 @@ import CoreLocation
 extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
     
     func reloadCommentContent() {
-        if pinIDCommentPinDetailView != "-999" {
+        if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
@@ -25,8 +25,8 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForComment.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
-        self.pinIDCommentPinDetailView = "\(pinID)"
-        if pinIDCommentPinDetailView != "-999" {
+        self.pinIDPinDetailView = "\(pinID)"
+        if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
@@ -78,7 +78,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
                 self.lableTextViewPlaceholder.isHidden = true
             }
             let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-                self.actionReportThisPin(self.buttonReportOnCommentDetail)
+                self.actionReportThisPin(self.buttonReportOnPinDetail)
             }
             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
                 

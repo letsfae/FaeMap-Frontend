@@ -30,6 +30,8 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
     var pinID = ""
     var previousCommentContent = ""
     
+    var pinGeoLocation: CLLocationCoordinate2D!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
@@ -53,7 +55,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         self.view.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonCancel)
         self.view.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonCancel)
         buttonCancel.addTarget(self,
-                               action: #selector(EditCommentPinViewController.actionCancelCommentPinEditing(_:)),
+                               action: #selector(self.actionCancelCommentPinEditing(_:)),
                                for: .touchUpInside)
         
         buttonSave = UIButton()
@@ -62,7 +64,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         self.view.addConstraintsWithFormat("H:[v0(38)]-15-|", options: [], views: buttonSave)
         self.view.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonSave)
         buttonSave.addTarget(self,
-                               action: #selector(EditCommentPinViewController.actionUpdateCommentPinEditing(_:)),
+                               action: #selector(self.actionUpdateCommentPinEditing(_:)),
                                for: .touchUpInside)
         
         labelTitle = UILabel()
@@ -113,6 +115,9 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         }
         else {
             let updateComment = FaeMap()
+            print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
+            updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
+            updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
             updateComment.whereKey("content", value: textViewUpdateComment.text)
             updateComment.updateComment(pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
