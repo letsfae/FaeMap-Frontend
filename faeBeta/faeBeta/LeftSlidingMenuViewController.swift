@@ -144,7 +144,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
         let array = ["Map Boards", "Go Invisible", "Relations", "Mood Avatar", "Pins", "My Activities", "Log Out"]
-        cell.imageLeft.image = UIImage(named: "leftSlideWindowImage\(indexPath.row)")
+        cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
         if indexPath.row < 2 {
             cell.switchRight.isHidden = false
