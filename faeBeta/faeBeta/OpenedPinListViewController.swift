@@ -54,7 +54,7 @@ class OpenedPinListViewController: UIViewController {
         }
         buttonSubviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(buttonSubviewBackToMap)
-        self.view.sendSubview(toBack: buttonSubviewBackToMap) // ??
+        self.view.sendSubview(toBack: buttonSubviewBackToMap)
         buttonSubviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         loadCommentPinList()
         backJustOnce = true
@@ -78,7 +78,7 @@ class OpenedPinListViewController: UIViewController {
     
     // Load comment pin list
     func loadCommentPinList() {
-        var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76) //设置下拉table的高度
+        var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
         var subviewTableHeight = tableHeight + 28
         if openedPinListArray.count <= 3 {
             subviewTableHeight = CGFloat(256)
@@ -86,13 +86,13 @@ class OpenedPinListViewController: UIViewController {
         else {
             tableHeight = CGFloat(228)
         }
+        
         subviewTableHeight = CGFloat(256)
-        //设置title 背景灰色在哪里？
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewWhite.backgroundColor = UIColor.white
         self.view.addSubview(subviewWhite)
         subviewWhite.layer.zPosition = 2
-        //设置table+ 展开按钮（在哪里）
+        
         subviewTable = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: subviewTableHeight))
         subviewTable.backgroundColor = UIColor.white
         self.view.addSubview(subviewTable)
@@ -101,7 +101,7 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         subviewTable.layer.shadowOpacity = 0.3
         subviewTable.layer.shadowRadius = 10.0
-        //下拉table
+        
         tableOpenedPin = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: tableHeight))
         tableOpenedPin.register(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
         tableOpenedPin.delegate = self
@@ -123,7 +123,7 @@ class OpenedPinListViewController: UIViewController {
         uiviewCommentPinListUnderLine01.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         subviewWhite.addSubview(uiviewCommentPinListUnderLine01)
         
-        // Button: Back to Comment Detail  ？？
+        // Button: Back to Comment Detail
         buttonBackToCommentPinDetail = UIButton()
         buttonBackToCommentPinDetail.setImage(UIImage(named: "commentPinBackToCommentDetail"), for: UIControlState())
         buttonBackToCommentPinDetail.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), for: .touchUpInside)

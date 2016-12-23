@@ -32,9 +32,9 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             cell.delegate = self
             let pinID = openedPinListArray[indexPath.row]
             cell.pinID = pinID
-            cell.indexPathInCell = indexPath // ？？
+            cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
-            // Bug: Currently, just comment   //闭包的使用
+            // Bug: Currently, just comment
             getCommentById.getPin(type: "comment", pinId: "\(pinID)") {(status: Int, message: Any?) in
                 let commentInfoJSON = JSON(message!)
                 if let userid = commentInfoJSON["user_id"].int {
