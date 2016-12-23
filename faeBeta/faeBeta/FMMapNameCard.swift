@@ -27,6 +27,12 @@ extension FaeMapViewController {
                 let profileInfo = JSON(message!)
                 if let canShowGender = profileInfo["show_gender"].bool {
                     print("[updateNameCard] canShowGender: \(canShowGender)")
+                    if canShowGender {
+                        self.uiviewUserGender.isHidden = false
+                    }
+                    else {
+                        self.uiviewUserGender.isHidden = true
+                    }
                 }
                 if let canShowAge = profileInfo["show_age"].bool {
                     print("[updateNameCard] canShowAge: \(canShowAge)")
