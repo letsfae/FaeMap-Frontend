@@ -94,7 +94,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     var markerMask: UIView! // mask to prevent UI action
     var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
-    var pinIdToPassBySegue: Int = -999 // segue to Comment Pin Popup Window
+    var pinIdToPassBySegue: String = "" // segue to Comment Pin Popup Window
     var previousPosition: CLLocationCoordinate2D!
     var previousZoomLevel: Float = 0 // previous zoom level to check if map should reload pins
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
@@ -145,7 +145,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadPositionAnimateImage()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
-        let emptyArrayList = [Int]()
+        let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)

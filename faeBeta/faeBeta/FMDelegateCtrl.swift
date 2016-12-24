@@ -40,7 +40,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
     }
     // PinDetailDelegate
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         print("DEBUG: Delegate pass pinID")
         print(pinID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)

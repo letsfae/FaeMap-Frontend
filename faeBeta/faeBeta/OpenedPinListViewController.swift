@@ -15,7 +15,7 @@ protocol OpenedPinListViewControllerDelegate {
     // Cancel marker's shadow when back to Fae Map
     func backFromOpenedPinList(_ back: Bool)
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String)
 }
 
 class OpenedPinListViewController: UIViewController {
@@ -29,17 +29,18 @@ class OpenedPinListViewController: UIViewController {
     var commentListExpand = false
     var commentListShowed = false
     var labelCommentPinListTitle: UILabel!
-    var openedPinListArray = [Int]()
+    var openedPinListArray = [String]()
     var subviewTable: UIView!
     var subviewWhite: UIView!
     var tableOpenedPin: UITableView!
     var uiviewCommentPinListUnderLine01: UIView!
     var uiviewCommentPinListUnderLine02: UIView!
     var draggingButtonSubview: UIView!
-    
     // For Dragging
     var commentPinSizeFrom: CGFloat = 0
     var commentPinSizeTo: CGFloat = 0
+    
+    var tableHeight: CGFloat = 0.0
     
     // Control the back to comment pin detail button, prevent the more than once action
     var backJustOnce = true
@@ -50,7 +51,7 @@ class OpenedPinListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let listArray = readByKey("openedPinList") {
-            self.openedPinListArray = listArray as! [Int]
+            self.openedPinListArray = listArray as! [String]
         }
         buttonSubviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(buttonSubviewBackToMap)
@@ -78,16 +79,13 @@ class OpenedPinListViewController: UIViewController {
     
     // Load comment pin list
     func loadCommentPinList() {
-        var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
-        var subviewTableHeight = tableHeight + 28
-        if openedPinListArray.count <= 3 {
-            subviewTableHeight = CGFloat(256)
-        }
-        else {
-            tableHeight = CGFloat(228)
-        }
-        
-        subviewTableHeight = CGFloat(256)
+        tableHeight = CGFloat(openedPinListArray.count * 76)
+        let subviewTableHeight = tableHeight + 28
+//        if openedPinListArray.count <= 3 {
+//            subviewTableHeight = CGFloat(256)
+//        }
+        print("subview = \(subviewTableHeight) table = \(tableHeight)")
+        //subviewTableHeight = CGFloat(256)
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewWhite.backgroundColor = UIColor.white
         self.view.addSubview(subviewWhite)
@@ -135,7 +133,7 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
         subviewWhite.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
         
-        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 228, width: screenWidth, height: 28))
+        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: tableHeight, width: screenWidth, height: 28))
         draggingButtonSubview.backgroundColor = UIColor.white
         self.subviewTable.addSubview(draggingButtonSubview)
         draggingButtonSubview.layer.zPosition = 109

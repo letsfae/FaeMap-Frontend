@@ -154,7 +154,7 @@ extension MomentPinDetailViewController {
     }
     
     func actionEditComment(_ sender: UIButton) {
-        if pinIdSentBySegue == -999 {
+        if pinIdSentBySegue == "-999" {
             return
         }
 //        let editCommentPinVC = EditCommentPinViewController()

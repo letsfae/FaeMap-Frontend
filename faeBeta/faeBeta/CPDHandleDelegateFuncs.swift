@@ -19,7 +19,7 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     }
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
