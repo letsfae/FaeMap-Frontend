@@ -14,7 +14,7 @@ protocol PinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map
     func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int)
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Animate the selected marker
     func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
 }
@@ -25,7 +25,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     weak var delegate: PinDetailDelegate?
     
     // Comment ID To Use In This Controller
-    var pinIdSentBySegue: Int = -999
+    var pinIdSentBySegue: String = "-999"
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -138,7 +138,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadCommentPinDetailWindow()
-        pinIDPinDetailView = "\(pinIdSentBySegue)"
+        pinIDPinDetailView = pinIdSentBySegue
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }

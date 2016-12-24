@@ -17,7 +17,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     weak var delegate: PinDetailDelegate?
     
     // Pin ID To Use In This Controller
-    var pinIdSentBySegue: Int = -999
+    var pinIdSentBySegue: String = "-999"
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -148,7 +148,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
-        pinIDPinDetailView = "\(pinIdSentBySegue)"
+        pinIDPinDetailView = pinIdSentBySegue
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }

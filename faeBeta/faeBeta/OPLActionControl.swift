@@ -68,12 +68,12 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         if sender.tag == 1 {
             sender.tag = 0
             UIView.animate(withDuration: 0.583, animations: ({
-                self.draggingButtonSubview.frame.origin.y = 228
-                self.subviewTable.frame.size.height = 256
+                self.draggingButtonSubview.frame.origin.y = self.tableHeight
+                self.subviewTable.frame.size.height = self.tableHeight + 28
                 self.tableOpenedPin.scrollToTop()
             }), completion: { (done: Bool) in
                 if done {
-                    
+                    self.tableOpenedPin.reloadData()
                 }
             })
             return
@@ -84,7 +84,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
             self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
-                
+                self.tableOpenedPin.reloadData()
             }
         })
     }
@@ -132,7 +132,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         self.dismiss(animated: false, completion: {
             self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID)
         })
@@ -153,6 +153,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         subviewTableHeight = CGFloat(256)
         self.tableOpenedPin.frame.size.height = tableHeight
         self.subviewTable.frame.size.height = subviewTableHeight
+        self.tableOpenedPin.reloadData()
     }
     
     
