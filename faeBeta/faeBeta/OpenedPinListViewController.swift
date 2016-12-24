@@ -40,8 +40,6 @@ class OpenedPinListViewController: UIViewController {
     var commentPinSizeFrom: CGFloat = 0
     var commentPinSizeTo: CGFloat = 0
     
-    var tableHeight: CGFloat = 0.0
-    
     // Control the back to comment pin detail button, prevent the more than once action
     var backJustOnce = true
     
@@ -79,13 +77,17 @@ class OpenedPinListViewController: UIViewController {
     
     // Load comment pin list
     func loadCommentPinList() {
-        tableHeight = CGFloat(openedPinListArray.count * 76)
-        let subviewTableHeight = tableHeight + 28
+        let tableHeight = CGFloat(228)
+        let subviewTableHeight = CGFloat(256)
 //        if openedPinListArray.count <= 3 {
 //            subviewTableHeight = CGFloat(256)
 //        }
-        print("subview = \(subviewTableHeight) table = \(tableHeight)")
+        
         //subviewTableHeight = CGFloat(256)
+//        if openedPinListArray.count > 3 {
+//            tableHeight = CGFloat(openedPinListArray.count * 76)
+//        }
+        print("subview = \(subviewTableHeight) table = \(tableHeight)")
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewWhite.backgroundColor = UIColor.white
         self.view.addSubview(subviewWhite)
@@ -107,9 +109,6 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.addSubview(tableOpenedPin)
         tableOpenedPin.isScrollEnabled = false
         
-        if tableHeight >= subviewTableHeight {
-            
-        }
         
         // Line at y = 64
         uiviewCommentPinListUnderLine01 = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
