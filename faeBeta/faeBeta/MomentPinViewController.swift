@@ -256,6 +256,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
             
             //        let camera = Camera(delegate_: self)
             let contentView = self.inputToolbar.contentView
+            contentView?.backgroundColor = UIColor.white
             let contentOffset = (screenWidth - 42 - 29 * 5) / 4 + 29
             buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
