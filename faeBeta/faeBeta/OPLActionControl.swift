@@ -68,9 +68,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         if sender.tag == 1 {
             sender.tag = 0
             UIView.animate(withDuration: 0.583, animations: ({
-                self.draggingButtonSubview.frame.origin.y = self.tableHeight
-                self.subviewTable.frame.size.height = self.tableHeight + 28
-                self.tableOpenedPin.scrollToTop()
+                self.draggingButtonSubview.frame.origin.y = 228
+                self.subviewTable.frame.size.height = 256
+                self.tableOpenedPin.frame.size.height = 228
             }), completion: { (done: Bool) in
                 if done {
                     self.tableOpenedPin.reloadData()
@@ -82,6 +82,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         UIView.animate(withDuration: 0.583, animations: ({
             self.draggingButtonSubview.frame.origin.y = screenHeight - 93
             self.subviewTable.frame.size.height = screenHeight - 65
+            self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
         }), completion: { (done: Bool) in
             if done {
                 self.tableOpenedPin.reloadData()
@@ -146,11 +147,21 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         var subviewTableHeight = tableHeight + 28
         if openedPinListArray.count <= 3 {
             subviewTableHeight = CGFloat(256)
-        }
-        else {
             tableHeight = CGFloat(228)
+            if openedPinListArray.count == 0 {
+                UIView.animate(withDuration: 0.583, animations: ({
+                    self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                    self.subviewTable.center.y -= screenHeight
+                }), completion: { (done: Bool) in
+                    if done {
+                        self.dismiss(animated: false, completion: {
+                            self.delegate?.backFromOpenedPinList(false)
+                        })
+                    }
+                })
+            }
         }
-        subviewTableHeight = CGFloat(256)
+        //subviewTableHeight = CGFloat(256)
         self.tableOpenedPin.frame.size.height = tableHeight
         self.subviewTable.frame.size.height = subviewTableHeight
         self.tableOpenedPin.reloadData()
