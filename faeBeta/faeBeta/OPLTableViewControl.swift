@@ -26,13 +26,12 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             return 0
         }
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableOpenedPin {
             let cell = tableView.dequeueReusableCell(withIdentifier: "openedPinCell", for: indexPath) as! OPLTableViewCell
             cell.delegate = self
             let pinInfo = openedPinListArray[indexPath.row]
-            print("[OPLTableViewControl] pinInfo = \(pinInfo)")
+            print("[OPLTableViewControl] pinInfo = \(pinInfo) row = \(indexPath.row)")
             let pinType = pinInfo.components(separatedBy: "%")[0]
             let pinID = pinInfo.components(separatedBy: "%")[1]
             cell.pinID = pinID

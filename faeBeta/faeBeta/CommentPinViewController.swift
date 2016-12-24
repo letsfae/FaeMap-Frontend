@@ -150,7 +150,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForComment.frame.origin.y = 65
-            self.draggingButtonSubview.frame.origin.y = 292
+            self.draggingButtonSubview.frame.origin.y = 293
             self.grayBackButton.alpha = 1
             self.commentPinIcon.alpha = 1
             self.buttonPrevPin.alpha = 1
