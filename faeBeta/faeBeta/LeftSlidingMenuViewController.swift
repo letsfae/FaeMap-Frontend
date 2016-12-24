@@ -117,7 +117,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         buttonImageOverlay.layer.cornerRadius = 45.5*screenWidthFactor
         buttonImageOverlay.addTarget(self, action: #selector(self.actionJumpToMainPage(_:)), for: .touchUpInside)
         
-        label = UILabel(frame: CGRect(x: 0, y: 139, width: 180, height: 27))
+        label = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
         label.text = "LinLinLinLinLinLinLin"
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         label.textColor = UIColor.white
@@ -125,8 +125,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         label.textAlignment = .center
         uiViewLeftWindow.addSubview(label)
         
-        imageLeftSlideWindowMiddle = UIImageView(frame: CGRect(x: 0, y: 140, width: 290, height: 120))
-        imageLeftSlideWindowMiddle.image = #imageLiteral(resourceName: "leftWindowCloud")
+        imageLeftSlideWindowMiddle = UIImageView(frame: CGRect(x: 0, y: 152, width: 290, height: 108))
+        imageLeftSlideWindowMiddle.image = #imageLiteral(resourceName: "leftMenuCloud")
         uiViewLeftWindow.addSubview(imageLeftSlideWindowMiddle)
         
         tableLeftSlideWindow = UITableView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight))
