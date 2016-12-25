@@ -33,6 +33,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     var labelSelectLocationContent: String!
     
+    private var submitButtonEnabled: Bool = false
+    
     enum OptionViewMode{
         case pin
         case bubble
@@ -185,14 +187,14 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                 leaveAddTags()
                 break
             }
-        }else if (optionViewMode == .pin){
+        }
+        // create a pin
+        else if (optionViewMode == .pin){
             
             let postSingleChatPin = FaeMap()
             
             var submitLatitude = selectedLatitude
             var submitLongitude = selectedLongitude
-            
-//            let commentContent = descriptionTextView.text
             
             if labelSelectLocationContent == nil || labelSelectLocationContent == "" {
                 submitLatitude = "\(currentLocation.coordinate.latitude)"
@@ -201,7 +203,9 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             
             postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
             postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
-//            postSingleChatPin.whereKey("content", value: commentContent)
+            if let des = descriptionTextView.text{
+                postSingleChatPin.whereKey("description", value: des)
+            }
             postSingleChatPin.whereKey("interaction_radius", value: "99999999")
             postSingleChatPin.whereKey("duration", value: "1440")
             postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
@@ -353,7 +357,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                 self.descriptionTextView.alpha = 0
             }
             self.titleLabel.text = ""
-            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: false)
+            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: self.submitButtonEnabled)
         }, completion:{
             Complete in
         })
@@ -397,7 +401,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             }
             
             self.titleLabel.text = ""
-            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: false)
+            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: self.submitButtonEnabled)
         }, completion:{
             Complete in
         })
@@ -464,8 +468,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     func updateSubmitButton()
     {
-        let enabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
-        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : enabled)
+        submitButtonEnabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
+        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : submitButtonEnabled)
     }
     
     //MARK: - SelectLocationViewControllerDelegate
