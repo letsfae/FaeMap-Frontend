@@ -143,7 +143,7 @@ class OpenedPinListViewController: UIViewController {
         draggingButtonSubview.addSubview(uiviewCommentPinListUnderLine02)
         
         // Button: Drag to larger
-        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
+        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
         buttonCommentPinListDragToLargeSize.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(OpenedPinListViewController.actionDraggingThisList(_:)), for: .touchUpInside)
         draggingButtonSubview.addSubview(buttonCommentPinListDragToLargeSize)

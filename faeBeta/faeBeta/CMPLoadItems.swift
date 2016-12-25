@@ -135,7 +135,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
         buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
         buttonMediaSubmit.adjustsImageWhenDisabled = false
-        buttonMediaSubmit.isEnabled = false
+        buttonMediaSubmit.isEnabled = true
         buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)

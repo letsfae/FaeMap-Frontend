@@ -233,6 +233,9 @@ extension CreateMomentPinViewController {
         if mediaContent != "" {
             postSingleMedia.whereKey("description", value: mediaContent)
         }
+        else {
+            
+        }
         postSingleMedia.whereKey("interaction_radius", value: "99999999")
         postSingleMedia.whereKey("duration", value: "180")
         postSingleMedia.whereKey("anonymous", value: "\(anonymous)")

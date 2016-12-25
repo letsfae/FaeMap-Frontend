@@ -118,7 +118,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         buttonImageOverlay.addTarget(self, action: #selector(self.actionJumpToMainPage(_:)), for: .touchUpInside)
         
         label = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
-        label.text = "LinLinLinLinLinLinLin"
+        label.text = displayName
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         label.textColor = UIColor.white
         label.center.x = 145

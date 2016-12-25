@@ -79,12 +79,13 @@ extension MomentPinDetailViewController {
         }
         
         // Textview of pin detail
-        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
+        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 200))
         textviewPinDetail.text = ""
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewPinDetail.isUserInteractionEnabled = true
         textviewPinDetail.isEditable = false
+        textviewPinDetail.isScrollEnabled = true
         textviewPinDetail.textContainerInset = UIEdgeInsets.zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
         textviewPinDetail.isHidden = true

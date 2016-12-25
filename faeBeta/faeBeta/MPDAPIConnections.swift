@@ -334,7 +334,8 @@ extension MomentPinDetailViewController {
             if let time = commentInfoJSON["created_at"].string {
                 self.labelPinTimestamp.text = time.formatFaeDate()
             }
-            if let content = commentInfoJSON["content"].string {
+            if let content = commentInfoJSON["description"].string {
+                print("[getPinInfo] description: \(content)")
                 self.textviewPinDetail.text = "\(content)"
             }
         }
