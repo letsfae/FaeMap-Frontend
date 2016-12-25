@@ -16,7 +16,7 @@ extension CommentPinDetailViewController {
         loadNavigationBar()
         
         // Table comments for comment
-        tableCommentsForComment = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 227))
+        tableCommentsForComment = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 228))
         tableCommentsForComment.delegate = self
         tableCommentsForComment.dataSource = self
         tableCommentsForComment.allowsSelection = false
@@ -30,7 +30,7 @@ extension CommentPinDetailViewController {
         tableCommentsForComment.center.y -= screenHeight
         
         // Dragging button
-        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 28))
+        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 293, width: screenWidth, height: 28))
         draggingButtonSubview.backgroundColor = UIColor.white
         self.view.addSubview(draggingButtonSubview)
         draggingButtonSubview.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
