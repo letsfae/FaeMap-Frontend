@@ -121,7 +121,7 @@ extension FaeMapViewController {
         
         let baseView = UIView(frame: CGRect(x: 97*screenWidthFactor, y: 82*screenWidthFactor, width: 74*screenWidthFactor, height: 74*screenWidthFactor))
         baseView.backgroundColor = UIColor.clear
-        baseView.layer.cornerRadius = 74*screenWidthFactor
+        baseView.layer.cornerRadius = 37*screenWidthFactor
         baseView.layer.borderColor = UIColor.white.cgColor
         baseView.layer.borderWidth = 6
         baseView.layer.shadowColor = UIColor.gray.cgColor
@@ -129,7 +129,7 @@ extension FaeMapViewController {
         baseView.layer.shadowOpacity = 0.75
         baseView.layer.shadowRadius = 3
         imageAvatarNameCard = UIImageView(frame: CGRect(x: 0, y: 0, width: 74*screenWidthFactor, height: 74*screenWidthFactor))
-        imageAvatarNameCard.layer.cornerRadius = 31*screenWidthFactor
+        imageAvatarNameCard.layer.cornerRadius = 37*screenWidthFactor
         imageAvatarNameCard.layer.borderColor = UIColor.white.cgColor
         imageAvatarNameCard.layer.borderWidth = 6
         imageAvatarNameCard.image = #imageLiteral(resourceName: "defaultMen")

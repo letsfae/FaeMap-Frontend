@@ -95,7 +95,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         imageLeftSlideWindowUp.image = UIImage(named: "leftWindowbackground")
         uiViewLeftWindow.addSubview(imageLeftSlideWindowUp)
         
-        imageAvatar = UIImageView(frame: CGRect(x: 105, y: 49, width: 91, height: 91))
+        imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
         uiViewLeftWindow.addSubview(imageAvatar)
         imageAvatar.center.x = 145
         imageAvatar.layer.cornerRadius = 45.5*screenWidthFactor
@@ -111,21 +111,21 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
         imageAvatar.contentMode = .scaleAspectFill
         imageAvatar.layer.masksToBounds = true
-        buttonImageOverlay = UIButton(frame: CGRect(x: 100, y: 44, width: 91, height: 91))
+        buttonImageOverlay = UIButton(frame: CGRect(x: 100, y: 40, width: 91, height: 91))
         uiViewLeftWindow.addSubview(buttonImageOverlay)
         buttonImageOverlay.center.x = 145
         buttonImageOverlay.layer.cornerRadius = 45.5*screenWidthFactor
         buttonImageOverlay.addTarget(self, action: #selector(self.actionJumpToMainPage(_:)), for: .touchUpInside)
         
-        label = UILabel(frame: CGRect(x: 0, y: 142, width: 290, height: 27))
-        label.text = displayName
+        label = UILabel(frame: CGRect(x: 0, y: 139, width: 180, height: 27))
+        label.text = "LinLinLinLinLinLinLin"
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         label.textColor = UIColor.white
         label.center.x = 145
         label.textAlignment = .center
         uiViewLeftWindow.addSubview(label)
         
-        imageLeftSlideWindowMiddle = UIImageView(frame: CGRect(x: 0, y: 138, width: 290, height: 120))
+        imageLeftSlideWindowMiddle = UIImageView(frame: CGRect(x: 0, y: 140, width: 290, height: 120))
         imageLeftSlideWindowMiddle.image = #imageLiteral(resourceName: "leftWindowCloud")
         uiViewLeftWindow.addSubview(imageLeftSlideWindowMiddle)
         
