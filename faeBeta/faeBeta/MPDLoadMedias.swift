@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 import SDWebImage
+import IDMPhotoBrowser
 
 extension MomentPinDetailViewController {
     func loadMedias() {
@@ -20,6 +21,9 @@ extension MomentPinDetailViewController {
             imageView.clipsToBounds = true
             imageViewMediaArray.append(imageView)
             scrollViewMedia.addSubview(imageView)
+            imageView.isUserInteractionEnabled = true
+            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
+            imageView.addGestureRecognizer(tapRecognizer)
             let realm = try! Realm()
             let mediaRealm = realm.objects(Media.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil")
             if mediaRealm.count >= 1 {
@@ -46,6 +50,15 @@ extension MomentPinDetailViewController {
             }
         }
         self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 105 - 10, height: 95)
+    }
+    
+    func openThisMedia(_ sender: UIGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        if let image = imageView.image {
+            let photos = IDMPhoto.photos(withImages: [image])
+            let browser = IDMPhotoBrowser(photos: photos)
+            self.present(browser!, animated: true, completion: nil)
+        }
     }
     
     func zoomMedia(_ type: MediaMode) {

@@ -69,17 +69,18 @@ extension MomentPinDetailViewController {
         // Textview width based on different resolutions
         var textViewWidth: CGFloat = 0
         if screenWidth == 414 { // 5.5
-            textViewWidth = 360
+            textViewWidth = 370
         }
         else if screenWidth == 320 { // 4.0
-            textViewWidth = 266
+            textViewWidth = 276
         }
         else if screenWidth == 375 { // 4.7
-            textViewWidth = 321
+            textViewWidth = 331
         }
         
         // Textview of pin detail
         textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 200))
+        textviewPinDetail.center.x = screenWidth / 2
         textviewPinDetail.text = ""
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)

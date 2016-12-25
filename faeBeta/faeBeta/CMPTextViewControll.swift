@@ -17,19 +17,19 @@ extension CreateMomentPinViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if textView == textViewForMediaPin {
-//            let spacing = CharacterSet.whitespacesAndNewlines 
-//            if textViewForMediaPin.text.trimmingCharacters(in: spacing).isEmpty == false {
-//                buttonMediaSubmit.isEnabled = true
-//                lableTextViewPlaceholder.isHidden = true
-//                buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
-//                buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
-//            }
-//            else {
-//                buttonMediaSubmit.isEnabled = false
-//                lableTextViewPlaceholder.isHidden = false
-//                buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
-//                buttonMediaSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
-//            }
+            let spacing = CharacterSet.whitespacesAndNewlines 
+            if textViewForMediaPin.text.trimmingCharacters(in: spacing).isEmpty == false {
+                buttonMediaSubmit.isEnabled = true
+                lableTextViewPlaceholder.isHidden = true
+                buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+                buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
+            }
+            else {
+                buttonMediaSubmit.isEnabled = false
+                lableTextViewPlaceholder.isHidden = false
+                buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
+                buttonMediaSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
+            }
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             var numlineOnDevice = 3
             if screenWidth == 375 {
