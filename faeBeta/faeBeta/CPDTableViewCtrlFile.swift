@@ -29,10 +29,12 @@ extension CommentPinDetailViewController: UITableViewDelegate, UITableViewDataSo
         if tableView == self.tableCommentsForComment {
             let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinCommentsCell", for: indexPath) as! PinCommentsCell
             cell.delegate = self
+            cell.pinID = pinIDPinDetailView
+            cell.pinType = "comment"
             let dictCell = JSON(dictCommentsOnCommentDetail[indexPath.row])
-            if let pinID = dictCell["pin_comment_id"].int {
-                print("[tableCommentsForComment] pinComment: \(pinID)")
-                cell.pinID = pinID
+            if let pinCommentID = dictCell["pin_comment_id"].int {
+                print("[tableCommentsForComment] pinComment: \(pinCommentID)")
+                cell.pinCommentID = "\(pinCommentID)"
             }
             if let voteType = dictCell["vote_type"].string {
                 if voteType == "up" {

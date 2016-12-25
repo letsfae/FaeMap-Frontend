@@ -113,6 +113,9 @@ extension MomentPinDetailViewController {
         if sender.tag == 1 {
             endEdit()
             sender.tag = 0
+            tableCommentsForPin.isScrollEnabled = false
+            mediaMode = .small
+            zoomMedia(.small)
             buttonPinDetailDragToLargeSize.tag = 0
             if inputToolbar != nil {
                 self.inputToolbar.isHidden = true
@@ -130,9 +133,10 @@ extension MomentPinDetailViewController {
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
+                self.scrollViewMedia.frame.origin.y = 80
             }), completion: { (done: Bool) in
                 if done {
-                    
+                    self.textviewPinDetail.isHidden = true
                 }
             })
             return
@@ -147,23 +151,33 @@ extension MomentPinDetailViewController {
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
         }
-        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
-        tableCommentsForPin.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
         }
+        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        tableCommentsForPin.isScrollEnabled = true
+        mediaMode = .large
+        zoomMedia(.large)
+        textviewPinDetail.frame.size.height = 0
+        textviewPinDetail.isHidden = false
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
+            self.uiviewPinDetail.frame.size.height += 65
+            self.textviewPinDetail.frame.size.height += 65
+            self.uiviewPinDetailThreeButtons.center.y += 65
+            self.uiviewPinDetailGrayBlock.center.y += 65
+            self.uiviewPinDetailMainButtons.center.y += 65
             if self.textviewPinDetail.text != "" {
                 self.uiviewPinDetail.frame.size.height += textViewHeight
                 self.textviewPinDetail.frame.size.height += textViewHeight
                 self.uiviewPinDetailThreeButtons.center.y += textViewHeight
                 self.uiviewPinDetailGrayBlock.center.y += textViewHeight
                 self.uiviewPinDetailMainButtons.center.y += textViewHeight
+                self.scrollViewMedia.frame.origin.y += textViewHeight
             }
         }), completion: { (done: Bool) in
             if done {
