@@ -12,7 +12,7 @@ import IDMPhotoBrowser
 import RealmSwift
 
 extension MomentPinDetailViewController: UIScrollViewDelegate {
-    
+    /*
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if scrollView == scrollViewMedia {
             
@@ -47,6 +47,7 @@ extension MomentPinDetailViewController: UIScrollViewDelegate {
             print("[scrollViewWillEndDragging] set start offset \(beforeScrollingOffset)")
         }
     }
+     */
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == tableCommentsForPin {
@@ -68,14 +69,15 @@ extension MomentPinDetailViewController: UIScrollViewDelegate {
             }
         }
         if scrollView == scrollViewMedia {
-            print(scrollViewMedia.contentOffset.x)
-            if direction == .left && (self.lastContentOffset < scrollView.contentOffset.x) {
+            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
+            if self.lastContentOffset < scrollView.contentOffset.x && scrollView.contentOffset.x > 0 {
                 UIView.animate(withDuration: 0.1, animations: {
                     self.scrollViewMedia.frame.origin.x = 0
                     self.scrollViewMedia.frame.size.width = screenWidth
                 })
             }
-            else if direction == .right && (self.lastContentOffset > scrollView.contentOffset.x) {
+            // self.lastContentOffset > scrollView.contentOffset.x && self.lastContentOffset < (scrollView.contentSize.width - scrollView.frame.width) &&
+            else if scrollView.contentOffset.x <= 0 {
                 UIView.animate(withDuration: 0.1, animations: {
                     if self.mediaMode == .small {
                         self.scrollViewMedia.frame.origin.x = 15
@@ -91,16 +93,16 @@ extension MomentPinDetailViewController: UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == scrollViewMedia {
-            if direction == .right {
-                print("[scrollViewDidEndDecelerating] direction: right")
-                direction = .left
-            }
-            else if direction == .left {
-                print("[scrollViewDidEndDecelerating] direction: left")
-                direction = .right
-            }
-        }
-    }
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        if scrollView == scrollViewMedia {
+//            if direction == .right {
+//                print("[scrollViewDidEndDecelerating] direction: right")
+//                direction = .left
+//            }
+//            else if direction == .left {
+//                print("[scrollViewDidEndDecelerating] direction: left")
+//                direction = .right
+//            }
+//        }
+//    }
 }
