@@ -27,6 +27,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonReportOnPinDetail: UIButton!
     
     // New Moment Pin Popup Window
+    var subviewTable: UIView!
     var animatingHeart: UIImageView!
     var anotherRedSlidingLine: UIView!
     var boolPinLiked = false
@@ -123,7 +124,6 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonNextPin: UIButton!
     var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
-    var displayMediaArray = [UIImage]()
     var imageViewMediaArray = [UIImageView]()
     
     enum MediaMode {
@@ -159,8 +159,9 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
         self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
         UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
-            self.tableCommentsForPin.frame.origin.y = 65
-            self.draggingButtonSubview.frame.origin.y = 293
+            self.tableCommentsForPin.frame.origin.y += screenHeight
+            self.subviewTable.center.y += screenHeight
+            self.draggingButtonSubview.center.y += screenHeight
             self.grayBackButton.alpha = 1
             self.pinIcon.alpha = 1
             self.buttonPrevPin.alpha = 1

@@ -17,6 +17,7 @@ extension MomentPinDetailViewController: OpenedPinListViewControllerDelegate, Pi
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForPin.center.y += screenHeight
+        self.draggingButtonSubview.center.y += screenHeight
         self.pinIDPinDetailView = "\(pinID)"
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
@@ -27,13 +28,6 @@ extension MomentPinDetailViewController: OpenedPinListViewControllerDelegate, Pi
         if back {
             backJustOnce = true
             subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-            UIView.animate(withDuration: 0.583, animations:({
-                self.uiviewPinDetail.center.y += screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
         }
         if !back {
             self.dismiss(animated: false, completion: nil)

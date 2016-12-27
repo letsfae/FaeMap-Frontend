@@ -284,6 +284,7 @@ extension MomentPinDetailViewController {
                     self.thisIsMyPin = false
                 }
             }
+            self.fileIdArray.removeAll()
             let fileIDs = commentInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
             for fileID in fileIDs {
                 if fileID != nil {
@@ -324,9 +325,9 @@ extension MomentPinDetailViewController {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 let getUserName = FaeUser()
-                getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
+                getUserName.getNamecardOfSpecificUser("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
-                    if let username = userProfile["user_name"].string {
+                    if let username = userProfile["nick_name"].string {
                         self.labelPinUserName.text = username
                     }
                 }

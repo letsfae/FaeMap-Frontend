@@ -53,10 +53,10 @@ extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSou
             }
             if let userID = dictCell["user_id"].int {
                 let getUserName = FaeUser()
-                getUserName.getOthersProfile("\(userID)") {(status, message) in
+                getUserName.getNamecardOfSpecificUser("\(userID)") {(status, message) in
                     let userProfile = JSON(message!)
-                    if let username = userProfile["user_name"].string {
-                        cell.labelUsername.text = "\(username)"
+                    if let displayName = userProfile["nick_name"].string {
+                        cell.labelUsername.text = "\(displayName)"
                     }
                 }
                 let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"

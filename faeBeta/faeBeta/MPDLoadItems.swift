@@ -15,8 +15,18 @@ extension MomentPinDetailViewController {
         
         loadNavigationBar()
         
+        subviewTable = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
+        subviewTable.backgroundColor = UIColor.white
+        subviewTable.center.y -= screenHeight
+        self.view.addSubview(subviewTable)
+        subviewTable.layer.zPosition = 1
+        subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        subviewTable.layer.shadowOpacity = 0.3
+        subviewTable.layer.shadowRadius = 10.0
+        
         // Table comments for moment
-        tableCommentsForPin = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 228))
+        tableCommentsForPin = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         tableCommentsForPin.delegate = self
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
@@ -30,20 +40,15 @@ extension MomentPinDetailViewController {
         tableCommentsForPin.showsVerticalScrollIndicator = false
         
         // Dragging button
-        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 293, width: screenWidth, height: 28))
+        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 27))
         draggingButtonSubview.backgroundColor = UIColor.white
         self.view.addSubview(draggingButtonSubview)
-        draggingButtonSubview.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-        draggingButtonSubview.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        draggingButtonSubview.layer.shadowOpacity = 0.3
-        draggingButtonSubview.layer.shadowRadius = 10.0
         draggingButtonSubview.layer.zPosition = 109
         draggingButtonSubview.center.y -= screenHeight
         
         uiviewPinUnderLine02 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         uiviewPinUnderLine02.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
         self.draggingButtonSubview.addSubview(uiviewPinUnderLine02)
-        //        uiviewPinUnderLine02.layer.zPosition = 109
         
         buttonPinDetailDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
         buttonPinDetailDragToLargeSize.backgroundColor = UIColor.white

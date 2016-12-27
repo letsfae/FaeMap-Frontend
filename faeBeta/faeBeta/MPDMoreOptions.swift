@@ -174,7 +174,7 @@ extension MomentPinDetailViewController {
     }
     
     func actionDeleteThisPin(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted from both the Map and Mapboards, no one can find it anymore. All the comments and replies will also be removed.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted on the map and in mapboards. All the comments and replies will also be removed.", preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()

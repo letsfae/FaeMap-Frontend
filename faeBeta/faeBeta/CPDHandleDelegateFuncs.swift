@@ -36,13 +36,6 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
         if back {
             backJustOnce = true
             subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-            UIView.animate(withDuration: 0.583, animations:({
-                self.uiviewCommentPinDetail.center.y += screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
         }
         if !back {
             self.dismiss(animated: false, completion: nil)

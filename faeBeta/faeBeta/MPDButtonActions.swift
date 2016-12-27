@@ -96,6 +96,7 @@ extension MomentPinDetailViewController {
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight
+            self.subviewTable.center.y -= screenHeight
             self.draggingButtonSubview.center.y -= screenHeight
             self.grayBackButton.alpha = 0
             self.pinIcon.alpha = 0

@@ -14,6 +14,7 @@ import IDMPhotoBrowser
 
 extension MomentPinDetailViewController {
     func loadMedias() {
+        imageViewMediaArray.removeAll()
         for index in 0...fileIdArray.count-1 {
             let imageView = UIImageView(frame: CGRect(x: 105*index, y: 0, width: 95, height: 95))
             imageView.contentMode = .scaleAspectFill
@@ -30,7 +31,6 @@ extension MomentPinDetailViewController {
                 if let media = mediaRealm.first {
                     let picture = UIImage.sd_image(with: media.picture as Data!)
                     imageView.image = picture
-                    self.displayMediaArray.append(picture!)
                     print("[cellForItemAt] \(index) read from Realm done!")
                 }
             }

@@ -78,15 +78,11 @@ class OpenedPinListViewController: UIViewController {
     // Load comment pin list
     func loadCommentPinList() {
         var tableHeight = CGFloat(openedPinListArray.count * 76)
-        let subviewTableHeight = CGFloat(256)
+        let subviewTableHeight = CGFloat(255)
         if openedPinListArray.count > 3 {
             tableHeight = CGFloat(228)
         }
         
-        //subviewTableHeight = CGFloat(256)
-//        if openedPinListArray.count > 3 {
-//            tableHeight = CGFloat(openedPinListArray.count * 76)
-//        }
         print("subview = \(subviewTableHeight) table = \(tableHeight)")
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewWhite.backgroundColor = UIColor.white
@@ -97,10 +93,10 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.white
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
-        subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-        subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        subviewTable.layer.shadowOpacity = 0.3
-        subviewTable.layer.shadowRadius = 10.0
+//        subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+//        subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+//        subviewTable.layer.shadowOpacity = 0.3
+//        subviewTable.layer.shadowRadius = 10.0
         
         tableOpenedPin = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: tableHeight))
         tableOpenedPin.register(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
@@ -108,8 +104,12 @@ class OpenedPinListViewController: UIViewController {
         tableOpenedPin.dataSource = self
         tableOpenedPin.tableFooterView = UIView.init(frame: CGRect.zero)
         subviewTable.addSubview(tableOpenedPin)
-        tableOpenedPin.isScrollEnabled = false
-        
+        if self.openedPinListArray.count > 3 {
+            self.tableOpenedPin.isScrollEnabled = true
+        }
+        else {
+            self.tableOpenedPin.isScrollEnabled = false
+        }
         
         // Line at y = 64
         uiviewCommentPinListUnderLine01 = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -133,14 +133,9 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(42)]-15-|", options: [], views: buttonCommentPinListClear)
         subviewWhite.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: buttonCommentPinListClear)
         
-        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: subviewTableHeight - 28, width: screenWidth, height: 28))
+        draggingButtonSubview = UIView(frame: CGRect(x: 0, y: subviewTableHeight - 28, width: screenWidth, height: 27))
         draggingButtonSubview.backgroundColor = UIColor.white
         self.subviewTable.addSubview(draggingButtonSubview)
-//        draggingButtonSubview.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-//        draggingButtonSubview.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-//        draggingButtonSubview.layer.shadowOpacity = 0.3
-//        draggingButtonSubview.layer.shadowRadius = 10.0
-//        draggingButtonSubview.layer.zPosition = 109
         
         // Line at y = 228
         uiviewCommentPinListUnderLine02 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
@@ -148,10 +143,12 @@ class OpenedPinListViewController: UIViewController {
         draggingButtonSubview.addSubview(uiviewCommentPinListUnderLine02)
         
         // Button: Drag to larger
-        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
+        buttonCommentPinListDragToLargeSize = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
         buttonCommentPinListDragToLargeSize.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         buttonCommentPinListDragToLargeSize.addTarget(self, action: #selector(OpenedPinListViewController.actionDraggingThisList(_:)), for: .touchUpInside)
         draggingButtonSubview.addSubview(buttonCommentPinListDragToLargeSize)
+//        buttonCommentPinListDragToLargeSize.layer.borderColor = UIColor.black.cgColor
+//        buttonCommentPinListDragToLargeSize.layer.borderWidth = 1
 //        let panCommentPinListDrag = UIPanGestureRecognizer(target: self, action: #selector(OpenedPinListViewController.panActionCommentPinListDrag(_:)))
 //        buttonCommentPinListDragToLargeSize.addGestureRecognizer(panCommentPinListDrag)
         
