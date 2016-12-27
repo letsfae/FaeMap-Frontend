@@ -433,7 +433,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     
     func createChatPin()
     {
-        
+        UIScreenService.showActivityIndicator()
         let postSingleChatPin = FaeMap()
         
         var submitLatitude = selectedLatitude
@@ -469,10 +469,15 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                     if let getMessageID = getMessage["chat_room_id"] {
                         let getJustPostedChatPin = FaeMap()
                         getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
+                            
+                            //upload cover image
+                            self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.createChatPinImageImageView.image!)
+                            
                             let latDouble = Double(submitLatitude!)
                             let longDouble = Double(submitLongitude!)
                             let lat = CLLocationDegrees(latDouble!)
                             let long = CLLocationDegrees(longDouble!)
+                            UIScreenService.hideActivityIndicator()
                             self.dismiss(animated: false, completion: {
                                 self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
                             })
@@ -486,6 +491,13 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                     print("Post Comment Fail")
                 }
             }
+        })
+    }
+    
+    func uploadChatRoomCoverImage(chatRoomId: NSNumber, image: UIImage){
+        let imageData = compressImage(image,max_image_bytes: 1024)
+        postChatRoomCoverImageToURL("files/chat_rooms/cover_image", parameter: ["chat_room_id": chatRoomId, "cover_image" : imageData as AnyObject], authentication: headerAuthentication(), completion: { (status:Int, message:Any?) in
+            
         })
     }
     

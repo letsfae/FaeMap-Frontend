@@ -62,8 +62,59 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
         })
         
     }
+}
+
+func postChatRoomCoverImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        //        "Device-ID" : headerDeviceID,
+        "Accept": headerAccept,
+        //        "Content-Type" : "application/form-data"
+    ]
+    if authentication != nil{
+        for(key,value) in authentication! {
+            headers[key] = value as? String
+        }
+    }
+    // Ren: delete do-catch here because no error thrown in do
+    if parameter != nil{
+        let imageData = parameter!["cover_image"] as! Data
+        let chatRoomId = parameter!["chat_room_id"] as! NSNumber
+        Alamofire.upload(multipartFormData: {
+            (MultipartFormData) in
+            MultipartFormData.append(imageData, withName: "cover_image", fileName: "cover_image.jpg", mimeType: "image/jpeg")
+            MultipartFormData.append(NSKeyedArchiver.archivedData(withRootObject: chatRoomId) , withName: "chat_room_id")
+        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseJSON { response in
+                    print(response.response.debugDescription)
+                    if response.response != nil{
+                        if let resMess = response.result.value {
+                            completion(response.response!.statusCode, resMess)
+                        }
+                        else{
+                            //                            MARK: bug here
+                            completion(response.response!.statusCode, "no Json body")
+                        }
+                    }
+                    else{
+                        completion(-500, "Internet error")
+                    }
+                    
+                }
+            case .failure(let encodingError):
+                completion(-400,"failure")
+                print(encodingError)
+            }
+        })
+        
+    }
     
 }
+
 
 func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
     let URL = baseURL + "/" + className

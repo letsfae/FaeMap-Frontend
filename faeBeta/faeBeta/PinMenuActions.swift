@@ -43,7 +43,8 @@ extension PinMenuViewController {
             createChatPinVC.modalPresentationStyle = .overCurrentContext
             createChatPinVC.delegate = self
             createChatPinVC.currentLocation = CLLocation(latitude: self.currentLatitude, longitude: self.currentLongitude)
-            self.present(createChatPinVC, animated: false, completion: nil)
+            createChatPinVC.modalTransitionStyle = .crossDissolve
+            self.present(createChatPinVC, animated: true, completion: nil)
         })
     }
     

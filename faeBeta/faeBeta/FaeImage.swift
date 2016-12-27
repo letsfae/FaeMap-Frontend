@@ -47,8 +47,8 @@ if (formatted_datas > self.max_image_bytes){
     }
 }*/
 
-func compressImage(_ image:UIImage)->Data{
-    let max_image_bytes = 1024    // 0.1 MB for the image
+func compressImage(_ image:UIImage, max_image_bytes: Int = 1024)->Data{
+//    let max_image_bytes = 1024    // 0.1 MB for the image
     let dates = UIImageJPEGRepresentation(image, 1)
     let formatted_datas = Int((dates?.count)!)//4752033
     if formatted_datas > max_image_bytes {
