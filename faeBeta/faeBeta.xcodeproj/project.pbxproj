@@ -234,6 +234,7 @@
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
+		DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0A443D1E10F59C007E203C /* TagCreator.swift */; };
 		DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2C8ACD1DFE771B000626B8 /* CreatePinAddTagsTextView.swift */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */; };
@@ -529,6 +530,7 @@
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
 		DC084A901DDCF969007DCC88 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
+		DC0A443D1E10F59C007E203C /* TagCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCreator.swift; sourceTree = "<group>"; };
 		DC2C8ACD1DFE771B000626B8 /* CreatePinAddTagsTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinAddTagsTextView.swift; sourceTree = "<group>"; };
 		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
 		DC3982071DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickPhotoPickerCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -1317,6 +1319,7 @@
 				DC79E1551DF7C6D300DA20E0 /* CreatePinInputToolbar */,
 				DCEB8C9D1DEEB26E00B516E9 /* CreatePinTextView */,
 				DCEB8C911DEE3BE600B516E9 /* CreatePinOptionsTableView */,
+				DC0A443D1E10F59C007E203C /* TagCreator.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1675,6 +1678,7 @@
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				B8612E411DF2504E0092C606 /* MPDInputToolbar.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
+				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,

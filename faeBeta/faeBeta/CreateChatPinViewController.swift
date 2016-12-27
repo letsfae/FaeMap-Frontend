@@ -190,48 +190,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         }
         // create a pin
         else if (optionViewMode == .pin){
-            
-            let postSingleChatPin = FaeMap()
-            
-            var submitLatitude = selectedLatitude
-            var submitLongitude = selectedLongitude
-            
-            if labelSelectLocationContent == nil || labelSelectLocationContent == "" {
-                submitLatitude = "\(currentLocation.coordinate.latitude)"
-                submitLongitude = "\(currentLocation.coordinate.longitude)"
-            }
-            
-            postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
-            postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
-            if let des = descriptionTextView.text{
-                postSingleChatPin.whereKey("description", value: des)
-            }
-            postSingleChatPin.whereKey("interaction_radius", value: "99999999")
-            postSingleChatPin.whereKey("duration", value: "1440")
-            postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
-            
-            postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
-                if let getMessage = message as? NSDictionary{
-                    if let getMessageID = getMessage["chat_room_id"] {
-                        let getJustPostedChatPin = FaeMap()
-                        getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
-                            let latDouble = Double(submitLatitude!)
-                            let longDouble = Double(submitLongitude!)
-                            let lat = CLLocationDegrees(latDouble!)
-                            let long = CLLocationDegrees(longDouble!)
-                            self.dismiss(animated: false, completion: {
-                                self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
-                            })
-                        }
-                    }
-                    else {
-                        print("Cannot get comment_id of this posted comment")
-                    }
-                }
-                else {
-                    print("Post Comment Fail")
-                }
-            }
+            createChatPin()
         }
     }
     
@@ -470,6 +429,64 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     {
         submitButtonEnabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
         setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : submitButtonEnabled)
+    }
+    
+    func createChatPin()
+    {
+        
+        let postSingleChatPin = FaeMap()
+        
+        var submitLatitude = selectedLatitude
+        var submitLongitude = selectedLongitude
+        
+        if labelSelectLocationContent == nil || labelSelectLocationContent == "" {
+            submitLatitude = "\(currentLocation.coordinate.latitude)"
+            submitLongitude = "\(currentLocation.coordinate.longitude)"
+        }
+        
+        postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
+        postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
+        
+        if descriptionTextView != nil && descriptionTextView.text! != ""{
+            let des = descriptionTextView.text
+            postSingleChatPin.whereKey("description", value: des)
+        }
+        postSingleChatPin.whereKey("interaction_radius", value: "99999999")
+        postSingleChatPin.whereKey("duration", value: "1440")
+        postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
+        
+        TagCreator.uploadTags(addTagsTextView != nil ? addTagsTextView.tagNames : [], completion: { (tagNames) in
+            var tagIdString = ""
+            for tag in tagNames{
+                tagIdString = tagIdString == "" ? tag.stringValue : "\(tagIdString);\(tag.stringValue)"
+            }
+            if tagIdString != ""{
+                postSingleChatPin.whereKey("tag_ids", value: tagIdString)
+            }
+            
+            postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
+                if let getMessage = message as? NSDictionary{
+                    if let getMessageID = getMessage["chat_room_id"] {
+                        let getJustPostedChatPin = FaeMap()
+                        getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
+                            let latDouble = Double(submitLatitude!)
+                            let longDouble = Double(submitLongitude!)
+                            let lat = CLLocationDegrees(latDouble!)
+                            let long = CLLocationDegrees(longDouble!)
+                            self.dismiss(animated: false, completion: {
+                                self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
+                            })
+                        }
+                    }
+                    else {
+                        print("Cannot get comment_id of this posted comment")
+                    }
+                }
+                else {
+                    print("Post Comment Fail")
+                }
+            }
+        })
     }
     
     //MARK: - SelectLocationViewControllerDelegate
