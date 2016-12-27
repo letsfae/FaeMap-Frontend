@@ -255,27 +255,27 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
             contentView?.addSubview(buttonKeyBoard)
             
-            /*
+            
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-            buttonSticker.addTarget(self, action: #selector(self.showStikcer), forControlEvents: .TouchUpInside)
-            contentView.addSubview(buttonSticker)
+            buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+            buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+            buttonSticker.addTarget(self, action: #selector(self.showStikcer), for: .touchUpInside)
+            contentView?.addSubview(buttonSticker)
             
             buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-            contentView.addSubview(buttonImagePicker)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+            contentView?.addSubview(buttonImagePicker)
             
-            buttonImagePicker.addTarget(self, action: #selector(self.showLibrary), forControlEvents: .TouchUpInside)
+            buttonImagePicker.addTarget(self, action: #selector(self.showLibrary), for: .touchUpInside)
             
             let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
-            buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
-            contentView.addSubview(buttonCamera)
+            buttonCamera.setImage(UIImage(named: "camera"), for: .normal)
+            buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
+            contentView?.addSubview(buttonCamera)
             
-            buttonCamera.addTarget(self, action: #selector(self.showCamera), forControlEvents: .TouchUpInside)
-            */
+            buttonCamera.addTarget(self, action: #selector(self.showCamera), for: .touchUpInside)
+ 
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
@@ -285,9 +285,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), for: .touchUpInside)
             
             buttonSet.append(buttonKeyBoard)
-//            buttonSet.append(buttonSticker)
-//            buttonSet.append(buttonImagePicker)
-//            buttonSet.append(buttonCamera)
+            buttonSet.append(buttonSticker)
+            buttonSet.append(buttonImagePicker)
+            buttonSet.append(buttonCamera)
             buttonSet.append(buttonSend)
             
             for button in buttonSet{
@@ -486,10 +486,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     {
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
-//        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-//        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-//        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-//        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
