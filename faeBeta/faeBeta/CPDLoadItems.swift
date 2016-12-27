@@ -278,7 +278,7 @@ extension CommentPinDetailViewController {
         
         // Back to Map
         buttonCommentPinBackToMap = UIButton()
-        buttonCommentPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
+        buttonCommentPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
         buttonCommentPinBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonCommentPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonCommentPinBackToMap)

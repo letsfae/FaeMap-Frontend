@@ -289,7 +289,7 @@ extension MomentPinDetailViewController {
         
         // Back to Map
         buttonPinBackToMap = UIButton()
-        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
+        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
         buttonPinBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonPinBackToMap)
