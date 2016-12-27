@@ -117,7 +117,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
-    weak var inputToolbar: JSQMessagesInputToolbarCustom!// IMPORTANT: need to set toolbar to use the whole function
+    weak var inputToolbar: JSQMessagesInputToolbarCustom!// IMPORTANT: need to set value for this variable to use the whole function
     
     //MARK: - init & setup
     override init(frame: CGRect)
