@@ -67,6 +67,35 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
     }
+    // PinDetailDelegate
+    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        self.faeMapView.animate(to: camera)
+        timerUpdateSelfLocation.invalidate()
+        self.clearMap(type: "user")
+        if withType == "media" {
+            let pinDetailVC = MomentPinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.pinIdSentBySegue = "\(pinID)"
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            pinDetailVC.delegate = self
+            pinDetailVC.animated = false
+            self.present(pinDetailVC, animated: false, completion: {
+                self.canOpenAnotherPin = true
+            })
+        }
+        else if withType == "comment" {
+            let pinDetailVC = CommentPinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.pinIdSentBySegue = "\(pinID)"
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            pinDetailVC.delegate = self
+            pinDetailVC.animated = false
+            self.present(pinDetailVC, animated: false, completion: {
+                self.canOpenAnotherPin = true
+            })
+        }
+    }
 
     // PinMenuDelegate
     // Back from pin menu view controller

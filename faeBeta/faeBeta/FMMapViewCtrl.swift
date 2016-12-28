@@ -234,6 +234,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.animated = true
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true
@@ -246,6 +247,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.animated = true
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true

@@ -105,7 +105,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
                      * this action should via comment pin detail view,
                      * it looks a direct transition, but in fact, it is not
                     **/
-                    self.delegate?.backFromOpenedPinList(false)
+                    self.delegate?.directlyReturnToMap()
                 })
             }
         })
@@ -115,7 +115,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     func actionBackToCommentDetail(_ sender: UIButton!) {
         if backJustOnce == true {
             backJustOnce = false
-            self.delegate?.backFromOpenedPinList(true)
+            self.delegate?.backFromOpenedPinList(pinType: "", pinID: "")
             UIView.animate(withDuration: 0.583, animations: ({
                 self.subviewTable.center.y -= screenHeight
             }), completion: { (done: Bool) in
@@ -135,11 +135,12 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID)
+            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID, pinType: pinType)
         })
     }
+    
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath) {
         self.openedPinListArray.remove(at: indexPath.row)
         self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
@@ -157,7 +158,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
             }), completion: { (done: Bool) in
                 if done {
                     self.dismiss(animated: false, completion: {
-                        self.delegate?.backFromOpenedPinList(false)
+                        self.delegate?.directlyReturnToMap()
                     })
                 }
             })

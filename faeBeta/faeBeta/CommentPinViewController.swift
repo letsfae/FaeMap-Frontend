@@ -17,6 +17,8 @@ protocol PinDetailDelegate: class {
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Animate the selected marker
     func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
+    // Open pin detail view controller with type
+    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D)
 }
 
 class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
@@ -35,17 +37,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonReportOnPinDetail: UIButton!
     
     // New Comment Pin Popup Window
-    var subviewTable: UIView!
     var animatingHeart: UIImageView!
     var anotherRedSlidingLine: UIView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinLists: UIButton!
-    var buttonPinDetailViewComments: UIButton!
-    var buttonPinDetailViewFeelings: UIButton!
-    var buttonPinDetailViewPeople: UIButton!
-    var labelPinDetailViewComments: UILabel!
-    var labelPinDetailViewFeelings: UILabel!
-    var labelPinDetailViewPeople: UILabel!
     var buttonCommentPinAddComment: UIButton!
     var buttonCommentPinBackToMap: UIButton!
     var buttonCommentPinDetailDragToLargeSize: UIButton!
@@ -54,6 +49,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
     var dictCommentsOnCommentDetail = [[String: AnyObject]]()
@@ -65,20 +63,24 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var numberOfCommentTableCells: Int = 0
     var pinIDPinDetailView: String = "-999"
     var subviewNavigation: UIView!
+    var subviewTable: UIView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
-    var uiviewPinDetailThreeButtons: UIView!
     var uiviewCommentPinDetail: UIView!
     var uiviewCommentPinDetailGrayBlock: UIView!
     var uiviewCommentPinDetailMainButtons: UIView!
     var uiviewCommentPinUnderLine01: UIView!
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewRedSlidingLine: UIView!
     
     // For Dragging
@@ -130,8 +132,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    
     var isSavedByMe = false
+    var pinType = "comment"
+    var animated = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,23 +146,36 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
+        if !animated {
+            self.subviewNavigation.frame.origin.y = 0
+            self.tableCommentsForComment.frame.origin.y = 65
+            self.subviewTable.frame.origin.y = 65
+            self.draggingButtonSubview.frame.origin.y = 292
+            self.grayBackButton.alpha = 1
+            self.commentPinIcon.alpha = 1
+            self.buttonPrevPin.alpha = 1
+            self.buttonNextPin.alpha = 1
+            self.loadInputToolBar()
+        }
     }
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
         self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
-        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.subviewNavigation.frame.origin.y = 0
-            self.tableCommentsForComment.center.y += screenHeight
-            self.subviewTable.center.y += screenHeight
-            self.draggingButtonSubview.center.y += screenHeight
-            self.grayBackButton.alpha = 1
-            self.commentPinIcon.alpha = 1
-            self.buttonPrevPin.alpha = 1
-            self.buttonNextPin.alpha = 1
+        if animated {
+            UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                self.subviewNavigation.frame.origin.y = 0
+                self.tableCommentsForComment.frame.origin.y = 65
+                self.subviewTable.frame.origin.y = 65
+                self.draggingButtonSubview.frame.origin.y = 292
+                self.grayBackButton.alpha = 1
+                self.commentPinIcon.alpha = 1
+                self.buttonPrevPin.alpha = 1
+                self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
                 self.loadInputToolBar()
-        })
+            })
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -262,6 +278,7 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             buttonSticker.addTarget(self, action: #selector(self.showStikcer), for: .touchUpInside)
             contentView?.addSubview(buttonSticker)
             
+            
             buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
             buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
@@ -322,6 +339,8 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
+//        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue)
+//        toolbarContentView.setup(initializeType)
     }
     
     // Animation of the red sliding line

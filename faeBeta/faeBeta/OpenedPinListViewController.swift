@@ -12,10 +12,11 @@ import CoreLocation
 import SDWebImage
 
 protocol OpenedPinListViewControllerDelegate {
-    // Cancel marker's shadow when back to Fae Map
-    func backFromOpenedPinList(_ back: Bool)
+    func directlyReturnToMap()
+    // Back to pin detail view
+    func backFromOpenedPinList(pinType: String, pinID: String)
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String)
 }
 
 class OpenedPinListViewController: UIViewController {
@@ -93,10 +94,6 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.white
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
-//        subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-//        subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-//        subviewTable.layer.shadowOpacity = 0.3
-//        subviewTable.layer.shadowRadius = 10.0
         
         tableOpenedPin = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: tableHeight))
         tableOpenedPin.register(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")

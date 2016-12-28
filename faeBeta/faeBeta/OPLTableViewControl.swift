@@ -35,6 +35,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             let pinType = pinInfo.components(separatedBy: "%")[0]
             let pinID = pinInfo.components(separatedBy: "%")[1]
             cell.pinID = pinID
+            cell.pinType = pinType
             cell.indexPathInCell = indexPath
             let getCommentById = FaeMap()
             // Bug: Currently, just comment
@@ -42,9 +43,9 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
                 let pinInfoJSON = JSON(message!)
                 if pinType == "comment"{
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinComment")
-                }else if pinType == "media" {
+                } else if pinType == "media" {
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinMoment")
-                }else if pinType == "chat_room" {
+                } else if pinType == "chat_room" {
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinChat")
                 }
                 print("[OpenedPinListViewController tableView] json = \(pinInfoJSON), pinType = \(pinType), pinID = \(pinID)")
@@ -53,9 +54,9 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
                 }
                 if let content = pinInfoJSON["content"].string {
                     cell.content.text = "\(content)"
-                }else if let content = pinInfoJSON["description"].string {
+                } else if let content = pinInfoJSON["description"].string {
                     cell.content.text = "\(content)"
-                }else if (pinInfoJSON["description"].stringValue == "") && (pinInfoJSON["file_ids"].arrayValue.count != 0) {
+                } else if (pinInfoJSON["description"].stringValue == "") && (pinInfoJSON["file_ids"].arrayValue.count != 0) {
                     cell.content.text = "\(pinInfoJSON["file_ids"].arrayValue.count) Photos"
                 }
                 if let latitudeInfo = pinInfoJSON["geolocation"]["latitude"].double {

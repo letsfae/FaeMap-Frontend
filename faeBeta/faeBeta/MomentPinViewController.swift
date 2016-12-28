@@ -141,6 +141,8 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var beforeScrollingOffset: CGFloat = 0
     
     var isSavedByMe = false
+    var pinType = "media"
+    var animated = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,23 +154,36 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
+        if !animated {
+            self.subviewNavigation.frame.origin.y = 0
+            self.tableCommentsForPin.frame.origin.y = 65
+            self.subviewTable.frame.origin.y = 65
+            self.draggingButtonSubview.frame.origin.y = 292
+            self.grayBackButton.alpha = 1
+            self.pinIcon.alpha = 1
+            self.buttonPrevPin.alpha = 1
+            self.buttonNextPin.alpha = 1
+            self.loadInputToolBar()
+        }
     }
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
         self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
-        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.subviewNavigation.frame.origin.y = 0
-            self.tableCommentsForPin.frame.origin.y += screenHeight
-            self.subviewTable.center.y += screenHeight
-            self.draggingButtonSubview.center.y += screenHeight
-            self.grayBackButton.alpha = 1
-            self.pinIcon.alpha = 1
-            self.buttonPrevPin.alpha = 1
-            self.buttonNextPin.alpha = 1
+        if animated {
+            UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                self.subviewNavigation.frame.origin.y = 0
+                self.tableCommentsForPin.frame.origin.y = 65
+                self.subviewTable.frame.origin.y = 65
+                self.draggingButtonSubview.frame.origin.y = 292
+                self.grayBackButton.alpha = 1
+                self.pinIcon.alpha = 1
+                self.buttonPrevPin.alpha = 1
+                self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
                 self.loadInputToolBar()
-        })
+            })
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
