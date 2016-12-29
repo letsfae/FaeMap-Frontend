@@ -300,6 +300,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         for button in buttonSet{
             button.autoresizingMask = [.flexibleTopMargin]
         }
+        
+        //heart Button
+        self.inputToolbar.contentView.heartButton.isHidden = false
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
+        
+        
     }
     
     // be sure to call this in ViewWillAppear!!!
@@ -586,6 +592,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func endEdit()
     {
         self.view.endEditing(true)
+    }
+    
+    @objc private func heartButtonTapped()
+    {
+        sendMessage(nil, date: Date(), picture : nil, sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), location : nil, snapImage : nil, audio : nil, video : nil, videoDuration: 0)
     }
     
     //MARK: - obsere value

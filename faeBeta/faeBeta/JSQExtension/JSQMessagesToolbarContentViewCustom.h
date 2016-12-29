@@ -111,6 +111,9 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingD
  */
 @property (weak, nonatomic, readonly) UIView *rightBarButtonContainerView;
 
+@property (weak, nonatomic) IBOutlet UIButton *heartButton;
+
+
 #pragma mark - Class methods
 
 /**
@@ -119,6 +122,7 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingD
  *  @return The initialized `UINib` object or `nil` if there were errors during
  *  initialization or the nib file could not be located.
  */
+
 + (UINib *)nib;
 
 @end

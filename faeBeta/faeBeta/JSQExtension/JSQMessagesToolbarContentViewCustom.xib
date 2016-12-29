@@ -57,6 +57,14 @@
                         <constraint firstAttribute="height" constant="1" id="pxN-bH-Cqn"/>
                     </constraints>
                 </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZwA-Ow-CJg">
+                    <rect key="frame" x="273" y="15" width="26" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="22" id="OW0-vg-bvx"/>
+                        <constraint firstAttribute="width" constant="26" id="wXN-Bk-BwT"/>
+                    </constraints>
+                    <state key="normal" image="pinDetailLikeHeartHollow"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -70,7 +78,9 @@
                 <constraint firstItem="LEq-G7-jGt" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="LAU-fo-GJJ"/>
                 <constraint firstItem="lPx-Ht-Wy3" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="LvH-xq-K8I"/>
                 <constraint firstAttribute="bottom" secondItem="9qV-jG-VzP" secondAttribute="bottom" id="Tko-46-ee3"/>
+                <constraint firstItem="ZwA-Ow-CJg" firstAttribute="top" secondItem="1" secondAttribute="top" constant="15" id="ZiZ-PG-Aw9"/>
                 <constraint firstAttribute="trailing" secondItem="9qV-jG-VzP" secondAttribute="trailing" id="Zni-Hj-CfC"/>
+                <constraint firstAttribute="trailing" secondItem="ZwA-Ow-CJg" secondAttribute="trailing" constant="21" id="aWw-Kx-ox2"/>
                 <constraint firstAttribute="trailing" secondItem="lPx-Ht-Wy3" secondAttribute="trailing" constant="10" id="bqK-8e-rqA"/>
                 <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
                 <constraint firstItem="B66-Yp-anV" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="nZX-7l-WWe"/>
@@ -81,6 +91,7 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="heartButton" destination="ZwA-Ow-CJg" id="cK3-VQ-9OM"/>
                 <outlet property="leftBarButtonContainerView" destination="LEq-G7-jGt" id="F0V-4N-1Mo"/>
                 <outlet property="leftBarButtonContainerViewWidthConstraint" destination="eMy-Af-wwH" id="FI9-F2-2bN"/>
                 <outlet property="leftHorizontalSpacingConstraint" destination="LAU-fo-GJJ" id="X2c-BI-0Q4"/>
@@ -92,6 +103,9 @@
             <point key="canvasLocation" x="256" y="554"/>
         </view>
     </objects>
+    <resources>
+        <image name="pinDetailLikeHeartHollow" width="26" height="22"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

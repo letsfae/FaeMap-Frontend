@@ -63,6 +63,9 @@ const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 8.0f;
     
     self.backgroundColor = [UIColor clearColor];
 
+    //setup heart button
+    [_heartButton setImage: [UIImage imageNamed:@"pinDetailLikeHeartHollow"] forState:UIControlStateNormal];
+    [_heartButton setImage: [UIImage imageNamed:@"pinDetailLikeHeartFull"] forState:UIControlStateHighlighted];
 }
 
 #pragma mark - Setters
