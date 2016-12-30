@@ -20,7 +20,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate, CAAnimationDelegate
 {
     //MARK: - properties
     var ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
@@ -89,6 +89,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //time stamp
     var lastMarkerDate: Date! = Date.distantPast
+
+    // heart animation related
+    var animatingHeart: UIImageView!
+    var animHeartDic: [CAAnimation : UIImageView] = [CAAnimation : UIImageView]()
     
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
@@ -596,7 +600,43 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc private func heartButtonTapped()
     {
-        sendMessage(nil, date: Date(), picture : nil, sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), location : nil, snapImage : nil, audio : nil, video : nil, videoDuration: 0)
+        animateHeart()
+//        sendMessage(nil, date: Date(), picture : nil, sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), location : nil, snapImage : nil, audio : nil, video : nil, videoDuration: 0)
+    }
+    private func animateHeart() {
+        animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
+        animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+        self.inputToolbar.contentView.addSubview(animatingHeart)
+        
+        //
+        let randomX = CGFloat(arc4random_uniform(150))
+        let randomY = CGFloat(arc4random_uniform(50) + 100)
+        let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
+        
+        let transform: CGAffineTransform = CGAffineTransform(translationX: inputToolbar.contentView.heartButton.center.x, y: inputToolbar.contentView.heartButton.center.y)
+        let path =  CGMutablePath()
+        path.move(to: CGPoint(x:0,y:0), transform: transform )
+        path.addLine(to: CGPoint(x:randomX-75, y:-randomY), transform: transform)
+        
+        let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")
+        scaleAnimation.values = [NSValue(caTransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(caTransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        scaleAnimation.duration = 1
+        
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.fromValue = 1.0
+        fadeAnimation.toValue = 0.0
+        fadeAnimation.duration = 1
+        fadeAnimation.delegate = self
+        
+        let orbit = CAKeyframeAnimation(keyPath: "position")
+        orbit.duration = 1
+        orbit.path = path
+        orbit.calculationMode = kCAAnimationPaced
+        animatingHeart.layer.add(orbit, forKey:"Move")
+        animatingHeart.layer.add(fadeAnimation, forKey: "Opacity")
+        animatingHeart.layer.add(scaleAnimation, forKey: "Scale")
+        animatingHeart.layer.position = CGPoint(x: inputToolbar.contentView.heartButton.center.x, y:inputToolbar.contentView.heartButton.center.y)
     }
     
     //MARK: - obsere value
@@ -677,6 +717,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.appWillEnterForeground()
     }
     
+    //MARK: - CAAnimationDelegate
+    func animationDidStart(_ anim: CAAnimation) {
+        if anim.duration == 1{
+            animHeartDic[anim] = animatingHeart
+        }
+    }
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if anim.duration == 1 && flag{
+            animHeartDic[anim]?.removeFromSuperview()
+            animHeartDic[anim] = nil
+        }
+    }
 }
 
 

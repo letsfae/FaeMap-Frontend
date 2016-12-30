@@ -11,7 +11,7 @@ import UIKit
 
 
 /// This this a public class use to add a loading indicator on the screen, while the indicator is appearing, the userInteraction is disabled
-class UIScreenService{
+final class UIScreenService{
     
     fileprivate class var activityIndicator : UIActivityIndicatorView{
         struct Element

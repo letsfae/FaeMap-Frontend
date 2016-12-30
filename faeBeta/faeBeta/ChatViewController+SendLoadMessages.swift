@@ -14,7 +14,7 @@ import FirebaseDatabase
 extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: - send message
-    func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?, video : Data?, videoDuration: Int) {
+    func sendMessage(_ text : String? = nil, date: Date, picture : UIImage? = nil, sticker : UIImage? = nil, location : CLLocation? = nil, snapImage : Data? = nil, audio : Data? = nil, video : Data? = nil, videoDuration: Int = 0) {
         
         var outgoingMessage: OutgoingMessage? = nil
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
@@ -93,7 +93,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : data, audio: nil, video: nil, videoDuration: 0)
     }
     
-    //MARK: Load Message
+    //MARK: - Load Message
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     func loadMessages(){
         roomRef = ref.child(chatRoomId)
