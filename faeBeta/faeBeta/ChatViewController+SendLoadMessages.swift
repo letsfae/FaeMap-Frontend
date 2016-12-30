@@ -14,7 +14,7 @@ import FirebaseDatabase
 extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: - send message
-    func sendMessage(_ text : String? = nil, date: Date, picture : UIImage? = nil, sticker : UIImage? = nil, location : CLLocation? = nil, snapImage : Data? = nil, audio : Data? = nil, video : Data? = nil, videoDuration: Int = 0) {
+    func sendMessage(text : String? = nil, picture : UIImage? = nil, sticker : UIImage? = nil, location : CLLocation? = nil, audio : Data? = nil, video : Data? = nil, videoDuration: Int = 0, snapImage : Data? = nil, date: Date) {
         
         var outgoingMessage: OutgoingMessage? = nil
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
@@ -76,21 +76,21 @@ extension ChatViewController: OutgoingMessageProtocol{
     //send image delegate function
     func sendImages(_ images:[UIImage]) {
         for i in 0 ..< images.count {
-            sendMessage(nil, date: Date(), picture: images[i], sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+            sendMessage(picture: images[i], date: Date())
         }
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(_ name: String) {
-        sendMessage(nil, date: Date(), picture: nil, sticker : UIImage(named: name), location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+        sendMessage(sticker : UIImage(named: name), date: Date())
     }
     
     func sendAudioData(_ data: Data) {
-        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: data, video: nil, videoDuration: 0)
+        sendMessage(audio: data,date: Date())
     }
     
     func sendGifData(_ data: Data){
-        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : data, audio: nil, video: nil, videoDuration: 0)
+        sendMessage(snapImage : data, date: Date())
     }
     
     //MARK: - Load Message
@@ -239,14 +239,14 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: - locationSend Delegate
     func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: Data) {
-        sendMessage(nil, date: Date(), picture: nil, sticker: nil, location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, audio: nil, video: nil, videoDuration: 0)
+        sendMessage(location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, date: Date())
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int){
         var imageData = UIImageJPEGRepresentation(snapImage,1)
         let factor = min( 5000000.0 / CGFloat(imageData!.count), 1.0)
         imageData = UIImageJPEGRepresentation(snapImage,factor)
-        sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: video, videoDuration: duration)
+        sendMessage(video: video, videoDuration: duration, snapImage : imageData, date: Date())
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

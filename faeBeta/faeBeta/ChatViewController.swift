@@ -327,7 +327,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         if text != "" {
             //send message
-            sendMessage(text, date: date, picture: nil, sticker : nil, location: nil, snapImage : nil, audio : nil, video: nil, videoDuration: 0)
+            sendMessage(text: text, date: date)
         }
     }
     
@@ -386,7 +386,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     func sendMessageButtonTapped() {
-        sendMessage(self.inputToolbar.contentView.textView.text, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+        sendMessage(text: self.inputToolbar.contentView.textView.text, date: Date())
         buttonSend.isEnabled = false
     }
     
@@ -601,7 +601,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc private func heartButtonTapped()
     {
         animateHeart()
-//        sendMessage(nil, date: Date(), picture : nil, sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), location : nil, snapImage : nil, audio : nil, video : nil, videoDuration: 0)
+        sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), date: Date())
     }
     private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
@@ -670,7 +670,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         case (kUTTypeImage as String as String):
             let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
             
-            self.sendMessage(nil, date: Date(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil, video: nil, videoDuration: 0)
+            self.sendMessage(picture: picture, date: Date())
             
             UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         case (kUTTypeMovie as String as String):
@@ -701,7 +701,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
-            self.sendMessage(nil, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : imageData, audio: nil, video: data, videoDuration: seconds)
+            self.sendMessage(video: data, videoDuration: seconds, snapImage : imageData, date: Date())
             break
         default:
             break
