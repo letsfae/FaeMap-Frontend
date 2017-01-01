@@ -601,7 +601,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc private func heartButtonTapped()
     {
         animateHeart()
-        sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), date: Date())
+        sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), isHeartSticker: true ,date: Date())
     }
     private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))

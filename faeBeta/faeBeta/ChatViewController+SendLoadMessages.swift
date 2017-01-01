@@ -14,7 +14,7 @@ import FirebaseDatabase
 extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: - send message
-    func sendMessage(text : String? = nil, picture : UIImage? = nil, sticker : UIImage? = nil, location : CLLocation? = nil, audio : Data? = nil, video : Data? = nil, videoDuration: Int = 0, snapImage : Data? = nil, date: Date) {
+    func sendMessage(text : String? = nil, picture : UIImage? = nil, sticker : UIImage? = nil, isHeartSticker: Bool? = false, location : CLLocation? = nil, audio : Data? = nil, video : Data? = nil, videoDuration: Int = 0, snapImage : Data? = nil, date: Date) {
         
         var outgoingMessage: OutgoingMessage? = nil
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
@@ -37,7 +37,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         else if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "[Sticker]", picture: imageData!, senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker! , senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         

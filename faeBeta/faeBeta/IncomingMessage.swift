@@ -198,6 +198,12 @@ class IncomingMessage {
         
         let mediaItem = JSQStickerMediaItem(image: nil)
         
+        if let isHeartSticker = item["isHeartSticker"] as? Bool{
+            if isHeartSticker{
+                mediaItem?.customizeSize = CGSize(width: 65, height: 44)
+            }
+        }
+        
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         
         imageFromData(item) { (image) in

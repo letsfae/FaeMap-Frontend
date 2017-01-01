@@ -14,7 +14,7 @@ import JSQMessagesViewController
 class JSQStickerMediaItem: JSQPhotoMediaItem {
     //inheritance from JSQPhoto
     var cachedImageView : UIImageView!
-    
+    var customizeSize : CGSize!
     override func mediaView() -> UIView! {
         if self.image == nil {
             return nil
@@ -24,7 +24,7 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
             let imageView = UIImageView(image: self.image)
             imageView.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
             imageView.contentMode = .scaleAspectFit
-            JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMask(toMediaView: imageView, isOutgoing: self.appliesMediaViewMaskAsOutgoing)
+//            JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMask(toMediaView: imageView, isOutgoing: self.appliesMediaViewMaskAsOutgoing)
             self.cachedImageView = imageView
         }
         return cachedImageView
@@ -32,7 +32,7 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
     
     //overridde the photo size to the stick size
     override func mediaViewDisplaySize() -> CGSize {
-        return CGSize(width: 120, height: 90)
+        return customizeSize ?? CGSize(width: 120, height: 90)
     }
     
 }

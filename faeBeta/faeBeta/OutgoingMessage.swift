@@ -42,9 +42,9 @@ class OutgoingMessage {
     
     
     // outgoing message for sticker
-    init (message : String, sticker : Data, senderId : String, senderName : String, date : Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
+    init (message : String, sticker : Data, isHeartSticker: Bool, senderId : String, senderName : String, date : Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let stick = sticker.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-        messageDictionary = NSMutableDictionary(objects: [message, stick, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "picture" as NSCopying, "senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
+        messageDictionary = NSMutableDictionary(objects: [message, stick, isHeartSticker, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "picture" as NSCopying,"isHeartSticker" as NSCopying ,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
     }
     
     // outgoing message for audio
