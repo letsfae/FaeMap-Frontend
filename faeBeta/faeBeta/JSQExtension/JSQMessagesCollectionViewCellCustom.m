@@ -166,6 +166,10 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     
     self.avatarImageView.image = nil;
     self.avatarImageView.highlightedImage = nil;
+    
+    for (UIView *subview in self.messageBubbleContainerView.subviews){
+        [subview removeFromSuperview];
+    }
 }
 
 - (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
