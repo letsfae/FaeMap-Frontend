@@ -44,7 +44,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B66-Yp-anV">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="-1" width="320" height="1"/>
                     <color key="backgroundColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="oTP-Zc-Kk7"/>
@@ -71,7 +71,7 @@
                 <constraint firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" constant="44" id="4pM-bo-SXM"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="6" id="6in-ES-ngF"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="11" id="8Pf-pI-zRB"/>
-                <constraint firstItem="B66-Yp-anV" firstAttribute="top" secondItem="1" secondAttribute="top" id="CHB-sD-Ogn"/>
+                <constraint firstItem="B66-Yp-anV" firstAttribute="top" secondItem="1" secondAttribute="top" constant="-1" id="CHB-sD-Ogn"/>
                 <constraint firstAttribute="bottom" secondItem="Myo-1S-Vg1" secondAttribute="bottom" constant="6" id="EaS-Oq-Qp5"/>
                 <constraint firstAttribute="bottom" secondItem="lPx-Ht-Wy3" secondAttribute="bottom" constant="42" id="HKY-aj-0Qt"/>
                 <constraint firstAttribute="trailing" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="6" id="KQg-1o-Yf8"/>
