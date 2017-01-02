@@ -62,6 +62,18 @@ extension ChatViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == self.collectionView && indexPath.row == messages.count - 1{
             clearRecentCounter(chat_id)
+            let object = objects[indexPath.row]
+
+            //Do not allow user to send two heart continously
+            let userId = object["senderId"] as? String
+            let isOutGoingMessage = userId! == user_id.stringValue
+            
+
+            if object["type"] as! String == "sticker" && object["isHeartSticker"] != nil && object["isHeartSticker"] as! Bool == true && isOutGoingMessage{
+                userJustSentHeart = true
+            }else{
+                userJustSentHeart = false
+            }
         }
     }
     

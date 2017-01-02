@@ -61,7 +61,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var buttonImagePicker : UIButton!
     private var buttonVoiceRecorder: UIButton!
 
-    var isContinuallySending = false// this virable is use to avoid mutiple time stamp when sending photos, true: did send sth in last 5s
+    var isContinuallySending = false// this virable is used to avoid mutiple time stamp when sending photos, true: did send sth in last 5s
+    var userJustSentHeart = false// this virable is used to check if user just sent a heart sticker and avoid sending heart continuously
     
     //toolbar content
     var toolbarContentView : FAEChatToolBarContentView!
@@ -601,7 +602,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc private func heartButtonTapped()
     {
         animateHeart()
-        sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), isHeartSticker: true ,date: Date())
+        if !userJustSentHeart{
+            sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), isHeartSticker: true ,date: Date())
+            userJustSentHeart = true
+        }
     }
     private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))

@@ -107,8 +107,8 @@ class FaeUser : NSObject {
             completion(status, message)
             
             // WARNING: this code should be deleted afterward, it's here just to test chat function
-            postToURL("chats", parameter: ["receiver_id": "1" as AnyObject, "message": "Hi there, I just registered. Let's chat!" as AnyObject, "type": "text" as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
-            })
+//            postToURL("chats", parameter: ["receiver_id": "1" as AnyObject, "message": "Hi there, I just registered. Let's chat!" as AnyObject, "type": "text" as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
+//            })
         }
     }
     

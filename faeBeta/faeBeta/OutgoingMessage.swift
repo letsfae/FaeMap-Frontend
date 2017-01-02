@@ -33,13 +33,13 @@ class OutgoingMessage {
         
         messageDictionary = NSMutableDictionary(objects: [message, latitude, longitude, snap, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "latitude" as NSCopying, "longitude" as NSCopying, "snapImage" as NSCopying, "senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying,"hasTimeStamp" as NSCopying])
     }
+    
     //picture
     init(message : String, picture : Data, senderId : String, senderName : String, date: Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         
         let pic = picture.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
         messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message"as NSCopying, "picture" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
     }
-    
     
     // outgoing message for sticker
     init (message : String, sticker : Data, isHeartSticker: Bool, senderId : String, senderName : String, date : Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
