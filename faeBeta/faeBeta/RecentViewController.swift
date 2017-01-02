@@ -171,7 +171,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK: load recents form server
     
-    /// load recent list from server
+    /// load recent list from server, also used to reload the recent list after deletion
     ///
     /// - Parameters:
     ///   - animated: update the table with/without animation
@@ -179,6 +179,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if let cacheRecent = result as? NSArray {
+//                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
+//                    if let cacheRecent2 = result2 as? NSArray {
+//                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
+//                        
+//                    }
+//                }
+
                 let json = JSON(result!)
                 self.recents = json
                     UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
@@ -196,46 +203,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
 
     }
-    
-//    func sortAlert() {
-//        print("clicked")
-//        
-//        let grey = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 1.0)
-//        
-//        let meunMessage = NSMutableAttributedString(string: "Sort Chats By")
-//        
-//        meunMessage.addAttributes([NSFontAttributeName : UIFont(name: "Avenir Next", size: 18)!, NSForegroundColorAttributeName : grey], range: NSRange(location: 0, length: meunMessage.length))
-//        
-//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-//        
-//        optionMenu.setValue(meunMessage, forKey: "attributedMessage")
-//        
-//        
-//        let time = UIAlertAction(title: "Time Received", style: .default) { (aler : UIAlertAction!) in
-//            print("Take photo")
-//            
-//        }
-//        
-//        let unread = UIAlertAction(title: "Unread Messages", style: .default) { (aler : UIAlertAction) in
-//            print("photo library")
-//        }
-//        
-//        let markers = UIAlertAction(title: "Markers", style: .default) { (aler : UIAlertAction) in
-//            print("Share location")
-//        }
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (aler : UIAlertAction) in
-//            print("Cancel")
-//        }
-//        
-//        optionMenu.addAction(time)
-//        optionMenu.addAction(unread)
-//        optionMenu.addAction(markers)
-//        optionMenu.addAction(cancelAction)
-//        self.present(optionMenu, animated: true, completion: nil)
-//    }
-    
-    
     
     func closeAllCell(_ recognizer:UITapGestureRecognizer){
         let point = recognizer.location(in: tableView)

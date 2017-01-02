@@ -37,7 +37,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         else if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker! , senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]":"[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker! , senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         
