@@ -390,16 +390,17 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)finishSendingMessage
 {
-    [self finishSendingMessageAnimated:YES];
+    [self finishSendingMessageAnimated:YES cleanTextView:YES];
 }
 
-- (void)finishSendingMessageAnimated:(BOOL)animated {
+- (void)finishSendingMessageAnimated:(BOOL)animated cleanTextView: (BOOL)cleanTextView {
 
     UITextView *textView = self.inputToolbar.contentView.textView;
-    textView.text = nil;
+    if(cleanTextView){
+        textView.text = nil;
+        [self.inputToolbar toggleSendButtonEnabled];
+    }
     [textView.undoManager removeAllActions];
-
-    [self.inputToolbar toggleSendButtonEnabled];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:textView];
 

@@ -18,7 +18,6 @@ class StickerTabView: UIView {
     //MARK: - properties
     private var cellWidth : CGFloat = 44.5
     private var buttonLength : CGFloat = 28
-//    var headGroupImageName = ["stickerMore", "stickerRecent", "stickerLike"]
     private var headGroupImageName = [String]()
     private var headView : UIView!
     private var scrollView : UIScrollView!

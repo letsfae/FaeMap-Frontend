@@ -61,9 +61,7 @@ class OutgoingMessage {
         let snap = snapImage.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "video" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
-    
-    // outgoing message for gif
-    
+        
     func sendMessage(_ chatRoomId : String, withUser user: FaeWithUser) {
         
         let item = self.messageDictionary
@@ -77,7 +75,7 @@ class OutgoingMessage {
                 print("Error, couldn't send message: \(error)")
             }else{
                 //WARNING : I changed item["type"] to "text" here to make backend work
-                postToURL("chats", parameter: ["receiver_id": user.userId as AnyObject, "message": item["message"] as! String, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                postToURL("chats", parameter: ["receiver_id": user.userId as AnyObject, "message": item["message"] as! String, "type": "sticker"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
                         if let resultDic = result as? NSDictionary{
                             self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)

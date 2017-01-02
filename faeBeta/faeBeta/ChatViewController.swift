@@ -418,6 +418,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func textViewDidBeginEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard()
+        buttonSend.isEnabled = self.inputToolbar.contentView.textView.text.characters.count > 0
     }
     
     func keyboardDidShow(_ notification: Notification){

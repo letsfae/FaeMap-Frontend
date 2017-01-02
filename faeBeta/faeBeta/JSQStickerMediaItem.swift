@@ -20,22 +20,20 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
         if self.image == nil {
             return nil
         }
-        if self.cachedImageView == nil {
-            if customizeSize != nil{
-                let imageSize = self.mediaViewDisplaySize()
-                let view = UIImageView(frame: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
-                let imageView = UIImageView(image: self.image)
-                imageView.frame = CGRect(x: 0, y: heartButtonTopOffset, width: imageSize.width, height: imageSize.height - heartButtonTopOffset * 2)
-                imageView.contentMode = .scaleAspectFit
-                view.addSubview(imageView)
-                self.cachedImageView = view 
-            }else{
-                let imageSize = self.mediaViewDisplaySize()
-                let imageView = UIImageView(image: self.image)
-                imageView.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
-                imageView.contentMode = .scaleAspectFit
-                self.cachedImageView = imageView
-            }
+        if customizeSize != nil{
+            let imageSize = self.mediaViewDisplaySize()
+            let view = UIImageView(frame: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+            let imageView = UIImageView(image: self.image)
+            imageView.frame = CGRect(x: 0, y: heartButtonTopOffset, width: imageSize.width, height: imageSize.height - heartButtonTopOffset * 2)
+            imageView.contentMode = .scaleAspectFit
+            view.addSubview(imageView)
+            self.cachedImageView = view 
+        }else{
+            let imageSize = self.mediaViewDisplaySize()
+            let imageView = UIImageView(image: self.image)
+            imageView.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+            imageView.contentMode = .scaleAspectFit
+            self.cachedImageView = imageView
         }
         return cachedImageView
     }

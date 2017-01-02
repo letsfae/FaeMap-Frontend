@@ -65,7 +65,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        self.finishSendingMessage()
+        self.finishSendingMessage(animated: true, cleanTextView: text != nil)
         
         outgoingMessage!.delegate = self
         

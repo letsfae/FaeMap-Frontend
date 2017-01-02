@@ -47,6 +47,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         currentScrollView.delegate = self
 
         switchSticker(3)
+        stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
     }
     
     init(frame : CGRect, emojiOnly : Bool){
@@ -62,6 +63,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
             currentScrollView.delegate = self
             
             switchSticker(3)
+            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
         }else{
             isInEmojiOnlyMode = true
             configureScrollViewLite()

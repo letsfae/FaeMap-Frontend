@@ -241,7 +241,8 @@
  *
  *  @see `automaticallyScrollsToMostRecentMessage`.
  */
-- (void)finishSendingMessageAnimated:(BOOL)animated;
+- (void)finishSendingMessageAnimated:(BOOL)animated
+                       cleanTextView: (BOOL)cleanTextView;
 
 /**
  *  Animates the receiving of a new message. See `finishReceivingMessageAnimated:` for more details.
