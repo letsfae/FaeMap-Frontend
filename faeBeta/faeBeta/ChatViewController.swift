@@ -61,6 +61,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var buttonImagePicker : UIButton!
     private var buttonVoiceRecorder: UIButton!
 
+    // a timer to show heart animation continously
+    private var animatingHeartTimer: Timer!
+    
     var isContinuallySending = false// this virable is used to avoid mutiple time stamp when sending photos, true: did send sth in last 5s
     var userJustSentHeart = false// this virable is used to check if user just sent a heart sticker and avoid sending heart continuously
     
@@ -312,7 +315,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //heart Button
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
-        
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpOutside)
         
     }
     
@@ -605,13 +609,23 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc private func heartButtonTapped()
     {
+        if(animatingHeartTimer != nil){
+            animatingHeartTimer.invalidate()
+            animatingHeartTimer = nil
+        }
         animateHeart()
         if !userJustSentHeart{
             sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true ,date: Date())
             userJustSentHeart = true
         }
     }
-    private func animateHeart() {
+    
+    @objc private func actionHoldingLikeButton(_ sender: UIButton) {
+        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
+        
+    }
+    
+    @objc private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
         animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         self.inputToolbar.contentView.addSubview(animatingHeart)
