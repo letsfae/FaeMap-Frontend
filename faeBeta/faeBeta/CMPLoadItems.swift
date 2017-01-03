@@ -39,6 +39,7 @@ extension CreateMomentPinViewController {
         collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
         collectionViewMedia.delegate = self
         collectionViewMedia.dataSource = self
+        collectionViewMedia.isPagingEnabled = true
         collectionViewMedia.isHidden = true
         collectionViewMedia.backgroundColor = UIColor.clear
         collectionViewMedia.showsHorizontalScrollIndicator = false

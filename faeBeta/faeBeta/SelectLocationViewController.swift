@@ -50,6 +50,7 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
     var pinType = "comment"
+    var isCreatingMode = true
     
     var resultTableWidth: CGFloat {
         if UIScreen.main.bounds.width == 414 { // 5.5
@@ -70,6 +71,14 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
         loadButtons()
         loadTableView()
         loadCustomSearchController()
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isCreatingMode {
+            UIApplication.shared.statusBarStyle = .lightContent
+        }
     }
 
     override func didReceiveMemoryWarning() {
