@@ -99,6 +99,7 @@
                 <outlet property="rightBarButtonContainerViewWidthConstraint" destination="yde-S9-dHe" id="WGu-df-M3L"/>
                 <outlet property="rightHorizontalSpacingConstraint" destination="ds6-61-GNv" id="ZQh-8M-QFs"/>
                 <outlet property="textView" destination="dm4-NT-mvr" id="PFw-HO-oT8"/>
+                <outlet property="textViewRightSpacingConstraint" destination="KQg-1o-Yf8" id="bie-gn-U34"/>
             </connections>
             <point key="canvasLocation" x="256" y="554"/>
         </view>

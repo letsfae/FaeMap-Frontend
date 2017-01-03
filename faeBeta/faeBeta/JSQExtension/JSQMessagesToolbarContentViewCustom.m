@@ -35,6 +35,7 @@ const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 8.0f;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftHorizontalSpacingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightHorizontalSpacingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewRightSpacingConstraint;
 
 @end
 
@@ -161,6 +162,17 @@ const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 8.0f;
 {
     self.leftHorizontalSpacingConstraint.constant = leftContentPadding;
     [self setNeedsUpdateConstraints];
+}
+
+- (void)setHeartButtonHidden: (BOOL)heartButtonHidden
+{
+    if(heartButtonHidden){
+        _heartButton.hidden = YES;
+        _textViewRightSpacingConstraint.constant = 6.0f;
+    }else{
+        _heartButton.hidden = NO;
+        _textViewRightSpacingConstraint.constant = 48.0f;
+    }
 }
 
 #pragma mark - Getters

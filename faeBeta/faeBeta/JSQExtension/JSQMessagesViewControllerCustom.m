@@ -563,15 +563,8 @@ JSQMessagesKeyboardControllerDelegate>
     cell.delegate = collectionView;
 
     if (!isMediaMessage) {
-        
-        cell.textView.attributedText = [EmojiService translateString: [messageItem text] isOutGoing: isOutgoingMessage];
-        
-        if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
-            //  workaround for iOS 7 textView data detectors bug
-            cell.textView.text = nil;
-            cell.textView.attributedText = [[NSAttributedString alloc] initWithString:[messageItem text]
-                                                                           attributes:@{ NSFontAttributeName : collectionView.collectionViewLayout.messageBubbleFont }];
-        }
+        NSAttributedString *attributedText = [EmojiService translateString: [messageItem text] isOutGoing: isOutgoingMessage];
+        cell.textView.attributedText = attributedText;
 
         NSParameterAssert(cell.textView.text != nil);
 

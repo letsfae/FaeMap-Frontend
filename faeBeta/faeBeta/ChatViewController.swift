@@ -310,7 +310,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         
         //heart Button
-        self.inputToolbar.contentView.heartButton.isHidden = false
+        self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
         
         
@@ -607,7 +607,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     {
         animateHeart()
         if !userJustSentHeart{
-            sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFull"), isHeartSticker: true ,date: Date())
+            sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true ,date: Date())
             userJustSentHeart = true
         }
     }

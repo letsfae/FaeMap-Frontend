@@ -167,8 +167,9 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     self.avatarImageView.image = nil;
     self.avatarImageView.highlightedImage = nil;
     
-    for (UIView *subview in self.messageBubbleContainerView.subviews){
-        [subview removeFromSuperview];
+    if (_mediaView != nil){
+        [_mediaView removeFromSuperview];
+        _mediaView = nil;
     }
 }
 

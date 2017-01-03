@@ -112,7 +112,7 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingD
 @property (weak, nonatomic, readonly) UIView *rightBarButtonContainerView;
 
 @property (weak, nonatomic) IBOutlet UIButton *heartButton;
-
+@property (nonatomic) BOOL heartButtonHidden;
 
 #pragma mark - Class methods
 

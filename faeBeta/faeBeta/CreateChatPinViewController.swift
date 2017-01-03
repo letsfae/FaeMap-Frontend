@@ -165,9 +165,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         createChatPinOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
         
         self.view.addSubview(createChatPinOptionsTableView)
-//        self.view.addConstraintsWithFormat("H:|-[v0]-|", options: [], views: createChatPinOptionsTableView)
-//        self.view.addConstraintsWithFormat("V:[v0(\(CreatePinOptionsTableView.cellHeight * 3))]-56-[v1]", options: [], views: createChatPinOptionsTableView, submitButton)
-        
         createChatPinOptionsTableView.delegate = self
         createChatPinOptionsTableView.dataSource = self
     }
