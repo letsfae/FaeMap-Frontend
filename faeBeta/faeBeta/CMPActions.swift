@@ -52,7 +52,7 @@ extension CreateMomentPinViewController {
             
         }
         else {
-            let numMediaLeft = 5 - selectedMediaArray.count
+            let numMediaLeft = 6 - selectedMediaArray.count
             if numMediaLeft == 0 {
                 self.showAlert(title: "Up to 5 pictures can be uploaded at the same time", message: "please try again")
                 return
