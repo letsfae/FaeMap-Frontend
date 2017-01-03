@@ -21,6 +21,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <JSQMessagesViewController/NSString+JSQMessages.h>
+#import "faeBeta-swift.h"
 
 
 @implementation JSQMessagesComposerTextViewCustom
@@ -34,9 +35,7 @@
     CGFloat cornerRadius = 6.0f;
     
     self.backgroundColor = [UIColor whiteColor];
-//    self.layer.borderWidth = 0.5f;
-//    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//    self.layer.cornerRadius = cornerRadius;
+    self.tintColor = [UIColor faeAppRedColor];
     
     self.scrollIndicatorInsets = UIEdgeInsetsMake(cornerRadius, 0.0f, cornerRadius, 0.0f);
     
