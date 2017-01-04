@@ -8,6 +8,9 @@
 
 import Foundation
 import SwiftyJSON
+
+
+/// This is a class to help generate a tag on the server 
 class TagCreator: NSObject {
     class func uploadTags(_ tagNames: [String], completion: @escaping (_ tagIds: [NSNumber]) -> ()){
         var tagNames = tagNames

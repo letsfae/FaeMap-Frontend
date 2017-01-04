@@ -8,21 +8,31 @@
 
 import UIKit
 
+
+/// This is a general textview used in create pin pages. Can update its size according to its text
 protocol CreatePinTextViewDelegate:class {
+    
+    /// delegate method to handle event when a specific numebr of characters entered. Should update the inputtoolbar count label in this method
+    ///
+    /// - Parameters:
+    ///   - textView: the textView using
+    ///   - num: the number of chars entered
     func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
 }
 
 class CreatePinTextView: UITextView, UITextViewDelegate {
+    
     //MARK: - properties
-    private var labelTextViewPlaceholder: UILabel!
+    private var textViewPlaceholderLabel: UILabel!
+    
     weak var observerDelegate: CreatePinTextViewDelegate!
     var placeHolder: String? {
         get{
-            return labelTextViewPlaceholder.text
+            return textViewPlaceholderLabel.text
         }
         set{
-            labelTextViewPlaceholder.text = newValue
-            labelTextViewPlaceholder.sizeToFit()
+            textViewPlaceholderLabel.text = newValue
+            textViewPlaceholderLabel.sizeToFit()
         }
     }
     
@@ -45,11 +55,11 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.delegate = self
         self.isScrollEnabled = false
         self.clipsToBounds = false
-        labelTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 290, height: 47))
-        labelTextViewPlaceholder.numberOfLines = 2
-        labelTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        labelTextViewPlaceholder.textColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        self.addSubview(labelTextViewPlaceholder)
+        textViewPlaceholderLabel = UILabel(frame: CGRect(x: 5, y: 8, width: 290, height: 47))
+        textViewPlaceholderLabel.numberOfLines = 2
+        textViewPlaceholderLabel.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        textViewPlaceholderLabel.textColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        self.addSubview(textViewPlaceholderLabel)
     }
 
     //MARK: - UITextViewDelegate
@@ -62,10 +72,10 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         let spacing = CharacterSet.whitespacesAndNewlines
         
         if textView.text.trimmingCharacters(in: spacing).isEmpty == false {
-            labelTextViewPlaceholder.isHidden = true
+            textViewPlaceholderLabel.isHidden = true
         }
         else {
-            labelTextViewPlaceholder.isHidden = false
+            textViewPlaceholderLabel.isHidden = false
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
         var numlineOnDevice = 3

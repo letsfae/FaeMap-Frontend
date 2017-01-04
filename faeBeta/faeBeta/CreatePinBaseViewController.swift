@@ -14,22 +14,23 @@ import UIKit
     @objc optional func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
 }
 
+
+/// This class this the BASE of the create pin views, which include the title image, title, left arrow & cross button, bottom submit button, anonymous button. 
+///A subclass of this class will automatically have all the elements above. 
+///This class also contains the logic for the input Toolbar, including it's position, and timing to show.
 class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate, SendStickerDelegate {
     //MARK: - properties
     weak var delegate : CreatePinBaseDelegate!
-    var submitButton: UIButton!
+    private var submitButton: UIButton!
     var titleImageView: UIImageView!
     var titleLabel: UILabel!
     
     var anonymousButton: UIButton!
     private var anonymousBoxImageView: UIImageView!
-    var isAnonymous: Bool = false
+    var isAnonymous: Bool = false // whether the user check the anoymous box
     
     //input toolbar
     var inputToolbar: CreatePinInputToolbar!
-    var buttonOpenFaceGesPanel: UIButton!
-    var buttonFinishEdit: UIButton!
-    var labelCountChars: UILabel!
     
     //pin location
     var selectedLatitude: String!
@@ -37,17 +38,19 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var currentLocation: CLLocation! = CLLocation(latitude: 37 , longitude: 114)
     
     //emoji
-    var isShowingEmoji: Bool = false
+    var isShowingEmoji: Bool = false // whether the emoji picker view is shown
     var emojiView: StickerPickView!
     
-    var previousFirstResponder: AnyObject? = nil
+    var previousFirstResponder: AnyObject? = nil // this is a variable used to track the privous first responder, it can be either a textView or a textField. After hiding the emoji picker view, we need to make the privous first responder active again
     
-    //specificView
+    //specific View
     enum CreatePinSpecificViewOptions {
         case description
         case moreOptionsTable
         case addTags
     }
+    
+    // What specific content the user is current looking at. Such as the description textView or the more options table
     var currentViewingContent: CreatePinSpecificViewOptions!
     
     //MARK: - life cycles
@@ -111,7 +114,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: submitButton)
         self.view.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: submitButton)
         
-        
+        //title image
         titleImageView = UIImageView(frame: CGRect(x: 166, y: 36, width: 84, height: 91))
         self.view.addSubview(titleImageView)
         
@@ -127,6 +130,13 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         createAnonymousButton()
     }
     
+    
+    /// This is the method to update the bottom button
+    ///
+    /// - Parameters:
+    ///   - title: the title text for the button
+    ///   - color: the background color
+    ///   - enabled: whether this button is enabled or not. If not, the background color will have an alpha 0.65
     func setSubmitButton(withTitle title: String, backgroundColor color: UIColor, isEnabled enabled: Bool)
     {
         submitButton.setTitle(title, for: UIControlState())
@@ -134,6 +144,8 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         submitButton.isEnabled = enabled
     }
     
+    
+    /// This is the method to setup the input Toolbar
     private func loadKeyboardToolBar() {
         inputToolbar = CreatePinInputToolbar()
         inputToolbar.delegate = self
@@ -187,11 +199,20 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         }
     }
 
+    
+    /// This method is empty because this should be override in its subclass
+    ///
+    /// - Parameter sender: the sender button
     func submitButtonTapped(_ sender: UIButton)
     {
-        
+        // override this in the subclass
     }
+    
     //MARK: - CreatePinInputToolbarDelegate
+    
+    /// handle the event when right(finish) button of the keyboard tool bar is touched
+    ///
+    /// - Parameter inputToolbar: the toolbar that contains the finish button
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {
         self.view.endEditing(true)
@@ -201,12 +222,19 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         }
     }
     
+    /// handle the event when the left(emoji/keyboard) button on the keyboard toolbar is touched
+    ///
+    /// - Parameter inputToolbar: the toolbar that contains the left button
     func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
+        
+        //if the keyboard is shown, show emoji picker view instead
         if(!isShowingEmoji){
             isShowingEmoji = true
             self.view.endEditing(true)
             showEmojiViewAnimated(animated: true)
-        }else{
+        }
+        //if the emoji picker view is shown, hide it and show keyboard
+        else{
             isShowingEmoji = false
             hideEmojiViewAnimated(animated: false)
             _ = self.previousFirstResponder?.becomeFirstResponder()
@@ -272,10 +300,12 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     {
         // do nothing here, won't send sticker
     }
+    
     func appendEmojiWithImageName(_ name: String)
     {
         if let previousFirstResponder = previousFirstResponder
         {
+            //the input view can either be a textfield or a textView, so we need to check it first
             if previousFirstResponder is CreatePinTextView{
                 let textView = previousFirstResponder as! CreatePinTextView
                 textView.text = textView.text as String + "[\(name)]"
@@ -286,6 +316,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
             }
         }
     }
+    
     func deleteEmoji()
     {
         if let previousFirstResponder = previousFirstResponder
@@ -310,6 +341,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
             }
         }
     }
+    
     //MARK: - helper
     func showEmojiViewAnimated(animated: Bool)
     {

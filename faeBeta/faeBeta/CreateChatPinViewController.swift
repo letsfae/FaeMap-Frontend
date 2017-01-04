@@ -10,7 +10,7 @@ import UIKit
 
 class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationViewControllerDelegate, SendMutipleImagesDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     //MARK: - properties
-    private var createChatPinMainView: UIView!
+    private var createChatPinMainView: UIView!// this view contains the switch button, the round "add cover image" imageView, and the pin name textField
     private var switchButtonContentView: UIView!
     private var switchButtonBackgroundImageView: UIImageView!
     private var switchButtonLeft: UIButton!
@@ -548,6 +548,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - add tags related
+    
     override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
     {
         if !(previousFirstResponder is CreatePinAddTagsTextView){

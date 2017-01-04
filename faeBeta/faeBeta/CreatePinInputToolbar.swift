@@ -9,8 +9,8 @@
 import UIKit
 
 protocol CreatePinInputToolbarDelegate: class {
-    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
-    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
+    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)// tool bar right button tapped
+    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)// tool bar left button tapped
 }
 
 enum CreatePinInputToolbarMode {
@@ -30,13 +30,16 @@ class CreatePinInputToolbar: UIView {
         get{
             if _mode == .emoji{
                 return 200
-            }else {
+            }
+            //for tag mode
+            else {
                 return 5
             }
         }
     }
     
     private var _numberOfCharactersEntered: Int = 0
+    // a variable to track how many characters the user've entered. Also used to track how many tags the user has added in tag mode.
     var numberOfCharactersEntered: Int{
         set{
             _numberOfCharactersEntered = newValue
@@ -53,6 +56,7 @@ class CreatePinInputToolbar: UIView {
     }
     
     private var _countCharsLabelHidden: Bool = false
+    // set this to true if the count label should be hidden
     var countCharsLabelHidden: Bool{
         get{
             return _countCharsLabelHidden
@@ -67,6 +71,7 @@ class CreatePinInputToolbar: UIView {
         }
     }
     private var _mode: CreatePinInputToolbarMode = .emoji
+    // can be either emoji mode or tag mode. The button image and function will be different
     var mode: CreatePinInputToolbarMode {
         get{
             return _mode
