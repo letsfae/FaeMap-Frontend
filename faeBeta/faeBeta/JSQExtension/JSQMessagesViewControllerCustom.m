@@ -590,7 +590,6 @@ JSQMessagesKeyboardControllerDelegate>
     if (needsAvatar) {
         avatarImageDataSource = [collectionView.dataSource collectionView:collectionView avatarImageDataForItemAtIndexPath:indexPath];
         if (avatarImageDataSource != nil) {
-            cell.avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
             UIImage *avatarImage = [avatarImageDataSource avatarImage];
             if (avatarImage == nil) {
                 cell.avatarImageView.image = [avatarImageDataSource avatarPlaceholderImage];

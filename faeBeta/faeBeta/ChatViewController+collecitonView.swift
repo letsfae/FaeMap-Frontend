@@ -31,7 +31,8 @@ extension ChatViewController {
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
         cell.avatarImageView.layer.cornerRadius = 17.5
-        
+        cell.avatarImageView.contentMode = .scaleAspectFill
+        cell.avatarImageView.layer.masksToBounds = true
         let object = objects[indexPath.row]
         switch (object["type"] as! String) {
             case "text":
