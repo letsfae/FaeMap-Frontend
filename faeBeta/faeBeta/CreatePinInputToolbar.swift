@@ -21,10 +21,12 @@ enum CreatePinInputToolbarMode {
 class CreatePinInputToolbar: UIView {
     
     //MARK: - properties
-    private var buttonOpenFaceGesPanel: UIButton!
-    private var buttonFinishEdit: UIButton!
-    private var labelCountChars: UILabel!
+    var buttonOpenFaceGesPanel: UIButton!
+    var buttonFinishEdit: UIButton!
+    var labelCountChars: UILabel!
+    var darkBackgroundView: UIView!
     
+    private var _mode: CreatePinInputToolbarMode = .emoji
     var maximumNumberOfCharacters: Int
     {
         get{
@@ -66,7 +68,7 @@ class CreatePinInputToolbar: UIView {
             }
         }
     }
-    private var _mode: CreatePinInputToolbarMode = .emoji
+    
     var mode: CreatePinInputToolbarMode {
         get{
             return _mode
@@ -111,7 +113,7 @@ class CreatePinInputToolbar: UIView {
     private func setup()
     {
         self.backgroundColor = UIColor.clear
-        let darkBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
+        darkBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         darkBackgroundView.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
         self.addSubview(darkBackgroundView)
         self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: darkBackgroundView)
@@ -125,7 +127,6 @@ class CreatePinInputToolbar: UIView {
         self.addConstraintsWithFormat("H:|-14-[v0(45)]", options: [], views: buttonOpenFaceGesPanel)
         self.addConstraintsWithFormat("V:[v0(29)]-11-|", options: [], views: buttonOpenFaceGesPanel)
         buttonOpenFaceGesPanel.addTarget(self, action: #selector(self.emojiButtonTapped(_:)), for: .touchUpInside)
-
         
         buttonFinishEdit = UIButton()
         buttonFinishEdit.setImage(UIImage(named: "finishEditing"), for: UIControlState())
@@ -152,6 +153,7 @@ class CreatePinInputToolbar: UIView {
     
     func emojiButtonTapped(_ sender: UIButton)
     {
+        print("emoji is tapped")
         self.delegate?.inputToolbarEmojiButtonTapped(inputToolbar:self)
     }
     

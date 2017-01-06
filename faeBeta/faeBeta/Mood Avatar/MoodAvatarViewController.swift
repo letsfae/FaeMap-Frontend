@@ -135,6 +135,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func changeMaleAvatar(_ sender: UIButton) {
         // Unsafe
+        
         userAvatarMap = "miniAvatar_\(sender.tag)"
         userMiniAvatar = sender.tag
         currentAvatarIndex = sender.tag
@@ -157,7 +158,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func changeFemaleAvatar(_ sender: UIButton) {
         // Unsafe
-        userAvatarMap = "miniAvatar_\(sender.tag)" 
+        userAvatarMap = "miniAvatar_\(sender.tag)"
         userMiniAvatar = sender.tag
         currentAvatarIndex = sender.tag
         tableView.reloadData()
