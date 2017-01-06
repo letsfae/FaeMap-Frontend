@@ -10,17 +10,6 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-protocol PinDetailDelegate: class {
-    // Cancel marker's shadow when back to Fae Map
-    func dismissMarkerShadow(_ dismiss: Bool)
-    // Pass location data to fae map view
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
-    // Animate the selected marker
-    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
-    // Open pin detail view controller with type
-    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D)
-}
-
 class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
     // Delegate of this class

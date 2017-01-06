@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension MomentPinDetailViewController {
+extension PinDetailViewController {
     
     //MARK: - adjust input toolbar textView size
     

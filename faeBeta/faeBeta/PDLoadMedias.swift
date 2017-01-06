@@ -12,7 +12,7 @@ import RealmSwift
 import SDWebImage
 import IDMPhotoBrowser
 
-extension MomentPinDetailViewController {
+extension PinDetailViewController {
     func loadMedias() {
         imageViewMediaArray.removeAll()
         for index in 0...fileIdArray.count-1 {

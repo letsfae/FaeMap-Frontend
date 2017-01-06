@@ -11,7 +11,7 @@ import SDWebImage
 import IDMPhotoBrowser
 import RealmSwift
 
-extension MomentPinDetailViewController: UIScrollViewDelegate {
+extension PinDetailViewController: UIScrollViewDelegate {
     /*
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if scrollView == scrollViewMedia {

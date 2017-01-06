@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension MomentPinDetailViewController: UITableViewDelegate, UITableViewDataSource {
+extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
     func numberOfSections(in tableView: UITableView) -> Int {

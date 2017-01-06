@@ -99,7 +99,7 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
             }
         }
     }
-    
+    /*
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == collectionViewMedia {
             print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
@@ -134,6 +134,7 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
             self.lastContentOffset = scrollView.contentOffset.x
         }
     }
+     */
  
 //
 //    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension MomentPinDetailViewController {
+extension PinDetailViewController {
     // Load pin detail window
     func loadPinDetailWindow() {
         
@@ -25,7 +25,7 @@ extension MomentPinDetailViewController {
         subviewTable.layer.shadowOpacity = 0.3
         subviewTable.layer.shadowRadius = 10.0
         
-        // Table comments for moment
+        // Table comments
         tableCommentsForPin = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         tableCommentsForPin.delegate = self
         tableCommentsForPin.dataSource = self

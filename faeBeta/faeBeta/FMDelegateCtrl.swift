@@ -74,7 +74,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         timerUpdateSelfLocation.invalidate()
         self.clearMap(type: "user")
         if withType == "media" {
-            let pinDetailVC = MomentPinDetailViewController()
+            let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             pinDetailVC.pinIdSentBySegue = "\(pinID)"
             pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLocation
 
-extension MomentPinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
     
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {

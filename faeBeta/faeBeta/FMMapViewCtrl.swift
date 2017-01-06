@@ -230,7 +230,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 if type == "media" {
                     timerUpdateSelfLocation.invalidate()
                     self.clearMap(type: "user")
-                    let pinDetailVC = MomentPinDetailViewController()
+                    let pinDetailVC = PinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)

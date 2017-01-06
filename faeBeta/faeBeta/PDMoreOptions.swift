@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension MomentPinDetailViewController {
+extension PinDetailViewController {
     // Close more options button when it is open, the subview is under it
     func actionToCloseOtherViews(_ sender: UIButton) {
         if buttonMoreOnPinCellExpanded == true {

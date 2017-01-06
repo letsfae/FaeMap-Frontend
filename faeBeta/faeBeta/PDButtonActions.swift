@@ -11,7 +11,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension MomentPinDetailViewController {
+extension PinDetailViewController {
     
     // Pan gesture for dragging pin detail dragging button
     func panActionPinDetailDrag(_ pan: UIPanGestureRecognizer) {

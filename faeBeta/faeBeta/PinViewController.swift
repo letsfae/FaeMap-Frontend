@@ -1,5 +1,5 @@
 //
-//  MomentPinDetailViewController.swift
+//  PinDetailViewController.swift
 //  faeBeta
 //
 //  Created by Yue on 12/2/16.
@@ -11,7 +11,18 @@ import SwiftyJSON
 import CoreLocation
 import RealmSwift
 
-class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
+protocol PinDetailDelegate: class {
+    // Cancel marker's shadow when back to Fae Map
+    func dismissMarkerShadow(_ dismiss: Bool)
+    // Pass location data to fae map view
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    // Animate the selected marker
+    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
+    // Open pin detail view controller with type
+    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D)
+}
+
+class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
     
     // Delegate of this class
     weak var delegate: PinDetailDelegate?
@@ -26,7 +37,7 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var buttonDeleteOnPinDetail: UIButton!
     var buttonReportOnPinDetail: UIButton!
     
-    // New Moment Pin Popup Window
+    // New Pin Popup Window
     var subviewTable: UIView!
     var animatingHeart: UIImageView!
     var anotherRedSlidingLine: UIView!
@@ -141,7 +152,13 @@ class MomentPinDetailViewController: UIViewController, UIImagePickerControllerDe
     var beforeScrollingOffset: CGFloat = 0
     
     var isSavedByMe = false
-    var pinType = "media"
+    enum PinType {
+        case comment
+        case media
+        case chat_room
+    }
+    var pinType = "moment"
+    var pinTypeString = ""
     var animated = false
     
     override func viewDidLoad() {
