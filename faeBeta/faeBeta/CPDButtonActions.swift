@@ -99,6 +99,7 @@ extension CommentPinDetailViewController {
         UIView.animate(withDuration: 0.583, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForComment.center.y -= screenHeight
+            self.subviewTable.center.y -= screenHeight
             self.draggingButtonSubview.center.y -= screenHeight
             self.grayBackButton.alpha = 0
             self.commentPinIcon.alpha = 0
@@ -128,7 +129,7 @@ extension CommentPinDetailViewController {
                 self.buttonCommentPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForComment.scrollToTop()
-                self.tableCommentsForComment.frame.size.height = 227
+                self.tableCommentsForComment.frame.size.height = 255
                 self.uiviewCommentPinDetail.frame.size.height = 281
                 self.textviewCommentPinDetail.frame.size.height = 100
                 self.uiviewCommentPinDetailMainButtons.frame.origin.y = 190

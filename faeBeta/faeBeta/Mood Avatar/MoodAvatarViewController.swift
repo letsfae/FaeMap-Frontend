@@ -68,10 +68,10 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imageCurrentAvatar = UIImageView()
-        imageCurrentAvatar.image = UIImage(named: "curAvatar_1")
+        imageCurrentAvatar.image = UIImage(named: "miniAvatar_1")
         self.headerView.addSubview(imageCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("H:[v0(70)]", options: [], views: imageCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("V:[v0(70)]-30-|", options: [], views: imageCurrentAvatar)
+        self.headerView.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
+        self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
         NSLayoutConstraint(item: imageCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         // Line at y = 64
@@ -110,12 +110,12 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.labelAvatarDes.text = titles[indexPath.row]
         let indexMale = indexPath.row + 1
         let indexFemale = indexPath.row + 19
-        cell.maleImage.image = UIImage(named: "cellAvatar_\(indexMale)")
-        cell.femaleImage.image = UIImage(named: "cellAvatar_\(indexFemale)")
+        cell.maleImage.image = UIImage(named: "miniAvatar_\(indexMale)")
+        cell.femaleImage.image = UIImage(named: "miniAvatar_\(indexFemale)")
         cell.buttonLeft.addTarget(self, action: #selector(MoodAvatarViewController.changeMaleAvatar), for: .touchUpInside)
-        cell.buttonLeft.tag = indexPath.row + 1
+        cell.buttonLeft.tag = indexMale
         cell.buttonRight.addTarget(self, action: #selector(MoodAvatarViewController.changeFemaleAvatar), for: .touchUpInside)
-        cell.buttonRight.tag = indexPath.row + 19
+        cell.buttonRight.tag = indexFemale
         if currentAvatarIndex == cell.buttonLeft.tag {
             cell.maleRedBtn.image = UIImage(named: "selectedMoodButton")
         }
@@ -135,11 +135,12 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func changeMaleAvatar(_ sender: UIButton) {
         // Unsafe
-        userAvatarMap = "mapAvatar_\(sender.tag)"
+        
+        userAvatarMap = "miniAvatar_\(sender.tag)"
         userMiniAvatar = sender.tag
         currentAvatarIndex = sender.tag
         tableView.reloadData()
-        imageCurrentAvatar.image = UIImage(named: "curAvatar_\(sender.tag)")
+        imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
         let updateMiniAvatar = FaeUser()
         if let miniAvatar = userMiniAvatar {
             print(miniAvatar)
@@ -157,11 +158,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func changeFemaleAvatar(_ sender: UIButton) {
         // Unsafe
-        userAvatarMap = "mapAvatar_\(sender.tag)"
+        userAvatarMap = "miniAvatar_\(sender.tag)"
         userMiniAvatar = sender.tag
         currentAvatarIndex = sender.tag
         tableView.reloadData()
-        imageCurrentAvatar.image = UIImage(named: "curAvatar_\(sender.tag)")
+        imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
         let updateMiniAvatar = FaeUser()
         if let miniAvatar = userMiniAvatar {
             print(miniAvatar)

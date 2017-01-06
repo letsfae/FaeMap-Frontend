@@ -78,7 +78,7 @@ class CreateMomentPinViewController: UIViewController {
     var direction: Direction = .right
     
     var buttonAddMedia: UIButton!
-    var lastContentOffset: CGFloat = 0
+    var lastContentOffset: CGFloat = -999
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -173,6 +173,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         if marker.userData == nil {
             return false
         }
+        print("DidTap \(marker)")
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
@@ -200,29 +201,40 @@ extension FaeMapViewController: GMSMapViewDelegate {
 //                mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
-                if let pinIDGet = pinComment["\(type)_id"].int {
+                let pinIDGet = pinComment["\(type)_id"].stringValue 
                     pinIdToPassBySegue = pinIDGet
-                    var openedPinListArray = [Int]()
-                    openedPinListArray.append(pinIDGet)
-//                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
-                    marker.zIndex = 2
-                    if let listArray = readByKey("openedPinList") {
-                        openedPinListArray.removeAll()
-                        openedPinListArray = listArray as! [Int]
-                        if openedPinListArray.contains(pinIDGet) == false {
-                            openedPinListArray.append(pinIDGet)
+//                    var openedPinListArray = [Int]()
+//                    openedPinListArray.append(pinIDGet)
+////                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
+//                    marker.zIndex = 2
+//                    if let listArray = readByKey("openedPinList") {
+//                        openedPinListArray.removeAll()
+//                        openedPinListArray = listArray as! [Int]
+//                        if openedPinListArray.contains(pinIDGet) == false {
+//                            openedPinListArray.append(pinIDGet)
+//                        }
+//                    }
+//                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+                    if let storedList = readByKey("openedPinList"){
+                        var openedPinListArray = storedList as! [String]
+                        let pinTypeID = "\(type)%\(pinIDGet)"
+                        if openedPinListArray.contains(pinTypeID) == false {
+                            openedPinListArray.insert(pinTypeID, at: 0)
+                            //openedPinListArray.append(pinTypeID)
                         }
+                        self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+                        print("[FMMapViewCtrl] \(openedPinListArray)")
                     }
-                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                }
+                
                 self.markerBackFromPinDetail = marker
                 if type == "media" {
                     timerUpdateSelfLocation.invalidate()
                     self.clearMap(type: "user")
-                    let pinDetailVC = MomentPinDetailViewController()
+                    let pinDetailVC = PinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.animated = true
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true
@@ -235,6 +247,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    pinDetailVC.animated = true
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true

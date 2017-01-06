@@ -17,8 +17,7 @@ extension CreateMomentPinViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if textView == textViewForMediaPin {
-            let spacing = CharacterSet.whitespacesAndNewlines
-            
+            let spacing = CharacterSet.whitespacesAndNewlines 
             if textViewForMediaPin.text.trimmingCharacters(in: spacing).isEmpty == false {
                 buttonMediaSubmit.isEnabled = true
                 lableTextViewPlaceholder.isHidden = true

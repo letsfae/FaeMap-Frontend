@@ -14,12 +14,28 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.alpha = 0.0
         self.view.addSubview(uiviewCreateMediaPin)
         
+        let layout = CenterCellCollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 200, height: 200)
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 49
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 200), collectionViewLayout: layout)
+        collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.isPagingEnabled = false
+        collectionViewMedia.isHidden = true
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        uiviewCreateMediaPin.addSubview(collectionViewMedia)
+        
         buttonTakeMedia = UIButton(frame: CGRect(x: 109, y: 268, width: 65, height: 65))
         buttonTakeMedia.setImage(UIImage(named: "momentPinTakeMoment"), for: UIControlState())
         uiviewCreateMediaPin.addSubview(buttonTakeMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-109-[v0(65)]", options: [], views: buttonTakeMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: buttonTakeMedia)
-        buttonTakeMedia.addTarget(self, action: #selector(CreateMomentPinViewController.actionTakeMedia(_:)), for: .touchUpInside)
+        buttonTakeMedia.addTarget(self, action: #selector(self.actionTakeMedia(_:)), for: .touchUpInside)
         
         buttonSelectMedia = UIButton(frame: CGRect(x: 241, y: 268, width: 65, height: 65))
         buttonSelectMedia.setImage(UIImage(named: "momentPinSelectMoment"), for: UIControlState())
@@ -27,22 +43,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(buttonSelectMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(65)]-109-|", options: [], views: buttonSelectMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: buttonSelectMedia)
-        buttonSelectMedia.addTarget(self, action: #selector(CreateMomentPinViewController.actionTakeMedia(_:)), for: .touchUpInside)
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 200, height: 200)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 49
-        
-        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: 307, height: 200), collectionViewLayout: layout)
-        collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
-        collectionViewMedia.delegate = self
-        collectionViewMedia.dataSource = self
-        collectionViewMedia.isHidden = true
-        collectionViewMedia.backgroundColor = UIColor.clear
-        collectionViewMedia.showsHorizontalScrollIndicator = false
-        uiviewCreateMediaPin.addSubview(collectionViewMedia)
+        buttonSelectMedia.addTarget(self, action: #selector(self.actionTakeMedia(_:)), for: .touchUpInside)
         
         textViewForMediaPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
         textViewForMediaPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
@@ -62,7 +63,7 @@ extension CreateMomentPinViewController {
         lableTextViewPlaceholder.text = "Add Description..."
         textViewForMediaPin.addSubview(lableTextViewPlaceholder)
         
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreateMomentPinViewController.tapOutsideToDismissKeyboard(_:)))
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         uiviewCreateMediaPin.addGestureRecognizer(tapToDismissKeyboard)
         
         let imageCreateMediaPin = UIImageView(frame: CGRect(x: 166, y: 36, width: 84, height: 91))
@@ -135,7 +136,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
         buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
         buttonMediaSubmit.adjustsImageWhenDisabled = false
-        buttonMediaSubmit.isEnabled = false
+        buttonMediaSubmit.isEnabled = true
         buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)

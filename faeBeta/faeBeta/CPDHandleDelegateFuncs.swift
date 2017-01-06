@@ -19,34 +19,37 @@ extension CommentPinDetailViewController: EditCommentPinViewControllerDelegate, 
     }
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
-        self.delegate?.animateToCamera(coordinate, pinID: pinID)
-        self.backJustOnce = true
-        self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-        self.tableCommentsForComment.center.y += screenHeight
-        self.draggingButtonSubview.center.y += screenHeight
-        self.pinIDPinDetailView = "\(pinID)"
-        if pinIDPinDetailView != "-999" {
-            getSeveralInfo()
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {
+        print("[animateToCameraFromOpenedPinListView] pinID: \(pinID), pinType: \(pinType)")
+        if pinType == self.pinType {
+            print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinType)")
+            self.delegate?.animateToCamera(coordinate, pinID: pinID)
+            self.backJustOnce = true
+            self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+            self.tableCommentsForComment.center.y += screenHeight
+            self.draggingButtonSubview.center.y += screenHeight
+            self.pinIDPinDetailView = "\(pinID)"
+            if pinIDPinDetailView != "-999" {
+                getSeveralInfo()
+            }
+        }
+        else {
+            print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinType)")
+            self.dismiss(animated: false, completion: { 
+                self.delegate?.openPinDetailView(withType: pinType, pinID: pinID, coordinate: coordinate)
+            })
         }
     }
     
     // OpenedPinListViewControllerDelegate
-    func backFromOpenedPinList(_ back: Bool) {
-        if back {
-            backJustOnce = true
-            subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-            UIView.animate(withDuration: 0.583, animations:({
-                self.uiviewCommentPinDetail.center.y += screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    
-                }
-            })
-        }
-        if !back {
-            self.dismiss(animated: false, completion: nil)
-        }
+    func directlyReturnToMap() {
+        self.dismiss(animated: false, completion: nil)
+    }
+    
+    // OpenedPinListViewControllerDelegate
+    func backFromOpenedPinList(pinType: String, pinID: String) {
+        backJustOnce = true
+        subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
     }
     
     func showActionSheetFromPinCell(_ username: String) {

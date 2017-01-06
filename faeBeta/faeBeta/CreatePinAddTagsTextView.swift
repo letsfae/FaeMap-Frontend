@@ -28,12 +28,11 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.layoutManager.delegate = self
-
     }
     
     //MARK: - add tags
     
-    /// abstract the user's input from textView add call appendNewTags()
+    // abstract the user's input from textView add call appendNewTags()
     func addLastInputTag()
     {
         

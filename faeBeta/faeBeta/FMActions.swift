@@ -38,6 +38,8 @@ extension FaeMapViewController {
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton!) {
+        timerUpdateSelfLocation.invalidate()
+        self.clearMap(type: "user")
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
         pinMenuVC.currentLatitude = self.currentLatitude

@@ -70,10 +70,13 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
             UIView.animate(withDuration: 0.583, animations: ({
                 self.draggingButtonSubview.frame.origin.y = 228
                 self.subviewTable.frame.size.height = 256
-                self.tableOpenedPin.scrollToTop()
+                if self.openedPinListArray.count <= 3 {
+                    self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
+                }else{
+                    self.tableOpenedPin.frame.size.height = CGFloat(228)
+                }
             }), completion: { (done: Bool) in
                 if done {
-                    
                 }
             })
             return
@@ -82,9 +85,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         UIView.animate(withDuration: 0.583, animations: ({
             self.draggingButtonSubview.frame.origin.y = screenHeight - 93
             self.subviewTable.frame.size.height = screenHeight - 65
+            self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
         }), completion: { (done: Bool) in
             if done {
-                
             }
         })
     }
@@ -102,7 +105,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
                      * this action should via comment pin detail view,
                      * it looks a direct transition, but in fact, it is not
                     **/
-                    self.delegate?.backFromOpenedPinList(false)
+                    self.delegate?.directlyReturnToMap()
                 })
             }
         })
@@ -112,7 +115,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     func actionBackToCommentDetail(_ sender: UIButton!) {
         if backJustOnce == true {
             backJustOnce = false
-            self.delegate?.backFromOpenedPinList(true)
+            self.delegate?.backFromOpenedPinList(pinType: "", pinID: "")
             UIView.animate(withDuration: 0.583, animations: ({
                 self.subviewTable.center.y -= screenHeight
             }), completion: { (done: Bool) in
@@ -132,9 +135,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID)
+            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID, pinType: pinType)
         })
     }
     
@@ -142,17 +145,25 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         self.openedPinListArray.remove(at: indexPath.row)
         self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
         self.tableOpenedPin.deleteRows(at: [indexPath], with: .fade)
-        var tableHeight: CGFloat = CGFloat(openedPinListArray.count * 76)
-        var subviewTableHeight = tableHeight + 28
-        if openedPinListArray.count <= 3 {
-            subviewTableHeight = CGFloat(256)
+        if self.openedPinListArray.count <= 3 {
+            self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
+        }else{
+            self.tableOpenedPin.frame.size.height = CGFloat(228)
         }
-        else {
-            tableHeight = CGFloat(228)
+        self.tableOpenedPin.reloadData()
+        if openedPinListArray.count == 0 {
+            UIView.animate(withDuration: 0.583, animations: ({
+                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                self.subviewTable.center.y -= screenHeight
+            }), completion: { (done: Bool) in
+                if done {
+                    self.dismiss(animated: false, completion: {
+                        self.delegate?.directlyReturnToMap()
+                    })
+                }
+            })
         }
-        subviewTableHeight = CGFloat(256)
-        self.tableOpenedPin.frame.size.height = tableHeight
-        self.subviewTable.frame.size.height = subviewTableHeight
+        
     }
     
     

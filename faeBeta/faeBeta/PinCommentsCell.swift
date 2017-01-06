@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol PinCommentsCellDelegate: class {
     func showActionSheetFromPinCell(_ username: String) // Reply to this user
@@ -28,13 +29,15 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var buttonUpVote: UIButton!
     var buttonDownVote: UIButton!
     var buttonReply: UIButton!
-    var pinID = -999
+    var pinID = ""
     enum VoteType {
         case null
         case up
         case down
     }
     var voteType: VoteType = .null
+    var pinType = ""
+    var pinCommentID = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -141,17 +144,18 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func upVoteThisComment(_ sender: UIButton) {
-        if voteType == .up || pinID == -999 {
+        if voteType == .up || pinCommentID == "" {
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
         buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         let upVote = FaePinAction()
         upVote.whereKey("vote", value: "up")
-        upVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
-            print("[upVoteThisComment] pinID: \(self.pinID)")
+        upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
+            print("[upVoteThisComment] pinID: \(self.pinCommentID)")
             if status / 100 == 2 {
                 self.voteType = .up
+                self.updateVoteCount()
                 print("[upVoteThisComment] Successfully upvote this pin comment")
             }
             else if status == 400 {
@@ -172,16 +176,17 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func downVoteThisComment(_ sender: UIButton) {
-        if voteType == .down || pinID == -999 {
+        if voteType == .down || pinCommentID == "" {
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
         let downVote = FaePinAction()
         downVote.whereKey("vote", value: "down")
-        downVote.votePinComments(pinID: "\(pinID)") { (status: Int, message: Any?) in
+        downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.voteType = .down
+                self.updateVoteCount()
                 print("[upVoteThisComment] Successfully downvote this pin comment")
             }
             else if status == 400 {
@@ -197,6 +202,38 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
                     self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 print("[upVoteThisComment] Fail to downvote this pin comment")
+            }
+        }
+    }
+    
+    func updateVoteCount() {
+        let getPinCommentsDetail = FaePinAction()
+        getPinCommentsDetail.getPinComments(pinType, pinID: pinID) {(status: Int, message: Any?) in
+            let commentsOfCommentJSON = JSON(message!)
+            if commentsOfCommentJSON.count > 0 {
+                for i in 0...(commentsOfCommentJSON.count-1) {
+                    var upVote = -999
+                    var downVote = -999
+                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
+                        if self.pinCommentID != "\(pin_comment_id)" {
+                            continue
+                        }
+                    }
+                    if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
+                        print("[getPinComments] upVoteCount: \(vote_up_count)")
+                        upVote = vote_up_count
+                    }
+                    if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
+                        print("[getPinComments] downVoteCount: \(vote_down_count)")
+                        downVote = vote_down_count
+                    }
+                    if let _ = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
+                        
+                    }
+                    if upVote != -999 && downVote != -999 {
+                        self.labelVoteCount.text = "\(upVote - downVote)"
+                    }
+                }
             }
         }
     }

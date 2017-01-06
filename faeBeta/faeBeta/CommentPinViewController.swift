@@ -10,22 +10,13 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-protocol PinDetailDelegate: class {
-    // Cancel marker's shadow when back to Fae Map
-    func dismissMarkerShadow(_ dismiss: Bool)
-    // Pass location data to fae map view
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int)
-    // Animate the selected marker
-    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
-}
-
 class CommentPinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
     // Delegate of this class
     weak var delegate: PinDetailDelegate?
     
     // Comment ID To Use In This Controller
-    var pinIdSentBySegue: Int = -999
+    var pinIdSentBySegue: String = "-999"
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -39,12 +30,6 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var anotherRedSlidingLine: UIView!
     var boolCommentPinLiked = false
     var buttonBackToCommentPinLists: UIButton!
-    var buttonPinDetailViewComments: UIButton!
-    var buttonPinDetailViewFeelings: UIButton!
-    var buttonPinDetailViewPeople: UIButton!
-    var labelPinDetailViewComments: UILabel!
-    var labelPinDetailViewFeelings: UILabel!
-    var labelPinDetailViewPeople: UILabel!
     var buttonCommentPinAddComment: UIButton!
     var buttonCommentPinBackToMap: UIButton!
     var buttonCommentPinDetailDragToLargeSize: UIButton!
@@ -53,6 +38,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var buttonCommentPinUpVote: UIButton!
     var buttonMoreOnCommentCellExpanded = false
     var buttonOptionOfCommentPin: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
     var commentPinDetailLiked = false
     var commentPinDetailShowed = false
     var dictCommentsOnCommentDetail = [[String: AnyObject]]()
@@ -64,20 +52,24 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var labelCommentPinTitle: UILabel!
     var labelCommentPinUserName: UILabel!
     var labelCommentPinVoteCount: UILabel!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
     var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var numberOfCommentTableCells: Int = 0
     var pinIDPinDetailView: String = "-999"
     var subviewNavigation: UIView!
+    var subviewTable: UIView!
     var tableCommentsForComment: UITableView!
     var textviewCommentPinDetail: UITextView!
-    var uiviewPinDetailThreeButtons: UIView!
     var uiviewCommentPinDetail: UIView!
     var uiviewCommentPinDetailGrayBlock: UIView!
     var uiviewCommentPinDetailMainButtons: UIView!
     var uiviewCommentPinUnderLine01: UIView!
     var uiviewCommentPinUnderLine02: UIView!
     var uiviewGrayBaseLine: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
     var uiviewRedSlidingLine: UIView!
     
     // For Dragging
@@ -129,8 +121,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    
     var isSavedByMe = false
+    var pinType = "comment"
+    var animated = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,26 +131,40 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadCommentPinDetailWindow()
-        pinIDPinDetailView = "\(pinIdSentBySegue)"
+        pinIDPinDetailView = pinIdSentBySegue
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
+        }
+        if !animated {
+            self.subviewNavigation.frame.origin.y = 0
+            self.tableCommentsForComment.frame.origin.y = 65
+            self.subviewTable.frame.origin.y = 65
+            self.draggingButtonSubview.frame.origin.y = 292
+            self.grayBackButton.alpha = 1
+            self.commentPinIcon.alpha = 1
+            self.buttonPrevPin.alpha = 1
+            self.buttonNextPin.alpha = 1
+            self.loadInputToolBar()
         }
     }
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
         self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
-        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.subviewNavigation.frame.origin.y = 0
-            self.tableCommentsForComment.frame.origin.y = 65
-            self.draggingButtonSubview.frame.origin.y = 292
-            self.grayBackButton.alpha = 1
-            self.commentPinIcon.alpha = 1
-            self.buttonPrevPin.alpha = 1
-            self.buttonNextPin.alpha = 1
+        if animated {
+            UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                self.subviewNavigation.frame.origin.y = 0
+                self.tableCommentsForComment.frame.origin.y = 65
+                self.subviewTable.frame.origin.y = 65
+                self.draggingButtonSubview.frame.origin.y = 292
+                self.grayBackButton.alpha = 1
+                self.commentPinIcon.alpha = 1
+                self.buttonPrevPin.alpha = 1
+                self.buttonNextPin.alpha = 1
             }, completion: { (done: Bool) in
                 self.loadInputToolBar()
-        })
+            })
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -254,27 +261,28 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
             contentView?.addSubview(buttonKeyBoard)
             
-            /*
+            
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-            buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-            buttonSticker.addTarget(self, action: #selector(self.showStikcer), forControlEvents: .TouchUpInside)
-            contentView.addSubview(buttonSticker)
+            buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+            buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+            buttonSticker.addTarget(self, action: #selector(self.showStikcer), for: .touchUpInside)
+            contentView?.addSubview(buttonSticker)
+            
             
             buttonImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
-            buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-            contentView.addSubview(buttonImagePicker)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
+            buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+            contentView?.addSubview(buttonImagePicker)
             
-            buttonImagePicker.addTarget(self, action: #selector(self.showLibrary), forControlEvents: .TouchUpInside)
+            buttonImagePicker.addTarget(self, action: #selector(self.showLibrary), for: .touchUpInside)
             
             let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
-            buttonCamera.setImage(UIImage(named: "camera"), forState: .Normal)
-            buttonCamera.setImage(UIImage(named: "camera"), forState: .Highlighted)
-            contentView.addSubview(buttonCamera)
+            buttonCamera.setImage(UIImage(named: "camera"), for: .normal)
+            buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
+            contentView?.addSubview(buttonCamera)
             
-            buttonCamera.addTarget(self, action: #selector(self.showCamera), forControlEvents: .TouchUpInside)
-            */
+            buttonCamera.addTarget(self, action: #selector(self.showCamera), for: .touchUpInside)
+ 
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
@@ -284,9 +292,9 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
             buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), for: .touchUpInside)
             
             buttonSet.append(buttonKeyBoard)
-//            buttonSet.append(buttonSticker)
-//            buttonSet.append(buttonImagePicker)
-//            buttonSet.append(buttonCamera)
+            buttonSet.append(buttonSticker)
+            buttonSet.append(buttonImagePicker)
+            buttonSet.append(buttonCamera)
             buttonSet.append(buttonSend)
             
             for button in buttonSet{
@@ -321,6 +329,8 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
+//        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue)
+//        toolbarContentView.setup(initializeType)
     }
     
     // Animation of the red sliding line
@@ -485,10 +495,10 @@ class CommentPinDetailViewController: UIViewController, UIImagePickerControllerD
     {
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
-//        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Normal)
-//        buttonSticker.setImage(UIImage(named: "sticker"), forState: .Highlighted)
-//        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Highlighted)
-//        buttonImagePicker.setImage(UIImage(named: "imagePicker"), forState: .Normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     

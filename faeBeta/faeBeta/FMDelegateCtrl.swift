@@ -40,7 +40,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
     }
     // PinDetailDelegate
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: Int) {
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         print("DEBUG: Delegate pass pinID")
         print(pinID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
@@ -67,13 +67,54 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
     }
+    // PinDetailDelegate
+    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        self.faeMapView.animate(to: camera)
+        timerUpdateSelfLocation.invalidate()
+        self.clearMap(type: "user")
+        if withType == "media" {
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.pinIdSentBySegue = "\(pinID)"
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            pinDetailVC.delegate = self
+            pinDetailVC.animated = false
+            self.present(pinDetailVC, animated: false, completion: {
+                self.canOpenAnotherPin = true
+            })
+        }
+        else if withType == "comment" {
+            let pinDetailVC = CommentPinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.pinIdSentBySegue = "\(pinID)"
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            pinDetailVC.delegate = self
+            pinDetailVC.animated = false
+            self.present(pinDetailVC, animated: false, completion: {
+                self.canOpenAnotherPin = true
+            })
+        }
+    }
 
     // PinMenuDelegate
-    // Back from pin menu view controller
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        self.renewSelfLocation()
+    }
+    // PinMenuDelegate
+    func whenDismissPinMenu() {
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        self.renewSelfLocation()
     }
     
     // LeftSlidingMenuDelegate

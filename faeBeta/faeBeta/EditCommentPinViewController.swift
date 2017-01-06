@@ -12,7 +12,7 @@ protocol EditCommentPinViewControllerDelegate {
     func reloadCommentContent()
 }
 
-class EditCommentPinViewController: UIViewController, UITextViewDelegate {
+class EditCommentPinViewController: UIViewController, UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate {
     
     var delegate: EditCommentPinViewControllerDelegate?
     
@@ -32,16 +32,37 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
     
     var pinGeoLocation: CLLocationCoordinate2D!
     
+    //input toolbar
+    var inputToolbar: CreatePinInputToolbar!
+    var buttonOpenFaceGesPanel: UIButton!
+    var buttonFinishEdit: UIButton!
+    var labelCountChars: UILabel!
+    var editOption: UIButton!
+    var lineOnToolbar: UIView!
+    
+    //Emoji View
+    var emojiView: StickerPickView!
+    var isShowingEmoji: Bool = false
+    
+    var previousFirstResponder: AnyObject? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         loadEditCommentPinItems()
+        addObservers()
+        loadKeyboardToolBar()
+        loadEmojiView()
+        
+        textViewUpdateComment.text = previousCommentContent
+        textViewUpdateComment.delegate = self
+        textViewDidChange(textViewUpdateComment)
+        
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textViewUpdateComment.text = previousCommentContent
         textViewUpdateComment.becomeFirstResponder()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -100,6 +121,52 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         textViewUpdateComment.indicatorStyle = UIScrollViewIndicatorStyle.white
         self.view.addSubview(textViewUpdateComment)
         UITextView.appearance().tintColor = UIColor.faeAppRedColor()
+        
+        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 2, y: 0, width: 171, height: 27))
+        lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lableTextViewPlaceholder.textColor = colorPlaceHolder
+        lableTextViewPlaceholder.text = "Type a comment..."
+        textViewUpdateComment.addSubview(lableTextViewPlaceholder)
+
+    }
+    
+    private func loadKeyboardToolBar() {
+        inputToolbar = CreatePinInputToolbar()
+        inputToolbar.delegate = self
+        inputToolbar.darkBackgroundView.backgroundColor = UIColor.white
+        inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
+        inputToolbar.buttonOpenFaceGesPanel.setTitle("", for: UIControlState())
+        inputToolbar.buttonFinishEdit.setImage(UIImage(), for: UIControlState())
+        
+        //Line on the toolbar
+        lineOnToolbar = UIView(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 1))
+        lineOnToolbar.layer.borderWidth = screenWidth
+        lineOnToolbar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        inputToolbar.darkBackgroundView.addSubview(lineOnToolbar)
+        
+        inputToolbar.buttonFinishEdit.isHidden = true
+        buttonFinishEdit = UIButton()
+        buttonFinishEdit.setTitle("Edit Options", for: UIControlState())
+        buttonFinishEdit.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        inputToolbar.addSubview(buttonFinishEdit)
+        inputToolbar.addConstraintsWithFormat("H:[v0(105)]-14-|", options: [], views: buttonFinishEdit)
+        inputToolbar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
+        buttonFinishEdit.addTarget(self, action: #selector(self.moreOptions(_ :)), for: .touchUpInside)
+        buttonFinishEdit.setTitleColor(UIColor(red: 155/255, green: 155/255, blue:155/255, alpha: 1), for: UIControlState())
+        inputToolbar.darkBackgroundView.addSubview(buttonFinishEdit)
+
+        inputToolbar.labelCountChars.textColor = UIColor(red: 155/255, green: 155/255, blue:155/255, alpha: 1)
+        
+        self.view.addSubview(inputToolbar)
+        
+        inputToolbar.alpha = 1
+        self.view.layoutIfNeeded()
+    }
+    
+    private func loadEmojiView(){
+        emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
+        emojiView.sendStickerDelegate = self
+        self.view.addSubview(emojiView)
     }
     
     func actionCancelCommentPinEditing(_ sender: UIButton) {
@@ -134,23 +201,161 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(_ notification:Notification)
+    {
+        
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        inputToolbar.alpha = 1
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+            Void in
+            self.inputToolbar.frame.origin.y = self.screenHeight - keyboardHeight - 100
+        }, completion: nil)
+    }
+    
+    func keyboardWillHide(_ notification: Notification)
+    {
+        if(!isShowingEmoji){
+            UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+                Void in
+                self.inputToolbar.frame.origin.y = self.screenHeight - 100
+                self.inputToolbar.alpha = 0
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+        }
+    }
+    
+    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
+    {
+        self.view.endEditing(true)
+        if(isShowingEmoji){
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: true)
+        }
+    }
+    
+    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
+        if(!isShowingEmoji){
+            isShowingEmoji = true
+            self.view.endEditing(true)
+            showEmojiViewAnimated(animated: true)
+        }else{
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: false)
+            _ = self.previousFirstResponder?.becomeFirstResponder()
+        }
+    }
+    
+    func moreOptions(_ sender: UIButton) {
+        print("option")
+    }
+    
+    func sendStickerWithImageName(_ name : String)
+    {
+        // do nothing here, won't send sticker
+    }
+    func appendEmojiWithImageName(_ name: String)
+    {
+        if let previousFirstResponder = previousFirstResponder
+        {
+            if previousFirstResponder is UITextView{
+//                let textView = previousFirstResponder as! UITextView
+//                textView.text = textView.text as String + "[\(name)]"
+//                textView.textViewDidChange(textView)
+                self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
+            }else if previousFirstResponder is UITextField{
+//                let textField = previousFirstResponder as! UITextField
+//                textField.text = textField.text! as String + "[\(name)]"
+            }
+            self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
+        }
+    }
+    func deleteEmoji()
+    {
+        if let previousFirstResponder = previousFirstResponder
+        {
+            var previous = ""
+            if previousFirstResponder is UITextView{
+                let textView = previousFirstResponder as! UITextView
+                previous = textView.text
+            }else if previousFirstResponder is UITextField{
+                let textField = previousFirstResponder as! UITextField
+                previous = textField.text!
+            }
+            let finalString = previous.stringByDeletingLastEmoji()
+            if previousFirstResponder is UITextView{
+                let textView = previousFirstResponder as! UITextView
+                textView.text = finalString
+                self.textViewDidChange(textView)
+            }else if previousFirstResponder is UITextField{
+                let textField = previousFirstResponder as! UITextField
+                textField.text = finalString
+            }
+        }
+    }
+    
+    func showEmojiViewAnimated(animated: Bool)
+    {
+        if(animated){
+            UIView.animate(withDuration: 0.3, animations: {
+                self.inputToolbar.frame.origin.y = self.screenHeight - 271 - 100
+                self.emojiView.frame.origin.y = self.screenHeight - 271
+            }, completion: { (Completed) in
+                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "keyboardIconFilledRed"), for: UIControlState())
+            })
+        }else{
+            self.inputToolbar.frame.origin.y = screenHeight - 271 - 100
+            self.emojiView.frame.origin.y = screenHeight - 271
+            self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "keyboardIconFilledRed"), for: UIControlState())
+        }
+        //textViewUpdateComment.becomeFirstResponder()
+    }
+    
+    func hideEmojiViewAnimated(animated: Bool)
+    {
+        if(animated){
+            UIView.animate(withDuration: 0.3, animations: {
+                self.inputToolbar.frame.origin.y = self.screenHeight - 100
+                self.inputToolbar.alpha = 0
+                self.emojiView.frame.origin.y = self.screenHeight
+            }, completion: { (Completed) in
+                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
+            })
+        }else{
+            self.inputToolbar.frame.origin.y = screenHeight - 100
+            self.inputToolbar.alpha = 0
+            self.emojiView.frame.origin.y = screenHeight
+            self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
+        }
+        //textViewUpdateComment.becomeFirstResponder()
+    }
+    
+    
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewUpdateComment.endEditing(true)
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView == textViewUpdateComment {
-            let spacing = CharacterSet.whitespacesAndNewlines
-            
-            if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
-                buttonSave.isEnabled = true
-                lableTextViewPlaceholder.isHidden = true
-            }
-            else {
-                buttonSave.isEnabled = false
-                lableTextViewPlaceholder.isHidden = false
-            }
-        }
+//        if textView == textViewUpdateComment {
+//            let spacing = CharacterSet.whitespacesAndNewlines
+//            
+//            if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
+//                buttonSave.isEnabled = true
+//                lableTextViewPlaceholder.isHidden = true
+//            }
+//            else {
+//                buttonSave.isEnabled = false
+//                lableTextViewPlaceholder.isHidden = false
+//            }
+//        }
+        
 //        let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
 //        if numLines <= 8 {
 //            let fixedWidth = textView.frame.size.width
@@ -164,6 +369,44 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
 //        else if numLines > 8 {
 //            textView.scrollEnabled = true
 //        }
+        if textView == textViewUpdateComment {
+            let spacing = CharacterSet.whitespacesAndNewlines
+            print(textViewUpdateComment.text)
+            if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
+                buttonSave.isEnabled = true
+                lableTextViewPlaceholder.isHidden = true
+            }else {
+                buttonSave.isEnabled = false
+                lableTextViewPlaceholder.isHidden = false
+            }
+            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
+            var numlineOnDevice = 3
+            if screenWidth == 375 {
+                numlineOnDevice = 4
+            }
+            else if screenWidth == 414 {
+                numlineOnDevice = 7
+            }
+            if numLines <= numlineOnDevice {
+                let fixedWidth = textView.frame.size.width
+                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                var newFrame = textView.frame
+                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+                textView.frame = newFrame
+                textView.isScrollEnabled = false
+            }
+            else if numLines > numlineOnDevice {
+                textView.isScrollEnabled = true
+            }
+            inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
+        }
+        
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
+        self.previousFirstResponder = textView
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -172,6 +415,8 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate {
                 textViewUpdateComment.resignFirstResponder()
                 return false
             }
+            let countChars = textView.text.characters.count + (text.characters.count - range.length)
+            return countChars <= 200
         }
         return true
     }

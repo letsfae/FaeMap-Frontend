@@ -49,6 +49,8 @@ extension PinMenuViewController {
     }
     
     func actionCloseSubmitPins(_ sender: UIButton!) {
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: false, completion: {
+            self.delegate?.whenDismissPinMenu()
+        })
     }
 }

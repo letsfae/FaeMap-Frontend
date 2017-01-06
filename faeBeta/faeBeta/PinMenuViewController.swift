@@ -10,6 +10,7 @@ import UIKit
 
 protocol PinMenuDelegate: class {
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func whenDismissPinMenu()
 }
 
 class PinMenuViewController: UIViewController {

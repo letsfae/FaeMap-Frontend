@@ -318,9 +318,9 @@ extension CommentPinDetailViewController {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imageCommentPinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 let getUserName = FaeUser()
-                getUserName.getOthersProfile("\(toGetUserName)") {(status, message) in
+                getUserName.getNamecardOfSpecificUser("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)
-                    if let username = userProfile["user_name"].string {
+                    if let username = userProfile["nick_name"].string {
                         self.labelCommentPinUserName.text = username
                     }
                 }
