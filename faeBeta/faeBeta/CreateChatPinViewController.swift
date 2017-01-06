@@ -448,8 +448,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             Complete in
             self.inputToolbar.mode = .emoji
         })
-        
-        
     }
     
     /// This is a method to set the image for createChatPinImageImageView
