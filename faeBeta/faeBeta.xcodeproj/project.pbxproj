@@ -1045,19 +1045,11 @@
 				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B8D5EEC41DB840BC00C62628 /* PinMenu */,
-				B811E9901E1F28F9002F10F0 /* PinDetail */,
 				B8612E321DF201A60092C606 /* MomentPinDetail */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
 			);
 			name = Map;
-			sourceTree = "<group>";
-		};
-		B811E9901E1F28F9002F10F0 /* PinDetail */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = PinDetail;
 			sourceTree = "<group>";
 		};
 		B81563851DDB987600BF85A1 /* CreateCommentPin */ = {
@@ -1163,6 +1155,7 @@
 				B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */,
 				B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */,
 				B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */,
+				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
 			);
 			name = MomentPinExtension;
 			sourceTree = "<group>";
@@ -1215,7 +1208,6 @@
 		B8E819591DB3251C00D418D1 /* CommentPinExtension */ = {
 			isa = PBXGroup;
 			children = (
-				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
 				B8A3BF551DD0672F00288C3B /* CPDButtonActions.swift */,
 				B8A3BF5D1DD0686A00288C3B /* CPDHandleDelegateFuncs.swift */,
 				B8C7410C1DB7100C0020E4E7 /* CPDLoadItems.swift */,

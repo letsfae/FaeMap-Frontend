@@ -1,5 +1,5 @@
 //
-//  MPDAPIConnections.swift
+//  PDAPIConnections.swift
 //  faeBeta
 //
 //  Created by Yue on 12/2/16.
@@ -25,7 +25,7 @@ extension PinDetailViewController {
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
-            unlikeThisPin("media", pinID: pinIDPinDetailView)
+            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
             print("debug animating sender.tag 1")
             print(sender.tag)
             sender.tag = 0
@@ -35,7 +35,7 @@ extension PinDetailViewController {
         if sender.tag == 0 && pinIDPinDetailView != "-999" {
             buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
-            likeThisPin("media", pinID: pinIDPinDetailView)
+            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
             print("debug animating sender.tag 0")
             print(sender.tag)
             sender.tag = 1
@@ -61,7 +61,7 @@ extension PinDetailViewController {
         }
         
         if pinIDPinDetailView != "-999" {
-            likeThisPin("media", pinID: pinIDPinDetailView)
+            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
         }
     }
     
@@ -72,7 +72,7 @@ extension PinDetailViewController {
             animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         }
         if pinIDPinDetailView != "-999" {
-            unlikeThisPin("media", pinID: pinIDPinDetailView)
+            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
         }
     }
     
@@ -83,8 +83,8 @@ extension PinDetailViewController {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully comment this comment pin!")
-                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
-                    self.getPinComments("media", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
+                    self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
+                    self.getPinComments("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
                     self.tableCommentsForPin.reloadData()
                 }
                 else {
@@ -101,7 +101,7 @@ extension PinDetailViewController {
             likeThisPin.likeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("[likeThisPin] Successfully like this media pin!")
-                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to like this comment pin!")
@@ -118,7 +118,7 @@ extension PinDetailViewController {
                 if status / 100 == 2 {
                     print("Successfully save this comment pin!")
                     self.getPinSavedState()
-                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
                         self.imageViewSaved.alpha = 1.0
                     }), completion: { (done: Bool) in
@@ -144,7 +144,7 @@ extension PinDetailViewController {
                 if status / 100 == 2 {
                     print("Successfully unsave this comment pin!")
                     self.getPinSavedState()
-                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
                         self.imageViewSaved.alpha = 1.0
                     }), completion: { (done: Bool) in
@@ -185,7 +185,7 @@ extension PinDetailViewController {
             unlikeThisPin.unlikeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status/100 == 2 {
                     print("Successfully unlike this comment pin!")
-                    self.getPinAttributeNum("media", pinID: self.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to unlike this comment pin!")
@@ -271,11 +271,11 @@ extension PinDetailViewController {
     }
     
     func getPinInfo() {
-        let getCommentById = FaeMap()
-        getCommentById.getPin(type: "media", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
-            let commentInfoJSON = JSON(message!)
-            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(commentInfoJSON)")
-            if let userid = commentInfoJSON["user_id"].int {
+        let getPinById = FaeMap()
+        getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+            let pinInfoJSON = JSON(message!)
+            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
+            if let userid = pinInfoJSON["user_id"].int {
                 print(user_id)
                 if userid == Int(user_id) {
                     self.thisIsMyPin = true
@@ -284,18 +284,30 @@ extension PinDetailViewController {
                     self.thisIsMyPin = false
                 }
             }
-            self.fileIdArray.removeAll()
-            let fileIDs = commentInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
-            for fileID in fileIDs {
-                if fileID != nil {
-                    print("[getPinInfo] fileID: \(fileID)")
-                    self.fileIdArray.append(fileID!)
+            if self.pinTypeEnum == .media {
+                self.fileIdArray.removeAll()
+                let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
+                for fileID in fileIDs {
+                    if fileID != nil {
+                        print("[getPinInfo] fileID: \(fileID)")
+                        self.fileIdArray.append(fileID!)
+                    }
+                }
+                self.loadMedias()
+                print("[getPinInfo] fileIDs: \(self.fileIdArray)")
+                print("[getPinInfo] fileIDs append done!")
+                if let content = pinInfoJSON["description"].string {
+                    print("[getPinInfo] description: \(content)")
+                    self.textviewPinDetail.text = "\(content)"
                 }
             }
-            self.loadMedias()
-            print("[getPinInfo] fileIDs: \(self.fileIdArray)")
-            print("[getPinInfo] fileIDs append done!")
-            if let isLiked = commentInfoJSON["user_pin_operations"]["is_liked"].bool {
+            else if self.pinTypeEnum == .comment {
+                if let content = pinInfoJSON["content"].string {
+                    print("[getPinInfo] description: \(content)")
+                    self.textviewPinDetail.text = "\(content)"
+                }
+            }
+            if let isLiked = pinInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
                     self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
                     self.buttonPinLike.tag = 0
@@ -311,7 +323,7 @@ extension PinDetailViewController {
                     }
                 }
             }
-            if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
+            if let isSaved = pinInfoJSON["user_pin_operations"]["is_saved"].bool {
                 if isSaved == false {
                     self.isSavedByMe = false
                     self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
@@ -321,7 +333,7 @@ extension PinDetailViewController {
                     self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
                 }
             }
-            if let toGetUserName = commentInfoJSON["user_id"].int {
+            if let toGetUserName = pinInfoJSON["user_id"].int {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 let getUserName = FaeUser()
@@ -332,19 +344,15 @@ extension PinDetailViewController {
                     }
                 }
             }
-            if let time = commentInfoJSON["created_at"].string {
+            if let time = pinInfoJSON["created_at"].string {
                 self.labelPinTimestamp.text = time.formatFaeDate()
-            }
-            if let content = commentInfoJSON["description"].string {
-                print("[getPinInfo] description: \(content)")
-                self.textviewPinDetail.text = "\(content)"
             }
         }
     }
     
     func getPinSavedState() {
         let getPinSavedState = FaeMap()
-        getPinSavedState.getPin(type: "media", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+        getPinSavedState.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
                 if isSaved == false {

@@ -1,5 +1,5 @@
 //
-//  MPDButtonActions.swift
+//  PDButtonActions.swift
 //  faeBeta
 //
 //  Created by Yue on 12/2/16.
@@ -13,6 +13,7 @@ import SwiftyJSON
 
 extension PinDetailViewController {
     
+    /*
     // Pan gesture for dragging pin detail dragging button
     func panActionPinDetailDrag(_ pan: UIPanGestureRecognizer) {
         var resumeTime:Double = 0.583
@@ -68,6 +69,7 @@ extension PinDetailViewController {
             }
         }
     }
+    */
     
     // Back to pin list window when in detail window
     func actionGoToList(_ sender: UIButton!) {
@@ -114,14 +116,12 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             endEdit()
             sender.tag = 0
-            tableCommentsForPin.isScrollEnabled = false
-            mediaMode = .small
-            zoomMedia(.small)
             buttonPinDetailDragToLargeSize.tag = 0
             if inputToolbar != nil {
                 self.inputToolbar.isHidden = true
                 self.subviewInputToolBar.isHidden = true
             }
+            textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
@@ -130,19 +130,28 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.scrollToTop()
                 self.tableCommentsForPin.frame.size.height = 227
                 self.uiviewPinDetail.frame.size.height = 281
-                self.textviewPinDetail.frame.size.height = 0
+                self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
-                self.scrollViewMedia.frame.origin.y = 80
             }), completion: { (done: Bool) in
-                if done {
-                    self.textviewPinDetail.isHidden = true
-                }
             })
+            // deal with diff UI according to pinType
+            if pinTypeEnum == .media {
+                mediaMode = .small
+                zoomMedia(.small)
+                UIView.animate(withDuration: 0.583, animations: ({
+                    self.scrollViewMedia.frame.origin.y = 80
+                }), completion: { (done: Bool) in
+                    if done {
+                        self.textviewPinDetail.isHidden = true
+                    }
+                })
+            }
             return
         }
         sender.tag = 1
+        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         if buttonPinDetailDragToLargeSize.tag == 1 {
             if inputToolbar != nil {
                 self.inputToolbar.isHidden = false
@@ -156,30 +165,48 @@ extension PinDetailViewController {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
         }
-        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
-        mediaMode = .large
-        zoomMedia(.large)
-        textviewPinDetail.frame.size.height = 0
-        textviewPinDetail.isHidden = false
+        if pinTypeEnum == .media {
+            mediaMode = .large
+            zoomMedia(.large)
+            textviewPinDetail.frame.size.height = 0
+            textviewPinDetail.isHidden = false
+            UIView.animate(withDuration: 0.583, animations: ({
+                self.uiviewPinDetail.frame.size.height += 65
+                self.textviewPinDetail.frame.size.height += 65
+                self.uiviewPinDetailThreeButtons.center.y += 65
+                self.uiviewPinDetailGrayBlock.center.y += 65
+                self.uiviewPinDetailMainButtons.center.y += 65
+                if self.textviewPinDetail.text != "" {
+                    self.uiviewPinDetail.frame.size.height += textViewHeight
+                    self.textviewPinDetail.frame.size.height += textViewHeight
+                    self.uiviewPinDetailThreeButtons.center.y += textViewHeight
+                    self.uiviewPinDetailGrayBlock.center.y += textViewHeight
+                    self.uiviewPinDetailMainButtons.center.y += textViewHeight
+                    self.scrollViewMedia.frame.origin.y += textViewHeight
+                }
+            }), completion: nil)
+        }
+        else if pinTypeEnum == .comment {
+            let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
+            if numLines > 4 {
+                let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
+                UIView.animate(withDuration: 0.583, animations: ({
+                    self.uiviewPinDetail.frame.size.height += diffHeight
+                    self.textviewPinDetail.frame.size.height += diffHeight
+                    self.uiviewPinDetailThreeButtons.center.y += diffHeight
+                    self.uiviewPinDetailGrayBlock.center.y += diffHeight
+                    self.uiviewPinDetailMainButtons.center.y += diffHeight
+                }), completion: nil)
+            }
+            
+        }
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
-            self.uiviewPinDetail.frame.size.height += 65
-            self.textviewPinDetail.frame.size.height += 65
-            self.uiviewPinDetailThreeButtons.center.y += 65
-            self.uiviewPinDetailGrayBlock.center.y += 65
-            self.uiviewPinDetailMainButtons.center.y += 65
-            if self.textviewPinDetail.text != "" {
-                self.uiviewPinDetail.frame.size.height += textViewHeight
-                self.textviewPinDetail.frame.size.height += textViewHeight
-                self.uiviewPinDetailThreeButtons.center.y += textViewHeight
-                self.uiviewPinDetailGrayBlock.center.y += textViewHeight
-                self.uiviewPinDetailMainButtons.center.y += textViewHeight
-                self.scrollViewMedia.frame.origin.y += textViewHeight
-            }
         }), completion: { (done: Bool) in
             if done {
                 self.tableCommentsForPin.reloadData()
@@ -192,9 +219,8 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             sender.tag = 0
             buttonPinAddComment.tag = 0
+            textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
-            mediaMode = .small
-            zoomMedia(.small)
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -206,39 +232,65 @@ extension PinDetailViewController {
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
-                self.scrollViewMedia.frame.origin.y = 80
             }), completion: { (done: Bool) in
-                if done {
-                    
-                }
             })
+            if pinTypeEnum == .media {
+                mediaMode = .small
+                zoomMedia(.small)
+                UIView.animate(withDuration: 0.583, animations: ({
+                    self.scrollViewMedia.frame.origin.y = 80
+                }), completion: { (done: Bool) in
+                    if done {
+                        self.textviewPinDetail.isHidden = true
+                    }
+                })
+            }
             return
         }
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
-        mediaMode = .large
-        zoomMedia(.large)
-        textviewPinDetail.frame.size.height = 0
-        textviewPinDetail.isHidden = false
+        if pinTypeEnum == .media {
+            mediaMode = .large
+            zoomMedia(.large)
+            textviewPinDetail.frame.size.height = 0
+            textviewPinDetail.isHidden = false
+            UIView.animate(withDuration: 0.583, animations: ({
+                self.uiviewPinDetail.frame.size.height += 65
+                self.textviewPinDetail.frame.size.height += 65
+                self.uiviewPinDetailThreeButtons.center.y += 65
+                self.uiviewPinDetailGrayBlock.center.y += 65
+                self.uiviewPinDetailMainButtons.center.y += 65
+                if self.textviewPinDetail.text != "" {
+                    self.uiviewPinDetail.frame.size.height += textViewHeight
+                    self.textviewPinDetail.frame.size.height += textViewHeight
+                    self.uiviewPinDetailThreeButtons.center.y += textViewHeight
+                    self.uiviewPinDetailGrayBlock.center.y += textViewHeight
+                    self.uiviewPinDetailMainButtons.center.y += textViewHeight
+                    self.scrollViewMedia.frame.origin.y += textViewHeight
+                }
+            }), completion: nil)
+        }
+        else if pinTypeEnum == .comment {
+            let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
+            if numLines > 4 {
+                let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
+                UIView.animate(withDuration: 0.583, animations: ({
+                    self.uiviewPinDetail.frame.size.height += diffHeight
+                    self.textviewPinDetail.frame.size.height += diffHeight
+                    self.uiviewPinDetailThreeButtons.center.y += diffHeight
+                    self.uiviewPinDetailGrayBlock.center.y += diffHeight
+                    self.uiviewPinDetailMainButtons.center.y += diffHeight
+                }), completion: nil)
+            }
+            
+        }
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
-            self.uiviewPinDetail.frame.size.height += 65
-            self.textviewPinDetail.frame.size.height += 65
-            self.uiviewPinDetailThreeButtons.center.y += 65
-            self.uiviewPinDetailGrayBlock.center.y += 65
-            self.uiviewPinDetailMainButtons.center.y += 65
-            if self.textviewPinDetail.text != "" {
-                self.uiviewPinDetail.frame.size.height += textViewHeight
-                self.textviewPinDetail.frame.size.height += textViewHeight
-                self.uiviewPinDetailThreeButtons.center.y += textViewHeight
-                self.uiviewPinDetailGrayBlock.center.y += textViewHeight
-                self.uiviewPinDetailMainButtons.center.y += textViewHeight
-                self.scrollViewMedia.frame.origin.y += textViewHeight
-            }
         }), completion: { (done: Bool) in
             if done {
                 self.tableCommentsForPin.reloadData()

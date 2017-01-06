@@ -136,9 +136,6 @@ extension CommentPinDetailViewController {
                 self.uiviewCommentPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
             }), completion: { (done: Bool) in
-                if done {
-                    
-                }
             })
             return
         }
@@ -152,14 +149,14 @@ extension CommentPinDetailViewController {
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
         }
-        let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
-        let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
-        textviewCommentPinDetail.isScrollEnabled = false
-        tableCommentsForComment.isScrollEnabled = true
         if inputToolbar != nil {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
         }
+        let numLines = Int(textviewCommentPinDetail.contentSize.height / textviewCommentPinDetail.font!.lineHeight)
+        let diffHeight: CGFloat = textviewCommentPinDetail.contentSize.height - textviewCommentPinDetail.frame.size.height
+        textviewCommentPinDetail.isScrollEnabled = false
+        tableCommentsForComment.isScrollEnabled = true
         UIView.animate(withDuration: 0.583, animations: ({
             self.buttonBackToCommentPinLists.alpha = 0.0
             self.buttonCommentPinBackToMap.alpha = 1.0

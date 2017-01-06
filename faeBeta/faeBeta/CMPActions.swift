@@ -56,7 +56,7 @@ extension CreateMomentPinViewController {
         else {
             let numMediaLeft = 6 - selectedMediaArray.count
             if numMediaLeft == 0 {
-                self.showAlert(title: "Up to 5 pictures can be uploaded at the same time", message: "please try again")
+                self.showAlert(title: "Up to 6 pictures can be uploaded at the same time", message: "please try again")
                 return
             }
             let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")

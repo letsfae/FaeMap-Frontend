@@ -142,14 +142,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case large
     }
     var mediaMode: MediaMode = .small
-    
-    enum Direction {
-        case left
-        case right
-    }
-    var direction: Direction = .left
+
     var lastContentOffset: CGFloat = 0
-    var beforeScrollingOffset: CGFloat = 0
     
     var isSavedByMe = false
     enum PinType {
@@ -158,13 +152,18 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case chat_room
     }
     var pinType = "moment"
+    var pinTypeEnum: PinType = .media
     var pinTypeString = ""
     var animated = false
+    var textViewOriginalHeight: CGFloat = 0
+    var pinDetailTitle = "Moment"
+    var pinIconHeavyShadow: UIImage = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
+        initPinBasicInfo()
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
         pinIDPinDetailView = pinIdSentBySegue
@@ -215,10 +214,28 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         super.didReceiveMemoryWarning()
     }
     
+    func initPinBasicInfo() {
+        switch pinTypeEnum {
+        case .comment:
+            pinDetailTitle = "Comment"
+            pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
+            textViewOriginalHeight = 100
+            break
+        case .media:
+            pinDetailTitle = "Moment"
+            pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
+            textViewOriginalHeight = 0
+            break
+        case .chat_room:
+            pinDetailTitle = "Chat"
+            break
+        }
+    }
+    
     func getSeveralInfo() {
-        getPinAttributeNum("media", pinID: pinIDPinDetailView)
+        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
         getPinInfo()
-        getPinComments("media", pinID: pinIDPinDetailView, sendMessageFlag: false)
+        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func loadTransparentButtonBackToMap() {
