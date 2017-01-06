@@ -16,6 +16,7 @@ extension CreateMomentPinViewController {
         if sender.tag == 0 {
             let angle: CGFloat = (-45 * 3.14 / 180.0) as CGFloat
             sender.tag = 1
+            self.collectionViewMedia.isScrollEnabled = false
             UIView.animate(withDuration: 0.5) {
                 self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: angle)
                 self.collectionViewMedia.center.x -= 249
@@ -25,6 +26,7 @@ extension CreateMomentPinViewController {
         }
         else {
             sender.tag = 0
+            self.collectionViewMedia.isScrollEnabled = true
             UIView.animate(withDuration: 0.5) {
                 self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
                 self.collectionViewMedia.center.x += 249

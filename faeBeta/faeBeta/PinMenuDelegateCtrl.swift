@@ -20,7 +20,9 @@ extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegat
     // CCP
     func closePinMenu(close: Bool) {
         if close {
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: false, completion: {
+                self.delegate?.whenDismissPinMenu()
+            })
         }
     }
     // CCP
@@ -40,7 +42,9 @@ extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegat
     // CMP
     func closePinMenuCMP(close: Bool) {
         if close {
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: false, completion: {
+                self.delegate?.whenDismissPinMenu()
+            })
         }
     }
     // CMP

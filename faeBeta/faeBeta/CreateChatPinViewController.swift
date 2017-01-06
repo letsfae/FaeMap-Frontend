@@ -47,7 +47,15 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         setupBasicUI()
         setupCreateChatPinMainView()
         setupcreateChatPinOptionsTableView()
+        self.view.alpha = 0.0
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.view.alpha = 1.0
+        }, completion: nil)
     }
     
     //MARK: - setup

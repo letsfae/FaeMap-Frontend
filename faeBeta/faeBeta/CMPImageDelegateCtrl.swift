@@ -20,23 +20,12 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
         uiviewCreateMediaPin.addSubview(newMedia)
     }
     
-    func reArrangePhotos() {
-        
-    }
-    
     func sendImages(_ images: [UIImage]) {
         for image in images {
             selectedMediaArray.append(image)
         }
         collectionViewMedia.isHidden = false
-        if selectedMediaArray.count == 1 {
-            collectionViewMedia.frame.origin.x = 107
-            collectionViewMedia.frame.size.width = 200
-        }
-        else {
-            collectionViewMedia.frame.origin.x = 0
-            collectionViewMedia.frame.size.width = 307
-        }
+        collectionViewMedia.frame.origin.x = 0
         buttonTakeMedia.alpha = 0
         buttonSelectMedia.alpha = 0
         buttonAddMedia.alpha = 1

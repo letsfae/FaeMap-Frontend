@@ -98,11 +98,23 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
 
     // PinMenuDelegate
-    // Back from pin menu view controller
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        self.renewSelfLocation()
+    }
+    // PinMenuDelegate
+    func whenDismissPinMenu() {
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        self.renewSelfLocation()
     }
     
     // LeftSlidingMenuDelegate
