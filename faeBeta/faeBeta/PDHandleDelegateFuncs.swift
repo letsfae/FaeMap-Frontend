@@ -12,9 +12,9 @@ import CoreLocation
 extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
         print("[animateToCameraFromOpenedPinListView] pinID: \(pinID), pinType: \(pinType)")
-        if pinType == self.pinType {
+        if pinType == self.pinTypeEnum {
             print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinType)")
             self.delegate?.animateToCamera(coordinate, pinID: pinID)
             self.backJustOnce = true
@@ -29,7 +29,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         else {
             print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinType)")
             self.dismiss(animated: false, completion: {
-                self.delegate?.openPinDetailView(withType: pinType, pinID: pinID, coordinate: coordinate)
+                self.delegate?.openPinDetailView(withType: "\(pinType)", pinID: pinID, coordinate: coordinate)
             })
         }
     }

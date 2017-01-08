@@ -98,7 +98,7 @@ extension PinDetailViewController {
         textviewPinDetail.isUserInteractionEnabled = true
         textviewPinDetail.isEditable = false
         textviewPinDetail.isScrollEnabled = true
-        textviewPinDetail.textContainerInset = UIEdgeInsets.zero
+        textviewPinDetail.textContainerInset = .zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
         if pinTypeEnum == .media {
             textviewPinDetail.isHidden = true
