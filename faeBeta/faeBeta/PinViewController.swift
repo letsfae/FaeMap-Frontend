@@ -156,8 +156,20 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinTypeString = ""
     var animated = false
     var textViewOriginalHeight: CGFloat = 0
-    var pinDetailTitle = "Moment"
-    var pinIconHeavyShadow: UIImage = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
+    var pinDetailTitle = "Moment" {
+        didSet {
+            if labelPinTitle != nil {
+                self.labelPinTitle.text = pinDetailTitle
+            }
+        }
+    }
+    var pinIconHeavyShadow: UIImage = #imageLiteral(resourceName: "markerMomentPinHeavyShadow") {
+        didSet {
+            if pinIcon != nil {
+                self.pinIcon.image = pinIconHeavyShadow
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,11 +232,24 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             pinDetailTitle = "Comment"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
             textViewOriginalHeight = 100
+            if scrollViewMedia != nil {
+                scrollViewMedia.isHidden = true
+                
+            }
+            if textviewPinDetail != nil {
+                textviewPinDetail.isHidden = false
+            }
             break
         case .media:
             pinDetailTitle = "Moment"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
             textViewOriginalHeight = 0
+            if scrollViewMedia != nil {
+                scrollViewMedia.isHidden = false
+            }
+            if textviewPinDetail != nil {
+                textviewPinDetail.isHidden = true
+            }
             break
         case .chat_room:
             pinDetailTitle = "Chat"
@@ -588,7 +613,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     // MARK: - send messages
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
-            commentThisPin("media", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
+            commentThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
         self.replyToUser = ""
         self.inputToolbar.contentView.textView.text = ""

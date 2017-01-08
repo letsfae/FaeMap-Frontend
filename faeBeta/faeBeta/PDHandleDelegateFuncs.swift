@@ -14,23 +14,22 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
         print("[animateToCameraFromOpenedPinListView] pinID: \(pinID), pinType: \(pinType)")
+        self.delegate?.animateToCamera(coordinate, pinID: pinID)
+        self.backJustOnce = true
+        self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+        self.tableCommentsForPin.center.y += screenHeight
+        self.draggingButtonSubview.center.y += screenHeight
+        self.pinIDPinDetailView = pinID
         if pinType == self.pinTypeEnum {
             print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinType)")
-            self.delegate?.animateToCamera(coordinate, pinID: pinID)
-            self.backJustOnce = true
-            self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-            self.tableCommentsForPin.center.y += screenHeight
-            self.draggingButtonSubview.center.y += screenHeight
-            self.pinIDPinDetailView = "\(pinID)"
-            if pinIDPinDetailView != "-999" {
-                getSeveralInfo()
-            }
         }
         else {
             print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinType)")
-            self.dismiss(animated: false, completion: {
-                self.delegate?.openPinDetailView(withType: "\(pinType)", pinID: pinID, coordinate: coordinate)
-            })
+            self.pinTypeEnum = pinType
+            self.initPinBasicInfo()
+        }
+        if pinIDPinDetailView != "-999" {
+            getSeveralInfo()
         }
     }
     

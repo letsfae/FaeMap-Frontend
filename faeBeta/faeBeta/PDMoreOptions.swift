@@ -178,7 +178,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "media", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete comment")
                     self.actionBackToMap(self.buttonPinBackToMap)
@@ -202,10 +202,10 @@ extension PinDetailViewController {
     func actionSaveThisPin(_ sender: UIButton) {
         if pinIDPinDetailView != "-999" {
             if isSavedByMe {
-                self.unsaveThisPin("media", pinID: pinIDPinDetailView)
+                self.unsaveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
             }
             else {
-                self.saveThisPin("media", pinID: pinIDPinDetailView)
+                self.saveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
             }
         }
         actionToCloseOtherViews(buttonFakeTransparentClosingView)

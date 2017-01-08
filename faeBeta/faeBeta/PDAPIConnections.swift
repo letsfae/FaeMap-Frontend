@@ -224,6 +224,7 @@ extension PinDetailViewController {
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnPinDetail.removeAll()
+        self.tableCommentsForPin.reloadData()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
@@ -262,10 +263,7 @@ extension PinDetailViewController {
                 print("DEBUG RELOAD DATA")
                 print(self.dictCommentsOnPinDetail.count)
                 self.numberOfCommentTableCells = self.dictCommentsOnPinDetail.count
-                //// Will figure out the UI presentation later
-                /**
-                 var offset = self.commentDetailFullBoardScrollView.contentOffset
-                 **/
+                self.tableCommentsForPin.reloadData()
             }
         }
     }

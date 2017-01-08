@@ -15,6 +15,9 @@ import IDMPhotoBrowser
 extension PinDetailViewController {
     func loadMedias() {
         imageViewMediaArray.removeAll()
+        for subview in scrollViewMedia.subviews {
+            subview.removeFromSuperview()
+        }
         for index in 0...fileIdArray.count-1 {
             let imageView = UIImageView(frame: CGRect(x: 105*index, y: 0, width: 95, height: 95))
             imageView.contentMode = .scaleAspectFill
