@@ -290,6 +290,11 @@ extension PinDetailViewController {
                 if fileID != nil {
                     print("[getPinInfo] fileID: \(fileID)")
                     self.fileIdArray.append(fileID!)
+                    if self.fileIdString == "" {
+                        self.fileIdString = "\(fileID!)"
+                    }else{
+                        self.fileIdString = "\(self.fileIdString);\(fileID!)"
+                    }
                 }
             }
             self.loadMedias()

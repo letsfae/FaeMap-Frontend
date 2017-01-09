@@ -72,7 +72,7 @@ class CreatePinInputToolbar: UIView {
             }
         }
     }
-    private var _mode: CreatePinInputToolbarMode = .emoji
+    //private var _mode: CreatePinInputToolbarMode = .emoji
     // can be either emoji mode or tag mode. The button image and function will be different
     var mode: CreatePinInputToolbarMode {
         get{

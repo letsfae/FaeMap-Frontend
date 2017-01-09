@@ -157,12 +157,17 @@ extension PinDetailViewController {
         if pinIdSentBySegue == "-999" {
             return
         }
-//        let editCommentPinVC = EditCommentPinViewController()
-//        editCommentPinVC.delegate = self
-//        editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
-//        editCommentPinVC.pinID = "\(pinIdSentBySegue)"
-//        editCommentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
-//        self.present(editCommentPinVC, animated: true, completion: nil)
+        let editMomentPinVC = EditCommentPinViewController()
+        editMomentPinVC.delegate = self
+        editMomentPinVC.previousCommentContent = textviewPinDetail.text
+        editMomentPinVC.pinID = "\(pinIdSentBySegue)"
+        editMomentPinVC.pinMediaImageArray = imageViewMediaArray
+        editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
+        editMomentPinVC.editPinMode = .media
+        editMomentPinVC.pinType = "medias"
+        editMomentPinVC.newAddedFileIDs = fileIdString
+        editMomentPinVC.mediaIdArray = fileIdArray
+        self.present(editMomentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
     

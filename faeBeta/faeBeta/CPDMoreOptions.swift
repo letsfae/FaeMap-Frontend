@@ -162,6 +162,8 @@ extension CommentPinDetailViewController {
         editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
         editCommentPinVC.pinID = "\(pinIdSentBySegue)"
         editCommentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
+        editCommentPinVC.editPinMode = .comment
+        editCommentPinVC.pinType = "comments"
         self.present(editCommentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }

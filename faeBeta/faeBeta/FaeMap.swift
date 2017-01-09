@@ -58,6 +58,15 @@ class FaeMap: NSObject {
         }
     }
     
+    func updatePin(_ pinType: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if pinId != nil && pinType != nil {
+            postToURL("\(pinType!)/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
     func getUserAllPinWithType(type: String?, userId: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && userId != nil {
             getFromURL("\(type!)s/users/\(userId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
