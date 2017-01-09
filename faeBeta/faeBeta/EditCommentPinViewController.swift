@@ -38,6 +38,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     var labelTextViewPlaceholder: UILabel!
     var imageViewForChat: UIImageView!
     var collectionViewMedia: UICollectionView!
+    var activityIndicator: UIActivityIndicatorView!
     
     //Parameter passed by parent view
     var pinID = ""
@@ -470,12 +471,14 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     
     func deleteMedia(cell: EditPinCollectionViewCell){
         if let indexPath = collectionViewMedia.indexPath(for: cell) {
+            print("Before [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
             let selectedMediaID = mediaIdArray[indexPath.row-1]
             pinMediaImageArray.remove(at: indexPath.row-1)
             collectionViewMedia.deleteItems(at: [indexPath])
             mediaIdArray.remove(at: indexPath.row-1)
             let newString = newAddedFileIDs.replacingOccurrences(of: "\(selectedMediaID);", with: "")
             newAddedFileIDs = newString
+            print("After [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
         }
     }
     
@@ -496,6 +499,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                 let fileIDJSON = JSON(message!)
                 if let file_id = fileIDJSON["file_id"].int {
                     print("newID is: \(file_id)")
+                    self.mediaIdArray.append(file_id)
                     if self.newAddedFileIDs == "" {
                         self.newAddedFileIDs = "\(file_id)"
                     }
@@ -507,6 +511,8 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                     print("[uploadFile] Fail to process file_id")
                 }
                 if count + 1 >= total {
+                    self.activityIndicator.stopAnimating()
+                    self.collectionViewMedia.reloadData()
                     return
                 }
                 self.uploadFile(image: self.newAddedImageArray[count+1],
@@ -582,6 +588,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             cell.buttonCancel.isHidden = true
         }else {
             cell.media.image = pinMediaImageArray[indexPath.row-1].image
+            cell.buttonCancel.isHidden = false
         }
         cell.delegate = self
         return cell
@@ -598,12 +605,12 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         }
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
-        newAddedImage.image = image
-        self.pinMediaImageArray.insert(newAddedImage, at: 0)
-        
-        self.collectionViewMedia.reloadData()
-        picker.dismiss(animated: true, completion: nil)
+//        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
+//        newAddedImage.image = image
+//        self.pinMediaImageArray.insert(newAddedImage, at: 0)
+//        
+//        self.collectionViewMedia.reloadData()
+//        picker.dismiss(animated: true, completion: nil)
     }
     
     func sendImages(_ images: [UIImage]) {
@@ -615,8 +622,15 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             newAddedImageArray.append(image)
         }
         if images.count > 0 {
+            activityIndicator = UIActivityIndicatorView()
+            activityIndicator.activityIndicatorViewStyle = .whiteLarge
+            activityIndicator.center = view.center
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+            self.view.addSubview(activityIndicator)
+            activityIndicator.bringSubview(toFront: activityIndicator)
+            activityIndicator.startAnimating()
             uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
-            collectionViewMedia.reloadData()
         }
         UIApplication.shared.statusBarStyle = .lightContent
     }
