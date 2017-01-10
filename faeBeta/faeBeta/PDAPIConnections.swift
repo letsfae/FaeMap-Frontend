@@ -45,7 +45,7 @@ extension PinDetailViewController {
     func actionHoldingLikeButton(_ sender: UIButton) {
         endEdit()
         buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(CommentPinDetailViewController.animateHeart), userInfo: nil, repeats: true)
+        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Upvote comment pin

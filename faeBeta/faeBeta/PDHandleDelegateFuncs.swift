@@ -54,7 +54,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             self.inputToolbar.contentView.textView.resignFirstResponder()
         }
         let infoDict: [String: AnyObject] = ["argumentInt": username as AnyObject]
-        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(CommentPinDetailViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
+        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(PinDetailViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
     }
     
     func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) {

@@ -23,7 +23,7 @@ extension PinDetailViewController {
             buttonFakeTransparentClosingView.layer.zPosition = 110
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
-                                                       action: #selector(CommentPinDetailViewController.actionToCloseOtherViews(_:)),
+                                                       action: #selector(self.actionToCloseOtherViews(_:)),
                                                        for: .touchUpInside)
             let subviewXBefore: CGFloat = 400 / 414 * screenWidth
             let subviewYBefore: CGFloat = 57 / 414 * screenWidth

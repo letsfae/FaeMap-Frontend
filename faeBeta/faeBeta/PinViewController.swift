@@ -18,8 +18,6 @@ protocol PinDetailDelegate: class {
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Animate the selected marker
     func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
-    // Open pin detail view controller with type
-    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D)
 }
 
 class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
