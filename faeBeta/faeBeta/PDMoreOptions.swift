@@ -163,8 +163,8 @@ extension PinDetailViewController {
         editMomentPinVC.pinID = "\(pinIdSentBySegue)"
         editMomentPinVC.pinMediaImageArray = imageViewMediaArray
         editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
-        editMomentPinVC.editPinMode = .media
-        editMomentPinVC.pinType = "medias"
+        editMomentPinVC.editPinMode = self.pinTypeEnum
+        editMomentPinVC.pinType = "\(self.pinTypeEnum)"
         editMomentPinVC.newAddedFileIDs = fileIdString
         editMomentPinVC.mediaIdArray = fileIdArray
         self.present(editMomentPinVC, animated: true, completion: nil)

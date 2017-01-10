@@ -15,11 +15,6 @@ import IDMPhotoBrowser
 protocol EditCommentPinViewControllerDelegate: class {
     func reloadCommentContent()
 }
-enum EditPinMode {
-    case media
-    case chat_room
-    case comment
-}
 
 class EditCommentPinViewController: UIViewController, UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, EditMediaCollectionCellDelegate {
     
@@ -47,7 +42,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     var pinType = ""
     var imageForChat: UIImage!
     var pinMediaImageArray: [UIImageView] = []
-    var editPinMode: EditPinMode = .media
+    var editPinMode: PinDetailViewController.PinType = .media
     var newAddedFileIDs = ""
     var mediaIdArray: [Int] = []
     
@@ -83,9 +78,16 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         textViewUpdateComment.becomeFirstResponder()
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func viewDidLayoutSubviews() {
+        print("[viewDidLayoutSubviews]")
+        super.viewDidLayoutSubviews()
+        if collectionViewMedia != nil {
+            var insets = self.collectionViewMedia.contentInset
+            insets.left = 15
+            insets.right = 15
+            self.collectionViewMedia.contentInset = insets
+            self.collectionViewMedia.decelerationRate = UIScrollViewDecelerationRateFast
+        }
     }
     
     func loadEditCommentPinItems() {
@@ -265,12 +267,12 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
             updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
             updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
-            if pinType == "comments" {
+            if pinType == "comment" {
                 updateComment.whereKey("content", value: textViewUpdateComment.text) //content or description
-            }else if pinType == "medias" {
+            }else if pinType == "media" {
                 updateComment.whereKey("description", value: textViewUpdateComment.text)
                 updateComment.whereKey("file_ids", value: self.newAddedFileIDs)
-            }else if pinType == "chat"{
+            }else if pinType == "chat_room"{
                 
             }
             updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
@@ -632,7 +634,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             activityIndicator.startAnimating()
             uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
         }
-        UIApplication.shared.statusBarStyle = .lightContent
     }
     
 }

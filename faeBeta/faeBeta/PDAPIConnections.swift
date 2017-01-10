@@ -284,11 +284,17 @@ extension PinDetailViewController {
             }
             if self.pinTypeEnum == .media {
                 self.fileIdArray.removeAll()
+                self.fileIdString = ""
                 let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
                 for fileID in fileIDs {
                     if fileID != nil {
                         print("[getPinInfo] fileID: \(fileID)")
                         self.fileIdArray.append(fileID!)
+                        if self.fileIdString == "" {
+                            self.fileIdString = "\(fileID!)"
+                        }else{
+                            self.fileIdString = "\(self.fileIdString);\(fileID!)"
+                        }
                     }
                 }
                 self.loadMedias()

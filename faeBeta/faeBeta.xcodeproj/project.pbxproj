@@ -1078,6 +1078,7 @@
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B8D5EEC41DB840BC00C62628 /* PinMenu */,
 				B8612E321DF201A60092C606 /* PinDetail */,
+				B898FF691E24975300AD763F /* EditPin */,
 				B8E819541DB3248C00D418D1 /* CommentPinDetail */,
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
 			);
@@ -1212,6 +1213,16 @@
 			name = OpenedPinList;
 			sourceTree = "<group>";
 		};
+		B898FF691E24975300AD763F /* EditPin */ = {
+			isa = PBXGroup;
+			children = (
+				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
+				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
+				853F27701E23180D00DD80DF /* EditOptions */,
+			);
+			name = EditPin;
+			sourceTree = "<group>";
+		};
 		B8D5EEC41DB840BC00C62628 /* PinMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1229,9 +1240,6 @@
 		B8E819541DB3248C00D418D1 /* CommentPinDetail */ = {
 			isa = PBXGroup;
 			children = (
-				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
-				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
-				853F27701E23180D00DD80DF /* EditOptions */,
 				B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */,
 				B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */,
 				B8E819591DB3251C00D418D1 /* CommentPinExtension */,

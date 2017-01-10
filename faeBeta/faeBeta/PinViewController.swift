@@ -156,7 +156,13 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinTypeEnum: PinType = .media
     var pinTypeString = ""
     var animated = false
-    var textViewOriginalHeight: CGFloat = 0
+    var textViewOriginalHeight: CGFloat = 0 {
+        didSet {
+            if textviewPinDetail != nil {
+                self.textviewPinDetail.frame.size.height = textViewOriginalHeight
+            }
+        }
+    }
     var pinDetailTitle = "Moment" {
         didSet {
             if labelPinTitle != nil {

@@ -170,7 +170,7 @@ extension PinDetailViewController {
         if pinTypeEnum == .media {
             mediaMode = .large
             zoomMedia(.large)
-            textviewPinDetail.frame.size.height = 0
+            textviewPinDetail.frame.size.height = textViewOriginalHeight
             textviewPinDetail.isHidden = false
             UIView.animate(withDuration: 0.583, animations: ({
                 self.uiviewPinDetail.frame.size.height += 65
@@ -228,7 +228,7 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.scrollToTop()
                 self.tableCommentsForPin.frame.size.height = 227
                 self.uiviewPinDetail.frame.size.height = 281
-                self.textviewPinDetail.frame.size.height = 0
+                self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
