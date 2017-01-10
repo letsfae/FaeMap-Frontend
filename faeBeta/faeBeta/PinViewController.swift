@@ -136,6 +136,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
     var imageViewMediaArray = [UIImageView]()
+    var fileIdString = "" // This will be passed to EditCommentPinViewController so that it can be updated 
     
     enum MediaMode {
         case small

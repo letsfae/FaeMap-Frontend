@@ -1,4 +1,4 @@
-//
+
 //  EditCommentPinViewController.swift
 //  faeBeta
 //
@@ -7,30 +7,49 @@
 //
 
 import UIKit
+import SwiftyJSON
+import SDWebImage
+import RealmSwift
+import IDMPhotoBrowser
 
-protocol EditCommentPinViewControllerDelegate {
+protocol EditCommentPinViewControllerDelegate: class {
     func reloadCommentContent()
 }
+enum EditPinMode {
+    case media
+    case chat_room
+    case comment
+}
 
-class EditCommentPinViewController: UIViewController, UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate {
+class EditCommentPinViewController: UIViewController, UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, EditMediaCollectionCellDelegate {
     
-    var delegate: EditCommentPinViewControllerDelegate?
+    weak var delegate: EditCommentPinViewControllerDelegate?
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
     
+    //Base View
     var buttonCancel: UIButton!
     var buttonSave: UIButton!
     var labelTitle: UILabel!
     var uiviewLine: UIView!
     var textViewUpdateComment: UITextView!
-    var lableTextViewPlaceholder: UILabel!
+    var labelTextViewPlaceholder: UILabel!
+    var imageViewForChat: UIImageView!
+    var collectionViewMedia: UICollectionView!
+    var activityIndicator: UIActivityIndicatorView!
     
+    //Parameter passed by parent view
     var pinID = ""
     var previousCommentContent = ""
-    
     var pinGeoLocation: CLLocationCoordinate2D!
+    var pinType = ""
+    var imageForChat: UIImage!
+    var pinMediaImageArray: [UIImageView] = []
+    var editPinMode: EditPinMode = .media
+    var newAddedFileIDs = ""
+    var mediaIdArray: [Int] = []
     
     //input toolbar
     var inputToolbar: CreatePinInputToolbar!
@@ -43,8 +62,11 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     //Emoji View
     var emojiView: StickerPickView!
     var isShowingEmoji: Bool = false
-    
     var previousFirstResponder: AnyObject? = nil
+    
+    
+    //New Added ID array
+    var newAddedImageArray: [UIImage] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +75,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         addObservers()
         loadKeyboardToolBar()
         loadEmojiView()
-        
-        textViewUpdateComment.text = previousCommentContent
-        textViewUpdateComment.delegate = self
         textViewDidChange(textViewUpdateComment)
         
     }
@@ -112,22 +131,84 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         else if screenWidth == 375 { // 4.7
             textViewWidth = 321
         }
-        
         textViewUpdateComment = UITextView(frame: CGRect(x: 27, y: 84, width: textViewWidth, height: 100))
         textViewUpdateComment.text = ""
         textViewUpdateComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textViewUpdateComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textViewUpdateComment.textContainerInset = UIEdgeInsets.zero
         textViewUpdateComment.indicatorStyle = UIScrollViewIndicatorStyle.white
+        textViewUpdateComment.text = previousCommentContent
+        textViewUpdateComment.delegate = self
         self.view.addSubview(textViewUpdateComment)
         UITextView.appearance().tintColor = UIColor.faeAppRedColor()
         
-        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 2, y: 0, width: 171, height: 27))
-        lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lableTextViewPlaceholder.textColor = colorPlaceHolder
-        lableTextViewPlaceholder.text = "Type a comment..."
-        textViewUpdateComment.addSubview(lableTextViewPlaceholder)
+        labelTextViewPlaceholder = UILabel(frame: CGRect(x: 2, y: 0, width: 171, height: 27))
+        labelTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        labelTextViewPlaceholder.textColor = colorPlaceHolder
+        labelTextViewPlaceholder.text = "Type a comment..."
+        textViewUpdateComment.addSubview(labelTextViewPlaceholder)
+        
+        switch editPinMode {
+        case .comment:
+            loadViewForComment()
+            break
+        case .chat_room:
+            loadViewForChat()
+            break
+        case .media:
+            loadViewForMoment()
+            break
+        }
 
+    }
+    
+    func loadViewForComment() {
+        textViewUpdateComment.frame.origin.x = 27
+        textViewUpdateComment.frame.origin.y = 84
+        
+        labelTextViewPlaceholder.text = "Type a comment..."
+    }
+    func loadViewForMoment() {
+        textViewUpdateComment.frame.origin.x = 27
+        textViewUpdateComment.frame.origin.y = 196
+        
+        labelTextViewPlaceholder.text = "Type a comment..."
+        
+        let layout = CenterCellCollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 100, height: 100)
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 5
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 81, width: screenWidth, height: 100), collectionViewLayout: layout)
+        collectionViewMedia.register(EditPinCollectionViewCell.self, forCellWithReuseIdentifier: "pinMedia")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.isPagingEnabled = false
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        self.view.addSubview(collectionViewMedia)
+    }
+    func loadViewForChat() {
+        imageViewForChat = UIImageView(frame: CGRect(x: 162, y: 76, width: 90, height: 90))
+        imageViewForChat.image = imageForChat
+        self.view.addSubview(imageViewForChat)
+        
+        //Line below the image
+        let line = UIView(frame: CGRect(x: 0, y: 213, width: screenWidth, height: 12))
+        line.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1)
+        self.view.addSubview(line)
+        
+        let descriptionTitle = UILabel(frame: CGRect(x: 15, y: 239, width: 200, height: 22))
+        descriptionTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        descriptionTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        descriptionTitle.text = "Description"
+        self.view.addSubview(descriptionTitle)
+        
+        textViewUpdateComment.frame.origin.x = 27
+        textViewUpdateComment.frame.origin.y = 266
+        
+        labelTextViewPlaceholder.text = "Type a chat decription"
     }
     
     private func loadKeyboardToolBar() {
@@ -170,40 +251,49 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     }
     
     func actionCancelCommentPinEditing(_ sender: UIButton) {
-        print(textViewUpdateComment.text)
         textViewUpdateComment.endEditing(true)
         self.dismiss(animated: true, completion: nil)
     }
     
     func actionUpdateCommentPinEditing(_ sender: UIButton) {
-        if previousCommentContent == textViewUpdateComment.text {
-            textViewUpdateComment.endEditing(true)
-            self.dismiss(animated: true, completion: nil)
-        }
-        else {
+//        if previousCommentContent == textViewUpdateComment.text && newAddedFileIDs =={
+//            textViewUpdateComment.endEditing(true)
+//            self.dismiss(animated: true, completion: nil)
+//        }
+//        else {
             let updateComment = FaeMap()
             print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
             updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
             updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
-            updateComment.whereKey("content", value: textViewUpdateComment.text)
-            updateComment.updateComment(pinID) {(status: Int, message: Any?) in
+            if pinType == "comments" {
+                updateComment.whereKey("content", value: textViewUpdateComment.text) //content or description
+            }else if pinType == "medias" {
+                updateComment.whereKey("description", value: textViewUpdateComment.text)
+                updateComment.whereKey("file_ids", value: self.newAddedFileIDs)
+            }else if pinType == "chat"{
+                
+            }
+            updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Success -> Update Comment")
+                    print("Success -> Update \(self.pinType)")
                     self.delegate?.reloadCommentContent()
                     self.textViewUpdateComment.endEditing(true)
                     self.dismiss(animated: true, completion: nil)
                 }
                 else {
-                    print("Fail -> Update Comment")
+                    print("Fail -> Update \(self.pinType)")
                 }
             }
-
-        }
+        //}
     }
     
     private func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.keyboardWillShow(_:)),
+                                               name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.keyboardWillHide(_:)),
+                                               name:NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func keyboardWillShow(_ notification:Notification)
@@ -254,7 +344,11 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     }
     
     func moreOptions(_ sender: UIButton) {
-        print("option")
+        let editMoreOptions = EditMoreOptionsViewController()
+        editMoreOptions.pinID = pinID
+        editMoreOptions.pinType = pinType
+        editMoreOptions.pinGeoLocation = pinGeoLocation
+        self.present(editMoreOptions, animated: true, completion: nil)
     }
     
     func sendStickerWithImageName(_ name : String)
@@ -315,7 +409,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             self.emojiView.frame.origin.y = screenHeight - 271
             self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "keyboardIconFilledRed"), for: UIControlState())
         }
-        //textViewUpdateComment.becomeFirstResponder()
     }
     
     func hideEmojiViewAnimated(animated: Bool)
@@ -334,50 +427,113 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             self.emojiView.frame.origin.y = screenHeight
             self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
         }
-        //textViewUpdateComment.becomeFirstResponder()
     }
     
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewUpdateComment.endEditing(true)
     }
+    func pickMedia() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        menu.view.tintColor = UIColor.faeAppRedColor()
+        let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
+            self.actionTakeMedia()
+        }
+        let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
+            imagePicker.sourceType = .camera
+            menu.removeFromParentViewController()
+            self.present(imagePicker,animated:true,completion:nil)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
+            
+        }
+        menu.addAction(showLibrary)
+        menu.addAction(showCamera)
+        menu.addAction(cancel)
+        self.present(menu,animated:true,completion: nil)
+    }
+    func actionTakeMedia() {
+        let numMediaLeft = 6 - pinMediaImageArray.count
+        if numMediaLeft == 0 {
+            self.showAlert(title: "Up to 6 pictures can be uploaded at the same time", message: "please try again")
+            return
+        }
+        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+        imagePicker.imageDelegate = self
+        imagePicker._maximumSelectedPhotoNum = numMediaLeft
+        self.present(nav, animated: true, completion: {
+            UIApplication.shared.statusBarStyle = .default
+        })
+    }
+    
+    func deleteMedia(cell: EditPinCollectionViewCell){
+        if let indexPath = collectionViewMedia.indexPath(for: cell) {
+            print("Before [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
+            let selectedMediaID = mediaIdArray[indexPath.row-1]
+            pinMediaImageArray.remove(at: indexPath.row-1)
+            collectionViewMedia.deleteItems(at: [indexPath])
+            mediaIdArray.remove(at: indexPath.row-1)
+            let newString = newAddedFileIDs.replacingOccurrences(of: "\(selectedMediaID);", with: "")
+            newAddedFileIDs = newString
+            print("After [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
+        }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func uploadFile(image: UIImage, count: Int, total: Int) {
+        let mediaImage = FaeImage()
+        mediaImage.type = "image"
+        mediaImage.image = image
+        mediaImage.faeUploadFile { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("[uploadFile] Successfully upload Image File")
+                let fileIDJSON = JSON(message!)
+                if let file_id = fileIDJSON["file_id"].int {
+                    print("newID is: \(file_id)")
+                    self.mediaIdArray.append(file_id)
+                    if self.newAddedFileIDs == "" {
+                        self.newAddedFileIDs = "\(file_id)"
+                    }
+                    else {
+                        self.newAddedFileIDs = "\(self.newAddedFileIDs);\(file_id)"
+                    }
+                }
+                else {
+                    print("[uploadFile] Fail to process file_id")
+                }
+                if count + 1 >= total {
+                    self.activityIndicator.stopAnimating()
+                    self.collectionViewMedia.reloadData()
+                    return
+                }
+                self.uploadFile(image: self.newAddedImageArray[count+1],
+                                   count: count+1,
+                                   total: total)
+            } else {
+                print("[uploadFile] Fail to upload Image File")
+            }
+        }
+    }
     
     func textViewDidChange(_ textView: UITextView) {
-//        if textView == textViewUpdateComment {
-//            let spacing = CharacterSet.whitespacesAndNewlines
-//            
-//            if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
-//                buttonSave.isEnabled = true
-//                lableTextViewPlaceholder.isHidden = true
-//            }
-//            else {
-//                buttonSave.isEnabled = false
-//                lableTextViewPlaceholder.isHidden = false
-//            }
-//        }
-        
-//        let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-//        if numLines <= 8 {
-//            let fixedWidth = textView.frame.size.width
-//            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-//            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-//            var newFrame = textView.frame
-//            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-//            textView.frame = newFrame
-//            textView.scrollEnabled = false
-//        }
-//        else if numLines > 8 {
-//            textView.scrollEnabled = true
-//        }
         if textView == textViewUpdateComment {
             let spacing = CharacterSet.whitespacesAndNewlines
             print(textViewUpdateComment.text)
             if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
                 buttonSave.isEnabled = true
-                lableTextViewPlaceholder.isHidden = true
+                labelTextViewPlaceholder.isHidden = true
             }else {
                 buttonSave.isEnabled = false
-                lableTextViewPlaceholder.isHidden = false
+                labelTextViewPlaceholder.isHidden = false
             }
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             var numlineOnDevice = 3
@@ -420,4 +576,63 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         }
         return true
     }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return pinMediaImageArray.count+1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinMedia", for: indexPath) as! EditPinCollectionViewCell
+        if indexPath.row == 0 {
+            cell.media.image = #imageLiteral(resourceName: "AddMoreImage")
+//            cell.circleLayer.isHidden = true
+            cell.buttonCancel.isHidden = true
+        }else {
+            cell.media.image = pinMediaImageArray[indexPath.row-1].image
+            cell.buttonCancel.isHidden = false
+        }
+        cell.delegate = self
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! EditPinCollectionViewCell
+        if indexPath.row == 0 {
+            pickMedia()
+        }else {
+            let image = cell.media.image
+            let photos = IDMPhoto.photos(withImages: [image!])
+            let browser = IDMPhotoBrowser(photos: photos)
+            self.present(browser!, animated: true, completion: nil)
+        }
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+//        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
+//        newAddedImage.image = image
+//        self.pinMediaImageArray.insert(newAddedImage, at: 0)
+//        
+//        self.collectionViewMedia.reloadData()
+//        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        newAddedImageArray.removeAll()
+        for image in images {
+            let newAddedView = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
+            newAddedView.image = image
+            pinMediaImageArray.append(newAddedView)
+            newAddedImageArray.append(image)
+        }
+        if images.count > 0 {
+            activityIndicator = UIActivityIndicatorView()
+            activityIndicator.activityIndicatorViewStyle = .whiteLarge
+            activityIndicator.center = view.center
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+            self.view.addSubview(activityIndicator)
+            activityIndicator.bringSubview(toFront: activityIndicator)
+            activityIndicator.startAnimating()
+            uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
+        }
+        UIApplication.shared.statusBarStyle = .lightContent
+    }
+    
 }

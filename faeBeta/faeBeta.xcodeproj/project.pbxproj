@@ -10,6 +10,12 @@
 		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
+		853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */; };
+		853F27721E23184E00DD80DF /* EditMoreOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27711E23184E00DD80DF /* EditMoreOptionsViewController.swift */; };
+		853F27751E231B4A00DD80DF /* EditOptionLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */; };
+		853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */; };
+		853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */; };
+		853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
@@ -282,6 +288,12 @@
 		7BFFA1EBC4EED7C62278A5BC /* Pods_faeBetaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlidingMenuViewController.swift; sourceTree = "<group>"; };
 		8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindowCell.swift; sourceTree = "<group>"; };
+		853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinCollectionViewCell.swift; sourceTree = "<group>"; };
+		853F27711E23184E00DD80DF /* EditMoreOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMoreOptionsViewController.swift; sourceTree = "<group>"; };
+		853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionLoadItems.swift; sourceTree = "<group>"; };
+		853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionButtonActions.swift; sourceTree = "<group>"; };
+		853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionHandleDelegate.swift; sourceTree = "<group>"; };
+		853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionTableViewCell.swift; sourceTree = "<group>"; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
 		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
@@ -633,6 +645,26 @@
 				8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */,
 			);
 			name = LeftSlidingMenu;
+			sourceTree = "<group>";
+		};
+		853F27701E23180D00DD80DF /* EditOptions */ = {
+			isa = PBXGroup;
+			children = (
+				853F27711E23184E00DD80DF /* EditMoreOptionsViewController.swift */,
+				853F27731E231B2000DD80DF /* EditOptionsExtension */,
+			);
+			name = EditOptions;
+			sourceTree = "<group>";
+		};
+		853F27731E231B2000DD80DF /* EditOptionsExtension */ = {
+			isa = PBXGroup;
+			children = (
+				853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */,
+				853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */,
+				853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */,
+				853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */,
+			);
+			name = EditOptionsExtension;
 			sourceTree = "<group>";
 		};
 		B00EC3EC1D2F539000AD9673 /* FAE cell */ = {
@@ -1198,6 +1230,8 @@
 			isa = PBXGroup;
 			children = (
 				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
+				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
+				853F27701E23180D00DD80DF /* EditOptions */,
 				B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */,
 				B842E51A1DB7372C006E2FB4 /* CommentPinViewController.swift */,
 				B8E819591DB3251C00D418D1 /* CommentPinExtension */,
@@ -1557,6 +1591,7 @@
 				DC3D105A1DC2B1AC0011C772 /* CPDInputToolbar.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
+				853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
@@ -1634,6 +1669,7 @@
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
+				853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
@@ -1704,6 +1740,7 @@
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
+				853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */,
@@ -1728,6 +1765,7 @@
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
 				B84C90C71DE7DBF6005B6F38 /* CMPLoadItems.swift in Sources */,
+				853F27721E23184E00DD80DF /* EditMoreOptionsViewController.swift in Sources */,
 				B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
@@ -1744,11 +1782,13 @@
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
+				853F27751E231B4A00DD80DF /* EditOptionLoadItems.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
 				B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */,
+				853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,

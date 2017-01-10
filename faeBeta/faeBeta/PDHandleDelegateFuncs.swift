@@ -9,8 +9,13 @@
 import UIKit
 import CoreLocation
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate {
     
+    func reloadCommentContent() {
+        if pinIDPinDetailView != "-999" {
+            getSeveralInfo()
+        }
+    }
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
         print("[animateToCameraFromOpenedPinListView] pinID: \(pinID), pinType: \(pinType)")
