@@ -37,22 +37,10 @@ class EditPinCollectionViewCell: UICollectionViewCell {
         media.clipsToBounds = true
         media.layer.cornerRadius = 13.5
         media.contentMode = .scaleAspectFill
-        var center = CGPoint()
-        center.x = 100
-        center.y = 0
-        let arcInCorner = UIBezierPath(arcCenter: center, radius: CGFloat(23.5), startAngle: CGFloat(0.5 * M_PI+0.214), endAngle: CGFloat(1.5 * M_PI-0.214), clockwise: true)
-        circleLayer = CAShapeLayer()
-        circleLayer.path = arcInCorner.cgPath
-        circleLayer.lineWidth = 3
-        circleLayer.strokeColor = UIColor.white.cgColor
-        circleLayer.fillColor = UIColor.clear.cgColor
-        circleLayer.zPosition = 999
-        //fullView.layer.addSublayer(circleLayer)
         fullView.addSubview(media)
         
         buttonCancel = UIButton(frame: CGRect(x: 74, y: 0, width: 26, height: 26))
         buttonCancel.setImage(#imageLiteral(resourceName: "Cancel"), for: UIControlState())
-        buttonCancel.alpha = 0.7
         buttonCancel.addTarget(self, action: #selector(self.deletePinMedia(_ :)), for: .touchUpInside)
         fullView.addSubview(buttonCancel)
     }

@@ -1,4 +1,4 @@
-//
+
 //  EditCommentPinViewController.swift
 //  faeBeta
 //
@@ -584,7 +584,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinMedia", for: indexPath) as! EditPinCollectionViewCell
         if indexPath.row == 0 {
             cell.media.image = #imageLiteral(resourceName: "AddMoreImage")
-            cell.circleLayer.isHidden = true
+//            cell.circleLayer.isHidden = true
             cell.buttonCancel.isHidden = true
         }else {
             cell.media.image = pinMediaImageArray[indexPath.row-1].image
