@@ -19,9 +19,9 @@ extension EditMoreOptionsViewController {
         print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
         updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
         updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
-        if pinType == "comments" {
+        if pinType == "comment" {
            
-        }else if pinType == "medias" {
+        }else if pinType == "media" {
 
         }else if pinType == "chat_room"{
             

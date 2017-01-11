@@ -165,7 +165,6 @@ extension PinDetailViewController {
         editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
         editMomentPinVC.editPinMode = self.pinTypeEnum
         editMomentPinVC.pinType = "\(self.pinTypeEnum)"
-        editMomentPinVC.newAddedFileIDs = fileIdString
         editMomentPinVC.mediaIdArray = fileIdArray
         self.present(editMomentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)

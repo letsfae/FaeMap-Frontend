@@ -60,7 +60,7 @@ class FaeMap: NSObject {
     
     func updatePin(_ pinType: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
         if pinId != nil && pinType != nil {
-            postToURL("\(pinType!)/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
+            postToURL("\(pinType!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }

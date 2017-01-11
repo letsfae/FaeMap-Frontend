@@ -43,7 +43,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     var imageForChat: UIImage!
     var pinMediaImageArray: [UIImageView] = []
     var editPinMode: PinDetailViewController.PinType = .media
-    var newAddedFileIDs = ""
     var mediaIdArray: [Int] = []
     
     //input toolbar
@@ -57,7 +56,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     //Emoji View
     var emojiView: StickerPickView!
     var isShowingEmoji: Bool = false
-    var previousFirstResponder: AnyObject? = nil
     
     
     //New Added ID array
@@ -101,7 +99,14 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                                for: .touchUpInside)
         
         buttonSave = UIButton()
-        buttonSave.setImage(UIImage(named: "saveEditCommentPin"), for: UIControlState())
+        buttonSave.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        buttonSave.setTitle("Save", for: .normal)
+        let buttonTitle = buttonSave.title(for: .normal)
+        let attributedString = NSMutableAttributedString(string: buttonTitle!)
+        attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.46), range: NSRange(location: 0, length: buttonTitle!.characters.count))
+        buttonSave.setAttributedTitle(attributedString, for: .normal)
+        
+        checkButtonState()
         self.view.addSubview(buttonSave)
         self.view.addConstraintsWithFormat("H:[v0(38)]-15-|", options: [], views: buttonSave)
         self.view.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonSave)
@@ -271,7 +276,16 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                 updateComment.whereKey("content", value: textViewUpdateComment.text) //content or description
             }else if pinType == "media" {
                 updateComment.whereKey("description", value: textViewUpdateComment.text)
-                updateComment.whereKey("file_ids", value: self.newAddedFileIDs)
+                var fileIdString = ""
+                for ID in mediaIdArray {
+                    if fileIdString == "" {
+                        fileIdString = "\(ID)"
+                    }else {
+                        fileIdString = "\(fileIdString);\(ID)"
+                    }
+                }
+                updateComment.whereKey("file_ids", value: fileIdString)
+                print("newAddedFileIDs: \(fileIdString)")
             }else if pinType == "chat_room"{
                 
             }
@@ -341,7 +355,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         }else{
             isShowingEmoji = false
             hideEmojiViewAnimated(animated: false)
-            _ = self.previousFirstResponder?.becomeFirstResponder()
         }
     }
     
@@ -359,42 +372,13 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     }
     func appendEmojiWithImageName(_ name: String)
     {
-        if let previousFirstResponder = previousFirstResponder
-        {
-            if previousFirstResponder is UITextView{
-//                let textView = previousFirstResponder as! UITextView
-//                textView.text = textView.text as String + "[\(name)]"
-//                textView.textViewDidChange(textView)
-                self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
-            }else if previousFirstResponder is UITextField{
-//                let textField = previousFirstResponder as! UITextField
-//                textField.text = textField.text! as String + "[\(name)]"
-            }
-            self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
-        }
+        self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
+        self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
     }
     func deleteEmoji()
     {
-        if let previousFirstResponder = previousFirstResponder
-        {
-            var previous = ""
-            if previousFirstResponder is UITextView{
-                let textView = previousFirstResponder as! UITextView
-                previous = textView.text
-            }else if previousFirstResponder is UITextField{
-                let textField = previousFirstResponder as! UITextField
-                previous = textField.text!
-            }
-            let finalString = previous.stringByDeletingLastEmoji()
-            if previousFirstResponder is UITextView{
-                let textView = previousFirstResponder as! UITextView
-                textView.text = finalString
-                self.textViewDidChange(textView)
-            }else if previousFirstResponder is UITextField{
-                let textField = previousFirstResponder as! UITextField
-                textField.text = finalString
-            }
-        }
+        self.textViewUpdateComment.text = self.textViewUpdateComment.text.stringByDeletingLastEmoji()
+        self.textViewDidChange(self.textViewUpdateComment)
     }
     
     func showEmojiViewAnimated(animated: Bool)
@@ -429,12 +413,13 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             self.emojiView.frame.origin.y = screenHeight
             self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
         }
+        self.textViewUpdateComment.becomeFirstResponder()
     }
-    
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewUpdateComment.endEditing(true)
     }
+    
     func pickMedia() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -456,6 +441,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         menu.addAction(cancel)
         self.present(menu,animated:true,completion: nil)
     }
+    
     func actionTakeMedia() {
         let numMediaLeft = 6 - pinMediaImageArray.count
         if numMediaLeft == 0 {
@@ -473,15 +459,26 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     
     func deleteMedia(cell: EditPinCollectionViewCell){
         if let indexPath = collectionViewMedia.indexPath(for: cell) {
-            print("Before [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
-            let selectedMediaID = mediaIdArray[indexPath.row-1]
+            print("before mediaIDarray: \(mediaIdArray)")
             pinMediaImageArray.remove(at: indexPath.row-1)
             collectionViewMedia.deleteItems(at: [indexPath])
             mediaIdArray.remove(at: indexPath.row-1)
-            let newString = newAddedFileIDs.replacingOccurrences(of: "\(selectedMediaID);", with: "")
-            newAddedFileIDs = newString
-            print("After [deleteMedia] array: \(mediaIdArray), index: \(indexPath.row), fileID: \(newAddedFileIDs)")
+            checkButtonState()
+            print("After mediaIDarray: \(mediaIdArray)")
         }
+    }
+    
+    func loadIndicator() {
+        self.textViewUpdateComment.resignFirstResponder() //Doesn't work
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+        self.view.addSubview(activityIndicator)
+        activityIndicator.bringSubview(toFront: activityIndicator)
+        activityIndicator.startAnimating()
+        self.textViewUpdateComment.resignFirstResponder()
     }
     
     private func showAlert(title: String, message: String) {
@@ -502,19 +499,14 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                 if let file_id = fileIDJSON["file_id"].int {
                     print("newID is: \(file_id)")
                     self.mediaIdArray.append(file_id)
-                    if self.newAddedFileIDs == "" {
-                        self.newAddedFileIDs = "\(file_id)"
-                    }
-                    else {
-                        self.newAddedFileIDs = "\(self.newAddedFileIDs);\(file_id)"
-                    }
                 }
                 else {
                     print("[uploadFile] Fail to process file_id")
                 }
                 if count + 1 >= total {
-                    self.activityIndicator.stopAnimating()
                     self.collectionViewMedia.reloadData()
+                    self.activityIndicator.stopAnimating()
+                    self.textViewUpdateComment.becomeFirstResponder()
                     return
                 }
                 self.uploadFile(image: self.newAddedImageArray[count+1],
@@ -523,6 +515,23 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             } else {
                 print("[uploadFile] Fail to upload Image File")
             }
+        }
+    }
+    
+    func checkButtonState() {
+        let main_string = "Save"
+        let string_to_color = "Save"
+        let range = (main_string as NSString).range(of: string_to_color)
+        if pinMediaImageArray.count < 1 {
+            self.buttonSave.isEnabled = false
+            let attribute = NSMutableAttributedString.init(string: main_string)
+            attribute.addAttributes([NSForegroundColorAttributeName: UIColor.faeAppDisabledRedColor(), NSKernAttributeName: CGFloat(-0.46)], range: range)
+            self.buttonSave.setAttributedTitle(attribute, for: .normal)
+        }else {
+            self.buttonSave.isEnabled = true
+            let attribute = NSMutableAttributedString.init(string: main_string)
+            attribute.addAttributes([NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSKernAttributeName: CGFloat(-0.46)], range: range)
+            self.buttonSave.setAttributedTitle(attribute, for: .normal)
         }
     }
     
@@ -564,7 +573,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
-        self.previousFirstResponder = textView
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -586,7 +594,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinMedia", for: indexPath) as! EditPinCollectionViewCell
         if indexPath.row == 0 {
             cell.media.image = #imageLiteral(resourceName: "AddMoreImage")
-//            cell.circleLayer.isHidden = true
             cell.buttonCancel.isHidden = true
         }else {
             cell.media.image = pinMediaImageArray[indexPath.row-1].image
@@ -607,12 +614,14 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         }
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-//        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
-//        newAddedImage.image = image
-//        self.pinMediaImageArray.insert(newAddedImage, at: 0)
-//        
-//        self.collectionViewMedia.reloadData()
-//        picker.dismiss(animated: true, completion: nil)
+        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
+        newAddedImage.image = image
+        self.pinMediaImageArray.append(newAddedImage)
+        self.newAddedImageArray.append(image)
+        loadIndicator()
+        checkButtonState()
+        uploadFile(image: newAddedImageArray[0], count: 0, total: 1)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func sendImages(_ images: [UIImage]) {
@@ -624,16 +633,9 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             newAddedImageArray.append(image)
         }
         if images.count > 0 {
-            activityIndicator = UIActivityIndicatorView()
-            activityIndicator.activityIndicatorViewStyle = .whiteLarge
-            activityIndicator.center = view.center
-            activityIndicator.hidesWhenStopped = true
-            activityIndicator.color = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
-            self.view.addSubview(activityIndicator)
-            activityIndicator.bringSubview(toFront: activityIndicator)
-            activityIndicator.startAnimating()
+            loadIndicator()
             uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
+            checkButtonState()
         }
     }
-    
 }

@@ -35,15 +35,15 @@ class EditMoreOptionsViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         switch pinType {
-        case "comments" :
+        case "comment" :
             optionImageArray = [0,1,2,3]
             tableViewHeight = 232
             break
-        case "medias" :
+        case "media" :
             optionImageArray = [0,4,1,2,3]
             tableViewHeight = 290
             break
-        case "chat_rooms" :
+        case "chat_room" :
             optionImageArray = [0,4,5,1,2,3]
             tableViewHeight = 338
             break

@@ -12,11 +12,11 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreOption", for: indexPath) as! EditOptionTableViewCell
-        if pinType == "comments" {
+        if pinType == "comment" {
             return loadCellForComment(cell: cell, indexPath: indexPath)
-        }else if pinType == "medias" {
+        }else if pinType == "media" {
             return loadCellForMedia(cell: cell, indexPath: indexPath)
-        }else if pinType == "chat_rooms" {
+        }else if pinType == "chat_room" {
             return loadCellForChat(cell: cell, indexPath: indexPath)
         }else {
             return cell
