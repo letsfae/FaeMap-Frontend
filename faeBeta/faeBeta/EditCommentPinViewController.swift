@@ -50,7 +50,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     var buttonOpenFaceGesPanel: UIButton!
     var buttonFinishEdit: UIButton!
     var labelCountChars: UILabel!
-    var editOption: UIButton!
     var lineOnToolbar: UIView!
     
     //Emoji View
@@ -74,7 +73,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         textViewUpdateComment.becomeFirstResponder()
-        
     }
     override func viewDidLayoutSubviews() {
         print("[viewDidLayoutSubviews]")
@@ -573,6 +571,15 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
+        if isShowingEmoji == true {
+            isShowingEmoji = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.emojiView.frame.origin.y = self.screenHeight
+            }, completion: { (Completed) in
+                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
+            })
+            self.textViewUpdateComment.becomeFirstResponder()
+        }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

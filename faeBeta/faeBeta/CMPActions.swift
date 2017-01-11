@@ -108,6 +108,7 @@ extension CreateMomentPinViewController {
             self.labelMediaPinAddDes.alpha = 1
             self.buttonBack.alpha = 1
             self.textViewForMediaPin.alpha = 1
+            self.textViewForMediaPin.becomeFirstResponder()
         }
     }
     

@@ -123,7 +123,6 @@ class CreatePinInputToolbar: UIView {
         self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: darkBackgroundView)
         self.addConstraintsWithFormat("V:[v0(50)]-0-|", options: [], views: darkBackgroundView)
         
-        
         buttonOpenFaceGesPanel = UIButton()
         buttonOpenFaceGesPanel.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())

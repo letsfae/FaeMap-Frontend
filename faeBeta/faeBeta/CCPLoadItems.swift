@@ -126,29 +126,17 @@ extension CreateCommentPinViewController {
     }
     
     func loadKeyboardToolBar() {
-        uiviewToolBar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 50))
-        uiviewToolBar.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
-        self.view.addSubview(uiviewToolBar)
-        
-        buttonOpenFaceGesPanel = UIButton()
-        buttonOpenFaceGesPanel.setImage(UIImage(named: "faceGesture"), for: UIControlState())
-        uiviewToolBar.addSubview(buttonOpenFaceGesPanel)
-        uiviewToolBar.addConstraintsWithFormat("H:|-15-[v0(23)]", options: [], views: buttonOpenFaceGesPanel)
-        uiviewToolBar.addConstraintsWithFormat("V:[v0(22)]-14-|", options: [], views: buttonOpenFaceGesPanel)
-        
-        buttonFinishEdit = UIButton()
-        buttonFinishEdit.setImage(UIImage(named: "finishEditing"), for: UIControlState())
-        uiviewToolBar.addSubview(buttonFinishEdit)
-        uiviewToolBar.addConstraintsWithFormat("H:[v0(49)]-14-|", options: [], views: buttonFinishEdit)
-        uiviewToolBar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
-        buttonFinishEdit.addTarget(self, action: #selector(CreateCommentPinViewController.actionFinishEditing(_:)), for: .touchUpInside)
-        
-        labelCountChars = UILabel(frame: CGRect(x: screenWidth-43, y: screenHeight, width: 29, height: 20))
-        labelCountChars.text = "200"
-        labelCountChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        labelCountChars.textAlignment = .right
-        labelCountChars.textColor = UIColor.white
-        self.view.addSubview(labelCountChars)
+        inputToolbar = CreatePinInputToolbar()
+        inputToolbar.delegate = self
+        self.view.addSubview(inputToolbar)
+        inputToolbar.alpha = 0
+        self.view.layoutIfNeeded()
+    }
+    
+   func loadEmojiView(){
+        emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
+        emojiView.sendStickerDelegate = self
+        self.view.addSubview(emojiView)
     }
     
     private func loadMoreOptionsButton() {

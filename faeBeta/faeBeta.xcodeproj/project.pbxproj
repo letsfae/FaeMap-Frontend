@@ -16,6 +16,8 @@
 		853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */; };
 		853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */; };
 		853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */; };
+		853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */; };
+		853F27801E26C3CF00DD80DF /* CMPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
@@ -286,6 +288,8 @@
 		853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionButtonActions.swift; sourceTree = "<group>"; };
 		853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionHandleDelegate.swift; sourceTree = "<group>"; };
 		853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionTableViewCell.swift; sourceTree = "<group>"; };
+		853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPToolBarDelegate.swift; sourceTree = "<group>"; };
+		853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPToolBarDelegate.swift; sourceTree = "<group>"; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
 		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
@@ -1082,6 +1086,7 @@
 			isa = PBXGroup;
 			children = (
 				B81563881DDBA07C00BF85A1 /* CCPLoadItems.swift */,
+				853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */,
 				B815638A1DDBA25B00BF85A1 /* CCPTextViewControll.swift */,
 				B815638C1DDBA36900BF85A1 /* CCPActions.swift */,
 				B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */,
@@ -1123,6 +1128,7 @@
 			isa = PBXGroup;
 			children = (
 				B84C90C61DE7DBF6005B6F38 /* CMPLoadItems.swift */,
+				853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */,
 				B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */,
 				B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */,
 				B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */,
@@ -1595,6 +1601,8 @@
 				B8612E3B1DF24CF90092C606 /* PDHandleDelegateFuncs.swift in Sources */,
 				B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */,
 				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
+				853F27801E26C3CF00DD80DF /* CMPToolBarDelegate.swift in Sources */,
+				853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */,
 				DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */,
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,

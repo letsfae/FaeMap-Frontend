@@ -44,12 +44,11 @@ class CreateMomentPinViewController: UIViewController {
     var buttonMediaSubmit: UIButton!
     
     // MARK: -- Keyboard Tool Bar
-    var uiviewToolBar: UIView!
-    var buttonOpenFaceGesPanel: UIButton!
-    var buttonFinishEdit: UIButton!
+    var inputToolbar: CreatePinInputToolbar!
     
-    // MARK: -- Count Number of Characters
-    var labelCountChars: UILabel!
+    //MARK: -- Emoji View
+    var emojiView: StickerPickView!
+    var isShowingEmoji: Bool = false
     
     // MARK: -- uiview containers to hold two toolbars
     var uiviewSelectLocation: UIView!
@@ -84,6 +83,7 @@ class CreateMomentPinViewController: UIViewController {
         super.viewDidLoad()
         loadCreateMediaPinView()
         loadKeyboardToolBar()
+        loadEmojiView()
         addObservers()
     }
     
@@ -106,20 +106,26 @@ class CreateMomentPinViewController: UIViewController {
     }
     
     func keyboardWillShow(_ notification:Notification) {
-        let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.uiviewToolBar.frame.origin.y = screenHeight - keyboardFrame.height - 50
-            self.labelCountChars.frame.origin.y = screenHeight - keyboardFrame.height - 81
-        })
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        inputToolbar.alpha = 1
+        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+            Void in
+            self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
+        }, completion: nil)
     }
     
     func keyboardWillHide(_ notification:Notification) {
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.uiviewToolBar.frame.origin.y = screenHeight
-            self.labelCountChars.frame.origin.y = screenHeight
-        })
+        if(!isShowingEmoji){
+            UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+                Void in
+                self.inputToolbar.frame.origin.y = screenHeight - 100
+                self.inputToolbar.alpha = 0
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+        }
     }
     
     override func didReceiveMemoryWarning() {

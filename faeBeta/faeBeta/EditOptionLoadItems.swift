@@ -39,7 +39,7 @@ extension EditMoreOptionsViewController{
         self.view.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelTitle)
         NSLayoutConstraint(item: labelTitle, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
-        uiviewLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        uiviewLine = UIView(frame: CGRect(x: 0, y: 64 * screenHeightFactor, width: screenWidth, height: 1))
         uiviewLine.layer.borderWidth = screenWidth
         uiviewLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         self.view.addSubview(uiviewLine)
@@ -51,6 +51,17 @@ extension EditMoreOptionsViewController{
         tableMoreOptions.isScrollEnabled = false
         tableMoreOptions.separatorStyle = .none
         self.view.addSubview(tableMoreOptions)
+        
+        uiviewLineBottom = UIView(frame: CGRect(x: 0, y: 685 * screenHeightFactor, width: screenWidth, height: 1))
+        //uiviewLineBottom.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        uiviewLineBottom.layer.borderWidth = screenWidth
+        uiviewLineBottom.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        self.view.addSubview(uiviewLineBottom)
+        
+        labelFooter = UILabel(frame: CGRect(x: 176 * screenHeightFactor, y: 698 * screenHeightFactor, width: 63, height: 25))
+        labelFooter.text = "Edit Pin"
+        labelFooter.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        labelFooter.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
+        self.view.addSubview(labelFooter)
     }
-    
 }

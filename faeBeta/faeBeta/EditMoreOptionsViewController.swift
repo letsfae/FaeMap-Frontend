@@ -27,6 +27,8 @@ class EditMoreOptionsViewController: UIViewController {
     var buttonCancel: UIButton!
     var buttonSave: UIButton!
     var uiviewLine: UIView!
+    var uiviewLineBottom: UIView!
+    var labelFooter: UILabel!
     
     //Data Structure
     var optionImageArray: [Int] = []
