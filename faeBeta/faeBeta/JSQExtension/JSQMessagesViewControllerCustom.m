@@ -1009,9 +1009,7 @@ JSQMessagesKeyboardControllerDelegate>
 
     [self jsq_updateKeyboardTriggerPoint];
 
-    if (dy < 0) {
-        [self jsq_scrollComposerTextViewToBottomAnimated:NO];
-    }
+    [self jsq_scrollComposerTextViewToBottomAnimated:NO];
 }
 
 - (void)jsq_adjustInputToolbarHeightConstraintByDelta:(CGFloat)dy
@@ -1024,10 +1022,15 @@ JSQMessagesKeyboardControllerDelegate>
         finalHeight = MIN(finalHeight, self.inputToolbar.maximumHeight);
     }
 
+    CGFloat toolbarOriginY = CGRectGetMinY(self.inputToolbar.frame);
+    CGFloat newToolbarOriginY = toolbarOriginY - (finalHeight - self.toolbarHeightConstraint.constant);
+    
     if (self.toolbarHeightConstraint.constant != finalHeight) {
         self.toolbarHeightConstraint.constant = finalHeight;
         [self.view setNeedsUpdateConstraints];
         [self.view layoutIfNeeded];
+        
+        self.inputToolbar.frame = CGRectMake(0, newToolbarOriginY, self.inputToolbar.frame.size.width, self.inputToolbar.frame.size.height);
     }
 }
 
@@ -1037,7 +1040,9 @@ JSQMessagesKeyboardControllerDelegate>
     CGPoint contentOffsetToShowLastLine = CGPointMake(0.0f, textView.contentSize.height - CGRectGetHeight(textView.bounds));
 
     if (!animated) {
-        textView.contentOffset = contentOffsetToShowLastLine;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            textView.contentOffset = contentOffsetToShowLastLine;
+        });
         return;
     }
 
@@ -1046,6 +1051,7 @@ JSQMessagesKeyboardControllerDelegate>
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          textView.contentOffset = contentOffsetToShowLastLine;
+                         [self.view layoutIfNeeded];
                      }
                      completion:nil];
 }

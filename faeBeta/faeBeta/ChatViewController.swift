@@ -315,9 +315,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //heart Button
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
-        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
-        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpOutside)
-        
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)        
     }
     
     // be sure to call this in ViewWillAppear!!!
