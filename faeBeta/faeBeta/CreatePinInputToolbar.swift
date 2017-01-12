@@ -26,7 +26,6 @@ class CreatePinInputToolbar: UIView {
     var labelCountChars: UILabel!
     var darkBackgroundView: UIView!
     
-    private var _mode: CreatePinInputToolbarMode = .emoji
     var maximumNumberOfCharacters: Int
     {
         get{
