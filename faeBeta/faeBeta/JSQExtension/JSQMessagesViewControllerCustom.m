@@ -136,6 +136,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 @property (assign, nonatomic) BOOL textViewWasFirstResponderDuringInteractivePop;
 
+@property (nonatomic) BOOL shouldSetOffsetToZero;
+
 @end
 
 
@@ -1018,6 +1020,8 @@ JSQMessagesKeyboardControllerDelegate>
 
     CGFloat finalHeight = MAX(proposedHeight, self.inputToolbar.preferredDefaultHeight);
 
+     _shouldSetOffsetToZero = self.inputToolbar.preferredDefaultHeight == finalHeight && (self.inputToolbar.contentView.textView.contentSize.height < 50.f);
+    
     if (self.inputToolbar.maximumHeight != NSNotFound) {
         finalHeight = MIN(finalHeight, self.inputToolbar.maximumHeight);
     }
@@ -1032,11 +1036,21 @@ JSQMessagesKeyboardControllerDelegate>
         
         self.inputToolbar.frame = CGRectMake(0, newToolbarOriginY, self.inputToolbar.frame.size.width, self.inputToolbar.frame.size.height);
     }
+    
+    self.inputToolbar.contentView.textView.sizeChanged = true;
 }
 
 - (void)jsq_scrollComposerTextViewToBottomAnimated:(BOOL)animated
 {
     UITextView *textView = self.inputToolbar.contentView.textView;
+
+    if(_shouldSetOffsetToZero){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            textView.contentOffset = CGPointMake(0, -2.f);
+        });
+        return;
+    }
+    
     CGPoint contentOffsetToShowLastLine = CGPointMake(0.0f, textView.contentSize.height - CGRectGetHeight(textView.bounds));
 
     if (!animated) {

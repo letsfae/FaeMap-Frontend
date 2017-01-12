@@ -41,7 +41,7 @@
  *  An instance of `JSQMessagesComposerTextView` is a subclass of `UITextView` that is styled and used
  *  for composing messages in a `JSQMessagesViewController`. It is a subview of a `JSQMessagesToolbarContentView`.
  */
-@interface JSQMessagesComposerTextViewCustom : UITextView
+@interface JSQMessagesComposerTextViewCustom : UITextView <NSLayoutManagerDelegate>
 
 /**
  *  The text to be displayed when the text view is empty. The default value is `nil`.
@@ -57,6 +57,8 @@
  *  The object that acts as the paste delegate of the text view.
  */
 @property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegateCustom> pasteDelegate;
+
+@property (nonatomic) BOOL sizeChanged;
 
 /**
  *  Determines whether or not the text view contains text after trimming white space

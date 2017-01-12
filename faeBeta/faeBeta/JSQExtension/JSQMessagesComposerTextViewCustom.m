@@ -24,7 +24,7 @@
 #import "faeBeta-swift.h"
 
 
-@implementation JSQMessagesComposerTextViewCustom
+@implementation JSQMessagesComposerTextViewCustom 
 
 #pragma mark - Initialization
 
@@ -61,7 +61,11 @@
     _placeHolder = nil;
     _placeHolderTextColor = [UIColor lightGrayColor];
     
+    _sizeChanged = NO;
+    
     [self jsq_addTextViewNotificationObservers];
+    
+    self.layoutManager.delegate = self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
@@ -225,8 +229,20 @@
     return [super becomeFirstResponder];
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
     [UIMenuController sharedMenuController].menuItems = nil;
     return [super canPerformAction:action withSender:sender];
 }
+
+#pragma mark - NSLayoutManagerDelegate
+
+//- (CGRect)caretRectForPosition:(UITextPosition *)position
+//{
+//    CGRect originalRect = [super caretRectForPosition:position];
+//    // "descender" is expressed as a negative value,
+//    // so to add its height you must subtract its value
+//    originalRect.origin.y = originalRect.origin.y - (_sizeChanged && [self.text  isEqual: @""] ? 5.f : 0.f);
+//    return originalRect;
+//}
 @end

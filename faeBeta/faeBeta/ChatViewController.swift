@@ -313,6 +313,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         
         //heart Button
+        self.automaticallyAdjustsScrollViewInsets = false;
+
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)        
