@@ -629,7 +629,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         self.inputToolbar.contentView.addSubview(animatingHeart)
         
-        //
         let randomX = CGFloat(arc4random_uniform(150))
         let randomY = CGFloat(arc4random_uniform(50) + 100)
         let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
@@ -742,6 +741,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func animationDidStart(_ anim: CAAnimation) {
         if anim.duration == 1{
             animHeartDic[anim] = animatingHeart
+            
+            let seconds = 0.5
+            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                self.inputToolbar.contentView.sendSubview(toBack: self.animHeartDic[anim]!)
+            })
         }
     }
     
