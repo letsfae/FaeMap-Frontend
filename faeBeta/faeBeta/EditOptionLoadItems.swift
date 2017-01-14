@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMaps
 
 extension EditMoreOptionsViewController{
     
@@ -50,6 +51,7 @@ extension EditMoreOptionsViewController{
         tableMoreOptions.register(EditOptionTableViewCell.self, forCellReuseIdentifier: "moreOption")
         tableMoreOptions.isScrollEnabled = false
         tableMoreOptions.separatorStyle = .none
+        
         self.view.addSubview(tableMoreOptions)
         
         uiviewLineBottom = UIView(frame: CGRect(x: 0, y: 685 * screenHeightFactor, width: screenWidth, height: 1))
@@ -63,5 +65,22 @@ extension EditMoreOptionsViewController{
         labelFooter.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelFooter.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
         self.view.addSubview(labelFooter)
+        
+        geoCode = CLGeocoder.init()
+        let currentLocation = CLLocation.init(latitude: pinGeoLocation.latitude, longitude: pinGeoLocation.longitude)
+        geoCode.reverseGeocodeLocation(currentLocation, completionHandler: {
+            (response, error) -> Void in
+            if response!.count > 0{
+                let placemark = response![0]
+                let location = "\(placemark.name!),\(placemark.locality!),\(placemark.administrativeArea!),\(placemark.postalCode!),\(placemark.country!)"
+                let index = NSIndexPath.init(row: 0, section: 0)
+                let cell = self.tableMoreOptions.cellForRow(at: index as IndexPath) as! EditOptionTableViewCell
+                cell.labelMiddle.text = location
+                self.currentLocation = placemark.location!
+            }
+            
+        })
+        
     }
+
 }

@@ -84,9 +84,7 @@ extension CreateMomentPinViewController {
             }
             self.buttonAddMedia.alpha = 0
             self.labelMediaPinMoreOptions.alpha = 1
-            self.uiviewDuration.alpha = 1
-            self.uiviewInterRadius.alpha = 1
-            self.uiviewPinPromot.alpha = 1
+            self.tableMoreOptions.alpha = 1
             self.buttonBack.alpha = 1
         }
     }
@@ -110,34 +108,47 @@ extension CreateMomentPinViewController {
             self.textViewForMediaPin.alpha = 1
             self.textViewForMediaPin.becomeFirstResponder()
         }
+        self.currentView = .moreOptionsTable
     }
     
     func actionBack(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.4) {
-            self.uiviewSelectLocation.alpha = 1
-            self.uiviewMoreOptions.alpha = 1
-            self.uiviewAddDescription.alpha = 1
-            self.labelCreateMediaPinTitle.alpha = 1
-            self.buttonMediaSubmit.alpha = 1
-            self.collectionViewMedia.alpha = 1
-            self.buttonAnonymous.alpha = 1
-            if self.selectedMediaArray.count > 0 {
-                self.buttonAddMedia.alpha = 1
-                self.buttonSelectMedia.alpha = 0
-                self.buttonTakeMedia.alpha = 0
-            }
-            else if self.selectedMediaArray.count == 0 {
-                self.buttonSelectMedia.alpha = 1
-                self.buttonTakeMedia.alpha = 1
-                self.buttonAddMedia.alpha = 0
-            }
-            self.labelMediaPinMoreOptions.alpha = 0
-            self.uiviewDuration.alpha = 0
-            self.uiviewInterRadius.alpha = 0
-            self.uiviewPinPromot.alpha = 0
-            self.buttonBack.alpha = 0
-            self.textViewForMediaPin.alpha = 0
-            self.labelMediaPinAddDes.alpha = 0
+        if self.currentView == .moreOptionsTable {
+            UIView.animate(withDuration: 0.4, animations: { void in
+                self.uiviewSelectLocation.alpha = 1
+                self.uiviewMoreOptions.alpha = 1
+                self.uiviewAddDescription.alpha = 1
+                self.labelCreateMediaPinTitle.alpha = 1
+                self.buttonMediaSubmit.alpha = 1
+                self.collectionViewMedia.alpha = 1
+                self.buttonAnonymous.alpha = 1
+                if self.selectedMediaArray.count > 0 {
+                    self.buttonAddMedia.alpha = 1
+                    self.buttonSelectMedia.alpha = 0
+                    self.buttonTakeMedia.alpha = 0
+                }
+                else if self.selectedMediaArray.count == 0 {
+                    self.buttonSelectMedia.alpha = 1
+                    self.buttonTakeMedia.alpha = 1
+                    self.buttonAddMedia.alpha = 0
+                }
+                self.labelMediaPinMoreOptions.alpha = 0
+                self.tableMoreOptions.alpha = 0
+                self.buttonBack.alpha = 0
+                self.textViewForMediaPin.alpha = 0
+                self.labelMediaPinAddDes.alpha = 0
+            }, completion: { complete in
+                self.inputToolbar.mode = .emoji
+            })
+        }else if self.currentView == .addTags {
+            self.tableMoreOptions.reloadData()
+            UIView.animate(withDuration: 0.4, animations: {void in
+                self.textAddTags.alpha = 0
+                self.tableMoreOptions.alpha = 1
+                self.labelMediaPinMoreOptions.text = "More Options"
+            }, completion: {done in
+                self.inputToolbar.mode = .emoji
+                self.currentView = .moreOptionsTable
+            })
         }
     }
     
@@ -180,6 +191,26 @@ extension CreateMomentPinViewController {
                       count: 0,
                       total: selectedMediaArray.count,
                       fileIDs: "")
+    }
+    
+    func switchToAddTags() {
+        self.currentView = .addTags
+        if textAddTags == nil {
+            textAddTags = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+            textAddTags.placeHolder = "Add Tags to promote your pin in searches..."
+            textAddTags.observerDelegate = self
+            self.view.addSubview(textAddTags)
+        }
+        textAddTags.alpha = 0
+        inputToolbar.mode = .tag
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.tableMoreOptions.alpha = 0
+            self.labelMediaPinMoreOptions.text = "Add Description"
+            self.textAddTags.alpha = 1
+        }, completion:{
+            Complete in
+        })
     }
     
     private func uploadingFile(image: UIImage, count: Int, total: Int, fileIDs: String) {
@@ -225,7 +256,7 @@ extension CreateMomentPinViewController {
         var submitLatitude = selectedLatitude
         var submitLongitude = selectedLongitude
         
-        if labelSelectLocationContent.text == "Current Location" {
+        if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
             submitLatitude = "\(currentLatitude)"
             submitLongitude = "\(currentLongitude)"
         }

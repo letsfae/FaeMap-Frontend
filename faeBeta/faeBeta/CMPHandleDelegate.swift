@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CreateMomentPinViewController: CreatePinInputToolbarDelegate,SendStickerDelegate {
+extension CreateMomentPinViewController: CreatePinInputToolbarDelegate,SendStickerDelegate, CreatePinTextViewDelegate {
     
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {
@@ -20,14 +20,18 @@ extension CreateMomentPinViewController: CreatePinInputToolbarDelegate,SendStick
     }
     
     func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
-        if(!isShowingEmoji){
-            isShowingEmoji = true
-            self.view.endEditing(true)
-            showEmojiViewAnimated(animated: true)
-        }else{
-            isShowingEmoji = false
-            hideEmojiViewAnimated(animated: false)
-            self.textViewForMediaPin.becomeFirstResponder()
+        if inputToolbar.mode == .emoji {
+            if(!isShowingEmoji){
+                isShowingEmoji = true
+                self.view.endEditing(true)
+                showEmojiViewAnimated(animated: true)
+            }else{
+                isShowingEmoji = false
+                hideEmojiViewAnimated(animated: false)
+                self.textViewForMediaPin.becomeFirstResponder()
+            }
+        }else if inputToolbar.mode == .tag {
+            textAddTags.addLastInputTag()
         }
     }
     
@@ -76,6 +80,12 @@ extension CreateMomentPinViewController: CreatePinInputToolbarDelegate,SendStick
             self.inputToolbar.alpha = 0
             self.emojiView.frame.origin.y = screenHeight
             self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
+        }
+    }
+    
+    func textView(_ textView: CreatePinTextView, numberOfCharactersEntered num: Int) {
+        if(inputToolbar != nil){
+            inputToolbar.numberOfCharactersEntered = max(0,num)
         }
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSource {
+extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSource,SelectLocationViewControllerDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreOption", for: indexPath) as! EditOptionTableViewCell
@@ -26,27 +26,17 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForChat(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.labelMiddle.text = "pinLocation"
-            cell.imageRight01.isHidden = false
+            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
         case 1:
-            cell.labelMiddle.text = "Add Tags"
-            cell.imageRight02.isHidden = false
+            cell.setup(middleText: "Add Tags", trailingText: nil, trailingImagePlus: true)
         case 2:
-            cell.labelMiddle.text = "Room Capacity"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "50"
+            cell.setup(middleText: "Room Capacity", trailingText: "50", trailingImagePlus: nil)
         case 3:
-            cell.labelMiddle.text = "Duration on Map"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "3HR"
+            cell.setup(middleText: "Duration on Map", trailingText: "3HR", trailingImagePlus: nil)
         case 4:
-            cell.labelMiddle.text = "Interaction Radius"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Interaction Radius", trailingText: "C.S", trailingImagePlus: nil)
         case 5:
-            cell.labelMiddle.text = "Pin Promotions"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Pin Promotions", trailingText: "C.S", trailingImagePlus: nil)
         default:
             print("Wrong Row")
         }
@@ -57,20 +47,13 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForComment(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.labelMiddle.text = "pinLocation"
-            cell.imageRight01.isHidden = false
+            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
         case 1:
-            cell.labelMiddle.text = "Duration on Map"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "3HR"
+            cell.setup(middleText: "Duration on Map", trailingText: "3HR", trailingImagePlus: nil)
         case 2:
-            cell.labelMiddle.text = "Interaction Radius"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Interaction Radius", trailingText: "C.S", trailingImagePlus: nil)
         case 3:
-            cell.labelMiddle.text = "Pin Promotions"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Pin Promotions", trailingText: "C.S", trailingImagePlus: nil)
         default:
             print("Wrong Row")
         }
@@ -81,23 +64,15 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForMedia(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.labelMiddle.text = "pinLocation"
-            cell.imageRight01.isHidden = false
+            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
         case 1:
-            cell.labelMiddle.text = "Tags"
-            cell.imageRight02.isHidden = false
+            cell.setup(middleText: "Tags", trailingText: nil, trailingImagePlus: true)
         case 2:
-            cell.labelMiddle.text = "Duration on Map"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "3HR"
+            cell.setup(middleText: "Duration on Map", trailingText: "3HR", trailingImagePlus: nil)
         case 3:
-            cell.labelMiddle.text = "Interaction Radius"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Interaction Radius", trailingText: "C.S", trailingImagePlus: nil)
         case 4:
-            cell.labelMiddle.text = "Pin Promotions"
-            cell.labelRight.isHidden = false
-            cell.labelRight.text = "C.S"
+            cell.setup(middleText: "Pin Promotions", trailingText: "C.S", trailingImagePlus: nil)
         default:
             print("Wrong Row")
         }
@@ -111,5 +86,73 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 58
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == tableMoreOptions {
+            switch pinType {
+            case "comment":
+                switch indexPath.row {
+                case 0:
+                    actionSelectLocation()
+                    break
+                case 1:
+                    break
+                case 2:
+                    break
+                case 3:
+                    break
+                default:
+                    break
+                }
+            case "media":
+                switch indexPath.row {
+                case 0:
+                    actionSelectLocation()
+                    break
+                case 1:
+                    break
+                case 2:
+                    break
+                case 3:
+                    break
+                case 4:
+                    break
+                default:
+                    break
+                }
+            case "chat_room":
+                switch indexPath.row {
+                case 0:
+                    actionSelectLocation()
+                    break
+                case 1:
+                    break
+                case 2:
+                    break
+                case 3:
+                    break
+                case 4:
+                    break
+                case 5:
+                    break
+                default:
+                    break
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    //Select Location Delegate
+    func sendAddress(_ value: String) {
+        let index = NSIndexPath.init(row: 0, section: 0)
+        let cell = tableMoreOptions.cellForRow(at: index as IndexPath) as! EditOptionTableViewCell
+        cell.labelMiddle.text = value
+    }
+    
+    func sendGeoInfo(_ latitude: String, longitude: String) {
+        pinGeoLocation.latitude = Double(latitude)!
+        pinGeoLocation.longitude = Double(longitude)!
     }
 }

@@ -16,7 +16,7 @@ protocol EditCommentPinViewControllerDelegate: class {
     func reloadCommentContent()
 }
 
-class EditCommentPinViewController: UIViewController, UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, EditMediaCollectionCellDelegate {
+class EditCommentPinViewController: UIViewController {
     
     weak var delegate: EditCommentPinViewControllerDelegate?
     
@@ -86,221 +86,8 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         }
     }
     
-    func loadEditCommentPinItems() {
-        buttonCancel = UIButton()
-        buttonCancel.setImage(UIImage(named: "cancelEditCommentPin"), for: UIControlState())
-        self.view.addSubview(buttonCancel)
-        self.view.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonCancel)
-        self.view.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonCancel)
-        buttonCancel.addTarget(self,
-                               action: #selector(self.actionCancelCommentPinEditing(_:)),
-                               for: .touchUpInside)
         
-        buttonSave = UIButton()
-        buttonSave.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        buttonSave.setTitle("Save", for: .normal)
-        let buttonTitle = buttonSave.title(for: .normal)
-        let attributedString = NSMutableAttributedString(string: buttonTitle!)
-        attributedString.addAttribute(NSKernAttributeName, value: CGFloat(-0.46), range: NSRange(location: 0, length: buttonTitle!.characters.count))
-        buttonSave.setAttributedTitle(attributedString, for: .normal)
         
-        checkButtonState()
-        self.view.addSubview(buttonSave)
-        self.view.addConstraintsWithFormat("H:[v0(38)]-15-|", options: [], views: buttonSave)
-        self.view.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonSave)
-        buttonSave.addTarget(self,
-                               action: #selector(self.actionUpdateCommentPinEditing(_:)),
-                               for: .touchUpInside)
-        
-        labelTitle = UILabel()
-        labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        labelTitle.text = "Edit Comment"
-        labelTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.view.addSubview(labelTitle)
-        self.view.addConstraintsWithFormat("H:[v0(133)]", options: [], views: labelTitle)
-        self.view.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelTitle)
-        NSLayoutConstraint(item: labelTitle, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        
-        uiviewLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
-        uiviewLine.layer.borderWidth = screenWidth
-        uiviewLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-        self.view.addSubview(uiviewLine)
-        
-        var textViewWidth: CGFloat = 0
-        if screenWidth == 414 { // 5.5
-            textViewWidth = 360
-        }
-        else if screenWidth == 320 { // 4.0
-            textViewWidth = 266
-        }
-        else if screenWidth == 375 { // 4.7
-            textViewWidth = 321
-        }
-        textViewUpdateComment = UITextView(frame: CGRect(x: 27, y: 84, width: textViewWidth, height: 100))
-        textViewUpdateComment.text = ""
-        textViewUpdateComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        textViewUpdateComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        textViewUpdateComment.textContainerInset = UIEdgeInsets.zero
-        textViewUpdateComment.indicatorStyle = UIScrollViewIndicatorStyle.white
-        textViewUpdateComment.text = previousCommentContent
-        textViewUpdateComment.delegate = self
-        self.view.addSubview(textViewUpdateComment)
-        UITextView.appearance().tintColor = UIColor.faeAppRedColor()
-        
-        labelTextViewPlaceholder = UILabel(frame: CGRect(x: 2, y: 0, width: 171, height: 27))
-        labelTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        labelTextViewPlaceholder.textColor = colorPlaceHolder
-        labelTextViewPlaceholder.text = "Type a comment..."
-        textViewUpdateComment.addSubview(labelTextViewPlaceholder)
-        
-        switch editPinMode {
-        case .comment:
-            loadViewForComment()
-            break
-        case .chat_room:
-            loadViewForChat()
-            break
-        case .media:
-            loadViewForMoment()
-            break
-        }
-
-    }
-    
-    func loadViewForComment() {
-        textViewUpdateComment.frame.origin.x = 27
-        textViewUpdateComment.frame.origin.y = 84
-        
-        labelTextViewPlaceholder.text = "Type a comment..."
-    }
-    func loadViewForMoment() {
-        textViewUpdateComment.frame.origin.x = 27
-        textViewUpdateComment.frame.origin.y = 196
-        
-        labelTextViewPlaceholder.text = "Type a comment..."
-        
-        let layout = CenterCellCollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 100)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 5
-        
-        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 81, width: screenWidth, height: 100), collectionViewLayout: layout)
-        collectionViewMedia.register(EditPinCollectionViewCell.self, forCellWithReuseIdentifier: "pinMedia")
-        collectionViewMedia.delegate = self
-        collectionViewMedia.dataSource = self
-        collectionViewMedia.isPagingEnabled = false
-        collectionViewMedia.backgroundColor = UIColor.clear
-        collectionViewMedia.showsHorizontalScrollIndicator = false
-        self.view.addSubview(collectionViewMedia)
-    }
-    func loadViewForChat() {
-        imageViewForChat = UIImageView(frame: CGRect(x: 162, y: 76, width: 90, height: 90))
-        imageViewForChat.image = imageForChat
-        self.view.addSubview(imageViewForChat)
-        
-        //Line below the image
-        let line = UIView(frame: CGRect(x: 0, y: 213, width: screenWidth, height: 12))
-        line.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1)
-        self.view.addSubview(line)
-        
-        let descriptionTitle = UILabel(frame: CGRect(x: 15, y: 239, width: 200, height: 22))
-        descriptionTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
-        descriptionTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        descriptionTitle.text = "Description"
-        self.view.addSubview(descriptionTitle)
-        
-        textViewUpdateComment.frame.origin.x = 27
-        textViewUpdateComment.frame.origin.y = 266
-        
-        labelTextViewPlaceholder.text = "Type a chat decription"
-    }
-    
-    private func loadKeyboardToolBar() {
-        inputToolbar = CreatePinInputToolbar()
-        inputToolbar.delegate = self
-        inputToolbar.darkBackgroundView.backgroundColor = UIColor.white
-        inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
-        inputToolbar.buttonOpenFaceGesPanel.setTitle("", for: UIControlState())
-        inputToolbar.buttonFinishEdit.setImage(UIImage(), for: UIControlState())
-        
-        //Line on the toolbar
-        lineOnToolbar = UIView(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 1))
-        lineOnToolbar.layer.borderWidth = screenWidth
-        lineOnToolbar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-        inputToolbar.darkBackgroundView.addSubview(lineOnToolbar)
-        
-        inputToolbar.buttonFinishEdit.isHidden = true
-        buttonFinishEdit = UIButton()
-        buttonFinishEdit.setTitle("Edit Options", for: UIControlState())
-        buttonFinishEdit.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        inputToolbar.addSubview(buttonFinishEdit)
-        inputToolbar.addConstraintsWithFormat("H:[v0(105)]-14-|", options: [], views: buttonFinishEdit)
-        inputToolbar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)
-        buttonFinishEdit.addTarget(self, action: #selector(self.moreOptions(_ :)), for: .touchUpInside)
-        buttonFinishEdit.setTitleColor(UIColor(red: 155/255, green: 155/255, blue:155/255, alpha: 1), for: UIControlState())
-        inputToolbar.darkBackgroundView.addSubview(buttonFinishEdit)
-
-        inputToolbar.labelCountChars.textColor = UIColor(red: 155/255, green: 155/255, blue:155/255, alpha: 1)
-        
-        self.view.addSubview(inputToolbar)
-        
-        inputToolbar.alpha = 1
-        self.view.layoutIfNeeded()
-    }
-    
-    private func loadEmojiView(){
-        emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
-        emojiView.sendStickerDelegate = self
-        self.view.addSubview(emojiView)
-    }
-    
-    func actionCancelCommentPinEditing(_ sender: UIButton) {
-        textViewUpdateComment.endEditing(true)
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func actionUpdateCommentPinEditing(_ sender: UIButton) {
-//        if previousCommentContent == textViewUpdateComment.text && newAddedFileIDs =={
-//            textViewUpdateComment.endEditing(true)
-//            self.dismiss(animated: true, completion: nil)
-//        }
-//        else {
-            let updateComment = FaeMap()
-            print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
-            updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
-            updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
-            if pinType == "comment" {
-                updateComment.whereKey("content", value: textViewUpdateComment.text) //content or description
-            }else if pinType == "media" {
-                updateComment.whereKey("description", value: textViewUpdateComment.text)
-                var fileIdString = ""
-                for ID in mediaIdArray {
-                    if fileIdString == "" {
-                        fileIdString = "\(ID)"
-                    }else {
-                        fileIdString = "\(fileIdString);\(ID)"
-                    }
-                }
-                updateComment.whereKey("file_ids", value: fileIdString)
-                print("newAddedFileIDs: \(fileIdString)")
-            }else if pinType == "chat_room"{
-                
-            }
-            updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Success -> Update \(self.pinType)")
-                    self.delegate?.reloadCommentContent()
-                    self.textViewUpdateComment.endEditing(true)
-                    self.dismiss(animated: true, completion: nil)
-                }
-                else {
-                    print("Fail -> Update \(self.pinType)")
-                }
-            }
-        //}
-    }
-    
     private func addObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.keyboardWillShow(_:)),
@@ -334,49 +121,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
                 self.view.layoutIfNeeded()
             }, completion: nil)
         }
-    }
-    
-    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
-    {
-        self.view.endEditing(true)
-        if(isShowingEmoji){
-            isShowingEmoji = false
-            hideEmojiViewAnimated(animated: true)
-        }
-    }
-    
-    func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
-        if(!isShowingEmoji){
-            isShowingEmoji = true
-            self.view.endEditing(true)
-            showEmojiViewAnimated(animated: true)
-        }else{
-            isShowingEmoji = false
-            hideEmojiViewAnimated(animated: false)
-        }
-    }
-    
-    func moreOptions(_ sender: UIButton) {
-        let editMoreOptions = EditMoreOptionsViewController()
-        editMoreOptions.pinID = pinID
-        editMoreOptions.pinType = pinType
-        editMoreOptions.pinGeoLocation = pinGeoLocation
-        self.present(editMoreOptions, animated: true, completion: nil)
-    }
-    
-    func sendStickerWithImageName(_ name : String)
-    {
-        // do nothing here, won't send sticker
-    }
-    func appendEmojiWithImageName(_ name: String)
-    {
-        self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
-        self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
-    }
-    func deleteEmoji()
-    {
-        self.textViewUpdateComment.text = self.textViewUpdateComment.text.stringByDeletingLastEmoji()
-        self.textViewDidChange(self.textViewUpdateComment)
     }
     
     func showEmojiViewAnimated(animated: Bool)
@@ -467,7 +211,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
     }
     
     func loadIndicator() {
-        self.textViewUpdateComment.resignFirstResponder() //Doesn't work
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -520,7 +263,7 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
         let main_string = "Save"
         let string_to_color = "Save"
         let range = (main_string as NSString).range(of: string_to_color)
-        if pinMediaImageArray.count < 1 {
+        if pinType == "media" && pinMediaImageArray.count < 1 || textViewUpdateComment.text.characters.count < 1{
             self.buttonSave.isEnabled = false
             let attribute = NSMutableAttributedString.init(string: main_string)
             attribute.addAttributes([NSForegroundColorAttributeName: UIColor.faeAppDisabledRedColor(), NSKernAttributeName: CGFloat(-0.46)], range: range)
@@ -531,118 +274,6 @@ class EditCommentPinViewController: UIViewController, UITextViewDelegate, Create
             attribute.addAttributes([NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSKernAttributeName: CGFloat(-0.46)], range: range)
             self.buttonSave.setAttributedTitle(attribute, for: .normal)
         }
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        if textView == textViewUpdateComment {
-            let spacing = CharacterSet.whitespacesAndNewlines
-            print(textViewUpdateComment.text)
-            if textViewUpdateComment.text.trimmingCharacters(in: spacing).isEmpty == false {
-                buttonSave.isEnabled = true
-                labelTextViewPlaceholder.isHidden = true
-            }else {
-                buttonSave.isEnabled = false
-                labelTextViewPlaceholder.isHidden = false
-            }
-            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-            var numlineOnDevice = 3
-            if screenWidth == 375 {
-                numlineOnDevice = 4
-            }
-            else if screenWidth == 414 {
-                numlineOnDevice = 7
-            }
-            if numLines <= numlineOnDevice {
-                let fixedWidth = textView.frame.size.width
-                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                var newFrame = textView.frame
-                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-                textView.frame = newFrame
-                textView.isScrollEnabled = false
-            }
-            else if numLines > numlineOnDevice {
-                textView.isScrollEnabled = true
-            }
-            inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
-        }
         
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
-        if isShowingEmoji == true {
-            isShowingEmoji = false
-            UIView.animate(withDuration: 0.3, animations: {
-                self.emojiView.frame.origin.y = self.screenHeight
-            }, completion: { (Completed) in
-                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
-            })
-            self.textViewUpdateComment.becomeFirstResponder()
-        }
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView == textViewUpdateComment {
-            if (text == "\n")  {
-                textViewUpdateComment.resignFirstResponder()
-                return false
-            }
-            let countChars = textView.text.characters.count + (text.characters.count - range.length)
-            return countChars <= 200
-        }
-        return true
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pinMediaImageArray.count+1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinMedia", for: indexPath) as! EditPinCollectionViewCell
-        if indexPath.row == 0 {
-            cell.media.image = #imageLiteral(resourceName: "AddMoreImage")
-            cell.buttonCancel.isHidden = true
-        }else {
-            cell.media.image = pinMediaImageArray[indexPath.row-1].image
-            cell.buttonCancel.isHidden = false
-        }
-        cell.delegate = self
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! EditPinCollectionViewCell
-        if indexPath.row == 0 {
-            pickMedia()
-        }else {
-            let image = cell.media.image
-            let photos = IDMPhoto.photos(withImages: [image!])
-            let browser = IDMPhotoBrowser(photos: photos)
-            self.present(browser!, animated: true, completion: nil)
-        }
-    }
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        let newAddedImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
-        newAddedImage.image = image
-        self.pinMediaImageArray.append(newAddedImage)
-        self.newAddedImageArray.append(image)
-        loadIndicator()
-        checkButtonState()
-        uploadFile(image: newAddedImageArray[0], count: 0, total: 1)
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func sendImages(_ images: [UIImage]) {
-        newAddedImageArray.removeAll()
-        for image in images {
-            let newAddedView = UIImageView(frame: CGRect(x: 0, y: 0, width: 95, height: 95))
-            newAddedView.image = image
-            pinMediaImageArray.append(newAddedView)
-            newAddedImageArray.append(image)
-        }
-        if images.count > 0 {
-            loadIndicator()
-            uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
-            checkButtonState()
-        }
     }
 }

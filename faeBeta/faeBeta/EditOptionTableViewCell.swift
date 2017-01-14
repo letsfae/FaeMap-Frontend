@@ -19,6 +19,7 @@ class EditOptionTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadCellContent()
+        self.selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,11 +54,19 @@ class EditOptionTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("V:|-21-[v0(16)]", options: [], views: imageRight02)
         
         labelRight = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 25))
-        labelRight.isHidden = true
         labelRight.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         labelRight.textColor = UIColor(red: 182/255, green: 182/255, blue: 182/255, alpha: 1)
         self.addSubview(labelRight)
         self.addConstraintsWithFormat("H:[v0]-0-|", options: [], views: labelRight)
         self.addConstraintsWithFormat("V:|-18-[v0(25)]", options: [], views: labelRight)
+    }
+    func setup(middleText: String?, trailingText: String?, trailingImagePlus: Bool?) {
+        labelMiddle.text = middleText
+        labelRight.text = trailingText
+        if trailingImagePlus == true {
+            imageRight02.isHidden = false
+        }else if trailingImagePlus == false{
+            imageRight01.isHidden = false
+        }
     }
 }

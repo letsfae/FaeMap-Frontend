@@ -82,7 +82,7 @@ class CreatePinInputToolbar: UIView {
             switch newValue {
             case .emoji:
                 buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
-                buttonOpenFaceGesPanel.setTitle("", for: UIControlState())
+                buttonOpenFaceGesPanel.setAttributedTitle(NSAttributedString(), for: UIControlState())
                 break
             case .tag:
                 buttonOpenFaceGesPanel.setAttributedTitle(
@@ -156,7 +156,6 @@ class CreatePinInputToolbar: UIView {
     
     func emojiButtonTapped(_ sender: UIButton)
     {
-        print("emoji is tapped")
         self.delegate?.inputToolbarEmojiButtonTapped(inputToolbar:self)
     }
     

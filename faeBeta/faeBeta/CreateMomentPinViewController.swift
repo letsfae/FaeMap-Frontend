@@ -59,10 +59,16 @@ class CreateMomentPinViewController: UIViewController {
     var labelMediaPinMoreOptions: UILabel! // Title of Media pin options when creating
     var labelMediaPinAddDes: UILabel! // Title of Media pin options when creating
     var buttonAnonymous: UIButton!
+    // MARK: -- MoreOption Table
+    var tableMoreOptions: CreatePinOptionsTableView!
+    enum CreatePinViewOptions {
+        case moreOptionsTable
+        case addTags
+    }
+    // MARK: -- Add Tags
+    var textAddTags: CreatePinAddTagsTextView!
+    var currentView: CreatePinViewOptions = .moreOptionsTable
     
-    var uiviewDuration: UIView!
-    var uiviewInterRadius: UIView!
-    var uiviewPinPromot: UIView!
     var imagePicker: UIImagePickerController!
     var buttonBack: UIButton!
     var selectedMediaArray = [UIImage]()

@@ -175,6 +175,7 @@ extension CreateMomentPinViewController {
         inputToolbar.delegate = self
         self.view.addSubview(inputToolbar)
         inputToolbar.alpha = 0
+        inputToolbar.mode = .emoji
         self.view.layoutIfNeeded()
     }
     
@@ -281,116 +282,12 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(labelMediaPinMoreOptions)
         labelMediaPinMoreOptions.alpha = 0.0
         
-        // Duration Select
-        uiviewDuration = UIView()
-        uiviewCreateMediaPin.addSubview(uiviewDuration)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(295)]", options: [], views: uiviewDuration)
-        uiviewCreateMediaPin.addConstraintsWithFormat("V:|-197-[v0(29)]", options: [], views: uiviewDuration)
-        NSLayoutConstraint(item: uiviewDuration, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        uiviewDuration.alpha = 0.0
-        
-        let imageDuration_1 = UIImageView()
-        imageDuration_1.image = UIImage(named: "durationIcon")
-        uiviewDuration.addSubview(imageDuration_1)
-        uiviewDuration.addConstraintsWithFormat("H:|-0-[v0(29)]", options: [], views: imageDuration_1)
-        uiviewDuration.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageDuration_1)
-        
-        let labelDuration_2 = UILabel()
-        labelDuration_2.text = "3HR"
-        labelDuration_2.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        labelDuration_2.textAlignment = .right
-        labelDuration_2.textColor = UIColor.white
-        uiviewDuration.addSubview(labelDuration_2)
-        uiviewDuration.addConstraintsWithFormat("H:[v0(72)]-0-|", options: [], views: labelDuration_2)
-        uiviewDuration.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelDuration_2)
-        
-        let labelDurationContent = UILabel()
-        labelDurationContent.text = "Duration on Map"
-        labelDurationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelDurationContent.textAlignment = .left
-        labelDurationContent.textColor = UIColor.white
-        uiviewDuration.addSubview(labelDurationContent)
-        uiviewDuration.addConstraintsWithFormat("H:|-44-[v0(209)]", options: [], views: labelDurationContent)
-        uiviewDuration.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelDurationContent)
-        
-        let buttonDuration = UIButton()
-        uiviewDuration.addSubview(buttonDuration)
-        uiviewDuration.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonDuration)
-        uiviewDuration.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonDuration)
-        
-        // Interaction Radius change
-        uiviewInterRadius = UIView()
-        uiviewCreateMediaPin.addSubview(uiviewInterRadius)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(295)]", options: [], views: uiviewInterRadius)
-        uiviewCreateMediaPin.addConstraintsWithFormat("V:|-256-[v0(29)]", options: [], views: uiviewInterRadius)
-        NSLayoutConstraint(item: uiviewInterRadius, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        uiviewInterRadius.alpha = 0.0
-        
-        let imageInterRadius_1 = UIImageView()
-        imageInterRadius_1.image = UIImage(named: "radiusIcon")
-        uiviewInterRadius.addSubview(imageInterRadius_1)
-        uiviewInterRadius.addConstraintsWithFormat("H:|-0-[v0(29)]", options: [], views: imageInterRadius_1)
-        uiviewInterRadius.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imageInterRadius_1)
-        
-        let labelInterRadius_2 = UILabel()
-        labelInterRadius_2.text = "C.S"
-        labelInterRadius_2.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        labelInterRadius_2.textAlignment = .right
-        labelInterRadius_2.textColor = UIColor.white
-        uiviewInterRadius.addSubview(labelInterRadius_2)
-        uiviewInterRadius.addConstraintsWithFormat("H:[v0(72)]-0-|", options: [], views: labelInterRadius_2)
-        uiviewInterRadius.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelInterRadius_2)
-        
-        let labelInterRadiusContent = UILabel()
-        labelInterRadiusContent.text = "Interaction Radius"
-        labelInterRadiusContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelInterRadiusContent.textAlignment = .left
-        labelInterRadiusContent.textColor = UIColor.white
-        uiviewInterRadius.addSubview(labelInterRadiusContent)
-        uiviewInterRadius.addConstraintsWithFormat("H:|-44-[v0(209)]", options: [], views: labelInterRadiusContent)
-        uiviewInterRadius.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelInterRadiusContent)
-        
-        let buttonInterRaidus = UIButton()
-        uiviewInterRadius.addSubview(buttonInterRaidus)
-        uiviewInterRadius.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonInterRaidus)
-        uiviewInterRadius.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonInterRaidus)
-        
-        // Pin Promotions
-        uiviewPinPromot = UIView()
-        uiviewCreateMediaPin.addSubview(uiviewPinPromot)
-        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(295)]", options: [], views: uiviewPinPromot)
-        uiviewCreateMediaPin.addConstraintsWithFormat("V:|-315-[v0(29)]", options: [], views: uiviewPinPromot)
-        NSLayoutConstraint(item: uiviewPinPromot, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateMediaPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        uiviewPinPromot.alpha = 0.0
-        
-        let imagePinPromot_1 = UIImageView()
-        imagePinPromot_1.image = UIImage(named: "promotionIcon")
-        uiviewPinPromot.addSubview(imagePinPromot_1)
-        uiviewPinPromot.addConstraintsWithFormat("H:|-0-[v0(29)]", options: [], views: imagePinPromot_1)
-        uiviewPinPromot.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: imagePinPromot_1)
-        
-        let labelPinPromot_2 = UILabel()
-        labelPinPromot_2.text = "C.S"
-        labelPinPromot_2.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        labelPinPromot_2.textAlignment = .right
-        labelPinPromot_2.textColor = UIColor.white
-        uiviewPinPromot.addSubview(labelPinPromot_2)
-        uiviewPinPromot.addConstraintsWithFormat("H:[v0(72)]-0-|", options: [], views: labelPinPromot_2)
-        uiviewPinPromot.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelPinPromot_2)
-        
-        let labelPinPromotContent = UILabel()
-        labelPinPromotContent.text = "Interaction Radius"
-        labelPinPromotContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelPinPromotContent.textAlignment = .left
-        labelPinPromotContent.textColor = UIColor.white
-        uiviewPinPromot.addSubview(labelPinPromotContent)
-        uiviewPinPromot.addConstraintsWithFormat("H:|-44-[v0(209)]", options: [], views: labelPinPromotContent)
-        uiviewPinPromot.addConstraintsWithFormat("V:|-3-[v0(25)]", options: [], views: labelPinPromotContent)
-        
-        let buttonPinPromot = UIButton()
-        uiviewPinPromot.addSubview(buttonPinPromot)
-        uiviewPinPromot.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonPinPromot)
-        uiviewPinPromot.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonPinPromot)
+        //More Option Table View
+        tableMoreOptions = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
+        self.view.addSubview(tableMoreOptions)
+        tableMoreOptions.delegate = self
+        tableMoreOptions.dataSource = self
+        tableMoreOptions.alpha = 0
         
         // Button Back
         buttonBack = UIButton()

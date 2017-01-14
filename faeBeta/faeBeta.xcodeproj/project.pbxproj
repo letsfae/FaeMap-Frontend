@@ -17,7 +17,11 @@
 		853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */; };
 		853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */; };
 		853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */; };
-		853F27801E26C3CF00DD80DF /* CMPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */; };
+		853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */; };
+		853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27811E26FDB900DD80DF /* ECPLoadItems.swift */; };
+		853F27861E26FE5200DD80DF /* ECPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27851E26FE5200DD80DF /* ECPActions.swift */; };
+		853F27881E26FEC300DD80DF /* ECPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */; };
+		853F278A1E2848C400DD80DF /* CMPTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27891E2848C400DD80DF /* CMPTableViewDelegate.swift */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
@@ -289,7 +293,11 @@
 		853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionHandleDelegate.swift; sourceTree = "<group>"; };
 		853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionTableViewCell.swift; sourceTree = "<group>"; };
 		853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPToolBarDelegate.swift; sourceTree = "<group>"; };
-		853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPToolBarDelegate.swift; sourceTree = "<group>"; };
+		853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPHandleDelegate.swift; sourceTree = "<group>"; };
+		853F27811E26FDB900DD80DF /* ECPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPLoadItems.swift; sourceTree = "<group>"; };
+		853F27851E26FE5200DD80DF /* ECPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPActions.swift; sourceTree = "<group>"; };
+		853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPHandleDelegate.swift; sourceTree = "<group>"; };
+		853F27891E2848C400DD80DF /* CMPTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTableViewDelegate.swift; sourceTree = "<group>"; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
 		86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesComposerTextViewCustom.m; sourceTree = "<group>"; };
@@ -653,6 +661,16 @@
 				853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */,
 			);
 			name = EditOptionsExtension;
+			sourceTree = "<group>";
+		};
+		853F27831E26FDC400DD80DF /* ECPExtension */ = {
+			isa = PBXGroup;
+			children = (
+				853F27811E26FDB900DD80DF /* ECPLoadItems.swift */,
+				853F27851E26FE5200DD80DF /* ECPActions.swift */,
+				853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */,
+			);
+			name = ECPExtension;
 			sourceTree = "<group>";
 		};
 		B00EC3EC1D2F539000AD9673 /* FAE cell */ = {
@@ -1128,12 +1146,13 @@
 			isa = PBXGroup;
 			children = (
 				B84C90C61DE7DBF6005B6F38 /* CMPLoadItems.swift */,
-				853F277F1E26C3CF00DD80DF /* CMPToolBarDelegate.swift */,
+				853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */,
 				B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */,
 				B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */,
 				B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */,
 				B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */,
 				B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */,
+				853F27891E2848C400DD80DF /* CMPTableViewDelegate.swift */,
 				B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */,
 			);
 			name = CMPExtension;
@@ -1207,6 +1226,7 @@
 			isa = PBXGroup;
 			children = (
 				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
+				853F27831E26FDC400DD80DF /* ECPExtension */,
 				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
 				853F27701E23180D00DD80DF /* EditOptions */,
 			);
@@ -1579,6 +1599,7 @@
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
 				B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */,
+				853F27881E26FEC300DD80DF /* ECPHandleDelegate.swift in Sources */,
 				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
@@ -1601,7 +1622,7 @@
 				B8612E3B1DF24CF90092C606 /* PDHandleDelegateFuncs.swift in Sources */,
 				B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */,
 				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
-				853F27801E26C3CF00DD80DF /* CMPToolBarDelegate.swift in Sources */,
+				853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */,
 				853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */,
 				DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */,
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
@@ -1622,6 +1643,7 @@
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
+				853F27861E26FE5200DD80DF /* ECPActions.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */,
@@ -1689,6 +1711,7 @@
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				853F278A1E2848C400DD80DF /* CMPTableViewDelegate.swift in Sources */,
 				B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
@@ -1703,6 +1726,7 @@
 				B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
+				853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */,
 				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import GoogleMaps
 
 class EditMoreOptionsViewController: UIViewController {
     
@@ -29,6 +29,10 @@ class EditMoreOptionsViewController: UIViewController {
     var uiviewLine: UIView!
     var uiviewLineBottom: UIView!
     var labelFooter: UILabel!
+    
+    // Google Map
+    var geoCode: CLGeocoder!
+    var currentLocation: CLLocation!
     
     //Data Structure
     var optionImageArray: [Int] = []

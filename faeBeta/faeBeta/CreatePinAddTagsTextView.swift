@@ -35,7 +35,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
     // abstract the user's input from textView add call appendNewTags()
     func addLastInputTag()
     {
-        
+
         // Find out every thing except the tag attachment
         var str = String(self.text.characters.filter() { $0 <= "~" })
         str = str.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)

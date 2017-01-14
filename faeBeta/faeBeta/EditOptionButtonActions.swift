@@ -37,4 +37,15 @@ extension EditMoreOptionsViewController {
             }
         }
     }
+    func actionSelectLocation() {
+        let selectLocationVC = SelectLocationViewController()
+        selectLocationVC.modalPresentationStyle = .overCurrentContext
+        selectLocationVC.delegate = self
+        if pinType == "media"{
+            selectLocationVC.pinType = "moment"
+        }else {
+            selectLocationVC.pinType = pinType
+        }
+        self.present(selectLocationVC, animated: false, completion: nil)
+    }
 }

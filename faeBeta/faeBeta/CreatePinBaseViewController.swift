@@ -254,7 +254,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     
     func keyboardWillShow(_ notification:Notification)
     {
-        
+
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
