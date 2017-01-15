@@ -1,5 +1,5 @@
 //
-//  MPDTableViewCtrlFile.swift
+//  PDTableViewCtrlFile.swift
 //  faeBeta
 //
 //  Created by Yue on 12/2/16.
@@ -27,10 +27,10 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableCommentsForPin {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "commentPinCommentsCell", for: indexPath) as! PinCommentsCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             cell.delegate = self
             cell.pinID = pinIDPinDetailView
-            cell.pinType = "media"
+            cell.pinType = "\(self.pinTypeEnum)"
             let dictCell = JSON(dictCommentsOnPinDetail[indexPath.row])
             if let pinCommentID = dictCell["pin_comment_id"].int {
                 print("[tableCommentsForPin] pinComment: \(pinCommentID)")

@@ -71,8 +71,7 @@ class CreatePinInputToolbar: UIView {
             }
         }
     }
-    private var _mode: CreatePinInputToolbarMode = .emoji
-    // can be either emoji mode or tag mode. The button image and function will be different
+    
     var mode: CreatePinInputToolbarMode {
         get{
             return _mode
@@ -82,7 +81,7 @@ class CreatePinInputToolbar: UIView {
             switch newValue {
             case .emoji:
                 buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
-                buttonOpenFaceGesPanel.setTitle("", for: UIControlState())
+                buttonOpenFaceGesPanel.setAttributedTitle(NSAttributedString(), for: UIControlState())
                 break
             case .tag:
                 buttonOpenFaceGesPanel.setAttributedTitle(
@@ -123,7 +122,6 @@ class CreatePinInputToolbar: UIView {
         self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: darkBackgroundView)
         self.addConstraintsWithFormat("V:[v0(50)]-0-|", options: [], views: darkBackgroundView)
         
-        
         buttonOpenFaceGesPanel = UIButton()
         buttonOpenFaceGesPanel.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
@@ -157,7 +155,6 @@ class CreatePinInputToolbar: UIView {
     
     func emojiButtonTapped(_ sender: UIButton)
     {
-        print("emoji is tapped")
         self.delegate?.inputToolbarEmojiButtonTapped(inputToolbar:self)
     }
     

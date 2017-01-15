@@ -1,5 +1,5 @@
 //
-//  MPDLoadItems.swift
+//  PDLoadItems.swift
 //  faeBeta
 //
 //  Created by Yue on 12/2/16.
@@ -30,7 +30,7 @@ extension PinDetailViewController {
         tableCommentsForPin.delegate = self
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
-        tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "commentPinCommentsCell")
+        tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
         tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
@@ -61,6 +61,14 @@ extension PinDetailViewController {
         //        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionPinDetailDrag(_:)))
         //        buttonPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
         
+        loadTableHeader()
+        loadAnotherToolbar()
+        loadPinCtrlButton()
+        
+        tableCommentsForPin.tableHeaderView = uiviewPinDetail
+    }
+    
+    private func loadTableHeader() {
         // Header
         uiviewPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 281))
         uiviewPinDetail.backgroundColor = UIColor.white
@@ -69,8 +77,6 @@ extension PinDetailViewController {
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         uiviewPinDetail.addGestureRecognizer(tapToDismissKeyboard)
         
-        
-        // ----
         // Textview width based on different resolutions
         var textViewWidth: CGFloat = 0
         if screenWidth == 414 { // 5.5
@@ -92,18 +98,24 @@ extension PinDetailViewController {
         textviewPinDetail.isUserInteractionEnabled = true
         textviewPinDetail.isEditable = false
         textviewPinDetail.isScrollEnabled = true
-        textviewPinDetail.textContainerInset = UIEdgeInsets.zero
+        textviewPinDetail.textContainerInset = .zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
-        textviewPinDetail.isHidden = true
+        if pinTypeEnum == .media {
+            textviewPinDetail.isHidden = true
+        }
         uiviewPinDetail.addSubview(textviewPinDetail)
         
-        scrollViewMedia = UIScrollView(frame: CGRect(x: 15, y: 80, width: screenWidth-15, height: 95))
+        scrollViewMedia = UIScrollView(frame: CGRect(x: 0, y: 80, width: screenWidth, height: 95))
         scrollViewMedia.delegate = self
         scrollViewMedia.contentSize = CGSize(width: screenWidth-15, height: 95)
         scrollViewMedia.isScrollEnabled = true
         scrollViewMedia.backgroundColor = UIColor.clear
         scrollViewMedia.showsHorizontalScrollIndicator = false
         uiviewPinDetail.addSubview(scrollViewMedia)
+        var insets = scrollViewMedia.contentInset
+        insets.left = 15
+        insets.right = 15
+        scrollViewMedia.contentInset = insets
         
         // ----
         // Main buttons' container of pin detail
@@ -267,11 +279,6 @@ extension PinDetailViewController {
         NSLayoutConstraint(item: imageViewSaved, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         imageViewSaved.layer.zPosition = 104
         imageViewSaved.alpha = 0.0
-        
-        loadAnotherToolbar()
-        loadPinCtrlButton()
-        
-        tableCommentsForPin.tableHeaderView = uiviewPinDetail
     }
     
     private func loadNavigationBar() {
@@ -314,7 +321,7 @@ extension PinDetailViewController {
         
         // Label of Title
         labelPinTitle = UILabel()
-        labelPinTitle.text = "Moment"
+        labelPinTitle.text = pinDetailTitle
         labelPinTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelPinTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         labelPinTitle.textAlignment = .center
@@ -404,7 +411,7 @@ extension PinDetailViewController {
     
     func loadPinCtrlButton() {
         pinIcon = UIImageView(frame: CGRect(x: 185, y: 477, width: 60, height: 80))
-        pinIcon.image = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
+        pinIcon.image = pinIconHeavyShadow
         pinIcon.contentMode = .scaleAspectFit
         pinIcon.center.x = screenWidth/2
         pinIcon.center.y = 510

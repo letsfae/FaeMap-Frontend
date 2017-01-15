@@ -1,5 +1,5 @@
 //
-//  MPDLoadMedias.swift
+//  PDLoadMedias.swift
 //  faeBeta
 //
 //  Created by Yue on 12/13/16.
@@ -15,6 +15,9 @@ import IDMPhotoBrowser
 extension PinDetailViewController {
     func loadMedias() {
         imageViewMediaArray.removeAll()
+        for subview in scrollViewMedia.subviews {
+            subview.removeFromSuperview()
+        }
         for index in 0...fileIdArray.count-1 {
             let imageView = UIImageView(frame: CGRect(x: 105*index, y: 0, width: 95, height: 95))
             imageView.contentMode = .scaleAspectFill
@@ -78,8 +81,11 @@ extension PinDetailViewController {
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
         }
-        UIView.animate(withDuration: 0.583) { 
-            self.scrollViewMedia.frame.origin.x = CGFloat(inset)
+        UIView.animate(withDuration: 0.583) {
+            var insets = self.scrollViewMedia.contentInset
+            insets.left = CGFloat(inset)
+            insets.right = CGFloat(inset)
+            self.scrollViewMedia.contentInset = insets
         }
         self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width+space) - space), height: CGFloat(width))
     }

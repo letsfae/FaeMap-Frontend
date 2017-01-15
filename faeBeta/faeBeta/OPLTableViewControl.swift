@@ -35,17 +35,18 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
             let pinType = pinInfo.components(separatedBy: "%")[0]
             let pinID = pinInfo.components(separatedBy: "%")[1]
             cell.pinID = pinID
-            cell.pinType = pinType
             cell.indexPathInCell = indexPath
-            let getCommentById = FaeMap()
-            // Bug: Currently, just comment
-            getCommentById.getPin(type: pinType, pinId: pinID) {(status: Int, message: Any?) in
+            let getPinById = FaeMap()
+            getPinById.getPin(type: pinType, pinId: pinID) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
                 if pinType == "comment"{
+                    cell.pinType = .comment
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinComment")
                 } else if pinType == "media" {
+                    cell.pinType = .media
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinMoment")
                 } else if pinType == "chat_room" {
+                    cell.pinType = .chat_room
                     cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinChat")
                 }
                 print("[OpenedPinListViewController tableView] json = \(pinInfoJSON), pinType = \(pinType), pinID = \(pinID)")

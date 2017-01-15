@@ -227,10 +227,11 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     }
                 
                 self.markerBackFromPinDetail = marker
+                let pinDetailVC = PinDetailViewController()
                 if type == "media" {
+                    pinDetailVC.pinTypeEnum = .media
                     timerUpdateSelfLocation.invalidate()
                     self.clearMap(type: "user")
-                    let pinDetailVC = PinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
@@ -241,9 +242,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     })
                 }
                 else if type == "comment" {
+                    pinDetailVC.pinTypeEnum = .comment
                     timerUpdateSelfLocation.invalidate()
                     self.clearMap(type: "user")
-                    let pinDetailVC = CommentPinDetailViewController()
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                     pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
@@ -253,6 +254,33 @@ extension FaeMapViewController: GMSMapViewDelegate {
                         self.canOpenAnotherPin = true
                     })
                 }
+                
+//                if type == "media" {
+//                    timerUpdateSelfLocation.invalidate()
+//                    self.clearMap(type: "user")
+//                    let pinDetailVC = PinDetailViewController()
+//                    pinDetailVC.modalPresentationStyle = .overCurrentContext
+//                    pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
+//                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+//                    pinDetailVC.animated = true
+//                    pinDetailVC.delegate = self
+//                    self.present(pinDetailVC, animated: false, completion: {
+//                        self.canOpenAnotherPin = true
+//                    })
+//                }
+//                else if type == "comment" {
+//                    timerUpdateSelfLocation.invalidate()
+//                    self.clearMap(type: "user")
+//                    let pinDetailVC = CommentPinDetailViewController()
+//                    pinDetailVC.modalPresentationStyle = .overCurrentContext
+//                    pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
+//                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+//                    pinDetailVC.animated = true
+//                    pinDetailVC.delegate = self
+//                    self.present(pinDetailVC, animated: false, completion: {
+//                        self.canOpenAnotherPin = true
+//                    })
+//                }
                 return true
             }
             else if type.contains("chat"){

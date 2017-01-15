@@ -15,6 +15,19 @@ extension CreateMomentPinViewController: UITextViewDelegate {
         textViewForMediaPin.resignFirstResponder()
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
+        if isShowingEmoji == true {
+            isShowingEmoji = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.emojiView.frame.origin.y = screenHeight
+            }, completion: { (Completed) in
+                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
+            })
+            self.textViewForMediaPin.becomeFirstResponder()
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         if textView == textViewForMediaPin {
             let spacing = CharacterSet.whitespacesAndNewlines 
@@ -50,6 +63,7 @@ extension CreateMomentPinViewController: UITextViewDelegate {
             else if numLines > numlineOnDevice {
                 textView.isScrollEnabled = true
             }
+            inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count) //This changes the number showed in labelCountChar
         }
     }
     
@@ -60,9 +74,6 @@ extension CreateMomentPinViewController: UITextViewDelegate {
                 return false
             }
             let countChars = textView.text.characters.count + (text.characters.count - range.length)
-            if countChars <= 200 {
-                self.labelCountChars.text = "\(200-countChars)"
-            }
             return countChars <= 200
         }
         return true

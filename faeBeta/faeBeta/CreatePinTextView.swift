@@ -100,7 +100,7 @@ class CreatePinTextView: UITextView, UITextViewDelegate {
         self.observerDelegate?.textView(self, numberOfCharactersEntered: textView.text.characters.count)
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool //Example: range of text(which is 3) needs to be changed by replaecmentText (which is 10 length), if textView.length is 194, then we do not replace the text, because 194+10-3>200
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
         if (text == "\n")  {
             self.resignFirstResponder()

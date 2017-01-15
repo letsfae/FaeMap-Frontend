@@ -147,8 +147,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
         let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+//        let notificationCenter = NotificationCenter.default
+//        notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         didLoadFirstLoad = true
         updateSelfInfo()
     }
@@ -190,18 +190,18 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // Testing back from background
     func appBackFromBackground() {
-        print("App back from background!")
         checkLocationEnablibity()
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        self.renewSelfLocation()
-        if userStatus != 5  {
-            print("[appBackFromBackground] testing delay")
-            loadPositionAnimateImage()
-            getSelfAccountInfo()
+        if faeMapView != nil {
+            let currentZoomLevel = faeMapView.camera.zoom
+            let powFactor: Double = Double(21 - currentZoomLevel)
+            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+            self.renewSelfLocation()
+            if userStatus != 5  {
+                loadPositionAnimateImage()
+                getSelfAccountInfo()
+            }
         }
     }
     

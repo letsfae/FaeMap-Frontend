@@ -12,6 +12,7 @@ import SwiftyJSON
 
 extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
+    /*
     // Pan gesture for dragging comment pin list dragging button
     func panActionCommentPinListDrag(_ pan: UIPanGestureRecognizer) {
         var resumeTime:Double = 0.583
@@ -62,6 +63,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
             }
         }
     }
+    */
     
     // When clicking dragging button in opened pin list window
     func actionDraggingThisList(_ sender: UIButton) {
@@ -100,30 +102,10 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: {
-                    /**
-                     * the first arg "false" means, back directly to map, however,
-                     * this action should via comment pin detail view,
-                     * it looks a direct transition, but in fact, it is not
-                    **/
                     self.delegate?.directlyReturnToMap()
                 })
             }
         })
-    }
-    
-    // Back to comment pin detail window when in pin list window
-    func actionBackToCommentDetail(_ sender: UIButton!) {
-        if backJustOnce == true {
-            backJustOnce = false
-            self.delegate?.backFromOpenedPinList(pinType: "", pinID: "")
-            UIView.animate(withDuration: 0.583, animations: ({
-                self.subviewTable.center.y -= screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    self.dismiss(animated: false, completion: nil)
-                }
-            })
-        }
     }
     
     // Reset comment pin list window and remove all saved data
@@ -135,7 +117,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
         self.dismiss(animated: false, completion: {
             self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID, pinType: pinType)
         })

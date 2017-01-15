@@ -15,6 +15,19 @@ extension CreateCommentPinViewController: UITextViewDelegate {
         textViewForCommentPin.resignFirstResponder()
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count)
+        if isShowingEmoji == true {
+            isShowingEmoji = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.emojiView.frame.origin.y = screenHeight
+            }, completion: { (Completed) in
+                self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGesture_filled"), for: UIControlState())
+            })
+            self.textViewForCommentPin.becomeFirstResponder()
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         if textView == textViewForCommentPin {
             let spacing = CharacterSet.whitespacesAndNewlines
@@ -51,6 +64,7 @@ extension CreateCommentPinViewController: UITextViewDelegate {
             else if numLines > numlineOnDevice {
                 textView.isScrollEnabled = true
             }
+            inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count) //This changes the number showed in labelCountChar
         }
     }
     
@@ -61,9 +75,6 @@ extension CreateCommentPinViewController: UITextViewDelegate {
                 return false
             }
             let countChars = textView.text.characters.count + (text.characters.count - range.length)
-            if countChars <= 200 {
-                self.labelCountChars.text = "\(200-countChars)"
-            }
             return countChars <= 200
         }
         return true

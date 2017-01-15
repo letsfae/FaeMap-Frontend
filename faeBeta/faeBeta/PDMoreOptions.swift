@@ -1,5 +1,5 @@
 //
-//  MPDMoreOptions.swift
+//  PDMoreOptions.swift
 //  faeBeta
 //
 //  Created by Yue on 12/23/16.
@@ -23,7 +23,7 @@ extension PinDetailViewController {
             buttonFakeTransparentClosingView.layer.zPosition = 110
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
-                                                       action: #selector(CommentPinDetailViewController.actionToCloseOtherViews(_:)),
+                                                       action: #selector(self.actionToCloseOtherViews(_:)),
                                                        for: .touchUpInside)
             let subviewXBefore: CGFloat = 400 / 414 * screenWidth
             let subviewYBefore: CGFloat = 57 / 414 * screenWidth
@@ -157,12 +157,16 @@ extension PinDetailViewController {
         if pinIdSentBySegue == "-999" {
             return
         }
-//        let editCommentPinVC = EditCommentPinViewController()
-//        editCommentPinVC.delegate = self
-//        editCommentPinVC.previousCommentContent = textviewCommentPinDetail.text
-//        editCommentPinVC.pinID = "\(pinIdSentBySegue)"
-//        editCommentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
-//        self.present(editCommentPinVC, animated: true, completion: nil)
+        let editMomentPinVC = EditCommentPinViewController()
+        editMomentPinVC.delegate = self
+        editMomentPinVC.previousCommentContent = textviewPinDetail.text
+        editMomentPinVC.pinID = "\(pinIdSentBySegue)"
+        editMomentPinVC.pinMediaImageArray = imageViewMediaArray
+        editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
+        editMomentPinVC.editPinMode = self.pinTypeEnum
+        editMomentPinVC.pinType = "\(self.pinTypeEnum)"
+        editMomentPinVC.mediaIdArray = fileIdArray
+        self.present(editMomentPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
     
@@ -178,7 +182,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "media", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete comment")
                     self.actionBackToMap(self.buttonPinBackToMap)
@@ -202,10 +206,10 @@ extension PinDetailViewController {
     func actionSaveThisPin(_ sender: UIButton) {
         if pinIDPinDetailView != "-999" {
             if isSavedByMe {
-                self.unsaveThisPin("media", pinID: pinIDPinDetailView)
+                self.unsaveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
             }
             else {
-                self.saveThisPin("media", pinID: pinIDPinDetailView)
+                self.saveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
             }
         }
         actionToCloseOtherViews(buttonFakeTransparentClosingView)

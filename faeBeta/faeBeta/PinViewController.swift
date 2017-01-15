@@ -18,8 +18,6 @@ protocol PinDetailDelegate: class {
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Animate the selected marker
     func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
-    // Open pin detail view controller with type
-    func openPinDetailView(withType: String, pinID: String, coordinate: CLLocationCoordinate2D)
 }
 
 class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
@@ -136,20 +134,15 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var scrollViewMedia: UIScrollView! // container to display pin's media
     var fileIdArray = [Int]()
     var imageViewMediaArray = [UIImageView]()
+    //Change by Yao, abandon fileIdString
     
     enum MediaMode {
         case small
         case large
     }
     var mediaMode: MediaMode = .small
-    
-    enum Direction {
-        case left
-        case right
-    }
-    var direction: Direction = .left
+
     var lastContentOffset: CGFloat = 0
-    var beforeScrollingOffset: CGFloat = 0
     
     var isSavedByMe = false
     enum PinType {
@@ -158,13 +151,36 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case chat_room
     }
     var pinType = "moment"
+    var pinTypeEnum: PinType = .media
     var pinTypeString = ""
     var animated = false
+    var textViewOriginalHeight: CGFloat = 0 {
+        didSet {
+            if textviewPinDetail != nil {
+                self.textviewPinDetail.frame.size.height = textViewOriginalHeight
+            }
+        }
+    }
+    var pinDetailTitle = "Moment" {
+        didSet {
+            if labelPinTitle != nil {
+                self.labelPinTitle.text = pinDetailTitle
+            }
+        }
+    }
+    var pinIconHeavyShadow: UIImage = #imageLiteral(resourceName: "markerMomentPinHeavyShadow") {
+        didSet {
+            if pinIcon != nil {
+                self.pinIcon.image = pinIconHeavyShadow
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
+        initPinBasicInfo()
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
         pinIDPinDetailView = pinIdSentBySegue
@@ -215,10 +231,41 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         super.didReceiveMemoryWarning()
     }
     
+    func initPinBasicInfo() {
+        switch pinTypeEnum {
+        case .comment:
+            pinDetailTitle = "Comment"
+            pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
+            textViewOriginalHeight = 100
+            if scrollViewMedia != nil {
+                scrollViewMedia.isHidden = true
+                
+            }
+            if textviewPinDetail != nil {
+                textviewPinDetail.isHidden = false
+            }
+            break
+        case .media:
+            pinDetailTitle = "Moment"
+            pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
+            textViewOriginalHeight = 0
+            if scrollViewMedia != nil {
+                scrollViewMedia.isHidden = false
+            }
+            if textviewPinDetail != nil {
+                textviewPinDetail.isHidden = true
+            }
+            break
+        case .chat_room:
+            pinDetailTitle = "Chat"
+            break
+        }
+    }
+    
     func getSeveralInfo() {
-        getPinAttributeNum("media", pinID: pinIDPinDetailView)
+        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
         getPinInfo()
-        getPinComments("media", pinID: pinIDPinDetailView, sendMessageFlag: false)
+        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func loadTransparentButtonBackToMap() {
@@ -571,7 +618,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     // MARK: - send messages
     func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
         if let realText = text {
-            commentThisPin("media", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
+            commentThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
         self.replyToUser = ""
         self.inputToolbar.contentView.textView.text = ""

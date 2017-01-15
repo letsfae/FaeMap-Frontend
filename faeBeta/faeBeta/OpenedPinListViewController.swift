@@ -12,11 +12,10 @@ import CoreLocation
 import SDWebImage
 
 protocol OpenedPinListViewControllerDelegate {
+    // Directly back to main map
     func directlyReturnToMap()
-    // Back to pin detail view
-    func backFromOpenedPinList(pinType: String, pinID: String)
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: String)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType)
 }
 
 class OpenedPinListViewController: UIViewController {
