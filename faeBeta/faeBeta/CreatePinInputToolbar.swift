@@ -26,6 +26,8 @@ class CreatePinInputToolbar: UIView {
     var labelCountChars: UILabel!
     var darkBackgroundView: UIView!
     
+    private var _mode: CreatePinInputToolbarMode = .emoji
+    
     var maximumNumberOfCharacters: Int
     {
         get{
@@ -86,7 +88,7 @@ class CreatePinInputToolbar: UIView {
             case .tag:
                 buttonOpenFaceGesPanel.setAttributedTitle(
                     NSAttributedString(string:"Add", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!]),
-                                                          for: UIControlState())
+                    for: UIControlState())
                 buttonOpenFaceGesPanel.setImage(nil, for: UIControlState())
                 break
             }

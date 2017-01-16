@@ -90,8 +90,7 @@ extension String {
         return usernameString
     }
     
-    func stringByDeletingLastEmoji() -> String
-    {
+    func stringByDeletingLastEmoji() -> String {
         var previous = self
         var finalString = ""
         
@@ -121,4 +120,61 @@ extension String {
         }
         return finalString
     }
+    
+    func convertStringWithEmoji() -> NSMutableAttributedString {
+        var content = self
+        var emojiText = ""
+        var startIndex = 0
+        var endIndex = 0
+        var finalText = ""
+        let retString = NSMutableAttributedString()
+        
+        while true {
+            if let range = content.range(of: "[") {
+                let tmpContent = content
+                startIndex = content.distance(from: content.startIndex, to: range.lowerBound)
+                let index = content.index(content.startIndex, offsetBy: startIndex)
+                finalText = "\(finalText)\(tmpContent.substring(to: index))"
+                content = "\(tmpContent.substring(from: index))"
+                let attrStringWithString = NSAttributedString(string: "\(tmpContent.substring(to: index))", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+                retString.append(attrStringWithString)
+            }
+            if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
+                let tmpContent = content
+                emojiText = "\(content.substring(with: match))"
+                print("Target: \(emojiText)")
+                endIndex = emojiText.characters.count+2
+                let index = tmpContent.index(tmpContent.startIndex, offsetBy: endIndex)
+                content = "\(tmpContent.substring(from: index))"
+                print("  Rest: \(content)")
+                finalText = "\(finalText)\(emojiText)"
+                
+                let emojiImage = UIImage(named: "\(emojiText)")
+                let textAttachment = InlineTextAttachment()
+                textAttachment.fontDescender = -6
+                textAttachment.image = UIImage(cgImage: (emojiImage?.cgImage)!, scale: 4, orientation: .up)
+                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                retString.append(attrStringWithImage)
+            }
+            else {
+                print("  Done!")
+                break
+            }
+        }
+        finalText = finalText + content
+        return retString
+    }
+}
+
+class InlineTextAttachment: NSTextAttachment {
+    var fontDescender: CGFloat = 0
+    
+    override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+        var superRect = super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
+        
+        superRect.origin.y = fontDescender
+        
+        return superRect
+    }
+    
 }

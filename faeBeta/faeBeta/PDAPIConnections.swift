@@ -297,13 +297,13 @@ extension PinDetailViewController {
                 print("[getPinInfo] fileIDs append done!")
                 if let content = pinInfoJSON["description"].string {
                     print("[getPinInfo] description: \(content)")
-                    self.textviewPinDetail.text = "\(content)"
+                    self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
             }
             else if self.pinTypeEnum == .comment {
                 if let content = pinInfoJSON["content"].string {
                     print("[getPinInfo] description: \(content)")
-                    self.textviewPinDetail.text = "\(content)"
+                    self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
             }
             if let isLiked = pinInfoJSON["user_pin_operations"]["is_liked"].bool {
