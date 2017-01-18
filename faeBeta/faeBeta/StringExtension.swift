@@ -128,9 +128,11 @@ extension String {
         var endIndex = 0
         var finalText = ""
         let retString = NSMutableAttributedString()
+        var isProcessed = false
         
         while true {
             if let range = content.range(of: "[") {
+                isProcessed = true
                 let tmpContent = content
                 startIndex = content.distance(from: content.startIndex, to: range.lowerBound)
                 let index = content.index(content.startIndex, offsetBy: startIndex)
@@ -140,6 +142,7 @@ extension String {
                 retString.append(attrStringWithString)
             }
             if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
+                isProcessed = true
                 let tmpContent = content
                 emojiText = "\(content.substring(with: match))"
                 print("Target: \(emojiText)")
@@ -162,6 +165,10 @@ extension String {
             }
         }
         finalText = finalText + content
+        if !isProcessed {
+            let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+            retString.append(attrStringWithString)
+        }
         return retString
     }
 }

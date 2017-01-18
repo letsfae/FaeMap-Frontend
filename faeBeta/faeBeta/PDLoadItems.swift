@@ -117,6 +117,14 @@ extension PinDetailViewController {
         insets.right = 15
         scrollViewMedia.contentInset = insets
         
+        // Hot pin
+        imageViewHotPin = UIImageView()
+        imageViewHotPin.image = #imageLiteral(resourceName: "pinDetailHotPin")
+        imageViewHotPin.contentMode = .scaleAspectFill
+        uiviewPinDetail.addSubview(imageViewHotPin)
+        uiviewPinDetail.addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imageViewHotPin)
+        uiviewPinDetail.addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imageViewHotPin)
+        
         // ----
         // Main buttons' container of pin detail
         uiviewPinDetailMainButtons = UIView(frame: CGRect(x: 0, y: 190, width: screenWidth, height: 22))
@@ -321,10 +329,9 @@ extension PinDetailViewController {
         
         // Label of Title
         labelPinTitle = UILabel()
-        labelPinTitle.text = pinDetailTitle
+        labelPinTitle.text = ""
         labelPinTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelPinTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        labelPinTitle.textAlignment = .center
         subviewNavigation.addSubview(labelPinTitle)
         subviewNavigation.addConstraintsWithFormat("H:[v0(92)]", options: [], views: labelPinTitle)
         subviewNavigation.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelPinTitle)

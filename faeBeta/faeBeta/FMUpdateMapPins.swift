@@ -145,6 +145,7 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getMapUserInfo.whereKey("radius", value: "500000")
         getMapUserInfo.whereKey("type", value: "user")
+        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")

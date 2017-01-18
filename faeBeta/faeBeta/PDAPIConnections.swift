@@ -198,26 +198,24 @@ extension PinDetailViewController {
         let getPinAttr = FaePinAction()
         getPinAttr.getPinAttribute(type, pinID: pinID) {(status: Int, message: Any?) in
             let mapInfoJSON = JSON(message!)
-            
+            var likesCount = 0
+            var commentsCount = 0
             if let likes = mapInfoJSON["likes"].int {
                 self.labelPinLikeCount.text = "\(likes)"
+                likesCount = likes
             }
             if let _ = mapInfoJSON["saves"].int {
                 
             }
             if let comments = mapInfoJSON["comments"].int {
                 self.labelPinCommentsCount.text = "\(comments)"
+                commentsCount = comments
             }
-        }
-    }
-    
-    func getPinAttributeCommentsNum(_ type: String, pinID: String) {
-        let getPinAttr = FaePinAction()
-        getPinAttr.getPinAttribute(type, pinID: pinID) {(status: Int, message: Any?) in
-            let mapInfoJSON = JSON(message!)
-            if let comments = mapInfoJSON["comments"].int {
-                self.labelPinCommentsCount.text = "\(comments)"
-                self.numberOfCommentTableCells = comments
+            if likesCount >= 15 || commentsCount >= 10 {
+                self.imageViewHotPin.isHidden = false
+            }
+            else {
+                self.imageViewHotPin.isHidden = true
             }
         }
     }
@@ -297,12 +295,14 @@ extension PinDetailViewController {
                 print("[getPinInfo] fileIDs append done!")
                 if let content = pinInfoJSON["description"].string {
                     print("[getPinInfo] description: \(content)")
+                    self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
             }
             else if self.pinTypeEnum == .comment {
                 if let content = pinInfoJSON["content"].string {
                     print("[getPinInfo] description: \(content)")
+                    self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
             }

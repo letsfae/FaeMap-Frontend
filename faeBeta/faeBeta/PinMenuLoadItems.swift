@@ -66,7 +66,7 @@ extension PinMenuViewController {
          let labelCenterY_3: CGFloat = 508/736 * screenHeight
          */
         
-        labelMenuMedia   = createMenuLabel(labelCenterX_1, y: labelCenterY_1, title: "Moment")
+        labelMenuMedia   = createMenuLabel(labelCenterX_1, y: labelCenterY_1, title: "Story")
         labelMenuChats   = createMenuLabel(labelCenterX_2, y: labelCenterY_1, title: "Chats")
         labelMenuComment = createMenuLabel(labelCenterX_3, y: labelCenterY_1, title: "Comment")
         /*

@@ -159,7 +159,7 @@ extension PinDetailViewController {
         }
         let editMomentPinVC = EditCommentPinViewController()
         editMomentPinVC.delegate = self
-        editMomentPinVC.previousCommentContent = textviewPinDetail.text
+        editMomentPinVC.previousCommentContent = self.stringPlainTextViewTxt
         editMomentPinVC.pinID = "\(pinIdSentBySegue)"
         editMomentPinVC.pinMediaImageArray = imageViewMediaArray
         editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)

@@ -1515,7 +1515,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		0D0F76EB5B00D33359D98B9D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -1530,7 +1530,7 @@
 		};
 		61B62FAB0DFAF37484806F93 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -1545,7 +1545,7 @@
 		};
 		6A1F095EE025EF8EF9803912 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -1560,7 +1560,7 @@
 		};
 		9E013B9AB4EDE356EAC8DAFE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (

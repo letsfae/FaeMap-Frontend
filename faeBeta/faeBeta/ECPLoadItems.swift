@@ -36,8 +36,9 @@ extension EditCommentPinViewController {
         
         labelTitle = UILabel()
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        labelTitle.text = "Edit Comment"
+        labelTitle.text = ""
         labelTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelTitle.textAlignment = .center
         self.view.addSubview(labelTitle)
         self.view.addConstraintsWithFormat("H:[v0(133)]", options: [], views: labelTitle)
         self.view.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelTitle)

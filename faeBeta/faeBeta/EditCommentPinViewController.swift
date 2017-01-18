@@ -68,6 +68,7 @@ class EditCommentPinViewController: UIViewController {
         loadKeyboardToolBar()
         loadEmojiView()
         textViewDidChange(textViewUpdateComment)
+        initPinBasicInfo()
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -86,7 +87,19 @@ class EditCommentPinViewController: UIViewController {
         }
     }
     
-        
+    func initPinBasicInfo() {
+        switch editPinMode {
+        case .comment:
+            self.labelTitle.text = "Edit Comment"
+            break
+        case .media:
+            self.labelTitle.text = "Edit Story"
+            break
+        case .chat_room:
+            self.labelTitle.text = "Edit Chat"
+            break
+        }
+    }
         
     private func addObservers() {
         NotificationCenter.default.addObserver(self,

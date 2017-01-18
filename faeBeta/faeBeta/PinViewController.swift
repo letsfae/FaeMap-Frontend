@@ -136,6 +136,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var imageViewMediaArray = [UIImageView]()
     //Change by Yao, abandon fileIdString
     
+    var imageViewHotPin: UIImageView!
+    var stringPlainTextViewTxt = ""
+    
     enum MediaMode {
         case small
         case large
@@ -153,18 +156,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinType = "moment"
     var pinTypeEnum: PinType = .media
     var pinTypeString = ""
-    var animated = false
     var textViewOriginalHeight: CGFloat = 0 {
         didSet {
             if textviewPinDetail != nil {
                 self.textviewPinDetail.frame.size.height = textViewOriginalHeight
-            }
-        }
-    }
-    var pinDetailTitle = "Moment" {
-        didSet {
-            if labelPinTitle != nil {
-                self.labelPinTitle.text = pinDetailTitle
             }
         }
     }
@@ -180,14 +175,19 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
-        initPinBasicInfo()
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
         pinIDPinDetailView = pinIdSentBySegue
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
-        if !animated {
+        initPinBasicInfo()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
+        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForPin.frame.origin.y = 65
             self.subviewTable.frame.origin.y = 65
@@ -196,27 +196,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             self.pinIcon.alpha = 1
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
+        }, completion: { (done: Bool) in
             self.loadInputToolBar()
-        }
-    }
-    
-    override func viewDidAppear(_ animated:Bool) {
-        super.viewDidAppear(animated)
-        self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
-        if animated {
-            UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                self.subviewNavigation.frame.origin.y = 0
-                self.tableCommentsForPin.frame.origin.y = 65
-                self.subviewTable.frame.origin.y = 65
-                self.draggingButtonSubview.frame.origin.y = 292
-                self.grayBackButton.alpha = 1
-                self.pinIcon.alpha = 1
-                self.buttonPrevPin.alpha = 1
-                self.buttonNextPin.alpha = 1
-            }, completion: { (done: Bool) in
-                self.loadInputToolBar()
-            })
-        }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -234,7 +216,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func initPinBasicInfo() {
         switch pinTypeEnum {
         case .comment:
-            pinDetailTitle = "Comment"
+            self.labelPinTitle.text = "Comment"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
             textViewOriginalHeight = 100
             if scrollViewMedia != nil {
@@ -246,7 +228,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             }
             break
         case .media:
-            pinDetailTitle = "Moment"
+            self.labelPinTitle.text = "Story"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
             textViewOriginalHeight = 0
             if scrollViewMedia != nil {
@@ -257,9 +239,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             }
             break
         case .chat_room:
-            pinDetailTitle = "Chat"
+            self.labelPinTitle.text = "Chat"
             break
         }
+        labelPinTitle.textAlignment = .center
     }
     
     func getSeveralInfo() {

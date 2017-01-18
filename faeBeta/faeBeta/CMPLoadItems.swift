@@ -71,7 +71,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(imageCreateMediaPin)
         
         labelCreateMediaPinTitle = UILabel(frame: CGRect(x: 109, y: 146, width: 196, height: 27))
-        labelCreateMediaPinTitle.text = "Create Moment Pin"
+        labelCreateMediaPinTitle.text = "Create Story Pin"
         labelCreateMediaPinTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         labelCreateMediaPinTitle.textAlignment = .center
         labelCreateMediaPinTitle.textColor = UIColor.white

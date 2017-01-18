@@ -123,6 +123,7 @@ extension PinDetailViewController {
             }
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
+            buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
             UIView.animate(withDuration: 0.583, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -152,6 +153,7 @@ extension PinDetailViewController {
         }
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsFull"), for: .normal)
         if buttonPinDetailDragToLargeSize.tag == 1 {
             if inputToolbar != nil {
                 self.inputToolbar.isHidden = false
