@@ -235,6 +235,16 @@
 		B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA0401DDD948400DEC329 /* FMActions.swift */; };
 		B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */; };
 		B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */; };
+		B8E4C3BD1E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */; };
+		B8E4C3BE1E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3B81E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m */; };
+		B8E4C3BF1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3BA1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m */; };
+		B8E4C3C01E30172D004E68A5 /* GMUWrappingDictionaryKey.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3BC1E30172D004E68A5 /* GMUWrappingDictionaryKey.m */; };
+		B8E4C3C91E30174B004E68A5 /* GMUClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3C41E30174B004E68A5 /* GMUClusterManager.m */; };
+		B8E4C3CA1E30174B004E68A5 /* GMUStaticCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3C81E30174B004E68A5 /* GMUStaticCluster.m */; };
+		B8E4C3D31E301765004E68A5 /* GMUDefaultClusterIconGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3CE1E301765004E68A5 /* GMUDefaultClusterIconGenerator.m */; };
+		B8E4C3D41E301765004E68A5 /* GMUDefaultClusterRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3D11E301765004E68A5 /* GMUDefaultClusterRenderer.m */; };
+		B8E4C3DC1E30177E004E68A5 /* GQTPointQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3D81E30177E004E68A5 /* GQTPointQuadTree.m */; };
+		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
@@ -533,6 +543,38 @@
 		B8CAA0401DDD948400DEC329 /* FMActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMActions.swift; sourceTree = "<group>"; };
 		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadMedias.swift; sourceTree = "<group>"; };
+		B8E4C3B41E30172D004E68A5 /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterAlgorithm.h; sourceTree = "<group>"; };
+		B8E4C3B51E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUGridBasedClusterAlgorithm.h; sourceTree = "<group>"; };
+		B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUGridBasedClusterAlgorithm.m; sourceTree = "<group>"; };
+		B8E4C3B71E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUNonHierarchicalDistanceBasedAlgorithm.h; sourceTree = "<group>"; };
+		B8E4C3B81E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUNonHierarchicalDistanceBasedAlgorithm.m; sourceTree = "<group>"; };
+		B8E4C3B91E30172D004E68A5 /* GMUSimpleClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUSimpleClusterAlgorithm.h; sourceTree = "<group>"; };
+		B8E4C3BA1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUSimpleClusterAlgorithm.m; sourceTree = "<group>"; };
+		B8E4C3BB1E30172D004E68A5 /* GMUWrappingDictionaryKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUWrappingDictionaryKey.h; sourceTree = "<group>"; };
+		B8E4C3BC1E30172D004E68A5 /* GMUWrappingDictionaryKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUWrappingDictionaryKey.m; sourceTree = "<group>"; };
+		B8E4C3C11E30174B004E68A5 /* GMUCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUCluster.h; sourceTree = "<group>"; };
+		B8E4C3C21E30174B004E68A5 /* GMUClusterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterItem.h; sourceTree = "<group>"; };
+		B8E4C3C31E30174B004E68A5 /* GMUClusterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterManager.h; sourceTree = "<group>"; };
+		B8E4C3C41E30174B004E68A5 /* GMUClusterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUClusterManager.m; sourceTree = "<group>"; };
+		B8E4C3C51E30174B004E68A5 /* GMUClusterManager+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMUClusterManager+Testing.h"; sourceTree = "<group>"; };
+		B8E4C3C61E30174B004E68A5 /* GMUMarkerClustering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUMarkerClustering.h; sourceTree = "<group>"; };
+		B8E4C3C71E30174B004E68A5 /* GMUStaticCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUStaticCluster.h; sourceTree = "<group>"; };
+		B8E4C3C81E30174B004E68A5 /* GMUStaticCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUStaticCluster.m; sourceTree = "<group>"; };
+		B8E4C3CB1E301765004E68A5 /* GMUClusterIconGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterIconGenerator.h; sourceTree = "<group>"; };
+		B8E4C3CC1E301765004E68A5 /* GMUClusterRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterRenderer.h; sourceTree = "<group>"; };
+		B8E4C3CD1E301765004E68A5 /* GMUDefaultClusterIconGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUDefaultClusterIconGenerator.h; sourceTree = "<group>"; };
+		B8E4C3CE1E301765004E68A5 /* GMUDefaultClusterIconGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUDefaultClusterIconGenerator.m; sourceTree = "<group>"; };
+		B8E4C3CF1E301765004E68A5 /* GMUDefaultClusterIconGenerator+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMUDefaultClusterIconGenerator+Testing.h"; sourceTree = "<group>"; };
+		B8E4C3D01E301765004E68A5 /* GMUDefaultClusterRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUDefaultClusterRenderer.h; sourceTree = "<group>"; };
+		B8E4C3D11E301765004E68A5 /* GMUDefaultClusterRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUDefaultClusterRenderer.m; sourceTree = "<group>"; };
+		B8E4C3D21E301765004E68A5 /* GMUDefaultClusterRenderer+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMUDefaultClusterRenderer+Testing.h"; sourceTree = "<group>"; };
+		B8E4C3D51E30177E004E68A5 /* GQTBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTBounds.h; sourceTree = "<group>"; };
+		B8E4C3D61E30177E004E68A5 /* GQTPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPoint.h; sourceTree = "<group>"; };
+		B8E4C3D71E30177E004E68A5 /* GQTPointQuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTree.h; sourceTree = "<group>"; };
+		B8E4C3D81E30177E004E68A5 /* GQTPointQuadTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GQTPointQuadTree.m; sourceTree = "<group>"; };
+		B8E4C3D91E30177E004E68A5 /* GQTPointQuadTreeChild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeChild.h; sourceTree = "<group>"; };
+		B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GQTPointQuadTreeChild.m; sourceTree = "<group>"; };
+		B8E4C3DB1E30177E004E68A5 /* GQTPointQuadTreeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeItem.h; sourceTree = "<group>"; };
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -931,6 +973,7 @@
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
+				B8E4C3B31E301603004E68A5 /* GoogleMaps-iOS-Utils */,
 				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
 				B868497D1DE0E4FF0016FC6E /* Login.storyboard */,
 				B86849781DE0E3BB0016FC6E /* Register.storyboard */,
@@ -1245,6 +1288,45 @@
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
 			name = PinMenu;
+			sourceTree = "<group>";
+		};
+		B8E4C3B31E301603004E68A5 /* GoogleMaps-iOS-Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B8E4C3D51E30177E004E68A5 /* GQTBounds.h */,
+				B8E4C3D61E30177E004E68A5 /* GQTPoint.h */,
+				B8E4C3D71E30177E004E68A5 /* GQTPointQuadTree.h */,
+				B8E4C3D81E30177E004E68A5 /* GQTPointQuadTree.m */,
+				B8E4C3D91E30177E004E68A5 /* GQTPointQuadTreeChild.h */,
+				B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */,
+				B8E4C3DB1E30177E004E68A5 /* GQTPointQuadTreeItem.h */,
+				B8E4C3CB1E301765004E68A5 /* GMUClusterIconGenerator.h */,
+				B8E4C3CC1E301765004E68A5 /* GMUClusterRenderer.h */,
+				B8E4C3CD1E301765004E68A5 /* GMUDefaultClusterIconGenerator.h */,
+				B8E4C3CE1E301765004E68A5 /* GMUDefaultClusterIconGenerator.m */,
+				B8E4C3CF1E301765004E68A5 /* GMUDefaultClusterIconGenerator+Testing.h */,
+				B8E4C3D01E301765004E68A5 /* GMUDefaultClusterRenderer.h */,
+				B8E4C3D11E301765004E68A5 /* GMUDefaultClusterRenderer.m */,
+				B8E4C3D21E301765004E68A5 /* GMUDefaultClusterRenderer+Testing.h */,
+				B8E4C3C11E30174B004E68A5 /* GMUCluster.h */,
+				B8E4C3C21E30174B004E68A5 /* GMUClusterItem.h */,
+				B8E4C3C31E30174B004E68A5 /* GMUClusterManager.h */,
+				B8E4C3C41E30174B004E68A5 /* GMUClusterManager.m */,
+				B8E4C3C51E30174B004E68A5 /* GMUClusterManager+Testing.h */,
+				B8E4C3C61E30174B004E68A5 /* GMUMarkerClustering.h */,
+				B8E4C3C71E30174B004E68A5 /* GMUStaticCluster.h */,
+				B8E4C3C81E30174B004E68A5 /* GMUStaticCluster.m */,
+				B8E4C3B41E30172D004E68A5 /* GMUClusterAlgorithm.h */,
+				B8E4C3B51E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.h */,
+				B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */,
+				B8E4C3B71E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.h */,
+				B8E4C3B81E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m */,
+				B8E4C3B91E30172D004E68A5 /* GMUSimpleClusterAlgorithm.h */,
+				B8E4C3BA1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m */,
+				B8E4C3BB1E30172D004E68A5 /* GMUWrappingDictionaryKey.h */,
+				B8E4C3BC1E30172D004E68A5 /* GMUWrappingDictionaryKey.m */,
+			);
+			name = "GoogleMaps-iOS-Utils";
 			sourceTree = "<group>";
 		};
 		B8E819541DB3248C00D418D1 /* ReportPin */ = {
@@ -1593,6 +1675,7 @@
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
 				853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */,
+				B8E4C3CA1E30174B004E68A5 /* GMUStaticCluster.m in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
@@ -1628,6 +1711,7 @@
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
+				B8E4C3BD1E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
@@ -1685,6 +1769,7 @@
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
+				B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */,
 				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
@@ -1692,9 +1777,11 @@
 				B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
+				B8E4C3DC1E30177E004E68A5 /* GQTPointQuadTree.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
+				B8E4C3C91E30174B004E68A5 /* GMUClusterManager.m in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatTableView.swift in Sources */,
 				B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */,
@@ -1705,6 +1792,7 @@
 				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
 				B8612E391DF249DC0092C606 /* PDLoadItems.swift in Sources */,
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
+				B8E4C3BF1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B883AE5B1E0DDD9C00D2E3CE /* PDMoreOptions.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -1726,6 +1814,7 @@
 				B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
+				B8E4C3BE1E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */,
 				853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */,
 				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
@@ -1746,6 +1835,7 @@
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
+				B8E4C3D41E301765004E68A5 /* GMUDefaultClusterRenderer.m in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */,
@@ -1759,8 +1849,10 @@
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
+				B8E4C3D31E301765004E68A5 /* GMUDefaultClusterIconGenerator.m in Sources */,
 				B8612E351DF202680092C606 /* PinViewController.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
+				B8E4C3C01E30172D004E68A5 /* GMUWrappingDictionaryKey.m in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,

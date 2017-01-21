@@ -31,7 +31,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.allowsSelection = false
         tableView.register(MoodAvatarTableViewCell.self, forCellReuseIdentifier: "moodAvatarCell")
         self.view.addSubview(tableView)
-        navigationBarSetting()
+//        navigationBarSetting()
         loadAvatarHeader()
     }
     

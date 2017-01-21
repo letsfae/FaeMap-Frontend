@@ -10,7 +10,36 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-extension FaeMapViewController: GMSMapViewDelegate {
+extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, GMUClusterRendererDelegate {
+    
+    // Setup Cluster Manager
+    func setupClusterManager() {
+        let iconGenerator = GMUDefaultClusterIconGenerator()
+        let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
+        let renderer = GMUDefaultClusterRenderer(mapView: faeMapView, clusterIconGenerator: iconGenerator)
+        renderer.delegate = self
+        renderer.animatesClusters = false
+        clusterManager = GMUClusterManager(map: faeMapView, algorithm: algorithm, renderer: renderer)
+    }
+    
+    // MARK: - GMUClusterRendererDelegate
+    func renderer(_ renderer: GMUClusterRenderer, willRenderMarker marker: GMSMarker) {
+        let pinInfo = JSON(marker.userData!)
+        if let type = pinInfo["type"].string {
+            if type != "user" && type != "comment" && type != "media" {
+                
+            }
+        }
+        marker.icon = #imageLiteral(resourceName: "markerRainbow")
+    }
+    
+    // MARK: - GMUClusterManagerDelegate
+    func clusterManager(_ clusterManager: GMUClusterManager, didTap cluster: GMUCluster) {
+        let newCamera = GMSCameraPosition.camera(withTarget: cluster.position,
+                                                 zoom: faeMapView.camera.zoom + 1)
+        let update = GMSCameraUpdate.setCamera(newCamera)
+        faeMapView.moveCamera(update)
+    }
     
     func clearMap(type: String) {
         if type == "all" || type == "pin" {
@@ -88,21 +117,21 @@ extension FaeMapViewController: GMSMapViewDelegate {
             myPositionIcon.center = selfPositionToPoint
         }
         
-        if mapView.camera.zoom < 11 && !canLoadMapPin {
-            clearMap(type: "all")
-            canLoadMapPin = true
-            return
-        }
-        
-        if mapView.camera.zoom >= 11 && canLoadMapPin {
-            canLoadMapPin = false
-            let currentZoomLevel = faeMapView.camera.zoom
-            let powFactor: Double = Double(21 - currentZoomLevel)
-            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-            // This update also includes updating for user pins updating
-            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        }
+//        if mapView.camera.zoom < 11 && !canLoadMapPin {
+//            clearMap(type: "all")
+//            canLoadMapPin = true
+//            return
+//        }
+//        
+//        if mapView.camera.zoom >= 11 && canLoadMapPin {
+//            canLoadMapPin = false
+//            let currentZoomLevel = faeMapView.camera.zoom
+//            let powFactor: Double = Double(21 - currentZoomLevel)
+//            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+//            // This update also includes updating for user pins updating
+//            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+//            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+//        }
         
         //        let mapTop = CGPointMake(0, 0)
         //        let mapTopCoor = faeMapView.projection.coordinateForPoint(mapTop)

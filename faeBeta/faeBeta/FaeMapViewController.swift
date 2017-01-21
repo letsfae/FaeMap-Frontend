@@ -18,6 +18,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Map main screen Objects
     var faeMapView: GMSMapView!
+    var clusterManager: GMUClusterManager!
+    
     var buttonLeftTop: UIButton!
     var buttonMainScreenSearch: UIButton!
     var buttonRightTop: UIButton!
@@ -63,7 +65,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapChatTable = UITableView()
     
     // More table view
-    let cellTableViewMore = "celltableviewmore1"
     let tableViewWeight : CGFloat = 290
     var buttonImagePicker : UIButton!
     var buttonMoreLeft : UIButton!
@@ -137,8 +138,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         myPositionIconFirstLoaded = true
-        _ = getUserStatus()
+        getUserStatus()
         loadMapView()
+        setupClusterManager()
         loadTransparentNavBarItems()
         loadButton()
         loadNameCard()

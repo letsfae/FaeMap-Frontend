@@ -18,6 +18,7 @@
 #import "JSQMessagesInputToolbarCustom.h"
 #import "JSQVideoMediaItemCustom.h"
 #import "KTCenterFlowLayout/KTCenterFlowLayout.h"
+#import "GMUMarkerClustering.h"
 //#import "KTCenterFlowLayout.h"
 
 

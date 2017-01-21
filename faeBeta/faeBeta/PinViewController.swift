@@ -458,7 +458,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
         let transform: CGAffineTransform = CGAffineTransform(translationX: buttonPinLike.center.x, y: buttonPinLike.center.y)
         let path =  CGMutablePath()
-        path.move(to: CGPoint(x:0,y:0), transform: transform )
+        path.move(to: CGPoint(x:0,y:0), transform: transform)
         path.addLine(to: CGPoint(x:randomX-75, y:-randomY), transform: transform)
         
         let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")

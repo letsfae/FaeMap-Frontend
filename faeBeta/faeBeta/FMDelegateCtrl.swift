@@ -118,9 +118,12 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     // LeftSlidingMenuDelegate
     func jumpToMoodAvatar() {
-        let moodAvatarVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController") as! MoodAvatarViewController
-        moodAvatarVC.modalPresentationStyle = .overCurrentContext
-        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
+        let moodAvatarVC = MoodAvatarViewController()
+        self.present(moodAvatarVC, animated: true, completion: nil)
+        
+//        let moodAvatarVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MoodAvatarViewController") as! MoodAvatarViewController
+//        moodAvatarVC.modalPresentationStyle = .overCurrentContext
+//        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
     // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
