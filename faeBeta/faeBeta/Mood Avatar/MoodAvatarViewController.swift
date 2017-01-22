@@ -19,20 +19,20 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Rigth Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
     
-    var faeGray = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
     var shadowGray = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        tableView = UITableView(frame: CGRect(x: 0, y: 144, width: screenWidth, height: screenHeight-159))
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.allowsSelection = false
-        tableView.register(MoodAvatarTableViewCell.self, forCellReuseIdentifier: "moodAvatarCell")
-        self.view.addSubview(tableView)
-//        navigationBarSetting()
+        self.view.backgroundColor = UIColor.white
+        navigationBarSetting()
         loadAvatarHeader()
+        loadTableView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.5, animations: { 
+            
+        }, completion: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -43,18 +43,33 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         super.didReceiveMemoryWarning()
     }
     
-    func navigationBarSetting() {
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.topItem?.title = ""
-        self.title = "Mood Avatar"
-        let attributes = [NSFontAttributeName : UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName : faeGray] as [String : Any]
-        self.navigationController!.navigationBar.titleTextAttributes = attributes
-        self.navigationController?.navigationBar.shadowImage = nil
+    private func navigationBarSetting() {
+        let uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
+        uiviewNavBar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
+        uiviewNavBar.layer.borderWidth = 1
+        uiviewNavBar.backgroundColor = UIColor.white
+        self.view.addSubview(uiviewNavBar)
+        
+        let lblTitle = UILabel(frame: CGRect(x: 0, y: 28, width: 130, height: 27))
+        lblTitle.center.x = screenWidth / 2
+        lblTitle.text = "Mood Avatar"
+        lblTitle.textAlignment = .center
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        self.view.addSubview(lblTitle)
     }
     
-    func loadAvatarHeader() {
-//        let height: CGFloat = 144/736 * screenHeight
-        headerView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 145))
+    private func loadTableView() {
+        tableView = UITableView(frame: CGRect(x: 0, y: 209, width: screenWidth, height: screenHeight-209))
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.allowsSelection = false
+        tableView.register(MoodAvatarTableViewCell.self, forCellReuseIdentifier: "moodAvatarCell")
+        self.view.addSubview(tableView)
+    }
+    
+    private func loadAvatarHeader() {
+        headerView = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 145))
         self.view.addSubview(headerView)
         
         labelCurrentAvatar = UILabel()
@@ -74,22 +89,20 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
         NSLayoutConstraint(item: imageCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
-        // Line at y = 64
-        let uiviewCommentPinUnderLine01 = UIView(frame: CGRect(x: 0, y: 122, width: screenWidth, height: 1))
-        uiviewCommentPinUnderLine01.layer.borderWidth = 1
-        uiviewCommentPinUnderLine01.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
-        self.headerView.addSubview(uiviewCommentPinUnderLine01)
+        let uiviewLine01 = UIView(frame: CGRect(x: 0, y: 122, width: screenWidth, height: 1))
+        uiviewLine01.layer.borderWidth = 1
+        uiviewLine01.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
+        self.headerView.addSubview(uiviewLine01)
         
         // Gray Block
-        let uiviewCommentPinDetailGrayBlock = UIView(frame: CGRect(x: 0, y: 123, width: screenWidth, height: 20))
-        uiviewCommentPinDetailGrayBlock.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
-        self.headerView.addSubview(uiviewCommentPinDetailGrayBlock)
+        let uiviewGrayBlock = UIView(frame: CGRect(x: 0, y: 123, width: screenWidth, height: 20))
+        uiviewGrayBlock.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
+        self.headerView.addSubview(uiviewGrayBlock)
         
-        // Line at y = 292
-        let uiviewCommentPinUnderLine02 = UIView(frame: CGRect(x: 0, y: 143, width: screenWidth, height: 1))
-        uiviewCommentPinUnderLine02.layer.borderWidth = 1
-        uiviewCommentPinUnderLine02.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
-        self.headerView.addSubview(uiviewCommentPinUnderLine02)
+        let uiviewLine02 = UIView(frame: CGRect(x: 0, y: 143, width: screenWidth, height: 1))
+        uiviewLine02.layer.borderWidth = 1
+        uiviewLine02.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
+        self.headerView.addSubview(uiviewLine02)
     }
     
     //table view delegate function
