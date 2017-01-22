@@ -16,8 +16,9 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     var headerView: UIView!
     var imageCurrentAvatar: UIImageView!
     var labelCurrentAvatar: UILabel!
+    var buttonSave: UIButton!
     
-    let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Rigth Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
+    let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Right Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
     
     var shadowGray = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1)
     
@@ -56,7 +57,22 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         lblTitle.textAlignment = .center
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
-        self.view.addSubview(lblTitle)
+        uiviewNavBar.addSubview(lblTitle)
+        
+        let buttonCancel = UIButton()
+        buttonCancel.setImage(UIImage(named: "cancelEditCommentPin"), for: UIControlState())
+        uiviewNavBar.addSubview(buttonCancel)
+        uiviewNavBar.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonCancel)
+        uiviewNavBar.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonCancel)
+        buttonCancel.addTarget(self, action: #selector(self.actionCancel(_:)), for: .touchUpInside)
+        
+        buttonSave = UIButton()
+        buttonSave.setImage(UIImage(named: "saveEditCommentPin"), for: UIControlState())
+        uiviewNavBar.addSubview(buttonSave)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(38)]-15-|", options: [], views: buttonSave)
+        uiviewNavBar.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonSave)
+        buttonSave.addTarget(self, action: #selector(self.actionSave(_:)), for: .touchUpInside)
+        buttonSave.isEnabled = false
     }
     
     private func loadTableView() {
@@ -83,7 +99,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imageCurrentAvatar = UIImageView()
-        imageCurrentAvatar.image = UIImage(named: "miniAvatar_1")
+        if userMiniAvatar != nil {
+            imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar!+1)")
+        } else {
+            imageCurrentAvatar.image = UIImage(named: "miniAvatar_1")
+        }
         self.headerView.addSubview(imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
@@ -125,9 +145,9 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         let indexFemale = indexPath.row + 19
         cell.maleImage.image = UIImage(named: "miniAvatar_\(indexMale)")
         cell.femaleImage.image = UIImage(named: "miniAvatar_\(indexFemale)")
-        cell.buttonLeft.addTarget(self, action: #selector(MoodAvatarViewController.changeMaleAvatar), for: .touchUpInside)
+        cell.buttonLeft.addTarget(self, action: #selector(MoodAvatarViewController.changeAvatar), for: .touchUpInside)
         cell.buttonLeft.tag = indexMale
-        cell.buttonRight.addTarget(self, action: #selector(MoodAvatarViewController.changeFemaleAvatar), for: .touchUpInside)
+        cell.buttonRight.addTarget(self, action: #selector(MoodAvatarViewController.changeAvatar), for: .touchUpInside)
         cell.buttonRight.tag = indexFemale
         if currentAvatarIndex == cell.buttonLeft.tag {
             cell.maleRedBtn.image = UIImage(named: "selectedMoodButton")
@@ -146,21 +166,20 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func changeMaleAvatar(_ sender: UIButton) {
-        // Unsafe
-        
-        userAvatarMap = "miniAvatar_\(sender.tag)"
-        userMiniAvatar = sender.tag
-        currentAvatarIndex = sender.tag
-        tableView.reloadData()
-        imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
+    func actionCancel(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         if let miniAvatar = userMiniAvatar {
             print(miniAvatar)
+            userAvatarMap = "miniAvatar_\(miniAvatar)"
             updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
             updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully update miniavatar")
+                    self.dismiss(animated: true, completion: nil)
                 }
                 else {
                     print("Fail to update miniavatar")
@@ -169,25 +188,12 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func changeFemaleAvatar(_ sender: UIButton) {
-        // Unsafe
-        userAvatarMap = "miniAvatar_\(sender.tag)"
+    func changeAvatar(_ sender: UIButton) {
+        buttonSave.isEnabled = true
         userMiniAvatar = sender.tag
         currentAvatarIndex = sender.tag
         tableView.reloadData()
         imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
-        let updateMiniAvatar = FaeUser()
-        if let miniAvatar = userMiniAvatar {
-            print(miniAvatar)
-            updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
-            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully update miniavatar")
-                }
-                else {
-                    print("Fail to update miniavatar")
-                }
-            })
-        }
+        
     }
 }
