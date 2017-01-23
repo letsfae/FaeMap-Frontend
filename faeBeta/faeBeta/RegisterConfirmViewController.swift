@@ -130,6 +130,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status/100 == 2 {
+                    // 01-22-2017 Add first login check
                     self.loginUser()
                 }
             })
@@ -152,14 +153,14 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     func jumpToEnableLocation() {
         let authstate = CLLocationManager.authorizationStatus()
         
-        if(authstate != CLAuthorizationStatus.authorizedAlways){
+        if authstate != CLAuthorizationStatus.authorizedAlways {
             let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
             self.navigationController?.pushViewController(vc, animated: true)
-        }else{
+        } else {
             let notificationType = UIApplication.shared.currentUserNotificationSettings
             if notificationType?.types == UIUserNotificationType() {
                 self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
-            }else{
+            } else {
                 self.dismiss(animated: true, completion: nil)
             }
         }

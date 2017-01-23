@@ -143,7 +143,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Map Boards", "Go Invisible", "Relations", "Mood Avatar", "Pins", "My Activities", "Log Out"]
+        let array = ["Map Boards", "Go Invisible", "Relations", "Pin Collection", "Mood Avatar", "Activity Log", "Log Out"]
         cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
         if indexPath.row < 2 {
@@ -174,7 +174,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
         }
         // Mood Avatar
-        else if indexPath.row == 3 {
+        else if indexPath.row == 4 {
             self.tableSelections = .moodAvatar
             self.actionCloseMenu(self.buttonBackground)
         }

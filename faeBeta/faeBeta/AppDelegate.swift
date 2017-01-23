@@ -19,6 +19,7 @@ import RealmSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    private var reachability:Reachability!
     
     let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
     let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
@@ -26,7 +27,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        //        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
+        
+        self.reachability = Reachability.init()
+        do {
+            try self.reachability.startNotifier()
+        } catch {
+        }
+        
         GMSServices.provideAPIKey(GoogleMapKey)
         GMSPlacesClient.provideAPIKey(GoogleMapKey)
         
@@ -48,23 +57,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    //MARK:- Network Check
+    func reachabilityChanged(notification: Notification) {
+        let reachability = notification.object as! Reachability
+        if reachability.isReachable {
+            if reachability.isReachableViaWiFi {
+                print("[reachabilityChanged] Reachable via WiFi")
+            } else {
+                print("[reachabilityChanged] Reachable via Cellular")
+            }
+        } else {
+            print("[reachabilityChanged] Network not reachable")
+            let vc = DisconnectionViewController()
+            self.window?.makeKeyAndVisible()
+            self.window?.rootViewController!.present(vc, animated: true, completion: nil)
+            
+        }
+    }
+    
     func openSettings() {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     
     func popUpEnableLocationViewController() {
-        let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+        let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion:nil)
+        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
         
     }
     
     func popUpWelcomeView() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
+        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion:nil)
+        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
         
     }
     

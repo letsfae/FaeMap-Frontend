@@ -2,17 +2,16 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Artboard 2 Copy 3.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Artboard 2 Copy 3@2x.png",
+      "filename" : "Group@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Artboard 2 Copy 3@3x.png",
+      "filename" : "Group@3x.png",
       "scale" : "3x"
     }
   ],

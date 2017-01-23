@@ -232,18 +232,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 var pinComment = JSON(marker.userData!)
                 let pinIDGet = pinComment["\(type)_id"].stringValue 
                     pinIdToPassBySegue = pinIDGet
-//                    var openedPinListArray = [Int]()
-//                    openedPinListArray.append(pinIDGet)
-////                    marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
-//                    marker.zIndex = 2
-//                    if let listArray = readByKey("openedPinList") {
-//                        openedPinListArray.removeAll()
-//                        openedPinListArray = listArray as! [Int]
-//                        if openedPinListArray.contains(pinIDGet) == false {
-//                            openedPinListArray.append(pinIDGet)
-//                        }
-//                    }
-//                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
                     if let storedList = readByKey("openedPinList"){
                         var openedPinListArray = storedList as! [String]
                         let pinTypeID = "\(type)%\(pinIDGet)"
