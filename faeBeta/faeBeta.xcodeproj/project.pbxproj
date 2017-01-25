@@ -247,6 +247,9 @@
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		CE97A9BC1E391F01005BBF6C /* YelpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9B91E391F01005BBF6C /* YelpManager.swift */; };
+		CE97A9BD1E391F01005BBF6C /* YelpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9BA1E391F01005BBF6C /* YelpQuery.swift */; };
+		CE97A9BE1E391F01005BBF6C /* YelpResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9BB1E391F01005BBF6C /* YelpResult.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
 		DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0A443D1E10F59C007E203C /* TagCreator.swift */; };
@@ -578,6 +581,9 @@
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CE97A9B91E391F01005BBF6C /* YelpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YelpManager.swift; path = ../../../../GooglePicker/GooglePicker/YelpManager.swift; sourceTree = "<group>"; };
+		CE97A9BA1E391F01005BBF6C /* YelpQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YelpQuery.swift; path = ../../../../GooglePicker/GooglePicker/YelpQuery.swift; sourceTree = "<group>"; };
+		CE97A9BB1E391F01005BBF6C /* YelpResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YelpResult.swift; path = ../../../../GooglePicker/GooglePicker/YelpResult.swift; sourceTree = "<group>"; };
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
 		DC084A901DDCF969007DCC88 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
@@ -1117,6 +1123,7 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				CE97A9B81E391EC9005BBF6C /* Yelp */,
 				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
 				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
@@ -1335,6 +1342,16 @@
 				B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */,
 			);
 			name = ReportPin;
+			sourceTree = "<group>";
+		};
+		CE97A9B81E391EC9005BBF6C /* Yelp */ = {
+			isa = PBXGroup;
+			children = (
+				CE97A9B91E391F01005BBF6C /* YelpManager.swift */,
+				CE97A9BA1E391F01005BBF6C /* YelpQuery.swift */,
+				CE97A9BB1E391F01005BBF6C /* YelpResult.swift */,
+			);
+			name = Yelp;
 			sourceTree = "<group>";
 		};
 		D5475357A73CFA1EFAD8018A /* Pods */ = {
@@ -1718,6 +1735,7 @@
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
 				B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
+				CE97A9BD1E391F01005BBF6C /* YelpQuery.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1843,6 +1861,7 @@
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */,
 				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
+				CE97A9BC1E391F01005BBF6C /* YelpManager.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				DC79E1571DF7C72800DA20E0 /* CreatePinInputToolbar.swift in Sources */,
@@ -1880,6 +1899,7 @@
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
 				B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */,
+				CE97A9BE1E391F01005BBF6C /* YelpResult.swift in Sources */,
 				853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */,
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
