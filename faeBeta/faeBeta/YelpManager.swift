@@ -29,7 +29,7 @@ class YelpManager {
     func hasToken() -> Bool {
         return token.characters.count != 0;
     }
-
+    
     init() {
         
     }
@@ -45,7 +45,7 @@ class YelpManager {
                         if let data = response.result.value {
                             let json = JSON(data)["businesses"]
                             for i in 0...(json.count - 1){
-                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add: json[i]["location"]["address1"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
+                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
                             }
                             completion(result)
                         }
@@ -57,7 +57,7 @@ class YelpManager {
                 if let data = response.result.value {
                     let json = JSON(data)["businesses"]
                     for i in 0...(json.count - 1){
-                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add: json[i]["location"]["address1"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
+                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
                     }
                     completion(result)
                 }

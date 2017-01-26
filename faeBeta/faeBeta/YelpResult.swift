@@ -12,23 +12,29 @@ import CoreLocation
 class YelpResult {
     
     private var imageURL : String!
-    private var address : String!
+    private var address1 : String!
+    private var address2 : String!
     private var name : String!
     private var position : CLLocation!
     
-    init(url : String, add : String, name : String, lat : String, long : String) {
+    init(url : String, add1 : String, add2 : String, name : String, lat : String, long : String) {
         imageURL = url
-        address = add
+        address1 = add1
+        address2 = add2
         self.name = name
-        self.position = CLLocation(latitude: Double(lat)!, longitude: Double(long)!)
+        position = CLLocation(latitude: Double(lat)!, longitude: Double(long)!)
     }
     
     func getImageURL() -> String {
         return imageURL
     }
     
-    func getAddress() -> String {
-        return address
+    func getAddress1() -> String {
+        return address1
+    }
+    
+    func getAddress2() -> String {
+        return address2
     }
     
     func getName() -> String {
