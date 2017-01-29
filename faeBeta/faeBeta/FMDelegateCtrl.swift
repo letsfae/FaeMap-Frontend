@@ -63,10 +63,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.faeMapView.animate(to: camera)
     }
     // PinDetailDelegate
-    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.animate(to: camera)
-    }
+    //func animateToSelectedMarker(coordinate: CLLocationCoordinate2D) {
+    //    let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+    //    self.faeMapView.animate(to: camera)
+    //}
 
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {

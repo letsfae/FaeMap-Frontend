@@ -127,6 +127,67 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewUserGender: UIView!
     var imageUserGender: UIImageView!
     
+    // Map Filter
+    
+    let filterMenuHeight = 542 * screenHeightFactor
+    
+    // Filter Button
+    var btnMapFilter: UIButton!
+    var polygonOutside: UIImageView!
+    var polygonInside: UIImageView!
+    var mapFilterArrow: UIImageView!
+    
+    // Filter Menu
+    var uiviewFilterMenu: UIView!
+    var btnDraggingMenu: UIButton!
+    
+    // Filter Item
+    var btnMFilterShowAll: MFilterButton!
+    var btnMFilterDistance: MFilterButton!
+    var btnMFilterPeople: MFilterButton!
+    
+    var btnMFilterTypeAll: MFilterButton!
+    var btnMFilterComments: MFilterButton!
+    var btnMFilterChats: MFilterButton!
+    var btnMFilterStories: MFilterButton!
+    
+    var btnMFilterStatusAll: MFilterButton!
+    var btnMFilterHot: MFilterButton!
+    var btnMFilterNew: MFilterButton!
+    var btnMFilterUnread: MFilterButton!
+    var btnMFilterRead: MFilterButton!
+    
+    var btnMFilterPlacesAll: MFilterButton!
+    var btnMFilterRestr: MFilterButton!
+    var btnMFilterCafe: MFilterButton!
+    var btnMFilterDesert: MFilterButton!
+    var btnMFilterCinema: MFilterButton!
+    var btnMFilterBeauty: MFilterButton!
+    var btnMFilterSports: MFilterButton!
+    var btnMFilterGallery: MFilterButton!
+    
+    var btnMFilterMyPins: MFilterButton!
+    var btnMFilterSavedPins: MFilterButton!
+    var btnMFilterSavedPlaces: MFilterButton!
+    var btnMFilterSavedLoc: MFilterButton!
+    
+    // Pan gesture var
+    var sizeFrom: CGFloat = 0
+    var sizeTo: CGFloat = 0
+    var spaceFilter: CGFloat = 0
+    var spaceMenu: CGFloat = 0
+    var end: CGFloat = 0
+    var percent: Double = 0
+    
+    // Filter data processing
+    var filterPinTypeDic = [String: MFilterButton]()
+    var filterPinStatusDic = [String: MFilterButton]()
+    var filterPlaceDic = [String: MFilterButton]()
+    
+    // Filter Slider
+    var filterSlider: UISlider!
+    var lblFilterDist: UILabel!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,10 +210,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
         let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-//        let notificationCenter = NotificationCenter.default
-//        notificationCenter.addObserver(self, selector: #selector(self.appBackFromBackground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         didLoadFirstLoad = true
         updateSelfInfo()
+        
+        loadMFilterSlider()
+        loadMapFilter()
+        checkFilterShowAll(btnMFilterShowAll)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -171,10 +234,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         renewSelfLocation()
+        
+        animateMapFilterArrow()
+        filterCircleAnimation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        // Need a Comment Clearance??????
         self.navigationController?.navigationBar.isTranslucent = false
     }
     

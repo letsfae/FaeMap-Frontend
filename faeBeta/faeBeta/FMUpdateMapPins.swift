@@ -38,15 +38,17 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("radius", value: "500000")
         loadPinsByZoomLevel.whereKey("type", value: "comment,chat_room,media")
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
-        loadPinsByZoomLevel.getMapInformation{(status:Int, message: Any?) in
+        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapInformation status/100 != 2")
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
             let mapInfoJSON = JSON(message!)
 
             self.mapPinsDic.removeAll()
             if mapInfoJSON.count <= 0 {
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
             for i in 0...(mapInfoJSON.count-1) {
@@ -127,6 +129,7 @@ extension FaeMapViewController {
                     }
                 })
             }
+            Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
         }
     }
     

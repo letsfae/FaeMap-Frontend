@@ -206,7 +206,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: latitude+0.0012, longitude: longitude, zoom: 17)
+        var camera = GMSCameraPosition.camera(withLatitude: latitude+0.0012, longitude: longitude, zoom: 17)
         let pinLoc = JSON(marker.userData!)
         if let type = pinLoc["type"].string {
             if type == "user" {
@@ -226,8 +226,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 if !self.canOpenAnotherPin {
                     return true
                 }
-//                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00155, longitude: longitude, zoom: 17)
-//                mapView.camera = camera
+                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
+                mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
                 let pinIDGet = pinComment["\(type)_id"].stringValue 
@@ -251,7 +251,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     self.clearMap(type: "user")
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
-                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    // pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true
@@ -263,7 +263,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     self.clearMap(type: "user")
                     pinDetailVC.modalPresentationStyle = .overCurrentContext
                     pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
-                    pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
+                    // pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: latitude+0.00148, longitude: longitude)
                     pinDetailVC.delegate = self
                     self.present(pinDetailVC, animated: false, completion: {
                         self.canOpenAnotherPin = true

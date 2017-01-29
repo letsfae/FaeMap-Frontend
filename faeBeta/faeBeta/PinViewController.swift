@@ -17,7 +17,7 @@ protocol PinDetailDelegate: class {
     // Pass location data to fae map view
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Animate the selected marker
-    func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
+    //func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
 }
 
 class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
@@ -186,7 +186,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
+        //self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
         UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForPin.frame.origin.y = 65
