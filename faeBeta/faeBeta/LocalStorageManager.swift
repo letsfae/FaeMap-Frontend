@@ -159,12 +159,12 @@ class LocalStorageManager: NSObject {
         return true
     }
     
-    func readLogInfo()->Bool{
+    func readLogInfo() -> Bool {
         _ = readUsername()
         if is_Login == 1 {
             return true
         }
-        if let login = readByKey("is_Login") as? Int{
+        if let login = readByKey("is_Login") as? Int {
             if login == 0 {
                 return false
             }

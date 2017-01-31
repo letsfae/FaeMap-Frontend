@@ -76,6 +76,8 @@ class CreateMomentPinViewController: UIViewController {
     var anonymous = false
     var activityIndicator: UIActivityIndicatorView!
     
+    var labelAddDesContent: UILabel!
+    
     enum Direction {
         case left
         case right

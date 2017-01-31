@@ -150,6 +150,9 @@ extension CreateMomentPinViewController {
                 self.currentView = .moreOptionsTable
             })
         }
+        if textViewForMediaPin.text != "" {
+            labelAddDesContent.text = textViewForMediaPin.text
+        }
     }
     
     func actionFinishEditing(_ sender: UIButton) {
@@ -175,6 +178,10 @@ extension CreateMomentPinViewController {
     }
     
     func actionSubmitMedia(_ sender: UIButton) {
+        if selectedMediaArray.count == 0 {
+            showAlert(title: "Please add at least one image", message: "and try again")
+            return
+        }
         if sender.tag == 0 {
             return
         }

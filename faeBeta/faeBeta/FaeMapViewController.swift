@@ -44,6 +44,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelUnreadMessages: UILabel!
     
     // MARK: -- My Position Marker
+    var myPosMarker = GMSMarker()
     var myPositionIcon: UIButton!
     var myPositionOutsideMarker_1: UIImageView!
     var myPositionOutsideMarker_2: UIImageView!
@@ -229,6 +230,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         getSelfAccountInfo()
         buttonFakeTransparentClosingView.alpha = 0
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -237,10 +239,19 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         
         animateMapFilterArrow()
         filterCircleAnimation()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.isTranslucent = false
+    }
+    
+    func isFirstTimeLogin(_ notification: NSNotification) {
+        print("[isFirstTimeLogin] yes it is")
+        let firstTimeLoginVC = FirstTimeLoginViewController()
+        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
+        self.present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
     // Check if location is enabled

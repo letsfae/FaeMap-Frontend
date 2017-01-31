@@ -165,9 +165,22 @@ class LogInViewController: UIViewController {
         user.whereKey("device_id", value: headerDeviceID)
         user.whereKey("is_mobile", value: "true")
         user.logInBackground { (status: Int?, message: Any?) in
-            if ( status! / 100 == 2 ){
+            if status! / 100 == 2 {
                 //success
-                self.dismiss(animated: true, completion: nil)
+                var isFirstTimeLogin = false
+                let messageJSON = JSON(message!)
+                if let _ = messageJSON["last_login_at"].string {
+                    
+                }
+                else {
+                    isFirstTimeLogin = true
+                    print("[loginUser] is first time login!")
+                }
+                self.dismiss(animated: true, completion: {
+                    if isFirstTimeLogin {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+                    }
+                })
             }
             else{
                 let loginJSONInfo = JSON(message!)

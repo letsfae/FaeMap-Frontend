@@ -129,4 +129,5 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
+    
 }

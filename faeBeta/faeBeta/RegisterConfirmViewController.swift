@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class RegisterConfirmViewController: RegisterBaseViewController {
     
     // MARK: - Variables
     
     var faeUser: FaeUser!
+    var isFirstTimeLogin = false
     
     // MARK: View Lifecycle
     
@@ -139,11 +141,19 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func loginUser() {
         showActivityIndicator()
-        faeUser.logInBackground({(status:Int, error:Any?) in
+        faeUser.logInBackground({(status: Int, message: Any?) in
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
                     print("login success")
+                    let messageJSON = JSON(message!)
+                    if let _ = messageJSON["last_login_at"].string {
+                        
+                    }
+                    else {
+                        self.isFirstTimeLogin = true
+                        print("[loginUser] is first time login!")
+                    }
                     self.jumpToEnableLocation()
                 }
             })
@@ -154,14 +164,18 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let authstate = CLLocationManager.authorizationStatus()
         
         if authstate != CLAuthorizationStatus.authorizedAlways {
-            let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
+            let vc: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
             self.navigationController?.pushViewController(vc, animated: true)
         } else {
             let notificationType = UIApplication.shared.currentUserNotificationSettings
             if notificationType?.types == UIUserNotificationType() {
                 self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
             } else {
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: {
+                    if self.isFirstTimeLogin {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+                    }
+                })
             }
         }
     }

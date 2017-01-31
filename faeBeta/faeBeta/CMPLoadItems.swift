@@ -134,9 +134,9 @@ extension CreateMomentPinViewController {
         buttonMediaSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
         uiviewCreateMediaPin.addSubview(buttonMediaSubmit)
-        buttonMediaSubmit.addTarget(self, action: #selector(CreateMomentPinViewController.actionSubmitMedia(_:)), for: .touchUpInside)
+        buttonMediaSubmit.addTarget(self, action: #selector(self.actionSubmitMedia(_:)), for: .touchUpInside)
         buttonMediaSubmit.adjustsImageWhenDisabled = false
-        buttonMediaSubmit.isEnabled = true
+        buttonMediaSubmit.isEnabled = false
         buttonMediaSubmit.tag = 1
         self.view.addSubview(uiviewCreateMediaPin)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: buttonMediaSubmit)
@@ -204,7 +204,7 @@ extension CreateMomentPinViewController {
         uiviewAddDescription.addConstraintsWithFormat("H:[v0(16)]-0-|", options: [], views: imageAddDes_2)
         uiviewAddDescription.addConstraintsWithFormat("V:|-7-[v0(16)]", options: [], views: imageAddDes_2)
         
-        let labelAddDesContent = UILabel()
+        labelAddDesContent = UILabel()
         labelAddDesContent.text = "Add Description"
         labelAddDesContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelAddDesContent.textAlignment = .left
@@ -215,7 +215,7 @@ extension CreateMomentPinViewController {
         
         let buttonAddDes = UIButton()
         uiviewAddDescription.addSubview(buttonAddDes)
-        buttonAddDes.addTarget(self, action: #selector(CreateMomentPinViewController.actionShowAddDes(_:)), for: .touchUpInside)
+        buttonAddDes.addTarget(self, action: #selector(self.actionShowAddDes(_:)), for: .touchUpInside)
         buttonAddDes.tag = 1
         uiviewAddDescription.addConstraintsWithFormat("H:[v0(276)]-0-|", options: [], views: buttonAddDes)
         uiviewAddDescription.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonAddDes)

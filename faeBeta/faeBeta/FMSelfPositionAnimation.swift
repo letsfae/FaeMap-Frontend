@@ -10,6 +10,11 @@ import UIKit
 import SwiftyJSON
 
 extension FaeMapViewController {
+    
+    func loadTempPosIcon() {
+        
+    }
+    
     func loadPositionAnimateImage() {
         if myPositionIconFirstLoaded {
             myPositionIconFirstLoaded = false
@@ -129,11 +134,6 @@ extension FaeMapViewController {
                 return
             }
             let selfUserInfoJSON = JSON(message!)
-            if let lastLoginAt = selfUserInfoJSON["last_login_at"].string {
-                print("[getSelfAccountInfo] last login at: \(lastLoginAt)")
-            } else {
-                print("[getSelfAccountInfo] last login at: null")
-            }
             if let firstName = selfUserInfoJSON["first_name"].string {
                 userFirstname = firstName
             }
