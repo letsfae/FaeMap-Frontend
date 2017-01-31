@@ -207,8 +207,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         loadNameCard()
         loadPositionAnimateImage()
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(FaeMapViewController.updateSelfLocation), userInfo: nil, repeats: true)
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(FaeMapViewController.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
         let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
         didLoadFirstLoad = true
@@ -314,16 +314,23 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // MARK: -- Map Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if didLoadFirstLoad {
+            self.didLoadFirstLoad = false
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
             self.faeMapView.camera = camera
-            self.didLoadFirstLoad = false
             self.startUpdatingLocation = true
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
+            
+            let currentZoomLevel = faeMapView.camera.zoom
+            let powFactor: Double = Double(21 - currentZoomLevel)
+            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+            // This update also includes updating for user pins updating
+            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         }
         
         // userStatus == 5, invisible

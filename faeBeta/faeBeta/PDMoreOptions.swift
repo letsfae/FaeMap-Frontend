@@ -184,7 +184,7 @@ extension PinDetailViewController {
             let deleteCommentPin = FaePinAction()
             deleteCommentPin.deletePinById(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Successfully delete comment")
+                    print("Successfully delete pin")
                     self.actionBackToMap(self.buttonPinBackToMap)
                     self.delegate?.dismissMarkerShadow(false)
                 }

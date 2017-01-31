@@ -26,10 +26,10 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.draggingButtonSubview.center.y += screenHeight
         self.pinIDPinDetailView = pinID
         if pinType == self.pinTypeEnum {
-            print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinType)")
+            print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinTypeEnum)")
         }
         else {
-            print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinType)")
+            print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinTypeEnum)")
             self.pinTypeEnum = pinType
             self.initPinBasicInfo()
         }

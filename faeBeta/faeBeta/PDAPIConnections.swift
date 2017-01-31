@@ -82,13 +82,13 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
-                    print("Successfully comment this comment pin!")
+                    print("Successfully comment this pin!")
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     self.getPinComments("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
                     self.tableCommentsForPin.reloadData()
                 }
                 else {
-                    print("Fail to comment this comment pin!")
+                    print("Fail to comment this pin!")
                 }
             }
         }
@@ -100,11 +100,11 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             likeThisPin.likeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
-                    print("[likeThisPin] Successfully like this media pin!")
+                    print("[likeThisPin] Successfully like this pin!")
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
-                    print("Fail to like this comment pin!")
+                    print("Fail to like this pin!")
                 }
             }
         }
@@ -116,7 +116,7 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             saveThisPin.saveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Successfully save this comment pin!")
+                    print("Successfully save this pin!")
                     self.getPinSavedState()
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
@@ -130,7 +130,7 @@ extension PinDetailViewController {
                     })
                 }
                 else {
-                    print("Fail to save this comment pin!")
+                    print("Fail to save this pin!")
                 }
             }
         }
@@ -142,7 +142,7 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             unsaveThisPin.unsaveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Successfully unsave this comment pin!")
+                    print("Successfully unsave this pin!")
                     self.getPinSavedState()
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
@@ -156,7 +156,7 @@ extension PinDetailViewController {
                     })
                 }
                 else {
-                    print("Fail to unsave this comment pin!")
+                    print("Fail to unsave this pin!")
                 }
             }
         }
@@ -169,10 +169,12 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Successfully read this comment pin!")
+                    print("Successfully read this pin!")
+                    self.pinStatus = "read"
+                    self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
                 }
                 else {
-                    print("Fail to read this comment pin!")
+                    print("Fail to read this pin!")
                 }
             }
         }
@@ -184,11 +186,11 @@ extension PinDetailViewController {
         if pinIDPinDetailView != "-999" {
             unlikeThisPin.unlikeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status/100 == 2 {
-                    print("Successfully unlike this comment pin!")
+                    print("Successfully unlike this pin!")
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
-                    print("Fail to unlike this comment pin!")
+                    print("Fail to unlike this pin!")
                 }
             }
         }
@@ -213,6 +215,11 @@ extension PinDetailViewController {
             }
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imageViewHotPin.isHidden = false
+                self.pinStatus = "hot"
+                if self.pinStatus == "read" {
+                    self.pinStatus = "hot and read"
+                }
+                self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
             }
             else {
                 self.imageViewHotPin.isHidden = true

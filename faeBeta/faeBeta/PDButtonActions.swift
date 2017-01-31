@@ -167,6 +167,7 @@ extension PinDetailViewController {
             self.inputToolbar.isHidden = false
             self.subviewInputToolBar.isHidden = false
         }
+        readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
         if pinTypeEnum == .media {
@@ -249,6 +250,7 @@ extension PinDetailViewController {
             }
             return
         }
+        readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         textviewPinDetail.isScrollEnabled = false

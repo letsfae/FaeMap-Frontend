@@ -56,26 +56,49 @@ extension FaeMapViewController {
                 pinMap.zIndex = 1
                 var pinData = [String: AnyObject]()
                 var type = "comment"
+                var status = ""
+                var iconImage = UIImage()
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 icon.contentMode = .scaleAspectFit
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
-                        icon.image = #imageLiteral(resourceName: "commentPinMarker")
-                        pinMap.iconView = icon
                         type = "comment"
                     }
                     else if typeInfo.contains("chat"){
-                        pinMap.icon = UIImage(named: "chatPinMarker")
-                        pinMap.zIndex = 0
                         type = "chat_room"
                     }
                     else if typeInfo == "media" {
-                        icon.image = #imageLiteral(resourceName: "momentPinMarker")
-                        pinMap.iconView = icon
                         type = "media"
                     }
                     pinMap.zIndex = 0
+                    if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
+                        if createdTimeInfo.isNewPin() {
+                            status = "new"
+                        }
+                    }
+                    if let likeCount = mapInfoJSON[i]["liked_count"].int {
+                        if likeCount >= 15 {
+                            status = "hot"
+                        }
+                    }
+                    if let commentCount = mapInfoJSON[i]["comment_count"].int {
+                        if commentCount >= 10 {
+                            status = "hot"
+                        }
+                    }
+                    if let readInfo = mapInfoJSON[i]["user_pin_operations"]["is_read"].bool {
+                        if readInfo && status == "hot" {
+                            status = "hot and read"
+                        }
+                        else if readInfo {
+                            status = "read"
+                        }
+                    }
+                    pinData["status"] = status as AnyObject?
+                    iconImage = self.pinIconSelector(type: type, status: status)
+                    icon.image = iconImage
+                    pinMap.iconView = icon
                 }
                 if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                     pinData["\(type)_id"] = pinIDInfo as AnyObject?
@@ -90,9 +113,6 @@ extension FaeMapViewController {
                 }
                 if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                     pinData["user_id"] = userIDInfo as AnyObject?
-                }
-                if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                    pinData["created_at"] = createdTimeInfo as AnyObject?
                 }
                 if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
                     pinMap.position.latitude = latitudeInfo
@@ -120,16 +140,66 @@ extension FaeMapViewController {
                 }, completion: {(done: Bool) in
                     if done {
                         pinMap.iconView = nil
-                        if type == "comment" {
-                            pinMap.icon = #imageLiteral(resourceName: "commentPinMarker")
-                        }
-                        else if type == "media" {
-                            pinMap.icon = #imageLiteral(resourceName: "momentPinMarker")
-                        }
+                        pinMap.icon = iconImage
                     }
                 })
             }
             Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+        }
+    }
+    
+    func pinIconSelector(type: String, status: String) -> UIImage {
+        switch type {
+        case "comment":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerCommentHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerCommentNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerCommentHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerCommentRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "commentPinMarker")
+            }
+        case "chat_room":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerChatHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerChatNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerChatHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerChatRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "chatPinMarker")
+            }
+        case "media":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerMomentHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerMomentNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerMomentHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerMomentRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "momentPinMarker")
+            }
+        default:
+            return UIImage()
         }
     }
     

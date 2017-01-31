@@ -10,14 +10,17 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 import RealmSwift
+import GoogleMaps
 
 protocol PinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map
+    // true  -> just means user want to back to main screen
+    // false -> delete this pin from map
     func dismissMarkerShadow(_ dismiss: Bool)
     // Pass location data to fae map view
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
-    // Animate the selected marker
-    //func animateToSelectedMarker(coordinate: CLLocationCoordinate2D)
+    // Change marker icon based on status
+    func changeIconImage(marker: GMSMarker, type: String, status: String)
 }
 
 class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
@@ -27,6 +30,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     // Pin ID To Use In This Controller
     var pinIdSentBySegue: String = "-999"
+    var pinStatus = ""
+    var pinMarker = GMSMarker()
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -153,7 +158,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case media
         case chat_room
     }
-    var pinType = "moment"
     var pinTypeEnum: PinType = .media
     var pinTypeString = ""
     var textViewOriginalHeight: CGFloat = 0 {

@@ -31,12 +31,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
-        if dismiss {
-//            self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
-//            self.markerBackFromPinDetail.zIndex = 0
+        if !dismiss {
+            self.markerBackFromPinDetail.map = nil
         }
         else {
-            self.markerBackFromPinDetail.map = nil
+            
         }
     }
     // PinDetailDelegate
@@ -44,29 +43,19 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         print("DEBUG: Delegate pass pinID")
         print(pinID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-//        self.markerBackFromPinDetail.icon = UIImage(named: "commentPinMarker")
-//        self.markerBackFromPinDetail.zIndex = 0
-//        if let marker = self.mapPinsDic[pinID] {
-////            self.markerBackFromPinDetail = marker
-////            marker.icon = UIImage(named: "markerCommentPinHeavyShadow")
-//            marker.zIndex = 2
-//            self.pinIDFromOpenedPinCell = -999
-//        }
-//        else {
-//            self.pinIDFromOpenedPinCell = pinID
-//            let currentZoomLevel = faeMapView.camera.zoom
-//            let powFactor: Double = Double(21 - currentZoomLevel)
-//            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-//            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-//            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-//        }
-        self.faeMapView.animate(to: camera)
+        self.faeMapView.camera = camera
     }
     // PinDetailDelegate
-    //func animateToSelectedMarker(coordinate: CLLocationCoordinate2D) {
-    //    let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-    //    self.faeMapView.animate(to: camera)
-    //}
+    func changeIconImage(marker: GMSMarker, type: String, status: String) {
+        print("[changeIconImage] type: \(type), status: \(status)")
+        var pinData = marker.userData as! [String: AnyObject]
+        print("[changeIconImage] type: \(type), status: \(pinData["status"])")
+        pinData["status"] = status as AnyObject?
+        if let statusCopy = pinData["status"] {
+            print("[changeIconImage] type: \(type), status: \(statusCopy)")
+        }
+        marker.icon = pinIconSelector(type: type, status: status)
+    }
 
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {

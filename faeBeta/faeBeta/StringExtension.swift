@@ -60,6 +60,31 @@ extension String {
         return "Invalid Date"
     }
     
+    func isNewPin() -> Bool {
+        // convert to NSDate
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        let myDate = dateFormatter.date(from: self)
+        
+        if myDate != nil {
+            dateFormatter.dateFormat = "MMMM dd, YYYY"
+            let localTimeZone = NSTimeZone.local.abbreviation()
+            let elapsed = Int(Date().timeIntervalSince(myDate!))
+            print("[isNewPin] DEBUG TIME: \(elapsed)")
+            if localTimeZone != nil {
+                // Greater than or equal to one day
+                if elapsed >= 300 {
+                    return false
+                }
+                else {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
     func formatPinCommentsContent() -> NSMutableAttributedString {
         
         let regularColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
