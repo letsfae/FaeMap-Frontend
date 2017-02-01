@@ -256,6 +256,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 timerUpdateSelfLocation.invalidate()
                 self.clearMap(type: "user")
                 pinDetailVC.modalPresentationStyle = .overCurrentContext
+                pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
                 pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                 pinDetailVC.pinMarker = marker
                 pinDetailVC.delegate = self

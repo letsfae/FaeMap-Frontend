@@ -157,12 +157,13 @@ extension PinDetailViewController {
         if pinIdSentBySegue == "-999" {
             return
         }
+        self.isKeyboardInThisView = false
         let editMomentPinVC = EditCommentPinViewController()
         editMomentPinVC.delegate = self
         editMomentPinVC.previousCommentContent = self.stringPlainTextViewTxt
         editMomentPinVC.pinID = "\(pinIdSentBySegue)"
         editMomentPinVC.pinMediaImageArray = imageViewMediaArray
-        editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude-0.00148, longitude: selectedMarkerPosition.longitude)
+        editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude, longitude: selectedMarkerPosition.longitude)
         editMomentPinVC.editPinMode = self.pinTypeEnum
         editMomentPinVC.pinType = "\(self.pinTypeEnum)"
         editMomentPinVC.mediaIdArray = fileIdArray

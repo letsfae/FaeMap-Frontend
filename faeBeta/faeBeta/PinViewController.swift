@@ -177,6 +177,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
+    var isKeyboardInThisView = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -499,7 +501,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
-        self.tableCommentsForPin.frame.size.height -= keyboardHeight
+        if isKeyboardInThisView {
+            self.tableCommentsForPin.frame.size.height -= keyboardHeight
+        }
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = -keyboardHeight
@@ -514,8 +518,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.tableCommentsForPin.scrollToTop(animated: true)
     }
     
-    func keyboardWillHide(_ notification: Notification){
-        self.tableCommentsForPin.frame.size.height = screenHeight - 90 - 65
+    func keyboardWillHide(_ notification: Notification) {
+        if isKeyboardInThisView {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 90 - 65
+        }
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = 0
@@ -533,6 +539,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         resetToolbarButtonIcon()
         if sender.tag == 1 {
             sender.tag = 0
+            isKeyboardInThisView = true
             self.buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
             self.inputToolbar.contentView.textView.resignFirstResponder()
             return
