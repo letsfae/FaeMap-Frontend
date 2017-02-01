@@ -394,12 +394,14 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         loadInputBarComponent()
         inputToolbar.isHidden = true
         subviewInputToolBar.isHidden = true
+        
     }
     
     func setupToolbarContentView() {
         toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
+        toolbarContentView.setup(3)
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
     
