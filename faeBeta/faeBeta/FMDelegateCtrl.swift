@@ -21,6 +21,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        filterCircleAnimation()
+        appBackFromBackground()
     }
     
     // PinDetailDelegate
@@ -37,6 +39,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         else {
             
         }
+        animateMapFilterArrow()
+        filterCircleAnimation()
+        appBackFromBackground()
     }
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
@@ -60,6 +65,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
+        animateMapFilterArrow()
+        filterCircleAnimation()
+        appBackFromBackground()
     }
     // PinMenuDelegate
     func whenDismissPinMenu() {
@@ -68,6 +76,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
+        animateMapFilterArrow()
+        filterCircleAnimation()
+        appBackFromBackground()
     }
     
     // LeftSlidingMenuDelegate

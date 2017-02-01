@@ -10,24 +10,22 @@ import UIKit
 
 extension FaeMapViewController {
     func loadMapFilter() {
-        btnMapFilter = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        btnMapFilter = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
         btnMapFilter.center.x = screenWidth / 2
-        btnMapFilter.center.y = screenHeight - 27
-        btnMapFilter.setImage(#imageLiteral(resourceName: "mapFilterIcon"), for: .normal)
+        btnMapFilter.center.y = screenHeight - 25
+        btnMapFilter.setImage(#imageLiteral(resourceName: "mapFilterHexagon"), for: .normal)
         btnMapFilter.addTarget(self, action: #selector(self.animateMapFilterPolygon(_:)), for: .touchUpInside)
         btnMapFilter.adjustsImageWhenDisabled = false
         btnMapFilter.adjustsImageWhenHighlighted = false
-        btnMapFilter.layer.zPosition = 600
         self.view.addSubview(btnMapFilter)
         loadFilterMenu()
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        btnMapFilter.addGestureRecognizer(draggingGesture)
+        self.btnMapFilter.addGestureRecognizer(draggingGesture)
     }
     
     private func loadFilterMenu() {
         uiviewFilterMenu = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 700))
         uiviewFilterMenu.backgroundColor = UIColor.white
-        uiviewFilterMenu.layer.zPosition = 600
         self.view.addSubview(uiviewFilterMenu)
         
         let imgMenuArrow = UIImageView(frame: CGRect(x: 0, y: 11 * screenHeightFactor, width: 16 * screenHeightFactor, height: 8 * screenHeightFactor))

@@ -218,6 +218,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("is FaeMap")
                 if let faeMapVC = vc as? FaeMapViewController {
                     faeMapVC.appBackFromBackground()
+                    faeMapVC.animateMapFilterArrow()
+                    faeMapVC.filterCircleAnimation()
                 }
             }
             else if vc is PinDetailViewController {

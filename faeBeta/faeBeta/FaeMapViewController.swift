@@ -189,6 +189,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var filterSlider: UISlider!
     var lblFilterDist: UILabel!
     
+    // Filter btn inside circles
+    var filterCircle_1: UIImageView!
+    var filterCircle_2: UIImageView!
+    var filterCircle_3: UIImageView!
+    var filterCircle_4: UIImageView!
+    
     // Class global variable to control the filter
     var stringFilterValue = "comment,chat_room,media"
     
