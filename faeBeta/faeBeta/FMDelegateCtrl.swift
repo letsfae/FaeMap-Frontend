@@ -40,20 +40,13 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        print("DEBUG: Delegate pass pinID")
-        print(pinID)
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.camera = camera
     }
     // PinDetailDelegate
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
-        print("[changeIconImage] type: \(type), status: \(status)")
         var pinData = marker.userData as! [String: AnyObject]
-        print("[changeIconImage] type: \(type), status: \(pinData["status"])")
         pinData["status"] = status as AnyObject?
-        if let statusCopy = pinData["status"] {
-            print("[changeIconImage] type: \(type), status: \(statusCopy)")
-        }
         marker.icon = pinIconSelector(type: type, status: status)
     }
 

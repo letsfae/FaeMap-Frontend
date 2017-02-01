@@ -162,18 +162,47 @@ extension FaeMapViewController {
                     let pinShowOnMap = GMSMarker()
                     pinShowOnMap.zIndex = 1
                     var pinData = [String: AnyObject]()
+                    var type = "comment"
+                    var status = ""
+                    var iconImage = UIImage()
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
-                            pinShowOnMap.icon = #imageLiteral(resourceName: "commentPinMarker")
+                            type = "comment"
+                        }
+                        else if typeInfo.contains("chat"){
+                            type = "chat_room"
                         }
                         else if typeInfo == "media" {
-                            pinShowOnMap.icon = #imageLiteral(resourceName: "momentPinMarker")
-                        }
-                        else if typeInfo.contains("chat") {
-                            pinShowOnMap.icon = UIImage(named: "chatPinMarker")
+                            type = "media"
                         }
                         pinShowOnMap.zIndex = 0
+                        if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
+                            if createdTimeInfo.isNewPin() {
+                                status = "new"
+                            }
+                        }
+                        if let likeCount = mapInfoJSON[i]["liked_count"].int {
+                            if likeCount >= 15 {
+                                status = "hot"
+                            }
+                        }
+                        if let commentCount = mapInfoJSON[i]["comment_count"].int {
+                            if commentCount >= 10 {
+                                status = "hot"
+                            }
+                        }
+                        if let readInfo = mapInfoJSON[i]["user_pin_operations"]["is_read"].bool {
+                            if readInfo && status == "hot" {
+                                status = "hot and read"
+                            }
+                            else if readInfo {
+                                status = "read"
+                            }
+                        }
+                        pinData["status"] = status as AnyObject?
+                        iconImage = self.pinIconSelector(type: type, status: status)
+                        pinShowOnMap.icon = iconImage
                     }
                     if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                         if pinID != "\(pinIDInfo)" {
