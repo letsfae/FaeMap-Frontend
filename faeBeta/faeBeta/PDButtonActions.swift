@@ -117,6 +117,8 @@ extension PinDetailViewController {
             endEdit()
             sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
+            buttonPinAddComment.tag = 0
+            buttonPinBackToMap.tag = 1
             if inputToolbar != nil {
                 self.inputToolbar.isHidden = true
                 self.subviewInputToolBar.isHidden = true

@@ -15,16 +15,23 @@ extension FaeMapViewController {
             checkFilterShowAll(sender)
             uncheckFilterMyPins()
             uncheckFilterSavedPins()
+            stringFilterValue = "comment,chat_room,media"
+            refreshMap(pins: true, users: true, places: true)
             break
         case .distance:
             checkFilterDistance(sender)
             break
         case .people:
+            clearMap(type: "pin")
+            timerLoadRegionPins.invalidate()
             checkFilterPeople(sender)
+            refreshMap(pins: false, users: true, places: false)
             break
             
         case .pinAll:
             checkFilterPinTypeAll(sender)
+            stringFilterValue = "comment,chat_room,media"
+            refreshMap(pins: true, users: false, places: false)
             break
         case .comment, .chat_room, .media:
             uncheckFilterShowAll()
@@ -33,18 +40,22 @@ extension FaeMapViewController {
             
         case .statusAll:
             checkFilterPinStatusAll(sender)
+            refreshMap(pins: true, users: false, places: false)
             break
         case .hot, .new, .unread, .read:
             uncheckFilterShowAll()
             checkFilterPinStatus(sender)
+            refreshMap(pins: true, users: false, places: false)
             break
             
         case .placeAll:
             checkFilterPlaceAll(sender)
+            refreshMap(pins: false, users: false, places: true)
             break
         case .restaurant, .cafe, .desert, .cinema, .beauty, .sports, .gallery:
             uncheckFilterShowAll()
             checkFilterPlace(sender)
+            refreshMap(pins: false, users: false, places: true)
             break
         case .myPins:
             checkFilterMyPins(sender)
@@ -59,7 +70,7 @@ extension FaeMapViewController {
     }
     
     // Clear pin type, pin status, and places
-    func clearTypeStatusPlaces() {
+    fileprivate func clearTypeStatusPlaces() {
         clearFilterTypeBtnArr()
         clearFilterStatusBtnArr()
         clearFilterPlaceBtnArr()
@@ -71,18 +82,18 @@ extension FaeMapViewController {
         clearTypeStatusPlaces()
         uncheckFilterPeople()
     }
-    func uncheckFilterShowAll() {
+    fileprivate func uncheckFilterShowAll() {
         if btnMFilterShowAll.tag == 1 {
             makeFilterBtnGray(btnMFilterShowAll)
         }
     }
-    func checkIfCanShowAll() {
+    fileprivate func checkIfCanShowAll() {
         if btnMFilterTypeAll.tag == 1 && btnMFilterStatusAll.tag == 1 && btnMFilterPlacesAll.tag == 1 {
             makeFilterBtnRed(btnMFilterShowAll)
         }
     }
     
-    func checkFilterDistance(_ sender: MFilterButton) {
+    fileprivate func checkFilterDistance(_ sender: MFilterButton) {
         if sender.tag == 0 {
             makeFilterBtnRed(sender)
             filterSlider.isHidden = false
@@ -94,30 +105,30 @@ extension FaeMapViewController {
     }
     
     // Filter only people
-    func checkFilterPeople(_ sender: MFilterButton) {
+    fileprivate func checkFilterPeople(_ sender: MFilterButton) {
         makeFilterBtnRed(sender)
         clearTypeStatusPlaces()
         uncheckFilterShowAll()
     }
-    func uncheckFilterPeople() {
+    fileprivate func uncheckFilterPeople() {
         if btnMFilterPeople.tag == 1 {
             makeFilterBtnGray(btnMFilterPeople)
         }
     }
     
     // Filter pin type
-    func checkFilterPinTypeAll(_ sender: MFilterButton) {
+    fileprivate func checkFilterPinTypeAll(_ sender: MFilterButton) {
         if filterPinTypeDic.count == 0 && btnMFilterMyPins.tag != 1 {
             self.filterPinStatusDic["all"] = btnMFilterStatusAll
             makeFilterBtnRed(btnMFilterStatusAll)
             uncheckFilterShowAll()
         }
         clearFilterTypeBtnArr()
-        self.filterPinTypeDic["comment, chat_room, media"] = btnMFilterTypeAll
+        self.filterPinTypeDic["comment,chat_room,media"] = btnMFilterTypeAll
         makeFilterBtnRed(sender)
         uncheckFilterShowAll()
     }
-    func checkFilterPinType(_ sender: MFilterButton) {
+    fileprivate func checkFilterPinType(_ sender: MFilterButton) {
         if filterPinTypeDic.count == 0 {
             checkFilterPinStatusAll(btnMFilterStatusAll)
         }
@@ -126,8 +137,8 @@ extension FaeMapViewController {
             makeFilterBtnGray(sender)
         }
         else {
-            if let _ = filterPinTypeDic["comment, chat_room, media"] {
-                filterPinTypeDic.removeValue(forKey: "comment, chat_room, media")
+            if let _ = filterPinTypeDic["comment,chat_room,media"] {
+                filterPinTypeDic.removeValue(forKey: "comment,chat_room,media")
                 makeFilterBtnGray(btnMFilterTypeAll)
             }
             filterPinTypeDic["\(sender.filterType)"] = sender
@@ -135,13 +146,27 @@ extension FaeMapViewController {
             if filterPinTypeDic.count == 3 {
                 checkFilterPinTypeAll(btnMFilterTypeAll)
             }
+            var string = ""
+            var firstOne = true
+            for (key, _) in filterPinTypeDic {
+                if firstOne {
+                    firstOne = false
+                    string = "\(key)"
+                    print("[checkFilterPinType] \(string)")
+                    continue
+                }
+                string = "\(string),\(key)"
+                print("[checkFilterPinType] \(string)")
+            }
+            stringFilterValue = string
+            refreshMap(pins: true, users: false, places: false)
         }
     }
     
     // Filter pin status
-    func checkFilterPinStatusAll(_ sender: MFilterButton) {
+    fileprivate func checkFilterPinStatusAll(_ sender: MFilterButton) {
         if filterPinStatusDic.count == 0 {
-            self.filterPinTypeDic["comment, chat_room, media"] = btnMFilterTypeAll
+            self.filterPinTypeDic["comment,chat_room,media"] = btnMFilterTypeAll
             makeFilterBtnRed(btnMFilterTypeAll)
             uncheckFilterShowAll()
         }
@@ -150,7 +175,7 @@ extension FaeMapViewController {
         makeFilterBtnRed(sender)
         uncheckFilterShowAll()
     }
-    func checkFilterPinStatus(_ sender: MFilterButton) {
+    fileprivate func checkFilterPinStatus(_ sender: MFilterButton) {
         if filterPinStatusDic.count == 0 {
             checkFilterPinTypeAll(btnMFilterTypeAll)
         }
@@ -172,13 +197,13 @@ extension FaeMapViewController {
     }
     
     // Filter place pin type
-    func checkFilterPlaceAll(_ sender: MFilterButton) {
+    fileprivate func checkFilterPlaceAll(_ sender: MFilterButton) {
         clearFilterPlaceBtnArr()
         self.filterPlaceDic["all"] = btnMFilterPlacesAll
         makeFilterBtnRed(sender)
         uncheckFilterShowAll()
     }
-    func checkFilterPlace(_ sender: MFilterButton) {
+    fileprivate func checkFilterPlace(_ sender: MFilterButton) {
         if sender.tag == 1 && filterPlaceDic.count != 1 {
             filterPlaceDic.removeValue(forKey: "\(sender.filterType)")
             makeFilterBtnGray(sender)
@@ -197,7 +222,7 @@ extension FaeMapViewController {
     }
     
     // My pins
-    func checkFilterMyPins(_ sender: MFilterButton) {
+    fileprivate func checkFilterMyPins(_ sender: MFilterButton) {
         makeFilterBtnRed(sender)
         uncheckFilterShowAll()
         checkFilterPinTypeAll(btnMFilterTypeAll)
@@ -222,7 +247,7 @@ extension FaeMapViewController {
         disableFilterBtn(btnMFilterSports)
         disableFilterBtn(btnMFilterGallery)
     }
-    func uncheckFilterMyPins() {
+    fileprivate func uncheckFilterMyPins() {
         if btnMFilterMyPins.tag == 1 {
             makeFilterBtnGray(btnMFilterMyPins)
             
@@ -243,7 +268,7 @@ extension FaeMapViewController {
     }
     
     // My pins
-    func checkFilterSavedPins(_ sender: MFilterButton) {
+    fileprivate func checkFilterSavedPins(_ sender: MFilterButton) {
         makeFilterBtnRed(sender)
         uncheckFilterShowAll()
         checkFilterPinTypeAll(btnMFilterTypeAll)
@@ -268,7 +293,7 @@ extension FaeMapViewController {
         disableFilterBtn(btnMFilterSports)
         disableFilterBtn(btnMFilterGallery)
     }
-    func uncheckFilterSavedPins() {
+    fileprivate func uncheckFilterSavedPins() {
         if btnMFilterSavedPins.tag == 1 {
             makeFilterBtnGray(btnMFilterSavedPins)
             
@@ -291,40 +316,40 @@ extension FaeMapViewController {
     
     
     // Change filter btn color or disable
-    func makeFilterBtnGray(_ sender: MFilterButton) {
+    fileprivate func makeFilterBtnGray(_ sender: MFilterButton) {
         sender.tag = 0
         sender.setTitleColor(UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1), for: .normal)
         sender.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18 * screenHeightFactor)
     }
-    func makeFilterBtnRed(_ sender: MFilterButton) {
+    fileprivate func makeFilterBtnRed(_ sender: MFilterButton) {
         sender.tag = 1
         sender.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
         sender.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
     }
-    func disableFilterBtn(_ sender: MFilterButton) {
+    fileprivate func disableFilterBtn(_ sender: MFilterButton) {
         sender.tag = 0
         sender.setTitleColor(UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1), for: .normal)
         sender.isEnabled = false
     }
-    func enableFilterBtn(_ sender: MFilterButton) {
+    fileprivate func enableFilterBtn(_ sender: MFilterButton) {
         sender.setTitleColor(UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1), for: .normal)
         sender.isEnabled = true
     }
     
     // Clear filterBtn array
-    func clearFilterTypeBtnArr() {
+    fileprivate func clearFilterTypeBtnArr() {
         for (_, button) in self.filterPinTypeDic {
             makeFilterBtnGray(button)
         }
         filterPinTypeDic.removeAll(keepingCapacity: false)
     }
-    func clearFilterStatusBtnArr() {
+    fileprivate func clearFilterStatusBtnArr() {
         for (_, button) in self.filterPinStatusDic {
             makeFilterBtnGray(button)
         }
         filterPinStatusDic.removeAll(keepingCapacity: false)
     }
-    func clearFilterPlaceBtnArr() {
+    fileprivate func clearFilterPlaceBtnArr() {
         for (_, button) in self.filterPlaceDic {
             makeFilterBtnGray(button)
         }
@@ -332,21 +357,21 @@ extension FaeMapViewController {
     }
     
     // Print array status, will be deleted in the future
-    func printPinTypeDic() {
+    fileprivate func printPinTypeDic() {
         print("[filterPinTypeDic]")
         for (key, _) in filterPinTypeDic {
             print("[filterPinTypeDic] \(key)")
         }
     }
     
-    func printPinStatusDic() {
+    fileprivate func printPinStatusDic() {
         print("[filterPinStatusDic]")
         for (key, _) in filterPinStatusDic {
             print("[filterPinStatusDic] \(key)")
         }
     }
     
-    func printPlaceDic() {
+    fileprivate func printPlaceDic() {
         print("[filterPlaceDic]")
         for (key, _) in filterPlaceDic {
             print("[filterPlaceDic] \(key)")

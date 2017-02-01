@@ -66,6 +66,15 @@ extension PinDetailViewController {
         loadPinCtrlButton()
         
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
+        
+        lblEmptyCommentArea = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 25))
+        lblEmptyCommentArea.center.y = (screenHeight - 200) / 2 + 200
+        lblEmptyCommentArea.text = "It’s empty around here, be the first to comment!"
+        lblEmptyCommentArea.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblEmptyCommentArea.textAlignment = .center
+        lblEmptyCommentArea.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.tableCommentsForPin.addSubview(lblEmptyCommentArea)
+        lblEmptyCommentArea.isHidden = true
     }
     
     private func loadTableHeader() {
@@ -306,11 +315,12 @@ extension PinDetailViewController {
         // Back to Map
         buttonPinBackToMap = UIButton()
         buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
-        buttonPinBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
+        buttonPinBackToMap.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: UIControlEvents.touchUpInside)
         subviewNavigation.addSubview(buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonPinBackToMap)
         buttonPinBackToMap.alpha = 0.0
+        buttonPinBackToMap.tag = 1
         
         // Back to Comment Pin List
         buttonBackToPinLists = UIButton()

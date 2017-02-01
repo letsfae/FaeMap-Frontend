@@ -71,7 +71,6 @@ extension String {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
             let localTimeZone = NSTimeZone.local.abbreviation()
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            print("[isNewPin] DEBUG TIME: \(elapsed)")
             if localTimeZone != nil {
                 // Greater than or equal to one day
                 if elapsed >= 300 {

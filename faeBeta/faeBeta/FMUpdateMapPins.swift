@@ -36,7 +36,7 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         loadPinsByZoomLevel.whereKey("radius", value: "500000")
-        loadPinsByZoomLevel.whereKey("type", value: "comment,chat_room,media")
+        loadPinsByZoomLevel.whereKey("type", value: stringFilterValue)
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {

@@ -189,6 +189,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var filterSlider: UISlider!
     var lblFilterDist: UILabel!
     
+    // Class global variable to control the filter
+    var stringFilterValue = "comment,chat_room,media"
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -310,6 +313,20 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.navigationBar.isTranslucent = true
     }
     
+    func refreshMap(pins: Bool, users: Bool, places: Bool) {
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+        if users {
+            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        }
+        if pins {
+            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+        }
+        if places {
+            
+        }
+    }
     
     // MARK: -- Map Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -325,12 +342,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
             
-            let currentZoomLevel = faeMapView.camera.zoom
-            let powFactor: Double = Double(21 - currentZoomLevel)
-            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-            // This update also includes updating for user pins updating
-            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+            refreshMap(pins: true, users: true, places: true)
         }
         
         // userStatus == 5, invisible

@@ -212,6 +212,12 @@ extension PinDetailViewController {
             if let comments = mapInfoJSON["comments"].int {
                 self.labelPinCommentsCount.text = "\(comments)"
                 commentsCount = comments
+                if comments == 0 {
+                    self.lblEmptyCommentArea.isHidden = false
+                }
+                else {
+                    self.lblEmptyCommentArea.isHidden = true
+                }
             }
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imageViewHotPin.isHidden = false

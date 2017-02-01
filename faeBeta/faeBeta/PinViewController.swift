@@ -144,6 +144,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var imageViewHotPin: UIImageView!
     var stringPlainTextViewTxt = ""
     
+    var lblEmptyCommentArea: UILabel!
+    
     enum MediaMode {
         case small
         case large
@@ -329,7 +331,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             buttonKeyBoard = UIButton(frame: CGRect(x: 21, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
             buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
-            buttonKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
+            buttonKeyBoard.addTarget(self, action: #selector(self.showKeyboard(_:)), for: .touchUpInside)
             contentView?.addSubview(buttonKeyBoard)
             
             
@@ -491,22 +493,27 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func keyboardWillShow(_ notification: Notification){
-        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
+        self.tableCommentsForPin.frame.size.height -= keyboardHeight
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = -keyboardHeight
             self.view.setNeedsUpdateConstraints()
-            }, completion: nil)
+        }, completion: {(done: Bool) in
+            
+        })
     }
     
     func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
+        self.tableCommentsForPin.scrollToTop(animated: true)
     }
     
     func keyboardWillHide(_ notification: Notification){
+        self.tableCommentsForPin.frame.size.height = screenHeight - 90 - 65
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
             self.toolbarDistanceToBottom.constant = 0
@@ -520,9 +527,15 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     
     //MARK: - keyboard input bar tapped event
-    func showKeyboard() {
-        
+    func showKeyboard(_ sender: UIButton) {
         resetToolbarButtonIcon()
+        if sender.tag == 1 {
+            sender.tag = 0
+            self.buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+            self.inputToolbar.contentView.textView.resignFirstResponder()
+            return
+        }
+        sender.tag = 1
         self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.toolbarContentView.showKeyboard()
         self.inputToolbar.contentView.textView.becomeFirstResponder()
@@ -681,7 +694,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-        self.showKeyboard()
+        self.showKeyboard(UIButton())
     }
     
     //MARK: - observe key path

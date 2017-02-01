@@ -15,9 +15,6 @@ extension PinDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == tableCommentsForPin {
-            if inputToolbar != nil {
-                self.inputToolbar.contentView.textView.resignFirstResponder()
-            }
             if touchToReplyTimer != nil {
                 touchToReplyTimer.invalidate()
             }
