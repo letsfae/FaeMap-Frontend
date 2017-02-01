@@ -116,6 +116,7 @@ extension PinDetailViewController {
         insets.left = 15
         insets.right = 15
         scrollViewMedia.contentInset = insets
+        scrollViewMedia.scrollToLeft(animated: false)
         
         // Hot pin
         imageViewHotPin = UIImageView()

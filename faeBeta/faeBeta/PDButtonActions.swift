@@ -128,7 +128,7 @@ extension PinDetailViewController {
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
-                self.tableCommentsForPin.scrollToTop()
+                self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
@@ -190,6 +190,7 @@ extension PinDetailViewController {
                     self.scrollViewMedia.frame.origin.y += textViewHeight
                 }
             }), completion: nil)
+            self.scrollViewMedia.scrollToLeft(animated: true)
         }
         else if pinTypeEnum == .comment {
             let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
@@ -228,7 +229,7 @@ extension PinDetailViewController {
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
-                self.tableCommentsForPin.scrollToTop()
+                self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
@@ -275,6 +276,7 @@ extension PinDetailViewController {
                     self.scrollViewMedia.frame.origin.y += textViewHeight
                 }
             }), completion: nil)
+            self.scrollViewMedia.scrollToLeft(animated: true)
         }
         else if pinTypeEnum == .comment {
             let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)

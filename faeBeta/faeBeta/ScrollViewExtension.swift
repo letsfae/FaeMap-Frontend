@@ -10,13 +10,23 @@ import Foundation
 import UIKit
 
 extension UIScrollView {
-    func scrollToTop() {
+    func scrollToTop(animated: Bool) {
         let desiredOffset = CGPoint(x: 0, y: -contentInset.top)
-        setContentOffset(desiredOffset, animated: true)
+        setContentOffset(desiredOffset, animated: animated)
+    }
+    
+    func scrollToBottom(animated: Bool) {
+        let desiredOffset = CGPoint(x: 0, y: -contentInset.bottom)
+        setContentOffset(desiredOffset, animated: animated)
     }
     
     func scrollToRight(animated: Bool) {
-        let desiredOffset = CGPoint(x: contentInset.left, y: 0)
+        let desiredOffset = CGPoint(x: -contentInset.right, y: 0)
+        setContentOffset(desiredOffset, animated: animated)
+    }
+    
+    func scrollToLeft(animated: Bool) {
+        let desiredOffset = CGPoint(x: -contentInset.left, y: 0)
         setContentOffset(desiredOffset, animated: animated)
     }
 }

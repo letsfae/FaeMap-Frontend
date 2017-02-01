@@ -33,8 +33,8 @@ extension PinDetailViewController: UIScrollViewDelegate {
             }
         }
         // DO NOT DELETE CODES BELOW !!!
-//        if scrollView == scrollViewMedia {
-//            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
+        if scrollView == scrollViewMedia {
+            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
 //            if self.lastContentOffset < scrollView.contentOffset.x && scrollView.contentOffset.x > 0 {
 //                UIView.animate(withDuration: 0.1, animations: {
 //                    self.scrollViewMedia.frame.origin.x = 0
@@ -55,6 +55,6 @@ extension PinDetailViewController: UIScrollViewDelegate {
 //                })
 //            }
 //            self.lastContentOffset = scrollView.contentOffset.x
-//        }
+        }
     }
 }

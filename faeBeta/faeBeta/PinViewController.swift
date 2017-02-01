@@ -203,6 +203,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }, completion: { (done: Bool) in
             self.loadInputToolBar()
         })
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
