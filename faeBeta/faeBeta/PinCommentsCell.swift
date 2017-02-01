@@ -145,6 +145,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
     func upVoteThisComment(_ sender: UIButton) {
         if voteType == .up || pinCommentID == "" {
+            cancelVote()
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
@@ -177,6 +178,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
     func downVoteThisComment(_ sender: UIButton) {
         if voteType == .down || pinCommentID == "" {
+            cancelVote()
             return
         }
         buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
@@ -203,6 +205,23 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
                 }
                 print("[upVoteThisComment] Fail to downvote this pin comment")
             }
+        }
+    }
+    
+    func cancelVote() {
+        let cancelVote = FaePinAction()
+        cancelVote.cancelVotePinComments(pinId: "\(pinCommentID)") { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                self.voteType = .null
+                self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                self.updateVoteCount()
+                print("[upVoteThisComment] Successfully cancel vote this pin comment")
+            }
+            else if status == 400 {
+                print("[upVoteThisComment] Already cancel vote this pin comment")
+            }
+            
         }
     }
     

@@ -104,6 +104,15 @@ class FaePinAction : NSObject {
         }
     }
     
+    func cancelVotePinComments(pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if pinId != nil{
+            deleteFromURL("pins/comments/\(pinId!)/vote", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
     func deletePinById(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
         if type != nil && pinId != nil{
             deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
