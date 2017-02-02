@@ -164,6 +164,7 @@ extension FaeMapViewController {
         polygonInside.contentMode = .scaleAspectFit
         self.view.addSubview(polygonInside)
         polygonInside.alpha = 0
+        polygonInside.layer.zPosition = 601
         
         if self.mapFilterArrow != nil {
             self.mapFilterArrow.removeFromSuperview()

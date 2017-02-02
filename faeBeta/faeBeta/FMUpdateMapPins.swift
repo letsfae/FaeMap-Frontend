@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import SwiftyJSON
+import RealmSwift
 
 extension FaeMapViewController {
     func updateTimerForSelfLoc(radius: Int) {
@@ -55,7 +56,9 @@ extension FaeMapViewController {
                 let pinMap = GMSMarker()
                 pinMap.zIndex = 1
                 var pinData = [String: AnyObject]()
+                var pinId = -999
                 var type = "comment"
+                var typeDecimal = -999
                 var status = ""
                 var iconImage = UIImage()
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -64,18 +67,33 @@ extension FaeMapViewController {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
                         type = "comment"
+                        typeDecimal = 0
                     }
                     else if typeInfo.contains("chat"){
                         type = "chat_room"
+                        typeDecimal = 1
                     }
                     else if typeInfo == "media" {
                         type = "media"
+                        typeDecimal = 2
                     }
                     pinMap.zIndex = 0
+                    if let pinIdInfo = mapInfoJSON[i]["\(type)_id"].int {
+                        pinId = pinIdInfo
+                    }
                     if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
                         if createdTimeInfo.isNewPin() {
                             status = "new"
                         }
+                        let realm = try! Realm()
+                        let newPinRealm = realm.objects(NewFaePin.self).filter("pinId == \(pinId) AND pinType == \(typeDecimal)")
+                        if newPinRealm.count >= 1 {
+                            if newPinRealm.first != nil {
+                                print("[checkPinStatus] newPin exists!")
+                                status = "normal"
+                            }
+                        }
+                        
                     }
                     if let likeCount = mapInfoJSON[i]["liked_count"].int {
                         if likeCount >= 15 {

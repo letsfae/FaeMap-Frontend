@@ -22,7 +22,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         filterCircleAnimation()
-        appBackFromBackground()
+        reloadSelfPosAnimation()
     }
     
     // PinDetailDelegate
@@ -41,7 +41,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
         animateMapFilterArrow()
         filterCircleAnimation()
-        appBackFromBackground()
+        reloadSelfPosAnimation()
     }
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
@@ -67,7 +67,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
-        appBackFromBackground()
+        reloadSelfPosAnimation()
     }
     // PinMenuDelegate
     func whenDismissPinMenu() {
@@ -78,7 +78,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
-        appBackFromBackground()
+        reloadSelfPosAnimation()
     }
     
     // LeftSlidingMenuDelegate
@@ -86,10 +86,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         if !isOn {
             self.faeMapView.isMyLocationEnabled = false
             self.renewSelfLocation()
-            if userStatus != 5  {
-                loadPositionAnimateImage()
-                getSelfAccountInfo()
-            }
+            reloadSelfPosAnimation()
             return
         }
         if userStatus == 5 {

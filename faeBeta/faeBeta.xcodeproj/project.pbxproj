@@ -124,7 +124,6 @@
 		B0714E181D62534A00356705 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714E171D62534A00356705 /* LogInViewController.swift */; };
 		B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714E1B1D62537300356705 /* SignInSupportViewController.swift */; };
 		B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */; };
-		B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49B31D9626140075EE45 /* AutoLayout.swift */; };
 		B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49B71D9630E20075EE45 /* NameCardShowTableViewCell.swift */; };
 		B09E49BC1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09E49B81D9630E20075EE45 /* NameCardShowTableViewCell.xib */; };
 		B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */; };
@@ -425,7 +424,6 @@
 		B0714E171D62534A00356705 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		B0714E1B1D62537300356705 /* SignInSupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportViewController.swift; sourceTree = "<group>"; };
 		B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportNewPassViewController.swift; sourceTree = "<group>"; };
-		B09E49B31D9626140075EE45 /* AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLayout.swift; sourceTree = "<group>"; };
 		B09E49B71D9630E20075EE45 /* NameCardShowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardShowTableViewCell.swift; sourceTree = "<group>"; };
 		B09E49B81D9630E20075EE45 /* NameCardShowTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameCardShowTableViewCell.xib; sourceTree = "<group>"; };
 		B09E49BF1D96D7330075EE45 /* NameCardTagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardTagsViewController.swift; sourceTree = "<group>"; };
@@ -1082,7 +1080,6 @@
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
-				B09E49B31D9626140075EE45 /* AutoLayout.swift */,
 				B82767531DF5DD2E00CFB912 /* Database.swift */,
 			);
 			name = Model;
@@ -1717,7 +1714,6 @@
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
-				B09E49B41D9626140075EE45 /* AutoLayout.swift in Sources */,
 				B8612E3D1DF24E3D0092C606 /* PDAPIConnections.swift in Sources */,
 				B8612E3F1DF24FB90092C606 /* PDTableViewCtrlFile.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,

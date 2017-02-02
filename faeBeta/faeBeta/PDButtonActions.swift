@@ -13,63 +13,69 @@ import SwiftyJSON
 
 extension PinDetailViewController {
     
-    /*
-    // Pan gesture for dragging pin detail dragging button
-    func panActionPinDetailDrag(_ pan: UIPanGestureRecognizer) {
-        var resumeTime:Double = 0.583
-        if pan.state == .began {
-            if uiviewPinDetail.frame.size.height == 255 {
-                pinSizeFrom = 255
-                pinSizeTo = screenHeight - 65
+    // Like comment pin
+    func actionLikeThisPin(_ sender: UIButton) {
+        endEdit()
+        
+        if animatingHeartTimer != nil {
+            animatingHeartTimer.invalidate()
+        }
+        
+        if sender.tag == 1 && pinIDPinDetailView != "-999" {
+            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+            if animatingHeart != nil {
+                animatingHeart.image = nil
             }
-            else {
-                pinSizeFrom = screenHeight - 65
-                pinSizeTo = 255
-            }
-        } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
-            let location = pan.location(in: view)
-            let velocity = pan.velocity(in: view)
-            resumeTime = abs(Double(CGFloat(screenHeight - 256) / velocity.y))
-            print("DEBUG: Velocity TESTing")
-            print("Velocity in CGPoint.y")
-            print(velocity.y)
-            print("Resume Time")
-            print(resumeTime)
-            if resumeTime >= 0.583 {
-                resumeTime = 0.583
-            }
-            if abs(location.y - pinSizeFrom) >= 80 {
-                UIView.animate(withDuration: resumeTime, animations: {
-                    self.draggingButtonSubview.frame.origin.y = self.pinSizeTo - 28
-                    self.uiviewPinDetail.frame.size.height = self.pinSizeTo
-                })
-            }
-            else {
-                UIView.animate(withDuration: resumeTime, animations: {
-                    self.draggingButtonSubview.frame.origin.y = self.pinSizeFrom - 28
-                    self.uiviewPinDetail.frame.size.height = self.pinSizeFrom
-                })
-            }
-            if uiviewPinDetail.frame.size.height == 255 {
-                textviewPinDetail.isScrollEnabled = true
-                buttonPinDetailDragToLargeSize.tag = 0
-            }
-            if uiviewPinDetail.frame.size.height == screenHeight - 65 {
-                textviewPinDetail.isScrollEnabled = false
-                buttonPinDetailDragToLargeSize.tag = 1
-                let newHeight = CGFloat(140 * self.dictCommentsOnPinDetail.count)
-                self.tableCommentsForPin.frame.size.height = newHeight
-            }
-            
-        } else {
-            let location = pan.location(in: view)
-            if location.y >= 306 {
-                self.draggingButtonSubview.center.y = location.y - 65
-                self.uiviewPinDetail.frame.size.height = location.y + 14 - 65
-            }
+            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
+            print("debug animating sender.tag 1")
+            print(sender.tag)
+            sender.tag = 0
+            return
+        }
+        
+        if sender.tag == 0 && pinIDPinDetailView != "-999" {
+            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
+            self.animateHeart()
+            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
+            print("debug animating sender.tag 0")
+            print(sender.tag)
+            sender.tag = 1
         }
     }
-    */
+    
+    func actionHoldingLikeButton(_ sender: UIButton) {
+        endEdit()
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
+        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
+    }
+    
+    // Upvote comment pin
+    func actionUpvoteThisComment(_ sender: UIButton) {
+        if isUpVoting {
+            return
+        }
+        
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
+        
+        if animatingHeart != nil {
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+        }
+        
+        if pinIDPinDetailView != "-999" {
+            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
+        }
+    }
+    
+    // Down vote comment pin
+    func actionDownVoteThisComment(_ sender: UIButton) {
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+        if animatingHeart != nil {
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+        }
+        if pinIDPinDetailView != "-999" {
+            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
+        }
+    }
     
     // Back to pin list window when in detail window
     func actionGoToList(_ sender: UIButton!) {

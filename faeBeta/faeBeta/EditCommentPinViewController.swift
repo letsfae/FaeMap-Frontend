@@ -8,9 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import SDWebImage
-import RealmSwift
-import IDMPhotoBrowser
 
 protocol EditCommentPinViewControllerDelegate: class {
     func reloadCommentContent()

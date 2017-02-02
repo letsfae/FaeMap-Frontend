@@ -23,3 +23,23 @@ class SelfInformation: Object {
     dynamic var currentUserID = -999
     dynamic var avatar: NSData? = nil
 }
+
+class NewPinList: Object {
+    dynamic var userId = -999
+    let pinList = List<FaePin>()
+}
+
+class PinList: Object {
+    dynamic var userId = -999
+    let pinList = List<NewFaePin>()
+}
+
+class FaePin: Object {
+    dynamic var pinType = ""
+    dynamic var pinId = ""
+}
+
+class NewFaePin: Object {
+    dynamic var pinType = -999
+    dynamic var pinId = -999
+}

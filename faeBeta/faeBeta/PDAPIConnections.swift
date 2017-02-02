@@ -12,67 +12,26 @@ import SDWebImage
 import RealmSwift
 
 extension PinDetailViewController {
-    // Like comment pin
-    func actionLikeThisPin(_ sender: UIButton) {
-        endEdit()
-        
-        if animatingHeartTimer != nil {
-            animatingHeartTimer.invalidate()
-        }
-        
-        if sender.tag == 1 && pinIDPinDetailView != "-999" {
-            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
-            if animatingHeart != nil {
-                animatingHeart.image = nil
+    
+    func checkPinStatus() {
+        if pinStatus == "new" {
+            let realm = try! Realm()
+            let newPinRealm = realm.objects(NewFaePin.self).filter("pinId == \(self.pinIdSentBySegue) AND pinType == \(self.pinTypeDecimal)")
+            if newPinRealm.count >= 1 {
+                if newPinRealm.first != nil {
+                    print("[checkPinStatus] newPin exists!")
+                }
             }
-            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
-            print("debug animating sender.tag 1")
-            print(sender.tag)
-            sender.tag = 0
-            return
-        }
-        
-        if sender.tag == 0 && pinIDPinDetailView != "-999" {
-            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-            self.animateHeart()
-            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
-            print("debug animating sender.tag 0")
-            print(sender.tag)
-            sender.tag = 1
-        }
-    }
-    
-    func actionHoldingLikeButton(_ sender: UIButton) {
-        endEdit()
-        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
-    }
-    
-    // Upvote comment pin
-    func actionUpvoteThisComment(_ sender: UIButton) {
-        if isUpVoting {
-            return
-        }
-        
-        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-        
-        if animatingHeart != nil {
-            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
-        }
-        
-        if pinIDPinDetailView != "-999" {
-            likeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
-        }
-    }
-    
-    // Down vote comment pin
-    func actionDownVoteThisComment(_ sender: UIButton) {
-        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
-        if animatingHeart != nil {
-            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
-        }
-        if pinIDPinDetailView != "-999" {
-            unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
+            else if newPinRealm.count == 0 {
+                let newPin = NewFaePin()
+                newPin.pinId = Int(self.pinIdSentBySegue)!
+                newPin.pinType = self.pinTypeDecimal
+                try! realm.write {
+                    realm.add(newPin)
+                    print("[checkPinStatus] newPin written!")
+                }
+            }
+            self.delegate?.changeIconImage(marker: pinMarker, type: "\(pinTypeEnum)", status: "normal")
         }
     }
     

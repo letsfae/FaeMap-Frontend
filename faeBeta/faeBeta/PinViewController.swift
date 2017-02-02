@@ -32,6 +32,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinIdSentBySegue: String = "-999"
     var pinStatus = ""
     var pinMarker = GMSMarker()
+    var pinTypeDecimal = -999 // 0 -> comment, 1 -> chat_room, 2 -> story
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -191,6 +192,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             getSeveralInfo()
         }
         initPinBasicInfo()
+        checkPinStatus()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -226,6 +228,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func initPinBasicInfo() {
         switch pinTypeEnum {
         case .comment:
+            self.pinTypeDecimal = 0
             self.labelPinTitle.text = "Comment"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
             textViewOriginalHeight = 100
@@ -238,6 +241,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             }
             break
         case .media:
+            self.pinTypeDecimal = 2
             self.labelPinTitle.text = "Story"
             pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
             textViewOriginalHeight = 0
@@ -249,9 +253,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             }
             break
         case .chat_room:
+            self.pinTypeDecimal = 1
             self.labelPinTitle.text = "Chat"
             break
         case .place:
+            
             break
         }
         labelPinTitle.textAlignment = .center

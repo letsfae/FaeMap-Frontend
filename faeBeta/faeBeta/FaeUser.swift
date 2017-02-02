@@ -466,8 +466,6 @@ class FaeUser : NSObject {
         }
     }
 
-    
-    
     func getAllTags(_ completion:@escaping (Int,Any?)->Void){
         getFromURL("users/name_card/tags", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
             completion(status,message)

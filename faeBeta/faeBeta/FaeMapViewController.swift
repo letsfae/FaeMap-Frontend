@@ -285,10 +285,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
             self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
             self.renewSelfLocation()
-            if userStatus != 5  {
-                loadPositionAnimateImage()
-                getSelfAccountInfo()
-            }
+            reloadSelfPosAnimation()
+        }
+    }
+    
+    func reloadSelfPosAnimation() {
+        if userStatus != 5  {
+            loadPositionAnimateImage()
+            getSelfAccountInfo()
         }
     }
     
