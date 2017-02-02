@@ -23,10 +23,10 @@ extension FaeMapViewController {
         if filterCircle_4 != nil {
             filterCircle_4.removeFromSuperview()
         }
-        let xAxis: CGFloat = 18
-        let yAxis: CGFloat = 18
-        let xAxisAfter: CGFloat = 3
-        let yAxisAfter: CGFloat = 3
+        let xAxis: CGFloat = 22
+        let yAxis: CGFloat = 22
+        let xAxisAfter: CGFloat = 7
+        let yAxisAfter: CGFloat = 7
         filterCircle_1 = UIImageView(frame: CGRect.zero)
         filterCircle_1.center = CGPoint(x: xAxis, y: yAxis)
         filterCircle_1.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
@@ -188,14 +188,14 @@ extension FaeMapViewController {
         if polygonInside != nil {
             polygonInside.layer.removeAllAnimations()
         }
-        if didLoadFirstLoad {
+        if !didLoadFirstLoad {
             self.filterCircleAnimation()
         }
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             if self.polygonInside != nil {
                 self.polygonInside.alpha = 0
             }
-            self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 18, y: screenHeight - 43, width: 36, height: 36)
+            self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
         }, completion: {(done: Bool) in
             self.btnMapFilter.isEnabled = true
             self.btnMapFilter.transform = CGAffineTransform(rotationAngle: 0)

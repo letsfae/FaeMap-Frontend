@@ -88,6 +88,8 @@ extension EditCommentPinViewController {
         case .media:
             loadViewForMoment()
             break
+        case .place:
+            break
         }
         
     }

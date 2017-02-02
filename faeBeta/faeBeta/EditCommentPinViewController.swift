@@ -98,6 +98,8 @@ class EditCommentPinViewController: UIViewController {
         case .chat_room:
             self.labelTitle.text = "Edit Chat"
             break
+        case .place:
+            break
         }
     }
         
