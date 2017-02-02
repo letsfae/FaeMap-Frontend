@@ -251,6 +251,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case .chat_room:
             self.labelPinTitle.text = "Chat"
             break
+        case .place:
+            break
         }
         labelPinTitle.textAlignment = .center
     }
