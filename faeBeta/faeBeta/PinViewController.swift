@@ -159,6 +159,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case comment
         case media
         case chat_room
+        case place
     }
     var pinTypeEnum: PinType = .media
     var pinTypeString = ""
