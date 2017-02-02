@@ -31,6 +31,7 @@ class DisconnectionViewController: UIViewController {
         let btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
         btnReconnect.layer.cornerRadius = 25*screenWidthFactor
         btnReconnect.setTitle("Reconnect", for: .normal)
+        btnReconnect.setTitleColor(UIColor.white, for: .normal)
         btnReconnect.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20*screenWidthFactor)
         btnReconnect.backgroundColor = UIColor.faeAppRedColor()
         view.addSubview(btnReconnect)

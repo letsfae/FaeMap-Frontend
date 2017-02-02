@@ -11,6 +11,14 @@ import UIKit
 extension FaeMapViewController {
     
     func filterCircleAnimation() {
+        func createFilterCircle() -> UIImageView {
+            let xAxis: CGFloat = 22
+            let yAxis: CGFloat = 22
+            let imgView = UIImageView(frame: CGRect.zero)
+            imgView.center = CGPoint(x: xAxis, y: yAxis)
+            imgView.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
+            return imgView
+        }
         if filterCircle_1 != nil {
             filterCircle_1.removeFromSuperview()
         }
@@ -23,44 +31,35 @@ extension FaeMapViewController {
         if filterCircle_4 != nil {
             filterCircle_4.removeFromSuperview()
         }
-        let xAxis: CGFloat = 22
-        let yAxis: CGFloat = 22
-        let xAxisAfter: CGFloat = 7
-        let yAxisAfter: CGFloat = 7
-        filterCircle_1 = UIImageView(frame: CGRect.zero)
-        filterCircle_1.center = CGPoint(x: xAxis, y: yAxis)
-        filterCircle_1.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
+        filterCircle_1 = createFilterCircle()
         btnMapFilter.addSubview(filterCircle_1)
-        filterCircle_2 = UIImageView(frame: CGRect.zero)
-        filterCircle_2.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
-        filterCircle_2.center = CGPoint(x: xAxis, y: yAxis)
+        filterCircle_2 = createFilterCircle()
         btnMapFilter.addSubview(filterCircle_2)
-        filterCircle_3 = UIImageView(frame: CGRect.zero)
-        filterCircle_3.center = CGPoint(x: xAxis, y: yAxis)
-        filterCircle_3.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
+        filterCircle_3 = createFilterCircle()
         btnMapFilter.addSubview(filterCircle_3)
-        filterCircle_4 = UIImageView(frame: CGRect.zero)
-        filterCircle_4.image = #imageLiteral(resourceName: "mapFilterInnerCircle")
-        filterCircle_4.center = CGPoint(x: xAxis, y: yAxis)
+        filterCircle_4 = createFilterCircle()
         btnMapFilter.addSubview(filterCircle_4)
-        UIView.animate(withDuration: 4, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
+        let animateTime: Double = 2
+        let radius: CGFloat = 50
+        let xAxisAfter: CGFloat = -3
+        UIView.animate(withDuration: animateTime, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_1.alpha = 0.0
-            self.filterCircle_1.frame = CGRect(x: xAxisAfter, y: yAxisAfter, width: 30, height: 30)
+            self.filterCircle_1.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: 4, delay: 1, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 0.5, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_2.alpha = 0.0
-            self.filterCircle_2.frame = CGRect(x: xAxisAfter, y: yAxisAfter, width: 30, height: 30)
+            self.filterCircle_2.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: 4, delay: 2, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 1, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_3.alpha = 0.0
-            self.filterCircle_3.frame = CGRect(x: xAxisAfter, y: yAxisAfter, width: 30, height: 30)
+            self.filterCircle_3.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: 4, delay: 3, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 1.5, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_4.alpha = 0.0
-            self.filterCircle_4.frame = CGRect(x: xAxisAfter, y: yAxisAfter, width: 30, height: 30)
+            self.filterCircle_4.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
     }
     
