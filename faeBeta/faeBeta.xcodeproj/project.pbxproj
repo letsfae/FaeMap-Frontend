@@ -247,6 +247,7 @@
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */; };
 		CE97A9C21E399D52005BBF6C /* YelpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9BF1E399D52005BBF6C /* YelpManager.swift */; };
 		CE97A9C31E399D52005BBF6C /* YelpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9C01E399D52005BBF6C /* YelpQuery.swift */; };
 		CE97A9C41E399D52005BBF6C /* YelpResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9C11E399D52005BBF6C /* YelpResult.swift */; };
@@ -581,6 +582,7 @@
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseWelcomer.swift; sourceTree = "<group>"; };
 		CE97A9BF1E399D52005BBF6C /* YelpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpManager.swift; sourceTree = "<group>"; };
 		CE97A9C01E399D52005BBF6C /* YelpQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpQuery.swift; sourceTree = "<group>"; };
 		CE97A9C11E399D52005BBF6C /* YelpResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpResult.swift; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				DC084A901DDCF969007DCC88 /* Recent.swift */,
+				CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */,
 			);
 			name = FireBaseData;
 			sourceTree = "<group>";
@@ -1844,6 +1847,7 @@
 				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
+				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
