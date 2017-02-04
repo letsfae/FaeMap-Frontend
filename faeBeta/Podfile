@@ -18,6 +18,7 @@ target 'faeBeta' do
 	pod 'IDMPhotoBrowser'
 	pod 'KTCenterFlowLayout'
 	pod 'RealmSwift'
+    
 end
 
 post_install do |installer|
