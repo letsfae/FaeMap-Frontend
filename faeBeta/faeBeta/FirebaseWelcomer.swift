@@ -17,9 +17,9 @@ func firebaseWelcome() {
     
     let message = OutgoingMessage.init(message : text, senderId : "1", senderName : "Fae Map Crew", date: Date(), status : "Delivered", type : "text", index : 1, hasTimeStamp: true)
     
-    print("[my user_id] :" + user_id.stringValue)
-    print("[my username] :" + username!)
+    //print("[my user_id] :" + user_id.stringValue)
+    //print("[my username] :" + username!)
     
-    message.sendMessage("1-" + user_id.stringValue , withUser: FaeWithUser(userName: username!, userId: user_id.stringValue, userAvatar: nil))
+    message.sendMessageWithWelcomeInformation("1-" + user_id.stringValue , withUser: FaeWithUser(userName: username!, userId: user_id.stringValue, userAvatar: nil))
     
 }
