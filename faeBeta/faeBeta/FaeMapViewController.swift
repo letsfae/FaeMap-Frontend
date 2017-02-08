@@ -226,6 +226,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         checkFilterShowAll(btnMFilterShowAll)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -353,6 +354,22 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.previousPosition = mapCenterCoordinate
             
             refreshMap(pins: true, users: true, places: true)
+            
+            let testYelp = YelpManager()
+            let testQuery = YelpQuery()
+            testQuery.setLatitude(lat: Double(currentLatitude))
+            testQuery.setLongitude(lon: Double(currentLongitude))
+            testQuery.setCatagoryToCafe()
+            testQuery.setRadius(radius: 4000)
+            testQuery.setSortRule(sort: "best_match")
+            testYelp.query(request: testQuery, completion: { (results) in
+                print("[YelpAPI - Testing]")
+                for result in results {
+                    print(result.getName())
+                    print(result.getCategory())
+                    print(result.getCategory().contains("coffee"))
+                }
+            })
         }
         
         // userStatus == 5, invisible

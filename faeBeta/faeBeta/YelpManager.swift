@@ -17,7 +17,7 @@ private var requestHeaders = ["Authorization": ""]
 
 class YelpManager {
     
-    class var shared:YelpManager {
+    class var shared: YelpManager {
         struct Singleton {
             static let instance = YelpManager()
         }
@@ -45,7 +45,13 @@ class YelpManager {
                         if let data = response.result.value {
                             let json = JSON(data)["businesses"]
                             for i in 0...(json.count - 1){
-                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
+                                // Added by Yue Shen - 02.07.17
+                                var cateArray = [String]()
+                                for j in 0...json[i]["categories"].count {
+                                    cateArray.append(json[i]["categories"][j]["alias"].stringValue)
+                                }
+                                // Modified by Yue Shen - 02.07.17
+                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
                             }
                             completion(result)
                         }
@@ -57,7 +63,13 @@ class YelpManager {
                 if let data = response.result.value {
                     let json = JSON(data)["businesses"]
                     for i in 0...(json.count - 1){
-                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue))
+                        // Added by Yue Shen - 02.07.17
+                        var cateArray = [String]()
+                        for j in 0...json[i]["categories"].count {
+                            cateArray.append(json[i]["categories"][j]["alias"].stringValue)
+                        }
+                        // Modified by Yue Shen - 02.07.17
+                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
                     }
                     completion(result)
                 }

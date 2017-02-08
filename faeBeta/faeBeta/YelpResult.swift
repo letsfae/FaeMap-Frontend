@@ -16,13 +16,15 @@ class YelpResult {
     private var address2 : String!
     private var name : String!
     private var position : CLLocation!
+    private var category = [String]() // Added by Yue Shen - 02.07.17
     
-    init(url : String, add1 : String, add2 : String, name : String, lat : String, long : String) {
+    init(url : String, add1 : String, add2 : String, name : String, lat : String, long : String, cate : [String]) {
         imageURL = url
         address1 = add1
         address2 = add2
         self.name = name
         position = CLLocation(latitude: Double(lat)!, longitude: Double(long)!)
+        category = cate
     }
     
     func getImageURL() -> String {
@@ -43,5 +45,10 @@ class YelpResult {
     
     func getPosition() -> CLLocation {
         return position
+    }
+    
+    // Added by Yue Shen - 02.07.17
+    func getCategory() -> [String] {
+        return category
     }
 }
