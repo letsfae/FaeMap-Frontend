@@ -28,6 +28,57 @@ extension FaeMapViewController {
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
     }
     
+    func updateTimerForLoadRegionPlacePin(radius: Int) {
+        self.loadCurrentRegionPlacePins(radius: radius)
+        if timerLoadRegionPlacePins != nil {
+            timerLoadRegionPlacePins.invalidate()
+        }
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+    }
+    
+    func loadCurrentRegionPlacePins(radius: Int) {
+        clearMap(type: "place")
+        let testYelp = YelpManager()
+        let testQuery = YelpQuery()
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+        testQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
+        testQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
+        testQuery.setCatagoryToPizza()
+        testQuery.setRadius(radius: Int(Double(radius)))
+        testQuery.setSortRule(sort: "distance")
+        testYelp.query(request: testQuery, completion: { (results) in
+            print("[YelpAPI - Testing]")
+            for result in results {
+                print(result.getName())
+                print(result.getCategory())
+                print(result.getCategory().contains("coffee"))
+                print(result.getPosition().coordinate)
+                let pinMap = GMSMarker()
+                var iconImage = UIImage()
+                iconImage = #imageLiteral(resourceName: "placePinCoffee")
+                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                icon.contentMode = .scaleAspectFit
+                icon.image = iconImage
+                pinMap.iconView = icon
+                let delay: Double = Double(arc4random_uniform(200)) / 100
+                pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+                pinMap.position = result.getPosition().coordinate
+                pinMap.map = self.faeMapView
+                self.mapPlacePinsDic.append(pinMap)
+                UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    icon.frame.size.width = 48
+                    icon.frame.size.height = 54
+                }, completion: {(done: Bool) in
+                    if done {
+                        pinMap.iconView = nil
+                        pinMap.icon = iconImage
+                    }
+                })
+            }
+        })
+    }
+    
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins(radius: Int) {
         clearMap(type: "pin")

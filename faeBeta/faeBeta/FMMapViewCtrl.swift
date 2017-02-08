@@ -55,7 +55,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
         }
         
-        if type == "all" || type == "user" {
+        else if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 UIView.animate(withDuration: 0.5, delay: delay, animations: {
@@ -64,6 +64,19 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     }
                     }, completion: {(done: Bool) in
                         marker.map = nil
+                })
+            }
+        }
+        
+        else if type == "all" || type == "place" {
+            for marker in mapPlacePinsDic {
+                let delay: Double = Double(arc4random_uniform(100)) / 100
+                UIView.animate(withDuration: 0.5, delay: delay, animations: {
+                    if marker.iconView != nil {
+                        marker.iconView?.alpha = 0
+                    }
+                }, completion: {(done: Bool) in
+                    marker.map = nil
                 })
             }
         }

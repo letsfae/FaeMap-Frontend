@@ -93,6 +93,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapPinsArray = [GMSMarker]() // Map Comment Pin Array
     var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin Dictionary
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
+    var mapPlacePinsDic = [GMSMarker]() // Map User Pin
     var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     var markerMask: UIView! // mask to prevent UI action
     var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
@@ -102,6 +103,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerUpdateSelfLocation: Timer! // timer to renew update user pins
+    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
     
     // Map Namecard
     var buttonChat: UIButton!
@@ -218,6 +220,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadPositionAnimateImage()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
         let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
         didLoadFirstLoad = true
@@ -335,7 +338,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         }
         if places {
-            
+            self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500))
         }
     }
     
@@ -346,7 +349,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
             self.faeMapView.camera = camera
             self.startUpdatingLocation = true
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
@@ -355,21 +358,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             
             refreshMap(pins: true, users: true, places: true)
             
-            let testYelp = YelpManager()
-            let testQuery = YelpQuery()
-            testQuery.setLatitude(lat: Double(currentLatitude))
-            testQuery.setLongitude(lon: Double(currentLongitude))
-            testQuery.setCatagoryToCafe()
-            testQuery.setRadius(radius: 4000)
-            testQuery.setSortRule(sort: "best_match")
-            testYelp.query(request: testQuery, completion: { (results) in
-                print("[YelpAPI - Testing]")
-                for result in results {
-                    print(result.getName())
-                    print(result.getCategory())
-                    print(result.getCategory().contains("coffee"))
-                }
-            })
         }
         
         // userStatus == 5, invisible

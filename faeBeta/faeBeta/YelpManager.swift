@@ -47,7 +47,7 @@ class YelpManager {
                             for i in 0...(json.count - 1){
                                 // Added by Yue Shen - 02.07.17
                                 var cateArray = [String]()
-                                for j in 0...json[i]["categories"].count {
+                                for j in 0...json[i]["categories"].count-1 {
                                     cateArray.append(json[i]["categories"][j]["alias"].stringValue)
                                 }
                                 // Modified by Yue Shen - 02.07.17
@@ -65,7 +65,7 @@ class YelpManager {
                     for i in 0...(json.count - 1){
                         // Added by Yue Shen - 02.07.17
                         var cateArray = [String]()
-                        for j in 0...json[i]["categories"].count {
+                        for j in 0...json[i]["categories"].count-1 {
                             cateArray.append(json[i]["categories"][j]["alias"].stringValue)
                         }
                         // Modified by Yue Shen - 02.07.17
