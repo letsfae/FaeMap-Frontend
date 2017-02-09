@@ -50,14 +50,33 @@ extension FaeMapViewController {
         testYelp.query(request: testQuery, completion: { (results) in
             print("[YelpAPI - Testing]")
             for result in results {
-                print(result.getName())
-                print(result.getCategory())
-                print(result.getCategory().contains("coffee"))
-                print(result.getPosition().coordinate)
-                let pinMap = GMSMarker()
+                var pinData = [String: AnyObject]()
                 var iconImage = UIImage()
-                iconImage = #imageLiteral(resourceName: "placePinCoffee")
-                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                pinData["title"] = result.getName() as AnyObject?
+                let categoryList = result.getCategory()
+                if categoryList.contains("pizza") {
+                    pinData["category"] = "pizza" as AnyObject?
+                    iconImage = #imageLiteral(resourceName: "placePinPizza")
+                }
+                else if categoryList.contains("burger") {
+                    pinData["category"] = "burger" as AnyObject?
+                    iconImage = #imageLiteral(resourceName: "placePinBurger")
+                }
+                else if categoryList.contains("coffee") {
+                    pinData["category"] = "coffee" as AnyObject?
+                    iconImage = #imageLiteral(resourceName: "placePinCoffee")
+                }
+                else if categoryList.contains("dessert") {
+                    pinData["category"] = "dessert" as AnyObject?
+                    iconImage = #imageLiteral(resourceName: "placePinDesert")
+                }
+                pinData["latitude"] = result.getPosition().coordinate.latitude as AnyObject?
+                pinData["longitude"] = result.getPosition().coordinate.longitude as AnyObject?
+                pinData["street"] = result.getAddress1() as AnyObject?
+                pinData["city"] = result.getAddress2() as AnyObject?
+                pinData["imageURL"] = result.getImageURL() as AnyObject?
+                let pinMap = GMSMarker()
+                let icon = UIImageView(frame: CGRect.zero)
                 icon.contentMode = .scaleAspectFit
                 icon.image = iconImage
                 pinMap.iconView = icon

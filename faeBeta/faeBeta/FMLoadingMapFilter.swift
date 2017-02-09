@@ -184,11 +184,11 @@ extension FaeMapViewController {
         uiviewFilterMenu.addSubview(btnMFilterCafe)
         btnMFilterCafe.filterType = .cafe
         
-        btnMFilterDesert = MFilterButton(frame: CGRect(x: 295, y: 349, width: 70, height: 25))
-        btnMFilterDesert.setTitle("Deserts", for: .normal)
-        btnMFilterDesert.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
-        uiviewFilterMenu.addSubview(btnMFilterDesert)
-        btnMFilterDesert.filterType = .desert
+        btnMFilterDessert = MFilterButton(frame: CGRect(x: 295, y: 349, width: 70, height: 25))
+        btnMFilterDessert.setTitle("Desserts", for: .normal)
+        btnMFilterDessert.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
+        uiviewFilterMenu.addSubview(btnMFilterDessert)
+        btnMFilterDessert.filterType = .dessert
         
         btnMFilterCinema = MFilterButton(frame: CGRect(x: 50, y: 384, width: 71, height: 25))
         btnMFilterCinema.setTitle("Cinema", for: .normal)
@@ -282,7 +282,7 @@ class MFilterButton: UIButton {
         case placeAll
         case restaurant
         case cafe
-        case desert
+        case dessert
         case cinema
         case beauty
         case sports

@@ -163,7 +163,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterPlacesAll: MFilterButton!
     var btnMFilterRestr: MFilterButton!
     var btnMFilterCafe: MFilterButton!
-    var btnMFilterDesert: MFilterButton!
+    var btnMFilterDessert: MFilterButton!
     var btnMFilterCinema: MFilterButton!
     var btnMFilterBeauty: MFilterButton!
     var btnMFilterSports: MFilterButton!
