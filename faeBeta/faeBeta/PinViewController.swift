@@ -759,7 +759,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
-    
     // set up content of extend view (mingjie jin)
     func loadExtendView() {
         print("[button frame] : \(inputToolbar.contentView.heartButton.frame)")
@@ -777,7 +776,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         anonyLabel.textAlignment = .center
         toolBarExtendView.addSubview(anonyLabel)
         toolBarExtendView.layer.addSublayer(topBorder)
-        var checkbutton = UIButton(frame: CGRect(x: screenWidth - 149, y: 14, width: 22, height: 22))
+        let checkbutton = UIButton(frame: CGRect(x: screenWidth - 149, y: 14, width: 22, height: 22))
         checkbutton.adjustsImageWhenHighlighted = false
         checkbutton.setImage(UIImage(named: "uncheckBoxGray"), for: UIControlState.normal)
         checkbutton.addTarget(self, action: #selector(checkboxAction(_:)), for: UIControlEvents.touchUpInside)

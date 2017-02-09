@@ -178,6 +178,7 @@ class LogInViewController: UIViewController {
                 }
                 self.dismiss(animated: true, completion: {
                     if isFirstTimeLogin {
+                        firebaseWelcome()
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
                     }
                 })

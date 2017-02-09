@@ -39,7 +39,7 @@ extension FaeMapViewController {
         btnMapFilter.addSubview(filterCircle_3)
         filterCircle_4 = createFilterCircle()
         btnMapFilter.addSubview(filterCircle_4)
-        let animateTime: Double = 2
+        let animateTime: Double = 4
         let radius: CGFloat = 50
         let xAxisAfter: CGFloat = -3
         UIView.animate(withDuration: animateTime, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
@@ -47,17 +47,17 @@ extension FaeMapViewController {
             self.filterCircle_1.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: animateTime, delay: 0.5, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 1, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_2.alpha = 0.0
             self.filterCircle_2.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: animateTime, delay: 1, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 2, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_3.alpha = 0.0
             self.filterCircle_3.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
         
-        UIView.animate(withDuration: animateTime, delay: 1.5, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: animateTime, delay: 3, options: [.repeat, .curveEaseIn], animations: ({
             self.filterCircle_4.alpha = 0.0
             self.filterCircle_4.frame = CGRect(x: xAxisAfter, y: xAxisAfter, width: radius, height: radius)
         }), completion: nil)
