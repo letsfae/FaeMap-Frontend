@@ -117,6 +117,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
     
+    var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
+    var isAnonymous = false // var to record is user is anonymous;
+    
     //custom toolBar the bottom toolbar button
     var buttonSet = [UIButton]()
     var buttonSend : UIButton!
@@ -209,6 +212,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             self.buttonNextPin.alpha = 1
         }, completion: { (done: Bool) in
             self.loadInputToolBar()
+            self.loadExtendView() // call func for loading extend view (mingjie jin)
         })
         
     }
@@ -389,13 +393,22 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         inputToolbar.contentView.textView.tintColor = UIColor.faeAppRedColor()
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
         inputToolbar.contentView.textView.delaysContentTouches = false
+        
+        //should button to open anonymous extend view (mingjie jin)
+        inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousNormal"), for: UIControlState.normal)
+        //inputToolbar.contentView.heartButton.frame = CGRect(x: 273, y: 14, width: 40, height: 40)
+        inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousHighlight"), for: UIControlState.highlighted)
+        inputToolbar.contentView.heartButton.addTarget(self, action:#selector(extendButtonAction(_:)), for: UIControlEvents.touchUpInside)
+        inputToolbar.contentView.heartButtonHidden = false
+        
+        
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 7, y: 3, width: 200, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lableTextViewPlaceholder.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1.0)
         lableTextViewPlaceholder.text = "Write a Comment..."
         inputToolbar.contentView.textView.addSubview(lableTextViewPlaceholder)
         
-        inputToolbar.maximumHeight = 128
+        inputToolbar.maximumHeight = 90
         subviewInputToolBar = UIView(frame: CGRect(x: 0, y: screenHeight-90, width: screenWidth, height: 90))
         subviewInputToolBar.backgroundColor = UIColor.white
         self.view.addSubview(subviewInputToolBar)
@@ -627,6 +640,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 self.moveUpInputBar()
                 self.toolbarContentView.frame.origin.y = screenHeight - 271
                 }, completion:{ (Bool) -> Void in
+                    
+                    
+                    
             })
         }else{
             self.moveUpInputBar()
@@ -708,6 +724,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func textViewDidEndEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        
+        // adjust position for extend view (mingjie jin)
+        toolBarExtendView.frame.origin.y += 258
+        
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -734,6 +754,55 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
             }
         }
+    }
+    
+    
+    // set up content of extend view (mingjie jin)
+    func loadExtendView() {
+        print("[button frame] : \(inputToolbar.contentView.heartButton.frame)")
+        let topBorder: CALayer = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 1)
+        topBorder.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1).cgColor
+        toolBarExtendView = UIView(frame: CGRect(x: 0, y: screenHeight - 141, width: screenWidth, height: 50))
+        toolBarExtendView.isHidden = true
+        toolBarExtendView.layer.zPosition = 121
+        toolBarExtendView.backgroundColor = UIColor.white
+        let anonyLabel = UILabel(frame: CGRect(x: screenWidth - 115, y: 14, width: 100, height: 25))
+        anonyLabel.text = "Anonymous"
+        anonyLabel.font = UIFont(name: "Avenir Next", size: 18)
+        anonyLabel.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1)
+        anonyLabel.textAlignment = .center
+        toolBarExtendView.addSubview(anonyLabel)
+        toolBarExtendView.layer.addSublayer(topBorder)
+        var checkbutton = UIButton(frame: CGRect(x: screenWidth - 149, y: 14, width: 22, height: 22))
+        checkbutton.adjustsImageWhenHighlighted = false
+        checkbutton.setImage(UIImage(named: "uncheckBoxGray"), for: UIControlState.normal)
+        checkbutton.addTarget(self, action: #selector(checkboxAction(_:)), for: UIControlEvents.touchUpInside)
+        toolBarExtendView.addSubview(checkbutton)
+        view.addSubview(toolBarExtendView)
+    }
+    
+    // action func for extend button (mingjie jin)
+    
+    func extendButtonAction(_ sender: UIButton) {
+        if(toolBarExtendView.isHidden) {
+            sender.setImage(UIImage(named: "anonymousHighlight"), for: .normal)
+        } else {
+            sender.setImage(UIImage(named: "anonymousNormal"), for: .normal)
+        }
+        toolBarExtendView.isHidden = !toolBarExtendView.isHidden
+    }
+    
+    // action func for check box button (mingjie jin)
+    
+    func checkboxAction(_ sender: UIButton) {
+        if(isAnonymous) {
+            sender.setImage(UIImage(named: "uncheckBoxGray"), for: UIControlState.normal)
+        } else {
+            sender.setImage(UIImage(named: "checkBoxGray"), for: UIControlState.normal)
+        }
+        isAnonymous = !isAnonymous
+        //toolBarExtendView.frame.origin.x -= 271
     }
     
 }
