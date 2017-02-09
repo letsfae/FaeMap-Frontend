@@ -44,9 +44,9 @@ extension FaeMapViewController {
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         testQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
         testQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
-        testQuery.setCatagoryToPizza()
+        testQuery.setCatagoryToRestaurant()
         testQuery.setRadius(radius: Int(Double(radius)))
-        testQuery.setSortRule(sort: "distance")
+        testQuery.setSortRule(sort: "best_match")
         testYelp.query(request: testQuery, completion: { (results) in
             print("[YelpAPI - Testing]")
             for result in results {
@@ -54,13 +54,13 @@ extension FaeMapViewController {
                 var iconImage = UIImage()
                 pinData["title"] = result.getName() as AnyObject?
                 let categoryList = result.getCategory()
-                if categoryList.contains("pizza") {
+                if categoryList.contains("burgers") {
+                    pinData["category"] = "burgers" as AnyObject?
+                    iconImage = #imageLiteral(resourceName: "placePinBurger")
+                }
+                else if categoryList.contains("pizza") {
                     pinData["category"] = "pizza" as AnyObject?
                     iconImage = #imageLiteral(resourceName: "placePinPizza")
-                }
-                else if categoryList.contains("burger") {
-                    pinData["category"] = "burger" as AnyObject?
-                    iconImage = #imageLiteral(resourceName: "placePinBurger")
                 }
                 else if categoryList.contains("coffee") {
                     pinData["category"] = "coffee" as AnyObject?

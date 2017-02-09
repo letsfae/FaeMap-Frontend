@@ -733,6 +733,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard(UIButton())
+        
+        // adjust position for extend view (mingjie jin)
+        toolBarExtendView.frame.origin.y -= 258
     }
     
     //MARK: - observe key path

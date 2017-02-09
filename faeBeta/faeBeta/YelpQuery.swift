@@ -56,6 +56,10 @@ class YelpQuery {
         dict = [:]
     }
     
+    func setCatagoryToRestaurant() {
+        setCatagory(cata: "pizza,burgers")
+    }
+    
     func setCatagoryToDessert() {
         setCatagory(cata: "desserts")
     }
