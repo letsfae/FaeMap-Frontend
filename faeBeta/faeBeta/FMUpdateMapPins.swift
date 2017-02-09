@@ -38,38 +38,23 @@ extension FaeMapViewController {
     
     func loadCurrentRegionPlacePins(radius: Int) {
         clearMap(type: "place")
-        let testYelp = YelpManager()
-        let testQuery = YelpQuery()
+        let yelpManager = YelpManager()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-        testQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
-        testQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
-        testQuery.setCatagoryToRestaurant()
-        testQuery.setRadius(radius: Int(Double(radius)))
-        testQuery.setSortRule(sort: "best_match")
-        testYelp.query(request: testQuery, completion: { (results) in
+        yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
+        yelpQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
+        yelpQuery.setRadius(radius: Int(Double(radius)))
+        yelpQuery.setSortRule(sort: "best_match")
+        yelpManager.query(request: yelpQuery, completion: { (results) in
             print("[YelpAPI - Testing]")
             for result in results {
                 var pinData = [String: AnyObject]()
                 var iconImage = UIImage()
                 pinData["title"] = result.getName() as AnyObject?
                 let categoryList = result.getCategory()
-                if categoryList.contains("burgers") {
-                    pinData["category"] = "burgers" as AnyObject?
-                    iconImage = #imageLiteral(resourceName: "placePinBurger")
-                }
-                else if categoryList.contains("pizza") {
-                    pinData["category"] = "pizza" as AnyObject?
-                    iconImage = #imageLiteral(resourceName: "placePinPizza")
-                }
-                else if categoryList.contains("coffee") {
-                    pinData["category"] = "coffee" as AnyObject?
-                    iconImage = #imageLiteral(resourceName: "placePinCoffee")
-                }
-                else if categoryList.contains("dessert") {
-                    pinData["category"] = "dessert" as AnyObject?
-                    iconImage = #imageLiteral(resourceName: "placePinDesert")
-                }
+                pinData["type"] = "place" as AnyObject?
+                pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
+                iconImage = self.placesPinIconImage(categoryList: categoryList)
                 pinData["latitude"] = result.getPosition().coordinate.latitude as AnyObject?
                 pinData["longitude"] = result.getPosition().coordinate.longitude as AnyObject?
                 pinData["street"] = result.getAddress1() as AnyObject?
@@ -83,6 +68,7 @@ extension FaeMapViewController {
                 let delay: Double = Double(arc4random_uniform(200)) / 100
                 pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
                 pinMap.position = result.getPosition().coordinate
+                pinMap.userData = pinData
                 pinMap.map = self.faeMapView
                 self.mapPlacePinsDic.append(pinMap)
                 UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
@@ -96,6 +82,75 @@ extension FaeMapViewController {
                 })
             }
         })
+    }
+    
+    func placesPinCheckCategory(categoryList: [String]) -> String {
+        if categoryList.contains("burgers") {
+            return "burgers"
+        }
+        else if categoryList.contains("pizza") {
+            return "pizza"
+        }
+        else if categoryList.contains("coffee") {
+            return "coffee"
+        }
+        else if categoryList.contains("desserts") {
+            return "desserts"
+        }
+        else if categoryList.contains("movietheaters") {
+            return "movietheaters"
+        }
+        else if categoryList.contains("museums") {
+            return "museums"
+        }
+        else if categoryList.contains("beautysvc") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("playgrounds") {
+            return "playgrounds"
+        }
+        else if categoryList.contains("countryclubs") {
+            return "countryclubs"
+        }
+        else if categoryList.contains("sports_clubs") {
+            return "sports_clubs"
+        }
+        return ""
+    }
+    
+    func placesPinIconImage(categoryList: [String]) -> UIImage {
+        var iconImage = UIImage()
+        if categoryList.contains("burgers") {
+            iconImage = #imageLiteral(resourceName: "placePinBurger")
+        }
+        else if categoryList.contains("pizza") {
+            iconImage = #imageLiteral(resourceName: "placePinPizza")
+        }
+        else if categoryList.contains("coffee") {
+            iconImage = #imageLiteral(resourceName: "placePinCoffee")
+        }
+        else if categoryList.contains("desserts") {
+            iconImage = #imageLiteral(resourceName: "placePinDesert")
+        }
+        else if categoryList.contains("movietheaters") {
+            iconImage = #imageLiteral(resourceName: "placePinCinema")
+        }
+        else if categoryList.contains("museums") {
+            iconImage = #imageLiteral(resourceName: "placePinArt")
+        }
+        else if categoryList.contains("beautysvc") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("playgrounds") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("countryclubs") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("sports_clubs") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        return iconImage
     }
     
     // MARK: -- Load Pins based on the Current Region Camera

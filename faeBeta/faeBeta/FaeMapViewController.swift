@@ -200,6 +200,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // Class global variable to control the filter
     var stringFilterValue = "comment,chat_room,media"
     
+    // Yelp API
+    let yelpQuery = YelpQuery()
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -229,7 +232,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         checkFilterShowAll(btnMFilterShowAll)
-        
+        yelpQuery.setCatagoryToAll()
     }
 
     override func viewWillAppear(_ animated: Bool) {

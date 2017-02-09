@@ -50,6 +50,7 @@ extension FaeMapViewController {
             
         case .placeAll:
             checkFilterPlaceAll(sender)
+            yelpQuery.setCatagoryToAll()
             refreshMap(pins: false, users: false, places: true)
             break
         case .restaurant, .cafe, .dessert, .cinema, .beauty, .sports, .gallery:

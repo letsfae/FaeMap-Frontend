@@ -184,12 +184,32 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     var isKeyboardInThisView = true
     
+    var placeType = "burgers"
+    var uiviewPlaceDetail: UIView!
+    var uiviewPlaceLine: UIView!
+    var imgPlaceQuickView: UIImageView!
+    var imgPlaceType: UIImageView!
+    var lblPlaceTitle: UILabel!
+    var lblPlaceStreet: UILabel!
+    var lblPlaceCity: UILabel!
+    var btnGoToPinList_Place: UIButton!
+    var btnMoreOptions_Place: UIButton!
+    
+    var strPlaceTitle = ""
+    var strPlaceStreet = ""
+    var strPlaceCity = ""
+    var strPlaceImageURL = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
+        if pinTypeEnum == .place {
+            loadPlaceDetail()
+            UIApplication.shared.statusBarStyle = .lightContent
+        }
         pinIDPinDetailView = pinIdSentBySegue
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
@@ -210,6 +230,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             self.pinIcon.alpha = 1
             self.buttonPrevPin.alpha = 1
             self.buttonNextPin.alpha = 1
+            if self.pinTypeEnum == .place {
+                self.uiviewPlaceDetail.frame.origin.y = 0
+            }
         }, completion: { (done: Bool) in
             self.loadInputToolBar()
             self.loadExtendView() // call func for loading extend view (mingjie jin)
@@ -223,6 +246,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             closeToolbarContentView()
             removeObservers()
         }
+        UIApplication.shared.statusBarStyle = .default
     }
     
     override func didReceiveMemoryWarning() {

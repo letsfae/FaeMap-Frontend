@@ -110,6 +110,9 @@ extension PinDetailViewController {
             self.pinIcon.alpha = 0
             self.buttonPrevPin.alpha = 0
             self.buttonNextPin.alpha = 0
+            if self.uiviewPlaceDetail != nil {
+                self.uiviewPlaceDetail.center.y -= screenHeight
+            }
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)

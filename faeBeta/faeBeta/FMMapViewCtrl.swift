@@ -190,6 +190,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     self.clearMap(type: "all")
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+                    self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500))
                     return
                 }
                 else {
@@ -200,6 +201,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         else {
             timerUpdateSelfLocation.invalidate()
             timerLoadRegionPins.invalidate()
+            timerLoadRegionPlacePins.invalidate()
             clearMap(type: "all")
         }
     }
@@ -243,17 +245,17 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 mapView.camera = camera
                 self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
-                let pinIDGet = pinComment["\(type)_id"].stringValue 
-                    pinIdToPassBySegue = pinIDGet
-                    if let storedList = readByKey("openedPinList"){
-                        var openedPinListArray = storedList as! [String]
-                        let pinTypeID = "\(type)%\(pinIDGet)"
-                        if openedPinListArray.contains(pinTypeID) == false {
-                            openedPinListArray.insert(pinTypeID, at: 0)
-                        }
-                        self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                        print("[FMMapViewCtrl] \(openedPinListArray)")
+                let pinIDGet = pinComment["\(type)_id"].stringValue
+                pinIdToPassBySegue = pinIDGet
+                if let storedList = readByKey("openedPinList"){
+                    var openedPinListArray = storedList as! [String]
+                    let pinTypeID = "\(type)%\(pinIDGet)"
+                    if openedPinListArray.contains(pinTypeID) == false {
+                        openedPinListArray.insert(pinTypeID, at: 0)
                     }
+                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+                    print("[FMMapViewCtrl] \(openedPinListArray)")
+                }
                 
                 self.markerBackFromPinDetail = marker
                 let pinDetailVC = PinDetailViewController()
@@ -278,8 +280,45 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 })
                 return true
             }
-            else if type.contains("chat"){
+            else if type == "place" {
+                if !self.canOpenAnotherPin {
+                    return true
+                }
+                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
+                mapView.camera = camera
+                self.canOpenAnotherPin = false
                 
+                self.markerBackFromPinDetail = marker
+                let pinDetailVC = PinDetailViewController()
+                pinDetailVC.pinTypeEnum = .place
+                if let placeType = pinLoc["category"].string {
+                    pinDetailVC.placeType = placeType
+                }
+                if let placeTitle = pinLoc["title"].string {
+                    pinDetailVC.strPlaceTitle = placeTitle
+                }
+                if let placeStreet = pinLoc["street"].string {
+                    pinDetailVC.strPlaceStreet = placeStreet
+                }
+                if let placeCity = pinLoc["city"].string {
+                    pinDetailVC.strPlaceCity = placeCity
+                }
+                if let placeImageURL = pinLoc["imageURL"].string {
+                    pinDetailVC.strPlaceImageURL = placeImageURL
+                }
+                timerUpdateSelfLocation.invalidate()
+                self.clearMap(type: "user")
+                pinDetailVC.modalPresentationStyle = .overCurrentContext
+                pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+                pinDetailVC.pinMarker = marker
+                pinDetailVC.delegate = self
+                self.present(pinDetailVC, animated: false, completion: {
+                    self.canOpenAnotherPin = true
+                })
+                return true
+            }
+            else if type.contains("chat"){
+                return true
             }
         }
         return true

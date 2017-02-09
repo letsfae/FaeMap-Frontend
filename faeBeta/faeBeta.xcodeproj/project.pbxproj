@@ -238,6 +238,7 @@
 		B8CAA03D1DDD931D00DEC329 /* FMSelfPositionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */; };
 		B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */; };
 		B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CAA0401DDD948400DEC329 /* FMActions.swift */; };
+		B8CBDEF71E4C475700E4BDDB /* PDLoadPlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */; };
 		B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */; };
 		B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */; };
 		B8E4C3BD1E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */; };
@@ -555,6 +556,7 @@
 		B8CAA03C1DDD931D00DEC329 /* FMSelfPositionAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMSelfPositionAnimation.swift; sourceTree = "<group>"; };
 		B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDelegateCtrl.swift; sourceTree = "<group>"; };
 		B8CAA0401DDD948400DEC329 /* FMActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMActions.swift; sourceTree = "<group>"; };
+		B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadPlacePin.swift; sourceTree = "<group>"; };
 		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadMedias.swift; sourceTree = "<group>"; };
 		B8E4C3B41E30172D004E68A5 /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterAlgorithm.h; sourceTree = "<group>"; };
@@ -1262,6 +1264,7 @@
 				B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */,
 				B8612E3A1DF24CF90092C606 /* PDDelegateCtrl.swift */,
 				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
+				B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */,
 			);
 			name = PinExtension;
 			sourceTree = "<group>";
@@ -1824,6 +1827,7 @@
 				B8E4C3DC1E30177E004E68A5 /* GQTPointQuadTree.m in Sources */,
 				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
+				B8CBDEF71E4C475700E4BDDB /* PDLoadPlacePin.swift in Sources */,
 				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
 				B8E4C3C91E30174B004E68A5 /* GMUClusterManager.m in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,

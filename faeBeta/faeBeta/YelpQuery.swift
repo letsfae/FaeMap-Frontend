@@ -56,6 +56,10 @@ class YelpQuery {
         dict = [:]
     }
     
+    func setCatagoryToAll() {
+        setCatagory(cata: "pizza,burgers,desserts,coffee,internetcafe,museums,galleries,beautysvc,playgrounds,countryclubs,sports_clubs,juicebars,movietheaters")
+    }
+    
     func setCatagoryToRestaurant() {
         setCatagory(cata: "pizza,burgers")
     }
@@ -73,7 +77,7 @@ class YelpQuery {
     }
     
     func setCatagoryToArt() {
-        setCatagory(cata: "artmuseums,galleries")
+        setCatagory(cata: "museums,galleries")
     }
     
     func setCatagoryToBeauty() {
@@ -81,7 +85,7 @@ class YelpQuery {
     }
     
     func setCatagoryToSport() {
-        setCatagory(cata: "playgrounds,countryclubs,sports_clubs,sportswear,sportgoods")
+        setCatagory(cata: "playgrounds,countryclubs,sports_clubs")
     }
     
     func setCatagoryToBurger() {

@@ -152,6 +152,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                     }
                     else {
                         self.isFirstTimeLogin = true
+                        firebaseWelcome()
                         print("[loginUser] is first time login!")
                     }
                     self.jumpToEnableLocation()
