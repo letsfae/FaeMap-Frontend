@@ -57,6 +57,10 @@ extension FaeMapViewController {
                     resultArray.append(result)
                 }
                 self.pinPlacesOnMap(results: resultArray)
+                let targetZoomLevel = self.calculateZoomLevel(results: resultArray)
+                print("[Zoom Level] \(targetZoomLevel)")
+                let camera = GMSCameraPosition.camera(withLatitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude, zoom: targetZoomLevel)
+                self.faeMapView.animate(to: camera)
             })
         }
         else {
@@ -105,6 +109,10 @@ extension FaeMapViewController {
                                         resultArray.append(result)
                                     }
                                     self.pinPlacesOnMap(results: resultArray)
+                                    let targetZoomLevel = self.calculateZoomLevel(results: resultArray)
+                                    print("[Zoom Level] \(targetZoomLevel)")
+                                    let camera = GMSCameraPosition.camera(withLatitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude, zoom: targetZoomLevel)
+                                    self.faeMapView.animate(to: camera)
                                 })
                             })
                         })
@@ -112,6 +120,28 @@ extension FaeMapViewController {
                 })
             })
         }
+    }
+    
+    func calculateZoomLevel(results: [YelpResult]) -> Float {
+        if results.count == 0 || results.count == 1 {
+            return 14
+        }
+        var latArr = [Double]()
+        var lonArr = [Double]()
+        for result in results {
+            latArr.append(result.getPosition().coordinate.latitude)
+            lonArr.append(result.getPosition().coordinate.longitude)
+        }
+        
+        let minLat = latArr.min()!
+        let maxLat = latArr.max()!
+        let minLon = lonArr.min()!
+        let maxLon = lonArr.max()!
+        
+        let maxRange = Float((max(maxLat - minLat, maxLon - minLon)))
+        print("[Zoom Level] \(maxRange)")
+        let zoomLevel = Float(21 - log2(maxRange/0.0004))
+        return zoomLevel
     }
     
     func pinPlacesOnMap(results: [YelpResult]) {

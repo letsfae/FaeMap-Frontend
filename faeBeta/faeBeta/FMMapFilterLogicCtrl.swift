@@ -17,6 +17,10 @@ extension FaeMapViewController {
             uncheckFilterSavedPins()
             stringFilterValue = "comment,chat_room,media"
             refreshMap(pins: true, users: true, places: true, placesAll: true)
+            refreshPins = true
+            refreshUsers = true
+            refreshPlaces = true
+            refreshPlacesAll = true
             break
         case .distance:
             checkFilterDistance(sender)
@@ -26,12 +30,20 @@ extension FaeMapViewController {
             timerLoadRegionPins.invalidate()
             checkFilterPeople(sender)
             refreshMap(pins: false, users: true, places: false, placesAll: false)
+            refreshPins = false
+            refreshUsers = true
+            refreshPlaces = false
+            refreshPlacesAll = false
             break
             
         case .pinAll:
             checkFilterPinTypeAll(sender)
             stringFilterValue = "comment,chat_room,media"
             refreshMap(pins: true, users: false, places: false, placesAll: false)
+            refreshPins = true
+            refreshUsers = false
+            refreshPlaces = false
+            refreshPlacesAll = false
             break
         case .comment, .chat_room, .media:
             uncheckFilterShowAll()
@@ -41,17 +53,29 @@ extension FaeMapViewController {
         case .statusAll:
             checkFilterPinStatusAll(sender)
             refreshMap(pins: true, users: false, places: false, placesAll: false)
+            refreshPins = true
+            refreshUsers = false
+            refreshPlaces = false
+            refreshPlacesAll = false
             break
         case .hot, .new, .unread, .read:
             uncheckFilterShowAll()
             checkFilterPinStatus(sender)
             refreshMap(pins: true, users: false, places: false, placesAll: false)
+            refreshPins = true
+            refreshUsers = false
+            refreshPlaces = false
+            refreshPlacesAll = false
             break
             
         case .placeAll:
             checkFilterPlaceAll(sender)
             yelpQuery.setCatagoryToAll()
-            refreshMap(pins: false, users: false, places: true, placesAll: false)
+            refreshMap(pins: false, users: false, places: true, placesAll: true)
+            refreshPins = false
+            refreshUsers = false
+            refreshPlaces = true
+            refreshPlacesAll = true
             break
         case .restaurant:
             yelpQuery.setCustomCategory(to: "pizza,burgers")
@@ -112,6 +136,10 @@ extension FaeMapViewController {
         checkFilterPlace(sender)
         convertPlaceDicToCategory()
         refreshMap(pins: false, users: false, places: true, placesAll: false)
+        refreshPins = false
+        refreshUsers = false
+        refreshPlaces = true
+        refreshPlacesAll = false
     }
     
     // Clear pin type, pin status, and places
@@ -205,6 +233,10 @@ extension FaeMapViewController {
             }
             stringFilterValue = string
             refreshMap(pins: true, users: false, places: false, placesAll: false)
+            refreshPins = true
+            refreshUsers = false
+            refreshPlaces = false
+            refreshPlacesAll = false
         }
     }
     

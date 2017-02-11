@@ -205,10 +205,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     let yelpQuery = YelpQuery()
     
     // If below can be refreshed
-    var refreshPins = false
-    var refreshUsers = false
-    var refreshPlaces = false
-    var refreshPlacesAll = false
+    var refreshPins = true
+    var refreshUsers = true
+    var refreshPlaces = true
+    var refreshPlacesAll = true
     
     // System Functions
     override func viewDidLoad() {

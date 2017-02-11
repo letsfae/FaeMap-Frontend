@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FaeSearchControllerDelegate {
+protocol FaeSearchControllerDelegate: class {
     func didStartSearching()
     
     func didTapOnSearchButton()
@@ -21,7 +21,7 @@ protocol FaeSearchControllerDelegate {
 
 class FaeSearchController: UISearchController, UISearchBarDelegate {
     var faeSearchBar: FaeSearchBar!
-    var faeDelegate: FaeSearchControllerDelegate!
+    weak var faeDelegate: FaeSearchControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,20 +61,20 @@ class FaeSearchController: UISearchController, UISearchBarDelegate {
     
     // MARK: UISearchBarDelegate functions
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        faeDelegate.didStartSearching()
+        faeDelegate?.didStartSearching()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         faeSearchBar.resignFirstResponder()
-        faeDelegate.didTapOnSearchButton()
+        faeDelegate?.didTapOnSearchButton()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         faeSearchBar.resignFirstResponder()
-        faeDelegate.didTapOnCancelButton()
+        faeDelegate?.didTapOnCancelButton()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        faeDelegate.didChangeSearchText(searchText)
+        faeDelegate?.didChangeSearchText(searchText)
     }
 }
