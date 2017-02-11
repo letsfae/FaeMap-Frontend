@@ -184,7 +184,7 @@ extension FaeMapViewController {
         uiviewFilterMenu.addSubview(btnMFilterCafe)
         btnMFilterCafe.filterType = .cafe
         
-        btnMFilterDessert = MFilterButton(frame: CGRect(x: 295, y: 349, width: 70, height: 25))
+        btnMFilterDessert = MFilterButton(frame: CGRect(x: 295, y: 349, width: 75, height: 25))
         btnMFilterDessert.setTitle("Desserts", for: .normal)
         btnMFilterDessert.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
         uiviewFilterMenu.addSubview(btnMFilterDessert)

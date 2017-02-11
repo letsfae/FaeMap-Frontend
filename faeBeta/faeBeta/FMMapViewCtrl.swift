@@ -190,7 +190,11 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     self.clearMap(type: "all")
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-                    self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500))
+                    var placesAll = false
+                    if btnMFilterPlacesAll.tag == 1 {
+                        placesAll = true
+                    }
+                    self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500), all: placesAll)
                     return
                 }
                 else {

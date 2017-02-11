@@ -46,7 +46,7 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     var filteredArray = [String]()
     var shouldShowSearchResults = false
     var searchController: UISearchController!
-    var customSearchController: CustomSearchController!
+    var faeSearchController: FaeSearchController!
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
     var pinType = "comment"
@@ -70,7 +70,7 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
         loadMapView()
         loadButtons()
         loadTableView()
-        loadCustomSearchController()
+        loadFaeSearchController()
         UIApplication.shared.statusBarStyle = .default
     }
     

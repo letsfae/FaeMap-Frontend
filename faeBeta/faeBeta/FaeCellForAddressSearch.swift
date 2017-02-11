@@ -1,5 +1,5 @@
 //
-//  CustomCellForAddressSearch.swift
+//  FaeCellForAddressSearch.swift
 //  FaeMap
 //
 //  Created by Yue on 6/13/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomCellForAddressSearch: UITableViewCell {
+class FaeCellForAddressSearch: UITableViewCell {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height

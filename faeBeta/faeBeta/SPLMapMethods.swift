@@ -28,7 +28,7 @@ extension SelectLocationViewController: GMSMapViewDelegate {
                         addressToSearchBar += line + ", "
                     }
                 }
-                self.customSearchController.customSearchBar.text = addressToSearchBar
+                self.faeSearchController.faeSearchBar.text = addressToSearchBar
             }
             self.latitudeForPin = mapCenterCoordinate.latitude
             self.longitudeForPin = mapCenterCoordinate.longitude
@@ -36,6 +36,6 @@ extension SelectLocationViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        customSearchController.customSearchBar.endEditing(true)
+        faeSearchController.faeSearchBar.endEditing(true)
     }
 }

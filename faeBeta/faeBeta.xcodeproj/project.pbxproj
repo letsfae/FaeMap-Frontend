@@ -94,9 +94,9 @@
 		B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF411D74ED0D00C078F5 /* EnterCodeTableViewCell.swift */; };
 		B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */; };
 		B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */; };
-		B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */; };
-		B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D281D5E435200356705 /* CustomSearchBar.swift */; };
-		B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* CustomSearchController.swift */; };
+		B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* FaeCellForAddressSearch.swift */; };
+		B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D281D5E435200356705 /* FaeSearchBar.swift */; };
+		B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D291D5E435200356705 /* FaeSearchController.swift */; };
 		B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */; };
 		B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */; };
@@ -203,7 +203,7 @@
 		B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */; };
 		B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */; };
 		B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */; };
-		B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */; };
+		B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */; };
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
@@ -399,9 +399,9 @@
 		B064EF411D74ED0D00C078F5 /* EnterCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterCodeTableViewCell.swift; sourceTree = "<group>"; };
 		B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnterCodeTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportCodeViewController.swift; sourceTree = "<group>"; };
-		B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForAddressSearch.swift; sourceTree = "<group>"; };
-		B0714D281D5E435200356705 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
-		B0714D291D5E435200356705 /* CustomSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchController.swift; sourceTree = "<group>"; };
+		B0714D271D5E435200356705 /* FaeCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForAddressSearch.swift; sourceTree = "<group>"; };
+		B0714D281D5E435200356705 /* FaeSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeSearchBar.swift; sourceTree = "<group>"; };
+		B0714D291D5E435200356705 /* FaeSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeSearchController.swift; sourceTree = "<group>"; };
 		B0714D2B1D5E435200356705 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMainScreenItems.swift; sourceTree = "<group>"; };
@@ -521,7 +521,7 @@
 		B84C90C81DE7DD83005B6F38 /* CMPTextViewControll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTextViewControll.swift; sourceTree = "<group>"; };
 		B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPActions.swift; sourceTree = "<group>"; };
 		B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPSelectLocation.swift; sourceTree = "<group>"; };
-		B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellForMainScreenSearch.swift; sourceTree = "<group>"; };
+		B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewControl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
@@ -840,15 +840,15 @@
 			name = MapViewExtensions;
 			sourceTree = "<group>";
 		};
-		B0714D7D1D5E43DA00356705 /* CustomSearchBar */ = {
+		B0714D7D1D5E43DA00356705 /* FaeSearchBar */ = {
 			isa = PBXGroup;
 			children = (
-				B0714D291D5E435200356705 /* CustomSearchController.swift */,
-				B0714D281D5E435200356705 /* CustomSearchBar.swift */,
-				B0714D271D5E435200356705 /* CustomCellForAddressSearch.swift */,
-				B84E1A581DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift */,
+				B0714D291D5E435200356705 /* FaeSearchController.swift */,
+				B0714D281D5E435200356705 /* FaeSearchBar.swift */,
+				B0714D271D5E435200356705 /* FaeCellForAddressSearch.swift */,
+				B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */,
 			);
-			name = CustomSearchBar;
+			name = FaeSearchBar;
 			sourceTree = "<group>";
 		};
 		B0714D7E1D5E440C00356705 /* MapViewCell */ = {
@@ -1146,7 +1146,7 @@
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
-				B0714D7D1D5E43DA00356705 /* CustomSearchBar */,
+				B0714D7D1D5E43DA00356705 /* FaeSearchBar */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B8D5EEC41DB840BC00C62628 /* PinMenu */,
 				B8612E321DF201A60092C606 /* PinDetail */,
@@ -1719,7 +1719,7 @@
 				B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */,
 				B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
-				B84E1A591DCB99FB000E29B9 /* CustomCellForMainScreenSearch.swift in Sources */,
+				B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */,
 				853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */,
 				B8E4C3CA1E30174B004E68A5 /* GMUStaticCluster.m in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
@@ -1729,7 +1729,7 @@
 				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
 				B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */,
 				853F27881E26FEC300DD80DF /* ECPHandleDelegate.swift in Sources */,
-				B0714D431D5E435200356705 /* CustomCellForAddressSearch.swift in Sources */,
+				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
@@ -1769,7 +1769,7 @@
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
-				B0714D461D5E435200356705 /* CustomSearchBar.swift in Sources */,
+				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B89AB3F91E3D79AA00C5116D /* FMMapFilterSlider.swift in Sources */,
@@ -1914,7 +1914,7 @@
 				853F27721E23184E00DD80DF /* EditMoreOptionsViewController.swift in Sources */,
 				B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
-				B0714D491D5E435200356705 /* CustomSearchController.swift in Sources */,
+				B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */,

@@ -11,18 +11,18 @@ import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
-extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate {
+extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate {
     
     // MARK: UISearchResultsUpdating delegate function
     func updateSearchResults(for searchController: UISearchController) {
         tblSearchResults.reloadData()
     }
     
-    // MARK: CustomSearchControllerDelegate functions
+    // MARK: FaeSearchControllerDelegate functions
     func didStartSearching() {
         shouldShowSearchResults = true
         tblSearchResults.reloadData()
-        customSearchController.customSearchBar.becomeFirstResponder()
+        faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     
     func didTapOnSearchButton() {
@@ -43,8 +43,8 @@ extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDele
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[0].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
         

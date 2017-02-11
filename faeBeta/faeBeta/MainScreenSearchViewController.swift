@@ -15,7 +15,7 @@ protocol MainScreenSearchDelegate: class {
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D)
 }
 
-class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
     weak var delegate: MainScreenSearchDelegate?
     
@@ -41,7 +41,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     var filteredArray = [String]()
     var shouldShowSearchResults = false
     var searchController: UISearchController!
-    var customSearchController: CustomSearchController!
+    var faeSearchController: FaeSearchController!
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
     
@@ -63,7 +63,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         loadBlurView()
         loadFunctionButtons()
         loadTableView()
-        loadCustomSearchController()
+        loadFaeSearchController()
         loadNavBarUnderLine()
     }
     
@@ -74,7 +74,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
             self.blurViewMainScreenSearch.effect = UIBlurEffect(style: .light)
         }), completion: { (done: Bool) in
             if done {
-                self.customSearchController.customSearchBar.becomeFirstResponder()
+                self.faeSearchController.faeSearchBar.becomeFirstResponder()
             }
         })
     }
@@ -123,19 +123,19 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         self.searchBarSubview.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
     }
     
-    func loadCustomSearchController() {
-        customSearchController = CustomSearchController(searchResultsController: self,
+    func loadFaeSearchController() {
+        faeSearchController = FaeSearchController(searchResultsController: self,
                                                         searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
                                                         searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
                                                         searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
                                                         searchBarTintColor: UIColor.white)
-        customSearchController.customSearchBar.placeholder = "Search Fae Map                                         "
-        customSearchController.customDelegate = self
-        customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
-        customSearchController.customSearchBar.tintColor = UIColor.faeAppRedColor()
+        faeSearchController.faeSearchBar.placeholder = "Search Fae Map                                         "
+        faeSearchController.faeDelegate = self
+        faeSearchController.faeSearchBar.layer.borderWidth = 2.0
+        faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
+        faeSearchController.faeSearchBar.tintColor = UIColor.faeAppRedColor()
         
-        searchBarSubview.addSubview(customSearchController.customSearchBar)
+        searchBarSubview.addSubview(faeSearchController.faeSearchBar)
         searchBarSubview.backgroundColor = UIColor.white
         
         searchBarSubview.layer.borderColor = UIColor.white.cgColor
@@ -170,7 +170,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func actionClearSearchBar(_ sender: UIButton) {
-        customSearchController.customSearchBar.text = ""
+        faeSearchController.faeSearchBar.text = ""
     }
     
     // MARK: UISearchResultsUpdating delegate function
@@ -178,11 +178,11 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         tblSearchResults.reloadData()
     }
     
-    // MARK: CustomSearchControllerDelegate functions
+    // MARK: FaeSearchControllerDelegate functions
     func didStartSearching() {
         shouldShowSearchResults = true
         tblSearchResults.reloadData()
-        customSearchController.customSearchBar.becomeFirstResponder()
+        faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     
     func didTapOnSearchButton() {
@@ -203,8 +203,8 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[0].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
         
@@ -273,7 +273,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.register(CustomCellForMainScreenSearch.self, forCellReuseIdentifier: "customCellForMainScreenSearch")
+        tblSearchResults.register(FaeCellForMainScreenSearch.self, forCellReuseIdentifier: "faeCellForMainScreenSearch")
         tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
         tblSearchResults.separatorInset = UIEdgeInsets.zero
@@ -308,7 +308,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "customCellForMainScreenSearch", for: indexPath) as! CustomCellForMainScreenSearch
+            let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForMainScreenSearch", for: indexPath) as! FaeCellForMainScreenSearch
             cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
             if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
                 cell.labelSubTitle.text = secondaryText.string
@@ -336,8 +336,8 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
             tableView.deselectRow(at: indexPath, animated: true)
         }

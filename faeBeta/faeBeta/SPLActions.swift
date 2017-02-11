@@ -16,7 +16,7 @@ extension SelectLocationViewController {
     }
     
     func actionSetLocationForComment(_ sender: UIButton) {
-        if let searchText = customSearchController.customSearchBar.text {
+        if let searchText = faeSearchController.faeSearchBar.text {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = mapSelectLocation.projection.coordinate(for: mapCenter)
             delegate?.sendAddress(searchText)

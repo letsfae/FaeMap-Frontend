@@ -16,7 +16,7 @@ extension FaeMapViewController {
             uncheckFilterMyPins()
             uncheckFilterSavedPins()
             stringFilterValue = "comment,chat_room,media"
-            refreshMap(pins: true, users: true, places: true)
+            refreshMap(pins: true, users: true, places: true, placesAll: true)
             break
         case .distance:
             checkFilterDistance(sender)
@@ -25,13 +25,13 @@ extension FaeMapViewController {
             clearMap(type: "pin")
             timerLoadRegionPins.invalidate()
             checkFilterPeople(sender)
-            refreshMap(pins: false, users: true, places: false)
+            refreshMap(pins: false, users: true, places: false, placesAll: false)
             break
             
         case .pinAll:
             checkFilterPinTypeAll(sender)
             stringFilterValue = "comment,chat_room,media"
-            refreshMap(pins: true, users: false, places: false)
+            refreshMap(pins: true, users: false, places: false, placesAll: false)
             break
         case .comment, .chat_room, .media:
             uncheckFilterShowAll()
@@ -40,23 +40,46 @@ extension FaeMapViewController {
             
         case .statusAll:
             checkFilterPinStatusAll(sender)
-            refreshMap(pins: true, users: false, places: false)
+            refreshMap(pins: true, users: false, places: false, placesAll: false)
             break
         case .hot, .new, .unread, .read:
             uncheckFilterShowAll()
             checkFilterPinStatus(sender)
-            refreshMap(pins: true, users: false, places: false)
+            refreshMap(pins: true, users: false, places: false, placesAll: false)
             break
             
         case .placeAll:
             checkFilterPlaceAll(sender)
             yelpQuery.setCatagoryToAll()
-            refreshMap(pins: false, users: false, places: true)
+            refreshMap(pins: false, users: false, places: true, placesAll: false)
             break
-        case .restaurant, .cafe, .dessert, .cinema, .beauty, .sports, .gallery:
-            uncheckFilterShowAll()
-            checkFilterPlace(sender)
-            refreshMap(pins: false, users: false, places: true)
+        case .restaurant:
+            yelpQuery.setCustomCategory(to: "pizza,burgers")
+            filterPlaceSwitch(sender)
+            break
+        case .cafe:
+            yelpQuery.setCustomCategory(to: "coffee,internetcafe")
+            filterPlaceSwitch(sender)
+            break
+        case .dessert:
+            yelpQuery.setCustomCategory(to: "desserts")
+            filterPlaceSwitch(sender)
+            break
+        case .cinema:
+            yelpQuery.setCustomCategory(to: "movietheaters")
+            filterPlaceSwitch(sender)
+            break
+        case .beauty:
+            yelpQuery.setCustomCategory(to: "beautysvc")
+            filterPlaceSwitch(sender)
+            break
+        case .sports:
+            yelpQuery.setCustomCategory(to: "playgrounds,countryclubs,sports_clubs")
+            filterPlaceSwitch(sender)
+            break
+        case .gallery:
+            yelpQuery.setCustomCategory(to: "museums,galleries")
+            filterPlaceSwitch(sender)
             break
         case .myPins:
             checkFilterMyPins(sender)
@@ -68,6 +91,27 @@ extension FaeMapViewController {
         default:
             break
         }
+    }
+    
+    // Filter convert place dic to category
+    fileprivate func convertPlaceDicToCategory() {
+        var category = ""
+        for (key, _) in filterPlaceDic {
+            if category == "" {
+                category = "\(key)"
+                continue
+            }
+            category = "\(category),\(key)"
+        }
+        print("[convertPlaceDicToCategory] \(category)")
+    }
+    
+    // Filter place button action
+    fileprivate func filterPlaceSwitch(_ sender: MFilterButton) {
+        uncheckFilterShowAll()
+        checkFilterPlace(sender)
+        convertPlaceDicToCategory()
+        refreshMap(pins: false, users: false, places: true, placesAll: false)
     }
     
     // Clear pin type, pin status, and places
@@ -160,7 +204,7 @@ extension FaeMapViewController {
                 print("[checkFilterPinType] \(string)")
             }
             stringFilterValue = string
-            refreshMap(pins: true, users: false, places: false)
+            refreshMap(pins: true, users: false, places: false, placesAll: false)
         }
     }
     

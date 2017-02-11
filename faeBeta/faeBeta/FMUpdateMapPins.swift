@@ -28,60 +28,127 @@ extension FaeMapViewController {
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
     }
     
-    func updateTimerForLoadRegionPlacePin(radius: Int) {
-        self.loadCurrentRegionPlacePins(radius: radius)
+    func updateTimerForLoadRegionPlacePin(radius: Int, all: Bool) {
+        self.loadCurrentRegionPlacePins(radius: radius, all: all)
         if timerLoadRegionPlacePins != nil {
             timerLoadRegionPlacePins.invalidate()
         }
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
-    func loadCurrentRegionPlacePins(radius: Int) {
+    func loadCurrentRegionPlacePins(radius: Int, all: Bool) {
         clearMap(type: "place")
-        let yelpManager = YelpManager()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
         yelpQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
         yelpQuery.setRadius(radius: Int(Double(radius)))
         yelpQuery.setSortRule(sort: "best_match")
-        yelpManager.query(request: yelpQuery, completion: { (results) in
-            print("[YelpAPI - Testing]")
-            for result in results {
-                var pinData = [String: AnyObject]()
-                var iconImage = UIImage()
-                pinData["title"] = result.getName() as AnyObject?
-                let categoryList = result.getCategory()
-                pinData["type"] = "place" as AnyObject?
-                pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
-                iconImage = self.placesPinIconImage(categoryList: categoryList)
-                pinData["latitude"] = result.getPosition().coordinate.latitude as AnyObject?
-                pinData["longitude"] = result.getPosition().coordinate.longitude as AnyObject?
-                pinData["street"] = result.getAddress1() as AnyObject?
-                pinData["city"] = result.getAddress2() as AnyObject?
-                pinData["imageURL"] = result.getImageURL() as AnyObject?
-                let pinMap = GMSMarker()
-                let icon = UIImageView(frame: CGRect.zero)
-                icon.contentMode = .scaleAspectFit
-                icon.image = iconImage
-                pinMap.iconView = icon
-                let delay: Double = Double(arc4random_uniform(200)) / 100
-                pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-                pinMap.position = result.getPosition().coordinate
-                pinMap.userData = pinData
-                pinMap.map = self.faeMapView
-                self.mapPlacePinsDic.append(pinMap)
-                UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                    icon.frame.size.width = 48
-                    icon.frame.size.height = 54
-                }, completion: {(done: Bool) in
-                    if done {
-                        pinMap.iconView = nil
-                        pinMap.icon = iconImage
+        
+        // All type
+        var resultArray = [YelpResult]()
+        
+        if !all {
+            yelpQuery.setResultLimit(count: 10)
+            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                print("[YelpAPI - Testing]")
+                for result in results {
+                    print(result.getCategory())
+                    resultArray.append(result)
+                }
+                self.pinPlacesOnMap(results: resultArray)
+            })
+        }
+        else {
+            yelpQuery.setResultLimit(count: 4)
+            yelpQuery.setCatagoryToRestaurant()
+            yelpManager.query(request: yelpQuery, completion: { (results) in
+                print("[YelpAPI - Testing]")
+                for result in results {
+                    print(result.getCategory())
+                    resultArray.append(result)
+                }
+                self.yelpQuery.setResultLimit(count: 2)
+                self.yelpQuery.setCatagoryToDessert()
+                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                    print("[YelpAPI - Testing]")
+                    for result in results {
+                        print(result.getCategory())
+                        resultArray.append(result)
                     }
+                    self.yelpQuery.setCatagoryToCafe()
+                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                        print("[YelpAPI - Testing]")
+                        for result in results {
+                            print(result.getCategory())
+                            resultArray.append(result)
+                        }
+                        self.yelpQuery.setCatagoryToCinema()
+                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                            print("[YelpAPI - Testing]")
+                            for result in results {
+                                print(result.getCategory())
+                                resultArray.append(result)
+                            }
+                            self.yelpQuery.setCatagoryToSport()
+                            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                                print("[YelpAPI - Testing]")
+                                for result in results {
+                                    print(result.getCategory())
+                                    resultArray.append(result)
+                                }
+                                self.yelpQuery.setCatagoryToBeauty()
+                                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                                    print("[YelpAPI - Testing]")
+                                    for result in results {
+                                        print(result.getCategory())
+                                        resultArray.append(result)
+                                    }
+                                    self.pinPlacesOnMap(results: resultArray)
+                                })
+                            })
+                        })
+                    })
                 })
-            }
-        })
+            })
+        }
+    }
+    
+    func pinPlacesOnMap(results: [YelpResult]) {
+        for result in results {
+            var pinData = [String: AnyObject]()
+            var iconImage = UIImage()
+            pinData["title"] = result.getName() as AnyObject?
+            let categoryList = result.getCategory()
+            pinData["type"] = "place" as AnyObject?
+            pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
+            iconImage = self.placesPinIconImage(categoryList: categoryList)
+            pinData["latitude"] = result.getPosition().coordinate.latitude as AnyObject?
+            pinData["longitude"] = result.getPosition().coordinate.longitude as AnyObject?
+            pinData["street"] = result.getAddress1() as AnyObject?
+            pinData["city"] = result.getAddress2() as AnyObject?
+            pinData["imageURL"] = result.getImageURL() as AnyObject?
+            let pinMap = GMSMarker()
+            let icon = UIImageView(frame: CGRect.zero)
+            icon.contentMode = .scaleAspectFit
+            icon.image = iconImage
+            pinMap.iconView = icon
+            let delay: Double = Double(arc4random_uniform(200)) / 100
+            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+            pinMap.position = result.getPosition().coordinate
+            pinMap.userData = pinData
+            pinMap.map = self.faeMapView
+            self.mapPlacePinsDic.append(pinMap)
+            UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                icon.frame.size.width = 48
+                icon.frame.size.height = 54
+            }, completion: {(done: Bool) in
+                if done {
+                    pinMap.iconView = nil
+                    pinMap.icon = iconImage
+                }
+            })
+        }
     }
     
     func placesPinCheckCategory(categoryList: [String]) -> String {

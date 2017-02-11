@@ -201,7 +201,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var stringFilterValue = "comment,chat_room,media"
     
     // Yelp API
+    let yelpManager = YelpManager()
     let yelpQuery = YelpQuery()
+    
+    // If below can be refreshed
+    var refreshPins = false
+    var refreshUsers = false
+    var refreshPlaces = false
+    var refreshPlacesAll = false
     
     // System Functions
     override func viewDidLoad() {
@@ -330,7 +337,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.navigationBar.isTranslucent = true
     }
     
-    func refreshMap(pins: Bool, users: Bool, places: Bool) {
+    func refreshMap(pins: Bool, users: Bool, places: Bool, placesAll: Bool) {
         let currentZoomLevel = faeMapView.camera.zoom
         let powFactor: Double = Double(21 - currentZoomLevel)
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
@@ -341,7 +348,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
         }
         if places {
-            self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500))
+            self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500), all: placesAll)
         }
     }
     
@@ -359,7 +366,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
             
-            refreshMap(pins: true, users: true, places: true)
+            refreshMap(pins: true, users: true, places: true, placesAll: true)
             
         }
         

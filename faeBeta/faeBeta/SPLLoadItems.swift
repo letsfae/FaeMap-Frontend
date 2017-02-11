@@ -56,16 +56,16 @@ extension SelectLocationViewController {
         self.view.addConstraintsWithFormat("V:[v0(65)]-0-|", options: [], views: buttonSetLocationOnMap)
     }
     
-    func loadCustomSearchController() {
+    func loadFaeSearchController() {
         let searchBarSubview = UIView(frame: CGRect(x: 8, y: 23, width: resultTableWidth, height: 48.0))
         
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5, width: resultTableWidth, height: 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
-        customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
-        customSearchController.customDelegate = self
-        customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5, width: resultTableWidth, height: 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
+        faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
+        faeSearchController.faeDelegate = self
+        faeSearchController.faeSearchBar.layer.borderWidth = 2.0
+        faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
         
-        searchBarSubview.addSubview(customSearchController.customSearchBar)
+        searchBarSubview.addSubview(faeSearchController.faeSearchBar)
         searchBarSubview.backgroundColor = UIColor.white
         self.view.addSubview(searchBarSubview)
         
@@ -83,7 +83,7 @@ extension SelectLocationViewController {
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.register(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
+        tblSearchResults.register(FaeCellForAddressSearch.self, forCellReuseIdentifier: "faeCellForAddressSearch")
         tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
         tblSearchResults.separatorInset = UIEdgeInsets.zero

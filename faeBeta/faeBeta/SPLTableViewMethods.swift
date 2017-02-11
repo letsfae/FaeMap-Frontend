@@ -29,7 +29,7 @@ extension SelectLocationViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "customCellForAddressSearch", for: indexPath) as! CustomCellForAddressSearch
+            let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForAddressSearch", for: indexPath) as! FaeCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero
@@ -54,8 +54,8 @@ extension SelectLocationViewController: UITableViewDelegate, UITableViewDataSour
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
             tableView.deselectRow(at: indexPath, animated: true)
         }

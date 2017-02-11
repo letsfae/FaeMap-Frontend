@@ -15,7 +15,7 @@ protocol LocationSendDelegate: class {
     func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : Data)
 }
 
-class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -45,7 +45,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     var filteredArray = [String]()
     var shouldShowSearchResults = false
     var searchController: UISearchController!
-    var customSearchController: CustomSearchController!
+    var faeSearchController: FaeSearchController!
     var searchBarSubview: UIView!
     var placeholder = [GMSAutocompletePrediction]()
     var searchBarSubviewButton: UIButton!
@@ -61,7 +61,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         heightFactor = screenHeight / 736
         loadMapView()
         loadTableView()
-        configureCustomSearchController()
+        configureFaeSearchController()
         loadButton()
         loadPin()
     }
@@ -103,7 +103,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        customSearchController.customSearchBar.endEditing(true)
+        faeSearchController.faeSearchBar.endEditing(true)
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
@@ -122,7 +122,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
                         addressToSearchBar += line + ", "
                     }
                 }
-                self.customSearchController.customSearchBar.text = addressToSearchBar
+                self.faeSearchController.faeSearchBar.text = addressToSearchBar
             }
             self.latitudeForPin = mapCenterCoordinate.latitude
             self.longitudeForPin = mapCenterCoordinate.longitude
@@ -140,16 +140,16 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         }
     }
     
-    func configureCustomSearchController() {
+    func configureFaeSearchController() {
         searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
-        customSearchController.customSearchBar.placeholder = "Search Address or Place                                  "
-        customSearchController.customDelegate = self
-        customSearchController.customSearchBar.layer.borderWidth = 2.0
-        customSearchController.customSearchBar.layer.borderColor = UIColor.white.cgColor
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
+        faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
+        faeSearchController.faeDelegate = self
+        faeSearchController.faeSearchBar.layer.borderWidth = 2.0
+        faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
         
-        searchBarSubview.addSubview(customSearchController.customSearchBar)
+        searchBarSubview.addSubview(faeSearchController.faeSearchBar)
         searchBarSubview.backgroundColor = UIColor.white
         self.view.addSubview(searchBarSubview)
         
@@ -216,7 +216,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     }
     
     func actionActiveSearchBar(_ sender: UIButton!) {
-        self.customSearchController.customSearchBar.becomeFirstResponder()
+        self.faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     
     func loadTableView() {
@@ -224,7 +224,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.register(CustomCellForAddressSearch.self, forCellReuseIdentifier: "customCellForAddressSearch")
+        tblSearchResults.register(FaeCellForAddressSearch.self, forCellReuseIdentifier: "faeCellForAddressSearch")
         tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
         tblSearchResults.separatorInset = UIEdgeInsets.zero
@@ -256,7 +256,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if(tableView == self.tblSearchResults){
-            let cell = tableView.dequeueReusableCell(withIdentifier: "customCellForAddressSearch", for: indexPath) as! CustomCellForAddressSearch
+            let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForAddressSearch", for: indexPath) as! FaeCellForAddressSearch
             cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero
@@ -281,8 +281,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
             tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -317,11 +317,11 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
         tblSearchResults.reloadData()
     }
     
-    // MARK: CustomSearchControllerDelegate functions
+    // MARK: FaeSearchControllerDelegate functions
     func didStartSearching() {
         shouldShowSearchResults = true
         tblSearchResults.reloadData()
-        customSearchController.customSearchBar.becomeFirstResponder()
+        faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     
     func didTapOnSearchButton() {
@@ -342,8 +342,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, CustomSe
                     }
                 })
             })
-            self.customSearchController.customSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.customSearchController.customSearchBar.resignFirstResponder()
+            self.faeSearchController.faeSearchBar.text = self.placeholder[0].attributedFullText.string
+            self.faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
         

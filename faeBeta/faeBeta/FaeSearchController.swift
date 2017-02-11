@@ -1,5 +1,5 @@
 //
-//  CustomSearchController.swift
+//  FaeSearchController.swift
 //  FaeMap
 //
 //  Created by Yue on 6/3/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CustomSearchControllerDelegate {
+protocol FaeSearchControllerDelegate {
     func didStartSearching()
     
     func didTapOnSearchButton()
@@ -19,9 +19,9 @@ protocol CustomSearchControllerDelegate {
 }
 
 
-class CustomSearchController: UISearchController, UISearchBarDelegate {
-    var customSearchBar: CustomSearchBar!
-    var customDelegate: CustomSearchControllerDelegate!
+class FaeSearchController: UISearchController, UISearchBarDelegate {
+    var faeSearchBar: FaeSearchBar!
+    var faeDelegate: FaeSearchControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,31 +50,31 @@ class CustomSearchController: UISearchController, UISearchBarDelegate {
     // MARK: Custom functions
     
     func configureSearchBar(_ frame: CGRect, font: UIFont, textColor: UIColor, bgColor: UIColor) {
-        customSearchBar = CustomSearchBar(frame: frame, font: font , textColor: textColor)
-        customSearchBar.barTintColor = bgColor
-        customSearchBar.tintColor = textColor
-        customSearchBar.showsBookmarkButton = false
-        customSearchBar.showsCancelButton = false
-        customSearchBar.setImage(UIImage(named: "searchBarIcon"), for: UISearchBarIcon.search, state: UIControlState())
-        customSearchBar.delegate = self
+        faeSearchBar = FaeSearchBar(frame: frame, font: font , textColor: textColor)
+        faeSearchBar.barTintColor = bgColor
+        faeSearchBar.tintColor = textColor
+        faeSearchBar.showsBookmarkButton = false
+        faeSearchBar.showsCancelButton = false
+        faeSearchBar.setImage(UIImage(named: "searchBarIcon"), for: UISearchBarIcon.search, state: UIControlState())
+        faeSearchBar.delegate = self
     }
     
     // MARK: UISearchBarDelegate functions
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        customDelegate.didStartSearching()
+        faeDelegate.didStartSearching()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        customSearchBar.resignFirstResponder()
-        customDelegate.didTapOnSearchButton()
+        faeSearchBar.resignFirstResponder()
+        faeDelegate.didTapOnSearchButton()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        customSearchBar.resignFirstResponder()
-        customDelegate.didTapOnCancelButton()
+        faeSearchBar.resignFirstResponder()
+        faeDelegate.didTapOnCancelButton()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        customDelegate.didChangeSearchText(searchText)
+        faeDelegate.didChangeSearchText(searchText)
     }
 }

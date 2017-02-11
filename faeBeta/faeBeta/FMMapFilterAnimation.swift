@@ -179,7 +179,7 @@ extension FaeMapViewController {
             self.polygonInside.transform = CGAffineTransform(rotationAngle: -3.1415926)
         }, completion: nil)
         
-        refreshMap(pins: true, users: true, places: true)
+        refreshMap(pins: refreshPins, users: refreshUsers, places: refreshPlaces, placesAll: refreshPlacesAll)
         
     }
     

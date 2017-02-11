@@ -11,6 +11,8 @@ import CoreLocation
 
 class YelpQuery {
     
+    fileprivate var customCategory = ""
+    
     var dict = [String : String]()
     
     init() {
@@ -30,6 +32,9 @@ class YelpQuery {
     }
     
     //IMPORTANT: you must provide (lat & lon) or location string
+    func setResultLimit(count: Int) {
+        dict["limit"] = "\(count)";
+    }
     
     func setLocation(location : String) {
         dict["location"] = location
@@ -57,7 +62,18 @@ class YelpQuery {
     }
     
     func setCatagoryToAll() {
+        customCategory = ""
         setCatagory(cata: "pizza,burgers,desserts,coffee,internetcafe,museums,galleries,beautysvc,playgrounds,countryclubs,sports_clubs,juicebars,movietheaters")
+    }
+    
+    func setCustomCategory(to: String) {
+        if customCategory == "" {
+            customCategory = to
+        }
+        else {
+            customCategory = "\(customCategory),\(to)"
+        }
+        setCatagory(cata: to)
     }
     
     func setCatagoryToRestaurant() {

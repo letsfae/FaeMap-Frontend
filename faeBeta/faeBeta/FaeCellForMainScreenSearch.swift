@@ -1,5 +1,5 @@
 //
-//  CustomCellForMainScreenSearch.swift
+//  FaeCellForMainScreenSearch.swift
 //  FaeMap
 //
 //  Created by Yue on 11/3/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomCellForMainScreenSearch: UITableViewCell {
+class FaeCellForMainScreenSearch: UITableViewCell {
     
     let titleColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
     let subTitleColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)

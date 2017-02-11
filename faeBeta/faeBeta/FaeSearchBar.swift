@@ -1,5 +1,5 @@
 //
-//  CustomSearchBar.swift
+//  FaeSearchBar.swift
 //  FaeMap
 //
 //  Created by Yue on 6/3/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomSearchBar: UISearchBar {
+class FaeSearchBar: UISearchBar {
     
     var preferredFont: UIFont!
     
