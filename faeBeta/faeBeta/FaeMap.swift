@@ -20,7 +20,7 @@ class FaeMap: NSObject {
     func renewCoordinate(_ completion: @escaping (Int,Any?) -> Void) {
         postToURL("map/user", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     

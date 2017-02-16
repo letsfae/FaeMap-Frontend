@@ -15,6 +15,8 @@ extension CreateCommentPinViewController {
         self.view.addSubview(uiviewCreateCommentPin)
         
         textViewForCommentPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
+        textViewForCommentPin.center.x = screenWidth / 2
+        textViewForCommentPin.showsVerticalScrollIndicator = false
         textViewForCommentPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewForCommentPin.textColor = UIColor.white
         textViewForCommentPin.backgroundColor = UIColor.clear

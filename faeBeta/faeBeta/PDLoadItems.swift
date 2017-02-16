@@ -142,7 +142,7 @@ extension PinDetailViewController {
         
         // Pin Like
         buttonPinLike = UIButton()
-        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
         buttonPinLike.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
         buttonPinLike.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewPinDetailMainButtons.addSubview(buttonPinLike)
@@ -315,7 +315,7 @@ extension PinDetailViewController {
         // Back to Map
         buttonPinBackToMap = UIButton()
         buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
-        buttonPinBackToMap.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: UIControlEvents.touchUpInside)
+        buttonPinBackToMap.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
         subviewNavigation.addSubview(buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonPinBackToMap)
@@ -325,7 +325,7 @@ extension PinDetailViewController {
         // Back to Comment Pin List
         buttonBackToPinLists = UIButton()
         buttonBackToPinLists.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
-        buttonBackToPinLists.addTarget(self, action: #selector(self.actionGoToList(_:)), for: UIControlEvents.touchUpInside)
+        buttonBackToPinLists.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
         subviewNavigation.addSubview(buttonBackToPinLists)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToPinLists)
         subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToPinLists)
@@ -333,7 +333,7 @@ extension PinDetailViewController {
         // Comment Pin Option
         buttonOptionOfPin = UIButton()
         buttonOptionOfPin.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
-        buttonOptionOfPin.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: UIControlEvents.touchUpInside)
+        buttonOptionOfPin.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
         subviewNavigation.addSubview(buttonOptionOfPin)
         subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: buttonOptionOfPin)
         subviewNavigation.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfPin)

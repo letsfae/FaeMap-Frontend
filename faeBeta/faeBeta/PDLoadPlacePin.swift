@@ -82,6 +82,7 @@ extension PinDetailViewController {
         uiviewPlaceDetail.addSubview(btnMoreOptions_Place)
         uiviewPlaceDetail.addConstraintsWithFormat("H:[v0(53)]-0-|", options: [], views: btnMoreOptions_Place)
         uiviewPlaceDetail.addConstraintsWithFormat("V:|-165-[v0(48)]", options: [], views: btnMoreOptions_Place)
+        btnMoreOptions_Place.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
         
         initPlaceBasicInfo()
         manageYelpData()

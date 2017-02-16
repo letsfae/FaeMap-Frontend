@@ -218,9 +218,13 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         checkPinStatus()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("[viewWillAppear]")
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.delegate?.animateToSelectedMarker(coordinate: selectedMarkerPosition)
         UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForPin.frame.origin.y = 65
@@ -237,7 +241,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             self.loadInputToolBar()
             self.loadExtendView() // call func for loading extend view (mingjie jin)
         })
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

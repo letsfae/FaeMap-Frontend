@@ -119,7 +119,7 @@ class CreatePinInputToolbar: UIView {
     {
         self.backgroundColor = UIColor.clear
         darkBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
-        darkBackgroundView.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 0.7)
+        darkBackgroundView.backgroundColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
         self.addSubview(darkBackgroundView)
         self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: darkBackgroundView)
         self.addConstraintsWithFormat("V:[v0(50)]-0-|", options: [], views: darkBackgroundView)

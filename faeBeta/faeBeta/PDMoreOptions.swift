@@ -19,24 +19,28 @@ extension PinDetailViewController {
     func showPinMoreButtonDetails(_ sender: UIButton!) {
         endEdit()
         if buttonMoreOnPinCellExpanded == false {
+            var menuOffset: CGFloat = 0
+            if pinTypeEnum == .place {
+                menuOffset = 148
+            }
             buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
             buttonFakeTransparentClosingView.layer.zPosition = 110
             self.view.addSubview(buttonFakeTransparentClosingView)
             buttonFakeTransparentClosingView.addTarget(self,
                                                        action: #selector(self.actionToCloseOtherViews(_:)),
                                                        for: .touchUpInside)
-            let subviewXBefore: CGFloat = 400 / 414 * screenWidth
-            let subviewYBefore: CGFloat = 57 / 414 * screenWidth
-            let subviewXAfter: CGFloat = 171 / 414 * screenWidth
-            let subviewYAfter: CGFloat = 57 / 414 * screenWidth
-            let subviewWidthAfter: CGFloat = 229 / 414 * screenWidth
-            let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
-            let firstButtonX: CGFloat = 192 / 414 * screenWidth
-            let secondButtonX: CGFloat = 262 / 414 * screenWidth
-            let thirdButtonX: CGFloat = 332 / 414 * screenWidth
-            let buttonY: CGFloat = 97 / 414 * screenWidth
-            let buttonWidth: CGFloat = 44 / 414 * screenWidth
-            let buttonHeight: CGFloat = 51 / 414 * screenWidth
+            let subviewXBefore: CGFloat = 400 * screenWidthFactor
+            let subviewYBefore: CGFloat = (57 + menuOffset) * screenWidthFactor
+            let subviewXAfter: CGFloat = 171 * screenWidthFactor
+            let subviewYAfter: CGFloat = (57 + menuOffset) * screenWidthFactor
+            let subviewWidthAfter: CGFloat = 229 * screenWidthFactor
+            let subviewHeightAfter: CGFloat = 110 * screenWidthFactor
+            let firstButtonX: CGFloat = 192 * screenWidthFactor
+            let secondButtonX: CGFloat = 262 * screenWidthFactor
+            let thirdButtonX: CGFloat = 332 * screenWidthFactor
+            let buttonY: CGFloat = (97 + menuOffset) * screenWidthFactor
+            let buttonWidth: CGFloat = 44 * screenWidthFactor
+            let buttonHeight: CGFloat = 51 * screenWidthFactor
             
             moreButtonDetailSubview = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
             moreButtonDetailSubview.image = #imageLiteral(resourceName: "moreButtonDetailSubview")
@@ -129,8 +133,12 @@ extension PinDetailViewController {
     // Hide comment pin more options' button
     func hidePinMoreButtonDetails() {
         buttonMoreOnPinCellExpanded = false
-        let subviewXBefore: CGFloat = 400 / 414 * screenWidth
-        let subviewYBefore: CGFloat = 57 / 414 * screenWidth
+        var menuOffset: CGFloat = 0
+        if pinTypeEnum == .place {
+            menuOffset = 148
+        }
+        let subviewXBefore: CGFloat = 400 * screenWidthFactor
+        let subviewYBefore: CGFloat = (57 + menuOffset) * screenWidthFactor
         UIView.animate(withDuration: 0.25, animations: ({
             self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
             self.buttonShareOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
@@ -172,9 +180,13 @@ extension PinDetailViewController {
     }
     
     func actionReportThisPin(_ sender: UIButton) {
-        let reportCommentPinVC = ReportCommentPinViewController()
-        reportCommentPinVC.reportType = 0
-        self.present(reportCommentPinVC, animated: true, completion: nil)
+        let reportPinVC = ReportCommentPinViewController()
+        reportPinVC.reportType = 0
+        if pinTypeEnum == .place {
+            reportPinVC.isPlacePin = true
+        }
+        self.isKeyboardInThisView = false
+        self.present(reportPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
     

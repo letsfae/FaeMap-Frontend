@@ -280,10 +280,10 @@ extension PinDetailViewController {
             }
             if let isLiked = pinInfoJSON["user_pin_operations"]["is_liked"].bool {
                 if isLiked == false {
-                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
                     self.buttonPinLike.tag = 0
                     if self.animatingHeart != nil {
-                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
                     }
                 }
                 else {

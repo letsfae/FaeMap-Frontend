@@ -22,7 +22,7 @@ extension PinDetailViewController {
         }
         
         if sender.tag == 1 && pinIDPinDetailView != "-999" {
-            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+            buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
@@ -68,9 +68,9 @@ extension PinDetailViewController {
     
     // Down vote comment pin
     func actionDownVoteThisComment(_ sender: UIButton) {
-        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
+        buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
         if animatingHeart != nil {
-            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+            animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
         }
         if pinIDPinDetailView != "-999" {
             unlikeThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
