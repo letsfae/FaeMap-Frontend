@@ -68,7 +68,6 @@
 		B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEE11D6E0D1000C078F5 /* StickerPickView.swift */; };
 		B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEE21D6E0D1000C078F5 /* StickerScrollView.swift */; };
 		B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEE31D6E0D1000C078F5 /* StickerTabView.swift */; };
-		B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */; };
 		B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF021D6E34E200C078F5 /* FAETextField.swift */; };
 		B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF031D6E34E200C078F5 /* FAEVerificationCodeView.swift */; };
 		B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF041D6E34E200C078F5 /* FAEVerificationCodeView.xib */; };
@@ -373,7 +372,6 @@
 		B064EEE11D6E0D1000C078F5 /* StickerPickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerPickView.swift; sourceTree = "<group>"; };
 		B064EEE21D6E0D1000C078F5 /* StickerScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerScrollView.swift; sourceTree = "<group>"; };
 		B064EEE31D6E0D1000C078F5 /* StickerTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerTabView.swift; sourceTree = "<group>"; };
-		B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPinsViewController.swift; sourceTree = "<group>"; };
 		B064EF021D6E34E200C078F5 /* FAETextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAETextField.swift; sourceTree = "<group>"; };
 		B064EF031D6E34E200C078F5 /* FAEVerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEVerificationCodeView.swift; sourceTree = "<group>"; };
 		B064EF041D6E34E200C078F5 /* FAEVerificationCodeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FAEVerificationCodeView.xib; sourceTree = "<group>"; };
@@ -1077,6 +1075,7 @@
 		B0CFC9981CED2CE700EC356A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CE97A9B81E391EC9005BBF6C /* Yelp */,
 				B05E2DBE1DD24FEE00D6745A /* Key.swift */,
 				B0CFC99D1CED342000EC356A /* Keys.swift */,
 				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
@@ -1139,11 +1138,9 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				CE97A9B81E391EC9005BBF6C /* Yelp */,
-				B064EEF61D6E2FD000C078F5 /* MyPinsViewController.swift */,
-				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
+				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B0714D7E1D5E440C00356705 /* MapViewCell */,
 				B0714D7D1D5E43DA00356705 /* FaeSearchBar */,
@@ -1323,6 +1320,14 @@
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
 			name = PinMenu;
+			sourceTree = "<group>";
+		};
+		B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */ = {
+			isa = PBXGroup;
+			children = (
+				B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */,
+			);
+			name = FirstTimeLogin;
 			sourceTree = "<group>";
 		};
 		B8E4C3B31E301603004E68A5 /* GoogleMaps-iOS-Utils */ = {
@@ -1895,7 +1900,6 @@
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
 				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */,
-				B064EEF71D6E2FD000C078F5 /* MyPinsViewController.swift in Sources */,
 				CE97A9C21E399D52005BBF6C /* YelpManager.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,

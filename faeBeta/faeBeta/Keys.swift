@@ -17,14 +17,14 @@ private enum SERVERTYPE {
 // change this to .production to switch to production mode
 private let server = SERVERTYPE.development
 
-var baseURL : String{
-    get{
+var baseURL: String {
+    get {
         return server == .development ? "https://dev.letsfae.com" : "https://api.letsfae.com"
     }
 }
 
-var fireBaseRef : String{
-    get{
+var fireBaseRef: String {
+    get {
         return server == .development ? "Message-dev" : "Message-prod"
     }
 }

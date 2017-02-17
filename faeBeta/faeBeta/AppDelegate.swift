@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpWelcomeView() {
-        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
+        let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
         self.window?.makeKeyAndVisible()
         self.window?.rootViewController!.present(vc, animated: true, completion: nil)
@@ -173,10 +173,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if status / 100 == 2 {
                     //success
                 } else {
-                    // self.popUpWelcomeView()
-                    let vc = DisconnectionViewController()
-                    self.window?.makeKeyAndVisible()
-                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
+                     self.popUpWelcomeView()
+//                    let vc = WelcomeViewController()
+//                    self.window?.makeKeyAndVisible()
+//                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
                 }
             })
         }

@@ -242,9 +242,9 @@ extension PinDetailViewController {
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
-            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
+//            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
             if let userid = pinInfoJSON["user_id"].int {
-                print(user_id)
+//                print(user_id)
                 if userid == Int(user_id) {
                     self.thisIsMyPin = true
                 }
@@ -257,23 +257,23 @@ extension PinDetailViewController {
                 let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
                 for fileID in fileIDs {
                     if fileID != nil {
-                        print("[getPinInfo] fileID: \(fileID)")
+//                        print("[getPinInfo] fileID: \(fileID)")
                         self.fileIdArray.append(fileID!)
                         //Changed by Yao, decide to pass fileIdArray to editPinViewController rather than fileIdString
                     }
                 }
                 self.loadMedias()
-                print("[getPinInfo] fileIDs: \(self.fileIdArray)")
-                print("[getPinInfo] fileIDs append done!")
+//                print("[getPinInfo] fileIDs: \(self.fileIdArray)")
+//                print("[getPinInfo] fileIDs append done!")
                 if let content = pinInfoJSON["description"].string {
-                    print("[getPinInfo] description: \(content)")
+//                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
             }
             else if self.pinTypeEnum == .comment {
                 if let content = pinInfoJSON["content"].string {
-                    print("[getPinInfo] description: \(content)")
+//                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                 }
@@ -312,6 +312,8 @@ extension PinDetailViewController {
                     let userProfile = JSON(message!)
                     if let username = userProfile["nick_name"].string {
                         self.labelPinUserName.text = username
+                    } else {
+                        self.labelPinUserName.text = "Anonymous"
                     }
                 }
             }
