@@ -61,7 +61,8 @@ extension FaeMapViewController {
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
             faeMapView.camera = camera
             if userStatus != 5  {
-                loadPositionAnimateImage()
+//                loadPositionAnimateImage()
+                loadSelfMarker()
                 getSelfAccountInfo()
             }
         }

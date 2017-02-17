@@ -123,11 +123,12 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
             let position = CLLocationCoordinate2DMake(self.currentLatitude, self.currentLongitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
-            myPositionOutsideMarker_3.center = selfPositionToPoint
-            myPositionOutsideMarker_2.center = selfPositionToPoint
-            myPositionOutsideMarker_1.center = selfPositionToPoint
-            myPositionIcon.center = selfPositionToPoint
+//            let selfPositionToPoint = faeMapView.projection.point(for: position)
+//            myPositionOutsideMarker_3.center = selfPositionToPoint
+//            myPositionOutsideMarker_2.center = selfPositionToPoint
+//            myPositionOutsideMarker_1.center = selfPositionToPoint
+//            myPositionIcon.center = selfPositionToPoint
+            selfMarker.position = position
         }
         
 //        if mapView.camera.zoom < 11 && !canLoadMapPin {

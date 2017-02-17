@@ -18,6 +18,11 @@ extension FaeMapViewController {
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
+        faeMapView.preferredFrameRate = kGMSFrameRateMaximum
+        faeMapView.isIndoorEnabled = false
+        faeMapView.isBuildingsEnabled = false
+        faeMapView.settings.tiltGestures = false
+
         self.view = faeMapView
         do {
             // Set the map style by passing a valid JSON string.

@@ -210,6 +210,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var refreshPlaces = true
     var refreshPlacesAll = true
     
+    // Self Position Marker: 02-17-2016 Yue Shen
+    var selfMarker = GMSMarker()
+    var subviewSelfMarker: UIView!
+    var selfMarkerIcon: UIImageView!
+    var myPositionCircle_1: UIImageView!
+    var myPositionCircle_2: UIImageView!
+    var myPositionCircle_3: UIImageView!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -227,7 +235,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadTransparentNavBarItems()
         loadButton()
         loadNameCard()
-        loadPositionAnimateImage()
+//        loadPositionAnimateImage()
+        loadSelfMarker()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
@@ -249,7 +258,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         if userStatus != 5  {
-            loadPositionAnimateImage()
+//            loadPositionAnimateImage()
+            loadSelfMarker()
         }
         getSelfAccountInfo()
         buttonFakeTransparentClosingView.alpha = 0
@@ -305,7 +315,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
-            loadPositionAnimateImage()
+//            loadPositionAnimateImage()
+            loadSelfMarker()
             getSelfAccountInfo()
         }
     }

@@ -92,18 +92,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         if userStatus == 5 {
             self.invisibleMode()
             self.faeMapView.isMyLocationEnabled = true
-            if self.myPositionOutsideMarker_1 != nil {
-                self.myPositionOutsideMarker_1.isHidden = true
-            }
-            if self.myPositionOutsideMarker_2 != nil {
-                self.myPositionOutsideMarker_2.isHidden = true
-            }
-            if self.myPositionOutsideMarker_3 != nil {
-                self.myPositionOutsideMarker_3.isHidden = true
-            }
-            if self.myPositionIcon != nil {
-                self.myPositionIcon.isHidden = true
-            }
+            selfMarker.map = nil
         }
     }
     // LeftSlidingMenuDelegate
