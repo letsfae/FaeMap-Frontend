@@ -50,15 +50,15 @@ class WelcomeImageContainerViewController: UIViewController {
             title = "Chat"
             description = "Chat & Interact with people\nin any area near or far!"
             break
+        //case 2:
+        //    title = "Trade"
+        //    description = "Fastest Way to Buy/Sell in\nthe most diverse Marketplace!"
+        //    break
         case 2:
-            title = "Trade"
-            description = "Fastest Way to Buy/Sell in\nthe most diverse Marketplace!"
-            break
-        case 3:
             title = "Discover"
             description = "Explore any City in the World\nand instantly get involved!"
             break
-        case 4:
+        case 3:
             title = "Secure"
             description = "Our Shadow Security System\nalways protects your Privacy!"
             break

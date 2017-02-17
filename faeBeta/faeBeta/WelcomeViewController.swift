@@ -13,12 +13,12 @@ public var navBarDefaultShadowImage: UIImage?
 class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     // MARK: - Interface
 
-    var imageContainerPageViewController : UIPageViewController! 
+    var imageContainerPageViewController: UIPageViewController!
     var pageControl: WelcomePageControl!
     var lookAroundButton: UIButton!
-    var loginButton:UIButton!
-    var createAccountButton:UIButton!
-    var rightLabel:UILabel!
+    var loginButton: UIButton!
+    var createAccountButton: UIButton!
+    var rightLabel: UILabel!
     // MARK: - View did/will
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,11 +57,12 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     fileprivate func setupImageContainerPageViewController()
     {
-        pageControl = WelcomePageControl(frame: CGRect(x: screenWidth / 2 - 45, y: 56, width: 90, height: 10))
-        pageControl.numberOfPages = 5
+        pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56, width: 66, height: 10))
+        pageControl.center.x = screenWidth / 2
+        pageControl.numberOfPages = 4 //  hide trade was 5
         self.view.insertSubview(pageControl, at: 0)
         
-        self.imageContainerPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation:.horizontal, options: [UIPageViewControllerOptionSpineLocationKey:NSNumber(value: 5 as Float)])
+        self.imageContainerPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation:.horizontal, options: [UIPageViewControllerOptionSpineLocationKey:NSNumber(value: 4 as Float)]) //  hide trade was 5
         
         self.imageContainerPageViewController.delegate = self
         self.imageContainerPageViewController.dataSource = self
@@ -83,15 +84,13 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     fileprivate func setupBottomPart()
     {
         // look around label
-        lookAroundButton = UIButton(frame: CGRect(x: 0,y: screenHeight - 216 * screenHeightFactor,width: 125,height: 22))
+        lookAroundButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 216 * screenHeightFactor, width: 125, height: 22))
         lookAroundButton.center.x = screenWidth / 2
-        var font = UIFont(name: "AvenirNext-Bold", size: 16)
-        
-        lookAroundButton.setAttributedTitle(NSAttributedString(string: "Look around ➜", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
-//        self.view.insertSubview(lookAroundButton, atIndex: 0)
+        lookAroundButton.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
+        self.view.insertSubview(lookAroundButton, at: 0)
         
         // log in button
-        font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
         loginButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         loginButton.center.x = screenWidth / 2
@@ -158,7 +157,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
     {
         let currentViewController = viewController as! WelcomeImageContainerViewController
-        if(currentViewController.index == 4){
+        if(currentViewController.index == 3){ // was 4, hide trade -- Yue Shen
             return nil
         }
         else{

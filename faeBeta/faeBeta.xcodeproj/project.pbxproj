@@ -1011,14 +1011,14 @@
 		B0A2ACC91CE3A9C8002E0C9D /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				B064EF361D74ECF700C078F5 /* TableViewCells */,
+				B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */,
+				DC9F45371E078C1000128444 /* Login */,
+				DC9F45351E078BA100128444 /* SignUp */,
 				B064EF281D74ECCF00C078F5 /* Keyboard */,
 				B0714DF01D62513300356705 /* Support */,
-				B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */,
 				DC9F45391E07996100128444 /* Term&Policy */,
-				DC9F45351E078BA100128444 /* SignUp */,
 				DC9F45361E078BDF00128444 /* Location&Notification */,
-				DC9F45371E078C1000128444 /* Login */,
+				B064EF361D74ECF700C078F5 /* TableViewCells */,
 				DC9F45381E078CEF00128444 /* Unused */,
 			);
 			name = SignIn;
