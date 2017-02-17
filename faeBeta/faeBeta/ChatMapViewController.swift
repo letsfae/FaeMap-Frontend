@@ -47,6 +47,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     var buttonTopRight: UIButton!
     var buttonBottomLeft: UIButton!
     var buttonBottomRight: UIButton!
+    var buttonMiddleRight: UIButton!
 
     //MARK: - life cycle
     
@@ -67,7 +68,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     override func viewDidAppear(_ animated: Bool){
-        buttonBottomLeftAction(UIButton())
+        buttonMiddleRightAction(UIButton())
     }
 
     // MARK: - handle touch
@@ -144,11 +145,11 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     private func loadButton(){
-        buttonTopLeft = UIButton(frame: CGRect(x:15, y: 26, width: 30, height: 30))
-        buttonTopLeft.setImage(UIImage(named: "chat_map_topLeft")!, for:UIControlState())
-        buttonTopLeft.setImage(UIImage(named: "chat_map_topLeft")!, for:.highlighted)
-        buttonTopLeft.addTarget(self, action: #selector(buttonTopLeftAction(_:)), for: .touchUpInside)
-        self.view.addSubview(buttonTopLeft)
+        buttonMiddleRight = UIButton(frame: CGRect(x:screenWidth - 71, y: screenHeight - 230, width: 51, height: 51))
+        buttonMiddleRight.setImage(UIImage(named: "pinCenterButton")!, for:UIControlState())
+        buttonMiddleRight.adjustsImageWhenHighlighted = false
+        buttonMiddleRight.addTarget(self, action: #selector(buttonMiddleRightAction(_:)), for: .touchUpInside)
+        self.view.addSubview(buttonMiddleRight)
         
         buttonTopRight = UIButton(frame: CGRect(x:screenWidth-15-31, y: 26, width: 30, height: 30))
         buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for: UIControlState())
@@ -156,12 +157,12 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         buttonTopRight.addTarget(self, action: #selector(buttonTopRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonTopRight)
         
-        buttonBottomLeft = UIButton(frame: CGRect(x:20, y: screenHeight - 164, width: 60, height: 60))
-        buttonBottomLeft.setImage(UIImage(named: "chat_map_bottomLeft"), for: UIControlState())
+        buttonBottomLeft = UIButton(frame: CGRect(x:20, y: screenHeight - 164, width: 51, height: 51))
+        buttonBottomLeft.setImage(UIImage(named: "cancelSelectLocation"), for: UIControlState())
         buttonBottomLeft.addTarget(self, action: #selector(buttonBottomLeftAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomLeft)
         
-        buttonBottomRight = UIButton(frame: CGRect(x:screenWidth-20-60, y: screenHeight - 164, width: 60, height: 60))
+        buttonBottomRight = UIButton(frame: CGRect(x:screenWidth - 71, y: screenHeight - 164, width: 60, height: 60))
         buttonBottomRight.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
         buttonBottomRight.addTarget(self, action: #selector(buttonBottomRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomRight)
@@ -177,8 +178,10 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     
     //MARK: - button actions
     
-    func buttonTopLeftAction(_ sender: UIButton!){
-        _ = self.navigationController?.popViewController(animated: true)
+    func buttonMiddleRightAction(_ sender: UIButton!){
+        let camera = GMSCameraPosition.camera(withLatitude: chatLatitude, longitude: chatLongitude, zoom: 17)
+        faeMapView.camera = camera
+        startUpdatingLocation = true
     }
     
     func buttonTopRightAction(_ sender: UIButton!){
@@ -186,9 +189,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func buttonBottomLeftAction(_ sender: UIButton!){
-        let camera = GMSCameraPosition.camera(withLatitude: chatLatitude, longitude: chatLongitude, zoom: 17)
-        faeMapView.camera = camera
-        startUpdatingLocation = true
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func buttonBottomRightAction(_ sender: UIButton!){

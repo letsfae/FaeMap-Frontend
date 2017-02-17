@@ -247,6 +247,7 @@
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
 		DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0A443D1E10F59C007E203C /* TagCreator.swift */; };
@@ -578,6 +579,7 @@
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
 		DC084A901DDCF969007DCC88 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
@@ -910,6 +912,7 @@
 			children = (
 				B0714DC81D5E475500356705 /* ChatMapViewController.swift */,
 				B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */,
+				CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */,
 			);
 			name = Location;
 			sourceTree = "<group>";
@@ -1035,9 +1038,9 @@
 				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
 				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
 				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
+				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
 				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
-				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
 				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
 				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
@@ -1809,6 +1812,7 @@
 				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
+				CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */,

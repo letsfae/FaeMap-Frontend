@@ -60,6 +60,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var buttonSticker : UIButton!
     private var buttonImagePicker : UIButton!
     private var buttonVoiceRecorder: UIButton!
+    private var buttonLocation : UIButton!
 
     // a timer to show heart animation continously
     private var animatingHeartTimer: Timer!
@@ -136,6 +137,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //        }
     }
     
+    
+    
+    //var miniLocation = LocationPickerMini()
+    
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -147,14 +152,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
+        //miniLocation.isHidden = true
+        //view.addSubview(miniLocation)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
@@ -173,7 +179,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.inputToolbar.contentView.backgroundColor = UIColor.white
         self.inputToolbar.contentView.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0);
         setupToolbarContentView()
-
+        
+        // new feature for location
+        self.toolbarContentView.miniLocation.buttonSearch.addTarget(self, action: #selector(self.showFullLocationView), for: .touchUpInside)
+        self.toolbarContentView.miniLocation.buttonSend.addTarget(self, action: #selector(self.sendLocationMessageFromMini), for: .touchUpInside)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -284,9 +294,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         contentView?.addSubview(buttonVoiceRecorder)
         
-        let buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
+        buttonLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
         buttonLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
-        buttonLocation.setImage(UIImage(named: "shareLocation"), for: .highlighted)
+        buttonLocation.showsTouchWhenHighlighted = false
         //add a function
         buttonLocation.addTarget(self, action: #selector(ChatViewController.sendLocation), for: .touchUpInside)
         contentView?.addSubview(buttonLocation)
@@ -317,7 +327,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
-        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)        
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        
     }
     
     // be sure to call this in ViewWillAppear!!!
@@ -386,10 +397,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func sendLocation() {
         resetToolbarButtonIcon()
-        closeToolbarContentView()
-        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
-        vc.locationDelegate = self
-        self.navigationController?.pushViewController(vc, animated: true)
+        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())
+                //closeToolbarContentView()
+        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
+        self.toolbarContentView.showMiniLocation()
+        moveUpInputBarContentView(animated)
     }
     
     
@@ -600,6 +612,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
+        buttonLocation.setImage(UIImage(named : "shareLocation"), for: UIControlState())
         buttonSend.isEnabled = false
     }
     
@@ -757,6 +770,26 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if anim.duration == 1 && flag{
             animHeartDic[anim]?.removeFromSuperview()
             animHeartDic[anim] = nil
+        }
+    }
+    
+    func showFullLocationView(_ sender : UIButton) {
+        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        vc.locationDelegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    func sendLocationMessageFromMini(_ sender : UIButton) {
+        print("sending location from mini")
+        if let mapview = self.toolbarContentView.miniLocation.mapView {
+            print("got mapview");
+            UIGraphicsBeginImageContext(mapview.frame.size)
+            mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
+            if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
+                print("got snap image")
+                sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+            }
         }
     }
 }
