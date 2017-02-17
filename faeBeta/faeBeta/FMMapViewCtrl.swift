@@ -84,7 +84,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-                print("Cur-Zoom Level: \(mapView.camera.zoom)")
+//                print("Cur-Zoom Level: \(mapView.camera.zoom)")
         //        print("Pre-Zoom Level: \(previousZoomLevel)")
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
@@ -146,12 +146,12 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
 //            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
 //        }
         
-        let mapTop = CGPoint.zero
-        let mapTopCoor = faeMapView.projection.coordinate(for: mapTop)
-        let mapBottom = CGPoint(x: screenWidth, y: screenHeight)
-        let mapBottomCoor = faeMapView.projection.coordinate(for: mapBottom)
-        let coorWidth = abs(mapBottomCoor.latitude - mapTopCoor.latitude)
-        print("DEBUG Coordinate Width: \(coorWidth)")
+//        let mapTop = CGPoint.zero
+//        let mapTopCoor = faeMapView.projection.coordinate(for: mapTop)
+//        let mapBottom = CGPoint(x: screenWidth, y: screenHeight)
+//        let mapBottomCoor = faeMapView.projection.coordinate(for: mapBottom)
+//        let coorWidth = abs(mapBottomCoor.latitude - mapTopCoor.latitude)
+//        print("DEBUG Coordinate Width: \(coorWidth)")
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
