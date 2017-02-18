@@ -57,10 +57,7 @@ extension FaeMapViewController {
                     resultArray.append(result)
                 }
                 self.pinPlacesOnMap(results: resultArray)
-                let targetZoomLevel = self.calculateZoomLevel(results: resultArray)
-                print("[Zoom Level] \(targetZoomLevel)")
-                let camera = GMSCameraPosition.camera(withLatitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude, zoom: targetZoomLevel)
-                self.faeMapView.animate(to: camera)
+                self.calculateZoomLevel(results: resultArray)
             })
         }
         else {
@@ -108,11 +105,25 @@ extension FaeMapViewController {
                                         print(result.getCategory())
                                         resultArray.append(result)
                                     }
-                                    self.pinPlacesOnMap(results: resultArray)
-//                                    let targetZoomLevel = self.calculateZoomLevel(results: resultArray)
-//                                    print("[Zoom Level] \(targetZoomLevel)")
-//                                    let camera = GMSCameraPosition.camera(withLatitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude, zoom: targetZoomLevel)
-//                                    self.faeMapView.animate(to: camera)
+                                    self.yelpQuery.setCatagoryToArt()
+                                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                                        print("[YelpAPI - Testing]")
+                                        for result in results {
+                                            print(result.getCategory())
+                                            resultArray.append(result)
+                                        }
+                                        self.yelpQuery.setCatagoryToJuice()
+                                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+                                            print("[YelpAPI - Testing]")
+                                            for result in results {
+                                                print(result.getCategory())
+                                                resultArray.append(result)
+                                            }
+                                            self.pinPlacesOnMap(results: resultArray)
+                                            self.calculateZoomLevel(results: resultArray)
+                                        })
+                                    })
+                                    
                                 })
                             })
                         })
@@ -122,26 +133,23 @@ extension FaeMapViewController {
         }
     }
     
-    func calculateZoomLevel(results: [YelpResult]) -> Float {
-        if results.count == 0 || results.count == 1 {
-            return 14
-        }
+    func calculateZoomLevel(results: [YelpResult]) {
         var latArr = [Double]()
         var lonArr = [Double]()
         for result in results {
-            latArr.append(result.getPosition().coordinate.latitude)
-            lonArr.append(result.getPosition().coordinate.longitude)
+            latArr.append(result.getPosition().latitude)
+            lonArr.append(result.getPosition().longitude)
         }
         
         let minLat = latArr.min()!
         let maxLat = latArr.max()!
         let minLon = lonArr.min()!
         let maxLon = lonArr.max()!
-        
-        let maxRange = Float((max(maxLat - minLat, maxLon - minLon)))
-        print("[Zoom Level] \(maxRange)")
-        let zoomLevel = Float(21 - log2(maxRange/0.0004))
-        return zoomLevel
+        let northWestCor = CLLocationCoordinate2DMake(maxLat, minLon)
+        let southEastCor = CLLocationCoordinate2DMake(minLat, maxLon)
+        let geoBounds = GMSCoordinateBounds(coordinate: northWestCor, coordinate: southEastCor)
+        let cameraUpdate = GMSCameraUpdate.fit(geoBounds, withPadding: 25.0)
+        faeMapView.animate(with: cameraUpdate)
     }
     
     func pinPlacesOnMap(results: [YelpResult]) {
@@ -153,8 +161,8 @@ extension FaeMapViewController {
             pinData["type"] = "place" as AnyObject?
             pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
             iconImage = self.placesPinIconImage(categoryList: categoryList)
-            pinData["latitude"] = result.getPosition().coordinate.latitude as AnyObject?
-            pinData["longitude"] = result.getPosition().coordinate.longitude as AnyObject?
+            pinData["latitude"] = result.getPosition().latitude as AnyObject?
+            pinData["longitude"] = result.getPosition().longitude as AnyObject?
             pinData["street"] = result.getAddress1() as AnyObject?
             pinData["city"] = result.getAddress2() as AnyObject?
             pinData["imageURL"] = result.getImageURL() as AnyObject?
@@ -165,7 +173,7 @@ extension FaeMapViewController {
             pinMap.iconView = icon
             let delay: Double = Double(arc4random_uniform(200)) / 100
             pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            pinMap.position = result.getPosition().coordinate
+            pinMap.position = result.getPosition()
             pinMap.userData = pinData
             pinMap.map = self.faeMapView
             self.mapPlacePinsDic.append(pinMap)
@@ -194,23 +202,47 @@ extension FaeMapViewController {
         else if categoryList.contains("desserts") {
             return "desserts"
         }
+        else if categoryList.contains("icecream") {
+            return "desserts"
+        }
         else if categoryList.contains("movietheaters") {
             return "movietheaters"
         }
         else if categoryList.contains("museums") {
             return "museums"
         }
+        else if categoryList.contains("galleries") {
+            return "museums"
+        }
         else if categoryList.contains("beautysvc") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("spas") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("barbers") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("skincare") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("massage") {
             return "beautysvc"
         }
         else if categoryList.contains("playgrounds") {
             return "playgrounds"
         }
         else if categoryList.contains("countryclubs") {
-            return "countryclubs"
+            return "playgrounds"
         }
         else if categoryList.contains("sports_clubs") {
-            return "sports_clubs"
+            return "playgrounds"
+        }
+        else if categoryList.contains("bubbletea") {
+            return "juicebars"
+        }
+        else if categoryList.contains("juicebars") {
+            return "juicebars"
         }
         return ""
     }
@@ -229,13 +261,28 @@ extension FaeMapViewController {
         else if categoryList.contains("desserts") {
             iconImage = #imageLiteral(resourceName: "placePinDesert")
         }
+        else if categoryList.contains("icecream") {
+            iconImage = #imageLiteral(resourceName: "placePinDesert")
+        }
         else if categoryList.contains("movietheaters") {
             iconImage = #imageLiteral(resourceName: "placePinCinema")
         }
         else if categoryList.contains("museums") {
             iconImage = #imageLiteral(resourceName: "placePinArt")
         }
-        else if categoryList.contains("beautysvc") {
+        else if categoryList.contains("galleries") {
+            iconImage = #imageLiteral(resourceName: "placePinArt")
+        }
+        else if categoryList.contains("spas") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("barbers") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("skincare") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("massage") {
             iconImage = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if categoryList.contains("playgrounds") {
@@ -246,6 +293,12 @@ extension FaeMapViewController {
         }
         else if categoryList.contains("sports_clubs") {
             iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("bubbletea") {
+            iconImage = #imageLiteral(resourceName: "placePinBoba")
+        }
+        else if categoryList.contains("juicebars") {
+            iconImage = #imageLiteral(resourceName: "placePinBoba")
         }
         return iconImage
     }

@@ -21,6 +21,8 @@ protocol PinDetailDelegate: class {
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Change marker icon based on status
     func changeIconImage(marker: GMSMarker, type: String, status: String)
+    // Disable self marker on main map true or not
+    func disableSelfMarker(yes: Bool)
 }
 
 class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
@@ -493,7 +495,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         if uiviewPinDetail != nil {
             if pinDetailShowed {
                 actionBackToMap(self.buttonPinBackToMap)
-                UIView.animate(withDuration: 0.583, animations: ({
+                UIView.animate(withDuration: 0.5, animations: ({
                     
                 }), completion: { (done: Bool) in
                     if done {

@@ -54,6 +54,14 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         pinData["status"] = status as AnyObject?
         marker.icon = pinIconSelector(type: type, status: status)
     }
+    // PinDetailDelegate
+    func disableSelfMarker(yes: Bool) {
+        if yes {
+            self.selfMarker.map = nil
+        } else {
+            reloadSelfPosAnimation()
+        }
+    }
 
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {

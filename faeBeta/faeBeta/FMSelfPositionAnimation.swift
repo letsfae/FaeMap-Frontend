@@ -36,6 +36,7 @@ extension FaeMapViewController {
         selfMarker.position.latitude = currentLatitude
         selfMarker.position.longitude = currentLongitude
         selfMarker.map = faeMapView
+        selfMarker.zIndex = 10
         selfMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         selfMarkerAnimation()
     }

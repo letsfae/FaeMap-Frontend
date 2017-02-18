@@ -74,14 +74,14 @@ extension PinDetailViewController {
             inset = 27
         }
         for index in 0...imageViewMediaArray.count-1 {
-            UIView.animate(withDuration: 0.583, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 self.imageViewMediaArray[index].frame.origin.x = CGFloat((width+space)*index)
                 self.imageViewMediaArray[index].frame.size.width = CGFloat(width)
                 self.imageViewMediaArray[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
         }
-        UIView.animate(withDuration: 0.583) {
+        UIView.animate(withDuration: 0.5) {
             var insets = self.scrollViewMedia.contentInset
             insets.left = CGFloat(inset)
             insets.right = CGFloat(inset)

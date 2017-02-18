@@ -135,7 +135,7 @@ extension FaeMapViewController {
             self.mapFilterArrow.frame.origin.y = screenHeight - 60
         }, completion: nil)
         
-        UIView.animate(withDuration: 0.583, delay: 6.2, options: [], animations: {
+        UIView.animate(withDuration: 0.5, delay: 6.2, options: [], animations: {
             self.mapFilterArrow.alpha = 0
         }, completion: {(done: Bool) in
             if self.mapFilterArrow != nil {

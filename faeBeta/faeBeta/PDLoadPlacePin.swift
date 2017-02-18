@@ -118,11 +118,11 @@ extension PinDetailViewController {
             pinIcon.image = #imageLiteral(resourceName: "placePinBoutique")
             imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBoutique")
             break
-        case "playgrounds", "countryclubs", "sports_clubs":
+        case "playgrounds":
             pinIcon.image = #imageLiteral(resourceName: "placePinSport")
             imgPlaceType.image = #imageLiteral(resourceName: "placeDetailSport")
             break
-        case "museums", "galleries":
+        case "museums":
             pinIcon.image = #imageLiteral(resourceName: "placePinArt")
             imgPlaceType.image = #imageLiteral(resourceName: "placeDetailArt")
             break

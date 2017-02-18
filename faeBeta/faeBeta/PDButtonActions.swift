@@ -101,7 +101,7 @@ extension PinDetailViewController {
         }
         controlBoard.removeFromSuperview()
         self.delegate?.dismissMarkerShadow(true)
-        UIView.animate(withDuration: 0.583, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight
             self.subviewTable.center.y -= screenHeight
@@ -123,6 +123,7 @@ extension PinDetailViewController {
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
         if sender.tag == 1 {
+            self.delegate?.disableSelfMarker(yes: false)
             endEdit()
             sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
@@ -135,7 +136,7 @@ extension PinDetailViewController {
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
@@ -152,7 +153,7 @@ extension PinDetailViewController {
             if pinTypeEnum == .media {
                 mediaMode = .small
                 zoomMedia(.small)
-                UIView.animate(withDuration: 0.583, animations: ({
+                UIView.animate(withDuration: 0.5, animations: ({
                     self.scrollViewMedia.frame.origin.y = 80
                 }), completion: { (done: Bool) in
                     if done {
@@ -186,7 +187,7 @@ extension PinDetailViewController {
             zoomMedia(.large)
             textviewPinDetail.frame.size.height = textViewOriginalHeight
             textviewPinDetail.isHidden = false
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewPinDetail.frame.size.height += 65
                 self.textviewPinDetail.frame.size.height += 65
                 self.uiviewPinDetailThreeButtons.center.y += 65
@@ -207,7 +208,7 @@ extension PinDetailViewController {
             let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
             if numLines > 4 {
                 let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
-                UIView.animate(withDuration: 0.583, animations: ({
+                UIView.animate(withDuration: 0.5, animations: ({
                     self.uiviewPinDetail.frame.size.height += diffHeight
                     self.textviewPinDetail.frame.size.height += diffHeight
                     self.uiviewPinDetailThreeButtons.center.y += diffHeight
@@ -217,13 +218,14 @@ extension PinDetailViewController {
             }
             
         }
-        UIView.animate(withDuration: 0.583, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
         }), completion: { (done: Bool) in
             if done {
+                self.delegate?.disableSelfMarker(yes: true)
                 self.tableCommentsForPin.reloadData()
             }
         })
@@ -232,11 +234,12 @@ extension PinDetailViewController {
     // When clicking dragging button in pin detail window
     func actionDraggingThisPin(_ sender: UIButton) {
         if sender.tag == 1 {
+            self.delegate?.disableSelfMarker(yes: false)
             sender.tag = 0
             buttonPinAddComment.tag = 0
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
@@ -252,7 +255,7 @@ extension PinDetailViewController {
             if pinTypeEnum == .media {
                 mediaMode = .small
                 zoomMedia(.small)
-                UIView.animate(withDuration: 0.583, animations: ({
+                UIView.animate(withDuration: 0.5, animations: ({
                     self.scrollViewMedia.frame.origin.y = 80
                 }), completion: { (done: Bool) in
                     if done {
@@ -272,7 +275,7 @@ extension PinDetailViewController {
             zoomMedia(.large)
             textviewPinDetail.frame.size.height = 0
             textviewPinDetail.isHidden = false
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewPinDetail.frame.size.height += 65
                 self.textviewPinDetail.frame.size.height += 65
                 self.uiviewPinDetailThreeButtons.center.y += 65
@@ -293,7 +296,7 @@ extension PinDetailViewController {
             let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
             if numLines > 4 {
                 let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
-                UIView.animate(withDuration: 0.583, animations: ({
+                UIView.animate(withDuration: 0.5, animations: ({
                     self.uiviewPinDetail.frame.size.height += diffHeight
                     self.textviewPinDetail.frame.size.height += diffHeight
                     self.uiviewPinDetailThreeButtons.center.y += diffHeight
@@ -303,13 +306,14 @@ extension PinDetailViewController {
             }
             
         }
-        UIView.animate(withDuration: 0.583, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
         }), completion: { (done: Bool) in
             if done {
+                self.delegate?.disableSelfMarker(yes: true)
                 self.tableCommentsForPin.reloadData()
             }
         })

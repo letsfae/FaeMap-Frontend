@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
         headerDeviceID = token
-        print("Device ID: ", headerDeviceID)
+//        print("Device ID: ", headerDeviceID)
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
@@ -223,7 +223,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if let vc = self.window?.visibleViewController {
             if vc is FaeMapViewController {
-                print("is FaeMap")
+//                print("is FaeMap")
                 if let faeMapVC = vc as? FaeMapViewController {
                     faeMapVC.appBackFromBackground()
                     faeMapVC.animateMapFilterArrow()
@@ -231,7 +231,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             else if vc is PinDetailViewController {
-                print("is PinDetail")
+//                print("is PinDetail")
             }
         }
     }

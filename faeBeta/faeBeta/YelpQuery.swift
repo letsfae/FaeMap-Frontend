@@ -63,7 +63,7 @@ class YelpQuery {
     
     func setCatagoryToAll() {
         customCategory = ""
-        setCatagory(cata: "pizza,burgers,desserts,coffee,internetcafe,museums,galleries,beautysvc,playgrounds,countryclubs,sports_clubs,juicebars,movietheaters")
+        setCatagory(cata: "pizza,burgers,desserts,coffee,internetcafe,museums,galleries,spas,hair,barbers,massage,skincare,playgrounds,countryclubs,sports_clubs,juicebars,movietheaters")
     }
     
     func setCustomCategory(to: String) {
@@ -97,7 +97,7 @@ class YelpQuery {
     }
     
     func setCatagoryToBeauty() {
-        setCatagory(cata: "beautysvc")
+        setCatagory(cata: "spas,hair,barbers,massage,skincare")
     }
     
     func setCatagoryToSport() {

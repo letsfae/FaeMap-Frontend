@@ -44,6 +44,10 @@ class YelpManager {
                     Alamofire.request("https://api.yelp.com/v3/businesses/search", method: .get, parameters: request.getDict(), headers: ["Authorization" : self.token]).responseJSON { response in
                         if let data = response.result.value {
                             let json = JSON(data)["businesses"]
+                            if json.count < 1 {
+                                completion(result)
+                                return
+                            }
                             for i in 0...(json.count - 1){
                                 // Added by Yue Shen - 02.07.17
                                 var cateArray = [String]()
@@ -62,6 +66,10 @@ class YelpManager {
             Alamofire.request("https://api.yelp.com/v3/businesses/search", method: .get, parameters: request.getDict(), headers: ["Authorization" : self.token]).responseJSON { response in
                 if let data = response.result.value {
                     let json = JSON(data)["businesses"]
+                    if json.count < 1 {
+                        completion(result)
+                        return
+                    }
                     for i in 0...(json.count - 1){
                         // Added by Yue Shen - 02.07.17
                         var cateArray = [String]()

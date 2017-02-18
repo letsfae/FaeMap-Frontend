@@ -69,7 +69,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     func actionDraggingThisList(_ sender: UIButton) {
         if sender.tag == 1 {
             sender.tag = 0
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.draggingButtonSubview.frame.origin.y = 228
                 self.subviewTable.frame.size.height = 256
                 if self.openedPinListArray.count <= 3 {
@@ -84,7 +84,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
             return
         }
         sender.tag = 1
-        UIView.animate(withDuration: 0.583, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.draggingButtonSubview.frame.origin.y = screenHeight - 93
             self.subviewTable.frame.size.height = screenHeight - 65
             self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
@@ -96,7 +96,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
     // Back to main map from opened pin list
     func actionBackToMap(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.583, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
             self.subviewTable.center.y -= screenHeight
         }), completion: { (done: Bool) in
@@ -134,7 +134,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         }
         self.tableOpenedPin.reloadData()
         if openedPinListArray.count == 0 {
-            UIView.animate(withDuration: 0.583, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
                 self.subviewTable.center.y -= screenHeight
             }), completion: { (done: Bool) in

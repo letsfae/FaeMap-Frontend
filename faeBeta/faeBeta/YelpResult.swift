@@ -15,7 +15,7 @@ class YelpResult {
     private var address1 : String!
     private var address2 : String!
     private var name : String!
-    private var position : CLLocation!
+    private var position : CLLocationCoordinate2D!
     private var category = [String]() // Added by Yue Shen - 02.07.17
     
     init(url : String, add1 : String, add2 : String, name : String, lat : String, long : String, cate : [String]) {
@@ -23,7 +23,7 @@ class YelpResult {
         address1 = add1
         address2 = add2
         self.name = name
-        position = CLLocation(latitude: Double(lat)!, longitude: Double(long)!)
+        position = CLLocationCoordinate2DMake(Double(lat)!, Double(long)!)
         category = cate
     }
     
@@ -43,7 +43,7 @@ class YelpResult {
         return name
     }
     
-    func getPosition() -> CLLocation {
+    func getPosition() -> CLLocationCoordinate2D {
         return position
     }
     
