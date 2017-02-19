@@ -84,53 +84,14 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-//                print("Cur-Zoom Level: \(mapView.camera.zoom)")
-        //        print("Pre-Zoom Level: \(previousZoomLevel)")
+
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
-        if userStatus == 5 {
-            self.faeMapView.isMyLocationEnabled = true
-            if myPositionOutsideMarker_1 != nil {
-                self.myPositionOutsideMarker_1.isHidden = true
-            }
-            if myPositionOutsideMarker_2 != nil {
-                self.myPositionOutsideMarker_2.isHidden = true
-            }
-            if myPositionOutsideMarker_3 != nil {
-                self.myPositionOutsideMarker_3.isHidden = true
-            }
-            if myPositionIcon != nil {
-                self.myPositionIcon.isHidden = true
-            }
-            return
-        }
-        if self.myPositionOutsideMarker_1 != nil {
-            self.myPositionOutsideMarker_1.isHidden = false
-        }
-        if self.myPositionOutsideMarker_2 != nil {
-            self.myPositionOutsideMarker_2.isHidden = false
-        }
-        if self.myPositionOutsideMarker_3 != nil {
-            self.myPositionOutsideMarker_3.isHidden = false
-        }
-        if self.myPositionIcon != nil {
-            self.myPositionIcon.isHidden = false
-        }
-        if startUpdatingLocation {
-            currentLocation = locManager.location
-            self.currentLatitude = currentLocation.coordinate.latitude
-            self.currentLongitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(self.currentLatitude, self.currentLongitude)
-//            let selfPositionToPoint = faeMapView.projection.point(for: position)
-//            myPositionOutsideMarker_3.center = selfPositionToPoint
-//            myPositionOutsideMarker_2.center = selfPositionToPoint
-//            myPositionOutsideMarker_1.center = selfPositionToPoint
-//            myPositionIcon.center = selfPositionToPoint
-            selfMarker.position = position
-        }
-        
+
+//        print("Cur-Zoom Level: \(mapView.camera.zoom)")
+//        print("Pre-Zoom Level: \(previousZoomLevel)")
 //        if mapView.camera.zoom < 11 && !canLoadMapPin {
 //            clearMap(type: "all")
 //            canLoadMapPin = true

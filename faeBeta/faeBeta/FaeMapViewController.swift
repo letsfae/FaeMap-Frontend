@@ -32,24 +32,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Location
     let locManager = CLLocationManager()
-    var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLocation: CLLocation!
+    var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
     var didLoadFirstLoad = false
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
-    var startUpdatingLocation = false
     
     // Unread Messages Label
     var labelUnreadMessages: UILabel!
-    
-    // MARK: -- My Position Marker
-    var myPosMarker = GMSMarker()
-    var myPositionIcon: UIButton!
-    var myPositionOutsideMarker_1: UIImageView!
-    var myPositionOutsideMarker_2: UIImageView!
-    var myPositionOutsideMarker_3: UIImageView!
-    var myPositionIconFirstLoaded = true
     
     // MARK: -- More Button Vars
     var uiviewMoreButton: UIView!
@@ -81,10 +72,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelWindbellTableTitle: UILabel!
     var tableviewWindbell = UITableView()
     
-    // Wang Yanxiang
     var openUserPinActive = false
-    // end of WYX
-    //
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
     var buttonCloseUserPinSubview: UIButton! // button to close user pin view
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -131,7 +119,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var imageUserGender: UIImageView!
     
     // Map Filter
-    
     let filterMenuHeight = 542 * screenHeightFactor
     
     // Filter Button
@@ -221,33 +208,21 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBarController?.tabBar.isHidden = true
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
-        if is_Login == 0 {
-            self.jumpToWelcomeView(animated: false)
-        }
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        myPositionIconFirstLoaded = true
+        
+        isUserLoggedIn()
         getUserStatus()
         loadMapView()
         setupClusterManager()
         loadTransparentNavBarItems()
         loadButton()
         loadNameCard()
-        loadSelfMarker()
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
-        let emptyArrayList = [String]()
-        self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-        didLoadFirstLoad = true
+        timerSetup()
+        openedPinListSetup()
         updateSelfInfo()
-        
         loadMFilterSlider()
         loadMapFilter()
-        checkFilterShowAll(btnMFilterShowAll)
-        yelpQuery.setCatagoryToAll()
+        filterAndYelpSetup()
+        didLoadFirstLoad = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -256,10 +231,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         checkLocationEnablibity()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
-        if userStatus != 5  {
-            loadSelfMarker()
-        }
-        getSelfAccountInfo()
         buttonFakeTransparentClosingView.alpha = 0
         
     }
@@ -276,6 +247,30 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.isTranslucent = false
+    }
+    
+    func isUserLoggedIn() {
+        let shareAPI = LocalStorageManager()
+        _ = shareAPI.readLogInfo()
+        if is_Login == 0 {
+            self.jumpToWelcomeView(animated: false)
+        }
+    }
+    
+    func openedPinListSetup() {
+        let emptyArrayList = [String]()
+        self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
+    }
+    
+    func filterAndYelpSetup() {
+        checkFilterShowAll(btnMFilterShowAll)
+        yelpQuery.setCatagoryToAll()
+    }
+    
+    func timerSetup() {
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func isFirstTimeLogin(_ notification: NSNotification) {
@@ -338,6 +333,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Load Navigation Items
     func loadTransparentNavBarItems() {
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -373,7 +370,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
-            
+            if userStatus != 5  {
+                reloadSelfPosAnimation()
+            }
             refreshMap(pins: true, users: true, places: true, placesAll: true)
             
         }
@@ -384,20 +383,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         
         if let location = locations.last {
-            if myPositionOutsideMarker_3 != nil {
-                let latitude = location.coordinate.latitude
-                let longitude = location.coordinate.longitude
-                let position = CLLocationCoordinate2DMake(latitude, longitude)
-                let selfPositionToPoint = faeMapView.projection.point(for: position)
-                myPositionOutsideMarker_3.center = selfPositionToPoint
-                myPositionOutsideMarker_2.center = selfPositionToPoint
-                myPositionOutsideMarker_1.center = selfPositionToPoint
-                myPositionIcon.center = selfPositionToPoint
-                self.myPositionIcon.isHidden = false
-                self.myPositionOutsideMarker_1.isHidden = false
-                self.myPositionOutsideMarker_2.isHidden = false
-                self.myPositionOutsideMarker_3.isHidden = false
-            }
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+            let position = CLLocationCoordinate2DMake(latitude, longitude)
+            self.selfMarker.position = position
         }
     }
 
