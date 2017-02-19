@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import RealmSwift
 
 protocol LeftSlidingMenuDelegate: class {
@@ -254,6 +255,16 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             imageAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                 
             })
+        }
+        
+        let updateNickName = FaeUser()
+        updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
+            if(status / 100 == 2){
+                let nickNameInfo = JSON(message!)
+                if let str = nickNameInfo["nick_name"].string{
+                    self.label.text = str
+                }
+            }
         }
         
         /* Disable realm usage for avatar until backend provide interface

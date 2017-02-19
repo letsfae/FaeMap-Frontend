@@ -160,7 +160,7 @@ extension EditCommentPinViewController {
         inputToolbar.buttonFinishEdit.isHidden = true
         buttonFinishEdit = UIButton()
         buttonFinishEdit.setTitle("Edit Options", for: UIControlState())
-        buttonFinishEdit.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        buttonFinishEdit.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         inputToolbar.addSubview(buttonFinishEdit)
         inputToolbar.addConstraintsWithFormat("H:[v0(105)]-14-|", options: [], views: buttonFinishEdit)
         inputToolbar.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: buttonFinishEdit)

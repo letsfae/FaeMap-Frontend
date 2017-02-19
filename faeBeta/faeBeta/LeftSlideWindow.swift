@@ -49,6 +49,7 @@ extension FaeMapViewController {
                 }
             }
         }
+        
         if user_id != nil {
             let realm = try! Realm()
             let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")

@@ -89,6 +89,7 @@ extension PinDetailViewController {
                 self.subviewNavigation.center.y -= self.subviewNavigation.frame.size.height
                 self.tableCommentsForPin.center.y -= screenHeight
                 self.draggingButtonSubview.center.y -= screenHeight
+                self.subviewTable.center.y -= screenHeight
             })
         }
     }
@@ -122,6 +123,7 @@ extension PinDetailViewController {
     
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
+        lblEmptyCommentArea.center.y = screenHeight / 2 + 65.0 * screenHeightFactor
         if sender.tag == 1 {
             self.delegate?.disableSelfMarker(yes: false)
             endEdit()
@@ -233,6 +235,7 @@ extension PinDetailViewController {
     
     // When clicking dragging button in pin detail window
     func actionDraggingThisPin(_ sender: UIButton) {
+        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
         if sender.tag == 1 {
             self.delegate?.disableSelfMarker(yes: false)
             sender.tag = 0

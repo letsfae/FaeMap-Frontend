@@ -726,6 +726,7 @@
 		853F27831E26FDC400DD80DF /* ECPExtension */ = {
 			isa = PBXGroup;
 			children = (
+				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
 				853F27811E26FDB900DD80DF /* ECPLoadItems.swift */,
 				853F27851E26FE5200DD80DF /* ECPActions.swift */,
 				853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */,
@@ -1291,7 +1292,6 @@
 			children = (
 				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
 				853F27831E26FDC400DD80DF /* ECPExtension */,
-				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
 				853F27701E23180D00DD80DF /* EditOptions */,
 			);
 			name = EditPin;

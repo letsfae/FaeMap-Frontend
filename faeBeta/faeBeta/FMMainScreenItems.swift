@@ -14,16 +14,18 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
-        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
+        
         faeMapView.preferredFrameRate = kGMSFrameRateMaximum
         faeMapView.isIndoorEnabled = false
         faeMapView.isBuildingsEnabled = false
         faeMapView.settings.tiltGestures = false
 
         self.view = faeMapView
+        
+        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
         do {
             // Set the map style by passing a valid JSON string.
             faeMapView.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
@@ -169,7 +171,11 @@ extension FaeMapViewController {
                     var pinData = [String: AnyObject]()
                     var type = "comment"
                     var status = ""
+                    var userid = -999
                     var iconImage = UIImage()
+                    if let useridInfo = mapInfoJSON[i]["user_id"].int {
+                        userid = useridInfo
+                    }
                     if let typeInfo = mapInfoJSON[i]["type"].string {
                         pinData["type"] = typeInfo as AnyObject?
                         if typeInfo == "comment" {
@@ -186,6 +192,9 @@ extension FaeMapViewController {
                             if createdTimeInfo.isNewPin() {
                                 status = "new"
                             }
+                        }
+                        if userid == Int(user_id) {
+                            status = "normal"
                         }
                         if let likeCount = mapInfoJSON[i]["liked_count"].int {
                             if likeCount >= 15 {

@@ -195,7 +195,10 @@ extension FaeMapViewController {
             if self.polygonInside != nil {
                 self.polygonInside.alpha = 0
             }
-            self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+            if self.btnMapFilter.center.y == screenHeight - 25 {
+                self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+                return
+            }
         }, completion: {(done: Bool) in
             self.btnMapFilter.isEnabled = true
             self.btnMapFilter.transform = CGAffineTransform(rotationAngle: 0)

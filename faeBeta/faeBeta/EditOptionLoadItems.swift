@@ -60,11 +60,15 @@ extension EditMoreOptionsViewController{
         uiviewLineBottom.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         self.view.addSubview(uiviewLineBottom)
         
-        labelFooter = UILabel(frame: CGRect(x: 176 * screenHeightFactor, y: 698 * screenHeightFactor, width: 63, height: 25))
-        labelFooter.text = "Edit Pin"
-        labelFooter.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        labelFooter.textColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
-        self.view.addSubview(labelFooter)
+        btnFooter = UIButton(frame: CGRect(x: 176 * screenHeightFactor, y: 698 * screenHeightFactor, width: 63, height: 25))
+        btnFooter.setTitle("Edit Pin", for: UIControlState())
+        btnFooter.setTitleColor(UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0), for: .normal)
+        btnFooter.setTitleColor(UIColor.lightGray, for: .highlighted)
+        btnFooter.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        self.view.addSubview(btnFooter)
+        btnFooter.addTarget(self,
+                                         action: #selector(self.actionCancel(_:)),
+                                         for: .touchUpInside)
         
         geoCode = CLGeocoder.init()
         let currentLocation = CLLocation.init(latitude: pinGeoLocation.latitude, longitude: pinGeoLocation.longitude)

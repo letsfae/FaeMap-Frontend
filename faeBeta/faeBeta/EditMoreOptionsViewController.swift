@@ -28,7 +28,7 @@ class EditMoreOptionsViewController: UIViewController {
     var buttonSave: UIButton!
     var uiviewLine: UIView!
     var uiviewLineBottom: UIView!
-    var labelFooter: UILabel!
+    var btnFooter: UIButton!
     
     // Google Map
     var geoCode: CLGeocoder!

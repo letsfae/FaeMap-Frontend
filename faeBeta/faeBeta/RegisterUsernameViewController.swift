@@ -102,7 +102,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func validation() {
         var isValid = false
         
-        let userNameRegEx = ".*[^A-Za-z0-9_].*"
+        let userNameRegEx = ".*[^a-z0-9_].*"
         let range = username!.range(of: userNameRegEx, options:.regularExpression)
         let result = range != nil ? false : true
         
@@ -165,7 +165,7 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
-            cell.setSubTitleLabelText("Letters & Numbers & Underscore Only")
+            cell.setSubTitleLabelText("Letters, Numbers & One Symbol ( ‘-’ ‘_’ or ‘.’ )")
             return cell
         case 2:
             if usernameTableViewCell == nil {
@@ -177,7 +177,6 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
                 usernameTableViewCell.setLeftPlaceHolderDisplay(true)
                 usernameTableViewCell.delegate = self
                 usernameTableViewCell.textfield.keyboardType = .namePhonePad
-
             }
             return usernameTableViewCell
         default:

@@ -307,6 +307,13 @@ extension PinDetailViewController {
             if let toGetUserName = pinInfoJSON["user_id"].int {
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
+                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                    if image != nil {
+                        UIView.animate(withDuration: 0.2, animations: { 
+                            self.imagePinUserAvatar.alpha = 1
+                        })
+                    }
+                })
                 let getUserName = FaeUser()
                 getUserName.getNamecardOfSpecificUser("\(toGetUserName)") {(status, message) in
                     let userProfile = JSON(message!)

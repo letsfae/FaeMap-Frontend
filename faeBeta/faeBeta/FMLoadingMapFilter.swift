@@ -17,7 +17,7 @@ extension FaeMapViewController {
         btnMapFilter.addTarget(self, action: #selector(self.animateMapFilterPolygon(_:)), for: .touchUpInside)
         btnMapFilter.adjustsImageWhenDisabled = false
         btnMapFilter.adjustsImageWhenHighlighted = false
-        btnMapFilter.layer.zPosition = 600
+        btnMapFilter.layer.zPosition = 601
         self.view.addSubview(btnMapFilter)
         loadFilterMenu()
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))

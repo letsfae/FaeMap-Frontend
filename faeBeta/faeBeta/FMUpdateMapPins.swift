@@ -57,7 +57,7 @@ extension FaeMapViewController {
                     resultArray.append(result)
                 }
                 self.pinPlacesOnMap(results: resultArray)
-                self.calculateZoomLevel(results: resultArray)
+//                self.calculateZoomLevel(results: resultArray)
             })
         }
         else {
@@ -120,10 +120,9 @@ extension FaeMapViewController {
                                                 resultArray.append(result)
                                             }
                                             self.pinPlacesOnMap(results: resultArray)
-                                            self.calculateZoomLevel(results: resultArray)
+//                                            self.calculateZoomLevel(results: resultArray)
                                         })
                                     })
-                                    
                                 })
                             })
                         })
@@ -327,6 +326,7 @@ extension FaeMapViewController {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
+            
             for i in 0...(mapInfoJSON.count-1) {
                 let pinMap = GMSMarker()
                 pinMap.zIndex = 1
@@ -335,9 +335,13 @@ extension FaeMapViewController {
                 var type = "comment"
                 var typeDecimal = -999
                 var status = ""
+                var userid = -999
                 var iconImage = UIImage()
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 icon.contentMode = .scaleAspectFit
+                if let useridInfo = mapInfoJSON[i]["user_id"].int {
+                    userid = useridInfo
+                }
                 if let typeInfo = mapInfoJSON[i]["type"].string {
                     pinData["type"] = typeInfo as AnyObject?
                     if typeInfo == "comment" {
@@ -368,7 +372,9 @@ extension FaeMapViewController {
                                 status = "normal"
                             }
                         }
-                        
+                    }
+                    if userid == Int(user_id) {
+                        status = "normal"
                     }
                     if let likeCount = mapInfoJSON[i]["liked_count"].int {
                         if likeCount >= 15 {

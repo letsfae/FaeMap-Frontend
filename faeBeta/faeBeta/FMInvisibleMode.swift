@@ -36,7 +36,7 @@ extension FaeMapViewController {
         
         let labelNoteInvisible = UILabel(frame: CGRect(x: 41*screenWidthFactor, y: 236*screenWidthFactor, width: 209*screenWidthFactor, height: 66*screenWidthFactor))
         labelNoteInvisible.numberOfLines = 0
-        labelNoteInvisible.text = "You are Hidden,\nNo one can see you and you\ncan't be discovered"
+        labelNoteInvisible.text = "You are Hidden.\nNo one can see you and you\ncan't be discovered"
         labelNoteInvisible.textAlignment = NSTextAlignment.center
         labelNoteInvisible.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
         labelNoteInvisible.font = UIFont(name: "AvenirNext-Medium", size: 16*screenWidthFactor)

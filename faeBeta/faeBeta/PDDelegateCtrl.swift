@@ -40,7 +40,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     
     // OpenedPinListViewControllerDelegate
     func directlyReturnToMap() {
-        self.dismiss(animated: false, completion: nil)
+        actionBackToMap(UIButton())
     }
     
     // OpenedPinListViewControllerDelegate

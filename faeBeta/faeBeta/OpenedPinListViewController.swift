@@ -55,7 +55,7 @@ class OpenedPinListViewController: UIViewController {
         self.view.addSubview(buttonSubviewBackToMap)
         self.view.sendSubview(toBack: buttonSubviewBackToMap)
         buttonSubviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
-        loadCommentPinList()
+        loadPinList()
         backJustOnce = true
     }
     
@@ -76,7 +76,7 @@ class OpenedPinListViewController: UIViewController {
     }
     
     // Load comment pin list
-    func loadCommentPinList() {
+    func loadPinList() {
         var tableHeight = CGFloat(openedPinListArray.count * 76)
         let subviewTableHeight = CGFloat(255)
         if openedPinListArray.count > 3 {

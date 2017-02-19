@@ -12,6 +12,7 @@ class DisconnectionViewController: UIViewController {
     
     var uiviewNavBar: UIView!
     var btnNavBar: UIButton!
+    var lblFailMessage: UILabel!
     private var reachability: Reachability!
     
     var uiviewNavBarMenu: UIView!
@@ -37,6 +38,14 @@ class DisconnectionViewController: UIViewController {
         view.addSubview(btnReconnect)
         btnReconnect.addTarget(self, action: #selector(self.actionReconnect(_:)), for: .touchUpInside)
         
+        lblFailMessage = UILabel(frame: CGRect(x: 70*screenWidthFactor, y: 72*screenHeightFactor, width: 275*screenWidthFactor, height: 60*screenHeightFactor))
+        lblFailMessage.text = "Sorry… Reconnection failed…\nPlease try again!"
+        lblFailMessage.numberOfLines = 2
+        lblFailMessage.textAlignment = .center
+        lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20*screenWidthFactor)
+        lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
+        view.addSubview(lblFailMessage)
+        lblFailMessage.isHidden = true
     }
     
     func actionReconnect(_ sender: UIButton) {
@@ -45,6 +54,7 @@ class DisconnectionViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         } else {
             print("[reachabilityChanged] Network not reachable")
+            lblFailMessage.isHidden = false
         }
     }
 }

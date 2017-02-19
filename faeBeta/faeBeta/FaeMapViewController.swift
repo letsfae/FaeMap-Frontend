@@ -235,7 +235,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadTransparentNavBarItems()
         loadButton()
         loadNameCard()
-//        loadPositionAnimateImage()
         loadSelfMarker()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
@@ -258,7 +257,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         if userStatus != 5  {
-//            loadPositionAnimateImage()
             loadSelfMarker()
         }
         getSelfAccountInfo()
@@ -315,7 +313,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
-//            loadPositionAnimateImage()
             loadSelfMarker()
             getSelfAccountInfo()
         }

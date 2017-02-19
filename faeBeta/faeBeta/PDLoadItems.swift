@@ -68,7 +68,7 @@ extension PinDetailViewController {
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
         
         lblEmptyCommentArea = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 25))
-        lblEmptyCommentArea.center.y = (screenHeight - 200) / 2 + 200
+        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
         lblEmptyCommentArea.text = "It’s empty around here, be the first to comment!"
         lblEmptyCommentArea.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         lblEmptyCommentArea.textAlignment = .center
@@ -267,6 +267,7 @@ extension PinDetailViewController {
         uiviewPinDetail.addSubview(imagePinUserAvatar)
         uiviewPinDetail.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imagePinUserAvatar)
         uiviewPinDetail.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imagePinUserAvatar)
+        imagePinUserAvatar.alpha = 0
         
         // Comment Pin Username
         labelPinUserName = UILabel()

@@ -172,11 +172,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             push.getSync({ (status:Int!, message: Any?) in
                 if status / 100 == 2 {
                     //success
+                } else if status == 401 {
+                    self.popUpWelcomeView()
                 } else {
-                     self.popUpWelcomeView()
-//                    let vc = WelcomeViewController()
-//                    self.window?.makeKeyAndVisible()
-//                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
+//                     self.popUpWelcomeView()
+                    let vc = DisconnectionViewController()
+                    self.window?.makeKeyAndVisible()
+                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
                 }
             })
         }
