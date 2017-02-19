@@ -504,7 +504,7 @@ extension FaeMapViewController {
     
     // Timer to update location (send self location to server)
     func updateSelfLocation(radius: Int) {
-        if !startUpdatingLocation || !canDoNextUserUpdate {
+        if didLoadFirstLoad || !canDoNextUserUpdate {
             return
         }
         clearMap(type: "user")

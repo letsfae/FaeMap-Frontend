@@ -366,7 +366,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
             self.faeMapView.camera = camera
-            self.startUpdatingLocation = true
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
