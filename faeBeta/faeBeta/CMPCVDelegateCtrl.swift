@@ -52,11 +52,11 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
     
     func deleteCell(cell: CMPCollectionViewCell) {
         if let indexPath = collectionViewMedia.indexPath(for: cell) {
-            selectedMediaArray.remove(at: indexPath.row)
-            collectionViewMedia.deleteItems(at: [indexPath])
-            if selectedMediaArray.count < 6 && indexPath.row <= selectedMediaArray.count - 1 {
+            if selectedMediaArray.count <= 6 && indexPath.row >= selectedMediaArray.count - 2 {
                 buttonAddMedia.alpha = 1
             }
+            selectedMediaArray.remove(at: indexPath.row)
+            collectionViewMedia.deleteItems(at: [indexPath])
         }
         else {
             return
@@ -90,7 +90,6 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
         print("[scrollViewWillEndDragging] \(targetContentOffset.pointee.x) : \(Int((targetContentOffset.pointee.x + 107) / 249))")
         let index = Int((targetContentOffset.pointee.x + 107) / 249)
         if index == selectedMediaArray.count - 1 {
-            buttonAddMedia.isEnabled = true
             UIView.animate(withDuration: 0.4) {
                 if self.selectedMediaArray.count != 6 {
                     self.buttonAddMedia.alpha = 1
@@ -98,7 +97,6 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
             }
         }
         else {
-            buttonAddMedia.isEnabled = false
             UIView.animate(withDuration: 0.4) {
                 self.buttonAddMedia.alpha = 0
             }
