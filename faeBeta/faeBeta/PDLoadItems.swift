@@ -429,16 +429,16 @@ extension PinDetailViewController {
     }
     
     func loadPinCtrlButton() {
-        pinIcon = UIImageView(frame: CGRect(x: 185, y: 477, width: 60, height: 80))
+        pinIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 80))
         pinIcon.image = pinIconHeavyShadow
         pinIcon.contentMode = .scaleAspectFit
-        pinIcon.center.x = screenWidth/2
-        pinIcon.center.y = 510
+        pinIcon.center.x = screenWidth / 2
+        pinIcon.center.y = 510 * screenHeightFactor
         pinIcon.layer.zPosition = 50
         pinIcon.alpha = 0
         self.view.addSubview(pinIcon)
         
-        buttonPrevPin = UIButton(frame: CGRect(x: 15, y: 477, width: 52, height: 52))
+        buttonPrevPin = UIButton(frame: CGRect(x: 15, y: 477 * screenHeightFactor, width: 52, height: 52))
         buttonPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         buttonPrevPin.layer.zPosition = 60
         buttonPrevPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
@@ -448,7 +448,7 @@ extension PinDetailViewController {
         buttonPrevPin.alpha = 0
         self.view.addSubview(buttonPrevPin)
         
-        buttonNextPin = UIButton(frame: CGRect(x: 399, y: 477, width: 52, height: 52))
+        buttonNextPin = UIButton(frame: CGRect(x: 399, y: 477 * screenHeightFactor, width: 52, height: 52))
         buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         buttonNextPin.layer.zPosition = 60
         buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor

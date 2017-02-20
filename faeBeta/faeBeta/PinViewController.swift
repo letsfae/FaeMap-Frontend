@@ -43,7 +43,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var buttonDeleteOnPinDetail: UIButton!
     var buttonReportOnPinDetail: UIButton!
     
-    // New Pin Popup Window
     var subviewTable: UIView!
     var animatingHeart: UIImageView!
     var anotherRedSlidingLine: UIView!
@@ -99,23 +98,17 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var isUpVoting = false
     var isDownVoting = false
     
-    // Fake Transparent View For Closing
-    var buttonFakeTransparentClosingView: UIButton!
+    var buttonFakeTransparentClosingView: UIButton! // Fake Transparent View For Closing
+    var thisIsMyPin = false // Check if this pin belongs to current user
+    var backJustOnce = true // Control the back to pin detail button, prevent the more than once action
     
-    // Check if this pin belongs to current user
-    var thisIsMyPin = false
-    
-    // Control the back to pin detail button, prevent the more than once action
-    var backJustOnce = true
-    
-    // A duplicate ControlBoard to hold
-    var controlBoard: UIView!
+    var controlBoard: UIView! // A duplicate ControlBoard to hold
     
     // Toolbar
     var inputToolbar: JSQMessagesInputToolbarCustom!
     var isObservingInputTextView = false
     var inputTextViewContext = 0
-    var inputTextViewMaximumHeight:CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
+    var inputTextViewMaximumHeight: CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
     var toolbarDistanceToBottom: NSLayoutConstraint!
     var toolbarHeightConstraint: NSLayoutConstraint!
     
@@ -130,21 +123,21 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var buttonImagePicker : UIButton!
     var toolbarContentView: FAEChatToolBarContentView!
     
-    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
-    var draggingButtonSubview: UIView! // Another dragging button for UI effect
     var animatingHeartTimer: Timer! // Timer for animating heart
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
-    var subviewInputToolBar: UIView! // subview to hold input toolbar
-    var firstLoadInputToolBar = true
-    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
-    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
-    var pinIcon: UIImageView! // Icon to indicate pin type
-    var selectedMarkerPosition: CLLocationCoordinate2D!
-    var buttonPrevPin: UIButton!
     var buttonNextPin: UIButton!
-    var scrollViewMedia: UIScrollView! // container to display pin's media
+    var buttonPrevPin: UIButton!
+    var draggingButtonSubview: UIView! // Another dragging button for UI effect
     var fileIdArray = [Int]()
+    var firstLoadInputToolBar = true
+    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
     var imageViewMediaArray = [UIImageView]()
+    var pinIcon: UIImageView! // Icon to indicate pin type
+    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
+    var scrollViewMedia: UIScrollView! // container to display pin's media
+    var selectedMarkerPosition: CLLocationCoordinate2D!
+    var subviewInputToolBar: UIView! // subview to hold input toolbar
+    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
+    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     //Change by Yao, abandon fileIdString
     
     var imageViewHotPin: UIImageView!
@@ -210,6 +203,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         loadPinDetailWindow()
         if pinTypeEnum == .place {
             loadPlaceDetail()
+            pinIcon.frame.size.width = 48
+            pinIcon.center.x = screenWidth / 2
+            pinIcon.center.y = 507 * screenHeightFactor
             UIApplication.shared.statusBarStyle = .lightContent
         }
         pinIDPinDetailView = pinIdSentBySegue
