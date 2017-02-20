@@ -38,6 +38,7 @@ extension FaeMapViewController {
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton!) {
+        self.selfMarker.map = nil
         timerUpdateSelfLocation.invalidate()
         self.clearMap(type: "user")
         let pinMenuVC = PinMenuViewController()
@@ -50,7 +51,7 @@ extension FaeMapViewController {
     
     // MARK: Actions for these buttons
     func actionSelfPosition(_ sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
             currentLocation = locManager.location
         }
         if currentLocation != nil {

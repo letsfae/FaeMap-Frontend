@@ -16,7 +16,6 @@ extension CreateMomentPinViewController {
         if sender.tag == 0 {
             let angle: CGFloat = (-45 * 3.14 / 180.0) as CGFloat
             sender.tag = 1
-            self.collectionViewMedia.isScrollEnabled = false
             UIView.animate(withDuration: 0.5) {
                 self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: angle)
                 self.collectionViewMedia.center.x -= 249
@@ -26,7 +25,6 @@ extension CreateMomentPinViewController {
         }
         else {
             sender.tag = 0
-            self.collectionViewMedia.isScrollEnabled = true
             UIView.animate(withDuration: 0.5) {
                 self.buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
                 self.collectionViewMedia.center.x += 249
@@ -56,12 +54,13 @@ extension CreateMomentPinViewController {
         else {
             let numMediaLeft = 6 - selectedMediaArray.count
             if numMediaLeft == 0 {
-                self.showAlert(title: "Up to 6 pictures can be uploaded at the same time", message: "please try again")
+                self.showAlert(title: "You can only have up to 6 items for your story", message: "please try again")
                 return
             }
             let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
             let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
             imagePicker.imageDelegate = self
+            imagePicker.isCSP = true
             imagePicker._maximumSelectedPhotoNum = numMediaLeft
             self.present(nav, animated: true, completion: {
                 UIApplication.shared.statusBarStyle = .default
@@ -180,6 +179,10 @@ extension CreateMomentPinViewController {
     func actionSubmitMedia(_ sender: UIButton) {
         if selectedMediaArray.count == 0 {
             showAlert(title: "Please add at least one image", message: "and try again")
+            return
+        }
+        else if textViewForMediaPin.text == "" {
+            showAlert(title: "Please add description for your story", message: "and try again")
             return
         }
         if sender.tag == 0 {

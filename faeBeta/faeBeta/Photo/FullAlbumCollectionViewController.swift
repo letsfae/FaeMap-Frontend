@@ -91,6 +91,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         }
     }
     
+    var isCSP = false // is creating story pin
+    
     
     //MARK: - life cycle
     override func viewDidLoad() {
@@ -332,7 +334,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
-                showAlertView(withWarning: "You can only select up to \(maximumSelectedPhotoNum) images at the same time")
+                if isCSP {
+                    showAlertView(withWarning: "You can only have up to \(maximumSelectedPhotoNum) items for your story")
+                } else {
+                    showAlertView(withWarning: "You can only select up to \(maximumSelectedPhotoNum) images at the same time")
+                }
             } else {
                 if(asset.mediaType == .image){
                     if(photoPicker.videoAsset != nil){

@@ -58,6 +58,9 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
         else {
             return
         }
+        if selectedMediaArray.count < 6 {
+            buttonAddMedia.alpha = 1
+        }
         if selectedMediaArray.count == 0 {
             buttonTakeMedia.alpha = 1
             buttonSelectMedia.alpha = 1
@@ -89,7 +92,9 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
         if index == selectedMediaArray.count - 1 {
             buttonAddMedia.isEnabled = true
             UIView.animate(withDuration: 0.4) {
-                self.buttonAddMedia.alpha = 1
+                if self.selectedMediaArray.count != 6 {
+                    self.buttonAddMedia.alpha = 1
+                }
             }
         }
         else {

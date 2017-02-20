@@ -205,6 +205,7 @@ class EditCommentPinViewController: UIViewController {
         let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
         let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
         imagePicker.imageDelegate = self
+        imagePicker.isCSP = true
         imagePicker._maximumSelectedPhotoNum = numMediaLeft
         self.present(nav, animated: true, completion: {
             UIApplication.shared.statusBarStyle = .default

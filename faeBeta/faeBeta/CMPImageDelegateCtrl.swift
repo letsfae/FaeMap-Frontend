@@ -36,9 +36,13 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
                                           at: .right,
                                           animated: false)
         if !selectedMediaArray.isEmpty {
+            collectionViewMedia.isScrollEnabled = true
             buttonMediaSubmit.isEnabled = true
             buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
             buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
+        }
+        if selectedMediaArray.count == 6 {
+            buttonAddMedia.alpha = 0
         }
         UIApplication.shared.statusBarStyle = .lightContent
     }
