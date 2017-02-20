@@ -54,12 +54,12 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
         if let indexPath = collectionViewMedia.indexPath(for: cell) {
             selectedMediaArray.remove(at: indexPath.row)
             collectionViewMedia.deleteItems(at: [indexPath])
+            if selectedMediaArray.count < 6 && indexPath.row <= selectedMediaArray.count - 1 {
+                buttonAddMedia.alpha = 1
+            }
         }
         else {
             return
-        }
-        if selectedMediaArray.count < 6 {
-            buttonAddMedia.alpha = 1
         }
         if selectedMediaArray.count == 0 {
             buttonTakeMedia.alpha = 1

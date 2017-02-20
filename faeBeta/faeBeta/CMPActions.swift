@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-extension CreateMomentPinViewController {
+extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func actionAddMedia(_ sender: UIButton) { // Add or Cancel Adding
         if sender.tag == 0 {
@@ -47,25 +47,56 @@ extension CreateMomentPinViewController {
         }
     }
     
+    func actionTakePhoto(_ sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        self.present(imagePicker,animated:true,completion:nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+//        self.imageViewAvatar.image = image
+//        picker.dismiss(animated: true, completion: nil)
+        
+        selectedMediaArray.append(image)
+        collectionViewMedia.isHidden = false
+        collectionViewMedia.frame.origin.x = 0
+        buttonTakeMedia.alpha = 0
+        buttonSelectMedia.alpha = 0
+        buttonAddMedia.alpha = 1
+        buttonAddMedia.tag = 0
+        buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
+        collectionViewMedia.reloadData()
+        collectionViewMedia.scrollToItem(at: IndexPath(row: selectedMediaArray.count-1, section: 0),
+                                         at: .right,
+                                         animated: false)
+        if !selectedMediaArray.isEmpty {
+            collectionViewMedia.isScrollEnabled = true
+            buttonMediaSubmit.isEnabled = true
+            buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
+            buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
+        }
+        if selectedMediaArray.count == 6 {
+            buttonAddMedia.alpha = 0
+        }
+        UIApplication.shared.statusBarStyle = .lightContent
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
     func actionTakeMedia(_ sender: UIButton) {
-        if sender.tag == 0 {
-            
+        let numMediaLeft = 6 - selectedMediaArray.count
+        if numMediaLeft == 0 {
+            self.showAlert(title: "You can only have up to 6 items for your story", message: "please try again")
+            return
         }
-        else {
-            let numMediaLeft = 6 - selectedMediaArray.count
-            if numMediaLeft == 0 {
-                self.showAlert(title: "You can only have up to 6 items for your story", message: "please try again")
-                return
-            }
-            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-            imagePicker.imageDelegate = self
-            imagePicker.isCSP = true
-            imagePicker._maximumSelectedPhotoNum = numMediaLeft
-            self.present(nav, animated: true, completion: {
-                UIApplication.shared.statusBarStyle = .default
-            })
-        }
+        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+        imagePicker.imageDelegate = self
+        imagePicker.isCSP = true
+        imagePicker._maximumSelectedPhotoNum = numMediaLeft
+        self.present(nav, animated: true, completion: {
+            UIApplication.shared.statusBarStyle = .default
+        })
     }
     
     func actionShowMoreOptions(_ sender: UIButton) {
