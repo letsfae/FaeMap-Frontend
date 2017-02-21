@@ -41,6 +41,10 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             if uiviewPlaceDetail != nil {
                 uiviewPlaceDetail.center.y -= screenHeight
             }
+            if inputToolbar == nil {
+                self.loadInputToolBar()
+                self.loadExtendView() // call func for loading extend view (mingjie jin)
+            }
             if pinIDPinDetailView != "-999" {
                 getSeveralInfo()
             }

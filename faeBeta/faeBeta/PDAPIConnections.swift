@@ -13,6 +13,12 @@ import RealmSwift
 
 extension PinDetailViewController {
     
+    func getSeveralInfo() {
+        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+        getPinInfo()
+        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
+    }
+    
     func checkPinStatus() {
         if pinStatus == "new" {
             let realm = try! Realm()
@@ -169,14 +175,9 @@ extension PinDetailViewController {
                 
             }
             if let comments = mapInfoJSON["comments"].int {
+                self.pinCommentsCount = comments
                 self.labelPinCommentsCount.text = "\(comments)"
                 commentsCount = comments
-                if comments == 0 {
-                    self.lblEmptyCommentArea.isHidden = false
-                }
-                else {
-                    self.lblEmptyCommentArea.isHidden = true
-                }
             }
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imageViewHotPin.isHidden = false

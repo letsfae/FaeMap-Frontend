@@ -17,16 +17,20 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == tableCommentsForPin {
+        if self.pinCommentsCount == 0 {
+            return 1
+        } else {
             return dictCommentsOnPinDetail.count
-        }
-        else {
-            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == self.tableCommentsForPin {
+        if self.pinCommentsCount == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pinEmptyCell", for: indexPath) as! PDEmptyCell
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
+            return cell
+        } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             cell.delegate = self
             cell.pinID = pinIDPinDetailView
@@ -73,20 +77,13 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.layoutMargins = UIEdgeInsets.zero
             return cell
         }
-        else {
-            let cell = UITableViewCell()
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
-            return cell
-        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == self.tableCommentsForPin {
+        if self.pinCommentsCount == 0 {
+            return screenHeight - 436
+        } else {
             return 140
-        }
-        else{
-            return 0
         }
     }
     

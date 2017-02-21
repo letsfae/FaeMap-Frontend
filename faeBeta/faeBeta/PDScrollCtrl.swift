@@ -15,12 +15,13 @@ extension PinDetailViewController: UIScrollViewDelegate {
             if touchToReplyTimer != nil {
                 touchToReplyTimer.invalidate()
             }
-            if tableCommentsForPin.contentOffset.y >= 292 {
+//            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
+            if tableCommentsForPin.contentOffset.y >= 227 {
                 if self.controlBoard != nil {
                     self.controlBoard.isHidden = false
                 }
             }
-            if tableCommentsForPin.contentOffset.y < 292 {
+            if tableCommentsForPin.contentOffset.y < 227 {
                 if self.controlBoard != nil {
                     self.controlBoard.isHidden = true
                 }

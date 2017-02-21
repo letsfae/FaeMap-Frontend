@@ -127,7 +127,6 @@ extension PinDetailViewController {
     
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 65.0 * screenHeightFactor
         if sender.tag == 1 {
             self.delegate?.disableSelfMarker(yes: false)
             endEdit()
@@ -239,7 +238,6 @@ extension PinDetailViewController {
     
     // When clicking dragging button in pin detail window
     func actionDraggingThisPin(_ sender: UIButton) {
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
         if sender.tag == 1 {
             self.delegate?.disableSelfMarker(yes: false)
             sender.tag = 0
@@ -321,6 +319,7 @@ extension PinDetailViewController {
         }), completion: { (done: Bool) in
             if done {
                 self.delegate?.disableSelfMarker(yes: true)
+                
                 self.tableCommentsForPin.reloadData()
             }
         })

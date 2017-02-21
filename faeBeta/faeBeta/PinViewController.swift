@@ -143,7 +143,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var imageViewHotPin: UIImageView!
     var stringPlainTextViewTxt = ""
     
-    var lblEmptyCommentArea: UILabel!
+    var pinCommentsCount = 0
     
     enum MediaMode {
         case small
@@ -218,7 +218,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("[viewWillAppear]")
+//        print("[viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -236,8 +236,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 self.uiviewPlaceDetail.frame.origin.y = 0
             }
         }, completion: { (done: Bool) in
-            self.loadInputToolBar()
-            self.loadExtendView() // call func for loading extend view (mingjie jin)
+            if self.pinTypeEnum != .place {
+                self.loadInputToolBar()
+                self.loadExtendView() // call func for loading extend view (mingjie jin)
+            }
         })
     }
     
@@ -290,12 +292,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             break
         }
         labelPinTitle.textAlignment = .center
-    }
-    
-    func getSeveralInfo() {
-        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
-        getPinInfo()
-        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func loadTransparentButtonBackToMap() {
@@ -374,7 +370,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             buttonKeyBoard.addTarget(self, action: #selector(self.showKeyboard(_:)), for: .touchUpInside)
             contentView?.addSubview(buttonKeyBoard)
             
-            
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
             buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
@@ -392,9 +387,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             buttonCamera.setImage(UIImage(named: "camera"), for: .normal)
             buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
             contentView?.addSubview(buttonCamera)
-            
             buttonCamera.addTarget(self, action: #selector(self.showCamera), for: .touchUpInside)
-            
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
@@ -548,32 +541,30 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
-        if isKeyboardInThisView {
-            self.tableCommentsForPin.frame.size.height -= keyboardHeight
-        }
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-            Void in
+        
+        UIView.animate(withDuration: 0.3, animations: {
             self.toolbarDistanceToBottom.constant = -keyboardHeight
             self.view.setNeedsUpdateConstraints()
         }, completion: {(done: Bool) in
-            
+            if self.isKeyboardInThisView {
+                self.tableCommentsForPin.frame.size.height = screenHeight - 155 - keyboardHeight
+            }
         })
     }
     
     func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
-        self.tableCommentsForPin.scrollToTop(animated: true)
+//        self.tableCommentsForPin.scrollToTop(animated: true)
     }
     
     func keyboardWillHide(_ notification: Notification) {
-        if isKeyboardInThisView {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 90 - 65
+        if self.isKeyboardInThisView {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 155
         }
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-            Void in
+        UIView.animate(withDuration: 0.3, animations: {
             self.toolbarDistanceToBottom.constant = 0
             self.view.setNeedsUpdateConstraints()
-            }, completion: nil)
+        }, completion: nil)
     }
     
     func keyboardDidHide(_ notification: Notification){

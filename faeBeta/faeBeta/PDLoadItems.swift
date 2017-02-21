@@ -31,6 +31,7 @@ extension PinDetailViewController {
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
+        tableCommentsForPin.register(PDEmptyCell.self, forCellReuseIdentifier: "pinEmptyCell")
         tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
@@ -66,15 +67,6 @@ extension PinDetailViewController {
         loadPinCtrlButton()
         
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
-        
-        lblEmptyCommentArea = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 25))
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
-        lblEmptyCommentArea.text = "It’s empty around here, be the first to comment!"
-        lblEmptyCommentArea.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        lblEmptyCommentArea.textAlignment = .center
-        lblEmptyCommentArea.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        self.tableCommentsForPin.addSubview(lblEmptyCommentArea)
-        lblEmptyCommentArea.isHidden = true
     }
     
     private func loadTableHeader() {
