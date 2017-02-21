@@ -86,6 +86,9 @@ extension PinDetailViewController {
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .overCurrentContext
             self.present(openedPinListVC, animated: false, completion: {
+                if self.uiviewPlaceDetail != nil {
+                    self.uiviewPlaceDetail.center.y -= screenHeight
+                }
                 self.subviewNavigation.center.y -= self.subviewNavigation.frame.size.height
                 self.tableCommentsForPin.center.y -= screenHeight
                 self.draggingButtonSubview.center.y -= screenHeight
