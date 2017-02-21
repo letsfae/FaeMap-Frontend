@@ -855,6 +855,7 @@
 				B0714DC21D5E471400356705 /* StickerAlbum */,
 				B0714DBD1D5E46EF00356705 /* UIviewController */,
 				B0714DAC1D5E46D600356705 /* FireBaseData */,
+				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
 			);
@@ -883,7 +884,6 @@
 		B0714DBD1D5E46EF00356705 /* UIviewController */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,

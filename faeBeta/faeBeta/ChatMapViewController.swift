@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import GooglePlaces
 
 class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate {
     
@@ -95,29 +96,58 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         startUpdatingLocation = true
         
         // load address
+        
+        let geocoder = GMSGeocoder()
+        
         viewAddress = UIView(frame: CGRect(x: 0, y: screenHeight - 91, width: screenWidth, height: 125))
         viewAddress.layer.cornerRadius = 25
         viewAddress.backgroundColor = UIColor.white
         
-        labelCity = UILabel(frame: CGRect(x: (screenWidth-193)/2, y: 21, width: 193, height: 20))
-        labelCity.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
+        labelCity = UILabel(frame: CGRect(x: 30 , y: 41, width: screenWidth - 60, height: 20))
+        labelCity.font = UIFont(name: "AvenirNext-Regular", size: 14.0)
         labelCity.textAlignment = .center
-        labelCity.text = "Address is not available"
+        labelCity.text = "City is not available"
         
-        labelStreet = UILabel(frame: CGRect(x: (screenWidth-193)/2, y: 41, width: 193, height: 17))
-        labelStreet.font = UIFont(name: "AvenirNext-Regular", size: 14.0)
+        labelStreet = UILabel(frame: CGRect(x: 30, y: 21, width: screenWidth - 60, height: 17))
+        labelStreet.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
         labelStreet.textAlignment = .center
-        labelStreet.text = "City is not available"
+        labelStreet.text = "Address is not available"
         
-        labelCountry = UILabel(frame: CGRect(x: (screenWidth-193)/2, y: 58, width: 193, height: 17))
+        labelCountry = UILabel(frame: CGRect(x: 30, y: 58, width: screenWidth - 60, height: 17))
         labelCountry.font = UIFont(name: "AvenirNext-Regular", size: 13.0)
         labelCountry.textAlignment = .center
         labelCountry.text = "Country is not available"
         
-        viewAddress.addSubview(labelCountry)
-        viewAddress.addSubview(labelStreet)
-        viewAddress.addSubview(labelCity)
-        faeMapView.addSubview(viewAddress)
+        geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(chatLatitude, chatLongitude)) { (response, error) in
+            
+            if(error == nil) {
+                //print("there is no error get address from lat & lon")
+                self.labelStreet.text = response?.firstResult()?.thoroughfare
+                var cityText = response?.firstResult()?.locality
+                
+                
+                if(response?.firstResult()?.administrativeArea != nil) {
+                    cityText = cityText! + ", " + (response?.firstResult()?.administrativeArea)!
+                }
+                
+                if(response?.firstResult()?.postalCode != nil) {
+                    cityText = cityText! + " " + (response?.firstResult()?.postalCode)!
+                }
+                
+                //self.labelCity.text = response?.firstResult()?.locality + ", " + response?.firstResult()?.administrativeArea + " " + response?.firstResult()?.postalCode
+                self.labelCity.text = cityText!
+                self.labelCountry.text = response?.firstResult()?.country
+            } else {
+                print(error)
+            }
+            
+            self.viewAddress.addSubview(self.labelCountry)
+            self.viewAddress.addSubview(self.labelStreet)
+            self.viewAddress.addSubview(self.labelCity)
+            self.faeMapView.addSubview(self.viewAddress)
+        }
+        
+        
 
         // load pop up dialog
         viewPopUp = UIView(frame: CGRect(x: screenWidth - 179, y: 62, width: 166, height: 90))
@@ -162,7 +192,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         buttonBottomLeft.addTarget(self, action: #selector(buttonBottomLeftAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomLeft)
         
-        buttonBottomRight = UIButton(frame: CGRect(x:screenWidth - 71, y: screenHeight - 164, width: 60, height: 60))
+        buttonBottomRight = UIButton(frame: CGRect(x:screenWidth - 71, y: screenHeight - 164, width: 51, height: 51))
         buttonBottomRight.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
         buttonBottomRight.addTarget(self, action: #selector(buttonBottomRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonBottomRight)
