@@ -239,8 +239,15 @@ extension PinDetailViewController {
     }
     
     func getPinInfo() {
+        self.buttonBackToPinLists.isEnabled = false
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+            let opinType = "\(self.pinTypeEnum)"
+            let opinId = self.pinIDPinDetailView
+            var opinContent = ""
+            let opinLat = self.selectedMarkerPosition.latitude
+            let opinLon = self.selectedMarkerPosition.longitude
+            var opinTime = ""
             let pinInfoJSON = JSON(message!)
 //            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
             if let userid = pinInfoJSON["user_id"].int {
@@ -269,6 +276,7 @@ extension PinDetailViewController {
 //                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
+                    opinContent = "\(content)"
                 }
             }
             else if self.pinTypeEnum == .comment {
@@ -276,6 +284,7 @@ extension PinDetailViewController {
 //                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
+                    opinContent = "\(content)"
                 }
             }
             if let isLiked = pinInfoJSON["user_pin_operations"]["is_liked"].bool {
@@ -326,7 +335,29 @@ extension PinDetailViewController {
             }
             if let time = pinInfoJSON["created_at"].string {
                 self.labelPinTimestamp.text = time.formatFaeDate()
+                opinTime = time
             }
+            
+            
+            
+            let realm = try! Realm()
+            let opinListElem = OpenedPinListElem()
+            opinListElem.pinId = opinId
+            opinListElem.pinType = opinType
+            opinListElem.pinContent = opinContent
+            opinListElem.pinLat = opinLat
+            opinListElem.pinLon = opinLon
+            opinListElem.pinTime = opinTime
+            try! realm.write {
+                realm.add(opinListElem)
+                print("[opinListElem] save in Realm done!")
+            }
+//            let opinListElem = realm.objects(OpenedPinListElem.self).filter("pinId == \(opinId) AND pinType == \(opinType)")
+//            if opinListElem.count == 0 {
+//                
+//            }
+            
+            self.buttonBackToPinLists.isEnabled = true
         }
     }
     

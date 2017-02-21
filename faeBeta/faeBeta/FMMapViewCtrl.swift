@@ -203,16 +203,34 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 }
                 return true
             }
+            if !self.canOpenAnotherPin {
+                return true
+            }
+            camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
+            mapView.camera = camera
+            self.canOpenAnotherPin = false
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+            pinDetailVC.pinMarker = marker
+            pinDetailVC.delegate = self
+            self.markerBackFromPinDetail = marker
             if type == "comment" || type == "media" {
-                if !self.canOpenAnotherPin {
-                    return true
-                }
-                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
-                mapView.camera = camera
-                self.canOpenAnotherPin = false
                 var pinComment = JSON(marker.userData!)
                 let pinIDGet = pinComment["\(type)_id"].stringValue
                 pinIdToPassBySegue = pinIDGet
+                if type == "media" {
+                    pinDetailVC.pinTypeEnum = .media
+                }
+                else if type == "comment" {
+                    pinDetailVC.pinTypeEnum = .comment
+                }
+                if let status = pinLoc["status"].string {
+                    pinDetailVC.pinStatus = status
+                }
+                
+                // for opened pin list
+                pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                 if let storedList = readByKey("openedPinList"){
                     var openedPinListArray = storedList as! [String]
                     let pinTypeID = "\(type)%\(pinIDGet)"
@@ -223,39 +241,14 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     print("[FMMapViewCtrl] \(openedPinListArray)")
                 }
                 
-                self.markerBackFromPinDetail = marker
-                let pinDetailVC = PinDetailViewController()
-                if type == "media" {
-                    pinDetailVC.pinTypeEnum = .media
-                }
-                else if type == "comment" {
-                    pinDetailVC.pinTypeEnum = .comment
-                }
-                if let status = pinLoc["status"].string {
-                    pinDetailVC.pinStatus = status
-                }
                 timerUpdateSelfLocation.invalidate()
                 self.clearMap(type: "user")
-                pinDetailVC.modalPresentationStyle = .overCurrentContext
-                pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
-                pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
-                pinDetailVC.pinMarker = marker
-                pinDetailVC.delegate = self
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
                 })
                 return true
             }
             else if type == "place" {
-                if !self.canOpenAnotherPin {
-                    return true
-                }
-                camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
-                mapView.camera = camera
-                self.canOpenAnotherPin = false
-                
-                self.markerBackFromPinDetail = marker
-                let pinDetailVC = PinDetailViewController()
                 pinDetailVC.pinTypeEnum = .place
                 if let placeType = pinLoc["category"].string {
                     pinDetailVC.placeType = placeType
@@ -274,16 +267,9 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 }
                 timerUpdateSelfLocation.invalidate()
                 self.clearMap(type: "user")
-                pinDetailVC.modalPresentationStyle = .overCurrentContext
-                pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
-                pinDetailVC.pinMarker = marker
-                pinDetailVC.delegate = self
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
                 })
-                return true
-            }
-            else if type.contains("chat"){
                 return true
             }
         }

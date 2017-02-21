@@ -43,3 +43,12 @@ class NewFaePin: Object {
     dynamic var pinType = -999
     dynamic var pinId = -999
 }
+
+class OpenedPinListElem: Object {
+    dynamic var pinType = ""
+    dynamic var pinId = ""
+    dynamic var pinContent = "" // content or place title
+    dynamic var pinLat: Double = 0.0
+    dynamic var pinLon: Double = 0.0
+    dynamic var pinTime = "" // created time or place address
+}
