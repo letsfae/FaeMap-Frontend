@@ -252,6 +252,7 @@
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
 		CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */; };
 		CE97A9C21E399D52005BBF6C /* YelpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9BF1E399D52005BBF6C /* YelpManager.swift */; };
 		CE97A9C31E399D52005BBF6C /* YelpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE97A9C01E399D52005BBF6C /* YelpQuery.swift */; };
@@ -592,6 +593,7 @@
 		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
 		CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseWelcomer.swift; sourceTree = "<group>"; };
 		CE97A9BF1E399D52005BBF6C /* YelpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpManager.swift; sourceTree = "<group>"; };
 		CE97A9C01E399D52005BBF6C /* YelpQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpQuery.swift; sourceTree = "<group>"; };

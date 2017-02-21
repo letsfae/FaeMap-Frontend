@@ -138,7 +138,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
                 self.labelCity.text = cityText!
                 self.labelCountry.text = response?.firstResult()?.country
             } else {
-                print(error)
+                print(error ?? "ohhhh")
             }
             
             self.viewAddress.addSubview(self.labelCountry)
