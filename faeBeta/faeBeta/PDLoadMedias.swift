@@ -29,7 +29,7 @@ extension PinDetailViewController {
             let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
             imageView.addGestureRecognizer(tapRecognizer)
             let realm = try! Realm()
-            let mediaRealm = realm.objects(Media.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil")
+            let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil")
             if mediaRealm.count >= 1 {
                 if let media = mediaRealm.first {
                     let picture = UIImage.sd_image(with: media.picture as Data!)
@@ -41,7 +41,7 @@ extension PinDetailViewController {
                 let fileURL = "\(baseURL)/files/\(self.fileIdArray[index])/data"
                 imageView.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {
-                        let mediaImage = Media()
+                        let mediaImage = FileObject()
                         mediaImage.fileId = self.fileIdArray[index]
                         mediaImage.picture = UIImageJPEGRepresentation(image!, 1.0) as NSData?
                         try! realm.write {

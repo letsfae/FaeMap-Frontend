@@ -18,23 +18,37 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
-        print("[animateToCameraFromOpenedPinListView] pinID: \(pinID), pinType: \(pinType)")
+        self.pinTypeEnum = pinType
+        self.selectedMarkerPosition = coordinate
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
         self.pinIDPinDetailView = pinID
-        if pinType == self.pinTypeEnum {
-            print("[animateToCameraFromOpenedPinListView] pinType match with current: \(self.pinTypeEnum)")
-        }
-        else {
-            print("[animateToCameraFromOpenedPinListView] pinType: \(pinType) dismatch with current: \(self.pinTypeEnum)")
-            self.pinTypeEnum = pinType
+        self.delegate?.disableSelfMarker(yes: false)
+        if pinType == .place {
+            if uiviewPlaceDetail == nil {
+                loadPlaceDetail()
+            }
+            loadPlaceFromRealm(pinTypeId: "place\(pinID)")
+            uiviewPlaceDetail.frame.origin.y = 0
+            pinIcon.frame.size.width = 48
+            pinIcon.center.x = screenWidth / 2
+            pinIcon.center.y = 507 * screenHeightFactor
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else {
+            if uiviewPlaceDetail != nil {
+                uiviewPlaceDetail.center.y -= screenHeight
+            }
+            if pinIDPinDetailView != "-999" {
+                getSeveralInfo()
+            }
             self.initPinBasicInfo()
-        }
-        if pinIDPinDetailView != "-999" {
-            getSeveralInfo()
+            pinIcon.frame.size.width = 60
+            pinIcon.center.x = screenWidth / 2
+            pinIcon.center.y = 510 * screenHeightFactor
+            UIApplication.shared.statusBarStyle = .default
         }
     }
     

@@ -61,7 +61,7 @@ class OPLTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("H:|-80-[v0(250)]", options: [], views: content)
         self.addConstraintsWithFormat("V:|-17-[v0(25)]", options: [], views: content)
         
-        time = UILabel(frame: CGRect(x: 80, y: 41, width: 130, height: 18))
+        time = UILabel(frame: CGRect(x: 80, y: 41, width: 280 * screenWidthFactor, height: 18))
         self.addSubview(time)
         time.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
         time.text = ""

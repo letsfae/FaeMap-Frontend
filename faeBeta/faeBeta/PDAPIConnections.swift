@@ -245,8 +245,8 @@ extension PinDetailViewController {
             let opinType = "\(self.pinTypeEnum)"
             let opinId = self.pinIDPinDetailView
             var opinContent = ""
-            let opinLat = self.selectedMarkerPosition.latitude
-            let opinLon = self.selectedMarkerPosition.longitude
+            var opinLat = self.selectedMarkerPosition.latitude
+            var opinLon = self.selectedMarkerPosition.longitude
             var opinTime = ""
             let pinInfoJSON = JSON(message!)
 //            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
@@ -338,8 +338,22 @@ extension PinDetailViewController {
                 opinTime = time
             }
             
+            if let latitudeInfo = pinInfoJSON["geolocation"]["latitude"].double {
+                opinLat = latitudeInfo
+            }
+            else {
+                print("DEBUG: Cannot get geoInfo: Latitude")
+                return
+            }
+            if let longitudeInfo = pinInfoJSON["geolocation"]["longitude"].double {
+                opinLon = longitudeInfo
+            }
+            else {
+                print("DEBUG: Cannot get geoInfo: Longitude")
+                return
+            }
+            
             let realm = try! Realm()
-//            let opinListElem = realm.objects(OpenedPinListElem.self).filter("pinId == '\(opinId)' AND pinType == '\(opinType)'")
             let opinListElem = OPinListElem()
             opinListElem.pinTypeId = "\(opinType)\(opinId)"
             opinListElem.pinContent = opinContent
@@ -350,9 +364,8 @@ extension PinDetailViewController {
             try! realm.write {
                 realm.add(opinListElem, update: true)
                 print("[opinListElem] save in Realm done!")
+                self.buttonBackToPinLists.isEnabled = true
             }
-            
-            self.buttonBackToPinLists.isEnabled = true
         }
     }
     

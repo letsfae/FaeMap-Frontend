@@ -90,6 +90,7 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.center.y -= screenHeight
                 self.draggingButtonSubview.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
+                self.delegate?.disableSelfMarker(yes: true)
             })
         }
     }

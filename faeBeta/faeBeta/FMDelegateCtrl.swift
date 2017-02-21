@@ -46,7 +46,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.camera = camera
+        self.faeMapView.animate(to: camera)
     }
     // PinDetailDelegate
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
