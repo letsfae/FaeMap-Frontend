@@ -18,7 +18,6 @@ extension FaeMapViewController {
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
         
-        faeMapView.preferredFrameRate = kGMSFrameRateMaximum
         faeMapView.isIndoorEnabled = false
         faeMapView.isBuildingsEnabled = false
         faeMapView.settings.tiltGestures = false
@@ -242,7 +241,7 @@ extension FaeMapViewController {
                     }
                     pinShowOnMap.userData = pinData
                     pinShowOnMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-                    pinShowOnMap.appearAnimation = kGMSMarkerAnimationNone
+                    pinShowOnMap.appearAnimation = GMSMarkerAnimation.none
                     pinShowOnMap.map = self.faeMapView
                     self.mapPinsArray.append(pinShowOnMap)
                     Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.removeTempMarker), userInfo: nil, repeats: false)

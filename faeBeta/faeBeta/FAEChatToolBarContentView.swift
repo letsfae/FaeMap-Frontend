@@ -87,7 +87,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // Whether the media content view is show
     var mediaContentShow : Bool{
         get{
-            return imageQuickPickerShow || stickerViewShow || recordShow
+            return imageQuickPickerShow || stickerViewShow || recordShow || miniLocationShow
         }
     }
     
@@ -105,6 +105,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     //sticker
     fileprivate var stickerViewShow = false//false : not open the stick view
     fileprivate var stickerPicker : StickerPickView!
+    
+    
+    //location
+    var miniLocation = LocationPickerMini()
+    fileprivate var miniLocationShow = false
     
     //record
     fileprivate var recordShow = false // false: not open the record view
@@ -185,6 +190,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             photoInitialized = true
         }
         
+        
+        func initializeMiniLocation() {
+            
+            miniLocation.isHidden = true
+            self.addSubview(miniLocation)
+        }
+        
         //MARK: voice helper function
         
         func setupRecorder() {
@@ -199,6 +211,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
         
         self.backgroundColor = UIColor.white
+        
+        initializeMiniLocation()
         
         if (type & FAEChatToolBarContentType.sticker.rawValue > 0) && !stickerInitialized{
             initializeStickerView()
@@ -229,6 +243,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             audioRecorderContentView.isHidden = true
             recordShow = false
         }
+        
+        if miniLocationShow {
+            miniLocationShow = false
+            miniLocation.isHidden = true
+        }
     }
     
     
@@ -245,10 +264,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 self.moreImageButton.isHidden = true
                 self.quickSendImageButton.isHidden = true
                 self.imageQuickPickerShow = false
-            }
-            else if (recordShow){
+            } else if (recordShow){
                 self.audioRecorderContentView.isHidden = true
                 self.recordShow = false
+            } else if miniLocationShow {
+                self.miniLocationShow = false
+                self.miniLocation.isHidden = true
             }
             else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
@@ -256,6 +277,37 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 UIView.setAnimationsEnabled(true)
             }
             self.stickerViewShow = true
+        }
+    }
+    
+    
+    func showMiniLocation() {
+        self.isHidden = false;
+        if !miniLocationShow {
+            self.miniLocation.isHidden = false
+            
+            if self.imageQuickPickerShow {
+                self.photoQuickCollectionView.isHidden = true
+                self.moreImageButton.isHidden = true
+                self.quickSendImageButton.isHidden = true
+                self.imageQuickPickerShow = false
+            }
+            else if (recordShow) {
+                self.audioRecorderContentView.isHidden = true
+                self.recordShow = false
+            } else if stickerViewShow {
+                stickerPicker.isHidden = true
+                stickerViewShow = false
+                self.quickSendImageButton.alpha = 1
+                self.moreImageButton.alpha = 1
+            }
+            else if (keyboardShow){
+                UIView.setAnimationsEnabled(false)
+                self.delegate.endEdit?()
+                UIView.setAnimationsEnabled(true)
+            }
+            
+            self.miniLocationShow = true
         }
     }
     
@@ -287,6 +339,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 self.recordShow = false
                 self.quickSendImageButton.alpha = 1
                 self.moreImageButton.alpha = 1
+            } else if miniLocationShow {
+                self.miniLocationShow = false
+                self.miniLocation.isHidden = true
             }
             else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
@@ -327,7 +382,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 self.moreImageButton.isHidden = true
                 self.quickSendImageButton.isHidden = true
                 self.imageQuickPickerShow = false
-            }else if keyboardShow {
+            } else if (miniLocationShow) {
+                self.miniLocationShow = false
+                self.miniLocation.isHidden = true
+            }
+            else if keyboardShow {
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
                 UIView.setAnimationsEnabled(true)
@@ -355,6 +414,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         audioRecorderContentView.isHidden = true
         audioRecorderContentView.switchToRecordMode()
         }
+        
+        if miniLocationShow {
+            miniLocationShow = false
+            miniLocation.isHidden = true
+        }
+        
+        
         recordShow = false
     }
     

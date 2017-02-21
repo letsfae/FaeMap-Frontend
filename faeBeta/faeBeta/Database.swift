@@ -52,3 +52,15 @@ class OpenedPinListElem: Object {
     dynamic var pinLon: Double = 0.0
     dynamic var pinTime = "" // created time or place address
 }
+
+class OPinListElem: Object { // Opened Pin List Element
+    dynamic var pinTypeId = ""
+    dynamic var pinContent = "" // content or place title
+    dynamic var pinLat: Double = 0.0
+    dynamic var pinLon: Double = 0.0
+    dynamic var pinTime = "" // created time or place address
+    
+    override static func primaryKey() -> String? {
+        return "pinTypeId"
+    }
+}

@@ -338,24 +338,19 @@ extension PinDetailViewController {
                 opinTime = time
             }
             
-            
-            
             let realm = try! Realm()
-            let opinListElem = OpenedPinListElem()
-            opinListElem.pinId = opinId
-            opinListElem.pinType = opinType
+//            let opinListElem = realm.objects(OpenedPinListElem.self).filter("pinId == '\(opinId)' AND pinType == '\(opinType)'")
+            let opinListElem = OPinListElem()
+            opinListElem.pinTypeId = "\(opinType)\(opinId)"
             opinListElem.pinContent = opinContent
             opinListElem.pinLat = opinLat
             opinListElem.pinLon = opinLon
             opinListElem.pinTime = opinTime
+            print("[opinListElem] \(opinListElem)")
             try! realm.write {
-                realm.add(opinListElem)
+                realm.add(opinListElem, update: true)
                 print("[opinListElem] save in Realm done!")
             }
-//            let opinListElem = realm.objects(OpenedPinListElem.self).filter("pinId == \(opinId) AND pinType == \(opinType)")
-//            if opinListElem.count == 0 {
-//                
-//            }
             
             self.buttonBackToPinLists.isEnabled = true
         }
