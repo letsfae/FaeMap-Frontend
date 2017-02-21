@@ -873,6 +873,7 @@
 				B0714DC21D5E471400356705 /* StickerAlbum */,
 				B0714DBD1D5E46EF00356705 /* UIviewController */,
 				B0714DAC1D5E46D600356705 /* FireBaseData */,
+				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
 			);
@@ -902,7 +903,6 @@
 		B0714DBD1D5E46EF00356705 /* UIviewController */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,
@@ -931,6 +931,7 @@
 			children = (
 				B0714DC81D5E475500356705 /* ChatMapViewController.swift */,
 				B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */,
+				CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */,
 			);
 			name = Location;
 			sourceTree = "<group>";
@@ -1056,9 +1057,9 @@
 				B0BF35621D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.h */,
 				B0BF35631D8DC8D600B0540B /* JSQMessagesInputToolbarCustom.m */,
 				B0BF35641D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.h */,
+				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				B0BF35651D8DC8D600B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m */,
 				86242F951D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.h */,
-				86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */,
 				B0BF35661D8DC8D600B0540B /* JSQMessagesToolbarContentViewCustom.xib */,
 				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
 				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
@@ -1864,6 +1865,7 @@
 				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
+				CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
 				B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */,
