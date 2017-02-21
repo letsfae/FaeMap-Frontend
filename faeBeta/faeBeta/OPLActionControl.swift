@@ -97,7 +97,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     // Back to main map from opened pin list
     func actionBackToMap(_ sender: UIButton) {
         UIView.animate(withDuration: 0.5, animations: ({
-            self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+            self.subviewWhite.center.y -= screenHeight
             self.subviewTable.center.y -= screenHeight
         }), completion: { (done: Bool) in
             if done {
