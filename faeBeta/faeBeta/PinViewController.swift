@@ -421,7 +421,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
         //should button to open anonymous extend view (mingjie jin)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousNormal"), for: UIControlState.normal)
-        //inputToolbar.contentView.heartButton.frame = CGRect(x: 273, y: 14, width: 40, height: 40)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousHighlight"), for: UIControlState.highlighted)
         inputToolbar.contentView.heartButton.addTarget(self, action:#selector(extendButtonAction(_:)), for: UIControlEvents.touchUpInside)
         inputToolbar.contentView.heartButtonHidden = false
@@ -751,8 +750,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         
         // adjust position for extend view (mingjie jin)
-        toolBarExtendView.frame.origin.y += 258
-        
+        if(screenHeight == 736) {
+            toolBarExtendView.frame.origin.y += 271
+        } else {
+            toolBarExtendView.frame.origin.y += 258
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -760,7 +762,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.showKeyboard(UIButton())
         
         // adjust position for extend view (mingjie jin)
-        toolBarExtendView.frame.origin.y -= 258
+        if(screenHeight == 736) {
+            toolBarExtendView.frame.origin.y -= 271
+        } else {
+            toolBarExtendView.frame.origin.y -= 258
+        }
     }
     
     //MARK: - observe key path
