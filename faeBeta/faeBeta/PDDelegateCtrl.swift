@@ -26,7 +26,6 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
         self.pinIDPinDetailView = pinID
-        self.delegate?.disableSelfMarker(yes: false)
         if pinType == .place {
             if uiviewPlaceDetail == nil {
                 loadPlaceDetail()

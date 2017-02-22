@@ -146,7 +146,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 coorOffset = pow(coorOffset, 0.5)*111
                 if coorOffset > coorDistance {
                     self.previousPosition = currentPosition
-                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
+//                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
                     if !self.canDoNextUserUpdate {
                         return
                     }
@@ -161,7 +161,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     return
                 }
                 else {
-                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
+//                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
                 }
             }
         }
@@ -184,7 +184,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         if marker.userData == nil {
             return false
         }
-        print("DidTap \(marker)")
         self.renewSelfLocation()
         let latitude = marker.position.latitude
         let longitude = marker.position.longitude
@@ -210,6 +209,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
             mapView.camera = camera
             self.canOpenAnotherPin = false
+            
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
@@ -239,7 +239,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                         openedPinListArray.insert(pinTypeID, at: 0)
                     }
                     self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                    print("[FMMapViewCtrl] \(openedPinListArray)")
                 }
                 
                 timerUpdateSelfLocation.invalidate()
@@ -291,7 +290,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                         openedPinListArray.insert(pinTypeID, at: 0)
                     }
                     self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                    print("[FMMapViewCtrl] \(openedPinListArray)")
                 }
                 
                 // write in realm swift
@@ -302,10 +300,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 opinListElem.pinLat = marker.position.latitude
                 opinListElem.pinLon = marker.position.longitude
                 opinListElem.pinTime = "\(street), \(city)"
-                print("[opinListElem] \(opinListElem)")
                 try! realm.write {
                     realm.add(opinListElem, update: true)
-                    print("[opinListElem] save in Realm done!")
                 }
                 
                 timerUpdateSelfLocation.invalidate()

@@ -360,10 +360,8 @@ extension PinDetailViewController {
             opinListElem.pinLat = opinLat
             opinListElem.pinLon = opinLon
             opinListElem.pinTime = opinTime
-            print("[opinListElem] \(opinListElem)")
             try! realm.write {
                 realm.add(opinListElem, update: true)
-                print("[opinListElem] save in Realm done!")
                 self.buttonBackToPinLists.isEnabled = true
             }
         }

@@ -96,9 +96,9 @@ extension String {
             username = "@\(self.substring(with: match))"
             endIndex = username.characters.count + 8
         }
-        else {
-            print("parse formatPinCommentsContent fails")
-        }
+//        else {
+//            print("parse formatPinCommentsContent fails")
+//        }
         
         let index = self.index(self.startIndex, offsetBy: endIndex)
         let restContent = " \(self.substring(from: index))"

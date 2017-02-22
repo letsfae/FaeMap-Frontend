@@ -214,6 +214,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
         initPinBasicInfo()
         checkPinStatus()
+        self.delegate?.disableSelfMarker(yes: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -544,13 +545,14 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         let keyboardHeight = keyboardRectangle.height
         
         UIView.animate(withDuration: 0.3, animations: {
-            self.toolbarDistanceToBottom.constant = -keyboardHeight
-            self.view.setNeedsUpdateConstraints()
-        }, completion: {(done: Bool) in
             if self.isKeyboardInThisView {
                 self.tableCommentsForPin.frame.size.height = screenHeight - 155 - keyboardHeight
                 self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - keyboardHeight
             }
+            self.toolbarDistanceToBottom.constant = -keyboardHeight
+            self.view.setNeedsUpdateConstraints()
+        }, completion: {(done: Bool) in
+            
         })
     }
     
@@ -752,7 +754,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard(UIButton())
-        
+        buttonKeyBoard.tag = 1
         // adjust position for extend view (mingjie jin)
         toolBarExtendView.frame.origin.y -= 258
     }

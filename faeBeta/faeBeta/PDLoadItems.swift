@@ -19,7 +19,7 @@ extension PinDetailViewController {
         subviewTable.backgroundColor = UIColor.white
         subviewTable.center.y -= screenHeight
         self.view.addSubview(subviewTable)
-        subviewTable.layer.zPosition = 1
+        subviewTable.layer.zPosition = 61
         subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
         subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         subviewTable.layer.shadowOpacity = 0.3

@@ -93,7 +93,6 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.center.y -= screenHeight
                 self.draggingButtonSubview.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
-                self.delegate?.disableSelfMarker(yes: true)
             })
         }
     }
@@ -130,7 +129,6 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             replyToUser = ""
             lableTextViewPlaceholder.text = "Write a Comment..."
-            self.delegate?.disableSelfMarker(yes: false)
             endEdit()
             sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
@@ -149,6 +147,7 @@ extension PinDetailViewController {
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
+                self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
@@ -179,6 +178,7 @@ extension PinDetailViewController {
                 self.subviewInputToolBar.isHidden = false
             }
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
+            self.subviewTable.frame.size.height = screenHeight - 65
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
         }
@@ -230,9 +230,9 @@ extension PinDetailViewController {
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
+            self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
-                self.delegate?.disableSelfMarker(yes: true)
                 self.tableCommentsForPin.reloadData()
             }
         })
@@ -241,7 +241,6 @@ extension PinDetailViewController {
     // When clicking dragging button in pin detail window
     func actionDraggingThisPin(_ sender: UIButton) {
         if sender.tag == 1 {
-            self.delegate?.disableSelfMarker(yes: false)
             sender.tag = 0
             buttonPinAddComment.tag = 0
             textviewPinDetail.isScrollEnabled = true
@@ -252,6 +251,7 @@ extension PinDetailViewController {
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
+                self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
@@ -318,10 +318,9 @@ extension PinDetailViewController {
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
+            self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
-                self.delegate?.disableSelfMarker(yes: true)
-                
                 self.tableCommentsForPin.reloadData()
             }
         })
