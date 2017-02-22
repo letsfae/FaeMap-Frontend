@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import RealmSwift
 
 class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -21,6 +23,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showGenderAge()
         firstTimeLogin()
     }
     
@@ -29,6 +32,39 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         UIView.animate(withDuration: 0.3, animations: {
             self.dimBackground.alpha = 1
         }, completion: nil)
+    }
+    
+    func showGenderAge() {
+        let updateGenderAge = FaeUser()
+        updateGenderAge.whereKey("show_gender", value: "true")
+        updateGenderAge.whereKey("show_age", value: "true")
+        updateGenderAge.updateNameCard { (status, message) in
+            if status / 100 == 2 {
+                print("[showGenderAge] Successfully update namecard")
+            } else {
+                print("[showGenderAge] Fail to update namecard")
+            }
+        }
+    }
+    
+    func updateDefaultProfilePic() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
+            let selfUserInfoJSON = JSON(message!)
+            if let gender = selfUserInfoJSON["gender"].string {
+                print("[getSelfAccountInfo] gender: \(gender)")
+                userUserGender = gender
+                if gender == "female" {
+                    self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
+                }
+                else {
+                    self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleMen")
+                }
+            }
+        })
     }
 
     func firstTimeLogin() {
@@ -51,12 +87,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         uiViewSetPicture.addSubview(labelTitle)
         
         imageViewAvatar = UIImageView(frame: CGRect(x: 100*screenWidthFactor, y: 88*screenWidthFactor, width: 90*screenWidthFactor, height: 90*screenWidthFactor))
-        if userUserGender == "female" {
-            imageViewAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
-        }
-        else {
-            imageViewAvatar.image = #imageLiteral(resourceName: "PeopleMen")
-        }
+        self.updateDefaultProfilePic()
         imageViewAvatar.layer.cornerRadius = 45*screenWidthFactor
         imageViewAvatar.clipsToBounds = true
         imageViewAvatar.contentMode = .scaleAspectFill
@@ -129,6 +160,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                 if status / 100 == 2 {
                     self.activityIndicator.stopAnimating()
                     self.textFieldDisplayName.resignFirstResponder()
+                    self.updateUserRealm()
                     UIView.animate(withDuration: 0.3, animations: {
                         self.dimBackground.alpha = 0
                     }) { (done: Bool) in
@@ -142,6 +174,16 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     self.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again")
                 }
             }
+        }
+    }
+    
+    func updateUserRealm() {
+        let realm = try! Realm()
+        let userRealm = FaeUserRealm()
+        userRealm.userId = Int(user_id)
+        userRealm.firstUpdate = true
+        try! realm.write {
+            realm.add(userRealm, update: true)
         }
     }
     

@@ -42,9 +42,9 @@ extension FaeMapViewController {
     func updateSelfInfo() {
         let updateNickName = FaeUser()
         updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
-            if(status / 100 == 2){
+            if status / 100 == 2 {
                 let nickNameInfo = JSON(message!)
-                if let str = nickNameInfo["nick_name"].string{
+                if let str = nickNameInfo["nick_name"].string {
                     nickname = str
                 }
             }
