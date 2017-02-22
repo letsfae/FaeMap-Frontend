@@ -128,6 +128,8 @@ extension PinDetailViewController {
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
         if sender.tag == 1 {
+            replyToUser = ""
+            lableTextViewPlaceholder.text = "Write a Comment..."
             self.delegate?.disableSelfMarker(yes: false)
             endEdit()
             sender.tag = 0

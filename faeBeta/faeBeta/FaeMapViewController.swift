@@ -373,7 +373,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 reloadSelfPosAnimation()
             }
             refreshMap(pins: true, users: true, places: true, placesAll: true)
-            
         }
         
         // userStatus == 5, invisible

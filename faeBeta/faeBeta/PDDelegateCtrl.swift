@@ -93,7 +93,8 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
                 self.subviewInputToolBar.isHidden = false
                 self.inputToolbar.contentView.textView.text = ""
                 self.inputToolbar.contentView.textView.becomeFirstResponder()
-                self.lableTextViewPlaceholder.isHidden = true
+//                self.lableTextViewPlaceholder.isHidden = true
+                self.lableTextViewPlaceholder.text = "@\(userN):"
             }
             let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
                 self.actionReportThisPin(self.buttonReportOnPinDetail)

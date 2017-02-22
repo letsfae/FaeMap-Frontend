@@ -536,7 +536,8 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
     }
     
-    func keyboardWillShow(_ notification: Notification){
+    func keyboardWillShow(_ notification: Notification) {
+        
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
@@ -548,6 +549,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }, completion: {(done: Bool) in
             if self.isKeyboardInThisView {
                 self.tableCommentsForPin.frame.size.height = screenHeight - 155 - keyboardHeight
+                self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - keyboardHeight
             }
         })
     }
@@ -560,6 +562,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func keyboardWillHide(_ notification: Notification) {
         if self.isKeyboardInThisView {
             self.tableCommentsForPin.frame.size.height = screenHeight - 155
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
         }
         UIView.animate(withDuration: 0.3, animations: {
             self.toolbarDistanceToBottom.constant = 0

@@ -50,7 +50,6 @@ extension PinDetailViewController {
                     print("Successfully comment this pin!")
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     self.getPinComments("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
-                    self.tableCommentsForPin.reloadData()
                 }
                 else {
                     print("Fail to comment this pin!")
