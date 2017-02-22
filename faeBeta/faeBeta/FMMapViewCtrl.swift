@@ -230,6 +230,10 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     pinDetailVC.pinStatus = status
                 }
                 
+                if let pinState = pinLoc["status"].string {
+                    pinDetailVC.pinStateEnum = self.selectPinState(pinState: pinState)
+                }
+                
                 // for opened pin list
                 pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
                 if let storedList = readByKey("openedPinList"){
@@ -313,5 +317,18 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
         }
         return true
+    }
+    
+    func selectPinState(pinState: String) -> PinDetailViewController.PinState {
+        switch pinState {
+        case "hot":
+            return .hot
+        case "read":
+            return .read
+        case "hot and read":
+            return .hotRead
+        default:
+            return .normal
+        }
     }
 }

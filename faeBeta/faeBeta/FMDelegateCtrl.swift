@@ -52,6 +52,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
         var pinData = marker.userData as! [String: AnyObject]
         pinData["status"] = status as AnyObject?
+        marker.userData = pinData
         marker.icon = pinIconSelector(type: type, status: status)
     }
     // PinDetailDelegate

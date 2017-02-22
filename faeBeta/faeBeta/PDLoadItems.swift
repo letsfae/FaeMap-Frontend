@@ -123,7 +123,7 @@ extension PinDetailViewController {
         imageViewHotPin = UIImageView()
         imageViewHotPin.image = #imageLiteral(resourceName: "pinDetailHotPin")
         imageViewHotPin.contentMode = .scaleAspectFill
-        imageViewHotPin.alpha = 0
+        imageViewHotPin.isHidden = true
         uiviewPinDetail.addSubview(imageViewHotPin)
         uiviewPinDetail.addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imageViewHotPin)
         uiviewPinDetail.addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imageViewHotPin)

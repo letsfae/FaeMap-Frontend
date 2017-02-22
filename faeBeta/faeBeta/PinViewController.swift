@@ -154,6 +154,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var lastContentOffset: CGFloat = 0
     
     var isSavedByMe = false
+    
     enum PinType {
         case comment
         case media
@@ -161,7 +162,15 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case place
     }
     var pinTypeEnum: PinType = .media
-    var pinTypeString = ""
+    
+    enum PinState {
+        case normal
+        case read
+        case hot
+        case hotRead
+    }
+    var pinStateEnum: PinState = .normal
+    
     var textViewOriginalHeight: CGFloat = 0 {
         didSet {
             if textviewPinDetail != nil {
@@ -177,7 +186,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
-    var isKeyboardInThisView = true
+    var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
     
     var placeType = "burgers"
     var uiviewPlaceDetail: UIView!
@@ -257,12 +266,28 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         super.didReceiveMemoryWarning()
     }
     
+    func selectPinState(pinState: PinState, pinType: PinType) {
+        switch pinState {
+        case .hot:
+            pinIcon.image = UIImage(named: "hot\(pinType)PD")
+            break
+        case .read:
+            pinIcon.image = UIImage(named: "read\(pinType)PD")
+            break
+        case .hotRead:
+            pinIcon.image = UIImage(named: "hotRead\(pinType)PD")
+            break
+        case .normal:
+            pinIcon.image = UIImage(named: "normal\(pinType)PD")
+            break
+        }
+    }
+    
     func initPinBasicInfo() {
         switch pinTypeEnum {
         case .comment:
             self.pinTypeDecimal = 0
             self.labelPinTitle.text = "Comment"
-            pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
             textViewOriginalHeight = 100
             if scrollViewMedia != nil {
                 scrollViewMedia.isHidden = true
@@ -271,11 +296,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = false
             }
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .media:
             self.pinTypeDecimal = 2
             self.labelPinTitle.text = "Story"
-            pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
             textViewOriginalHeight = 0
             if scrollViewMedia != nil {
                 scrollViewMedia.isHidden = false
@@ -283,13 +308,14 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = true
             }
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .chat_room:
             self.pinTypeDecimal = 1
             self.labelPinTitle.text = "Chat"
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .place:
-            
             break
         }
         labelPinTitle.textAlignment = .center
@@ -558,7 +584,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
-//        self.tableCommentsForPin.scrollToTop(animated: true)
     }
     
     func keyboardWillHide(_ notification: Notification) {

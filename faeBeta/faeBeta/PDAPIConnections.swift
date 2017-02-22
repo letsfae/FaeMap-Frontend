@@ -134,7 +134,14 @@ extension PinDetailViewController {
             readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully read this pin!")
-                    self.pinStatus = "read"
+                    if self.pinStatus == "hot" {
+                        self.pinStatus = "hot and read"
+                        self.pinStateEnum = .hotRead
+                    } else {
+                        self.pinStatus = "read"
+                        self.pinStateEnum = .read
+                    }
+                    self.selectPinState(pinState: self.pinStateEnum, pinType: self.pinTypeEnum)
                     self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
                 }
                 else {
@@ -180,10 +187,14 @@ extension PinDetailViewController {
             }
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imageViewHotPin.isHidden = false
-                self.pinStatus = "hot"
-                if self.pinStatus == "read" {
+                if self.pinStatus == "read" || self.pinStatus == "hot and read" {
                     self.pinStatus = "hot and read"
+                    self.pinStateEnum = .hotRead
+                } else {
+                    self.pinStatus = "hot"
+                    self.pinStateEnum = .hot
                 }
+                self.selectPinState(pinState: self.pinStateEnum, pinType: self.pinTypeEnum)
                 self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
             }
             else {
