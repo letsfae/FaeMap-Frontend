@@ -11,7 +11,7 @@ import SwiftyJSON
 
 protocol PinCommentsCellDelegate: class {
     func showActionSheetFromPinCell(_ username: String) // Reply to this user
-    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+//    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
 }
 
 class PinCommentsCell: UITableViewCell, UITextViewDelegate {
@@ -25,7 +25,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var labelLikeCount: UILabel!
     var labelShareCount: UILabel!
     var buttonForWholeCell: UIButton!
-    var textViewComment: UITextView!
+    var lblContent: UILabel!
     var buttonUpVote: UIButton!
     var buttonDownVote: UIButton!
     var buttonReply: UIButton!
@@ -50,12 +50,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
     func loadCellContent() {
         
-        self.buttonForWholeCell = UIButton()
-        self.buttonForWholeCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
-        self.buttonForWholeCell.addTarget(self, action: #selector(self.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
-        self.addSubview(buttonForWholeCell)
-        self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
-        self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
+//        self.buttonForWholeCell = UIButton()
+//        self.buttonForWholeCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
+//        self.buttonForWholeCell.addTarget(self, action: #selector(self.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
+//        self.addSubview(buttonForWholeCell)
+//        self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
+//        self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
         
         self.imageViewAvatar = UIImageView()
         self.addSubview(self.imageViewAvatar)
@@ -64,17 +64,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         self.imageViewAvatar.contentMode = .scaleAspectFill
         self.addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imageViewAvatar)
         
-        self.textViewComment = UITextView()
-        self.addSubview(self.textViewComment)
-        self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        self.textViewComment.isEditable = false
-        self.textViewComment.isUserInteractionEnabled = false
-        self.textViewComment.textContainerInset = UIEdgeInsets.zero
-        self.textViewComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: textViewComment)
-        self.addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(25)]", options: [], views: imageViewAvatar, textViewComment)
-        self.textViewComment.isScrollEnabled = false
-        self.textViewComment.delegate = self
+        self.lblContent = UILabel()
+        self.addSubview(self.lblContent)
+        self.lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        self.lblContent.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        self.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: lblContent)
+        self.addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(25)]", options: [], views: imageViewAvatar, lblContent)
         
         self.labelUsername = UILabel()
         self.addSubview(self.labelUsername)
@@ -139,9 +134,9 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         }
     }
     
-    func cancelTouchToReplyTimer(_ sender: UIButton) {
-        self.delegate?.cancelTouchToReplyTimerFromPinCell(true)
-    }
+//    func cancelTouchToReplyTimer(_ sender: UIButton) {
+//        self.delegate?.cancelTouchToReplyTimerFromPinCell(true)
+//    }
     
     func upVoteThisComment(_ sender: UIButton) {
         if voteType == .up || pinCommentID == "" {

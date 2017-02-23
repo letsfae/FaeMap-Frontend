@@ -39,36 +39,29 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     // move up the input bar
     func moveUpInputBar()
-    
     // Show the alert to warn user only 10 images can be selected
     func showAlertView(withWarning text: String)
-    
     /// send the sticker image with specific name
     ///
     /// - parameter name: the name of the sticker
-    func sendStickerWithImageName(_ name : String)
-    
-    
+    func sendStickerWithImageName(_ name: String)
     /// send multiple images from quick image picker
     ///
     /// - parameter images: an array of selected images
-    func sendImages(_ images:[UIImage])
-    
+    func sendImages(_ images: [UIImage])
     // present the complete photo album
     // should present CustomCollectionViewController
     func showFullAlbum()
-    
     /// need to implement this method if sending audio is needed
     ///
     /// - parameter data: the audio data to send
-    @objc optional func sendAudioData(_ data:Data)
-    
+    @objc optional func sendAudioData(_ data: Data)
     // end any editing. Especially the input toolbar textView.
     @objc optional func endEdit()
-    
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
-    
     @objc optional func sendGifData(_ data: Data)
+    @objc optional func appendEmoji(_ name: String)
+    @objc optional func deleteLastEmoji()
 }
 
 enum FAEChatToolBarContentType: UInt32 {
@@ -79,7 +72,7 @@ enum FAEChatToolBarContentType: UInt32 {
 }
 
 /// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
-class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
+class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate {
 
     //MARK: - Properties
     var keyboardShow = false // false: keyboard is hide
@@ -643,6 +636,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func appendEmojiWithImageName(_ name: String)
     {
+        print("[appendEmojiWithImageName]")
+        self.delegate.appendEmoji!(name)
         if inputToolbar != nil{
             inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
         }
@@ -651,6 +646,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // delete one emoji from the text view , if there's no emoji,then delete one character
     func deleteEmoji()
     {
+        print("[deleteEmoji]")
+        self.delegate.deleteLastEmoji!()
         if inputToolbar != nil{
             let previous = inputToolbar.contentView.textView.text!
             inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()

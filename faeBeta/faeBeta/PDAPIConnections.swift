@@ -134,7 +134,7 @@ extension PinDetailViewController {
             readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully read this pin!")
-                    if self.pinStatus == "hot" {
+                    if self.pinStatus == "hot" || self.pinStatus == "hot and read" {
                         self.pinStatus = "hot and read"
                         self.pinStateEnum = .hotRead
                     } else {
@@ -205,7 +205,6 @@ extension PinDetailViewController {
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnPinDetail.removeAll()
-        self.tableCommentsForPin.reloadData()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
@@ -240,11 +239,10 @@ extension PinDetailViewController {
                     self.dictCommentsOnPinDetail.insert(dicCell, at: 0)
                 }
             }
+            self.tableCommentsForPin.reloadData()
             if sendMessageFlag {
-                print("DEBUG RELOAD DATA")
-                print(self.dictCommentsOnPinDetail.count)
-                self.numberOfCommentTableCells = self.dictCommentsOnPinDetail.count
-                self.tableCommentsForPin.reloadData()
+                let indexPath = IndexPath(row: self.dictCommentsOnPinDetail.count - 1, section: 0)
+                self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
         }
     }

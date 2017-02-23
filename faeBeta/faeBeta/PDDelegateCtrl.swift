@@ -67,18 +67,35 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func showActionSheetFromPinCell(_ username: String) {
-        if inputToolbar != nil {
-            self.inputToolbar.contentView.textView.resignFirstResponder()
+        self.replyToUser = "<a>@\(username)</a> "
+        let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
+        menu.view.tintColor = UIColor.faeAppRedColor()
+        let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
+            self.loadInputToolBar()
+            self.inputToolbar.isHidden = false
+            self.subviewInputToolBar.isHidden = false
+            self.inputToolbar.contentView.textView.text = ""
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+            //                self.lableTextViewPlaceholder.isHidden = true
+            self.lableTextViewPlaceholder.text = "@\(username):"
         }
-        let infoDict: [String: AnyObject] = ["argumentInt": username as AnyObject]
-        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(PinDetailViewController.showActionSheetWithTimer), userInfo: infoDict, repeats: false)
+        let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
+            self.actionReportThisPin(self.buttonReportOnPinDetail)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
+            
+        }
+        menu.addAction(writeReply)
+        menu.addAction(report)
+        menu.addAction(cancel)
+        self.present(menu, animated: true, completion: nil)
     }
     
-    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) {
-        if touchToReplyTimer != nil {
-            touchToReplyTimer.invalidate()
-        }
-    }
+//    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) {
+//        if touchToReplyTimer != nil {
+//            touchToReplyTimer.invalidate()
+//        }
+//    }
     
     func showActionSheetWithTimer(_ timer: Timer) {
         if let usernameInfo = timer.userInfo as? Dictionary<String, AnyObject> {

@@ -37,7 +37,6 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.pinType = "\(self.pinTypeEnum)"
             let dictCell = JSON(dictCommentsOnPinDetail[indexPath.row])
             if let pinCommentID = dictCell["pin_comment_id"].int {
-//                print("[tableCommentsForPin] pinComment: \(pinCommentID)")
                 cell.pinCommentID = "\(pinCommentID)"
             }
             if let voteType = dictCell["vote_type"].string {
@@ -71,7 +70,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             }
             if let content = dictCell["content"].string {
                 let attributedContent = content.formatPinCommentsContent()
-                cell.textViewComment.attributedText = attributedContent
+                cell.lblContent.attributedText = attributedContent
             }
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero

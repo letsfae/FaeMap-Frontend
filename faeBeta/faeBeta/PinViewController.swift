@@ -73,7 +73,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var labelPinVoteCount: UILabel!
     var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
-    var numberOfCommentTableCells: Int = 0
     var pinDetailLiked = false
     var pinDetailShowed = false
     var pinIDPinDetailView: String = "-999"
@@ -439,6 +438,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
         inputToolbar.contentView.textView.delaysContentTouches = false
         
+        
         //should button to open anonymous extend view (mingjie jin)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousNormal"), for: UIControlState.normal)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousHighlight"), for: UIControlState.highlighted)
@@ -744,6 +744,28 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func showFullAlbum() {
         
+    }
+    
+    func appendEmoji(_ name: String) {
+        print("[appendEmojiWithImageName]")
+        if inputToolbar != nil{
+            buttonSend.isEnabled = true
+            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
+            self.lableTextViewPlaceholder.isHidden = true
+            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+        }
+    }
+    func deleteLastEmoji() {
+        print("[deleteEmoji]")
+        if inputToolbar != nil{
+            let previous = inputToolbar.contentView.textView.text!
+            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
+            if inputToolbar.contentView.textView.text == "" {
+                self.lableTextViewPlaceholder.isHidden = false
+                buttonSend.isEnabled = false
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+            }
+        }
     }
     
     func endEdit() {

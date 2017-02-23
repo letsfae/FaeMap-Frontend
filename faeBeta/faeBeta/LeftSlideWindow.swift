@@ -27,6 +27,7 @@ extension FaeMapViewController {
         else {
             leftMenuVC.displayName = "someone"
         }
+        self.selfMarker.map = nil
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)

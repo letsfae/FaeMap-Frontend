@@ -86,8 +86,6 @@ extension String {
     
     func formatPinCommentsContent() -> NSMutableAttributedString {
         
-        let regularColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        
 //        var content = "<a>@maplestory06</a> comment and like testing"
         var username = ""
         var endIndex = 0
@@ -104,11 +102,11 @@ extension String {
         let restContent = " \(self.substring(from: index))"
         
         let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
-        let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
+//        let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
-        let regularString = NSMutableAttributedString(string: restContent, attributes: attrsRegular)
-        
+//        let regularString = NSMutableAttributedString(string: restContent, attributes: attrsRegular)
+        let regularString = restContent.convertStringWithEmoji()
         usernameString.append(regularString)
         
         return usernameString
@@ -117,7 +115,6 @@ extension String {
     func stringByDeletingLastEmoji() -> String {
         var previous = self
         var finalString = ""
-        
         
         if previous.characters.count > 0 && previous.characters.last != "]"{
             finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
@@ -152,11 +149,11 @@ extension String {
         var endIndex = 0
         var finalText = ""
         let retString = NSMutableAttributedString()
-        var isProcessed = false
+//        var isProcessed = false
         
         while true {
             if let range = content.range(of: "[") {
-                isProcessed = true
+//                isProcessed = true
                 let tmpContent = content
                 startIndex = content.distance(from: content.startIndex, to: range.lowerBound)
                 let index = content.index(content.startIndex, offsetBy: startIndex)
@@ -166,7 +163,7 @@ extension String {
                 retString.append(attrStringWithString)
             }
             if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
-                isProcessed = true
+//                isProcessed = true
                 let tmpContent = content
                 emojiText = "\(content.substring(with: match))"
                 print("Target: \(emojiText)")
@@ -189,10 +186,8 @@ extension String {
             }
         }
         finalText = finalText + content
-        if !isProcessed {
-            let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
-            retString.append(attrStringWithString)
-        }
+        let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        retString.append(attrStringWithString)
         return retString
     }
 }

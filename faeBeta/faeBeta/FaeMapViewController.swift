@@ -287,11 +287,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func checkFirstLoginInRealm() {
-        let realm = try! Realm()
-        if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
-            if !userRealm.firstUpdate {
-                print("[checkFirstLoginInRealm] yes it is")
-                loadFirstLoginVC()
+        if user_id != nil {
+            let realm = try! Realm()
+            if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
+                if !userRealm.firstUpdate {
+                    print("[checkFirstLoginInRealm] yes it is")
+                    loadFirstLoginVC()
+                }
             }
         }
     }

@@ -117,5 +117,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
-    
+    // LeftSlidingMenuDelegate
+    func reloadSelfPosition() {
+        reloadSelfPosAnimation()
+    }
 }

@@ -15,6 +15,7 @@ protocol LeftSlidingMenuDelegate: class {
     func jumpToMoodAvatar()
     func logOutInLeftMenu()
     func jumpToFaeUserMainPage()
+    func reloadSelfPosition()
 }
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -224,7 +225,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.backgroundColorViewDown.frame.origin.x = self.sizeTo
                     self.buttonBackground.alpha = 0
                 }, completion: {(done: Bool) in
-                    self.dismiss(animated: false, completion: nil)
+                    self.dismiss(animated: false, completion: {
+                        self.delegate?.reloadSelfPosition()
+                    })
                 })
             }
             else {
@@ -339,6 +342,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             self.backgroundColorViewDown.center.x -= 290
         }) { (done: Bool) in
             self.dismiss(animated: false, completion: {
+                self.delegate?.reloadSelfPosition()
                 switch self.tableSelections {
                 case .mapBoard:
                     self.tableSelections = .none
