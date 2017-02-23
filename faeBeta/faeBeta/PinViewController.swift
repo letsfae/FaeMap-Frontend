@@ -441,7 +441,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
         //should button to open anonymous extend view (mingjie jin)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousNormal"), for: UIControlState.normal)
-        //inputToolbar.contentView.heartButton.frame = CGRect(x: 273, y: 14, width: 40, height: 40)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousHighlight"), for: UIControlState.highlighted)
         inputToolbar.contentView.heartButton.addTarget(self, action:#selector(extendButtonAction(_:)), for: UIControlEvents.touchUpInside)
         inputToolbar.contentView.heartButtonHidden = false
@@ -780,8 +779,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         
         // adjust position for extend view (mingjie jin)
-        toolBarExtendView.frame.origin.y += 258
-        
+        if(screenHeight == 736) {
+            toolBarExtendView.frame.origin.y += 271
+        } else {
+            toolBarExtendView.frame.origin.y += 258
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -789,7 +791,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.showKeyboard(UIButton())
         buttonKeyBoard.tag = 1
         // adjust position for extend view (mingjie jin)
-        toolBarExtendView.frame.origin.y -= 258
+        if(screenHeight == 736) {
+            toolBarExtendView.frame.origin.y -= 271
+        } else {
+            toolBarExtendView.frame.origin.y -= 258
+        }
     }
     
     //MARK: - observe key path
@@ -825,7 +831,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         toolBarExtendView.backgroundColor = UIColor.white
         let anonyLabel = UILabel(frame: CGRect(x: screenWidth - 115, y: 14, width: 100, height: 25))
         anonyLabel.text = "Anonymous"
-        anonyLabel.font = UIFont(name: "Avenir Next", size: 18)
+        anonyLabel.font = UIFont(name: "AvenirNext-Medium", size: 18)
         anonyLabel.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1)
         anonyLabel.textAlignment = .center
         toolBarExtendView.addSubview(anonyLabel)

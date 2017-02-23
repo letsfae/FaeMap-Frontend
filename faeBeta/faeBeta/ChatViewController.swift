@@ -13,6 +13,7 @@ import FirebaseDatabase
 //import Photos
 import MobileCoreServices
 import CoreMedia
+import GooglePlaces
 import AVFoundation
 
 
@@ -98,6 +99,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // heart animation related
     var animatingHeart: UIImageView!
     var animHeartDic: [CAAnimation : UIImageView] = [CAAnimation : UIImageView]()
+    
+    // locationExtendView
+    var locExtendView = LocationExtendView()
     
     //typing indicator
     //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
@@ -195,6 +199,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
+        
+        self.view.addSubview(locExtendView)
+//        locExtendView.isHidden = true
+        
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -356,12 +364,28 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         resetToolbarButtonIcon()
         self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.toolbarContentView.showKeyboard()
+        UIView.animate(withDuration: 0.2, animations: {
+            let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
+            if(screenHeight == 736) {
+                self.locExtendView.frame.origin.y = screenHeight - 271 - extendHeight - 90 - 64
+//                self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+//                self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+            } else {
+                self.locExtendView.frame.origin.y = screenHeight - 258 - extendHeight - 90 - 64
+//                self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 258 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+//                self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+            }
+            
+        }, completion:{ (Bool) -> Void in
+        })
         scrollToBottom(true)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
+        
     }
     
     func showCamera() {
         view.endEditing(true)
+        locExtendView.isHidden = true
         UIView.animate(withDuration: 0.3, animations: {
              self.closeToolbarContentView()
             }, completion:{ (Bool) -> Void in
@@ -384,6 +408,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showLibrary()
+        locExtendView.isHidden = true
         moveUpInputBarContentView(animated)
     }
     
@@ -455,10 +480,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if(scrollView == collectionView){
             let scrollViewCurrentOffset = scrollView.contentOffset.y
-            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0 && (toolbarContentView.mediaContentShow) && !isClosingToolbarContentView && scrollView.isScrollEnabled == true){
+            if(scrollViewCurrentOffset - scrollViewOriginOffset < 0
+                && (toolbarContentView.mediaContentShow)
+                && !isClosingToolbarContentView && scrollView.isScrollEnabled == true){
                 self.toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset ), screenHeight)
 
                 self.inputToolbar.frame.origin.y = min(screenHeight - 273 - self.inputToolbar.frame.height - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - self.inputToolbar.frame.height - 64)
+                
+                locExtendView.frame.origin.y = screenHeight - 271 - 76 - 90 - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset)
             }
             if scrollViewCurrentOffset < 1 && !isLoadingPreviousMessages{
                 loadPreviousMessages()
@@ -503,12 +532,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
                 self.toolbarContentView.frame.origin.y = screenHeight - 271
+                self.locExtendView.frame.origin.y = screenHeight - 271 - 64 - 76 - 90
+                
             }, completion:{ (Bool) -> Void in
                 self.collectionView.isScrollEnabled = true
             })
         }else{
             self.moveUpInputBar()
             self.toolbarContentView.frame.origin.y = screenHeight - 271
+            self.locExtendView.frame.origin.y = screenHeight - 271 - 64 - 76 - 90
             self.collectionView.isScrollEnabled = true
         }
         scrollToBottom(animated)
@@ -521,11 +553,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let xPosition = self.inputToolbar.frame.origin.x
         let yPosition = screenHeight - 271 - height - 64
         UIView.setAnimationsEnabled(false)
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height, right: 0.0)
+        let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height + extendHeight, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height + extendHeight, right: 0.0)
         UIView.setAnimationsEnabled(true)
         //        self.inputToolbar.frame.origin.y = yPosition
         self.inputToolbar.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+//        if(locExtendView.frame.origin.y == )
+//        locExtendView.frame.origin.y -= 271
     }
     
     func moveDownInputBar() {
@@ -534,9 +569,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
         let yPosition = screenHeight - height - 64
-        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height, right: 0.0)
+        let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
+        collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
         self.inputToolbar.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+//        if(locExtendView.frame.origin.y != screenHeight - 64 - 76 - 90) {
+            locExtendView.frame.origin.y = screenHeight - 64 - 76 - 90
+//        }
+    }
+    
+    func adjustCollectionScroll() {
+        
     }
 
     
@@ -788,7 +831,38 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
                 print("got snap image")
-                sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+                //sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+                locExtendView.setAvator(image: screenShotImage)
+                let geocoder = GMSGeocoder()
+                geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(mapview.camera.target.latitude, mapview.camera.target.longitude)) { (response, error) in
+                    
+                    if(error == nil) {
+                        var texts : [String] = []
+                        texts.append((response?.firstResult()?.thoroughfare)!)
+                        var cityText = response?.firstResult()?.locality
+                        
+                        if(response?.firstResult()?.administrativeArea != nil) {
+                            cityText = cityText! + ", " + (response?.firstResult()?.administrativeArea)!
+                        }
+                        
+                        if(response?.firstResult()?.postalCode != nil) {
+                            cityText = cityText! + " " + (response?.firstResult()?.postalCode)!
+                        }
+                        texts.append(cityText!)
+                        texts.append((response?.firstResult()?.country)!)
+                        
+                        self.locExtendView.setLabel(texts: texts)
+                        self.locExtendView.isHidden = false
+                        let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
+                        self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+                        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+                        self.scrollToBottom(true)
+                        
+                    } else {
+                        print(error ?? "ohhhh")
+                    }
+                }
+                
             }
         }
     }
