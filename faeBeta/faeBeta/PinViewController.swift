@@ -802,7 +802,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         toolBarExtendView.backgroundColor = UIColor.white
         let anonyLabel = UILabel(frame: CGRect(x: screenWidth - 115, y: 14, width: 100, height: 25))
         anonyLabel.text = "Anonymous"
-        anonyLabel.font = UIFont(name: "Avenir Next", size: 18)
+        anonyLabel.font = UIFont(name: "AvenirNext-Medium", size: 18)
         anonyLabel.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 1)
         anonyLabel.textAlignment = .center
         toolBarExtendView.addSubview(anonyLabel)

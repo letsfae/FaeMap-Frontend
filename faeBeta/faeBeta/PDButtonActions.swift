@@ -163,6 +163,8 @@ extension PinDetailViewController {
                     }
                 })
             }
+            toolBarExtendView.isHidden = true
+            inputToolbar.contentView.heartButton.setImage(UIImage(named : "anonymousNormal"), for: .normal)
             return
         }
         sender.tag = 1
