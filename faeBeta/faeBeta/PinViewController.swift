@@ -619,6 +619,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func showCamera() {
+        buttonKeyBoard.tag = 0
         view.endEditing(true)
         UIView.animate(withDuration: 0.3, animations: {
             self.closeToolbarContentView()
@@ -629,19 +630,25 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func showStikcer() {
+        buttonKeyBoard.tag = 0
         resetToolbarButtonIcon()
         buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
+        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
+        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
     }
     
     func showLibrary() {
+        buttonKeyBoard.tag = 0
         resetToolbarButtonIcon()
         buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showLibrary()
         moveUpInputBarContentView(animated)
+        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
+        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
     }
     
     func sendMessageButtonTapped() {
@@ -680,7 +687,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func moveUpInputBarContentView(_ animated: Bool)
     {
-        if(animated){
+        if animated {
             self.toolbarContentView.frame.origin.y = screenHeight
             UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
@@ -690,7 +697,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                     
                     
             })
-        }else{
+        } else {
             self.moveUpInputBar()
             self.toolbarContentView.frame.origin.y = screenHeight - 271
         }
@@ -729,9 +736,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func sendStickerWithImageName(_ name : String) {
-        
+        print("[sendStickerWithImageName] name: \(name)")
     }
-    func sendImages(_ images:[UIImage]) {
+    
+    func sendImages(_ images: [UIImage]) {
         
     }
     

@@ -17,7 +17,7 @@ protocol CreatePinTextViewDelegate:class {
     /// - Parameters:
     ///   - textView: the textView using
     ///   - num: the number of chars entered
-    func textView(_ textView:CreatePinTextView, numberOfCharactersEntered num: Int)
+    func textView(_ textView: CreatePinTextView, numberOfCharactersEntered num: Int)
 }
 
 class CreatePinTextView: UITextView, UITextViewDelegate {

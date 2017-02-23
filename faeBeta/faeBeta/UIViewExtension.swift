@@ -20,11 +20,3 @@ extension UIView {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: options, metrics: nil, views: viewDictionary))
     }
 }
-
-extension UITableView {
-    func reloadData(completion: @escaping ()->()) {
-        UIView.animate(withDuration: 0, animations:
-            { self.reloadData()
-        }) { _ in completion() }
-    }
-}

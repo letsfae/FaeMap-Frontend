@@ -121,7 +121,7 @@ extension String {
         
         if previous.characters.count > 0 && previous.characters.last != "]"{
             finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
-        }else if previous.characters.count > 0 && previous.characters.last == "]"{
+        } else if previous.characters.count > 0 && previous.characters.last == "]"{
             var i = 1
             var findEmoji = false
             while( i <= previous.characters.count){

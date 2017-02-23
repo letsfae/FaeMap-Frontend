@@ -232,7 +232,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         buttonFakeTransparentClosingView.alpha = 0
-        
+        reloadSelfPosAnimation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -289,7 +289,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func checkFirstLoginInRealm() {
         let realm = try! Realm()
         if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
-            print("[checkFirstLoginInRealm]\n\(userRealm)")
             if !userRealm.firstUpdate {
                 print("[checkFirstLoginInRealm] yes it is")
                 loadFirstLoginVC()
