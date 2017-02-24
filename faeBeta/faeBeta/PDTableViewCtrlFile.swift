@@ -27,8 +27,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.pinCommentsCount == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinEmptyCell", for: indexPath) as! PDEmptyCell
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
+            cell.separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
@@ -42,16 +41,16 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             if let voteType = dictCell["vote_type"].string {
                 if voteType == "up" {
                     cell.voteType = .up
-                    cell.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+                    cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
                 }
                 else if voteType == "down" {
                     cell.voteType = .down
-                    cell.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+                    cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
             }
             if let upVoteCount = dictCell["vote_up_count"].int {
                 if let downVoteCount = dictCell["vote_down_count"].int {
-                    cell.labelVoteCount.text = "\(upVoteCount-downVoteCount)"
+                    cell.lblVoteCount.text = "\(upVoteCount-downVoteCount)"
                 }
             }
             if let userID = dictCell["user_id"].int {
@@ -59,18 +58,27 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 getUserName.getNamecardOfSpecificUser("\(userID)") {(status, message) in
                     let userProfile = JSON(message!)
                     if let displayName = userProfile["nick_name"].string {
-                        cell.labelUsername.text = "\(displayName)"
+                        cell.lblUsername.text = "\(displayName)"
                     }
                 }
-                let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
-                cell.imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
+//                let stringHeaderURL = "\(baseURL)/files/users/\(userID)/avatar"
+//                cell.imgAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
             }
             if let date = dictCell["date"].string {
-                cell.labelTimestamp.text = date
+                cell.lblTime.text = date
             }
             if let content = dictCell["content"].string {
-                let attributedContent = content.formatPinCommentsContent()
-                cell.lblContent.attributedText = attributedContent
+                let stickerName = content.getFaeStickerName()
+                if stickerName != "" {
+                    cell.isSticker = true
+                    cell.imgSticker.image = UIImage(named: stickerName)
+                } else {
+                    cell.isSticker = false
+                    let attributedContent = content.formatPinCommentsContent()
+                    cell.lblContent.attributedText = attributedContent
+                }
+                cell.updateLayout()
+                cell.updateConstraints()
             }
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero
@@ -78,18 +86,18 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.pinCommentsCount == 0 {
-            return screenHeight - 436
-        } else {
-            return 140
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if self.pinCommentsCount == 0 {
+//            return screenHeight - 436 * screenHeightFactor
+//        } else {
+//            return 140
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == self.tableCommentsForPin {
             let cell = tableView.cellForRow(at: indexPath) as! PinCommentsCell
-            if let usernameInCell = cell.labelUsername.text {
+            if let usernameInCell = cell.lblUsername.text {
                 self.actionShowActionSheet(usernameInCell)
             }
         }

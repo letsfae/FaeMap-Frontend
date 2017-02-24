@@ -136,7 +136,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
+//    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     //Change by Yao, abandon fileIdString
     
     var imageViewHotPin: UIImageView!
@@ -261,8 +261,53 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         UIApplication.shared.statusBarStyle = .default
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    //MARK: - toolbar Content view delegate
+    func showAlertView(withWarning text:String) {
+        
+    }
+    
+    func sendStickerWithImageName(_ name : String) {
+        print("[sendStickerWithImageName] name: \(name)")
+        let stickerMessage = "<faeSticker>\(name)</faeSticker>"
+        sendMessage(stickerMessage, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        buttonSend.isEnabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        UIView.animate(withDuration: 0.3) { 
+            self.tableCommentsForPin.frame.size.height = screenHeight - 155
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
+            self.closeToolbarContentView()
+        }
+        
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        
+    }
+    
+    func showFullAlbum() {
+        
+    }
+    
+    func appendEmoji(_ name: String) {
+        print("[appendEmojiWithImageName]")
+        if inputToolbar != nil{
+            buttonSend.isEnabled = true
+            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
+            self.lableTextViewPlaceholder.isHidden = true
+            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+        }
+    }
+    func deleteLastEmoji() {
+        print("[deleteEmoji]")
+        if inputToolbar != nil{
+            let previous = inputToolbar.contentView.textView.text!
+            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
+            if inputToolbar.contentView.textView.text == "" {
+                self.lableTextViewPlaceholder.isHidden = false
+                buttonSend.isEnabled = false
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+            }
+        }
     }
     
     func selectPinState(pinState: PinState, pinType: PinType) {
@@ -496,31 +541,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         })
     }
     
-    // Disable a button, make it unclickable
-    func disableTheButton(_ button: UIButton) {
-        let origImage = button.imageView?.image
-        let tintedImage = origImage?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        button.setImage(tintedImage, for: UIControlState())
-        button.tintColor = UIColor.lightGray
-        button.isUserInteractionEnabled = false
-    }
-    
-    // Hide pin detail window
-    func hidePinDetail() {
-        if uiviewPinDetail != nil {
-            if pinDetailShowed {
-                actionBackToMap(self.buttonPinBackToMap)
-                UIView.animate(withDuration: 0.5, animations: ({
-                    
-                }), completion: { (done: Bool) in
-                    if done {
-                        
-                    }
-                })
-            }
-        }
-    }
-    
     func animateHeart() {
         buttonPinLike.tag = 0
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
@@ -729,44 +749,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.appWillEnterForeground()
     }
     
-    //MARK: - toolbar Content view delegate
-    func showAlertView(withWarning text:String) {
-        
-    }
     
-    func sendStickerWithImageName(_ name : String) {
-        print("[sendStickerWithImageName] name: \(name)")
-    }
-    
-    func sendImages(_ images: [UIImage]) {
-        
-    }
-    
-    func showFullAlbum() {
-        
-    }
-    
-    func appendEmoji(_ name: String) {
-        print("[appendEmojiWithImageName]")
-        if inputToolbar != nil{
-            buttonSend.isEnabled = true
-            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
-            self.lableTextViewPlaceholder.isHidden = true
-            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
-        }
-    }
-    func deleteLastEmoji() {
-        print("[deleteEmoji]")
-        if inputToolbar != nil{
-            let previous = inputToolbar.contentView.textView.text!
-            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
-            if inputToolbar.contentView.textView.text == "" {
-                self.lableTextViewPlaceholder.isHidden = false
-                buttonSend.isEnabled = false
-                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
-            }
-        }
-    }
     
     func endEdit() {
         self.view.endEditing(true)

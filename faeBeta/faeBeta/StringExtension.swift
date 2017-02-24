@@ -20,8 +20,8 @@ extension String {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
             let localTimeZone = NSTimeZone.local.abbreviation()
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            print("DEBUG TIMEE")
-            print(elapsed)
+//            print("DEBUG TIMEE")
+//            print(elapsed)
             if localTimeZone != nil {
                 dateFormatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
                 let normalFormat = dateFormatter.string(from: myDate!)
@@ -102,14 +102,20 @@ extension String {
         let restContent = " \(self.substring(from: index))"
         
         let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
-//        let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
-//        let regularString = NSMutableAttributedString(string: restContent, attributes: attrsRegular)
         let regularString = restContent.convertStringWithEmoji()
         usernameString.append(regularString)
         
         return usernameString
+    }
+    
+    func getFaeStickerName() -> String {
+        var stickerName = ""
+        if let match = self.range(of: "(?<=<faeSticker>)[^.]+(?=</faeSticker>)", options: .regularExpression) {
+            stickerName = "\(self.substring(with: match))"
+        }
+        return stickerName
     }
     
     func stringByDeletingLastEmoji() -> String {
@@ -166,11 +172,11 @@ extension String {
 //                isProcessed = true
                 let tmpContent = content
                 emojiText = "\(content.substring(with: match))"
-                print("Target: \(emojiText)")
+//                print("Target: \(emojiText)")
                 endIndex = emojiText.characters.count+2
                 let index = tmpContent.index(tmpContent.startIndex, offsetBy: endIndex)
                 content = "\(tmpContent.substring(from: index))"
-                print("  Rest: \(content)")
+//                print("  Rest: \(content)")
                 finalText = "\(finalText)\(emojiText)"
                 
                 let emojiImage = UIImage(named: "\(emojiText)")
@@ -181,7 +187,7 @@ extension String {
                 retString.append(attrStringWithImage)
             }
             else {
-                print("  Done!")
+//                print("  Done!")
                 break
             }
         }

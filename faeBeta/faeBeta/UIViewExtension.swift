@@ -19,4 +19,14 @@ extension UIView {
         }
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: options, metrics: nil, views: viewDictionary))
     }
+    
+    func returnConstraintsWithFormat(_ format: String, options: NSLayoutFormatOptions, views: UIView...) -> [NSLayoutConstraint] {
+        var viewDictionary = [String: UIView]()
+        for (index, view) in views.enumerated() {
+            let key = "v\(index)"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            viewDictionary[key] = view
+        }
+        return NSLayoutConstraint.constraints(withVisualFormat: format, options: options, metrics: nil, views: viewDictionary)
+    }
 }

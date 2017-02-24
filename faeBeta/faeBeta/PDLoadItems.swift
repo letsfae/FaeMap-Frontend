@@ -32,6 +32,8 @@ extension PinDetailViewController {
         tableCommentsForPin.allowsSelection = false
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
         tableCommentsForPin.register(PDEmptyCell.self, forCellReuseIdentifier: "pinEmptyCell")
+        tableCommentsForPin.rowHeight = UITableViewAutomaticDimension
+        tableCommentsForPin.estimatedRowHeight = 140
         tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
