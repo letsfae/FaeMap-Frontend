@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CreateMomentPinViewController: CreatePinInputToolbarDelegate,SendStickerDelegate, CreatePinTextViewDelegate {
+extension CreateMomentPinViewController: CreatePinInputToolbarDelegate, SendStickerDelegate, CreatePinTextViewDelegate {
     
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {

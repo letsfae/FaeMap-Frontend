@@ -18,6 +18,7 @@ extension FaeMapViewController {
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
         
+        faeMapView.preferredFrameRate = GMSFrameRate.maximum
         faeMapView.isIndoorEnabled = false
         faeMapView.isBuildingsEnabled = false
         faeMapView.settings.tiltGestures = false

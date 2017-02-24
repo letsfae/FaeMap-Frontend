@@ -53,11 +53,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRDatabase.database().persistenceEnabled = true
         
         // Config Realm Database
+        
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 2,
             migrationBlock: { migration, oldSchemaVersion in
-                
+                // The enumerateObjects:block: method iterates
+                // over every 'Person' object stored in the Realm file
+                /*
+                migration.enumerateObjects(ofType: OPinListElem.className()) { oldObject, newObject in
+                    // Add the `fullName` property only to Realms with a schema version of 0
+                    
+                    // Add the `email` property to Realms with a schema version of 0 or 1
+                    if oldSchemaVersion < 2 {
+                        newObject!["street"] = ""
+                        newObject!["city"] = ""
+                        newObject!["category"] = ""
+                        newObject!["imageURL"] = ""
+                    }
+                }
+                */
         })
+        
+//        let realm = try! Realm()
+//        try! realm.write {
+//            realm.deleteAll()
+//        }
         
         return true
     }

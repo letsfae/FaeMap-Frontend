@@ -57,6 +57,7 @@ class OpenedPinListViewController: UIViewController {
         buttonSubviewBackToMap.addTarget(self, action: #selector(OpenedPinListViewController.actionBackToMap(_:)), for: UIControlEvents.touchUpInside)
         loadPinList()
         backJustOnce = true
+        UIApplication.shared.statusBarStyle = .default
     }
     
     override func viewDidAppear(_ animated: Bool) {

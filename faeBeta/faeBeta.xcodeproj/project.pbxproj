@@ -224,6 +224,7 @@
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
 		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
+		B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */; };
 		B89AB3F31E3D775F00C5116D /* FMLoadingMapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */; };
 		B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */; };
 		B89AB3F71E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */; };
@@ -543,6 +544,7 @@
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
 		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScreenFactor.swift; path = support/ScreenFactor.swift; sourceTree = "<group>"; };
+		B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDEmptyCell.swift; sourceTree = "<group>"; };
 		B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLoadingMapFilter.swift; sourceTree = "<group>"; };
 		B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterAnimation.swift; sourceTree = "<group>"; };
 		B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterLogicCtrl.swift; sourceTree = "<group>"; };
@@ -1261,14 +1263,15 @@
 				B8612E361DF20B180092C606 /* PDButtonActions.swift */,
 				B8612E381DF249DC0092C606 /* PDLoadItems.swift */,
 				B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */,
+				B8612E3E1DF24FB90092C606 /* PDTableViewCtrlFile.swift */,
 				B8612E3C1DF24E3D0092C606 /* PDAPIConnections.swift */,
 				B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */,
-				B8612E3E1DF24FB90092C606 /* PDTableViewCtrlFile.swift */,
 				B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */,
 				B8612E3A1DF24CF90092C606 /* PDDelegateCtrl.swift */,
 				B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */,
-				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
 				B8612E401DF2504E0092C606 /* PDInputToolbar.swift */,
+				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
+				B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */,
 			);
 			name = PinExtension;
 			sourceTree = "<group>";
@@ -1863,6 +1866,7 @@
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				853F278A1E2848C400DD80DF /* CMPTableViewDelegate.swift in Sources */,
 				B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */,
+				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,

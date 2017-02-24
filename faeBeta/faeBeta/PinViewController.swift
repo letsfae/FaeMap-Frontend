@@ -73,7 +73,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var labelPinVoteCount: UILabel!
     var lableTextViewPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
-    var numberOfCommentTableCells: Int = 0
     var pinDetailLiked = false
     var pinDetailShowed = false
     var pinIDPinDetailView: String = "-999"
@@ -137,13 +136,13 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
+//    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     //Change by Yao, abandon fileIdString
     
     var imageViewHotPin: UIImageView!
     var stringPlainTextViewTxt = ""
     
-    var lblEmptyCommentArea: UILabel!
+    var pinCommentsCount = 0
     
     enum MediaMode {
         case small
@@ -154,6 +153,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var lastContentOffset: CGFloat = 0
     
     var isSavedByMe = false
+    
     enum PinType {
         case comment
         case media
@@ -161,7 +161,15 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case place
     }
     var pinTypeEnum: PinType = .media
-    var pinTypeString = ""
+    
+    enum PinState {
+        case normal
+        case read
+        case hot
+        case hotRead
+    }
+    var pinStateEnum: PinState = .normal
+    
     var textViewOriginalHeight: CGFloat = 0 {
         didSet {
             if textviewPinDetail != nil {
@@ -177,7 +185,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
-    var isKeyboardInThisView = true
+    var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
     
     var placeType = "burgers"
     var uiviewPlaceDetail: UIView!
@@ -214,11 +222,12 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         }
         initPinBasicInfo()
         checkPinStatus()
+        self.delegate?.disableSelfMarker(yes: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("[viewWillAppear]")
+//        print("[viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -236,8 +245,10 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 self.uiviewPlaceDetail.frame.origin.y = 0
             }
         }, completion: { (done: Bool) in
-            self.loadInputToolBar()
-            self.loadExtendView() // call func for loading extend view (mingjie jin)
+            if self.pinTypeEnum != .place {
+                self.loadInputToolBar()
+                self.loadExtendView() // call func for loading extend view (mingjie jin)
+            }
         })
     }
     
@@ -246,12 +257,82 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         if inputToolbar != nil {
             closeToolbarContentView()
             removeObservers()
+            toolbarContentView.removeFromSuperview()
         }
         UIApplication.shared.statusBarStyle = .default
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    //MARK: - toolbar Content view delegate
+    func showAlertView(withWarning text: String) {
+        showAlert(title: text, message: "please try again")
+    }
+    
+    func sendStickerWithImageName(_ name : String) {
+        print("[sendStickerWithImageName] name: \(name)")
+        let stickerMessage = "<faeSticker>\(name)</faeSticker>"
+        sendMessage(stickerMessage, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        buttonSend.isEnabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        UIView.animate(withDuration: 0.3) { 
+            self.tableCommentsForPin.frame.size.height = screenHeight - 155
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
+            self.closeToolbarContentView()
+        }
+        
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        
+    }
+    
+    func showFullAlbum() {
+        
+    }
+    
+    func appendEmoji(_ name: String) {
+        print("[appendEmojiWithImageName]")
+        if inputToolbar != nil{
+            buttonSend.isEnabled = true
+            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
+            self.lableTextViewPlaceholder.isHidden = true
+            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+        }
+    }
+    func deleteLastEmoji() {
+        print("[deleteEmoji]")
+        if inputToolbar != nil{
+            let previous = inputToolbar.contentView.textView.text!
+            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
+            if inputToolbar.contentView.textView.text == "" {
+                self.lableTextViewPlaceholder.isHidden = false
+                buttonSend.isEnabled = false
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+            }
+        }
+    }
+    
+    func selectPinState(pinState: PinState, pinType: PinType) {
+        switch pinState {
+        case .hot:
+            pinIcon.image = UIImage(named: "hot\(pinType)PD")
+            break
+        case .read:
+            pinIcon.image = UIImage(named: "read\(pinType)PD")
+            break
+        case .hotRead:
+            pinIcon.image = UIImage(named: "hotRead\(pinType)PD")
+            break
+        case .normal:
+            pinIcon.image = UIImage(named: "normal\(pinType)PD")
+            break
+        }
     }
     
     func initPinBasicInfo() {
@@ -259,7 +340,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         case .comment:
             self.pinTypeDecimal = 0
             self.labelPinTitle.text = "Comment"
-            pinIconHeavyShadow = #imageLiteral(resourceName: "markerCommentPinHeavyShadow")
             textViewOriginalHeight = 100
             if scrollViewMedia != nil {
                 scrollViewMedia.isHidden = true
@@ -268,11 +348,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = false
             }
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .media:
             self.pinTypeDecimal = 2
             self.labelPinTitle.text = "Story"
-            pinIconHeavyShadow = #imageLiteral(resourceName: "markerMomentPinHeavyShadow")
             textViewOriginalHeight = 0
             if scrollViewMedia != nil {
                 scrollViewMedia.isHidden = false
@@ -280,22 +360,17 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = true
             }
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .chat_room:
             self.pinTypeDecimal = 1
             self.labelPinTitle.text = "Chat"
+            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .place:
-            
             break
         }
         labelPinTitle.textAlignment = .center
-    }
-    
-    func getSeveralInfo() {
-        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
-        getPinInfo()
-        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func loadTransparentButtonBackToMap() {
@@ -374,7 +449,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             buttonKeyBoard.addTarget(self, action: #selector(self.showKeyboard(_:)), for: .touchUpInside)
             contentView?.addSubview(buttonKeyBoard)
             
-            
             buttonSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
             buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
@@ -392,9 +466,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             buttonCamera.setImage(UIImage(named: "camera"), for: .normal)
             buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
             contentView?.addSubview(buttonCamera)
-            
             buttonCamera.addTarget(self, action: #selector(self.showCamera), for: .touchUpInside)
-            
             
             buttonSend = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: self.inputToolbar.frame.height - 36, width: 29, height: 29))
             buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
@@ -418,6 +490,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         inputToolbar.contentView.textView.tintColor = UIColor.faeAppRedColor()
         inputToolbar.contentView.textView.font = UIFont(name: "AvenirNext-Regular", size: 18)
         inputToolbar.contentView.textView.delaysContentTouches = false
+        
         
         //should button to open anonymous extend view (mingjie jin)
         inputToolbar.contentView.heartButton.setImage(UIImage(named: "anonymousNormal"), for: UIControlState.normal)
@@ -450,6 +523,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
         toolbarContentView.setup(3)
+        toolbarContentView.maxPhotos = 1
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
     
@@ -474,31 +548,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 
             }
         })
-    }
-    
-    // Disable a button, make it unclickable
-    func disableTheButton(_ button: UIButton) {
-        let origImage = button.imageView?.image
-        let tintedImage = origImage?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        button.setImage(tintedImage, for: UIControlState())
-        button.tintColor = UIColor.lightGray
-        button.isUserInteractionEnabled = false
-    }
-    
-    // Hide pin detail window
-    func hidePinDetail() {
-        if uiviewPinDetail != nil {
-            if pinDetailShowed {
-                actionBackToMap(self.buttonPinBackToMap)
-                UIView.animate(withDuration: 0.5, animations: ({
-                    
-                }), completion: { (done: Bool) in
-                    if done {
-                        
-                    }
-                })
-            }
-        }
     }
     
     func animateHeart() {
@@ -542,16 +591,18 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
     }
     
-    func keyboardWillShow(_ notification: Notification){
+    func keyboardWillShow(_ notification: Notification) {
+        
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
-        if isKeyboardInThisView {
-            self.tableCommentsForPin.frame.size.height -= keyboardHeight
-        }
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-            Void in
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            if self.isKeyboardInThisView {
+                self.tableCommentsForPin.frame.size.height = screenHeight - 155 - keyboardHeight
+                self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - keyboardHeight
+            }
             self.toolbarDistanceToBottom.constant = -keyboardHeight
             self.view.setNeedsUpdateConstraints()
         }, completion: {(done: Bool) in
@@ -561,18 +612,17 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func keyboardDidShow(_ notification: Notification){
         toolbarContentView.keyboardShow = true
-        self.tableCommentsForPin.scrollToTop(animated: true)
     }
     
     func keyboardWillHide(_ notification: Notification) {
-        if isKeyboardInThisView {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 90 - 65
+        if self.isKeyboardInThisView {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 155
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
         }
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-            Void in
+        UIView.animate(withDuration: 0.3, animations: {
             self.toolbarDistanceToBottom.constant = 0
             self.view.setNeedsUpdateConstraints()
-            }, completion: nil)
+        }, completion: nil)
     }
     
     func keyboardDidHide(_ notification: Notification){
@@ -597,6 +647,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func showCamera() {
+        buttonKeyBoard.tag = 0
         view.endEditing(true)
         UIView.animate(withDuration: 0.3, animations: {
             self.closeToolbarContentView()
@@ -607,19 +658,25 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func showStikcer() {
+        buttonKeyBoard.tag = 0
         resetToolbarButtonIcon()
         buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
+        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
+        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
     }
     
     func showLibrary() {
+        buttonKeyBoard.tag = 0
         resetToolbarButtonIcon()
         buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showLibrary()
         moveUpInputBarContentView(animated)
+        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
+        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
     }
     
     func sendMessageButtonTapped() {
@@ -658,7 +715,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     func moveUpInputBarContentView(_ animated: Bool)
     {
-        if(animated){
+        if animated {
             self.toolbarContentView.frame.origin.y = screenHeight
             UIView.animate(withDuration: 0.3, animations: {
                 self.moveUpInputBar()
@@ -668,7 +725,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                     
                     
             })
-        }else{
+        } else {
             self.moveUpInputBar()
             self.toolbarContentView.frame.origin.y = screenHeight - 271
         }
@@ -701,21 +758,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.appWillEnterForeground()
     }
     
-    //MARK: - toolbar Content view delegate
-    func showAlertView(withWarning text:String) {
-        
-    }
     
-    func sendStickerWithImageName(_ name : String) {
-        
-    }
-    func sendImages(_ images:[UIImage]) {
-        
-    }
-    
-    func showFullAlbum() {
-        
-    }
     
     func endEdit() {
         self.view.endEditing(true)
@@ -760,7 +803,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         self.showKeyboard(UIButton())
-        
+        buttonKeyBoard.tag = 1
         // adjust position for extend view (mingjie jin)
         if(screenHeight == 736) {
             toolBarExtendView.frame.origin.y -= 271

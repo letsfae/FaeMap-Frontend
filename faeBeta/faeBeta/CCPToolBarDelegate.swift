@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CreateCommentPinViewController: CreatePinInputToolbarDelegate,SendStickerDelegate {
+extension CreateCommentPinViewController: CreatePinInputToolbarDelegate, SendStickerDelegate {
     
     func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
     {

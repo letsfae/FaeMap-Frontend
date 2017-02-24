@@ -51,9 +51,7 @@ extension FaeMapViewController {
         if !all {
             yelpQuery.setResultLimit(count: 10)
             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                print("[YelpAPI - Testing]")
                 for result in results {
-                    print(result.getCategory())
                     resultArray.append(result)
                 }
                 self.pinPlacesOnMap(results: resultArray)
@@ -64,59 +62,43 @@ extension FaeMapViewController {
             yelpQuery.setResultLimit(count: 4)
             yelpQuery.setCatagoryToRestaurant()
             yelpManager.query(request: yelpQuery, completion: { (results) in
-                print("[YelpAPI - Testing]")
                 for result in results {
-                    print(result.getCategory())
                     resultArray.append(result)
                 }
                 self.yelpQuery.setResultLimit(count: 2)
                 self.yelpQuery.setCatagoryToDessert()
                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                    print("[YelpAPI - Testing]")
                     for result in results {
-                        print(result.getCategory())
                         resultArray.append(result)
                     }
                     self.yelpQuery.setCatagoryToCafe()
                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                        print("[YelpAPI - Testing]")
                         for result in results {
-                            print(result.getCategory())
                             resultArray.append(result)
                         }
                         self.yelpQuery.setCatagoryToCinema()
                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                            print("[YelpAPI - Testing]")
                             for result in results {
-                                print(result.getCategory())
                                 resultArray.append(result)
                             }
                             self.yelpQuery.setCatagoryToSport()
                             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                print("[YelpAPI - Testing]")
                                 for result in results {
-                                    print(result.getCategory())
                                     resultArray.append(result)
                                 }
                                 self.yelpQuery.setCatagoryToBeauty()
                                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                    print("[YelpAPI - Testing]")
                                     for result in results {
-                                        print(result.getCategory())
                                         resultArray.append(result)
                                     }
                                     self.yelpQuery.setCatagoryToArt()
                                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                        print("[YelpAPI - Testing]")
                                         for result in results {
-                                            print(result.getCategory())
                                             resultArray.append(result)
                                         }
                                         self.yelpQuery.setCatagoryToJuice()
                                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                            print("[YelpAPI - Testing]")
                                             for result in results {
-                                                print(result.getCategory())
                                                 resultArray.append(result)
                                             }
                                             self.pinPlacesOnMap(results: resultArray)

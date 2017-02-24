@@ -12,70 +12,17 @@ import SwiftyJSON
 
 extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
-    /*
-    // Pan gesture for dragging comment pin list dragging button
-    func panActionCommentPinListDrag(_ pan: UIPanGestureRecognizer) {
-        var resumeTime:Double = 0.583
-        if pan.state == .began {
-            if subviewTable.frame.size.height == 256 {
-                commentPinSizeFrom = 256
-                commentPinSizeTo = screenHeight - 65
-            }
-            else {
-                commentPinSizeFrom = screenHeight - 65
-                commentPinSizeTo = 256
-            }
-        } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
-            let location = pan.location(in: view)
-            let velocity = pan.velocity(in: view)
-            resumeTime = abs(Double(CGFloat(screenHeight - 256) / velocity.y))
-            print("DEBUG: Velocity TESTing")
-            print("Velocity in CGPoint.y")
-            print(velocity.y)
-            print("Resume Time")
-            print(resumeTime)
-            if resumeTime >= 0.583 {
-                resumeTime = 0.583
-            }
-            if abs(location.y - commentPinSizeFrom) >= 80 {
-                UIView.animate(withDuration: resumeTime, animations: {
-                    self.draggingButtonSubview.frame.origin.y = self.commentPinSizeTo - 28
-                    self.subviewTable.frame.size.height = self.commentPinSizeTo
-                })
-            }
-            else {
-                UIView.animate(withDuration: resumeTime, animations: {
-                    self.draggingButtonSubview.frame.origin.y = self.commentPinSizeFrom - 28
-                    self.subviewTable.frame.size.height = self.commentPinSizeFrom
-                })
-            }
-            if subviewTable.frame.size.height == 256 {
-                buttonCommentPinListDragToLargeSize.tag = 0
-            }
-            if subviewTable.frame.size.height == screenHeight - 65 {
-                buttonCommentPinListDragToLargeSize.tag = 1
-            }
-        } else {
-            let location = pan.location(in: view)
-            if location.y >= 307 {
-                self.draggingButtonSubview.center.y = location.y - 65
-                self.subviewTable.frame.size.height = location.y + 14 - 65
-            }
-        }
-    }
-    */
-    
     // When clicking dragging button in opened pin list window
     func actionDraggingThisList(_ sender: UIButton) {
         if sender.tag == 1 {
             sender.tag = 0
             UIView.animate(withDuration: 0.5, animations: ({
-                self.draggingButtonSubview.frame.origin.y = 228
+                self.draggingButtonSubview.frame.origin.y = 227
                 self.subviewTable.frame.size.height = 256
                 if self.openedPinListArray.count <= 3 {
                     self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
                 }else{
-                    self.tableOpenedPin.frame.size.height = CGFloat(228)
+                    self.tableOpenedPin.frame.size.height = CGFloat(227)
                 }
             }), completion: { (done: Bool) in
                 if done {
@@ -135,7 +82,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         self.tableOpenedPin.reloadData()
         if openedPinListArray.count == 0 {
             UIView.animate(withDuration: 0.5, animations: ({
-                self.subviewWhite.center.y -= self.subviewWhite.frame.size.height
+                self.subviewWhite.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
             }), completion: { (done: Bool) in
                 if done {

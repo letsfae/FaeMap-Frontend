@@ -39,36 +39,29 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     // move up the input bar
     func moveUpInputBar()
-    
     // Show the alert to warn user only 10 images can be selected
     func showAlertView(withWarning text: String)
-    
     /// send the sticker image with specific name
     ///
     /// - parameter name: the name of the sticker
-    func sendStickerWithImageName(_ name : String)
-    
-    
+    func sendStickerWithImageName(_ name: String)
     /// send multiple images from quick image picker
     ///
     /// - parameter images: an array of selected images
-    func sendImages(_ images:[UIImage])
-    
+    func sendImages(_ images: [UIImage])
     // present the complete photo album
     // should present CustomCollectionViewController
     func showFullAlbum()
-    
     /// need to implement this method if sending audio is needed
     ///
     /// - parameter data: the audio data to send
-    @objc optional func sendAudioData(_ data:Data)
-    
+    @objc optional func sendAudioData(_ data: Data)
     // end any editing. Especially the input toolbar textView.
     @objc optional func endEdit()
-    
     @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
-    
     @objc optional func sendGifData(_ data: Data)
+    @objc optional func appendEmoji(_ name: String)
+    @objc optional func deleteLastEmoji()
 }
 
 enum FAEChatToolBarContentType: UInt32 {
@@ -79,7 +72,7 @@ enum FAEChatToolBarContentType: UInt32 {
 }
 
 /// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
-class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate{
+class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionViewDataSource, AudioRecorderViewDelegate, SendStickerDelegate {
 
     //MARK: - Properties
     var keyboardShow = false // false: keyboard is hide
@@ -119,6 +112,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     private var photoInitialized = false
     private var stickerInitialized = false
     private var audioInitialized = false
+    
+    var maxPhotos = 10
     
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
@@ -513,14 +508,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
             let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
-            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+            let asset: PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             
             if !cell.photoSelected {
-                if photoPicker.indexAssetDict.count == 10 {
-                    self.delegate.showAlertView(withWarning: "You can only select up to 10 images at the same time")
+                if photoPicker.indexAssetDict.count == maxPhotos {
+                    self.delegate.showAlertView(withWarning: "You can only select up to \(maxPhotos) images at the same time")
                 } else {
-
-                    
                     if(asset.mediaType == .image){
                         if(photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can't select photo with video")
@@ -643,6 +636,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     func appendEmojiWithImageName(_ name: String)
     {
+        print("[appendEmojiWithImageName]")
+        self.delegate.appendEmoji!(name)
         if inputToolbar != nil{
             inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
         }
@@ -651,6 +646,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // delete one emoji from the text view , if there's no emoji,then delete one character
     func deleteEmoji()
     {
+        print("[deleteEmoji]")
+        self.delegate.deleteLastEmoji!()
         if inputToolbar != nil{
             let previous = inputToolbar.contentView.textView.text!
             inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
@@ -660,18 +657,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // MARK: - Quick image picker delegate
     func sendImageFromQuickPicker()
     {
-        if(photoPicker.videoAsset != nil){
+        if(photoPicker.videoAsset != nil) {
             sendVideoFromQuickPicker()
             return
-        }else if (photoPicker.gifAssetDict.count != 0){
+        } else if (photoPicker.gifAssetDict.count != 0) {
             if sendGifFromQuickPicker() {
                 return
             }
         }
         var images = [UIImage]()
 
-        for i in 0..<photoPicker.indexImageDict.count
-        {
+        for i in 0..<photoPicker.indexImageDict.count {
             images.append(photoPicker.indexImageDict[i]!)
         }
         self.delegate.sendImages(images)

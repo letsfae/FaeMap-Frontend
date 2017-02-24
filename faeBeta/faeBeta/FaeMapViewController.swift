@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import SwiftyJSON
+import RealmSwift
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
@@ -208,7 +209,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         isUserLoggedIn()
         getUserStatus()
         loadMapView()
@@ -232,7 +232,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.loadTransparentNavBarItems()
         self.loadMapChat()
         buttonFakeTransparentClosingView.alpha = 0
-        
+        reloadSelfPosAnimation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -243,6 +243,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         filterCircleAnimation()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+        
+        checkFirstLoginInRealm()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -275,9 +277,25 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func isFirstTimeLogin(_ notification: NSNotification) {
         print("[isFirstTimeLogin] yes it is")
+        loadFirstLoginVC()
+    }
+    
+    func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         self.present(firstTimeLoginVC, animated: false, completion: nil)
+    }
+    
+    func checkFirstLoginInRealm() {
+        if user_id != nil {
+            let realm = try! Realm()
+            if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
+                if !userRealm.firstUpdate {
+                    print("[checkFirstLoginInRealm] yes it is")
+                    loadFirstLoginVC()
+                }
+            }
+        }
     }
     
     // Check if location is enabled
@@ -318,7 +336,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.present(locEnableVC, animated: true, completion: nil)
     }
     
-    func jumpToWelcomeView(animated: Bool){
+    func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
         self.present(welcomeVC, animated: animated, completion: nil)
     }
@@ -373,7 +391,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 reloadSelfPosAnimation()
             }
             refreshMap(pins: true, users: true, places: true, placesAll: true)
-            
         }
         
         // userStatus == 5, invisible
@@ -412,5 +429,4 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func printsth() {
         print("timer awake!")
     }
-    ////////////////////////////////
 }

@@ -11,25 +11,28 @@ import SwiftyJSON
 
 protocol PinCommentsCellDelegate: class {
     func showActionSheetFromPinCell(_ username: String) // Reply to this user
-    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+//    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
 }
 
 class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     
     weak var delegate: PinCommentsCellDelegate?
-    var imageViewAvatar: UIImageView!
-    var labelUsername: UILabel!
-    var labelTimestamp: UILabel!
-    var uiviewCommentActionButtons: UIView!
-    var labelVoteCount: UILabel!
-    var labelLikeCount: UILabel!
-    var labelShareCount: UILabel!
-    var buttonForWholeCell: UIButton!
-    var textViewComment: UITextView!
-    var buttonUpVote: UIButton!
-    var buttonDownVote: UIButton!
-    var buttonReply: UIButton!
+    var imgAvatar: UIImageView!
+    var imgSticker: UIImageView!
+    var lblUsername: UILabel!
+    var lblTime: UILabel!
+    var lblVoteCount: UILabel!
+    var lblLikeCount: UILabel!
+    var lblContent: UILabel!
+    var btnUpVote: UIButton!
+    var btnDownVote: UIButton!
+    var btnReply: UIButton!
     var pinID = ""
+    var isSticker = false
+    
+    var commentConstraint = [NSLayoutConstraint]()
+    var stickerConstraint = [NSLayoutConstraint]()
+    
     enum VoteType {
         case null
         case up
@@ -42,105 +45,104 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadCellContent()
+        commentConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
+        stickerConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(50)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgSticker, lblVoteCount)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadCellContent() {
-        
-        self.buttonForWholeCell = UIButton()
-        self.buttonForWholeCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
-        self.buttonForWholeCell.addTarget(self, action: #selector(self.cancelTouchToReplyTimer(_:)), for: [.touchUpInside, .touchUpOutside])
-        self.addSubview(buttonForWholeCell)
-        self.addConstraintsWithFormat("H:[v0(\(screenWidth))]-0-|", options: [], views: buttonForWholeCell)
-        self.addConstraintsWithFormat("V:[v0(140)]-0-|", options: [], views: buttonForWholeCell)
-        
-        self.imageViewAvatar = UIImageView()
-        self.addSubview(self.imageViewAvatar)
-        self.imageViewAvatar.layer.cornerRadius = 19.5
-        self.imageViewAvatar.clipsToBounds = true
-        self.imageViewAvatar.contentMode = .scaleAspectFill
-        self.addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imageViewAvatar)
-        
-        self.textViewComment = UITextView()
-        self.addSubview(self.textViewComment)
-        self.textViewComment.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        self.textViewComment.isEditable = false
-        self.textViewComment.isUserInteractionEnabled = false
-        self.textViewComment.textContainerInset = UIEdgeInsets.zero
-        self.textViewComment.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.addConstraintsWithFormat("H:|-27-[v0(361)]", options: [], views: textViewComment)
-        self.addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(25)]", options: [], views: imageViewAvatar, textViewComment)
-        self.textViewComment.isScrollEnabled = false
-        self.textViewComment.delegate = self
-        
-        self.labelUsername = UILabel()
-        self.addSubview(self.labelUsername)
-        self.labelUsername.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        self.labelUsername.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        self.labelUsername.textAlignment = .left
-        self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelUsername)
-        self.addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: labelUsername)
-        
-        self.labelTimestamp = UILabel()
-        self.addSubview(self.labelTimestamp)
-        self.labelTimestamp.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        self.labelTimestamp.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelTimestamp.textAlignment = .left
-        self.addConstraintsWithFormat("H:|-69-[v0(200)]", options: [], views: labelTimestamp)
-        self.addConstraintsWithFormat("V:|-36-[v0(20)]", options: [], views: labelTimestamp)
-        
-        // Main buttons container
-        self.uiviewCommentActionButtons = UIView()
-        self.addSubview(uiviewCommentActionButtons)
-        self.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewCommentActionButtons)
-        self.addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: uiviewCommentActionButtons)
-        
-        // Label of Vote Count
-        self.labelVoteCount = UILabel()
-        self.labelVoteCount.text = "0"
-        self.labelVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        self.labelVoteCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
-        self.labelVoteCount.textAlignment = .center
-        self.uiviewCommentActionButtons.addSubview(labelVoteCount)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: labelVoteCount)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelVoteCount)
-        
-        // DownVote
-        self.buttonDownVote = UIButton()
-        self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-        self.buttonDownVote.addTarget(self, action: #selector(self.downVoteThisComment(_:)), for: .touchUpInside)
-        self.uiviewCommentActionButtons.addSubview(buttonDownVote)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: buttonDownVote)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonDownVote)
-        
-        // UpVote
-        self.buttonUpVote = UIButton()
-        self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-        self.buttonUpVote.addTarget(self, action: #selector(self.upVoteThisComment(_:)), for: .touchUpInside)
-        self.uiviewCommentActionButtons.addSubview(buttonUpVote)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: buttonUpVote)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonUpVote)
- 
-        // Add Comment
-        self.buttonReply = UIButton()
-        self.buttonReply.setImage(#imageLiteral(resourceName: "pinCommentReply"), for: UIControlState())
-        self.buttonReply.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
-        self.uiviewCommentActionButtons.addSubview(buttonReply)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonReply)
-        self.uiviewCommentActionButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonReply)
-    }
-    
-    func showActionSheet(_ sender: UIButton) {
-        if let username = labelUsername.text {
-            self.delegate?.showActionSheetFromPinCell(username)
+    func updateLayout() {
+        if isSticker {
+            removeConstraints(commentConstraint)
+            addConstraints(stickerConstraint)
+            imgSticker.isHidden = false
+            lblContent.isHidden = true
+        } else {
+            removeConstraints(stickerConstraint)
+            addConstraints(commentConstraint)
+            imgSticker.isHidden = true
+            lblContent.isHidden = false
         }
     }
     
-    func cancelTouchToReplyTimer(_ sender: UIButton) {
-        self.delegate?.cancelTouchToReplyTimerFromPinCell(true)
+    func loadCellContent() {
+        
+        imgAvatar = UIImageView()
+        addSubview(imgAvatar)
+        imgAvatar.layer.cornerRadius = 19.5
+        imgAvatar.clipsToBounds = true
+        imgAvatar.contentMode = .scaleAspectFill
+        addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imgAvatar)
+        
+        imgSticker = UIImageView()
+        addSubview(imgSticker)
+        imgSticker.contentMode = .scaleAspectFill
+        addConstraintsWithFormat("H:|-27-[v0(50)]", options: [], views: imgSticker)
+        
+        lblContent = UILabel()
+        addSubview(lblContent)
+        lblContent.lineBreakMode = .byWordWrapping
+        lblContent.numberOfLines = 8
+        lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
+        
+        lblUsername = UILabel()
+        addSubview(lblUsername)
+        lblUsername.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblUsername.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsername.textAlignment = .left
+        addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblUsername)
+        
+        lblTime = UILabel()
+        addSubview(lblTime)
+        lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblTime.textAlignment = .left
+        addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblTime)
+        
+        // Label of Vote Count
+        lblVoteCount = UILabel()
+        lblVoteCount.text = "0"
+        lblVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
+        lblVoteCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblVoteCount.textAlignment = .center
+        addSubview(lblVoteCount)
+        addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: lblVoteCount)
+        
+        // DownVote
+        btnDownVote = UIButton()
+        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+        btnDownVote.addTarget(self, action: #selector(downVoteThisComment(_:)), for: .touchUpInside)
+        addSubview(btnDownVote)
+        addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: btnDownVote)
+        
+        // UpVote
+        btnUpVote = UIButton()
+        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+        btnUpVote.addTarget(self, action: #selector(upVoteThisComment(_:)), for: .touchUpInside)
+        addSubview(btnUpVote)
+        addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: btnUpVote)
+        
+        // Add Comment
+        btnReply = UIButton()
+        btnReply.setImage(#imageLiteral(resourceName: "pinCommentReply"), for: UIControlState())
+        btnReply.addTarget(self, action: #selector(showActionSheet(_:)), for: .touchUpInside)
+        addSubview(btnReply)
+        addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: btnReply)
+        
+        addConstraintsWithFormat("V:|-15-[v0(20)]-1-[v1(20)]", options: [], views: lblUsername, lblTime)
+        addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnDownVote)
+        addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnUpVote)
+        addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnReply)
+    }
+    
+    func showActionSheet(_ sender: UIButton) {
+        if let username = lblUsername.text {
+            delegate?.showActionSheetFromPinCell(username)
+        }
     }
     
     func upVoteThisComment(_ sender: UIButton) {
@@ -148,8 +150,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             cancelVote()
             return
         }
-        buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-        buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         let upVote = FaePinAction()
         upVote.whereKey("vote", value: "up")
         upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
@@ -164,12 +166,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             }
             else {
                 if self.voteType == .down {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
                 else if self.voteType == .null {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 print("[upVoteThisComment] Fail to upvote this pin comment")
             }
@@ -181,8 +183,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             cancelVote()
             return
         }
-        buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-        buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
         let downVote = FaePinAction()
         downVote.whereKey("vote", value: "down")
         downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
@@ -196,12 +198,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             }
             else {
                 if self.voteType == .up {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 else if self.voteType == .null {
-                    self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
                 print("[upVoteThisComment] Fail to downvote this pin comment")
             }
@@ -213,8 +215,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         cancelVote.cancelVotePinComments(pinId: "\(pinCommentID)") { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.voteType = .null
-                self.buttonUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                self.buttonDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 self.updateVoteCount()
                 print("[upVoteThisComment] Successfully cancel vote this pin comment")
             }
@@ -250,10 +252,14 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
                         
                     }
                     if upVote != -999 && downVote != -999 {
-                        self.labelVoteCount.text = "\(upVote - downVote)"
+                        self.lblVoteCount.text = "\(upVote - downVote)"
                     }
                 }
             }
         }
     }
+    
+    //    func cancelTouchToReplyTimer(_ sender: UIButton) {
+    //        delegate?.cancelTouchToReplyTimerFromPinCell(true)
+    //    }
 }

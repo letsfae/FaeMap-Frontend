@@ -86,6 +86,9 @@ extension PinDetailViewController {
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .overCurrentContext
             self.present(openedPinListVC, animated: false, completion: {
+                if self.uiviewPlaceDetail != nil {
+                    self.uiviewPlaceDetail.center.y -= screenHeight
+                }
                 self.subviewNavigation.center.y -= self.subviewNavigation.frame.size.height
                 self.tableCommentsForPin.center.y -= screenHeight
                 self.draggingButtonSubview.center.y -= screenHeight
@@ -123,9 +126,10 @@ extension PinDetailViewController {
     
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 65.0 * screenHeightFactor
         if sender.tag == 1 {
-            self.delegate?.disableSelfMarker(yes: false)
+            closeToolbarContentView()
+            replyToUser = ""
+            lableTextViewPlaceholder.text = "Write a Comment..."
             endEdit()
             sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
@@ -144,6 +148,7 @@ extension PinDetailViewController {
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
+                self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
@@ -176,6 +181,7 @@ extension PinDetailViewController {
                 self.subviewInputToolBar.isHidden = false
             }
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
+            self.subviewTable.frame.size.height = screenHeight - 65
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
         }
@@ -227,9 +233,9 @@ extension PinDetailViewController {
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
+            self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
-                self.delegate?.disableSelfMarker(yes: true)
                 self.tableCommentsForPin.reloadData()
             }
         })
@@ -237,9 +243,7 @@ extension PinDetailViewController {
     
     // When clicking dragging button in pin detail window
     func actionDraggingThisPin(_ sender: UIButton) {
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
         if sender.tag == 1 {
-            self.delegate?.disableSelfMarker(yes: false)
             sender.tag = 0
             buttonPinAddComment.tag = 0
             textviewPinDetail.isScrollEnabled = true
@@ -250,6 +254,7 @@ extension PinDetailViewController {
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
                 self.tableCommentsForPin.frame.size.height = 227
+                self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
@@ -316,9 +321,9 @@ extension PinDetailViewController {
             self.buttonPinBackToMap.alpha = 1.0
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             self.tableCommentsForPin.frame.size.height = screenHeight - 93
+            self.subviewTable.frame.size.height = screenHeight - 65
         }), completion: { (done: Bool) in
             if done {
-                self.delegate?.disableSelfMarker(yes: true)
                 self.tableCommentsForPin.reloadData()
             }
         })

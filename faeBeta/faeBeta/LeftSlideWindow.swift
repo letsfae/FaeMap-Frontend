@@ -27,6 +27,7 @@ extension FaeMapViewController {
         else {
             leftMenuVC.displayName = "someone"
         }
+        self.selfMarker.map = nil
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)
@@ -42,9 +43,9 @@ extension FaeMapViewController {
     func updateSelfInfo() {
         let updateNickName = FaeUser()
         updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
-            if(status / 100 == 2){
+            if status / 100 == 2 {
                 let nickNameInfo = JSON(message!)
-                if let str = nickNameInfo["nick_name"].string{
+                if let str = nickNameInfo["nick_name"].string {
                     nickname = str
                 }
             }

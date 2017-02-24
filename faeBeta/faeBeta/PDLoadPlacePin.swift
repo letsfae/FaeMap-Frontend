@@ -8,8 +8,26 @@
 
 import UIKit
 import SDWebImage
+import RealmSwift
 
 extension PinDetailViewController {
+    func loadPlaceFromRealm(pinTypeId: String) {
+        let realm = try! Realm()
+        if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinTypeId)'").first {
+            self.lblPlaceTitle.text = opinListElem.pinContent
+            self.lblPlaceStreet.text = opinListElem.street
+            self.lblPlaceCity.text = opinListElem.city
+            let imageURL = opinListElem.imageURL
+            self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.imgPlaceQuickView.alpha = 1
+                })
+            })
+            placeType = opinListElem.category
+            initPlaceBasicInfo()
+        }
+    }
+    
     fileprivate func manageYelpData() {
         self.lblPlaceTitle.text = strPlaceTitle
         self.lblPlaceStreet.text = strPlaceStreet
@@ -76,6 +94,7 @@ extension PinDetailViewController {
         btnGoToPinList_Place = UIButton(frame: CGRect(x: 0, y: 165, width: 53, height: 48))
         btnGoToPinList_Place.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: .normal)
         uiviewPlaceDetail.addSubview(btnGoToPinList_Place)
+        btnGoToPinList_Place.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
         
         btnMoreOptions_Place = UIButton()
         btnMoreOptions_Place.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: .normal)

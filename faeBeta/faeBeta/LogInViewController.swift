@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 import Foundation
+import RealmSwift
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -172,14 +174,20 @@ class LogInViewController: UIViewController {
         user.logInBackground { (status: Int?, message: Any?) in
             if status! / 100 == 2 {
                 //success
+                let realm = try! Realm()
+                let userRealm = FaeUserRealm()
+                userRealm.userId = Int(user_id)
                 var isFirstTimeLogin = false
                 let messageJSON = JSON(message!)
                 if let _ = messageJSON["last_login_at"].string {
-                    
-                }
-                else {
+                    userRealm.firstUpdate = true
+                } else {
+                    userRealm.firstUpdate = false
                     isFirstTimeLogin = true
                     print("[loginUser] is first time login!")
+                }
+                try! realm.write {
+                    realm.add(userRealm, update: true)
                 }
                 self.dismiss(animated: true, completion: {
                     if isFirstTimeLogin {
@@ -201,7 +209,7 @@ class LogInViewController: UIViewController {
                         self.setLoginResult("Internet Error!")
                     }
                 }
-            self.activityIndicator.stopAnimating()
+                self.activityIndicator.stopAnimating()
             }
         }
     }

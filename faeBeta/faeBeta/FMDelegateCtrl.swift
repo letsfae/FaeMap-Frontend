@@ -46,12 +46,13 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.camera = camera
+        self.faeMapView.animate(to: camera)
     }
     // PinDetailDelegate
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
         var pinData = marker.userData as! [String: AnyObject]
         pinData["status"] = status as AnyObject?
+        marker.userData = pinData
         marker.icon = pinIconSelector(type: type, status: status)
     }
     // PinDetailDelegate
@@ -116,5 +117,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
-    
+    // LeftSlidingMenuDelegate
+    func reloadSelfPosition() {
+        reloadSelfPosAnimation()
+    }
 }

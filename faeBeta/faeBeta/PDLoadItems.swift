@@ -19,7 +19,7 @@ extension PinDetailViewController {
         subviewTable.backgroundColor = UIColor.white
         subviewTable.center.y -= screenHeight
         self.view.addSubview(subviewTable)
-        subviewTable.layer.zPosition = 1
+        subviewTable.layer.zPosition = 61
         subviewTable.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
         subviewTable.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         subviewTable.layer.shadowOpacity = 0.3
@@ -31,6 +31,9 @@ extension PinDetailViewController {
         tableCommentsForPin.dataSource = self
         tableCommentsForPin.allowsSelection = false
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
+        tableCommentsForPin.register(PDEmptyCell.self, forCellReuseIdentifier: "pinEmptyCell")
+        tableCommentsForPin.rowHeight = UITableViewAutomaticDimension
+        tableCommentsForPin.estimatedRowHeight = 140
         tableCommentsForPin.isScrollEnabled = false
         tableCommentsForPin.tableFooterView = UIView()
         tableCommentsForPin.layer.zPosition = 109
@@ -66,15 +69,6 @@ extension PinDetailViewController {
         loadPinCtrlButton()
         
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
-        
-        lblEmptyCommentArea = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 25))
-        lblEmptyCommentArea.center.y = screenHeight / 2 + 100.0 * screenHeightFactor
-        lblEmptyCommentArea.text = "It’s empty around here, be the first to comment!"
-        lblEmptyCommentArea.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        lblEmptyCommentArea.textAlignment = .center
-        lblEmptyCommentArea.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        self.tableCommentsForPin.addSubview(lblEmptyCommentArea)
-        lblEmptyCommentArea.isHidden = true
     }
     
     private func loadTableHeader() {
@@ -131,7 +125,7 @@ extension PinDetailViewController {
         imageViewHotPin = UIImageView()
         imageViewHotPin.image = #imageLiteral(resourceName: "pinDetailHotPin")
         imageViewHotPin.contentMode = .scaleAspectFill
-        imageViewHotPin.alpha = 0
+        imageViewHotPin.isHidden = true
         uiviewPinDetail.addSubview(imageViewHotPin)
         uiviewPinDetail.addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imageViewHotPin)
         uiviewPinDetail.addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imageViewHotPin)

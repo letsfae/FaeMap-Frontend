@@ -20,8 +20,8 @@ extension String {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
             let localTimeZone = NSTimeZone.local.abbreviation()
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            print("DEBUG TIMEE")
-            print(elapsed)
+//            print("DEBUG TIMEE")
+//            print(elapsed)
             if localTimeZone != nil {
                 dateFormatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
                 let normalFormat = dateFormatter.string(from: myDate!)
@@ -86,8 +86,6 @@ extension String {
     
     func formatPinCommentsContent() -> NSMutableAttributedString {
         
-        let regularColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-        
 //        var content = "<a>@maplestory06</a> comment and like testing"
         var username = ""
         var endIndex = 0
@@ -96,32 +94,45 @@ extension String {
             username = "@\(self.substring(with: match))"
             endIndex = username.characters.count + 8
         }
-        else {
-            print("parse formatPinCommentsContent fails")
-        }
+//        else {
+//            print("parse formatPinCommentsContent fails")
+//        }
         
         let index = self.index(self.startIndex, offsetBy: endIndex)
         let restContent = " \(self.substring(from: index))"
         
         let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
-        let attrsRegular = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!, NSForegroundColorAttributeName: regularColor]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
-        let regularString = NSMutableAttributedString(string: restContent, attributes: attrsRegular)
-        
+        let regularString = restContent.convertStringWithEmoji()
         usernameString.append(regularString)
         
         return usernameString
+    }
+    
+    func getFaeStickerName() -> String {
+        var stickerName = ""
+        if let match = self.range(of: "(?<=<faeSticker>)[^.]+(?=</faeSticker>)", options: .regularExpression) {
+            stickerName = "\(self.substring(with: match))"
+        }
+        return stickerName
+    }
+    
+    func getFaeImageName() -> String {
+        var stickerName = ""
+        if let match = self.range(of: "(?<=<faeImg>)[^.]+(?=</faeImg>)", options: .regularExpression) {
+            stickerName = "\(self.substring(with: match))"
+        }
+        return stickerName
     }
     
     func stringByDeletingLastEmoji() -> String {
         var previous = self
         var finalString = ""
         
-        
         if previous.characters.count > 0 && previous.characters.last != "]"{
             finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1 ))
-        }else if previous.characters.count > 0 && previous.characters.last == "]"{
+        } else if previous.characters.count > 0 && previous.characters.last == "]"{
             var i = 1
             var findEmoji = false
             while( i <= previous.characters.count){
@@ -152,11 +163,11 @@ extension String {
         var endIndex = 0
         var finalText = ""
         let retString = NSMutableAttributedString()
-        var isProcessed = false
+//        var isProcessed = false
         
         while true {
             if let range = content.range(of: "[") {
-                isProcessed = true
+//                isProcessed = true
                 let tmpContent = content
                 startIndex = content.distance(from: content.startIndex, to: range.lowerBound)
                 let index = content.index(content.startIndex, offsetBy: startIndex)
@@ -166,14 +177,14 @@ extension String {
                 retString.append(attrStringWithString)
             }
             if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
-                isProcessed = true
+//                isProcessed = true
                 let tmpContent = content
                 emojiText = "\(content.substring(with: match))"
-                print("Target: \(emojiText)")
+//                print("Target: \(emojiText)")
                 endIndex = emojiText.characters.count+2
                 let index = tmpContent.index(tmpContent.startIndex, offsetBy: endIndex)
                 content = "\(tmpContent.substring(from: index))"
-                print("  Rest: \(content)")
+//                print("  Rest: \(content)")
                 finalText = "\(finalText)\(emojiText)"
                 
                 let emojiImage = UIImage(named: "\(emojiText)")
@@ -184,15 +195,13 @@ extension String {
                 retString.append(attrStringWithImage)
             }
             else {
-                print("  Done!")
+//                print("  Done!")
                 break
             }
         }
         finalText = finalText + content
-        if !isProcessed {
-            let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
-            retString.append(attrStringWithString)
-        }
+        let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        retString.append(attrStringWithString)
         return retString
     }
 }

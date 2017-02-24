@@ -13,16 +13,19 @@ import RealmSwift
 
 extension PinDetailViewController {
     
+    func getSeveralInfo() {
+        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+        getPinInfo()
+        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
+    }
+    
     func checkPinStatus() {
         if pinStatus == "new" {
             let realm = try! Realm()
-            let newPinRealm = realm.objects(NewFaePin.self).filter("pinId == \(self.pinIdSentBySegue) AND pinType == \(self.pinTypeDecimal)")
-            if newPinRealm.count >= 1 {
-                if newPinRealm.first != nil {
-                    print("[checkPinStatus] newPin exists!")
-                }
+            if let _ = realm.objects(NewFaePin.self).filter("pinId == \(self.pinIdSentBySegue) AND pinType == \(self.pinTypeDecimal)").first {
+                print("[checkPinStatus] newPin exists!")
             }
-            else if newPinRealm.count == 0 {
+            else {
                 let newPin = NewFaePin()
                 newPin.pinId = Int(self.pinIdSentBySegue)!
                 newPin.pinType = self.pinTypeDecimal
@@ -35,6 +38,24 @@ extension PinDetailViewController {
         }
     }
     
+    func uploadingFile(image: UIImage) {
+//        var fileId = 0
+        let mediaImage = FaeImage()
+        mediaImage.type = "image"
+        mediaImage.image = image
+        mediaImage.faeUploadFile { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("[uploadingFile] Successfully upload Image File")
+                let fileIDJSON = JSON(message!)
+                if let _ = fileIDJSON["file_id"].int {
+//                    fileId = file_id
+                }
+            } else {
+                print("[uploadingFile] Fail to upload Image File")
+            }
+        }
+    }
+    
     func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
@@ -44,7 +65,6 @@ extension PinDetailViewController {
                     print("Successfully comment this pin!")
                     self.getPinAttributeNum("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     self.getPinComments("\(self.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
-                    self.tableCommentsForPin.reloadData()
                 }
                 else {
                     print("Fail to comment this pin!")
@@ -129,7 +149,14 @@ extension PinDetailViewController {
             readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully read this pin!")
-                    self.pinStatus = "read"
+                    if self.pinStatus == "hot" || self.pinStatus == "hot and read" {
+                        self.pinStatus = "hot and read"
+                        self.pinStateEnum = .hotRead
+                    } else {
+                        self.pinStatus = "read"
+                        self.pinStateEnum = .read
+                    }
+                    self.selectPinState(pinState: self.pinStateEnum, pinType: self.pinTypeEnum)
                     self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
                 }
                 else {
@@ -169,21 +196,20 @@ extension PinDetailViewController {
                 
             }
             if let comments = mapInfoJSON["comments"].int {
+                self.pinCommentsCount = comments
                 self.labelPinCommentsCount.text = "\(comments)"
                 commentsCount = comments
-                if comments == 0 {
-                    self.lblEmptyCommentArea.isHidden = false
-                }
-                else {
-                    self.lblEmptyCommentArea.isHidden = true
-                }
             }
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imageViewHotPin.isHidden = false
-                self.pinStatus = "hot"
-                if self.pinStatus == "read" {
+                if self.pinStatus == "read" || self.pinStatus == "hot and read" {
                     self.pinStatus = "hot and read"
+                    self.pinStateEnum = .hotRead
+                } else {
+                    self.pinStatus = "hot"
+                    self.pinStateEnum = .hot
                 }
+                self.selectPinState(pinState: self.pinStateEnum, pinType: self.pinTypeEnum)
                 self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
             }
             else {
@@ -194,7 +220,6 @@ extension PinDetailViewController {
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
         dictCommentsOnPinDetail.removeAll()
-        self.tableCommentsForPin.reloadData()
         let getPinCommentsDetail = FaePinAction()
         getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
@@ -215,11 +240,11 @@ extension PinDetailViewController {
                         dicCell["date"] = date.formatFaeDate() as AnyObject?
                     }
                     if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
-                        print("[getPinComments] upVoteCount: \(vote_up_count)")
+//                        print("[getPinComments] upVoteCount: \(vote_up_count)")
                         dicCell["vote_up_count"] = vote_up_count as AnyObject?
                     }
                     if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
-                        print("[getPinComments] downVoteCount: \(vote_down_count)")
+//                        print("[getPinComments] downVoteCount: \(vote_down_count)")
                         dicCell["vote_down_count"] = vote_down_count as AnyObject?
                     }
                     if let voteType = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
@@ -229,11 +254,10 @@ extension PinDetailViewController {
                     self.dictCommentsOnPinDetail.insert(dicCell, at: 0)
                 }
             }
+            self.tableCommentsForPin.reloadData()
             if sendMessageFlag {
-                print("DEBUG RELOAD DATA")
-                print(self.dictCommentsOnPinDetail.count)
-                self.numberOfCommentTableCells = self.dictCommentsOnPinDetail.count
-                self.tableCommentsForPin.reloadData()
+                let indexPath = IndexPath(row: self.dictCommentsOnPinDetail.count - 1, section: 0)
+                self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
         }
     }
@@ -245,8 +269,8 @@ extension PinDetailViewController {
             let opinType = "\(self.pinTypeEnum)"
             let opinId = self.pinIDPinDetailView
             var opinContent = ""
-            let opinLat = self.selectedMarkerPosition.latitude
-            let opinLon = self.selectedMarkerPosition.longitude
+            var opinLat = self.selectedMarkerPosition.latitude
+            var opinLon = self.selectedMarkerPosition.longitude
             var opinTime = ""
             let pinInfoJSON = JSON(message!)
 //            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
@@ -338,21 +362,32 @@ extension PinDetailViewController {
                 opinTime = time
             }
             
+            if let latitudeInfo = pinInfoJSON["geolocation"]["latitude"].double {
+                opinLat = latitudeInfo
+            }
+            else {
+                print("DEBUG: Cannot get geoInfo: Latitude")
+                return
+            }
+            if let longitudeInfo = pinInfoJSON["geolocation"]["longitude"].double {
+                opinLon = longitudeInfo
+            }
+            else {
+                print("DEBUG: Cannot get geoInfo: Longitude")
+                return
+            }
+            
             let realm = try! Realm()
-//            let opinListElem = realm.objects(OpenedPinListElem.self).filter("pinId == '\(opinId)' AND pinType == '\(opinType)'")
             let opinListElem = OPinListElem()
             opinListElem.pinTypeId = "\(opinType)\(opinId)"
             opinListElem.pinContent = opinContent
             opinListElem.pinLat = opinLat
             opinListElem.pinLon = opinLon
             opinListElem.pinTime = opinTime
-            print("[opinListElem] \(opinListElem)")
             try! realm.write {
                 realm.add(opinListElem, update: true)
-                print("[opinListElem] save in Realm done!")
+                self.buttonBackToPinLists.isEnabled = true
             }
-            
-            self.buttonBackToPinLists.isEnabled = true
         }
     }
     
