@@ -113,6 +113,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     private var stickerInitialized = false
     private var audioInitialized = false
     
+    var maxPhotos = 10
+    
     weak var delegate : FAEChatToolBarContentViewDelegate!
     
     weak var inputToolbar: JSQMessagesInputToolbarCustom!// IMPORTANT: need to set value for this variable to use the whole function
@@ -506,14 +508,12 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
             let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
-            let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+            let asset: PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             
             if !cell.photoSelected {
-                if photoPicker.indexAssetDict.count == 10 {
-                    self.delegate.showAlertView(withWarning: "You can only select up to 10 images at the same time")
+                if photoPicker.indexAssetDict.count == maxPhotos {
+                    self.delegate.showAlertView(withWarning: "You can only select up to \(maxPhotos) images at the same time")
                 } else {
-
-                    
                     if(asset.mediaType == .image){
                         if(photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can't select photo with video")
@@ -657,18 +657,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // MARK: - Quick image picker delegate
     func sendImageFromQuickPicker()
     {
-        if(photoPicker.videoAsset != nil){
+        if(photoPicker.videoAsset != nil) {
             sendVideoFromQuickPicker()
             return
-        }else if (photoPicker.gifAssetDict.count != 0){
+        } else if (photoPicker.gifAssetDict.count != 0) {
             if sendGifFromQuickPicker() {
                 return
             }
         }
         var images = [UIImage]()
 
-        for i in 0..<photoPicker.indexImageDict.count
-        {
+        for i in 0..<photoPicker.indexImageDict.count {
             images.append(photoPicker.indexImageDict[i]!)
         }
         self.delegate.sendImages(images)

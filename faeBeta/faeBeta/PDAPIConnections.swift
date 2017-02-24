@@ -38,6 +38,24 @@ extension PinDetailViewController {
         }
     }
     
+    func uploadingFile(image: UIImage) {
+//        var fileId = 0
+        let mediaImage = FaeImage()
+        mediaImage.type = "image"
+        mediaImage.image = image
+        mediaImage.faeUploadFile { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("[uploadingFile] Successfully upload Image File")
+                let fileIDJSON = JSON(message!)
+                if let _ = fileIDJSON["file_id"].int {
+//                    fileId = file_id
+                }
+            } else {
+                print("[uploadingFile] Fail to upload Image File")
+            }
+        }
+    }
+    
     func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)

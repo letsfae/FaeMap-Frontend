@@ -257,13 +257,21 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         if inputToolbar != nil {
             closeToolbarContentView()
             removeObservers()
+            toolbarContentView.removeFromSuperview()
         }
         UIApplication.shared.statusBarStyle = .default
     }
     
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     //MARK: - toolbar Content view delegate
-    func showAlertView(withWarning text:String) {
-        
+    func showAlertView(withWarning text: String) {
+        showAlert(title: text, message: "please try again")
     }
     
     func sendStickerWithImageName(_ name : String) {
@@ -515,6 +523,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         toolbarContentView.delegate = self
         toolbarContentView.cleanUpSelectedPhotos()
         toolbarContentView.setup(3)
+        toolbarContentView.maxPhotos = 1
         UIApplication.shared.keyWindow?.addSubview(toolbarContentView)
     }
     
