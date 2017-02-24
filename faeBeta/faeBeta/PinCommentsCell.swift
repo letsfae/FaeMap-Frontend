@@ -12,6 +12,7 @@ import SwiftyJSON
 protocol PinCommentsCellDelegate: class {
     func showActionSheetFromPinCell(_ username: String) // Reply to this user
 //    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+    func showFullCellImage(_ image: UIImage)
 }
 
 class PinCommentsCell: UITableViewCell, UITextViewDelegate {
@@ -19,6 +20,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     weak var delegate: PinCommentsCellDelegate?
     var imgAvatar: UIImageView!
     var imgSticker: UIImageView!
+    var imgPicture: UIImageView!
     var lblUsername: UILabel!
     var lblTime: UILabel!
     var lblVoteCount: UILabel!
@@ -29,9 +31,11 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var btnReply: UIButton!
     var pinID = ""
     var isSticker = false
+    var isImage = false
     
     var commentConstraint = [NSLayoutConstraint]()
     var stickerConstraint = [NSLayoutConstraint]()
+    var imageConstraint = [NSLayoutConstraint]()
     
     enum VoteType {
         case null
@@ -47,6 +51,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         loadCellContent()
         commentConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
         stickerConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(50)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgSticker, lblVoteCount)
+        imageConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(100)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgPicture, lblVoteCount)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -56,13 +61,24 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     func updateLayout() {
         if isSticker {
             removeConstraints(commentConstraint)
+            removeConstraints(imageConstraint)
             addConstraints(stickerConstraint)
             imgSticker.isHidden = false
+            imgPicture.isHidden = true
+            lblContent.isHidden = true
+        } else if isImage {
+            removeConstraints(commentConstraint)
+            removeConstraints(stickerConstraint)
+            addConstraints(imageConstraint)
+            imgSticker.isHidden = true
+            imgPicture.isHidden = false
             lblContent.isHidden = true
         } else {
+            removeConstraints(imageConstraint)
             removeConstraints(stickerConstraint)
             addConstraints(commentConstraint)
             imgSticker.isHidden = true
+            imgPicture.isHidden = true
             lblContent.isHidden = false
         }
     }
@@ -78,8 +94,18 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         
         imgSticker = UIImageView()
         addSubview(imgSticker)
-        imgSticker.contentMode = .scaleAspectFill
-        addConstraintsWithFormat("H:|-27-[v0(50)]", options: [], views: imgSticker)
+        imgSticker.clipsToBounds = true
+        imgSticker.contentMode = .scaleAspectFit
+        addConstraintsWithFormat("H:|-27-[v0(100)]", options: [], views: imgSticker)
+        
+        imgPicture = UIImageView()
+        addSubview(imgPicture)
+        imgPicture.layer.cornerRadius = 5
+        imgPicture.clipsToBounds = true
+        imgPicture.contentMode = .scaleAspectFill
+        addConstraintsWithFormat("H:|-27-[v0(100)]", options: [], views: imgPicture)
+//        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
+//        imgPicture.addGestureRecognizer(tapRecognizer)
         
         lblContent = UILabel()
         addSubview(lblContent)
@@ -142,6 +168,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     func showActionSheet(_ sender: UIButton) {
         if let username = lblUsername.text {
             delegate?.showActionSheetFromPinCell(username)
+        }
+    }
+    
+    func openThisMedia(_ sender: UIGestureRecognizer) {
+        if imgPicture.image != nil {
+            delegate?.showFullCellImage(imgPicture.image!)
         }
     }
     

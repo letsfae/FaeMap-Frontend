@@ -11,11 +11,17 @@ import CoreLocation
 
 extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate {
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        uploadingFile(image: image)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
     func reloadCommentContent() {
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
     }
+    
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
         self.pinTypeEnum = pinType

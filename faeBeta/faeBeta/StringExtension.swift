@@ -119,11 +119,11 @@ extension String {
     }
     
     func getFaeImageName() -> String {
-        var stickerName = ""
+        var imgName = ""
         if let match = self.range(of: "(?<=<faeImg>)[^.]+(?=</faeImg>)", options: .regularExpression) {
-            stickerName = "\(self.substring(with: match))"
+            imgName = "\(self.substring(with: match))"
         }
-        return stickerName
+        return imgName
     }
     
     func stringByDeletingLastEmoji() -> String {

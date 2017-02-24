@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import SDWebImage
+import IDMPhotoBrowser
 
 extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -68,12 +70,23 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.lblTime.text = date
             }
             if let content = dictCell["content"].string {
-                let stickerName = content.getFaeStickerName()
-                if stickerName != "" {
+                if content.getFaeStickerName() != "" {
+                    let stickerName = content.getFaeStickerName()
                     cell.isSticker = true
+                    cell.isImage = false
                     cell.imgSticker.image = UIImage(named: stickerName)
+                } else if content.getFaeImageName() != "" {
+                    cell.isSticker = false
+                    cell.isImage = true
+                    let fileId = content.getFaeImageName()
+                    let stringHeaderURL = "\(baseURL)/files/\(fileId)/data"
+                    cell.imgPicture.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                        cell.updateLayout()
+                        cell.updateConstraints()
+                    })
                 } else {
                     cell.isSticker = false
+                    cell.isImage = false
                     let attributedContent = content.formatPinCommentsContent()
                     cell.lblContent.attributedText = attributedContent
                 }
@@ -101,6 +114,12 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 self.actionShowActionSheet(usernameInCell)
             }
         }
+    }
+    
+    func showFullCellImage(_ image: UIImage) {
+        let photos = IDMPhoto.photos(withImages: [image])
+        let browser = IDMPhotoBrowser(photos: photos)
+        self.present(browser!, animated: true, completion: nil)
     }
 }
 

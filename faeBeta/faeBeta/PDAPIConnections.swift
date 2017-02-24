@@ -39,16 +39,19 @@ extension PinDetailViewController {
     }
     
     func uploadingFile(image: UIImage) {
-//        var fileId = 0
+        let imgData = UIImageJPEGRepresentation(image, 0.1) as NSData?
+        let imgNew = UIImage.sd_image(with: imgData as Data!)
         let mediaImage = FaeImage()
         mediaImage.type = "image"
-        mediaImage.image = image
+        mediaImage.image = imgNew
         mediaImage.faeUploadFile { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("[uploadingFile] Successfully upload Image File")
                 let fileIDJSON = JSON(message!)
-                if let _ = fileIDJSON["file_id"].int {
-//                    fileId = file_id
+                if let file_Id = fileIDJSON["file_id"].int {
+                    self.sendMessage("<faeImg>\(file_Id)</faeImg>", date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+                    self.buttonSend.isEnabled = false
+                    self.buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
                 }
             } else {
                 print("[uploadingFile] Fail to upload Image File")
