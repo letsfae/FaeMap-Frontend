@@ -8,6 +8,7 @@
 
 import Foundation
 import JSQMessagesViewController
+import GooglePlaces
 
 // this class is used to create JSQMessage object from information in firebase, it can be message from current user
 // or the other user who current user are chatting with.
@@ -92,6 +93,32 @@ class IncomingMessage {
         
         let location = CLLocation(latitude: latitude!, longitude: longitude!)
         let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil)
+        
+        let geocoder = GMSGeocoder()
+        
+        geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(latitude!, longitude!)) { (response, error) in
+            
+            if(error == nil) {
+                //print("there is no error get address from lat & lon")
+                mediaItem?.addressLine1.text = response?.firstResult()?.thoroughfare
+                var cityText = response?.firstResult()?.locality
+                if(response?.firstResult()?.administrativeArea != nil) {
+                    cityText = cityText! + ", " + (response?.firstResult()?.administrativeArea)!
+                }
+                if(response?.firstResult()?.postalCode != nil) {
+                    cityText = cityText! + " " + (response?.firstResult()?.postalCode)!
+                }
+                mediaItem?.addressLine2.text = cityText!
+                mediaItem?.addressLine3.text = response?.firstResult()?.country
+                
+                mediaItem?.address1 = mediaItem?.addressLine1.text
+                mediaItem?.address2 = mediaItem?.addressLine2.text
+                mediaItem?.address3 = mediaItem?.addressLine3.text
+            } else {
+                print(error ?? "ohhhh")
+            }
+        }
+        
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
         self.snapShotFromData(item) { (image) in

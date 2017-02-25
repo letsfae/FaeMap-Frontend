@@ -182,6 +182,10 @@ extension ChatViewController {
                 
                 let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
                 
+                vc.address1 = mediaItem.address1
+                vc.address2 = mediaItem.address2
+                vc.address3 = mediaItem.address3
+
                 vc.chatLatitude = mediaItem.coordinate.latitude
                 vc.chatLongitude = mediaItem.coordinate.longitude
                 

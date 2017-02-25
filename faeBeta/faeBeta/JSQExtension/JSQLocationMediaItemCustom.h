@@ -44,9 +44,17 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  */
 @property (readonly, nonatomic) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, retain, readwrite) UIImageView *cachedMapImageView;
+@property (nonatomic, retain, readwrite) UIView *cachedMapImageView;
 
 @property (nonatomic, retain, readwrite) UIImage *cachedMapSnapshotImage;
+
+@property (nonatomic, retain, readwrite) NSString *address1;
+@property (nonatomic, retain, readwrite) NSString *address2;
+@property (nonatomic, retain, readwrite) NSString *address3;
+
+@property (nonatomic, retain, readwrite) UILabel *addressLine1;
+@property (nonatomic, retain, readwrite) UILabel *addressLine2;
+@property (nonatomic, retain, readwrite) UILabel *addressLine3;
 /**
  *  Initializes and returns a location media item object having the given location.
  *

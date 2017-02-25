@@ -139,26 +139,56 @@
 
 - (UIView *)mediaView
 {
+    UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
+    locationView.backgroundColor = [UIColor whiteColor];
+    
+    _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
+    _addressLine1.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 16];
+    _addressLine1.text = _address1;
+    _addressLine1.textColor = [UIColor colorWithRed: 89 / 255.0 green: 89 / 255.0 blue: 89 / 255.0 alpha: 1.0];
+    
+    _addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 37, 189, 16)];
+    _addressLine2.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 12];
+    _addressLine2.text = _address2;
+    _addressLine2.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
+    
+    _addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 55, 189, 16)];
+    _addressLine3.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 12];
+    _addressLine3.text = _address3;
+    _addressLine3.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
+    
+    [locationView addSubview: _addressLine1];
+    [locationView addSubview: _addressLine2];
+    [locationView addSubview: _addressLine3];
+
+    
     if (self.location == nil || self.cachedMapSnapshotImage == nil) {
         return nil;
     }
     
-    if (self.cachedMapImageView == nil) {
-        CGSize size = [self mediaViewDisplaySize];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:self.cachedMapSnapshotImage];
-        imageView.frame = CGRectMake(0, 0, size.width, size.height);
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.clipsToBounds = YES;
+//    if (self.cachedMapImageView == nil) {
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:self.cachedMapSnapshotImage];
         
-        [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
-        self.cachedMapImageView = imageView;
-    }
-    return self.cachedMapImageView;
+    imageView.frame = CGRectMake(13, 13, 66, 66);
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.clipsToBounds = YES;
+        
+    [locationView addSubview:imageView];
+        
+    [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:locationView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
+    self.cachedMapImageView = locationView;
+//    }
+    return locationView;
 }
 
 - (NSUInteger)mediaHash
 {
     return self.hash;
+}
+
+- (CGSize) mediaViewDisplaySize
+{
+    return CGSizeMake(300, 92);
 }
 
 #pragma mark - NSObject
