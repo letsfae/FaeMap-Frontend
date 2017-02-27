@@ -59,7 +59,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var buttonPinDownVote: UIButton!
     var buttonPinLike: UIButton!
     var buttonPinUpVote: UIButton!
-    var dictCommentsOnPinDetail = [[String: AnyObject]]()
+    var dictUserDisplayName = [String]()
     var imagePinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelPinCommentsCount: UILabel!
@@ -202,6 +202,9 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var strPlaceStreet = ""
     var strPlaceCity = ""
     var strPlaceImageURL = ""
+    
+    var pinComments = [PinComment]()
+    var pinDetailUsers = [PinDetailUser]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -730,7 +733,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     // set up content of extend view (mingjie jin)
     func loadExtendView() {
-        print("[button frame] : \(inputToolbar.contentView.heartButton.frame)")
         let topBorder: CALayer = CALayer()
         topBorder.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 1)
         topBorder.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1).cgColor
@@ -754,7 +756,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     // action func for extend button (mingjie jin)
-    
     func extendButtonAction(_ sender: UIButton) {
         if(toolBarExtendView.isHidden) {
             sender.setImage(UIImage(named: "anonymousHighlight"), for: .normal)

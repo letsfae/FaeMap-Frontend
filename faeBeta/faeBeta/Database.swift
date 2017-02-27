@@ -7,6 +7,7 @@
 //
 
 import RealmSwift
+import SDWebImage
 
 class FileObject: Object {
     dynamic var fileId = -999
@@ -17,6 +18,12 @@ class FileObject: Object {
 class SelfInformation: Object {
     dynamic var currentUserID = -999
     dynamic var avatar: NSData? = nil
+}
+
+class UserAvatar: Object {
+    dynamic var userId = 0
+    dynamic var avatar: NSData? = nil
+    dynamic var etag = ""
 }
 
 class NewFaePin: Object {
@@ -50,3 +57,4 @@ class FaeUserRealm: Object {
         return "userId"
     }
 }
+

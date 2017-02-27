@@ -30,58 +30,56 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var btnDownVote: UIButton!
     var btnReply: UIButton!
     var pinID = ""
-    var isSticker = false
-    var isImage = false
+//    var isSticker = false
+//    var isImage = false
     
-    var commentConstraint = [NSLayoutConstraint]()
-    var stickerConstraint = [NSLayoutConstraint]()
-    var imageConstraint = [NSLayoutConstraint]()
+//    var commentConstraint = [NSLayoutConstraint]()
+//    var stickerConstraint = [NSLayoutConstraint]()
+//    var imageConstraint = [NSLayoutConstraint]()
     
-    enum VoteType {
-        case null
-        case up
-        case down
-    }
-    var voteType: VoteType = .null
+    var voteType: String = "null"    
     var pinType = ""
     var pinCommentID = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.separatorInset = UIEdgeInsets.zero
+        self.layoutMargins = UIEdgeInsets.zero
         loadCellContent()
-        commentConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
-        stickerConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(50)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgSticker, lblVoteCount)
-        imageConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(100)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgPicture, lblVoteCount)
+//        commentConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
+//        stickerConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(50)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgSticker, lblVoteCount)
+//        imageConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(100)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgPicture, lblVoteCount)
+//        addConstraints(commentConstraint)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateLayout() {
-        if isSticker {
-            removeConstraints(commentConstraint)
-            removeConstraints(imageConstraint)
-            addConstraints(stickerConstraint)
-            imgSticker.isHidden = false
-            imgPicture.isHidden = true
-            lblContent.isHidden = true
-        } else if isImage {
-            removeConstraints(commentConstraint)
-            removeConstraints(stickerConstraint)
-            addConstraints(imageConstraint)
-            imgSticker.isHidden = true
-            imgPicture.isHidden = false
-            lblContent.isHidden = true
-        } else {
-            removeConstraints(imageConstraint)
-            removeConstraints(stickerConstraint)
-            addConstraints(commentConstraint)
-            imgSticker.isHidden = true
-            imgPicture.isHidden = true
-            lblContent.isHidden = false
-        }
-    }
+//    func updateLayout() {
+//        if isSticker {
+//            removeConstraints(commentConstraint)
+//            removeConstraints(imageConstraint)
+//            addConstraints(stickerConstraint)
+//            imgSticker.isHidden = false
+//            imgPicture.isHidden = true
+//            lblContent.isHidden = true
+//        } else if isImage {
+//            removeConstraints(commentConstraint)
+//            removeConstraints(stickerConstraint)
+//            addConstraints(imageConstraint)
+//            imgSticker.isHidden = true
+//            imgPicture.isHidden = false
+//            lblContent.isHidden = true
+//        } else {
+//            removeConstraints(imageConstraint)
+//            removeConstraints(stickerConstraint)
+//            addConstraints(commentConstraint)
+//            imgSticker.isHidden = true
+//            imgPicture.isHidden = true
+//            lblContent.isHidden = false
+//        }
+//    }
     
     func loadCellContent() {
         
@@ -102,7 +100,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         addSubview(imgPicture)
         imgPicture.layer.cornerRadius = 5
         imgPicture.clipsToBounds = true
-        imgPicture.contentMode = .scaleAspectFill
+        imgPicture.contentMode = .scaleAspectFit
         addConstraintsWithFormat("H:|-27-[v0(100)]", options: [], views: imgPicture)
 //        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
 //        imgPicture.addGestureRecognizer(tapRecognizer)
@@ -110,7 +108,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.lineBreakMode = .byWordWrapping
-        lblContent.numberOfLines = 8
+        lblContent.numberOfLines = 0
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lblContent.textColor = UIColor.faeAppInputTextGrayColor()
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
@@ -159,6 +157,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         addSubview(btnReply)
         addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: btnReply)
         
+        addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
         addConstraintsWithFormat("V:|-15-[v0(20)]-1-[v1(20)]", options: [], views: lblUsername, lblTime)
         addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnDownVote)
         addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnUpVote)
@@ -178,7 +177,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func upVoteThisComment(_ sender: UIButton) {
-        if voteType == .up || pinCommentID == "" {
+        if voteType == "up" || pinCommentID == "" {
             cancelVote()
             return
         }
@@ -189,7 +188,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
             print("[upVoteThisComment] pinID: \(self.pinCommentID)")
             if status / 100 == 2 {
-                self.voteType = .up
+                self.voteType = "up"
                 self.updateVoteCount()
                 print("[upVoteThisComment] Successfully upvote this pin comment")
             }
@@ -197,11 +196,11 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
                 print("[upVoteThisComment] Already upvote this pin comment")
             }
             else {
-                if self.voteType == .down {
+                if self.voteType == "down" {
                     self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
                 }
-                else if self.voteType == .null {
+                else if self.voteType == "" {
                     self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
@@ -211,7 +210,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func downVoteThisComment(_ sender: UIButton) {
-        if voteType == .down || pinCommentID == "" {
+        if voteType == "down" || pinCommentID == "" {
             cancelVote()
             return
         }
@@ -221,7 +220,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         downVote.whereKey("vote", value: "down")
         downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
             if status / 100 == 2 {
-                self.voteType = .down
+                self.voteType = "down"
                 self.updateVoteCount()
                 print("[upVoteThisComment] Successfully downvote this pin comment")
             }
@@ -229,11 +228,11 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
                 print("[upVoteThisComment] Already downvote this pin comment")
             }
             else {
-                if self.voteType == .up {
+                if self.voteType == "up" {
                     self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
                     self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
-                else if self.voteType == .null {
+                else if self.voteType == "" {
                     self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
@@ -246,7 +245,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         let cancelVote = FaePinAction()
         cancelVote.cancelVotePinComments(pinId: "\(pinCommentID)") { (status: Int, message: Any?) in
             if status / 100 == 2 {
-                self.voteType = .null
+                self.voteType = ""
                 self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                 self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 self.updateVoteCount()

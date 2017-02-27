@@ -29,9 +29,10 @@ class PDEmptyCell: UITableViewCell {
         lblEmptyCommentArea.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         lblEmptyCommentArea.textAlignment = .center
         lblEmptyCommentArea.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        let padding = 140 * screenHeightFactor
         self.addSubview(lblEmptyCommentArea)
-        self.addConstraintsWithFormat("H:[v0(\(screenWidth))]", options: [], views: lblEmptyCommentArea)
-        self.addConstraintsWithFormat("V:[v0(25)]", options: [], views: lblEmptyCommentArea)
+        self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblEmptyCommentArea)
+        self.addConstraintsWithFormat("V:|-\(padding)-[v0(25)]-\(padding)-|", options: [], views: lblEmptyCommentArea)
         NSLayoutConstraint(item: lblEmptyCommentArea, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0).isActive = true
     }
 

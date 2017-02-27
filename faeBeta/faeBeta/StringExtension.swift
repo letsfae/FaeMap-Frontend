@@ -110,20 +110,18 @@ extension String {
         return usernameString
     }
     
-    func getFaeStickerName() -> String {
-        var stickerName = ""
+    func getFaeStickerName() -> String? {
         if let match = self.range(of: "(?<=<faeSticker>)[^.]+(?=</faeSticker>)", options: .regularExpression) {
-            stickerName = "\(self.substring(with: match))"
+            return "\(self.substring(with: match))"
         }
-        return stickerName
+        return nil
     }
     
-    func getFaeImageName() -> String {
-        var imgName = ""
+    func getFaeImageName() -> String? {
         if let match = self.range(of: "(?<=<faeImg>)[^.]+(?=</faeImg>)", options: .regularExpression) {
-            imgName = "\(self.substring(with: match))"
+            return "\(self.substring(with: match))"
         }
-        return imgName
+        return nil
     }
     
     func stringByDeletingLastEmoji() -> String {

@@ -262,7 +262,7 @@ extension PinDetailViewController {
         uiviewPinDetail.addSubview(imagePinUserAvatar)
         uiviewPinDetail.addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imagePinUserAvatar)
         uiviewPinDetail.addConstraintsWithFormat("V:|-15-[v0(50)]", options: [], views: imagePinUserAvatar)
-        imagePinUserAvatar.alpha = 0
+        imagePinUserAvatar.alpha = 1
         
         // Comment Pin Username
         labelPinUserName = UILabel()

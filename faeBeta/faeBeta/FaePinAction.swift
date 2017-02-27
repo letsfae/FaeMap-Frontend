@@ -9,6 +9,7 @@
 import Foundation
 
 class FaePinAction : NSObject {
+
     var keyValue = [String:AnyObject]()
     
     func whereKey(_ key:String, value:String) -> Void {

@@ -222,45 +222,73 @@ extension PinDetailViewController {
     }
     
     func getPinComments(_ type: String, pinID: String, sendMessageFlag: Bool) {
-        dictCommentsOnPinDetail.removeAll()
-        let getPinCommentsDetail = FaePinAction()
-        getPinCommentsDetail.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
-            let commentsOfCommentJSON = JSON(message!)
-            if commentsOfCommentJSON.count > 0 {
-                for i in 0...(commentsOfCommentJSON.count-1) {
-                    var dicCell = [String: AnyObject]()
-                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
-                        dicCell["pin_comment_id"] = pin_comment_id as AnyObject?
-                    }
-                    
-                    if let user_id = commentsOfCommentJSON[i]["user_id"].int {
-                        dicCell["user_id"] = user_id as AnyObject?
-                    }
-                    if let content = commentsOfCommentJSON[i]["content"].string {
-                        dicCell["content"] = content as AnyObject?
-                    }
-                    if let date = commentsOfCommentJSON[i]["created_at"].string {
-                        dicCell["date"] = date.formatFaeDate() as AnyObject?
-                    }
-                    if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
-//                        print("[getPinComments] upVoteCount: \(vote_up_count)")
-                        dicCell["vote_up_count"] = vote_up_count as AnyObject?
-                    }
-                    if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
-//                        print("[getPinComments] downVoteCount: \(vote_down_count)")
-                        dicCell["vote_down_count"] = vote_down_count as AnyObject?
-                    }
-                    if let voteType = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
-                        dicCell["vote_type"] = voteType as AnyObject?
-                    }
-                    
-                    self.dictCommentsOnPinDetail.insert(dicCell, at: 0)
-                }
+        pinComments.removeAll()
+        let getPinComments = FaePinAction()
+        getPinComments.getPinComments(type, pinID: pinID) {(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                print("[getPinComments] fail to get pin comments")
+                return
             }
+            let commentsJSON = JSON(message!)
+            guard let pinCommentJsonArray = commentsJSON.array else {
+                print("[getPinComments] fail to parse pin comments")
+                return
+            }
+            self.pinComments = pinCommentJsonArray.map{PinComment(json: $0)}
+            self.pinComments.reverse()
             self.tableCommentsForPin.reloadData()
-            if sendMessageFlag {
-                let indexPath = IndexPath(row: self.dictCommentsOnPinDetail.count - 1, section: 0)
-                self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            var count_name = 0
+            var count_image = 0
+            let realm = try! Realm()
+            if self.pinComments.count >= 1 {
+                for i in 0...self.pinComments.count - 1 {
+                    let getUser = FaeUser()
+                    let userid = self.pinComments[i].userId
+                    getUser.getNamecardOfSpecificUser("\(userid)", completion: { (status, message) in
+                        if status / 100 != 2 {
+                            print("[getNamecardOfSpecificUser] fail to get user")
+                        } else {
+                            let userJSON = JSON(message!)
+                            let displayName = userJSON["nick_name"].stringValue
+                            self.pinComments[i].displayName = displayName
+                            count_name += 1
+                            if count_name == self.pinComments.count {
+                                self.tableCommentsForPin.reloadData()
+                            }
+                        }
+                    })
+                    if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
+                        let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)
+                        self.pinComments[i].profileImage = profileImage!
+                        count_image += 1
+                        if count_image == self.pinComments.count {
+                            self.tableCommentsForPin.reloadData()
+                        }
+                    } else {
+                        let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
+                        let imgView = UIImageView()
+                        imgView.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if let profileImage = image {
+                                self.pinComments[i].profileImage = profileImage
+                                let userAvatar = UserAvatar()
+                                userAvatar.userId = userid
+                                userAvatar.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
+                                try! realm.write {
+                                    realm.add(userAvatar)
+                                }
+                                count_image += 1
+                                if count_image == self.pinComments.count {
+                                    self.tableCommentsForPin.reloadData()
+                                }
+                            }
+                        })
+                    }
+                    
+                }
+                if sendMessageFlag {
+                    let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
+                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                }
             }
         }
     }
@@ -276,9 +304,7 @@ extension PinDetailViewController {
             var opinLon = self.selectedMarkerPosition.longitude
             var opinTime = ""
             let pinInfoJSON = JSON(message!)
-//            print("[PinDetailViewController getPinInfo] id = \(self.pinIDPinDetailView) json = \(pinInfoJSON)")
             if let userid = pinInfoJSON["user_id"].int {
-//                print(user_id)
                 if userid == Int(user_id) {
                     self.thisIsMyPin = true
                 }
@@ -291,16 +317,12 @@ extension PinDetailViewController {
                 let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
                 for fileID in fileIDs {
                     if fileID != nil {
-//                        print("[getPinInfo] fileID: \(fileID)")
                         self.fileIdArray.append(fileID!)
                         //Changed by Yao, decide to pass fileIdArray to editPinViewController rather than fileIdString
                     }
                 }
                 self.loadMedias()
-//                print("[getPinInfo] fileIDs: \(self.fileIdArray)")
-//                print("[getPinInfo] fileIDs append done!")
                 if let content = pinInfoJSON["description"].string {
-//                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                     opinContent = "\(content)"
@@ -308,7 +330,6 @@ extension PinDetailViewController {
             }
             else if self.pinTypeEnum == .comment {
                 if let content = pinInfoJSON["content"].string {
-//                    print("[getPinInfo] description: \(content)")
                     self.stringPlainTextViewTxt = "\(content)"
                     self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
                     opinContent = "\(content)"
@@ -341,6 +362,7 @@ extension PinDetailViewController {
                 }
             }
             if let toGetUserName = pinInfoJSON["user_id"].int {
+//                getAvatarFromRealm(id: toGetUserName, imgView: self.imagePinUserAvatar)
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in

@@ -275,6 +275,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
+    func invalidateAllTimer() {
+        timerUpdateSelfLocation.invalidate()
+        timerLoadRegionPins.invalidate()
+        timerLoadRegionPlacePins.invalidate()
+    }
+    
     func isFirstTimeLogin(_ notification: NSNotification) {
         print("[isFirstTimeLogin] yes it is")
         loadFirstLoginVC()
