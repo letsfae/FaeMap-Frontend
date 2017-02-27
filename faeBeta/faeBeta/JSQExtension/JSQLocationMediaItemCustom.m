@@ -157,11 +157,25 @@
     if(![_text isEqualToString:@""] && ![_text isEqualToString:@"[Location]"]) {
         height = [_text boundingRectWithSize:CGSizeMake(273, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]} context:nil].size.height;
     }
-    UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
+    //UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
     
-    //UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, height == 0 ? 92 : 92 + 15 + height)];
+    UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, height == 0 ? 92 : 92 + 15 + height)];
     
     locationView.backgroundColor = [UIColor whiteColor];
+    
+    if(height != 0) {
+        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(13, 99, 273, height)];
+        _textLabel.font = [UIFont fontWithName:@"Avenir Next" size : 17.5];
+        _textLabel.text = _text;
+        _textLabel.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
+        _textLabel.numberOfLines = 0;
+        [locationView addSubview:_textLabel];
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(12, 92, 276, 1)];
+        line.backgroundColor = [UIColor colorWithRed: 234 / 255.0 green: 234 / 255.0 blue: 234 / 255.0 alpha: 1.0];
+        
+        [locationView addSubview:line];
+    }
     
     _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
     _addressLine1.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 16];

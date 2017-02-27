@@ -55,6 +55,8 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
 @property (nonatomic, retain, readwrite) UILabel *addressLine1;
 @property (nonatomic, retain, readwrite) UILabel *addressLine2;
 @property (nonatomic, retain, readwrite) UILabel *addressLine3;
+
+@property (nonatomic, retain, readwrite) UILabel *textLabel;
 /**
  *  Initializes and returns a location media item object having the given location.
  *

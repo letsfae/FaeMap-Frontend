@@ -156,6 +156,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.setup(initializeType)
         //miniLocation.isHidden = true
         //view.addSubview(miniLocation)
+        locExtendView.isHidden = true
+        self.view.addSubview(locExtendView)
+
     }
     
     override func viewDidLoad() {
@@ -195,14 +198,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
-        
-        self.view.addSubview(locExtendView)
-//        locExtendView.isHidden = true
-        
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {
-        
         if(parent == nil && chatRoomId != nil){
             roomRef?.removeAllObservers()
         }
