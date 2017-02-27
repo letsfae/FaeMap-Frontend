@@ -23,6 +23,7 @@
 
 @interface JSQLocationMediaItemCustom ()
 @property (nonatomic, strong) UIImage *snap;
+@property (nonatomic, strong) NSString *text;
 @end
 
 
@@ -33,6 +34,18 @@
 - (instancetype)initWithLocation:(CLLocation *)location snapImage:(UIImage *)snap
 {
     self = [super init];
+    _text = @"";
+    if (self) {
+        [self setLocation:location snapImage: snap withCompletionHandler:nil];
+    }
+    return self;
+
+}
+
+- (instancetype)initWithLocation:(CLLocation *)location snapImage:(UIImage *)snap text:(NSString *)comment
+{
+    self = [super init];
+    _text = comment;
     if (self) {
         [self setLocation:location snapImage: snap withCompletionHandler:nil];
     }
@@ -139,7 +152,15 @@
 
 - (UIView *)mediaView
 {
+    
+    CGFloat height = 0;
+    if(![_text isEqualToString:@""] && ![_text isEqualToString:@"[Location]"]) {
+        height = [_text boundingRectWithSize:CGSizeMake(273, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]} context:nil].size.height;
+    }
     UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
+    
+    //UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, height == 0 ? 92 : 92 + 15 + height)];
+    
     locationView.backgroundColor = [UIColor whiteColor];
     
     _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
@@ -166,7 +187,6 @@
         return nil;
     }
     
-//    if (self.cachedMapImageView == nil) {
     UIImageView *imageView = [[UIImageView alloc] initWithImage:self.cachedMapSnapshotImage];
         
     imageView.frame = CGRectMake(13, 13, 66, 66);
@@ -177,7 +197,7 @@
         
     [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:locationView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
     self.cachedMapImageView = locationView;
-//    }
+    
     return locationView;
 }
 
@@ -188,7 +208,12 @@
 
 - (CGSize) mediaViewDisplaySize
 {
-    return CGSizeMake(300, 92);
+    if([_text isEqualToString:@""] || [_text isEqualToString:@"[Location]"]) {
+        return CGSizeMake(300, 92);
+    } else {
+        CGFloat height = [_text boundingRectWithSize:CGSizeMake(273, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]} context:nil].size.height;
+        return CGSizeMake(300, 92 + 15 + height);
+    }
 }
 
 #pragma mark - NSObject
@@ -237,7 +262,12 @@
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    JSQLocationMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap];
+//    if([_text isEqualToString:@""]) {
+//        JSQLocationMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap];
+//        copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
+//        return copy;
+//    }
+    JSQLocationMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap text: _text];
     copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
     return copy;
 }

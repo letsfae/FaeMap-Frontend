@@ -16,7 +16,7 @@ class LocationExtendView : UIView {
     private var LabelLine1 : UILabel!
     private var LabelLine2 : UILabel!
     private var LabelLine3 : UILabel!
-
+    var location : CLLocation!
     
     init() {
         super.init(frame : CGRect(x: 0, y: screenHeight - 64 - 76 - 90, width: screenWidth, height: 76));
@@ -87,4 +87,7 @@ class LocationExtendView : UIView {
         self.isHidden = true
     }
     
+    func getImageDate() -> Data {
+        return UIImageJPEGRepresentation(imageView.image!, 0.7)!
+    }
 }

@@ -67,7 +67,12 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  Once the location data has been retrieved, you can then set the location property
  *  using `setLocation: withCompletionHandler:`
  */
+
 - (instancetype)initWithLocation:(CLLocation *)location snapImage: (UIImage *) snap;
+
+
+
+- (instancetype)initWithLocation:(CLLocation *)location snapImage: (UIImage *) snap text : (NSString *) comment;
 
 /**
  *  Sets the specified location for the location media item and immediately begins creating

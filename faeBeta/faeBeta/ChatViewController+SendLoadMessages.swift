@@ -18,13 +18,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         var outgoingMessage: OutgoingMessage? = nil
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
-        //if text message
-        if let text = text {
-            // send message
-            outgoingMessage = OutgoingMessage(message: text, senderId: user_id.stringValue , senderName: username! , date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-            
-        }
-        else if let pic = picture {
+        if let pic = picture {
             // send picture message
             
             if let imageData = compressImageToData(pic){
@@ -45,8 +39,8 @@ extension ChatViewController: OutgoingMessageProtocol{
             // send location message
             let lat : NSNumber = NSNumber(value: loc.coordinate.latitude as Double)
             let lon : NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
-            
-            outgoingMessage = OutgoingMessage(message: "[Location]", latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            let comment = text == "" ? "[Location]" : text!
+            outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         else if let audio = audio {
@@ -59,6 +53,11 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
         else if let snapImage = snapImage{
             outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "gif" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+        }
+        //if text message
+        else if let text = text {
+            // send message
+            outgoingMessage = OutgoingMessage(message: text, senderId: user_id.stringValue , senderName: username! , date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
         }
         
         //play message sent sound

@@ -90,9 +90,15 @@ class IncomingMessage {
         
         let latitude = item["latitude"] as? Double
         let longitude = item["longitude"] as? Double
-        
         let location = CLLocation(latitude: latitude!, longitude: longitude!)
-        let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil)
+        
+        //var mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil)
+        
+        //if let comment = item["message"] as? String {
+        let comment = item["message"] as? String
+        let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil, text : comment)
+        //}
+        
         
         let geocoder = GMSGeocoder()
         
