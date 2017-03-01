@@ -47,11 +47,23 @@ extension FaeMapViewController {
         
         // All type
         var resultArray = [YelpResult]()
+        var resultName = [String]()
+        
+        func checkPlaceExist(_ result: YelpResult) -> Bool {
+            if resultName.contains(result.getName()) {
+                return true
+            }
+            return false
+        }
         
         if !all {
             yelpQuery.setResultLimit(count: 10)
             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                 for result in results {
+                    if checkPlaceExist(result) {
+                        continue
+                    }
+                    resultName.append(result.getName())
                     resultArray.append(result)
                 }
                 self.pinPlacesOnMap(results: resultArray)
@@ -63,42 +75,74 @@ extension FaeMapViewController {
             yelpQuery.setCatagoryToRestaurant()
             yelpManager.query(request: yelpQuery, completion: { (results) in
                 for result in results {
+                    if checkPlaceExist(result) {
+                        continue
+                    }
+                    resultName.append(result.getName())
                     resultArray.append(result)
                 }
                 self.yelpQuery.setResultLimit(count: 2)
                 self.yelpQuery.setCatagoryToDessert()
                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                     for result in results {
+                        if checkPlaceExist(result) {
+                            continue
+                        }
+                        resultName.append(result.getName())
                         resultArray.append(result)
                     }
                     self.yelpQuery.setCatagoryToCafe()
                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                         for result in results {
+                            if checkPlaceExist(result) {
+                                continue
+                            }
+                            resultName.append(result.getName())
                             resultArray.append(result)
                         }
                         self.yelpQuery.setCatagoryToCinema()
                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                             for result in results {
+                                if checkPlaceExist(result) {
+                                    continue
+                                }
+                                resultName.append(result.getName())
                                 resultArray.append(result)
                             }
                             self.yelpQuery.setCatagoryToSport()
                             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                 for result in results {
+                                    if checkPlaceExist(result) {
+                                        continue
+                                    }
+                                    resultName.append(result.getName())
                                     resultArray.append(result)
                                 }
                                 self.yelpQuery.setCatagoryToBeauty()
                                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                     for result in results {
+                                        if checkPlaceExist(result) {
+                                            continue
+                                        }
+                                        resultName.append(result.getName())
                                         resultArray.append(result)
                                     }
                                     self.yelpQuery.setCatagoryToArt()
                                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                         for result in results {
+                                            if checkPlaceExist(result) {
+                                                continue
+                                            }
+                                            resultName.append(result.getName())
                                             resultArray.append(result)
                                         }
                                         self.yelpQuery.setCatagoryToJuice()
                                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                             for result in results {
+                                                if checkPlaceExist(result) {
+                                                    continue
+                                                }
+                                                resultName.append(result.getName())
                                                 resultArray.append(result)
                                             }
                                             self.pinPlacesOnMap(results: resultArray)
@@ -114,179 +158,11 @@ extension FaeMapViewController {
         }
     }
     
-    func calculateZoomLevel(results: [YelpResult]) {
-        var latArr = [Double]()
-        var lonArr = [Double]()
-        for result in results {
-            latArr.append(result.getPosition().latitude)
-            lonArr.append(result.getPosition().longitude)
-        }
-        
-        let minLat = latArr.min()!
-        let maxLat = latArr.max()!
-        let minLon = lonArr.min()!
-        let maxLon = lonArr.max()!
-        let northWestCor = CLLocationCoordinate2DMake(maxLat, minLon)
-        let southEastCor = CLLocationCoordinate2DMake(minLat, maxLon)
-        let geoBounds = GMSCoordinateBounds(coordinate: northWestCor, coordinate: southEastCor)
-        let cameraUpdate = GMSCameraUpdate.fit(geoBounds, withPadding: 25.0)
-        faeMapView.animate(with: cameraUpdate)
-    }
-    
-    func pinPlacesOnMap(results: [YelpResult]) {
-        for result in results {
-            var pinData = [String: AnyObject]()
-            var iconImage = UIImage()
-            pinData["title"] = result.getName() as AnyObject?
-            let categoryList = result.getCategory()
-            pinData["type"] = "place" as AnyObject?
-            pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
-            iconImage = self.placesPinIconImage(categoryList: categoryList)
-            pinData["latitude"] = result.getPosition().latitude as AnyObject?
-            pinData["longitude"] = result.getPosition().longitude as AnyObject?
-            pinData["street"] = result.getAddress1() as AnyObject?
-            pinData["city"] = result.getAddress2() as AnyObject?
-            pinData["imageURL"] = result.getImageURL() as AnyObject?
-            let pinMap = GMSMarker()
-            let icon = UIImageView(frame: CGRect.zero)
-            icon.contentMode = .scaleAspectFit
-            icon.image = iconImage
-            pinMap.iconView = icon
-            let delay: Double = Double(arc4random_uniform(200)) / 100
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            pinMap.position = result.getPosition()
-            pinMap.userData = pinData
-            pinMap.map = self.faeMapView
-            self.mapPlacePinsDic.append(pinMap)
-            UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                icon.frame.size.width = 48
-                icon.frame.size.height = 54
-            }, completion: {(done: Bool) in
-                if done {
-                    pinMap.iconView = nil
-                    pinMap.icon = iconImage
-                }
-            })
-        }
-    }
-    
-    func placesPinCheckCategory(categoryList: [String]) -> String {
-        if categoryList.contains("burgers") {
-            return "burgers"
-        }
-        else if categoryList.contains("pizza") {
-            return "pizza"
-        }
-        else if categoryList.contains("coffee") {
-            return "coffee"
-        }
-        else if categoryList.contains("desserts") {
-            return "desserts"
-        }
-        else if categoryList.contains("icecream") {
-            return "desserts"
-        }
-        else if categoryList.contains("movietheaters") {
-            return "movietheaters"
-        }
-        else if categoryList.contains("museums") {
-            return "museums"
-        }
-        else if categoryList.contains("galleries") {
-            return "museums"
-        }
-        else if categoryList.contains("beautysvc") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("spas") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("barbers") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("skincare") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("massage") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("playgrounds") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("countryclubs") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("sports_clubs") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("bubbletea") {
-            return "juicebars"
-        }
-        else if categoryList.contains("juicebars") {
-            return "juicebars"
-        }
-        return ""
-    }
-    
-    func placesPinIconImage(categoryList: [String]) -> UIImage {
-        var iconImage = UIImage()
-        if categoryList.contains("burgers") {
-            iconImage = #imageLiteral(resourceName: "placePinBurger")
-        }
-        else if categoryList.contains("pizza") {
-            iconImage = #imageLiteral(resourceName: "placePinPizza")
-        }
-        else if categoryList.contains("coffee") {
-            iconImage = #imageLiteral(resourceName: "placePinCoffee")
-        }
-        else if categoryList.contains("desserts") {
-            iconImage = #imageLiteral(resourceName: "placePinDesert")
-        }
-        else if categoryList.contains("icecream") {
-            iconImage = #imageLiteral(resourceName: "placePinDesert")
-        }
-        else if categoryList.contains("movietheaters") {
-            iconImage = #imageLiteral(resourceName: "placePinCinema")
-        }
-        else if categoryList.contains("museums") {
-            iconImage = #imageLiteral(resourceName: "placePinArt")
-        }
-        else if categoryList.contains("galleries") {
-            iconImage = #imageLiteral(resourceName: "placePinArt")
-        }
-        else if categoryList.contains("spas") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
-        }
-        else if categoryList.contains("barbers") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
-        }
-        else if categoryList.contains("skincare") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
-        }
-        else if categoryList.contains("massage") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
-        }
-        else if categoryList.contains("playgrounds") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
-        }
-        else if categoryList.contains("countryclubs") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
-        }
-        else if categoryList.contains("sports_clubs") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
-        }
-        else if categoryList.contains("bubbletea") {
-            iconImage = #imageLiteral(resourceName: "placePinBoba")
-        }
-        else if categoryList.contains("juicebars") {
-            iconImage = #imageLiteral(resourceName: "placePinBoba")
-        }
-        return iconImage
-    }
-    
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins(radius: Int) {
         clearMap(type: "pin")
+        self.mapPinsDic.removeAll()
+        self.mapPins.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -302,12 +178,17 @@ extension FaeMapViewController {
                 return
             }
             let mapInfoJSON = JSON(message!)
-
-            self.mapPinsDic.removeAll()
-            if mapInfoJSON.count <= 0 {
+            guard let mapPinJsonArray = mapInfoJSON.array else {
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                print("[getPinComments] fail to parse pin comments")
+                return
+            }
+            if mapPinJsonArray.count <= 0 {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
+            
+            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
             
             for i in 0...(mapInfoJSON.count-1) {
                 let pinMap = GMSMarker()
@@ -384,13 +265,6 @@ extension FaeMapViewController {
                 if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
                     pinData["\(type)_id"] = pinIDInfo as AnyObject?
                     self.mapPinsDic[pinIDInfo] = pinMap
-                    /*
-                    if self.pinIDFromOpenedPinCell == pinIDInfo {
-                        self.markerBackFromPinDetail = pinMap
-                        pinMap.icon = UIImage(named: "")
-                        pinMap.zIndex = 2
-                    }
-                     */
                 }
                 if let userIDInfo = mapInfoJSON[i]["user_id"].int {
                     pinData["user_id"] = userIDInfo as AnyObject?
@@ -429,61 +303,6 @@ extension FaeMapViewController {
         }
     }
     
-    func pinIconSelector(type: String, status: String) -> UIImage {
-        switch type {
-        case "comment":
-            if status == "hot" {
-                return #imageLiteral(resourceName: "markerCommentHot")
-            }
-            else if status == "new" {
-                return #imageLiteral(resourceName: "markerCommentNew")
-            }
-            else if status == "hot and read" {
-                return #imageLiteral(resourceName: "markerCommentHotRead")
-            }
-            else if status == "read" {
-                return #imageLiteral(resourceName: "markerCommentRead")
-            }
-            else {
-                return #imageLiteral(resourceName: "commentPinMarker")
-            }
-        case "chat_room":
-            if status == "hot" {
-                return #imageLiteral(resourceName: "markerChatHot")
-            }
-            else if status == "new" {
-                return #imageLiteral(resourceName: "markerChatNew")
-            }
-            else if status == "hot and read" {
-                return #imageLiteral(resourceName: "markerChatHotRead")
-            }
-            else if status == "read" {
-                return #imageLiteral(resourceName: "markerChatRead")
-            }
-            else {
-                return #imageLiteral(resourceName: "chatPinMarker")
-            }
-        case "media":
-            if status == "hot" {
-                return #imageLiteral(resourceName: "markerMomentHot")
-            }
-            else if status == "new" {
-                return #imageLiteral(resourceName: "markerMomentNew")
-            }
-            else if status == "hot and read" {
-                return #imageLiteral(resourceName: "markerMomentHotRead")
-            }
-            else if status == "read" {
-                return #imageLiteral(resourceName: "markerMomentRead")
-            }
-            else {
-                return #imageLiteral(resourceName: "momentPinMarker")
-            }
-        default:
-            return UIImage()
-        }
-    }
-    
     // Timer to update location (send self location to server)
     func updateSelfLocation(radius: Int) {
         if didLoadFirstLoad || !canDoNextUserUpdate {
@@ -499,7 +318,7 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getMapUserInfo.whereKey("radius", value: "500000")
         getMapUserInfo.whereKey("type", value: "user")
-        getMapUserInfo.whereKey("user_updated_in", value: "30")
+//        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
@@ -510,6 +329,9 @@ extension FaeMapViewController {
                 return
             }
             for i in 0...(mapUserInfoJSON.count-1) {
+                if i > 5 {
+                    break
+                }
                 var userIDinGetMapUser = -999
                 let pinUser = GMSMarker()
                 var pinData = [String: AnyObject]()
@@ -574,5 +396,230 @@ extension FaeMapViewController {
                 }
             }
         }
+    }
+    
+    func pinIconSelector(type: String, status: String) -> UIImage {
+        switch type {
+        case "comment":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerCommentHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerCommentNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerCommentHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerCommentRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "commentPinMarker")
+            }
+        case "chat_room":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerChatHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerChatNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerChatHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerChatRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "chatPinMarker")
+            }
+        case "media":
+            if status == "hot" {
+                return #imageLiteral(resourceName: "markerMomentHot")
+            }
+            else if status == "new" {
+                return #imageLiteral(resourceName: "markerMomentNew")
+            }
+            else if status == "hot and read" {
+                return #imageLiteral(resourceName: "markerMomentHotRead")
+            }
+            else if status == "read" {
+                return #imageLiteral(resourceName: "markerMomentRead")
+            }
+            else {
+                return #imageLiteral(resourceName: "momentPinMarker")
+            }
+        default:
+            return UIImage()
+        }
+    }
+    
+    fileprivate func calculateZoomLevel(results: [YelpResult]) {
+        var latArr = [Double]()
+        var lonArr = [Double]()
+        for result in results {
+            latArr.append(result.getPosition().latitude)
+            lonArr.append(result.getPosition().longitude)
+        }
+        
+        let minLat = latArr.min()!
+        let maxLat = latArr.max()!
+        let minLon = lonArr.min()!
+        let maxLon = lonArr.max()!
+        let northWestCor = CLLocationCoordinate2DMake(maxLat, minLon)
+        let southEastCor = CLLocationCoordinate2DMake(minLat, maxLon)
+        let geoBounds = GMSCoordinateBounds(coordinate: northWestCor, coordinate: southEastCor)
+        let cameraUpdate = GMSCameraUpdate.fit(geoBounds, withPadding: 25.0)
+        faeMapView.animate(with: cameraUpdate)
+    }
+    
+    fileprivate func pinPlacesOnMap(results: [YelpResult]) {
+        for result in results {
+            var pinData = [String: AnyObject]()
+            var iconImage = UIImage()
+            pinData["title"] = result.getName() as AnyObject?
+            let categoryList = result.getCategory()
+            pinData["type"] = "place" as AnyObject?
+            pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
+            iconImage = self.placesPinIconImage(categoryList: categoryList)
+            pinData["latitude"] = result.getPosition().latitude as AnyObject?
+            pinData["longitude"] = result.getPosition().longitude as AnyObject?
+            pinData["street"] = result.getAddress1() as AnyObject?
+            pinData["city"] = result.getAddress2() as AnyObject?
+            pinData["imageURL"] = result.getImageURL() as AnyObject?
+            let pinMap = GMSMarker()
+            let icon = UIImageView(frame: CGRect.zero)
+            icon.contentMode = .scaleAspectFit
+            icon.image = iconImage
+            pinMap.iconView = icon
+            let delay: Double = Double(arc4random_uniform(200)) / 100
+            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+            pinMap.position = result.getPosition()
+            pinMap.userData = pinData
+            pinMap.map = self.faeMapView
+            self.mapPlacePinsDic.append(pinMap)
+            UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                icon.frame.size.width = 48
+                icon.frame.size.height = 54
+            }, completion: {(done: Bool) in
+                if done {
+                    pinMap.iconView = nil
+                    pinMap.icon = iconImage
+                }
+            })
+        }
+    }
+    
+    fileprivate func placesPinCheckCategory(categoryList: [String]) -> String {
+        if categoryList.contains("burgers") {
+            return "burgers"
+        }
+        else if categoryList.contains("pizza") {
+            return "pizza"
+        }
+        else if categoryList.contains("coffee") {
+            return "coffee"
+        }
+        else if categoryList.contains("desserts") {
+            return "desserts"
+        }
+        else if categoryList.contains("icecream") {
+            return "desserts"
+        }
+        else if categoryList.contains("movietheaters") {
+            return "movietheaters"
+        }
+        else if categoryList.contains("museums") {
+            return "museums"
+        }
+        else if categoryList.contains("galleries") {
+            return "museums"
+        }
+        else if categoryList.contains("beautysvc") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("spas") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("barbers") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("skincare") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("massage") {
+            return "beautysvc"
+        }
+        else if categoryList.contains("playgrounds") {
+            return "playgrounds"
+        }
+        else if categoryList.contains("countryclubs") {
+            return "playgrounds"
+        }
+        else if categoryList.contains("sports_clubs") {
+            return "playgrounds"
+        }
+        else if categoryList.contains("bubbletea") {
+            return "juicebars"
+        }
+        else if categoryList.contains("juicebars") {
+            return "juicebars"
+        }
+        return ""
+    }
+    
+    fileprivate func placesPinIconImage(categoryList: [String]) -> UIImage {
+        var iconImage = UIImage()
+        if categoryList.contains("burgers") {
+            iconImage = #imageLiteral(resourceName: "placePinBurger")
+        }
+        else if categoryList.contains("pizza") {
+            iconImage = #imageLiteral(resourceName: "placePinPizza")
+        }
+        else if categoryList.contains("coffee") {
+            iconImage = #imageLiteral(resourceName: "placePinCoffee")
+        }
+        else if categoryList.contains("desserts") {
+            iconImage = #imageLiteral(resourceName: "placePinDesert")
+        }
+        else if categoryList.contains("icecream") {
+            iconImage = #imageLiteral(resourceName: "placePinDesert")
+        }
+        else if categoryList.contains("movietheaters") {
+            iconImage = #imageLiteral(resourceName: "placePinCinema")
+        }
+        else if categoryList.contains("museums") {
+            iconImage = #imageLiteral(resourceName: "placePinArt")
+        }
+        else if categoryList.contains("galleries") {
+            iconImage = #imageLiteral(resourceName: "placePinArt")
+        }
+        else if categoryList.contains("spas") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("barbers") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("skincare") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("massage") {
+            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+        }
+        else if categoryList.contains("playgrounds") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("countryclubs") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("sports_clubs") {
+            iconImage = #imageLiteral(resourceName: "placePinSport")
+        }
+        else if categoryList.contains("bubbletea") {
+            iconImage = #imageLiteral(resourceName: "placePinBoba")
+        }
+        else if categoryList.contains("juicebars") {
+            iconImage = #imageLiteral(resourceName: "placePinBoba")
+        }
+        return iconImage
     }
 }

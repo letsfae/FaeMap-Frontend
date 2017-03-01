@@ -29,7 +29,8 @@ struct PinComment {
         self.displayName = ""
         self.date = json["created_at"].stringValue.formatFaeDate()
         self.numVoteCount = json["vote_up_count"].intValue - json["vote_down_count"].intValue
-        self.voteType = json["vote_type"].stringValue
+        self.voteType = json["pin_comment_operations"]["vote"].stringValue
+        print("[PinComment]", self.voteType, "smth")
         self.profileImage = UIImage()
         let contentJson = json["content"].stringValue
         if let stickerName = contentJson.getFaeStickerName() {

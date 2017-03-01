@@ -43,36 +43,26 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.lblTime.text = comment.date
             cell.lblVoteCount.text = "\(comment.numVoteCount)"
             cell.voteType = comment.voteType
+            switch comment.voteType {
+            case "up":
+                cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+                cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                break
+            case "down":
+                cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+                break
+            default:
+                cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+                cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+                break
+            }
             cell.lblContent.attributedText = comment.attributedText
             cell.imgAvatar.image = comment.profileImage
-//            getAvatarFromRealm(id: comment.userId, imgView: cell.imgAvatar)
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                
-                DispatchQueue.main.async {
-                    
-                }
-            }
+
             return cell
         }
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if self.pinCommentsCount == 0 {
-//            return screenHeight - 436 * screenHeightFactor
-//        } else {
-//            return 140
-//        }
-//    }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if tableView == self.tableCommentsForPin {
-//            let cell = tableView.cellForRow(at: indexPath) as! PinCommentsCell
-//            if let usernameInCell = cell.lblUsername.text {
-//                self.actionShowActionSheet(usernameInCell)
-//            }
-//        }
-//    }
     
     func showFullCellImage(_ image: UIImage) {
         let photos = IDMPhoto.photos(withImages: [image])

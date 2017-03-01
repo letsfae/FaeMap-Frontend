@@ -154,7 +154,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
                     self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
                     var placesAll = false
-                    if btnMFilterPlacesAll.tag == 1 {
+                    if btnMFilterPlacesAll.tag == 1 || btnMFilterTypeAll.tag == 1 {
                         placesAll = true
                     }
                     self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500), all: placesAll)
@@ -195,7 +195,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 mapView.animate (to: camera)
                 if let userid = pinLoc["user_id"].int {
                     self.updateNameCard(withUserId: userid)
-                    
+                    self.animateNameCard()
                     UIView.animate(withDuration: 0.25, animations: {
                         self.buttonFakeTransparentClosingView.alpha = 1
                     })

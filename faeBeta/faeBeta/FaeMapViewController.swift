@@ -81,6 +81,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var mapPinsArray = [GMSMarker]() // Map Comment Pin Array
     var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin Dictionary
+    var mapPins = [MapPin]()
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
     var mapPlacePinsDic = [GMSMarker]() // Map User Pin
     var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
@@ -118,6 +119,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelUserAge: UILabel!
     var uiviewUserGender: UIView!
     var imageUserGender: UIImageView!
+    var avatarBaseView: UIView!
+    let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0)
+    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451)
     
     // Map Filter
     let filterMenuHeight = 542 * screenHeightFactor

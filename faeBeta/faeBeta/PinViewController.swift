@@ -226,6 +226,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         initPinBasicInfo()
         checkPinStatus()
         self.delegate?.disableSelfMarker(yes: true)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.displayNameDidLoadNotification(_:)), name: NSNotification.Name(rawValue: "displayNameDidLoad"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -263,6 +264,12 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             toolbarContentView.removeFromSuperview()
         }
         UIApplication.shared.statusBarStyle = .default
+    }
+    
+    func displayNameDidLoadNotification(_ notification: NSNotification) {
+        if let cell = notification.object as? PinCommentsCell, let indexPath = tableCommentsForPin.indexPath(for: cell) {
+            tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        }
     }
     
     func showAlert(title: String, message: String) {

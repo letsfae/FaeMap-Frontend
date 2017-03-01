@@ -40,6 +40,12 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var voteType: String = "null"    
     var pinType = ""
     var pinCommentID = ""
+//    var userId = "" {
+//        didSet {
+//            self.updateUI()
+//        }
+//    }
+//    var displayName = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,6 +61,20 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//    func updateUI() {
+//        let getUser = FaeUser()
+//        getUser.getNamecardOfSpecificUser(userId, completion: { (status, message) in
+//            if status / 100 != 2 {
+//                print("[getNamecardOfSpecificUser] fail to get user")
+//            } else {
+//                let userJSON = JSON(message!)
+//                let displayName = userJSON["nick_name"].stringValue
+//                self.lblUsername.text = displayName
+////                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayNameDidLoad"), object: self)
+//            }
+//        })
+//    }
     
 //    func updateLayout() {
 //        if isSticker {
@@ -138,14 +158,14 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         
         // DownVote
         btnDownVote = UIButton()
-        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         btnDownVote.addTarget(self, action: #selector(downVoteThisComment(_:)), for: .touchUpInside)
         addSubview(btnDownVote)
         addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: btnDownVote)
         
         // UpVote
         btnUpVote = UIButton()
-        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         btnUpVote.addTarget(self, action: #selector(upVoteThisComment(_:)), for: .touchUpInside)
         addSubview(btnUpVote)
         addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: btnUpVote)
@@ -159,8 +179,8 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         
         addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
         addConstraintsWithFormat("V:|-15-[v0(20)]-1-[v1(20)]", options: [], views: lblUsername, lblTime)
-        addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnDownVote)
-        addConstraintsWithFormat("V:[v0(22)]-16-|", options: [], views: btnUpVote)
+        addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnDownVote)
+        addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnUpVote)
         addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnReply)
     }
     

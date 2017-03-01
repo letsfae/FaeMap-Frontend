@@ -237,11 +237,10 @@ extension PinDetailViewController {
             self.pinComments = pinCommentJsonArray.map{PinComment(json: $0)}
             self.pinComments.reverse()
             self.tableCommentsForPin.reloadData()
-            var count_name = 0
-            var count_image = 0
             let realm = try! Realm()
             if self.pinComments.count >= 1 {
                 for i in 0...self.pinComments.count - 1 {
+                    let indexPath = IndexPath(row: i, section: 0)
                     let getUser = FaeUser()
                     let userid = self.pinComments[i].userId
                     getUser.getNamecardOfSpecificUser("\(userid)", completion: { (status, message) in
@@ -251,23 +250,16 @@ extension PinDetailViewController {
                             let userJSON = JSON(message!)
                             let displayName = userJSON["nick_name"].stringValue
                             self.pinComments[i].displayName = displayName
-                            count_name += 1
-                            if count_name == self.pinComments.count {
-                                self.tableCommentsForPin.reloadData()
-                            }
+                            self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                         }
                     })
                     if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
                         let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)
                         self.pinComments[i].profileImage = profileImage!
-                        count_image += 1
-                        if count_image == self.pinComments.count {
-                            self.tableCommentsForPin.reloadData()
-                        }
+                        self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                     } else {
                         let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
-                        let imgView = UIImageView()
-                        imgView.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                        UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                             if let profileImage = image {
                                 self.pinComments[i].profileImage = profileImage
                                 let userAvatar = UserAvatar()
@@ -276,10 +268,7 @@ extension PinDetailViewController {
                                 try! realm.write {
                                     realm.add(userAvatar)
                                 }
-                                count_image += 1
-                                if count_image == self.pinComments.count {
-                                    self.tableCommentsForPin.reloadData()
-                                }
+                                self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                             }
                         })
                     }
