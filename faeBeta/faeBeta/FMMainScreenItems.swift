@@ -154,100 +154,32 @@ extension FaeMapViewController {
     }
     
     func loadMarkerWithpinID(pinID: String, type: String, tempMaker: UIImageView) {
-        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-        let loadPinsByZoomLevel = FaeMap()
-        loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
-        loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        loadPinsByZoomLevel.whereKey("radius", value: "200")
-        loadPinsByZoomLevel.whereKey("type", value: type)
-        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
-        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
-            let mapInfoJSON = JSON(message!)
-            if mapInfoJSON.count > 0 {
-                for i in 0...(mapInfoJSON.count-1) {
-                    let pinShowOnMap = GMSMarker()
-                    pinShowOnMap.zIndex = 1
-                    var pinData = [String: AnyObject]()
-                    var type = "comment"
-                    var status = ""
-                    var userid = -999
-                    var iconImage = UIImage()
-                    if let useridInfo = mapInfoJSON[i]["user_id"].int {
-                        userid = useridInfo
-                    }
-                    if let typeInfo = mapInfoJSON[i]["type"].string {
-                        pinData["type"] = typeInfo as AnyObject?
-                        if typeInfo == "comment" {
-                            type = "comment"
-                        }
-                        else if typeInfo.contains("chat"){
-                            type = "chat_room"
-                        }
-                        else if typeInfo == "media" {
-                            type = "media"
-                        }
-                        pinShowOnMap.zIndex = 0
-                        if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                            if createdTimeInfo.isNewPin() {
-                                status = "new"
-                            }
-                        }
-                        if userid == Int(user_id) {
-                            status = "normal"
-                        }
-                        if let likeCount = mapInfoJSON[i]["liked_count"].int {
-                            if likeCount >= 15 {
-                                status = "hot"
-                            }
-                        }
-                        if let commentCount = mapInfoJSON[i]["comment_count"].int {
-                            if commentCount >= 10 {
-                                status = "hot"
-                            }
-                        }
-                        if let readInfo = mapInfoJSON[i]["user_pin_operations"]["is_read"].bool {
-                            if readInfo && status == "hot" {
-                                status = "hot and read"
-                            }
-                            else if readInfo {
-                                status = "read"
-                            }
-                        }
-                        pinData["status"] = status as AnyObject?
-                        iconImage = self.pinIconSelector(type: type, status: status)
-                        pinShowOnMap.icon = iconImage
-                    }
-                    if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
-                        if pinID != "\(pinIDInfo)" {
-                            print("[loadMarkerWithpinID] not found pinID")
-                            continue
-                        }
-                        pinData["\(type)_id"] = pinIDInfo as AnyObject?
-                        print("[loadMarkerWithpinID] found pinID")
-                    }
-                    if let userIDInfo = mapInfoJSON[i]["user_id"].int {
-                        pinData["user_id"] = userIDInfo as AnyObject?
-                    }
-                    if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                        pinData["created_at"] = createdTimeInfo as AnyObject?
-                    }
-                    if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
-                        pinData["latitude"] = latitudeInfo as AnyObject?
-                        pinShowOnMap.position.latitude = latitudeInfo
-                    }
-                    if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
-                        pinData["longitude"] = longitudeInfo as AnyObject?
-                        pinShowOnMap.position.longitude = longitudeInfo
-                    }
-                    pinShowOnMap.userData = pinData
-                    pinShowOnMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-                    pinShowOnMap.appearAnimation = GMSMarkerAnimation.none
-                    pinShowOnMap.map = self.faeMapView
-                    self.mapPinsArray.append(pinShowOnMap)
-                    Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.removeTempMarker), userInfo: nil, repeats: false)
-                }
+        let loadPin = FaeMap()
+        loadPin.getPin(type: type, pinId: pinID) {(status: Int, message: Any?) in
+            if status/100 != 2 || message == nil {
+                print("[loadMarkerWithpinID] status/100 != 2")
+                return
             }
+            guard let mapInfo = message else {
+                print("[loadMarkerWithpinID] fail to parse pin info")
+                return
+            }
+            let mapPinJson = JSON(mapInfo)
+            var mapPin = MapPin(json: mapPinJson)
+            mapPin.pinId = Int(pinID)!
+            mapPin.type = type
+            print("[loadMarkerWithpinID]", mapPin)
+            self.mapPins.append(mapPin)
+            let pinMap = GMSMarker()
+            pinMap.icon = self.pinIconSelector(type: type, status: mapPin.status)
+            pinMap.position = mapPin.position
+            pinMap.userData = [0: mapPin]
+            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+            pinMap.zIndex = 1
+            pinMap.appearAnimation = GMSMarkerAnimation.none
+            pinMap.map = self.faeMapView
+            self.mapPinsArray.append(pinMap)
+            Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.removeTempMarker), userInfo: nil, repeats: false)
         }
     }
     

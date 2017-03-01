@@ -11,9 +11,9 @@ import SwiftyJSON
 import RealmSwift
 
 struct MapPin {
-    let pinId: Int
+    var pinId: Int
     let userId: Int
-    let type: String
+    var type: String
     var status: String
     let position: CLLocationCoordinate2D
     

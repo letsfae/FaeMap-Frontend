@@ -242,86 +242,86 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             return true
         }
         
-        let pinLoc = JSON(marker.userData!)
-        if let type = pinLoc["type"].string {
-            if type == "user" {
-                
-            }
-            if !self.canOpenAnotherPin {
-                return true
-            }
-            mapView.camera = camera
-            self.canOpenAnotherPin = false
-            
-            let pinDetailVC = PinDetailViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
-            pinDetailVC.pinMarker = marker
-            pinDetailVC.delegate = self
-            if type == "place" {
-                var pinTypeID = ""
-                var category = "burgers"
-                var title = ""
-                var street = ""
-                var city = ""
-                pinDetailVC.pinTypeEnum = .place
-                
-                let opinListElem = OPinListElem()
-                
-                if let placeType = pinLoc["category"].string {
-                    pinDetailVC.placeType = placeType
-                    category = placeType
-                    opinListElem.category = placeType
-                }
-                if let placeTitle = pinLoc["title"].string {
-                    pinDetailVC.strPlaceTitle = placeTitle
-                    title = placeTitle
-                }
-                if let placeStreet = pinLoc["street"].string {
-                    pinDetailVC.strPlaceStreet = placeStreet
-                    street = placeStreet
-                    opinListElem.street = placeStreet
-                }
-                if let placeCity = pinLoc["city"].string {
-                    pinDetailVC.strPlaceCity = placeCity
-                    city = placeCity
-                    opinListElem.city = placeCity
-                }
-                if let placeImageURL = pinLoc["imageURL"].string {
-                    pinDetailVC.strPlaceImageURL = placeImageURL
-                    opinListElem.imageURL = placeImageURL
-                }
-                
-                // for opened pin list
-                if let storedList = readByKey("openedPinList"){
-                    var openedPinListArray = storedList as! [String]
-                    pinTypeID = "\(type)%\(title)\(street)%\(category)"
-                    if openedPinListArray.contains(pinTypeID) == false {
-                        openedPinListArray.insert(pinTypeID, at: 0)
-                    }
-                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                }
-                
-                // write in realm swift
-                let realm = try! Realm()
-                
-                opinListElem.pinTypeId = "\(type)\(title)\(street)"
-                opinListElem.pinContent = title
-                opinListElem.pinLat = marker.position.latitude
-                opinListElem.pinLon = marker.position.longitude
-                opinListElem.pinTime = "\(street), \(city)"
-                try! realm.write {
-                    realm.add(opinListElem, update: true)
-                }
-                
-                timerUpdateSelfLocation.invalidate()
-                self.clearMap(type: "user")
-                self.present(pinDetailVC, animated: false, completion: {
-                    self.canOpenAnotherPin = true
-                })
-                return true
-            }
-        }
+//        let pinLoc = JSON(marker.userData!)
+//        if let type = pinLoc["type"].string {
+//            if type == "user" {
+//                
+//            }
+//            if !self.canOpenAnotherPin {
+//                return true
+//            }
+//            mapView.camera = camera
+//            self.canOpenAnotherPin = false
+//            
+//            let pinDetailVC = PinDetailViewController()
+//            pinDetailVC.modalPresentationStyle = .overCurrentContext
+//            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+//            pinDetailVC.pinMarker = marker
+//            pinDetailVC.delegate = self
+//            if type == "place" {
+//                var pinTypeID = ""
+//                var category = "burgers"
+//                var title = ""
+//                var street = ""
+//                var city = ""
+//                pinDetailVC.pinTypeEnum = .place
+//                
+//                let opinListElem = OPinListElem()
+//                
+//                if let placeType = pinLoc["category"].string {
+//                    pinDetailVC.placeType = placeType
+//                    category = placeType
+//                    opinListElem.category = placeType
+//                }
+//                if let placeTitle = pinLoc["title"].string {
+//                    pinDetailVC.strPlaceTitle = placeTitle
+//                    title = placeTitle
+//                }
+//                if let placeStreet = pinLoc["street"].string {
+//                    pinDetailVC.strPlaceStreet = placeStreet
+//                    street = placeStreet
+//                    opinListElem.street = placeStreet
+//                }
+//                if let placeCity = pinLoc["city"].string {
+//                    pinDetailVC.strPlaceCity = placeCity
+//                    city = placeCity
+//                    opinListElem.city = placeCity
+//                }
+//                if let placeImageURL = pinLoc["imageURL"].string {
+//                    pinDetailVC.strPlaceImageURL = placeImageURL
+//                    opinListElem.imageURL = placeImageURL
+//                }
+//                
+//                // for opened pin list
+//                if let storedList = readByKey("openedPinList"){
+//                    var openedPinListArray = storedList as! [String]
+//                    pinTypeID = "\(type)%\(title)\(street)%\(category)"
+//                    if openedPinListArray.contains(pinTypeID) == false {
+//                        openedPinListArray.insert(pinTypeID, at: 0)
+//                    }
+//                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+//                }
+//                
+//                // write in realm swift
+//                let realm = try! Realm()
+//                
+//                opinListElem.pinTypeId = "\(type)\(title)\(street)"
+//                opinListElem.pinContent = title
+//                opinListElem.pinLat = marker.position.latitude
+//                opinListElem.pinLon = marker.position.longitude
+//                opinListElem.pinTime = "\(street), \(city)"
+//                try! realm.write {
+//                    realm.add(opinListElem, update: true)
+//                }
+//                
+//                timerUpdateSelfLocation.invalidate()
+//                self.clearMap(type: "user")
+//                self.present(pinDetailVC, animated: false, completion: {
+//                    self.canOpenAnotherPin = true
+//                })
+//                return true
+//            }
+//        }
         return true
     }
     

@@ -270,25 +270,25 @@ extension FaeMapViewController {
         
         nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
         nameCardMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
-        self.imageBackground.addSubview(nameCardMoreOptions)
+        self.buttonClosingOptionsInNameCard.addSubview(nameCardMoreOptions)
         
         shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
         shareNameCard.setImage(#imageLiteral(resourceName: "buttonShareOnCommentDetail"), for: .normal)
-        self.imageBackground.addSubview(shareNameCard)
+        self.buttonClosingOptionsInNameCard.addSubview(shareNameCard)
         shareNameCard.clipsToBounds = true
         shareNameCard.alpha = 0.0
 //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
         
         editNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
         editNameCard.setImage(#imageLiteral(resourceName: "buttonEditOnCommentDetail"), for: .normal)
-        self.imageBackground.addSubview(editNameCard)
+        self.buttonClosingOptionsInNameCard.addSubview(editNameCard)
         editNameCard.clipsToBounds = true
         editNameCard.alpha = 0.0
 //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
         
         reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
         reportNameCard.setImage(#imageLiteral(resourceName: "buttonReportOnCommentDetail"), for: .normal)
-        self.imageBackground.addSubview(reportNameCard)
+        self.buttonClosingOptionsInNameCard.addSubview(reportNameCard)
         reportNameCard.clipsToBounds = true
         reportNameCard.alpha = 0.0
 //        reportNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionReportThisPin(_:)), for: .touchUpInside)
