@@ -33,12 +33,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
         self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
         self.renewSelfLocation()
-        if !dismiss {
-            self.markerBackFromPinDetail.map = nil
-        }
-        else {
-            
-        }
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
@@ -50,9 +44,16 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     // PinDetailDelegate
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
-        var pinData = marker.userData as! [String: AnyObject]
-        pinData["status"] = status as AnyObject?
-        marker.userData = pinData
+        guard let userData = marker.userData as? [Int: AnyObject] else {
+            return
+        }
+        guard let mapPin = userData.values.first as? MapPin else {
+            return
+        }
+        var mapPin_new = mapPin
+        print("[changeIconImage]", mapPin_new)
+        mapPin_new.status = status
+        marker.userData = [0: mapPin_new]
         marker.icon = pinIconSelector(type: type, status: status)
     }
     // PinDetailDelegate

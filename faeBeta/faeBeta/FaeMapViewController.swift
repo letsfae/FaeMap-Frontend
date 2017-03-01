@@ -79,12 +79,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var canLoadMapPin = true // if can load map pin when zoom level is valid for updating
     var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var mapPinsArray = [GMSMarker]() // Map Comment Pin Array
-    var mapPinsDic = [Int: GMSMarker]() // Map Comment Pin Dictionary
+    var mapPinsArray = [GMSMarker]() // Map Pin Array
     var mapPins = [MapPin]()
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
+    var userPins = [UserPin]()
     var mapPlacePinsDic = [GMSMarker]() // Map User Pin
-    var markerBackFromPinDetail = GMSMarker() // Marker saved for back from comment pin detail view
     var markerMask: UIView! // mask to prevent UI action
     var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
     var pinIdToPassBySegue: String = "" // segue to Comment Pin Popup Window

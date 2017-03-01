@@ -54,9 +54,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                         marker.map = nil
                 })
             }
-        }
-        
-        else if type == "all" || type == "user" {
+        } else if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 UIView.animate(withDuration: 0.5, delay: delay, animations: {
@@ -67,9 +65,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                         marker.map = nil
                 })
             }
-        }
-        
-        else if type == "all" || type == "place" {
+        } else if type == "all" || type == "place" {
             for marker in mapPlacePinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 UIView.animate(withDuration: 0.5, delay: delay, animations: {
@@ -81,7 +77,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 })
             }
         }
-        
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
@@ -184,29 +179,77 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         if marker.userData == nil {
             return false
         }
+        
+        guard let userData = marker.userData as? [Int: AnyObject] else {
+            return false
+        }
+        
+        guard let type = userData.keys.first else {
+            return false
+        }
+        
         self.renewSelfLocation()
-        let latitude = marker.position.latitude
-        let longitude = marker.position.longitude
-        var camera = GMSCameraPosition.camera(withLatitude: latitude+0.0012, longitude: longitude, zoom: 17)
-        let pinLoc = JSON(marker.userData!)
-        if let type = pinLoc["type"].string {
-            if type == "user" {
-                self.canDoNextUserUpdate = false
-                mapView.animate (to: camera)
-                if let userid = pinLoc["user_id"].int {
-                    self.updateNameCard(withUserId: userid)
-                    self.animateNameCard()
-                    UIView.animate(withDuration: 0.25, animations: {
-                        self.buttonFakeTransparentClosingView.alpha = 1
-                    })
-                    self.openUserPinActive = true
-                }
-                return true
+        var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.0012,
+                                              longitude: marker.position.longitude, zoom: 17)
+        
+        if type == 0 {
+            guard let mapPin = userData.values.first as? MapPin else {
+                return false
             }
             if !self.canOpenAnotherPin {
                 return true
             }
-            camera = GMSCameraPosition.camera(withLatitude: latitude+0.00148, longitude: longitude, zoom: 17)
+            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
+                                              longitude: marker.position.longitude, zoom: 17)
+            mapView.animate(to: camera)
+            self.canOpenAnotherPin = false
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+            pinDetailVC.pinMarker = marker
+            pinDetailVC.delegate = self
+            pinDetailVC.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
+            pinDetailVC.pinStatus = mapPin.status
+            pinDetailVC.pinStateEnum = self.selectPinState(pinState: mapPin.status)
+            pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
+            if let storedList = readByKey("openedPinList"){
+                var openedPinListArray = storedList as! [String]
+                let pinTypeID = "\(mapPin.type)%\(mapPin.pinId)"
+                if openedPinListArray.contains(pinTypeID) == false {
+                    openedPinListArray.insert(pinTypeID, at: 0)
+                }
+                self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+            }
+            
+            timerUpdateSelfLocation.invalidate()
+            self.clearMap(type: "user")
+            self.present(pinDetailVC, animated: false, completion: {
+                self.canOpenAnotherPin = true
+            })
+            return true
+        } else if type == 1 {
+            guard let userPin = userData.values.first as? UserPin else {
+                return false
+            }
+            self.canDoNextUserUpdate = false
+            mapView.animate (to: camera)
+            self.updateNameCard(withUserId: userPin.userId)
+            self.animateNameCard()
+            UIView.animate(withDuration: 0.25, animations: {
+                self.buttonFakeTransparentClosingView.alpha = 1
+            })
+            self.openUserPinActive = true
+            return true
+        }
+        
+        let pinLoc = JSON(marker.userData!)
+        if let type = pinLoc["type"].string {
+            if type == "user" {
+                
+            }
+            if !self.canOpenAnotherPin {
+                return true
+            }
             mapView.camera = camera
             self.canOpenAnotherPin = false
             
@@ -215,44 +258,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
             pinDetailVC.pinMarker = marker
             pinDetailVC.delegate = self
-            self.markerBackFromPinDetail = marker
-            if type == "comment" || type == "media" {
-                var pinComment = JSON(marker.userData!)
-                let pinIDGet = pinComment["\(type)_id"].stringValue
-                pinIdToPassBySegue = pinIDGet
-                if type == "media" {
-                    pinDetailVC.pinTypeEnum = .media
-                }
-                else if type == "comment" {
-                    pinDetailVC.pinTypeEnum = .comment
-                }
-                if let status = pinLoc["status"].string {
-                    pinDetailVC.pinStatus = status
-                }
-                
-                if let pinState = pinLoc["status"].string {
-                    pinDetailVC.pinStateEnum = self.selectPinState(pinState: pinState)
-                }
-                
-                // for opened pin list
-                pinDetailVC.pinIdSentBySegue = pinIdToPassBySegue
-                if let storedList = readByKey("openedPinList"){
-                    var openedPinListArray = storedList as! [String]
-                    let pinTypeID = "\(type)%\(pinIDGet)"
-                    if openedPinListArray.contains(pinTypeID) == false {
-                        openedPinListArray.insert(pinTypeID, at: 0)
-                    }
-                    self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-                }
-                
-                timerUpdateSelfLocation.invalidate()
-                self.clearMap(type: "user")
-                self.present(pinDetailVC, animated: false, completion: {
-                    self.canOpenAnotherPin = true
-                })
-                return true
-            }
-            else if type == "place" {
+            if type == "place" {
                 var pinTypeID = ""
                 var category = "burgers"
                 var title = ""

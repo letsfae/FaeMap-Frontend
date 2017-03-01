@@ -27,7 +27,7 @@ class UserAvatar: Object {
 }
 
 class NewFaePin: Object {
-    dynamic var pinType = -999
+    dynamic var pinType = ""
     dynamic var pinId = -999
 }
 

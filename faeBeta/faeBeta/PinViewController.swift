@@ -34,7 +34,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinIdSentBySegue: String = "-999"
     var pinStatus = ""
     var pinMarker = GMSMarker()
-    var pinTypeDecimal = -999 // 0 -> comment, 1 -> chat_room, 2 -> story
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -154,19 +153,19 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     var isSavedByMe = false
     
-    enum PinType {
-        case comment
-        case media
-        case chat_room
-        case place
+    enum PinType: String {
+        case comment = "comment"
+        case media = "media"
+        case chat_room = "chat_room"
+        case place = "place"
     }
     var pinTypeEnum: PinType = .media
     
-    enum PinState {
-        case normal
-        case read
-        case hot
-        case hotRead
+    enum PinState: String {
+        case normal = "normal"
+        case read = "read"
+        case hot = "hot"
+        case hotRead = "hot and read"
     }
     var pinStateEnum: PinState = .normal
     
@@ -355,7 +354,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     func initPinBasicInfo() {
         switch pinTypeEnum {
         case .comment:
-            self.pinTypeDecimal = 0
             self.labelPinTitle.text = "Comment"
             textViewOriginalHeight = 100
             if scrollViewMedia != nil {
@@ -368,7 +366,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .media:
-            self.pinTypeDecimal = 2
             self.labelPinTitle.text = "Story"
             textViewOriginalHeight = 0
             if scrollViewMedia != nil {
@@ -380,7 +377,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .chat_room:
-            self.pinTypeDecimal = 1
             self.labelPinTitle.text = "Chat"
             selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break

@@ -37,6 +37,7 @@ extension FaeMapViewController {
     }
     
     func loadCurrentRegionPlacePins(radius: Int, all: Bool) {
+        return
         clearMap(type: "place")
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
@@ -161,7 +162,7 @@ extension FaeMapViewController {
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins(radius: Int) {
         clearMap(type: "pin")
-        self.mapPinsDic.removeAll()
+        self.mapPinsArray.removeAll()
         self.mapPins.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
@@ -187,111 +188,28 @@ extension FaeMapViewController {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
-            
             self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
-            
-            for i in 0...(mapInfoJSON.count-1) {
+            for mapPin in self.mapPins {
                 let pinMap = GMSMarker()
-                pinMap.zIndex = 1
-                var pinData = [String: AnyObject]()
-                var pinId = -999
-                var type = "comment"
-                var typeDecimal = -999
-                var status = ""
-                var userid = -999
+                
                 var iconImage = UIImage()
-                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
+                let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
+                iconSub.addSubview(icon)
                 icon.contentMode = .scaleAspectFit
-                if let useridInfo = mapInfoJSON[i]["user_id"].int {
-                    userid = useridInfo
-                }
-                if let typeInfo = mapInfoJSON[i]["type"].string {
-                    pinData["type"] = typeInfo as AnyObject?
-                    if typeInfo == "comment" {
-                        type = "comment"
-                        typeDecimal = 0
-                    }
-                    else if typeInfo.contains("chat"){
-                        type = "chat_room"
-                        typeDecimal = 1
-                    }
-                    else if typeInfo == "media" {
-                        type = "media"
-                        typeDecimal = 2
-                    }
-                    pinMap.zIndex = 0
-                    if let pinIdInfo = mapInfoJSON[i]["\(type)_id"].int {
-                        pinId = pinIdInfo
-                    }
-                    if let createdTimeInfo = mapInfoJSON[i]["created_at"].string {
-                        if createdTimeInfo.isNewPin() {
-                            status = "new"
-                        }
-                        let realm = try! Realm()
-                        let newPinRealm = realm.objects(NewFaePin.self).filter("pinId == \(pinId) AND pinType == \(typeDecimal)")
-                        if newPinRealm.count >= 1 {
-                            if newPinRealm.first != nil {
-                                print("[checkPinStatus] newPin exists!")
-                                status = "normal"
-                            }
-                        }
-                    }
-                    if userid == Int(user_id) {
-                        status = "normal"
-                    }
-                    if let likeCount = mapInfoJSON[i]["liked_count"].int {
-                        if likeCount >= 15 {
-                            status = "hot"
-                        }
-                    }
-                    if let commentCount = mapInfoJSON[i]["comment_count"].int {
-                        if commentCount >= 10 {
-                            status = "hot"
-                        }
-                    }
-                    if let readInfo = mapInfoJSON[i]["user_pin_operations"]["is_read"].bool {
-                        if readInfo && status == "hot" {
-                            status = "hot and read"
-                        }
-                        else if readInfo {
-                            status = "read"
-                        }
-                    }
-                    pinData["status"] = status as AnyObject?
-                    iconImage = self.pinIconSelector(type: type, status: status)
-                    icon.image = iconImage
-                    pinMap.iconView = icon
-                }
-                if let pinIDInfo = mapInfoJSON[i]["\(type)_id"].int {
-                    pinData["\(type)_id"] = pinIDInfo as AnyObject?
-                    self.mapPinsDic[pinIDInfo] = pinMap
-                }
-                if let userIDInfo = mapInfoJSON[i]["user_id"].int {
-                    pinData["user_id"] = userIDInfo as AnyObject?
-                }
-                if let latitudeInfo = mapInfoJSON[i]["geolocation"]["latitude"].double {
-                    pinMap.position.latitude = latitudeInfo
-                }
-                else {
-                    print("DEBUG: Cannot get geoInfo: Latitude")
-                    return
-                }
-                if let longitudeInfo = mapInfoJSON[i]["geolocation"]["longitude"].double {
-                    pinMap.position.longitude = longitudeInfo
-                }
-                else {
-                    print("DEBUG: Cannot get geoInfo: Longitude")
-                    return
-                }
-                pinMap.userData = pinData
-                // Delay 0-3 seconds, randomly
-                let delay: Double = Double(arc4random_uniform(200)) / 100
+                iconImage = self.pinIconSelector(type: mapPin.type, status: mapPin.status)
+                icon.image = iconImage
+                icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
+                pinMap.position = mapPin.position
+                pinMap.iconView = iconSub
+                pinMap.userData = [0: mapPin]
                 pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+                pinMap.zIndex = 1
                 pinMap.map = self.faeMapView
                 self.mapPinsArray.append(pinMap)
-                UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                    icon.frame.size.width = 48
-                    icon.frame.size.height = 51
+                let delay: Double = Double(arc4random_uniform(300)) / 100 // Delay 0-3 seconds, randomly
+                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
                 }, completion: {(done: Bool) in
                     if done {
                         pinMap.iconView = nil
@@ -308,6 +226,7 @@ extension FaeMapViewController {
         if didLoadFirstLoad || !canDoNextUserUpdate {
             return
         }
+        userPins.removeAll()
         clearMap(type: "user")
         canDoNextUserUpdate = false
         self.renewSelfLocation()
@@ -320,79 +239,58 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("type", value: "user")
 //        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
+            
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
+                
                 return
             }
+            let mapUserJSON = JSON(message!)
+            guard let mapUserJsonArray = mapUserJSON.array else {
+                print("[getMapUserInfo] fail to parse pin comments")
+                return
+            }
+            if mapUserJsonArray.count <= 0 {
+                return
+            }
+            self.userPins = mapUserJsonArray.map{UserPin(json: $0)}
             let mapUserInfoJSON = JSON(message!)
             if mapUserInfoJSON.count <= 0 {
                 return
             }
-            for i in 0...(mapUserInfoJSON.count-1) {
-                if i > 5 {
+            var count = 0
+            for userPin in self.userPins {
+                if count > 5 {
                     break
+                } else if userPin.userId == Int(user_id) {
+                    continue
                 }
-                var userIDinGetMapUser = -999
+                count += 1
                 let pinUser = GMSMarker()
-                var pinData = [String: AnyObject]()
-                if let userIDInfo = mapUserInfoJSON[i]["user_id"].int {
-                    pinData["user_id"] = userIDInfo as AnyObject?
-                    userIDinGetMapUser = userIDInfo
-                    if userIDinGetMapUser == user_id.intValue {
-                        continue
-                    }
-                }
-                else {
-                    print("DEBUG: Cannot get user_id")
-                    return
-                }
-                if let typeInfo = mapUserInfoJSON[i]["type"].string {
-                    pinData["type"] = typeInfo as AnyObject?
-                }
-                if let createdTimeInfo = mapUserInfoJSON[i]["created_at"].string {
-                    pinData["created_at"] = createdTimeInfo as AnyObject?
-                }
-                if mapUserInfoJSON[i]["geolocation"].count == 5 {
-                    let random = Int(arc4random_uniform(5))
-                    if let latitudeInfo = mapUserInfoJSON[i]["geolocation"][random]["latitude"].double {
-                        pinUser.position.latitude = latitudeInfo
-                    }
-                    else {
-                        print("DEBUG: Cannot get geoInfo: Latitude")
+                pinUser.position = userPin.position
+                let getMiniAvatar = FaeUser()
+                getMiniAvatar.getOthersProfile("\(userPin.userId)") {(status, message) in
+                    if status/100 != 2 || message == nil{
+                        print("DEBUG: getOthersProfile status/100 != 2")
                         return
                     }
-                    if let longitudeInfo = mapUserInfoJSON[i]["geolocation"][random]["longitude"].double {
-                        pinUser.position.longitude = longitudeInfo
-                    }
-                    else {
-                        print("DEBUG: Cannot get geoInfo: Longitude")
-                        return
-                    }
-                    let getMiniAvatar = FaeUser()
-                    getMiniAvatar.getOthersProfile("\(userIDinGetMapUser)") {(status, message) in
-                        if status/100 != 2 || message == nil{
-                            print("DEBUG: getOthersProfile status/100 != 2")
-                            return
-                        }
-                        let userProfile = JSON(message!)
-                        if let miniAvatar = userProfile["mini_avatar"].int {
-                            self.mapUserPinsDic.append(pinUser)
-                            pinUser.userData = pinData
-                            let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-                            icon.image = UIImage(named: "miniAvatar_\(miniAvatar+1)")
-                            icon.contentMode = .scaleAspectFit
-                            icon.alpha = 0
-                            pinUser.iconView = icon
-                            pinUser.zIndex = 1
-                            pinUser.map = self.faeMapView
-                            self.canDoNextUserUpdate = true
-                            // Delay 0-1 seconds, randomly
-                            let delay: Double = Double(arc4random_uniform(100)) / 100
-                            UIView.animate(withDuration: 1, delay: delay, animations: {
-                                icon.alpha = 1
-                            })
-                        }
-                    }
+                    let userProfile = JSON(message!)
+                    let miniAvatar = userProfile["mini_avatar"].intValue
+                    self.mapUserPinsDic.append(pinUser)
+                    pinUser.userData = [1: userPin]
+                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+                    icon.image = UIImage(named: "miniAvatar_\(miniAvatar+1)")
+                    icon.contentMode = .scaleAspectFit
+                    icon.alpha = 0
+                    pinUser.iconView = icon
+                    pinUser.zIndex = 1
+                    pinUser.map = self.faeMapView
+                    self.canDoNextUserUpdate = true
+                    // Delay 0-1 seconds, randomly
+                    let delay: Double = Double(arc4random_uniform(100)) / 100
+                    UIView.animate(withDuration: 1, delay: delay, animations: {
+                        icon.alpha = 1
+                    })
                 }
             }
         }
