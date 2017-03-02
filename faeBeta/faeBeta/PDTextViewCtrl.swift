@@ -32,7 +32,7 @@ extension PinDetailViewController: UITextViewDelegate {
             
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             let numlineOnDevice = 4
-            var keyboardHeight: CGFloat = self.uiviewToolBar.frame.origin.y - self.uiviewToolBar.frame.size.height
+            var keyboardHeight: CGFloat = screenHeight - self.uiviewToolBar.frame.origin.y - self.uiviewToolBar.frame.size.height
             if emojiView.tag == 1 {
                 keyboardHeight = 271
             }
