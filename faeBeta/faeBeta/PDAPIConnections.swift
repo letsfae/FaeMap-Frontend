@@ -268,7 +268,7 @@ extension PinDetailViewController {
                 print("[uploadingFile] Successfully upload Image File")
                 let fileIDJSON = JSON(message!)
                 if let file_Id = fileIDJSON["file_id"].int {
-                    self.sendMessage("<faeImg>\(file_Id)</faeImg>", date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+                    self.sendMessage("<faeImg>\(file_Id)</faeImg>")
                     self.buttonSend.isEnabled = false
                     self.buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
                 }

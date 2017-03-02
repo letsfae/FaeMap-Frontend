@@ -99,10 +99,6 @@ extension PinDetailViewController {
     
     func actionBackToMap(_ sender: UIButton) {
         endEdit()
-        if inputToolbar != nil {
-            self.inputToolbar.isHidden = true
-            self.subviewInputToolBar.isHidden = true
-        }
         controlBoard.removeFromSuperview()
         self.delegate?.dismissMarkerShadow(true)
         UIView.animate(withDuration: 0.5, animations: ({
@@ -127,18 +123,13 @@ extension PinDetailViewController {
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
         if sender.tag == 1 {
-            closeToolbarContentView()
             replyToUser = ""
-            lableTextViewPlaceholder.text = "Write a Comment..."
+            lblTxtPlaceholder.text = "Write a Comment..."
             endEdit()
             sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
             buttonPinAddComment.tag = 0
             buttonPinBackToMap.tag = 1
-            if inputToolbar != nil {
-                self.inputToolbar.isHidden = true
-                self.subviewInputToolBar.isHidden = true
-            }
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
@@ -154,6 +145,7 @@ extension PinDetailViewController {
                 self.uiviewPinDetailMainButtons.frame.origin.y = 190
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 239
+                self.uiviewToolBar.frame.origin.y = screenHeight
             }), completion: { (done: Bool) in
             })
             // deal with diff UI according to pinType
@@ -168,26 +160,17 @@ extension PinDetailViewController {
                     }
                 })
             }
-            toolBarExtendView.isHidden = true
-            inputToolbar.contentView.heartButton.setImage(UIImage(named : "anonymousNormal"), for: .normal)
+//            toolBarExtendView.isHidden = true
             return
         }
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsFull"), for: .normal)
         if buttonPinDetailDragToLargeSize.tag == 1 {
-            if inputToolbar != nil {
-                self.inputToolbar.isHidden = false
-                self.subviewInputToolBar.isHidden = false
-            }
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
             self.subviewTable.frame.size.height = screenHeight - 65
             self.draggingButtonSubview.frame.origin.y = screenHeight - 28
             return
-        }
-        if inputToolbar != nil {
-            self.inputToolbar.isHidden = false
-            self.subviewInputToolBar.isHidden = false
         }
         readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
         textviewPinDetail.isScrollEnabled = false
@@ -229,11 +212,13 @@ extension PinDetailViewController {
             
         }
         UIView.animate(withDuration: 0.5, animations: ({
+            let toolbarHeight = self.uiviewToolBar.frame.size.height
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
-            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
-            self.subviewTable.frame.size.height = screenHeight - 65
+            self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
+            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
+            self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
+            self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
         }), completion: { (done: Bool) in
             if done {
                 self.tableCommentsForPin.reloadData()
@@ -333,11 +318,7 @@ extension PinDetailViewController {
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.loadInputToolBar()
-            self.inputToolbar.isHidden = false
-            self.inputToolbar.contentView.textView.text = "@\(username) "
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
-            self.lableTextViewPlaceholder.isHidden = true
+//            self.inputToolbar.contentView.textView.text = "@\(username) "
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
             self.actionReportThisPin(self.buttonReportOnPinDetail)

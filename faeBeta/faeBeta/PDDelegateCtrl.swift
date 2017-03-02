@@ -9,12 +9,21 @@
 import UIKit
 import CoreLocation
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        uploadingFile(image: image)
-        picker.dismiss(animated: true, completion: nil)
+    // SendStickerDelegate
+    func appendEmojiWithImageName(_ name: String) {
+        
     }
+    
+    func deleteEmoji() {
+        
+    }
+    
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+//        uploadingFile(image: image)
+//        picker.dismiss(animated: true, completion: nil)
+//    }
     
     func reloadCommentContent() {
         if pinIDPinDetailView != "-999" {
@@ -46,10 +55,6 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             if uiviewPlaceDetail != nil {
                 uiviewPlaceDetail.center.y -= screenHeight
             }
-            if inputToolbar == nil {
-                self.loadInputToolBar()
-                self.loadExtendView() // call func for loading extend view (mingjie jin)
-            }
             if pinIDPinDetailView != "-999" {
                 getSeveralInfo()
             }
@@ -77,13 +82,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.loadInputToolBar()
-            self.inputToolbar.isHidden = false
-            self.subviewInputToolBar.isHidden = false
-            self.inputToolbar.contentView.textView.text = ""
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
-            //                self.lableTextViewPlaceholder.isHidden = true
-            self.lableTextViewPlaceholder.text = "@\(username):"
+            self.lblTxtPlaceholder.text = "@\(username):"
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
             self.actionReportThisPin(self.buttonReportOnPinDetail)
@@ -110,13 +109,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
             menu.view.tintColor = UIColor.faeAppRedColor()
             let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-                self.loadInputToolBar()
-                self.inputToolbar.isHidden = false
-                self.subviewInputToolBar.isHidden = false
-                self.inputToolbar.contentView.textView.text = ""
-                self.inputToolbar.contentView.textView.becomeFirstResponder()
-//                self.lableTextViewPlaceholder.isHidden = true
-                self.lableTextViewPlaceholder.text = "@\(userN):"
+                self.lblTxtPlaceholder.text = "@\(userN):"
             }
             let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
                 self.actionReportThisPin(self.buttonReportOnPinDetail)

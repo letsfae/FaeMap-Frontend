@@ -135,7 +135,7 @@ extension CreateCommentPinViewController {
         self.view.layoutIfNeeded()
     }
     
-   func loadEmojiView(){
+    func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
         self.view.addSubview(emojiView)

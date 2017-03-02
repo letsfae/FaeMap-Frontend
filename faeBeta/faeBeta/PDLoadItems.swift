@@ -10,11 +10,89 @@ import UIKit
 import SwiftyJSON
 
 extension PinDetailViewController {
+    
     // Load pin detail window
     func loadPinDetailWindow() {
         
         loadNavigationBar()
+        loadingOtherParts()
+        loadTableHeader()
+        loadAnotherToolbar()
+        loadPinCtrlButton()
+        loadInputToolBar()
+        tableCommentsForPin.tableHeaderView = uiviewPinDetail
+    }
+    
+    private func loadInputToolBar() {
+        uiviewToolBar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 91))
+        uiviewToolBar.backgroundColor = UIColor.white
+        uiviewToolBar.layer.zPosition = 200
         
+        // Line at y = 64
+        let line_0 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        line_0.layer.borderWidth = 1
+        line_0.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        uiviewToolBar.addSubview(line_0)
+        
+        let line_1 = UIView()
+        line_1.layer.borderWidth = 1
+        line_1.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        uiviewToolBar.addSubview(line_1)
+        uiviewToolBar.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: line_1)
+        uiviewToolBar.addConstraintsWithFormat("V:[v0(1)]-42.5-|", options: [], views: line_1)
+        
+        textViewInput = UITextView(frame: CGRect(x: 10, y: 14.5, width: screenWidth-78, height: 25))
+        textViewInput.delegate = self
+        textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
+        textViewInput.tintColor = UIColor.faeAppRedColor()
+//        textViewInput.layer.borderWidth = 1
+//        textViewInput.layer.borderColor = UIColor.black.cgColor
+        textViewInput.textContainerInset = .zero
+        textViewInput.showsVerticalScrollIndicator = false
+        textViewInput.autocorrectionType = .no
+        textViewInput.autocapitalizationType = .none
+        uiviewToolBar.addSubview(textViewInput)
+        
+        lblTxtPlaceholder = UILabel()
+        lblTxtPlaceholder.text = "Write a Comment..."
+        lblTxtPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lblTxtPlaceholder.textColor = UIColor(red: 146, green: 146, blue: 146)
+        uiviewToolBar.addSubview(lblTxtPlaceholder)
+        uiviewToolBar.addConstraintsWithFormat("H:|-15-[v0]-68-|", options: [], views: lblTxtPlaceholder)
+        uiviewToolBar.addConstraintsWithFormat("V:|-14-[v0(25)]", options: [], views: lblTxtPlaceholder)
+        
+        buttonKeyBoard = UIButton()
+        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .normal)
+        uiviewToolBar.addSubview(buttonKeyBoard)
+        uiviewToolBar.addConstraintsWithFormat("H:|-10-[v0(47)]", options: [], views: buttonKeyBoard)
+        uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonKeyBoard)
+        
+        buttonSticker = UIButton()
+        buttonSticker.alpha = 0
+        buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+        uiviewToolBar.addSubview(buttonSticker)
+        uiviewToolBar.addConstraintsWithFormat("H:|-10-[v0(47)]", options: [], views: buttonSticker)
+        uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonSticker)
+        
+        buttonSend = UIButton()
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        uiviewToolBar.addSubview(buttonSend)
+        uiviewToolBar.addConstraintsWithFormat("H:[v0(29)]-21-|", options: [], views: buttonSend)
+        uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonSend)
+        buttonSend.addTarget(self, action: #selector(self.sendMessageButtonTapped), for: .touchUpInside)
+        
+        self.view.addSubview(uiviewToolBar)
+        loadEmojiView()
+    }
+    
+    private func loadEmojiView(){
+        emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
+        emojiView.sendStickerDelegate = self
+        self.view.addSubview(emojiView)
+    }
+    
+    private func loadingOtherParts() {
         subviewTable = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         subviewTable.backgroundColor = UIColor.white
         subviewTable.center.y -= screenHeight
@@ -59,16 +137,7 @@ extension PinDetailViewController {
         buttonPinDetailDragToLargeSize.addTarget(self, action: #selector(self.actionDraggingThisPin(_:)), for: .touchUpInside)
         self.draggingButtonSubview.addSubview(buttonPinDetailDragToLargeSize)
         buttonPinDetailDragToLargeSize.center.x = screenWidth/2
-        //        buttonPinDetailDragToLargeSize.layer.zPosition = 109
         buttonPinDetailDragToLargeSize.tag = 0
-        //        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionPinDetailDrag(_:)))
-        //        buttonPinDetailDragToLargeSize.addGestureRecognizer(draggingGesture)
-        
-        loadTableHeader()
-        loadAnotherToolbar()
-        loadPinCtrlButton()
-        
-        tableCommentsForPin.tableHeaderView = uiviewPinDetail
     }
     
     private func loadTableHeader() {
@@ -175,13 +244,11 @@ extension PinDetailViewController {
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelPinCommentsCount)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelPinCommentsCount)
         
-        
         // ----
         // Gray Block
         uiviewPinDetailGrayBlock = UIView(frame: CGRect(x: 0, y: 227, width: screenWidth, height: 12))
         uiviewPinDetailGrayBlock.backgroundColor = UIColor(red: 244/255, green: 244/255, blue: 244/255, alpha: 1.0)
         uiviewPinDetail.addSubview(uiviewPinDetailGrayBlock)
-        
         
         // ----
         // View to hold three buttons
@@ -345,7 +412,7 @@ extension PinDetailViewController {
         NSLayoutConstraint(item: labelPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
     }
     
-    func loadAnotherToolbar() {
+    private func loadAnotherToolbar() {
         // Gray Block
         controlBoard = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 54))
         controlBoard.backgroundColor = UIColor.white
@@ -423,7 +490,7 @@ extension PinDetailViewController {
         threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: comments, feelings, people)
     }
     
-    func loadPinCtrlButton() {
+    private func loadPinCtrlButton() {
         pinIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 80))
         pinIcon.image = pinIconHeavyShadow
         pinIcon.contentMode = .scaleAspectFit

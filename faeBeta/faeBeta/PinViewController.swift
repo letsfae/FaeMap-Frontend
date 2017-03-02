@@ -25,7 +25,7 @@ protocol PinDetailDelegate: class {
     func disableSelfMarker(yes: Bool)
 }
 
-class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FAEChatToolBarContentViewDelegate, UITextViewDelegate {
+class PinDetailViewController: UIViewController, UITextViewDelegate {
     
     // Delegate of this class
     weak var delegate: PinDetailDelegate?
@@ -70,7 +70,7 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var labelPinTitle: UILabel!
     var labelPinUserName: UILabel!
     var labelPinVoteCount: UILabel!
-    var lableTextViewPlaceholder: UILabel!
+    var lblTxtPlaceholder: UILabel!
     var moreButtonDetailSubview: UIImageView!
     var pinDetailLiked = false
     var pinDetailShowed = false
@@ -102,24 +102,13 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     
     var controlBoard: UIView! // A duplicate ControlBoard to hold
     
-    // Toolbar
-    var inputToolbar: JSQMessagesInputToolbarCustom!
-    var isObservingInputTextView = false
-    var inputTextViewContext = 0
-    var inputTextViewMaximumHeight: CGFloat = 250 * screenHeightFactor * screenHeightFactor// the distance from the top of toolbar to top of screen
-    var toolbarDistanceToBottom: NSLayoutConstraint!
-    var toolbarHeightConstraint: NSLayoutConstraint!
-    
     var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
     var isAnonymous = false // var to record is user is anonymous;
     
     //custom toolBar the bottom toolbar button
-    var buttonSet = [UIButton]()
     var buttonSend : UIButton!
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
-    var buttonImagePicker : UIButton!
-    var toolbarContentView: FAEChatToolBarContentView!
     
     var animatingHeartTimer: Timer! // Timer for animating heart
     var buttonNextPin: UIButton!
@@ -205,6 +194,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
     var pinComments = [PinComment]()
     var pinDetailUsers = [PinDetailUser]()
     
+    // Input tool bar
+    var uiviewToolBar: UIView!
+    var textViewInput: UITextView!
+    var emojiView: StickerPickView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -225,7 +219,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         initPinBasicInfo()
         checkPinStatus()
         self.delegate?.disableSelfMarker(yes: true)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.displayNameDidLoadNotification(_:)), name: NSNotification.Name(rawValue: "displayNameDidLoad"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -248,90 +241,28 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
                 self.uiviewPlaceDetail.frame.origin.y = 0
             }
         }, completion: { (done: Bool) in
-            if self.pinTypeEnum != .place {
-                self.loadInputToolBar()
-                self.loadExtendView() // call func for loading extend view (mingjie jin)
-            }
+//            if self.pinTypeEnum != .place {
+//                self.loadExtendView() // call func for loading extend view (mingjie jin)
+//            }
         })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if inputToolbar != nil {
-            closeToolbarContentView()
-            removeObservers()
-            toolbarContentView.removeFromSuperview()
-        }
         UIApplication.shared.statusBarStyle = .default
-    }
-    
-    func displayNameDidLoadNotification(_ notification: NSNotification) {
-        if let cell = notification.object as? PinCommentsCell, let indexPath = tableCommentsForPin.indexPath(for: cell) {
-            tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        }
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    //MARK: - toolbar Content view delegate
-    func showAlertView(withWarning text: String) {
-        showAlert(title: text, message: "please try again")
     }
     
     func sendStickerWithImageName(_ name : String) {
         print("[sendStickerWithImageName] name: \(name)")
         let stickerMessage = "<faeSticker>\(name)</faeSticker>"
-        sendMessage(stickerMessage, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        sendMessage(stickerMessage)
         buttonSend.isEnabled = false
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
         UIView.animate(withDuration: 0.3) { 
             self.tableCommentsForPin.frame.size.height = screenHeight - 155
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
-            self.closeToolbarContentView()
         }
         
-    }
-    
-    func sendImages(_ images: [UIImage]) {
-        if let image = images.first {
-            uploadingFile(image: image)
-        }
-        UIView.animate(withDuration: 0.3) {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 155
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
-            self.closeToolbarContentView()
-        }
-    }
-    
-    func showFullAlbum() {
-        
-    }
-    
-    func appendEmoji(_ name: String) {
-        print("[appendEmojiWithImageName]")
-        if inputToolbar != nil{
-            buttonSend.isEnabled = true
-            buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
-            self.lableTextViewPlaceholder.isHidden = true
-            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
-        }
-    }
-    func deleteLastEmoji() {
-        print("[deleteEmoji]")
-        if inputToolbar != nil{
-            let previous = inputToolbar.contentView.textView.text!
-            inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()
-            if inputToolbar.contentView.textView.text == "" {
-                self.lableTextViewPlaceholder.isHidden = false
-                buttonSend.isEnabled = false
-                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
-            }
-        }
     }
     
     func selectPinState(pinState: PinState, pinType: PinType) {
@@ -394,37 +325,6 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.view.sendSubview(toBack: grayBackButton)
         grayBackButton.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
     }
-    
-    func loadInputToolBar() {
-        if !firstLoadInputToolBar {
-            return
-        }
-        firstLoadInputToolBar = false
-        setupInputToolbar()
-        setupToolbarContentView()
-        addObservers()
-        for constraint in self.inputToolbar.constraints{
-            if constraint.constant == 90 {
-                toolbarHeightConstraint = constraint
-            }
-        }
-        if toolbarHeightConstraint == nil{
-            toolbarHeightConstraint = NSLayoutConstraint(item:inputToolbar, attribute:.height,relatedBy:.equal,toItem:nil,attribute:.notAnAttribute ,multiplier:1,constant:90)
-            self.inputToolbar.addConstraint(toolbarHeightConstraint)
-            
-            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.width,relatedBy:.equal,toItem:self.view,attribute:.width ,multiplier:1,constant:0)
-            self.view.addConstraint(toolbarDistanceToBottom)
-            
-            toolbarDistanceToBottom = NSLayoutConstraint(item:inputToolbar, attribute:.bottom,relatedBy:.equal,toItem:self.view,attribute:.bottom ,multiplier:1,constant:0)
-            self.view.addConstraint(toolbarDistanceToBottom)
-            self.view.setNeedsUpdateConstraints()
-        }
-        adjustInputToolbarHeightConstraint(byDelta: -90) // A tricky way to set the toolbarHeight to default
-    }
-    
-    
-    
-    
     
     // Animation of the red sliding line
     func animationRedSlidingLine(_ sender: UIButton) {
@@ -499,18 +399,15 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         
         UIView.animate(withDuration: 0.3, animations: {
             if self.isKeyboardInThisView {
-                self.tableCommentsForPin.frame.size.height = screenHeight - 155 - keyboardHeight
-                self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - keyboardHeight
+                
             }
-            self.toolbarDistanceToBottom.constant = -keyboardHeight
-            self.view.setNeedsUpdateConstraints()
         }, completion: {(done: Bool) in
             
         })
     }
     
     func keyboardDidShow(_ notification: Notification){
-        toolbarContentView.keyboardShow = true
+        
     }
     
     func keyboardWillHide(_ notification: Notification) {
@@ -519,69 +416,37 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
             self.draggingButtonSubview.frame.origin.y = screenHeight - 90
         }
         UIView.animate(withDuration: 0.3, animations: {
-            self.toolbarDistanceToBottom.constant = 0
-            self.view.setNeedsUpdateConstraints()
+            
         }, completion: nil)
     }
     
     func keyboardDidHide(_ notification: Notification){
-        toolbarContentView.keyboardShow = false
+        
     }
     
     
     //MARK: - keyboard input bar tapped event
     func showKeyboard(_ sender: UIButton) {
-        resetToolbarButtonIcon()
         if sender.tag == 1 {
             sender.tag = 0
             isKeyboardInThisView = true
             self.buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
-            self.inputToolbar.contentView.textView.resignFirstResponder()
             return
         }
         sender.tag = 1
         self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-        self.toolbarContentView.showKeyboard()
-        self.inputToolbar.contentView.textView.becomeFirstResponder()
-    }
-    
-    func showCamera() {
-        buttonKeyBoard.tag = 0
-        view.endEditing(true)
-        UIView.animate(withDuration: 0.3, animations: {
-            self.closeToolbarContentView()
-            }, completion:{ (Bool) -> Void in
-        })
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .camera
-        self.present(imagePicker, animated: true, completion: nil)
     }
     
     func showStikcer() {
         buttonKeyBoard.tag = 0
         resetToolbarButtonIcon()
         buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
-        self.toolbarContentView.showStikcer()
-        moveUpInputBarContentView(animated)
-        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
-        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
-    }
-    
-    func showLibrary() {
-        buttonKeyBoard.tag = 0
-        resetToolbarButtonIcon()
-        buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
-        self.toolbarContentView.showLibrary()
-        moveUpInputBarContentView(animated)
         self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
         self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
     }
     
     func sendMessageButtonTapped() {
-        sendMessage(self.inputToolbar.contentView.textView.text, date: Date(), picture: nil, sticker : nil, location: nil, snapImage : nil, audio: nil)
+        sendMessage(textViewInput.text)
         buttonSend.isEnabled = false
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
@@ -592,100 +457,57 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
         buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
         buttonSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
-        buttonImagePicker.setImage(UIImage(named: "imagePicker"), for: .normal)
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
-    func closeToolbarContentView() {
-        resetToolbarButtonIcon()
-        moveDownInputBar()
-        toolbarContentView.closeAll()
-        toolbarContentView.frame.origin.y = screenHeight
-    }
-    
-    func moveUpInputBar() {
-        toolbarDistanceToBottom.constant = -271
-        self.view.setNeedsUpdateConstraints()
-    }
-    
-    func moveDownInputBar() {
-        toolbarDistanceToBottom.constant = 0
-        self.view.setNeedsUpdateConstraints()
-    }
-    
-    func moveUpInputBarContentView(_ animated: Bool)
-    {
-        if animated {
-            self.toolbarContentView.frame.origin.y = screenHeight
-            UIView.animate(withDuration: 0.3, animations: {
-                self.moveUpInputBar()
-                self.toolbarContentView.frame.origin.y = screenHeight - 271
-                }, completion:{ (Bool) -> Void in
-                    
-                    
-                    
-            })
-        } else {
-            self.moveUpInputBar()
-            self.toolbarContentView.frame.origin.y = screenHeight - 271
-        }
-    }
-    
     // MARK: - send messages
-    func sendMessage(_ text : String?, date: Date, picture : UIImage?, sticker : UIImage?, location : CLLocation?, snapImage : Data?, audio : Data?) {
+    func sendMessage(_ text : String?) {
         if let realText = text {
             commentThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
+        self.textViewInput.text = ""
+        self.textViewInput.resignFirstResponder()
         self.replyToUser = ""
-        self.inputToolbar.contentView.textView.text = ""
-        self.lableTextViewPlaceholder.isHidden = false
-        self.inputToolbar.contentView.textView.resignFirstResponder()
+        self.lblTxtPlaceholder.isHidden = false
     }
-    
-//    //MARK: -  UIImagePickerController
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-//        let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
-//        
-//        self.sendMessage(nil, date: Date(), picture: picture, sticker : nil, location: nil, snapImage : nil, audio: nil)
-//        
-//        //        UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
-//        
-//        picker.dismiss(animated: true, completion: nil)
-//        
-//    }
-    
-    func image(_ image:UIImage, didFinishSavingWithError error: NSError, contextInfo:AnyObject?) {
-        self.appWillEnterForeground()
-    }
-    
-    
     
     func endEdit() {
         self.view.endEditing(true)
-        if inputToolbar != nil {
-            self.inputToolbar.contentView.textView.resignFirstResponder()
-        }
     }
     
     //MARK: - TEXTVIEW delegate
     func textViewDidChange(_ textView: UITextView) {
-        if textView == self.inputToolbar.contentView.textView {
+        if textView == self.textViewInput {
             let spacing = CharacterSet.whitespacesAndNewlines
             
-            if self.inputToolbar.contentView.textView.text.trimmingCharacters(in: spacing).isEmpty == false {
-                self.lableTextViewPlaceholder.isHidden = true
+            if textView.text.trimmingCharacters(in: spacing).isEmpty == false {
+                self.lblTxtPlaceholder.isHidden = true
+            } else {
+                self.lblTxtPlaceholder.isHidden = false
             }
-            else {
-                self.lableTextViewPlaceholder.isHidden = false
-            }
+            
             if textView.text.characters.count == 0 {
                 // when text has no char, cannot send message
                 buttonSend.isEnabled = false
-                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .normal)
             } else {
                 buttonSend.isEnabled = true
-                buttonSend.setImage(UIImage(named: "canSendMessage"), for: UIControlState())
+                buttonSend.setImage(UIImage(named: "canSendMessage"), for: .normal)
+            }
+            
+            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
+            let numlineOnDevice = 4
+            if numLines <= numlineOnDevice {
+                let txtHeight = textView.contentSize.height
+                textView.frame.size.height = txtHeight
+                uiviewToolBar.frame.size.height = txtHeight + 66
+                uiviewToolBar.frame.origin.y = screenHeight - txtHeight - 66
+                tableCommentsForPin.frame.size.height = screenHeight - txtHeight - 66 - 65
+            } else {
+                textView.frame.size.height = 98
+                uiviewToolBar.frame.size.height = 164
+                uiviewToolBar.frame.origin.y = screenHeight - 164
+                tableCommentsForPin.frame.size.height = screenHeight - 164 - 65
             }
         }
     }
@@ -694,11 +516,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         
         // adjust position for extend view (mingjie jin)
-        if(screenHeight == 736) {
-            toolBarExtendView.frame.origin.y += 271
-        } else {
-            toolBarExtendView.frame.origin.y += 258
-        }
+//        if(screenHeight == 736) {
+//            toolBarExtendView.frame.origin.y += 271
+//        } else {
+//            toolBarExtendView.frame.origin.y += 258
+//        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -706,32 +528,11 @@ class PinDetailViewController: UIViewController, UIImagePickerControllerDelegate
         self.showKeyboard(UIButton())
         buttonKeyBoard.tag = 1
         // adjust position for extend view (mingjie jin)
-        if(screenHeight == 736) {
-            toolBarExtendView.frame.origin.y -= 271
-        } else {
-            toolBarExtendView.frame.origin.y -= 258
-        }
-    }
-    
-    //MARK: - observe key path
-    override func observeValue(forKeyPath keyPath: String?,
-                               of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?,
-                               context: UnsafeMutableRawPointer?)
-    {
-        let textView = object as! UITextView
-        if (textView == self.inputToolbar.contentView.textView && keyPath! == "contentSize") {
-            
-            let oldContentSize = (change![NSKeyValueChangeKey.oldKey]! as AnyObject).cgSizeValue
-            
-            let newContentSize = (change![NSKeyValueChangeKey.newKey]! as AnyObject).cgSizeValue
-            
-            let dy = (newContentSize?.height)! - (oldContentSize?.height)!;
-            
-            if toolbarHeightConstraint != nil {
-                self.adjustInputToolbarForComposerTextViewContentSizeChange(dy)
-            }
-        }
+//        if(screenHeight == 736) {
+//            toolBarExtendView.frame.origin.y -= 271
+//        } else {
+//            toolBarExtendView.frame.origin.y -= 258
+//        }
     }
     
     // set up content of extend view (mingjie jin)

@@ -202,6 +202,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
                                               longitude: marker.position.longitude, zoom: 17)
             mapView.animate(to: camera)
+            marker.icon = UIImage()
             self.canOpenAnotherPin = false
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
