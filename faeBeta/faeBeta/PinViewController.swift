@@ -25,7 +25,7 @@ protocol PinDetailDelegate: class {
     func disableSelfMarker(yes: Bool)
 }
 
-class PinDetailViewController: UIViewController, UITextViewDelegate {
+class PinDetailViewController: UIViewController {
     
     // Delegate of this class
     weak var delegate: PinDetailDelegate?
@@ -219,6 +219,7 @@ class PinDetailViewController: UIViewController, UITextViewDelegate {
         initPinBasicInfo()
         checkPinStatus()
         self.delegate?.disableSelfMarker(yes: true)
+        addObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -386,64 +387,7 @@ class PinDetailViewController: UIViewController, UITextViewDelegate {
         animatingHeart.layer.position = CGPoint(x: buttonPinLike.center.x, y: buttonPinLike.center.y)
     }
     
-    func appWillEnterForeground(){
-        
-    }
-    
-    func keyboardWillShow(_ notification: Notification) {
-        
-        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            if self.isKeyboardInThisView {
-                
-            }
-        }, completion: {(done: Bool) in
-            
-        })
-    }
-    
-    func keyboardDidShow(_ notification: Notification){
-        
-    }
-    
-    func keyboardWillHide(_ notification: Notification) {
-        if self.isKeyboardInThisView {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 155
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
-        }
-        UIView.animate(withDuration: 0.3, animations: {
-            
-        }, completion: nil)
-    }
-    
-    func keyboardDidHide(_ notification: Notification){
-        
-    }
-    
-    
     //MARK: - keyboard input bar tapped event
-    func showKeyboard(_ sender: UIButton) {
-        if sender.tag == 1 {
-            sender.tag = 0
-            isKeyboardInThisView = true
-            self.buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
-            return
-        }
-        sender.tag = 1
-        self.buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-    }
-    
-    func showStikcer() {
-        buttonKeyBoard.tag = 0
-        resetToolbarButtonIcon()
-        buttonSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
-        self.tableCommentsForPin.frame.size.height = screenHeight - 155 - 271
-        self.draggingButtonSubview.frame.origin.y = screenHeight - 90 - 271
-    }
     
     func sendMessageButtonTapped() {
         sendMessage(textViewInput.text)
@@ -465,74 +409,10 @@ class PinDetailViewController: UIViewController, UITextViewDelegate {
         if let realText = text {
             commentThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
-        self.textViewInput.text = ""
-        self.textViewInput.resignFirstResponder()
         self.replyToUser = ""
-        self.lblTxtPlaceholder.isHidden = false
-    }
-    
-    func endEdit() {
-        self.view.endEditing(true)
-    }
-    
-    //MARK: - TEXTVIEW delegate
-    func textViewDidChange(_ textView: UITextView) {
-        if textView == self.textViewInput {
-            let spacing = CharacterSet.whitespacesAndNewlines
-            
-            if textView.text.trimmingCharacters(in: spacing).isEmpty == false {
-                self.lblTxtPlaceholder.isHidden = true
-            } else {
-                self.lblTxtPlaceholder.isHidden = false
-            }
-            
-            if textView.text.characters.count == 0 {
-                // when text has no char, cannot send message
-                buttonSend.isEnabled = false
-                buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: .normal)
-            } else {
-                buttonSend.isEnabled = true
-                buttonSend.setImage(UIImage(named: "canSendMessage"), for: .normal)
-            }
-            
-            let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-            let numlineOnDevice = 4
-            if numLines <= numlineOnDevice {
-                let txtHeight = textView.contentSize.height
-                textView.frame.size.height = txtHeight
-                uiviewToolBar.frame.size.height = txtHeight + 66
-                uiviewToolBar.frame.origin.y = screenHeight - txtHeight - 66
-                tableCommentsForPin.frame.size.height = screenHeight - txtHeight - 66 - 65
-            } else {
-                textView.frame.size.height = 98
-                uiviewToolBar.frame.size.height = 164
-                uiviewToolBar.frame.origin.y = screenHeight - 164
-                tableCommentsForPin.frame.size.height = screenHeight - 164 - 65
-            }
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
-        
-        // adjust position for extend view (mingjie jin)
-//        if(screenHeight == 736) {
-//            toolBarExtendView.frame.origin.y += 271
-//        } else {
-//            toolBarExtendView.frame.origin.y += 258
-//        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-        self.showKeyboard(UIButton())
-        buttonKeyBoard.tag = 1
-        // adjust position for extend view (mingjie jin)
-//        if(screenHeight == 736) {
-//            toolBarExtendView.frame.origin.y -= 271
-//        } else {
-//            toolBarExtendView.frame.origin.y -= 258
-//        }
+        self.textViewInput.text = ""
+        self.textViewDidChange(textViewInput)
+        endEdit()
     }
     
     // set up content of extend view (mingjie jin)

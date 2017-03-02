@@ -279,7 +279,8 @@ extension FaeMapViewController {
                     self.mapUserPinsDic.append(pinUser)
                     pinUser.userData = [1: userPin]
                     let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-                    icon.image = UIImage(named: "miniAvatar_\(miniAvatar+1)")
+                    let iconImage = UIImage(named: "miniAvatar_\(miniAvatar+1)")
+                    icon.image = iconImage
                     icon.contentMode = .scaleAspectFit
                     icon.alpha = 0
                     pinUser.iconView = icon
@@ -290,6 +291,9 @@ extension FaeMapViewController {
                     let delay: Double = Double(arc4random_uniform(100)) / 100
                     UIView.animate(withDuration: 1, delay: delay, animations: {
                         icon.alpha = 1
+                    }, completion: {(finished) in
+                        pinUser.iconView = nil
+                        pinUser.icon = iconImage
                     })
                 }
             }

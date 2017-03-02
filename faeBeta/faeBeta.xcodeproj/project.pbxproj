@@ -233,6 +233,7 @@
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
 		B8B2C15E1E66C2BD00F253EA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15D1E66C2BD00F253EA /* UserPin.swift */; };
+		B8B2C1601E680C2200F253EA /* PDTextViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15F1E680C2200F253EA /* PDTextViewCtrl.swift */; };
 		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
 		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
 		B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C46DBD1E63786B00FD7E27 /* PinComment.swift */; };
@@ -557,6 +558,7 @@
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
 		B8B2C15D1E66C2BD00F253EA /* UserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
+		B8B2C15F1E680C2200F253EA /* PDTextViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDTextViewCtrl.swift; sourceTree = "<group>"; };
 		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
 		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
 		B8C46DBD1E63786B00FD7E27 /* PinComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinComment.swift; sourceTree = "<group>"; };
@@ -1276,6 +1278,7 @@
 				B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */,
 				B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */,
 				B8612E3A1DF24CF90092C606 /* PDDelegateCtrl.swift */,
+				B8B2C15F1E680C2200F253EA /* PDTextViewCtrl.swift */,
 				B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */,
 				B8612E401DF2504E0092C606 /* PDInputToolbar.swift */,
 				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
@@ -1948,6 +1951,7 @@
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */,
 				B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */,
+				B8B2C1601E680C2200F253EA /* PDTextViewCtrl.swift in Sources */,
 				B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */,
 				B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,

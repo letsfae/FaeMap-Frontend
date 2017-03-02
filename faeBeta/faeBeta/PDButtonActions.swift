@@ -13,6 +13,54 @@ import SwiftyJSON
 
 extension PinDetailViewController {
     
+    func endEdit() {
+        buttonKeyBoard.tag = 0
+        buttonKeyBoard.isHidden = false
+        buttonSticker.isHidden = true
+        textViewInput.endEditing(true)
+        textViewInput.resignFirstResponder()
+        if emojiView.tag == 1 {
+            self.emojiView.tag = 0
+            UIView.animate(withDuration: 0.3) {
+                self.emojiView.frame.origin.y = screenHeight
+                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+            }
+        }
+    }
+    
+    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+        endEdit()
+    }
+    
+    func actionSwitchKeyboard(_ sender: UIButton) {
+        if sender == buttonKeyBoard {
+            textViewInput.becomeFirstResponder()
+            actionHideEmojiView()
+            buttonKeyBoard.isHidden = true
+            buttonSticker.isHidden = false
+        } else {
+            textViewInput.resignFirstResponder()
+            actionShowEmojiView()
+            buttonKeyBoard.isHidden = false
+            buttonSticker.isHidden = true
+        }
+    }
+    
+    private func actionShowEmojiView() {
+        self.emojiView.tag = 1
+        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
+        UIView.animate(withDuration: 0.3) { 
+            self.emojiView.frame.origin.y = screenHeight - 271
+        }
+    }
+    
+    private func actionHideEmojiView() {
+        self.emojiView.tag = 0
+        UIView.animate(withDuration: 0.3) {
+            self.emojiView.frame.origin.y = screenHeight
+        }
+    }
+    
     // Like comment pin
     func actionLikeThisPin(_ sender: UIButton) {
         endEdit()
@@ -330,9 +378,5 @@ extension PinDetailViewController {
         menu.addAction(report)
         menu.addAction(cancel)
         self.present(menu, animated: true, completion: nil)
-    }
-    
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        endEdit()
     }
 }

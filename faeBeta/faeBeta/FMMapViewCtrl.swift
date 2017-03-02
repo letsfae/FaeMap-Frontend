@@ -57,12 +57,16 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         } else if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
-                UIView.animate(withDuration: 0.5, delay: delay, animations: {
-                    if marker.iconView != nil {
-                        marker.iconView?.alpha = 0
-                    }
-                    }, completion: {(done: Bool) in
-                        marker.map = nil
+                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+                icon.image = marker.icon
+                icon.contentMode = .scaleAspectFit
+                icon.alpha = 1
+                marker.iconView = icon
+                marker.icon = nil
+                UIView.animate(withDuration: 0.3, delay: delay, animations: {
+                    icon.alpha = 0
+                }, completion: {(done: Bool) in
+                    marker.map = nil
                 })
             }
         } else if type == "all" || type == "place" {

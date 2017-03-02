@@ -18,4 +18,45 @@ extension PinDetailViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name:NSNotification.Name.UIKeyboardDidHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
+    
+    func appWillEnterForeground(){
+        
+    }
+    
+    func keyboardWillShow(_ notification: Notification) {
+        
+        buttonKeyBoard.isHidden = true
+        buttonSticker.isHidden = false
+        
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            if self.isKeyboardInThisView {
+                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
+            }
+        }, completion: {(done: Bool) in
+            
+        })
+    }
+    
+    func keyboardDidShow(_ notification: Notification){
+        
+    }
+    
+    func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3, animations: {
+            if self.isKeyboardInThisView {
+                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height
+                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+            }
+        }, completion: nil)
+    }
+    
+    func keyboardDidHide(_ notification: Notification){
+        
+    }
 }

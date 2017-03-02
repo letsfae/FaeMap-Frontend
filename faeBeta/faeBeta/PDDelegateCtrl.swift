@@ -13,17 +13,14 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     
     // SendStickerDelegate
     func appendEmojiWithImageName(_ name: String) {
-        
+        self.textViewInput.text = self.textViewInput.text + "[\(name)]"
+        self.textViewDidChange(textViewInput)
     }
     
     func deleteEmoji() {
-        
+        self.textViewInput.text = self.textViewInput.text.stringByDeletingLastEmoji()
+        self.textViewDidChange(textViewInput)
     }
-    
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-//        uploadingFile(image: image)
-//        picker.dismiss(animated: true, completion: nil)
-//    }
     
     func reloadCommentContent() {
         if pinIDPinDetailView != "-999" {

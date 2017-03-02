@@ -63,17 +63,21 @@ extension PinDetailViewController {
         uiviewToolBar.addConstraintsWithFormat("V:|-14-[v0(25)]", options: [], views: lblTxtPlaceholder)
         
         buttonKeyBoard = UIButton()
-        buttonKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .normal)
+        buttonKeyBoard.tag = 0
+        buttonKeyBoard.setImage(#imageLiteral(resourceName: "keyboard"), for: .normal)
         uiviewToolBar.addSubview(buttonKeyBoard)
         uiviewToolBar.addConstraintsWithFormat("H:|-10-[v0(47)]", options: [], views: buttonKeyBoard)
         uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonKeyBoard)
+        buttonKeyBoard.addTarget(self, action: #selector(self.actionSwitchKeyboard(_:)), for: .touchUpInside)
         
         buttonSticker = UIButton()
-        buttonSticker.alpha = 0
-        buttonSticker.setImage(UIImage(named: "sticker"), for: .normal)
+        buttonSticker.tag = 0
+        buttonSticker.isHidden = true
+        buttonSticker.setImage(#imageLiteral(resourceName: "stickerChosen"), for: .normal)
         uiviewToolBar.addSubview(buttonSticker)
         uiviewToolBar.addConstraintsWithFormat("H:|-10-[v0(47)]", options: [], views: buttonSticker)
         uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonSticker)
+        buttonSticker.addTarget(self, action: #selector(self.actionSwitchKeyboard(_:)), for: .touchUpInside)
         
         buttonSend = UIButton()
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
@@ -89,6 +93,7 @@ extension PinDetailViewController {
     private func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
+        emojiView.layer.zPosition = 130
         self.view.addSubview(emojiView)
     }
     
@@ -119,6 +124,8 @@ extension PinDetailViewController {
         tableCommentsForPin.center.y -= screenHeight
         tableCommentsForPin.delaysContentTouches = false
         tableCommentsForPin.showsVerticalScrollIndicator = false
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
+        tableCommentsForPin.addGestureRecognizer(tapToDismissKeyboard)
         
         // Dragging button
         draggingButtonSubview = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 27))
@@ -146,8 +153,6 @@ extension PinDetailViewController {
         uiviewPinDetail.backgroundColor = UIColor.white
         uiviewPinDetail.layer.zPosition = 100
         self.view.addSubview(uiviewPinDetail)
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
-        uiviewPinDetail.addGestureRecognizer(tapToDismissKeyboard)
         
         // Textview width based on different resolutions
         var textViewWidth: CGFloat = 0
