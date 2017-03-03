@@ -34,8 +34,9 @@ class YelpManager {
         
     }
     
-    func query(request : YelpQuery, completion : @escaping (_ res : [YelpResult]) -> ()) {
-        var result = [YelpResult]()
+    func query(request : YelpQuery, completion : @escaping (_ res : [PlacePin]) -> ()) {
+//        var result = [YelpResult]()
+        var result = [PlacePin]()
         if (!hasToken()) {
             Alamofire.request("https://api.yelp.com/oauth2/token",method: .post, parameters: ["grant_type":"client_credentials","client_id":yelpAppID,"client_secret":yelpSecret],headers: yelpHeaders).responseJSON { response in
                 if let val = response.result.value {
@@ -44,20 +45,29 @@ class YelpManager {
                     Alamofire.request("https://api.yelp.com/v3/businesses/search", method: .get, parameters: request.getDict(), headers: ["Authorization" : self.token]).responseJSON { response in
                         if let data = response.result.value {
                             let json = JSON(data)["businesses"]
-                            if json.count < 1 {
+                            guard let yelpJSON = json.array else {
                                 completion(result)
                                 return
                             }
-                            for i in 0...(json.count - 1){
-                                // Added by Yue Shen - 02.07.17
-                                var cateArray = [String]()
-                                for j in 0...json[i]["categories"].count-1 {
-                                    cateArray.append(json[i]["categories"][j]["alias"].stringValue)
-                                }
-                                // Modified by Yue Shen - 02.07.17
-                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
-                            }
+                            
+                            result = yelpJSON.map{PlacePin(json: $0)}
+                            
                             completion(result)
+                            
+//                            if json.count < 1 {
+//                                completion(result)
+//                                return
+//                            }
+//                            for i in 0...(json.count - 1){
+//                                // Added by Yue Shen - 02.07.17
+//                                var cateArray = [String]()
+//                                for j in 0...json[i]["categories"].count-1 {
+//                                    cateArray.append(json[i]["categories"][j]["alias"].stringValue)
+//                                }
+//                                // Modified by Yue Shen - 02.07.17
+//                                result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
+//                            }
+//                            completion(result)
                         }
                     }
                 }
@@ -66,20 +76,28 @@ class YelpManager {
             Alamofire.request("https://api.yelp.com/v3/businesses/search", method: .get, parameters: request.getDict(), headers: ["Authorization" : self.token]).responseJSON { response in
                 if let data = response.result.value {
                     let json = JSON(data)["businesses"]
-                    if json.count < 1 {
+                    guard let yelpJSON = json.array else {
                         completion(result)
                         return
                     }
-                    for i in 0...(json.count - 1){
-                        // Added by Yue Shen - 02.07.17
-                        var cateArray = [String]()
-                        for j in 0...json[i]["categories"].count-1 {
-                            cateArray.append(json[i]["categories"][j]["alias"].stringValue)
-                        }
-                        // Modified by Yue Shen - 02.07.17
-                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
-                    }
+                    
+                    result = yelpJSON.map{PlacePin(json: $0)}
+                    
                     completion(result)
+//                    if json.count < 1 {
+//                        completion(result)
+//                        return
+//                    }
+//                    for i in 0...(json.count - 1){
+//                        // Added by Yue Shen - 02.07.17
+//                        var cateArray = [String]()
+//                        for j in 0...json[i]["categories"].count-1 {
+//                            cateArray.append(json[i]["categories"][j]["alias"].stringValue)
+//                        }
+//                        // Modified by Yue Shen - 02.07.17
+//                        result.append(YelpResult(url: json[i]["image_url"].stringValue, add1: json[i]["location"]["address1"].stringValue, add2: json[i]["location"]["city"].stringValue + ", " + json[i]["location"]["state"].stringValue + ", " + json[i]["location"]["country"].stringValue, name: json[i]["name"].stringValue, lat: json[i]["coordinates"]["latitude"].stringValue, long: json[i]["coordinates"]["longitude"].stringValue, cate: cateArray))
+//                    }
+//                    completion(result)
                 }
             }
         }

@@ -36,6 +36,8 @@ extension PinDetailViewController {
         UIView.animate(withDuration: 0.3, animations: {
             if self.isKeyboardInThisView {
                 self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
+                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - keyboardHeight
+                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
             }
         }, completion: {(done: Bool) in
             

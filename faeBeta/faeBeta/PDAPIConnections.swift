@@ -23,9 +23,6 @@ extension PinDetailViewController {
                 self.labelPinLikeCount.text = "\(likes)"
                 likesCount = likes
             }
-            if let _ = mapInfoJSON["saves"].int {
-                
-            }
             if let comments = mapInfoJSON["comments"].int {
                 self.pinCommentsCount = comments
                 self.labelPinCommentsCount.text = "\(comments)"

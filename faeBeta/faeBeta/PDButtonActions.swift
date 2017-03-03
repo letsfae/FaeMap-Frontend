@@ -51,6 +51,8 @@ extension PinDetailViewController {
         self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
         UIView.animate(withDuration: 0.3) { 
             self.emojiView.frame.origin.y = screenHeight - 271
+            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - 271
+            self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
         }
     }
     

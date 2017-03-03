@@ -84,6 +84,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
     var userPins = [UserPin]()
     var mapPlacePinsDic = [GMSMarker]() // Map User Pin
+    var mapPlaces = [PlacePin]()
+    var placeNames = [String]()
     var markerMask: UIView! // mask to prevent UI action
     var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
     var pinIdToPassBySegue: String = "" // segue to Comment Pin Popup Window

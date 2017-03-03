@@ -36,9 +36,41 @@ extension FaeMapViewController {
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
+    fileprivate func pinPlacesOnMap(results: [PlacePin]) {
+        for result in results {
+            var iconImage = UIImage()
+            let categoryList = result.category
+            iconImage = self.placesPinIconImage(categoryList: categoryList)
+            let pinMap = GMSMarker()
+            let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 64))
+            let icon = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
+            iconSub.addSubview(icon)
+            icon.contentMode = .scaleAspectFit
+            icon.image = iconImage
+            pinMap.iconView = iconSub
+            let delay: Double = Double(arc4random_uniform(200)) / 100
+            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+            pinMap.position = result.position
+            pinMap.userData = [2: result]
+            pinMap.map = self.faeMapView
+            self.mapPlacePinsDic.append(pinMap)
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                icon.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+            }, completion: {(done: Bool) in
+                if done {
+                    pinMap.iconView = nil
+                    pinMap.icon = iconImage
+                }
+            })
+        }
+    }
+    
     func loadCurrentRegionPlacePins(radius: Int, all: Bool) {
-        return
+//        return
         clearMap(type: "place")
+        mapPlacePinsDic.removeAll()
+        mapPlaces.removeAll()
+        placeNames.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
@@ -46,117 +78,126 @@ extension FaeMapViewController {
         yelpQuery.setRadius(radius: Int(Double(radius)))
         yelpQuery.setSortRule(sort: "best_match")
         
-        // All type
-        var resultArray = [YelpResult]()
-        var resultName = [String]()
-        
-        func checkPlaceExist(_ result: YelpResult) -> Bool {
-            if resultName.contains(result.getName()) {
+        func checkPlaceExist(_ result: PlacePin) -> Bool {
+            if placeNames.contains(result.name) {
                 return true
             }
             return false
         }
         
-        if !all {
-            yelpQuery.setResultLimit(count: 10)
-            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                for result in results {
-                    if checkPlaceExist(result) {
-                        continue
-                    }
-                    resultName.append(result.getName())
-                    resultArray.append(result)
+        yelpQuery.setResultLimit(count: 10)
+        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+            self.mapPlaces = results
+            for result in results {
+                if checkPlaceExist(result) {
+                    continue
                 }
-                self.pinPlacesOnMap(results: resultArray)
-//                self.calculateZoomLevel(results: resultArray)
-            })
-        }
-        else {
-            yelpQuery.setResultLimit(count: 4)
-            yelpQuery.setCatagoryToRestaurant()
-            yelpManager.query(request: yelpQuery, completion: { (results) in
-                for result in results {
-                    if checkPlaceExist(result) {
-                        continue
-                    }
-                    resultName.append(result.getName())
-                    resultArray.append(result)
-                }
-                self.yelpQuery.setResultLimit(count: 2)
-                self.yelpQuery.setCatagoryToDessert()
-                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                    for result in results {
-                        if checkPlaceExist(result) {
-                            continue
-                        }
-                        resultName.append(result.getName())
-                        resultArray.append(result)
-                    }
-                    self.yelpQuery.setCatagoryToCafe()
-                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                        for result in results {
-                            if checkPlaceExist(result) {
-                                continue
-                            }
-                            resultName.append(result.getName())
-                            resultArray.append(result)
-                        }
-                        self.yelpQuery.setCatagoryToCinema()
-                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                            for result in results {
-                                if checkPlaceExist(result) {
-                                    continue
-                                }
-                                resultName.append(result.getName())
-                                resultArray.append(result)
-                            }
-                            self.yelpQuery.setCatagoryToSport()
-                            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                for result in results {
-                                    if checkPlaceExist(result) {
-                                        continue
-                                    }
-                                    resultName.append(result.getName())
-                                    resultArray.append(result)
-                                }
-                                self.yelpQuery.setCatagoryToBeauty()
-                                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                    for result in results {
-                                        if checkPlaceExist(result) {
-                                            continue
-                                        }
-                                        resultName.append(result.getName())
-                                        resultArray.append(result)
-                                    }
-                                    self.yelpQuery.setCatagoryToArt()
-                                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                        for result in results {
-                                            if checkPlaceExist(result) {
-                                                continue
-                                            }
-                                            resultName.append(result.getName())
-                                            resultArray.append(result)
-                                        }
-                                        self.yelpQuery.setCatagoryToJuice()
-                                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                            for result in results {
-                                                if checkPlaceExist(result) {
-                                                    continue
-                                                }
-                                                resultName.append(result.getName())
-                                                resultArray.append(result)
-                                            }
-                                            self.pinPlacesOnMap(results: resultArray)
-//                                            self.calculateZoomLevel(results: resultArray)
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        }
+                self.placeNames.append(result.name)
+            }
+            self.pinPlacesOnMap(results: self.mapPlaces)
+            //                self.calculateZoomLevel(results: resultArray)
+        })
+        
+//        if !all {
+//            yelpQuery.setResultLimit(count: 10)
+//            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                for result in results {
+//                    if checkPlaceExist(result) {
+//                        continue
+//                    }
+//                    resultName.append(result.getName())
+//                    resultArray.append(result)
+//                }
+//                self.pinPlacesOnMap(results: resultArray)
+////                self.calculateZoomLevel(results: resultArray)
+//            })
+//        }
+//        else {
+//            yelpQuery.setResultLimit(count: 4)
+//            yelpQuery.setCatagoryToRestaurant()
+//            yelpManager.query(request: yelpQuery, completion: { (results) in
+//                for result in results {
+//                    if checkPlaceExist(result) {
+//                        continue
+//                    }
+//                    resultName.append(result.getName())
+//                    resultArray.append(result)
+//                }
+//                self.yelpQuery.setResultLimit(count: 2)
+//                self.yelpQuery.setCatagoryToDessert()
+//                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                    for result in results {
+//                        if checkPlaceExist(result) {
+//                            continue
+//                        }
+//                        resultName.append(result.getName())
+//                        resultArray.append(result)
+//                    }
+//                    self.yelpQuery.setCatagoryToCafe()
+//                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                        for result in results {
+//                            if checkPlaceExist(result) {
+//                                continue
+//                            }
+//                            resultName.append(result.getName())
+//                            resultArray.append(result)
+//                        }
+//                        self.yelpQuery.setCatagoryToCinema()
+//                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                            for result in results {
+//                                if checkPlaceExist(result) {
+//                                    continue
+//                                }
+//                                resultName.append(result.getName())
+//                                resultArray.append(result)
+//                            }
+//                            self.yelpQuery.setCatagoryToSport()
+//                            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                for result in results {
+//                                    if checkPlaceExist(result) {
+//                                        continue
+//                                    }
+//                                    resultName.append(result.getName())
+//                                    resultArray.append(result)
+//                                }
+//                                self.yelpQuery.setCatagoryToBeauty()
+//                                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                    for result in results {
+//                                        if checkPlaceExist(result) {
+//                                            continue
+//                                        }
+//                                        resultName.append(result.getName())
+//                                        resultArray.append(result)
+//                                    }
+//                                    self.yelpQuery.setCatagoryToArt()
+//                                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                        for result in results {
+//                                            if checkPlaceExist(result) {
+//                                                continue
+//                                            }
+//                                            resultName.append(result.getName())
+//                                            resultArray.append(result)
+//                                        }
+//                                        self.yelpQuery.setCatagoryToJuice()
+//                                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                            for result in results {
+//                                                if checkPlaceExist(result) {
+//                                                    continue
+//                                                }
+//                                                resultName.append(result.getName())
+//                                                resultArray.append(result)
+//                                            }
+//                                            self.pinPlacesOnMap(results: resultArray)
+////                                            self.calculateZoomLevel(results: resultArray)
+//                                        })
+//                                    })
+//                                })
+//                            })
+//                        })
+//                    })
+//                })
+//            })
+//        }
     }
     
     // MARK: -- Load Pins based on the Current Region Camera
@@ -174,18 +215,22 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {
-                print("DEBUG: getMapInformation status/100 != 2")
+                print("[loadCurrentRegionPins] status/100 != 2")
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 return
             }
             let mapInfoJSON = JSON(message!)
             guard let mapPinJsonArray = mapInfoJSON.array else {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-                print("[getPinComments] fail to parse pin comments")
+                print("[loadCurrentRegionPins] fail to parse pin comments")
                 return
             }
             if mapPinJsonArray.count <= 0 {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                return
+            }
+            if !self.mapPins.isEmpty {
+                print("[loadCurrentRegionPins] may cause piles of markers")
                 return
             }
             self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
@@ -239,7 +284,6 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("type", value: "user")
 //        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
-            
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
                 
@@ -372,101 +416,6 @@ extension FaeMapViewController {
         let geoBounds = GMSCoordinateBounds(coordinate: northWestCor, coordinate: southEastCor)
         let cameraUpdate = GMSCameraUpdate.fit(geoBounds, withPadding: 25.0)
         faeMapView.animate(with: cameraUpdate)
-    }
-    
-    fileprivate func pinPlacesOnMap(results: [YelpResult]) {
-        for result in results {
-            var pinData = [String: AnyObject]()
-            var iconImage = UIImage()
-            pinData["title"] = result.getName() as AnyObject?
-            let categoryList = result.getCategory()
-            pinData["type"] = "place" as AnyObject?
-            pinData["category"] = self.placesPinCheckCategory(categoryList: categoryList) as AnyObject?
-            iconImage = self.placesPinIconImage(categoryList: categoryList)
-            pinData["latitude"] = result.getPosition().latitude as AnyObject?
-            pinData["longitude"] = result.getPosition().longitude as AnyObject?
-            pinData["street"] = result.getAddress1() as AnyObject?
-            pinData["city"] = result.getAddress2() as AnyObject?
-            pinData["imageURL"] = result.getImageURL() as AnyObject?
-            let pinMap = GMSMarker()
-            let icon = UIImageView(frame: CGRect.zero)
-            icon.contentMode = .scaleAspectFit
-            icon.image = iconImage
-            pinMap.iconView = icon
-            let delay: Double = Double(arc4random_uniform(200)) / 100
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            pinMap.position = result.getPosition()
-            pinMap.userData = pinData
-            pinMap.map = self.faeMapView
-            self.mapPlacePinsDic.append(pinMap)
-            UIView.animate(withDuration: 0.683, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                icon.frame.size.width = 48
-                icon.frame.size.height = 54
-            }, completion: {(done: Bool) in
-                if done {
-                    pinMap.iconView = nil
-                    pinMap.icon = iconImage
-                }
-            })
-        }
-    }
-    
-    fileprivate func placesPinCheckCategory(categoryList: [String]) -> String {
-        if categoryList.contains("burgers") {
-            return "burgers"
-        }
-        else if categoryList.contains("pizza") {
-            return "pizza"
-        }
-        else if categoryList.contains("coffee") {
-            return "coffee"
-        }
-        else if categoryList.contains("desserts") {
-            return "desserts"
-        }
-        else if categoryList.contains("icecream") {
-            return "desserts"
-        }
-        else if categoryList.contains("movietheaters") {
-            return "movietheaters"
-        }
-        else if categoryList.contains("museums") {
-            return "museums"
-        }
-        else if categoryList.contains("galleries") {
-            return "museums"
-        }
-        else if categoryList.contains("beautysvc") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("spas") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("barbers") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("skincare") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("massage") {
-            return "beautysvc"
-        }
-        else if categoryList.contains("playgrounds") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("countryclubs") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("sports_clubs") {
-            return "playgrounds"
-        }
-        else if categoryList.contains("bubbletea") {
-            return "juicebars"
-        }
-        else if categoryList.contains("juicebars") {
-            return "juicebars"
-        }
-        return ""
     }
     
     fileprivate func placesPinIconImage(categoryList: [String]) -> UIImage {

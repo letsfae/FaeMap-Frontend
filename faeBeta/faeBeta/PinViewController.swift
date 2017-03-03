@@ -229,7 +229,7 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.633, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.subviewNavigation.frame.origin.y = 0
             self.tableCommentsForPin.frame.origin.y = 65
             self.subviewTable.frame.origin.y = 65
@@ -242,9 +242,10 @@ class PinDetailViewController: UIViewController {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             }
         }, completion: { (done: Bool) in
-//            if self.pinTypeEnum != .place {
+            if self.pinTypeEnum != .place {
+                self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
 //                self.loadExtendView() // call func for loading extend view (mingjie jin)
-//            }
+            }
         })
     }
     
