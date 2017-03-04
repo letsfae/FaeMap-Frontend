@@ -85,7 +85,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var userPins = [UserPin]()
     var mapPlacePinsDic = [GMSMarker]() // Map User Pin
     var mapPlaces = [PlacePin]()
-    var placeNames = [String]()
+    var placeNames = [Double]()
     var markerMask: UIView! // mask to prevent UI action
     var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
     var pinIdToPassBySegue: String = "" // segue to Comment Pin Popup Window
@@ -386,7 +386,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
-    // MARK: -- Map Methods
+    // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if didLoadFirstLoad {
             self.didLoadFirstLoad = false
@@ -401,7 +401,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             if userStatus != 5  {
                 reloadSelfPosAnimation()
             }
-            refreshMap(pins: true, users: true, places: true, placesAll: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                self.refreshMap(pins: true, users: true, places: true, placesAll: true)
+            })
         }
         
         // userStatus == 5, invisible
@@ -420,24 +422,5 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    
-    
-    // Testing move to background, with timer
-    func testingJumpToBackground() {
-        let qualityOfServiceClass = DispatchQoS.QoSClass.background
-        let backgroundQueue = DispatchQueue.global(qos: qualityOfServiceClass)
-        backgroundQueue.async(execute: {
-            print("This is run on the background queue")
-            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(FaeMapViewController.printsth), userInfo: nil, repeats: false)
-            DispatchQueue.main.async(execute: { () -> Void in
-                print("This is run on the main queue, after the previous code in outer block")
-            })
-        })
-    }
-    
-    func printsth() {
-        print("timer awake!")
     }
 }
