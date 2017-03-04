@@ -14,7 +14,7 @@ extension CreateCommentPinViewController {
         uiviewCreateCommentPin.alpha = 0.0
         self.view.addSubview(uiviewCreateCommentPin)
         
-        textViewForCommentPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 27))
+        textViewForCommentPin = UITextView(frame: CGRect(x: 60, y: 198, width: 294, height: 30))
         textViewForCommentPin.center.x = screenWidth / 2
         textViewForCommentPin.showsVerticalScrollIndicator = false
         textViewForCommentPin.font = UIFont(name: "AvenirNext-Regular", size: 20)
@@ -22,7 +22,6 @@ extension CreateCommentPinViewController {
         textViewForCommentPin.backgroundColor = UIColor.clear
         textViewForCommentPin.tintColor = UIColor.white
         textViewForCommentPin.delegate = self
-        textViewForCommentPin.isScrollEnabled = false
         uiviewCreateCommentPin.addSubview(textViewForCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: textViewForCommentPin)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-198-[v0(44)]", options: [], views: textViewForCommentPin)

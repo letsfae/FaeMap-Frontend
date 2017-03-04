@@ -53,16 +53,12 @@ extension CreateCommentPinViewController: UITextViewDelegate {
                 numlineOnDevice = 7
             }
             if numLines <= numlineOnDevice {
-                let fixedWidth = textView.frame.size.width
-                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                var newFrame = textView.frame
-                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-                textView.frame = newFrame
-                textView.isScrollEnabled = false
+                let txtHeight = ceil(textView.contentSize.height)
+                textView.frame.size.height = txtHeight
+                textView.setContentOffset(CGPoint.zero, animated: false)
             }
             else if numLines > numlineOnDevice {
-                textView.isScrollEnabled = true
+                
             }
             inputToolbar.numberOfCharactersEntered = max(0,textView.text.characters.count) //This changes the number showed in labelCountChar
         }
