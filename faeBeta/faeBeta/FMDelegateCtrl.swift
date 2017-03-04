@@ -51,7 +51,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             return
         }
         var mapPin_new = mapPin
-        print("[changeIconImage]", mapPin_new)
         mapPin_new.status = status
         marker.userData = [0: mapPin_new]
         marker.icon = pinIconSelector(type: type, status: status)

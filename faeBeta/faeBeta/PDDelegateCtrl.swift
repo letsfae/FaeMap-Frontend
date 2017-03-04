@@ -12,11 +12,22 @@ import CoreLocation
 extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate {
     
     // SendStickerDelegate
+    func sendStickerWithImageName(_ name : String) {
+        print("[sendStickerWithImageName] name: \(name)")
+        let stickerMessage = "<faeSticker>\(name)</faeSticker>"
+        sendMessage(stickerMessage)
+        buttonSend.isEnabled = false
+        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        UIView.animate(withDuration: 0.3) {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 155
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
+        }
+        
+    }
     func appendEmojiWithImageName(_ name: String) {
         self.textViewInput.text = self.textViewInput.text + "[\(name)]"
         self.textViewDidChange(textViewInput)
     }
-    
     func deleteEmoji() {
         self.textViewInput.text = self.textViewInput.text.stringByDeletingLastEmoji()
         self.textViewDidChange(textViewInput)

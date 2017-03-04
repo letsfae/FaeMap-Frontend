@@ -19,11 +19,13 @@ extension PinDetailViewController {
         buttonSticker.isHidden = true
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
-        if emojiView.tag == 1 {
-            self.emojiView.tag = 0
+        self.emojiView.tag = 0
+        if buttonPinAddComment.tag == 1 {
             UIView.animate(withDuration: 0.3) {
                 self.emojiView.frame.origin.y = screenHeight
                 self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height
+                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
             }
         }
     }
@@ -217,9 +219,14 @@ extension PinDetailViewController {
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsFull"), for: .normal)
         if buttonPinDetailDragToLargeSize.tag == 1 {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 90
-            self.subviewTable.frame.size.height = screenHeight - 65
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 28
+            UIView.animate(withDuration: 0.5, animations: ({
+                let toolbarHeight = self.uiviewToolBar.frame.size.height
+                self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
+                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
+                self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
+                self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
+            }), completion: { (done: Bool) in
+            })
             return
         }
         readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
