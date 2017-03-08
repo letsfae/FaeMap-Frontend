@@ -423,7 +423,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if (locExtendView.isHidden) {
             sendMessage(text: self.inputToolbar.contentView.textView.text, date: Date())
         } else {
-            print("sending location")
             sendMessage(text: self.inputToolbar.contentView.textView.text, location: locExtendView.location,snapImage: locExtendView.getImageDate(), date: Date())
         }
         locExtendView.isHidden = true
@@ -819,13 +818,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     func sendLocationMessageFromMini(_ sender : UIButton) {
-        print("sending location from mini")
         if let mapview = self.toolbarContentView.miniLocation.mapView {
-            print("got mapview");
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
-                print("got snap image")
                 //sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
                 locExtendView.setAvator(image: screenShotImage)
                 let geocoder = GMSGeocoder()

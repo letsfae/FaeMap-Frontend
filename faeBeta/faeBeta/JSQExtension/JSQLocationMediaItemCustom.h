@@ -32,7 +32,9 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  to a `JSQMediaMessage` object during its initialization to construct a valid media message object.
  *  You may wish to subclass `JSQLocationMediaItem` to provide additional functionality or behavior.
  */
-@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding, NSCopying>
+//@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding, NSCopying>
+
+@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding>
 
 /**
  *  The location for the media item. The default value is `nil`.

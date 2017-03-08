@@ -46,6 +46,9 @@
 {
     self = [super init];
     _text = comment;
+    _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
+    _addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 37, 189, 16)];
+    _addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 55, 189, 16)];
     if (self) {
         [self setLocation:location snapImage: snap withCompletionHandler:nil];
     }
@@ -87,6 +90,8 @@
 
 - (void)setLocation:(CLLocation *)location region:(MKCoordinateRegion)region withCompletionHandler:(JSQLocationMediaItemCompletionBlock)completion
 {
+    //_location = [CLLocation init];
+    //_location.coordinate = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     _location = [location copy];
     //    _cachedMapSnapshotImage = nil;
     _cachedMapImageView = nil;
@@ -152,6 +157,7 @@
 
 - (UIView *)mediaView
 {
+    printf("creating media view");
     
     CGFloat height = 0;
     if(![_text isEqualToString:@""] && ![_text isEqualToString:@"[Location]"]) {
@@ -177,17 +183,17 @@
         [locationView addSubview:line];
     }
     
-    _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
+    //_addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 17, 189, 22)];
     _addressLine1.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 16];
     _addressLine1.text = _address1;
     _addressLine1.textColor = [UIColor colorWithRed: 89 / 255.0 green: 89 / 255.0 blue: 89 / 255.0 alpha: 1.0];
     
-    _addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 37, 189, 16)];
+    //_addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 37, 189, 16)];
     _addressLine2.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 12];
     _addressLine2.text = _address2;
     _addressLine2.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
     
-    _addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 55, 189, 16)];
+    //_addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 55, 189, 16)];
     _addressLine3.font = [UIFont fontWithName:@"AvenirNext-Medium" size : 12];
     _addressLine3.text = _address3;
     _addressLine3.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
@@ -211,6 +217,8 @@
         
     [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:locationView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
     self.cachedMapImageView = locationView;
+    
+    printf("done creating media view");
     
     return locationView;
 }
@@ -281,9 +289,9 @@
 //        copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
 //        return copy;
 //    }
-    JSQLocationMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap text: _text];
-    copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
-    return copy;
+//    JSQLocationMediaItemCustom *copy = [[[self class] allocWithZone:zone] initWithLocation:self.location snapImage: _snap text: _text];
+//    copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
+    return nil;
 }
 
 @end

@@ -20,7 +20,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
         if let pic = picture {
             // send picture message
-            
             if let imageData = compressImageToData(pic){
                 outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
                 isContinuallySending = true

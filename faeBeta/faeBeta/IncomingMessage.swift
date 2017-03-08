@@ -9,6 +9,7 @@
 import Foundation
 import JSQMessagesViewController
 import GooglePlaces
+import GoogleMaps
 
 // this class is used to create JSQMessage object from information in firebase, it can be message from current user
 // or the other user who current user are chatting with.
@@ -99,6 +100,14 @@ class IncomingMessage {
         let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil, text : comment)
         //}
         
+        //init?
+        
+        if(mediaItem!.addressLine1 == nil) {
+            print("addressLine 1 is nil")
+        }
+        print(mediaItem!)
+        
+        
         
         let geocoder = GMSGeocoder()
         
@@ -106,6 +115,7 @@ class IncomingMessage {
             
             if(error == nil) {
                 //print("there is no error get address from lat & lon")
+            
                 mediaItem?.addressLine1.text = response?.firstResult()?.thoroughfare
                 var cityText = response?.firstResult()?.locality
                 if(response?.firstResult()?.administrativeArea != nil) {
