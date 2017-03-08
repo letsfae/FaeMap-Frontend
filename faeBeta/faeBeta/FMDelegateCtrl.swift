@@ -58,7 +58,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func disableSelfMarker(yes: Bool) {
         if yes {
-            self.selfMarker.map = nil
+//            self.selfMarker.map = nil
+            self.subviewSelfMarker.isHidden = true
         } else {
             reloadSelfPosAnimation()
         }
@@ -96,12 +97,13 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.faeMapView.isMyLocationEnabled = false
             self.renewSelfLocation()
             reloadSelfPosAnimation()
+            self.subviewSelfMarker.isHidden = false
             return
         }
         if userStatus == 5 {
             self.invisibleMode()
             self.faeMapView.isMyLocationEnabled = true
-            selfMarker.map = nil
+            self.subviewSelfMarker.isHidden = true
         }
     }
     // LeftSlidingMenuDelegate

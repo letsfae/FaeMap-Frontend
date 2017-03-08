@@ -120,6 +120,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelUserAge: UILabel!
     var uiviewUserGender: UIView!
     var imageUserGender: UIImageView!
+    var lblUserAge: UILabel!
     var avatarBaseView: UIView!
     let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0)
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451)
@@ -227,6 +228,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
+        loadSelfMarker()
         didLoadFirstLoad = true
     }
 
@@ -250,6 +252,17 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
         
         checkFirstLoginInRealm()
+        
+        let updateGenderAge = FaeUser()
+        updateGenderAge.whereKey("show_gender", value: "true")
+        updateGenderAge.whereKey("show_age", value: "false")
+        updateGenderAge.updateNameCard { (status, message) in
+            if status / 100 == 2 {
+                print("[showGenderAge] Successfully update namecard")
+            } else {
+                print("[showGenderAge] Fail to update namecard")
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -337,8 +350,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
+            subviewSelfMarker.isHidden = false
             loadSelfMarker()
             getSelfAccountInfo()
+        } else {
+            subviewSelfMarker.isHidden = true
         }
     }
     
@@ -398,9 +414,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
             self.previousPosition = mapCenterCoordinate
-            if userStatus != 5  {
-                reloadSelfPosAnimation()
-            }
+            reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true, placesAll: true)
             })
@@ -415,7 +429,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
             let position = CLLocationCoordinate2DMake(latitude, longitude)
-            self.selfMarker.position = position
+            let points = self.faeMapView.projection.point(for: position)
+//            self.selfMarker.position = position
+            self.subviewSelfMarker.center = points
         }
     }
 

@@ -85,7 +85,6 @@ extension FaeMapViewController {
         yelpQuery.setSortRule(sort: "best_match")
         
         func checkPlaceExist(_ result: PlacePin) -> Bool {
-            print("[checkPlaceExist]", result.position)
             let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
             if placeNames.contains(latPlusLon) {
                 return true

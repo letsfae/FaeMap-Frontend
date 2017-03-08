@@ -61,11 +61,7 @@ extension FaeMapViewController {
             // let curZoomLevel = faeMapView.camera.zoom
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
             faeMapView.camera = camera
-            if userStatus != 5  {
-//                loadPositionAnimateImage()
-                loadSelfMarker()
-                getSelfAccountInfo()
-            }
+            reloadSelfPosAnimation()
         }
     }
 }

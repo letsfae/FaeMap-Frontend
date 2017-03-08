@@ -97,6 +97,14 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         let direction: CGFloat = CGFloat(directionMap)
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
+        
+        if !didLoadFirstLoad && self.subviewSelfMarker != nil {
+            let latitude = currentLocation.coordinate.latitude
+            let longitude = currentLocation.coordinate.longitude
+            let position = CLLocationCoordinate2DMake(latitude, longitude)
+            let points = self.faeMapView.projection.point(for: position)
+            self.subviewSelfMarker.center = points
+        }
 
 //        print("Cur-Zoom Level: \(mapView.camera.zoom)")
 //        print("Pre-Zoom Level: \(previousZoomLevel)")

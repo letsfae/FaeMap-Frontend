@@ -12,9 +12,13 @@ import SwiftyJSON
 extension FaeMapViewController {
     
     func loadSelfMarker() {
-        
-        self.subviewSelfMarker = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
-        
+        if subviewSelfMarker != nil {
+            myPositionCircle_1.removeFromSuperview()
+            myPositionCircle_2.removeFromSuperview()
+            myPositionCircle_3.removeFromSuperview()
+            subviewSelfMarker.removeFromSuperview()
+        }
+        self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 120, height: 120))
         selfMarkerIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         selfMarkerIcon.contentMode = .scaleAspectFit
         let point = CGPoint(x: 60, y: 60)
@@ -32,12 +36,13 @@ extension FaeMapViewController {
         self.subviewSelfMarker.addSubview(myPositionCircle_1)
         self.subviewSelfMarker.addSubview(selfMarkerIcon)
         
-        selfMarker.iconView = subviewSelfMarker
-        selfMarker.position.latitude = currentLatitude
-        selfMarker.position.longitude = currentLongitude
-        selfMarker.map = faeMapView
-        selfMarker.zIndex = 10
-        selfMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+//        selfMarker.iconView = subviewSelfMarker
+//        selfMarker.position.latitude = currentLatitude
+//        selfMarker.position.longitude = currentLongitude
+//        selfMarker.map = faeMapView
+//        selfMarker.zIndex = 10
+//        selfMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+        self.view.addSubview(self.subviewSelfMarker)
         selfMarkerAnimation()
     }
     
@@ -82,7 +87,6 @@ extension FaeMapViewController {
                 userBirthday = birthday
             }
             if let gender = selfUserInfoJSON["gender"].string {
-//                print("[getSelfAccountInfo] gender: \(gender)")
                 userUserGender = gender
             }
             if let userName = selfUserInfoJSON["user_name"].string {

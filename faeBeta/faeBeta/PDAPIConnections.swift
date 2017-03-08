@@ -55,6 +55,7 @@ extension PinDetailViewController {
                 return
             }
             let commentsJSON = JSON(message!)
+//            print(message)
             guard let pinCommentJsonArray = commentsJSON.array else {
                 print("[getPinComments] fail to parse pin comments")
                 return

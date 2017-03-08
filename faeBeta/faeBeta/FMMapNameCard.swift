@@ -29,8 +29,10 @@ extension FaeMapViewController {
             self.buttonShowSelfOnMap.frame = CGRect(x: 116, y: 393, width: 27, height: 27)
             self.buttonOptions.frame = CGRect(x: 294, y: 292, width: 32, height: 18)
             self.buttonEmoji.frame = CGRect(x: 271, y: 393, width: 27, height: 27)
-            self.uiviewUserGender.frame = CGRect(x: 88, y: 292, width: 28, height: 18)
             self.uiViewNameCard.frame = CGRect(x: 73, y: 158, width: 268, height: 275)
+            self.uiviewUserGender.frame = CGRect(x: 88, y: 292, width: 46, height: 18)
+            self.imageUserGender.frame = CGRect(x: 97, y: 295, width: 10, height: 12)
+            self.lblUserAge.frame = CGRect(x: 113, y: 293, width: 16, height: 14)
         }, completion: nil)
     }
     
@@ -52,6 +54,8 @@ extension FaeMapViewController {
                 self.buttonEmoji.frame = self.startFrame
                 self.uiviewUserGender.frame = self.startFrame
                 self.uiViewNameCard.frame = self.startFrame
+                self.imageUserGender.frame = self.startFrame
+                self.lblUserAge.frame = self.startFrame
             }
             if sender.tag == 1 || sender == self.buttonClosingOptionsInNameCard {
                 self.buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
@@ -70,6 +74,9 @@ extension FaeMapViewController {
             }
         }), completion: {(done: Bool) in
             self.canDoNextUserUpdate = true
+            self.uiviewUserGender.isHidden = true
+            self.imageUserGender.image = nil
+            self.lblUserAge.text = nil
         })
     }
     
@@ -203,9 +210,83 @@ extension FaeMapViewController {
         uiviewUserGender.layer.cornerRadius = 9*screenHeightFactor
         uiviewUserGender.layer.zPosition = 912
         self.view.addSubview(uiviewUserGender)
-        imageUserGender = UIImageView(frame: CGRect(x: 9, y: 3, width: 10, height: 12))
-        imageUserGender.image = #imageLiteral(resourceName: "userGenderMale")
-        imageBackground.addSubview(imageUserGender)
+        imageUserGender = UIImageView(frame: startFrame)
+        imageUserGender.contentMode = .scaleAspectFit
+        imageUserGender.layer.anchorPoint = nameCardAnchor
+        self.view.addSubview(imageUserGender)
+        imageUserGender.layer.zPosition = 913
+        lblUserAge = UILabel(frame: startFrame)
+        lblUserAge.layer.anchorPoint = nameCardAnchor
+        lblUserAge.textColor = UIColor.white
+        lblUserAge.font = UIFont(name: "AvenirNext-Demibold", size: 13)
+        lblUserAge.layer.zPosition = 913
+        self.view.addSubview(lblUserAge)
+//        lblUserAge.text = "21"
+    }
+    
+    func updateNameCard(withUserId: Int) {
+        buttonChat.tag = withUserId
+        buttonOptions.tag = withUserId
+        buttonShowSelfOnMap.isHidden = true
+        buttonFavorite.isHidden = false
+        let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
+        imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+        let userNameCard = FaeUser()
+        userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
+            if status / 100 == 2 {
+                print("[updateNameCard] \(message!)")
+                let profileInfo = JSON(message!)
+                let canShowGender = profileInfo["show_gender"].boolValue
+                let gender = profileInfo["gender"].stringValue
+                let canShowAge = profileInfo["show_age"].boolValue
+                let age = profileInfo["age"].stringValue
+                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
+                self.labelDisplayName.text = profileInfo["nick_name"].stringValue
+                self.labelShortIntro.text = profileInfo["short_intro"].stringValue
+            }
+        }
+    }
+    
+    private func showGenderAge(showGender: Bool, gender: String, showAge: Bool, age: String) {
+        if !showGender && !showAge {
+            uiviewUserGender.isHidden = true
+            imageUserGender.image = nil
+        } else if showGender && showAge {
+            uiviewUserGender.isHidden = false
+            if gender == "male" {
+                imageUserGender.image = #imageLiteral(resourceName: "userGenderMale")
+                uiviewUserGender.backgroundColor = UIColor.maleBackgroundColor()
+            } else if gender == "female" {
+                imageUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
+                uiviewUserGender.backgroundColor = UIColor.femaleBackgroundColor()
+            } else {
+                imageUserGender.image = nil
+            }
+            lblUserAge.text = age
+            lblUserAge.frame.size = lblUserAge.intrinsicContentSize
+            uiviewUserGender.frame.size.width = 32 + lblUserAge.intrinsicContentSize.width
+        } else if showAge && !showGender {
+            uiviewUserGender.isHidden = false
+            lblUserAge.text = age
+            lblUserAge.frame.size = lblUserAge.intrinsicContentSize
+            uiviewUserGender.frame.size.width = 17 + lblUserAge.intrinsicContentSize.width
+            lblUserAge.frame.origin.x = 97
+            imageUserGender.image = nil
+            uiviewUserGender.backgroundColor = UIColor.faeAppShadowGrayColor()
+        } else if showGender && !showAge {
+            uiviewUserGender.isHidden = false
+            if gender == "male" {
+                imageUserGender.image = #imageLiteral(resourceName: "userGenderMale")
+                uiviewUserGender.backgroundColor = UIColor.maleBackgroundColor()
+            } else if gender == "female" {
+                imageUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
+                uiviewUserGender.backgroundColor = UIColor.femaleBackgroundColor()
+            } else {
+                imageUserGender.image = nil
+            }
+            uiviewUserGender.frame.size.width = 28
+            lblUserAge.text = nil
+        }
     }
     
     func buttonChatAction(_ sender: UIButton) {
@@ -222,13 +303,12 @@ extension FaeMapViewController {
                 if(status / 100 == 2){
                     let resultJson2 = JSON(result!)
                     var chat_id: String?
-                    
-                    if let id = resultJson1["chat_id"].number{
+                    if let id = resultJson1["chat_id"].number {
                         chat_id = id.stringValue
                     }
                     if let withUserName = resultJson2["user_name"].string {
                         self.startChat(chat_id ,withUserId: withUserId, withUserName: withUserName)
-                    }else{
+                    } else {
                         self.startChat(chat_id, withUserId: withUserId, withUserName: nil)
                     }
                 }
@@ -238,7 +318,6 @@ extension FaeMapViewController {
     
     func startChat(_ chat_id: String? ,withUserId: NSNumber, withUserName: String?){
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
-        
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
         chatVC.chat_id = chat_id
         let withUserName = withUserName ?? "Chat"
@@ -308,43 +387,6 @@ extension FaeMapViewController {
         }))
     }
     
-    func updateNameCard(withUserId: Int) {
-        buttonChat.tag = withUserId
-        buttonOptions.tag = withUserId
-        buttonShowSelfOnMap.isHidden = true
-        buttonFavorite.isHidden = false
-        let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
-        imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
-        let userNameCard = FaeUser()
-        userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
-            if(status / 100 == 2) {
-                print("[updateNameCard] \(message!)")
-                let profileInfo = JSON(message!)
-                if let canShowGender = profileInfo["show_gender"].bool {
-                    print("[updateNameCard] canShowGender: \(canShowGender)")
-                    if canShowGender {
-                        self.uiviewUserGender.isHidden = false
-                    }
-                    else {
-                        self.uiviewUserGender.isHidden = true
-                    }
-                }
-                if let canShowAge = profileInfo["show_age"].bool {
-                    print("[updateNameCard] canShowAge: \(canShowAge)")
-                }
-                if let displayName = profileInfo["nick_name"].string{
-                    self.labelDisplayName.text = displayName
-                }
-                if let shortIntro = profileInfo["short_intro"].string{
-                    self.labelShortIntro.text = shortIntro
-                }
-                if let age = profileInfo["age"].int {
-                    print("[updateNameCard] age: \(age)")
-                }
-            }
-        }
-    }
-    
     func getSelfNameCard(_ sender: UIButton) {
         buttonOptions.tag = Int(user_id)
         buttonShowSelfOnMap.isHidden = false
@@ -365,24 +407,16 @@ extension FaeMapViewController {
         self.openUserPinActive = true
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
-            if(status / 100 == 2){
+            if status / 100 == 2 {
                 print("[updateNameCard] \(message!)")
                 let profileInfo = JSON(message!)
-                if let canShowGender = profileInfo["show_gender"].bool {
-                    print("[updateNameCard] canShowGender: \(canShowGender)")
-                }
-                if let canShowAge = profileInfo["show_age"].bool {
-                    print("[updateNameCard] canShowAge: \(canShowAge)")
-                }
-                if let displayName = profileInfo["nick_name"].string{
-                    self.labelDisplayName.text = displayName
-                }
-                if let shortIntro = profileInfo["short_intro"].string{
-                    self.labelShortIntro.text = shortIntro
-                }
-                if let age = profileInfo["age"].int {
-                    print("[updateNameCard] age: \(age)")
-                }
+                let canShowGender = profileInfo["show_gender"].boolValue
+                let gender = profileInfo["gender"].stringValue
+                let canShowAge = profileInfo["show_age"].boolValue
+                let age = profileInfo["age"].stringValue
+                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
+                self.labelDisplayName.text = profileInfo["nick_name"].stringValue
+                self.labelShortIntro.text = profileInfo["short_intro"].stringValue
             }
         }
     }
