@@ -18,10 +18,10 @@ extension FaeMapViewController {
             selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status/100 == 2 {
-                    print("Successfully renew self position")
+//                    print("Successfully renew self position")
                 }
                 else {
-                    print("fail to renew self position")
+                    print("[renewSelfLocation] fail")
                 }
             }
         }
@@ -55,7 +55,7 @@ extension FaeMapViewController {
             // let curZoomLevel = faeMapView.camera.zoom
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
             faeMapView.camera = camera
-            reloadSelfPosAnimation()
+//            reloadSelfPosAnimation()
         }
     }
 }

@@ -54,16 +54,23 @@ extension FaeMapViewController {
     func loadCurrentRegionPins() {
         clearMap(type: "pin")
         let coorDistance = cameraDiagonalDistance()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            self.refreshMapPins(radius: coorDistance)
-        })
+        if self.canDoNextMapPinUpdate {
+            
+            self.canDoNextMapPinUpdate = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                self.refreshMapPins(radius: coorDistance, completion: { (results) in
+                    
+                    self.pinMapPinsOnMap(results: results)
+                    self.canDoNextMapPinUpdate = true
+                })
+            })
+        }
     }
     
-    private func refreshMapPins(radius: Int) {
+    private func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
         self.mapPinsArray.removeAll()
         self.mapPins.removeAll()
         self.clearMapNonAnimated(type: "pin")
-        print("[referrenceCount - Outside]", self.referrenceCount)
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -73,27 +80,27 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("type", value: stringFilterValue)
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
-            self.referrenceCount += 1
             if status/100 != 2 || message == nil {
                 print("[loadCurrentRegionPins] status/100 != 2")
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                completion(self.mapPins)
                 return
             }
-            print("[referrenceCount - Inside]", self.referrenceCount)
             let mapInfoJSON = JSON(message!)
             guard let mapPinJsonArray = mapInfoJSON.array else {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 print("[loadCurrentRegionPins] fail to parse pin comments")
+                completion(self.mapPins)
                 return
             }
             if mapPinJsonArray.count <= 0 {
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                completion(self.mapPins)
                 return
             }
             self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
-            self.pinMapPinsOnMap(results: self.mapPins)
             Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-            self.canDoNextMapPinUpdate = true
+            completion(self.mapPins)
         }
     }
     
@@ -183,9 +190,16 @@ extension FaeMapViewController {
         clearMap(type: "place")
         let coorDistance = cameraDiagonalDistance()
         let placeAllType = allTypePlacesPin()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            self.refreshPlacePins(radius: coorDistance, all: placeAllType)
-        })
+        if self.canDoNextPlacePinUpdate {
+            print("[referrenceCount - Outside]", self.referrenceCount)
+            self.referrenceCount += 1
+            self.canDoNextPlacePinUpdate = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                print("[referrenceCount - Inside]", self.referrenceCount)
+                self.refreshPlacePins(radius: coorDistance, all: placeAllType)
+                self.canDoNextPlacePinUpdate = true
+            })
+        }
     }
     
     private func refreshPlacePins(radius: Int, all: Bool) {
@@ -346,20 +360,23 @@ extension FaeMapViewController {
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
             if status/100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
-                
+                self.canDoNextUserUpdate = true
                 return
             }
             let mapUserJSON = JSON(message!)
             guard let mapUserJsonArray = mapUserJSON.array else {
                 print("[getMapUserInfo] fail to parse pin comments")
+                self.canDoNextUserUpdate = true
                 return
             }
             if mapUserJsonArray.count <= 0 {
+                self.canDoNextUserUpdate = true
                 return
             }
             self.userPins = mapUserJsonArray.map{UserPin(json: $0)}
             let mapUserInfoJSON = JSON(message!)
             if mapUserInfoJSON.count <= 0 {
+                self.canDoNextUserUpdate = true
                 return
             }
             var count = 0
@@ -390,7 +407,6 @@ extension FaeMapViewController {
                     pinUser.iconView = icon
                     pinUser.zIndex = 1
                     pinUser.map = self.faeMapView
-                    self.canDoNextUserUpdate = true
                     // Delay 0-1 seconds, randomly
                     let delay: Double = Double(arc4random_uniform(100)) / 100
                     UIView.animate(withDuration: 1, delay: delay, animations: {
@@ -401,6 +417,7 @@ extension FaeMapViewController {
                     })
                 }
             }
+            self.canDoNextUserUpdate = true
         }
     }
     

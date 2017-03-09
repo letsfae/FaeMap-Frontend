@@ -213,6 +213,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var referrenceCount = 0
     var canDoNextMapPinUpdate = true
+    var canDoNextPlacePinUpdate = true
     
     // System Functions
     override func viewDidLoad() {

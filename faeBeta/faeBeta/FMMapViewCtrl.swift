@@ -170,10 +170,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 if coorOffset > coorDistance {
                     self.previousPosition = currentPosition
                     print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
-                    if self.canDoNextMapPinUpdate {
-                        print("[referrenceCount - Map - idleAt]", self.referrenceCount)
-                        self.updateTimerForAllPins()
-                    }
+                    self.updateTimerForAllPins()
                 }
                 else {
                     print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
