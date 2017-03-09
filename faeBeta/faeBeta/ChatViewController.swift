@@ -141,10 +141,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //        }
     }
     
-    
-    
-    //var miniLocation = LocationPickerMini()
-    
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -160,6 +156,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.setup(initializeType)
         //miniLocation.isHidden = true
         //view.addSubview(miniLocation)
+        locExtendView.isHidden = true
+        self.view.addSubview(locExtendView)
+
     }
     
     override func viewDidLoad() {
@@ -199,14 +198,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
-        
-        self.view.addSubview(locExtendView)
-//        locExtendView.isHidden = true
-        
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {
-        
         if(parent == nil && chatRoomId != nil){
             roomRef?.removeAllObservers()
         }
@@ -368,12 +362,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
             if(screenHeight == 736) {
                 self.locExtendView.frame.origin.y = screenHeight - 271 - extendHeight - 90 - 64
-//                self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
-//                self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
             } else {
                 self.locExtendView.frame.origin.y = screenHeight - 258 - extendHeight - 90 - 64
-//                self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 258 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
-//                self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
             }
             
         }, completion:{ (Bool) -> Void in
@@ -422,8 +412,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func sendLocation() {
         resetToolbarButtonIcon()
-        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())
-                //closeToolbarContentView()
+        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())//closeToolbarContentView()
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showMiniLocation()
         moveUpInputBarContentView(animated)
@@ -431,7 +420,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     func sendMessageButtonTapped() {
-        sendMessage(text: self.inputToolbar.contentView.textView.text, date: Date())
+        if (locExtendView.isHidden) {
+            sendMessage(text: self.inputToolbar.contentView.textView.text, date: Date())
+        } else {
+            sendMessage(text: self.inputToolbar.contentView.textView.text, location: locExtendView.location,snapImage: locExtendView.getImageDate(), date: Date())
+        }
+        locExtendView.isHidden = true
         buttonSend.isEnabled = false
     }
     
@@ -824,13 +818,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     
     func sendLocationMessageFromMini(_ sender : UIButton) {
-        print("sending location from mini")
         if let mapview = self.toolbarContentView.miniLocation.mapView {
-            print("got mapview");
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
-                print("got snap image")
                 //sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
                 locExtendView.setAvator(image: screenShotImage)
                 let geocoder = GMSGeocoder()
@@ -852,12 +843,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                         texts.append((response?.firstResult()?.country)!)
                         
                         self.locExtendView.setLabel(texts: texts)
+                        self.locExtendView.location = CLLocation(latitude: mapview.camera.target.latitude, longitude: mapview.camera.target.longitude)
                         self.locExtendView.isHidden = false
                         let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
                         self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
                         self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
                         self.scrollToBottom(true)
-                        
+                        self.buttonSend.isEnabled = true
                     } else {
                         print(error ?? "ohhhh")
                     }

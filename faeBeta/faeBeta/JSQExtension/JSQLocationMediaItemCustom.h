@@ -32,7 +32,9 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  to a `JSQMediaMessage` object during its initialization to construct a valid media message object.
  *  You may wish to subclass `JSQLocationMediaItem` to provide additional functionality or behavior.
  */
-@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding, NSCopying>
+//@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding, NSCopying>
+
+@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding>
 
 /**
  *  The location for the media item. The default value is `nil`.
@@ -44,9 +46,19 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  */
 @property (readonly, nonatomic) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, retain, readwrite) UIImageView *cachedMapImageView;
+@property (nonatomic, retain, readwrite) UIView *cachedMapImageView;
 
 @property (nonatomic, retain, readwrite) UIImage *cachedMapSnapshotImage;
+
+@property (nonatomic, retain, readwrite) NSString *address1;
+@property (nonatomic, retain, readwrite) NSString *address2;
+@property (nonatomic, retain, readwrite) NSString *address3;
+
+@property (nonatomic, retain, readwrite) UILabel *addressLine1;
+@property (nonatomic, retain, readwrite) UILabel *addressLine2;
+@property (nonatomic, retain, readwrite) UILabel *addressLine3;
+
+@property (nonatomic, retain, readwrite) UILabel *textLabel;
 /**
  *  Initializes and returns a location media item object having the given location.
  *
@@ -59,7 +71,12 @@ typedef void (^JSQLocationMediaItemCompletionBlock)(void);
  *  Once the location data has been retrieved, you can then set the location property
  *  using `setLocation: withCompletionHandler:`
  */
+
 - (instancetype)initWithLocation:(CLLocation *)location snapImage: (UIImage *) snap;
+
+
+
+- (instancetype)initWithLocation:(CLLocation *)location snapImage: (UIImage *) snap text : (NSString *) comment;
 
 /**
  *  Sets the specified location for the location media item and immediately begins creating
