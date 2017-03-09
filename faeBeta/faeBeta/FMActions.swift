@@ -29,18 +29,12 @@ extension FaeMapViewController {
     
     func actionTrueNorth(_ sender: UIButton!) {
         self.faeMapView.animate(toBearing: 0)
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
     }
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton!) {
-        self.selfMarker.map = nil
-        timerUpdateSelfLocation.invalidate()
-        self.clearMap(type: "user")
+        invalidateAllTimer()
+        faeMapView.clear()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
         pinMenuVC.currentLatitude = self.currentLatitude

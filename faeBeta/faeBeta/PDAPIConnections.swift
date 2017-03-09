@@ -196,7 +196,10 @@ extension PinDetailViewController {
                         self.labelPinUserName.text = "Anonymous"
                     }
                 }
+            } else {
+                self.labelPinUserName.text = "Anonymous"
             }
+            
             if let time = pinInfoJSON["created_at"].string {
                 self.labelPinTimestamp.text = time.formatFaeDate()
                 opinTime = time

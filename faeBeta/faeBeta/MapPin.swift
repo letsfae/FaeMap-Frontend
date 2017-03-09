@@ -10,6 +10,12 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+extension MapPin: Equatable {
+    static func ==(lhs: MapPin, rhs: MapPin) -> Bool {
+        return lhs.pinId == rhs.pinId && lhs.type == rhs.type
+    }
+}
+
 struct MapPin {
     var pinId: Int
     let userId: Int

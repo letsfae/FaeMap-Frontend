@@ -150,6 +150,7 @@ extension FaeMapViewController {
             return
         }
         
+        canDoNextUserUpdate = true
         btnMapFilter.isEnabled = false
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
@@ -179,7 +180,7 @@ extension FaeMapViewController {
             self.polygonInside.transform = CGAffineTransform(rotationAngle: -3.1415926)
         }, completion: nil)
         
-        refreshMap(pins: refreshPins, users: refreshUsers, places: refreshPlaces, placesAll: refreshPlacesAll)
+        refreshMap(pins: refreshPins, users: refreshUsers, places: refreshPlaces)
         
     }
     

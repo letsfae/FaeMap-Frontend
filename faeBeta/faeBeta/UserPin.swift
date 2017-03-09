@@ -10,6 +10,12 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+extension UserPin: Equatable {
+    static func ==(lhs: UserPin, rhs: UserPin) -> Bool {
+        return lhs.userId == rhs.userId
+    }
+}
+
 struct UserPin {
     let userId: Int
     let type: String

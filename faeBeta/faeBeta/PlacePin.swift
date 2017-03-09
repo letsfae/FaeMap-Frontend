@@ -9,6 +9,12 @@
 import Foundation
 import SwiftyJSON
 
+extension PlacePin: Equatable {
+    static func ==(lhs: PlacePin, rhs: PlacePin) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
+
 struct PlacePin {
     let imageURL: String
     let address1: String

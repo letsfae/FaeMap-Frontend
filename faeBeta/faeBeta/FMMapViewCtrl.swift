@@ -58,7 +58,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     marker.map = nil
                 })
             }
-        } else if type == "all" || type == "user" {
+        }
+        if type == "all" || type == "user" {
             for marker in mapUserPinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
@@ -73,7 +74,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                     marker.map = nil
                 })
             }
-        } else if type == "all" || type == "place" {
+        }
+        if type == "all" || type == "place" {
             for marker in mapPlacePinsDic {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
@@ -87,6 +89,24 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 }, completion: {(done: Bool) in
                     marker.map = nil
                 })
+            }
+        }
+    }
+    
+    func clearMapNonAnimated(type: String) {
+        if type == "all" || type == "pin" {
+            for marker in mapPinsArray {
+                marker.map = nil
+            }
+        }
+        if type == "all" || type == "user" {
+            for marker in mapUserPinsDic {
+                marker.map = nil
+            }
+        }
+        if type == "all" || type == "place" {
+            for marker in mapPlacePinsDic {
+                marker.map = nil
             }
         }
     }
@@ -105,7 +125,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             let points = self.faeMapView.projection.point(for: position)
             self.subviewSelfMarker.center = points
         }
-
+        
 //        print("Cur-Zoom Level: \(mapView.camera.zoom)")
 //        print("Pre-Zoom Level: \(previousZoomLevel)")
 //        if mapView.camera.zoom < 11 && !canLoadMapPin {
@@ -133,26 +153,14 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let currentPosition = mapCenterCoordinate
-        
         let currentZoomLevel = mapView.camera.zoom
-//        let preZoomLevel = previousZoomLevel
-//        self.previousZoomLevel = currentZoomLevel
  
         if currentZoomLevel >= 11 {
-            let powFactor: Double = Double(21 - currentZoomLevel)
-            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-            
-            /*
-            if abs(currentZoomLevel-preZoomLevel) >= 1 {
-                print("DEBUG: Zoom level diff >= 1")
-                self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-                self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-                return
-            }
-             */
+            let coorDistance = Double(cameraDiagonalDistance()) / 1000
             
             if let curPosition = previousPosition {
                 let latitudeOffset = abs(currentPosition.latitude-curPosition.latitude)
@@ -161,38 +169,25 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 coorOffset = pow(coorOffset, 0.5)*111
                 if coorOffset > coorDistance {
                     self.previousPosition = currentPosition
-//                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
-                    if !self.canDoNextUserUpdate {
-                        return
+                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
+                    if self.canDoNextMapPinUpdate {
+                        print("[referrenceCount - Map - idleAt]", self.referrenceCount)
+                        self.updateTimerForAllPins()
                     }
-                    self.clearMap(type: "all")
-                    self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-                    self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-                    var placesAll = false
-                    if btnMFilterPlacesAll.tag == 1 || btnMFilterTypeAll.tag == 1 {
-                        placesAll = true
-                    }
-                    self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500), all: placesAll)
-                    return
                 }
                 else {
-//                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
+                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
                 }
             }
         }
         else {
-            timerUpdateSelfLocation.invalidate()
-            timerLoadRegionPins.invalidate()
-            timerLoadRegionPlacePins.invalidate()
-            clearMap(type: "all")
+            invalidateAllTimer()
+            faeMapView.clear()
         }
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        if openUserPinActive {
-            self.canDoNextUserUpdate = true
-            openUserPinActive = false
-        }
+        
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -259,7 +254,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             UIView.animate(withDuration: 0.25, animations: {
                 self.buttonFakeTransparentClosingView.alpha = 1
             })
-            self.openUserPinActive = true
             return true
         } else if type == 2 {
             guard let placePin = userData.values.first as? PlacePin else {

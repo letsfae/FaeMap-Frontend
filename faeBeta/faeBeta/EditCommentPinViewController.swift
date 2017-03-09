@@ -71,6 +71,7 @@ class EditCommentPinViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         textViewUpdateComment.becomeFirstResponder()
+        UIApplication.shared.statusBarStyle = .default
     }
     override func viewDidLayoutSubviews() {
         print("[viewDidLayoutSubviews]")

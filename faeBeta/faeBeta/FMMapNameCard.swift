@@ -387,7 +387,7 @@ extension FaeMapViewController {
         }))
     }
     
-    func getSelfNameCard(_ sender: UIButton) {
+    func getSelfNameCard(_ sender: UITapGestureRecognizer) {
         buttonOptions.tag = Int(user_id)
         buttonShowSelfOnMap.isHidden = false
         buttonFavorite.isHidden = true
@@ -404,7 +404,6 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 0.25, animations: {
             self.buttonFakeTransparentClosingView.alpha = 1
         })
-        self.openUserPinActive = true
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
             if status / 100 == 2 {

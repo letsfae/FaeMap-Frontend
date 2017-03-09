@@ -194,6 +194,7 @@ class LogInViewController: UIViewController {
                         firebaseWelcome()
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
                     }
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 })
             }
             else{

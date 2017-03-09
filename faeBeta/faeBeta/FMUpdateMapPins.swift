@@ -11,29 +11,90 @@ import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 
+extension Array where Element: Equatable {
+    func removeDuplicates() -> [Element] {
+        var result = [Element]()
+        
+        for value in self {
+            if result.contains(value) == false {
+                result.append(value)
+            }
+        }
+        
+        return result
+    }
+}
+
 extension FaeMapViewController {
-    func updateTimerForSelfLoc(radius: Int) {
-        self.updateSelfLocation(radius: radius)
+    func updateTimerForSelfLoc() {
+        self.updateSelfLocation()
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
     
-    func updateTimerForLoadRegionPin(radius: Int) {
-        self.loadCurrentRegionPins(radius: radius)
+    func updateTimerForLoadRegionPin() {
+        self.loadCurrentRegionPins()
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
     }
     
-    func updateTimerForLoadRegionPlacePin(radius: Int, all: Bool) {
-        self.loadCurrentRegionPlacePins(radius: radius, all: all)
+    func updateTimerForLoadRegionPlacePin() {
+        self.loadCurrentRegionPlacePins()
         if timerLoadRegionPlacePins != nil {
             timerLoadRegionPlacePins.invalidate()
         }
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+    }
+    
+    // MARK: -- Load Pins based on the Current Region Camera
+    func loadCurrentRegionPins() {
+        clearMap(type: "pin")
+        let coorDistance = cameraDiagonalDistance()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            self.refreshMapPins(radius: coorDistance)
+        })
+    }
+    
+    private func refreshMapPins(radius: Int) {
+        self.mapPinsArray.removeAll()
+        self.mapPins.removeAll()
+        self.clearMapNonAnimated(type: "pin")
+        print("[referrenceCount - Outside]", self.referrenceCount)
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+        let loadPinsByZoomLevel = FaeMap()
+        loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+        loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+        loadPinsByZoomLevel.whereKey("radius", value: "\(radius)")
+        loadPinsByZoomLevel.whereKey("type", value: stringFilterValue)
+        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
+        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
+            self.referrenceCount += 1
+            if status/100 != 2 || message == nil {
+                print("[loadCurrentRegionPins] status/100 != 2")
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                return
+            }
+            print("[referrenceCount - Inside]", self.referrenceCount)
+            let mapInfoJSON = JSON(message!)
+            guard let mapPinJsonArray = mapInfoJSON.array else {
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                print("[loadCurrentRegionPins] fail to parse pin comments")
+                return
+            }
+            if mapPinJsonArray.count <= 0 {
+                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                return
+            }
+            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
+            self.pinMapPinsOnMap(results: self.mapPins)
+            Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+            self.canDoNextMapPinUpdate = true
+        }
     }
     
     fileprivate func pinPlacesOnMap(results: [PlacePin]) {
@@ -65,11 +126,65 @@ extension FaeMapViewController {
         }
     }
     
-    func loadCurrentRegionPlacePins(radius: Int, all: Bool) {
-//        return
+    fileprivate func pinMapPinsOnMap(results: [MapPin]) {
+        for mapPin in results {
+            let pinMap = GMSMarker()
+            var iconImage = UIImage()
+            let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
+            let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
+            iconSub.addSubview(icon)
+            icon.contentMode = .scaleAspectFit
+            iconImage = self.pinIconSelector(type: mapPin.type, status: mapPin.status)
+            icon.image = iconImage
+            icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
+            pinMap.position = mapPin.position
+            pinMap.iconView = iconSub
+            pinMap.userData = [0: mapPin]
+            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
+            pinMap.zIndex = 1
+            pinMap.map = self.faeMapView
+            self.mapPinsArray.append(pinMap)
+            let delay: Double = Double(arc4random_uniform(300)) / 100 // Delay 0-3 seconds, randomly
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
+            }, completion: {(done: Bool) in
+                if done {
+                    pinMap.iconView = nil
+                    pinMap.icon = iconImage
+                }
+            })
+        }
+    }
+    
+    func calculateRadius() -> Int {
+        let currentZoomLevel = faeMapView.camera.zoom
+        let powFactor: Double = Double(21 - currentZoomLevel)
+        let coorDistance: Double = 67*pow(2.0, powFactor) // 0.0004 * 111 * 1500
+        return Int(coorDistance)
+    }
+    
+    func allTypePlacesPin() -> Bool {
+        if btnMFilterPlacesAll.tag == 1 || btnMFilterShowAll.tag == 1 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func cameraDiagonalDistance() -> Int {
+        let region = faeMapView.projection.visibleRegion()
+        let farLeft = region.farLeft
+        let nearLeft = region.nearRight
+        let distance = GMSGeometryDistance(farLeft, nearLeft)
+        return Int(distance)
+    }
+    
+    func loadCurrentRegionPlacePins() {
         clearMap(type: "place")
+        let coorDistance = cameraDiagonalDistance()
+        let placeAllType = allTypePlacesPin()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            self.refreshPlacePins(radius: radius, all: all)
+            self.refreshPlacePins(radius: coorDistance, all: placeAllType)
         })
     }
     
@@ -104,7 +219,7 @@ extension FaeMapViewController {
                     self.placeNames.append(latPlusLon)
                 }
                 self.pinPlacesOnMap(results: self.mapPlaces)
-//                self.calculateZoomLevel(results: resultArray)
+//                self.calculateZoomLevel(results: self.mapPlaces)
             })
         } else {
             yelpQuery.setResultLimit(count: 4)
@@ -198,7 +313,7 @@ extension FaeMapViewController {
                                                 self.mapPlaces.append(result)
                                                 self.pinPlacesOnMap(results: [result])
                                             }
-//                                            self.calculateZoomLevel(results: resultArray)
+//                                            self.calculateZoomLevel(results: self.mapPlaces)
                                         })
                                     })
                                 })
@@ -210,83 +325,12 @@ extension FaeMapViewController {
         }
     }
     
-    // MARK: -- Load Pins based on the Current Region Camera
-    func loadCurrentRegionPins(radius: Int) {
-        clearMap(type: "pin")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            self.refreshMapPins(radius: radius)
-        })
-    }
-    
-    private func refreshMapPins(radius: Int) {
-        self.mapPinsArray.removeAll()
-        self.mapPins.removeAll()
-        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-        let loadPinsByZoomLevel = FaeMap()
-        loadPinsByZoomLevel.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
-        loadPinsByZoomLevel.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        loadPinsByZoomLevel.whereKey("radius", value: "500000")
-        loadPinsByZoomLevel.whereKey("type", value: stringFilterValue)
-        loadPinsByZoomLevel.whereKey("in_duration", value: "true")
-        loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
-            if status/100 != 2 || message == nil {
-                print("[loadCurrentRegionPins] status/100 != 2")
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-                return
-            }
-            let mapInfoJSON = JSON(message!)
-            guard let mapPinJsonArray = mapInfoJSON.array else {
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-                print("[loadCurrentRegionPins] fail to parse pin comments")
-                return
-            }
-            if mapPinJsonArray.count <= 0 {
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-                return
-            }
-            if !self.mapPins.isEmpty {
-                print("[loadCurrentRegionPins] may cause piles of markers")
-                return
-            }
-            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
-            for mapPin in self.mapPins {
-                let pinMap = GMSMarker()
-                
-                var iconImage = UIImage()
-                let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
-                let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
-                iconSub.addSubview(icon)
-                icon.contentMode = .scaleAspectFit
-                iconImage = self.pinIconSelector(type: mapPin.type, status: mapPin.status)
-                icon.image = iconImage
-                icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
-                pinMap.position = mapPin.position
-                pinMap.iconView = iconSub
-                pinMap.userData = [0: mapPin]
-                pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-                pinMap.zIndex = 1
-                pinMap.map = self.faeMapView
-                self.mapPinsArray.append(pinMap)
-                let delay: Double = Double(arc4random_uniform(300)) / 100 // Delay 0-3 seconds, randomly
-                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                    icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-                }, completion: {(done: Bool) in
-                    if done {
-                        pinMap.iconView = nil
-                        pinMap.icon = iconImage
-                    }
-                })
-            }
-            Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
-        }
-    }
-    
     // Timer to update location (send self location to server)
-    func updateSelfLocation(radius: Int) {
+    func updateSelfLocation() {
         if didLoadFirstLoad || !canDoNextUserUpdate {
             return
         }
+        let coorDistance = cameraDiagonalDistance()
         userPins.removeAll()
         clearMap(type: "user")
         canDoNextUserUpdate = false
@@ -296,7 +340,7 @@ extension FaeMapViewController {
         let getMapUserInfo = FaeMap()
         getMapUserInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        getMapUserInfo.whereKey("radius", value: "500000")
+        getMapUserInfo.whereKey("radius", value: "\(coorDistance)")
         getMapUserInfo.whereKey("type", value: "user")
 //        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation {(status: Int, message: Any?) in
@@ -415,12 +459,12 @@ extension FaeMapViewController {
         }
     }
     
-    fileprivate func calculateZoomLevel(results: [YelpResult]) {
+    fileprivate func calculateZoomLevel(results: [PlacePin]) {
         var latArr = [Double]()
         var lonArr = [Double]()
         for result in results {
-            latArr.append(result.getPosition().latitude)
-            lonArr.append(result.getPosition().longitude)
+            latArr.append(result.position.latitude)
+            lonArr.append(result.position.longitude)
         }
         
         let minLat = latArr.min()!

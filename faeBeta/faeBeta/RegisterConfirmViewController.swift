@@ -176,6 +176,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                     if self.isFirstTimeLogin {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
                     }
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 })
             }
         }

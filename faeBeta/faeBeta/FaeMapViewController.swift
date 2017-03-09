@@ -73,7 +73,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var labelWindbellTableTitle: UILabel!
     var tableviewWindbell = UITableView()
     
-    var openUserPinActive = false
     let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
     var buttonCloseUserPinSubview: UIButton! // button to close user pin view
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -202,7 +201,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var refreshPins = true
     var refreshUsers = true
     var refreshPlaces = true
-    var refreshPlacesAll = true
+//    var refreshPlacesAll = true
     
     // Self Position Marker: 02-17-2016 Yue Shen
     var selfMarker = GMSMarker()
@@ -211,6 +210,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var myPositionCircle_1: UIImageView!
     var myPositionCircle_2: UIImageView!
     var myPositionCircle_3: UIImageView!
+    
+    var referrenceCount = 0
+    var canDoNextMapPinUpdate = true
     
     // System Functions
     override func viewDidLoad() {
@@ -251,6 +253,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
+        
         checkFirstLoginInRealm()
         
         let updateGenderAge = FaeUser()
@@ -267,6 +271,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.isTranslucent = false
+    }
+    
+    func returnFromLoginSignup(_ notification: NSNotification) {
+        print("[returnFromLoginSignup] yes it is")
+        refreshMap(pins: true, users: true, places: false)
     }
     
     func isUserLoggedIn() {
@@ -334,16 +343,18 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
+    func updateTimerForAllPins() {
+        self.updateTimerForLoadRegionPin()
+        self.updateTimerForSelfLoc()
+        self.updateTimerForLoadRegionPlacePin()
+    }
+    
     // Testing back from background
     func appBackFromBackground() {
         checkLocationEnablibity()
         if faeMapView != nil {
-            let currentZoomLevel = faeMapView.camera.zoom
-            let powFactor: Double = Double(21 - currentZoomLevel)
-            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-            self.renewSelfLocation()
+            updateTimerForAllPins()
+            renewSelfLocation()
             reloadSelfPosAnimation()
         }
     }
@@ -387,18 +398,16 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.navigationBar.isTranslucent = true
     }
     
-    func refreshMap(pins: Bool, users: Bool, places: Bool, placesAll: Bool) {
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
+    func refreshMap(pins: Bool, users: Bool, places: Bool) {
+        
         if users {
-            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+            self.updateTimerForSelfLoc()
         }
         if pins {
-            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
+            self.updateTimerForLoadRegionPin()
         }
         if places {
-            self.updateTimerForLoadRegionPlacePin(radius: Int(coorDistance*1500), all: placesAll)
+            self.updateTimerForLoadRegionPlacePin()
         }
     }
     
@@ -416,7 +425,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.previousPosition = mapCenterCoordinate
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
-                self.refreshMap(pins: true, users: true, places: true, placesAll: true)
+                self.refreshMap(pins: true, users: true, places: true)
             })
         }
         
@@ -433,10 +442,5 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
 //            self.selfMarker.position = position
             self.subviewSelfMarker.center = points
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }

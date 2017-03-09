@@ -16,10 +16,10 @@ extension FaeMapViewController {
         dimBackgroundWindBell.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
         dimBackgroundWindBell.alpha = 0.0
         UIApplication.shared.keyWindow?.addSubview(dimBackgroundWindBell)
-        dimBackgroundWindBell.addTarget(self, action: #selector(FaeMapViewController.animationWindBellHide(_:)), for: UIControlEvents.touchUpInside)
+        dimBackgroundWindBell.addTarget(self, action: #selector(self.animationWindBellHide(_:)), for: UIControlEvents.touchUpInside)
         
         let rightSwipe = UISwipeGestureRecognizer(target: self,
-                                                 action: #selector(FaeMapViewController.animationWindBellHide(_:)))
+                                                 action: #selector(self.animationWindBellHide(_:)))
         rightSwipe.direction = .right
 
         uiviewWindBell = UIView(frame: CGRect(x: screenWidth, y: 0, width: 311, height: screenHeight))

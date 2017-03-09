@@ -16,11 +16,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+        updateTimerForAllPins()
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
@@ -28,11 +24,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
         print("back from comment pin detail")
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        self.renewSelfLocation()
+        updateTimerForAllPins()
+        renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
@@ -70,22 +63,16 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        self.renewSelfLocation()
+        updateTimerForAllPins()
+        renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
     // PinMenuDelegate
     func whenDismissPinMenu() {
-        let currentZoomLevel = faeMapView.camera.zoom
-        let powFactor: Double = Double(21 - currentZoomLevel)
-        let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-        self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
-        self.renewSelfLocation()
+        updateTimerForAllPins()
+        renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()

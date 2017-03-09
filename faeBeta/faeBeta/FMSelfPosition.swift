@@ -36,6 +36,9 @@ extension FaeMapViewController {
         self.subviewSelfMarker.addSubview(myPositionCircle_1)
         self.subviewSelfMarker.addSubview(selfMarkerIcon)
         
+        let tapToOpenSelfNameCard = UITapGestureRecognizer(target: self, action: #selector(self.getSelfNameCard(_:)))
+        selfMarkerIcon.addGestureRecognizer(tapToOpenSelfNameCard)
+        
 //        selfMarker.iconView = subviewSelfMarker
 //        selfMarker.position.latitude = currentLatitude
 //        selfMarker.position.longitude = currentLongitude
