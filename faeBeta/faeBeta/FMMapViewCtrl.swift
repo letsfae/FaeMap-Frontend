@@ -141,7 +141,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
 //            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
 //            // This update also includes updating for user pins updating
 //            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-//            self.updateTimerForSelfLoc(radius: Int(coorDistance*1500))
+//            self.updateTimerForUserPin(radius: Int(coorDistance*1500))
 //        }
         
 //        let mapTop = CGPoint.zero
@@ -211,6 +211,9 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             if !self.canOpenAnotherPin {
                 return true
             }
+            
+            invalidateAllTimer()
+            
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
                                               longitude: marker.position.longitude, zoom: 17)
             mapView.animate(to: camera)
@@ -234,13 +237,12 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
             }
             
-            timerUpdateSelfLocation.invalidate()
             self.clearMap(type: "user")
             self.present(pinDetailVC, animated: false, completion: {
                 self.canOpenAnotherPin = true
             })
             return true
-        } else if type == 1 {
+        } else if type == 1 { // user pin
             guard let userPin = userData.values.first as? UserPin else {
                 return false
             }
@@ -248,17 +250,19 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             mapView.animate (to: camera)
             self.updateNameCard(withUserId: userPin.userId)
             self.animateNameCard()
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
                 self.buttonFakeTransparentClosingView.alpha = 1
             })
             return true
-        } else if type == 2 {
+        } else if type == 2 { // place pin
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
             if !self.canOpenAnotherPin {
                 return true
             }
+            
+            invalidateAllTimer()
             
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
                                               longitude: marker.position.longitude, zoom: 17)
@@ -309,7 +313,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 realm.add(opinListElem, update: true)
             }
             
-            timerUpdateSelfLocation.invalidate()
             self.clearMap(type: "user")
             self.present(pinDetailVC, animated: false, completion: {
                 self.canOpenAnotherPin = true

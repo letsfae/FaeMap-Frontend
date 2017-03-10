@@ -298,15 +298,22 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func timerSetup() {
+        invalidateAllTimer()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
-        timerUpdateSelfLocation.invalidate()
-        timerLoadRegionPins.invalidate()
-        timerLoadRegionPlacePins.invalidate()
+        if timerLoadRegionPins != nil {
+            timerLoadRegionPins.invalidate()
+        }
+        if timerUpdateSelfLocation != nil {
+            timerUpdateSelfLocation.invalidate()
+        }
+        if timerLoadRegionPlacePins != nil {
+            timerLoadRegionPlacePins.invalidate()
+        }
     }
     
     func isFirstTimeLogin(_ notification: NSNotification) {
@@ -346,7 +353,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func updateTimerForAllPins() {
         self.updateTimerForLoadRegionPin()
-        self.updateTimerForSelfLoc()
+        self.updateTimerForUserPin()
         self.updateTimerForLoadRegionPlacePin()
     }
     
@@ -402,7 +409,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
         
         if users {
-            self.updateTimerForSelfLoc()
+            self.updateTimerForUserPin()
         }
         if pins {
             self.updateTimerForLoadRegionPin()

@@ -15,7 +15,7 @@ extension FaeMapViewController {
     
     func animateNameCard() {
         let targetFrame = CGRect(x: 73, y: 158, width: 268, height: 293)
-        UIView.animate(withDuration: 0.8, delay: 0.1, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.buttonFakeTransparentClosingView.alpha = 1
             self.imageBackground.frame = targetFrame
             self.imageCover.frame = CGRect(x: 73, y: 158, width: 268, height: 125)

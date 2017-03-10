@@ -11,8 +11,7 @@ import UIKit
 //MARK: Show unread chat tableView
 extension FaeMapViewController {
     
-    func loadMapChat()
-    {
+    func loadMapChat() {
         self.labelUnreadMessages.isHidden = true
         Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.updateUnreadChatIndicator), userInfo: nil, repeats: true)
     }
