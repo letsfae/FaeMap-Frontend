@@ -126,30 +126,62 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             self.subviewSelfMarker.center = points
         }
         
-//        print("Cur-Zoom Level: \(mapView.camera.zoom)")
-//        print("Pre-Zoom Level: \(previousZoomLevel)")
-//        if mapView.camera.zoom < 11 && !canLoadMapPin {
-//            clearMap(type: "all")
-//            canLoadMapPin = true
-//            return
-//        }
-//        
-//        if mapView.camera.zoom >= 11 && canLoadMapPin {
-//            canLoadMapPin = false
-//            let currentZoomLevel = faeMapView.camera.zoom
-//            let powFactor: Double = Double(21 - currentZoomLevel)
-//            let coorDistance: Double = 0.0004*pow(2.0, powFactor)*111
-//            // This update also includes updating for user pins updating
-//            self.updateTimerForLoadRegionPin(radius: Int(coorDistance*1500))
-//            self.updateTimerForUserPin(radius: Int(coorDistance*1500))
+//        for marker in mapPlacePinsDic {
+//            regionContainsMarker(marker: marker)
 //        }
         
-//        let mapTop = CGPoint.zero
-//        let mapTopCoor = faeMapView.projection.coordinate(for: mapTop)
-//        let mapBottom = CGPoint(x: screenWidth, y: screenHeight)
-//        let mapBottomCoor = faeMapView.projection.coordinate(for: mapBottom)
-//        let coorWidth = abs(mapBottomCoor.latitude - mapTopCoor.latitude)
-//        print("DEBUG Coordinate Width: \(coorWidth)")
+    }
+    
+    fileprivate func regionContainsMarker(marker: GMSMarker) {
+        let region = GMSCoordinateBounds(region: faeMapView.projection.visibleRegion())
+        if region.contains(marker.position) && marker.map == nil {
+            animateMarkerIn(marker: marker)
+        } else if region.contains(marker.position) && marker.map != nil {
+            
+        } else if !region.contains(marker.position) && marker.map != nil {
+            animateMarkerOut(marker: marker)
+        }
+    }
+    
+    fileprivate func animateMarkerIn(marker: GMSMarker) {
+        guard let userData = marker.userData as? [Int: AnyObject] else {
+            return
+        }
+        guard let placePin = userData.values.first as? PlacePin else {
+            return
+        }
+        marker.map = faeMapView
+        let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
+        let iconImage = placePin.markerAvatar
+        icon.image = iconImage
+        marker.iconView = icon
+        icon.alpha = 0
+        UIView.animate(withDuration: 0.3, animations: {
+            icon.alpha = 1
+        }, completion: {(done: Bool) in
+            marker.iconView = nil
+            marker.icon = iconImage
+        })
+    }
+    
+    fileprivate func animateMarkerOut(marker: GMSMarker) {
+        guard let userData = marker.userData as? [Int: AnyObject] else {
+            return
+        }
+        guard let placePin = userData.values.first as? PlacePin else {
+            return
+        }
+        let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
+        icon.image = placePin.markerAvatar
+        icon.contentMode = .scaleAspectFit
+        icon.alpha = 1
+        marker.iconView = icon
+        marker.icon = nil
+        UIView.animate(withDuration: 0.3, animations: {
+            icon.alpha = 0
+        }, completion: {(done: Bool) in
+            marker.map = nil
+        })
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
@@ -181,10 +213,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             invalidateAllTimer()
             faeMapView.clear()
         }
-    }
-    
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -228,6 +256,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             pinDetailVC.pinStatus = mapPin.status
             pinDetailVC.pinStateEnum = self.selectPinState(pinState: mapPin.status)
             pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
+            pinDetailVC.pinUserId = mapPin.userId
             if let storedList = readByKey("openedPinList"){
                 var openedPinListArray = storedList as! [String]
                 let pinTypeID = "\(mapPin.type)%\(mapPin.pinId)"
@@ -322,7 +351,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         return true
     }
     
-    func selectPinState(pinState: String) -> PinDetailViewController.PinState {
+    fileprivate func selectPinState(pinState: String) -> PinDetailViewController.PinState {
         switch pinState {
         case "hot":
             return .hot

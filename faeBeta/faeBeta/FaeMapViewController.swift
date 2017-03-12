@@ -260,7 +260,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
-        updateGenderAge.whereKey("show_age", value: "false")
+        updateGenderAge.whereKey("show_age", value: "true")
         updateGenderAge.updateNameCard { (status, message) in
             if status / 100 == 2 {
                 print("[showGenderAge] Successfully update namecard")

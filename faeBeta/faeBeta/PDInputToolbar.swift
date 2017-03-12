@@ -12,6 +12,7 @@ extension PinDetailViewController {
     
     //MARK: - keyboard input bar tapped event
     func sendMessageButtonTapped() {
+        self.animationRedSlidingLine(self.buttonPinDetailViewComments)
         sendMessage(textViewInput.text)
         buttonSend.isEnabled = false
         buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())

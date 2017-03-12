@@ -40,11 +40,9 @@ extension FaeMapViewController {
         clearMap(type: "pin")
         let coorDistance = cameraDiagonalDistance()
         if self.canDoNextMapPinUpdate {
-            
             self.canDoNextMapPinUpdate = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
                 self.refreshMapPins(radius: coorDistance, completion: { (results) in
-                    
                     self.pinMapPinsOnMap(results: results)
                     self.canDoNextMapPinUpdate = true
                 })
@@ -65,7 +63,7 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.whereKey("type", value: stringFilterValue)
         loadPinsByZoomLevel.whereKey("in_duration", value: "true")
         loadPinsByZoomLevel.getMapInformation{(status: Int, message: Any?) in
-            if status/100 != 2 || message == nil {
+            if status / 100 != 2 || message == nil {
                 print("[loadCurrentRegionPins] status/100 != 2")
                 Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
                 completion(self.mapPins)
@@ -83,9 +81,21 @@ extension FaeMapViewController {
                 completion(self.mapPins)
                 return
             }
-            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
+            self.processMapPins(results: mapPinJsonArray)
+//            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
             Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
             completion(self.mapPins)
+        }
+    }
+    
+    fileprivate func processMapPins(results: [JSON]) {
+        for result in results {
+            let mapPin = MapPin(json: result)
+            if self.mapPins.contains(mapPin) {
+                continue
+            } else {
+                self.mapPins.append(mapPin)
+            }
         }
     }
     

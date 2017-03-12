@@ -12,6 +12,30 @@ import GoogleMaps
 import SwiftyJSON
 
 extension PinDetailViewController {
+
+    // Animation of the red sliding line
+    func animationRedSlidingLine(_ sender: UIButton) {
+        endEdit()
+        if sender.tag == 1 {
+            tableMode = .talktalk
+        } else if sender.tag == 3 {
+            
+        } else if sender.tag == 5 {
+            tableMode = .people
+        }
+        tableCommentsForPin.reloadData()
+        let tag = CGFloat(sender.tag)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
+        UIView.animate(withDuration: 0.25, animations:({
+            self.uiviewRedSlidingLine.center.x = targetCenter
+            self.anotherRedSlidingLine.center.x = targetCenter
+        }), completion: { (done: Bool) in
+            if done {
+                
+            }
+        })
+    }
     
     func endEdit() {
         buttonKeyBoard.tag = 0

@@ -34,6 +34,7 @@ class PinDetailViewController: UIViewController {
     var pinIdSentBySegue: String = "-999"
     var pinStatus = ""
     var pinMarker = GMSMarker()
+    var pinUserId = 0
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -58,7 +59,6 @@ class PinDetailViewController: UIViewController {
     var buttonPinDownVote: UIButton!
     var buttonPinLike: UIButton!
     var buttonPinUpVote: UIButton!
-    var dictUserDisplayName = [String]()
     var imagePinUserAvatar: UIImageView!
     var imageViewSaved: UIImageView!
     var labelPinCommentsCount: UILabel!
@@ -199,6 +199,13 @@ class PinDetailViewController: UIViewController {
     var textViewInput: UITextView!
     var emojiView: StickerPickView!
     
+    enum TableMode: Int {
+        case talktalk = 0
+        case feelings = 1
+        case people = 2
+    }
+    var tableMode: TableMode = .talktalk
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -313,29 +320,6 @@ class PinDetailViewController: UIViewController {
         self.view.addSubview(grayBackButton)
         self.view.sendSubview(toBack: grayBackButton)
         grayBackButton.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
-    }
-    
-    // Animation of the red sliding line
-    func animationRedSlidingLine(_ sender: UIButton) {
-        endEdit()
-        if sender.tag == 1 {
-//            tableCommentsForPin.isHidden = false
-        }
-        else if sender.tag == 3 {
-//            tableCommentsForPin.isHidden = true
-        }
-        let tag = CGFloat(sender.tag)
-        let centerAtOneSix = screenWidth / 6
-        let targetCenter = CGFloat(tag * centerAtOneSix)
-        print("[animationRedSlidingLine] did slide")
-        UIView.animate(withDuration: 0.25, animations:({
-            self.uiviewRedSlidingLine.center.x = targetCenter
-            self.anotherRedSlidingLine.center.x = targetCenter
-        }), completion: { (done: Bool) in
-            if done {
-                
-            }
-        })
     }
     
     func animateHeart() {

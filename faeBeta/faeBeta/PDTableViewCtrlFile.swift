@@ -19,19 +19,23 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.pinComments.count == 0 {
+        if self.pinComments.count == 0 && tableMode == .talktalk {
             return 1
-        } else {
+        } else if self.pinComments.count > 0 && tableMode == .talktalk {
             return pinComments.count
+        } else if tableMode == .people {
+            return pinDetailUsers.count
+        } else {
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.pinComments.count == 0 {
+        if self.pinComments.count == 0 && tableMode == .talktalk {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinEmptyCell", for: indexPath) as! PDEmptyCell
             cell.separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
             return cell
-        } else {
+        } else if self.pinComments.count > 0 && tableMode == .talktalk {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             
             let comment = self.pinComments[indexPath.row]
@@ -61,6 +65,34 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.imgAvatar.image = comment.profileImage
 
             return cell
+        } else if tableMode == .people {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDUserInfoCell
+            let userInfo = self.pinDetailUsers[indexPath.row]
+            cell.lblDisplayName.text = userInfo.displayName
+            cell.lblUserName.text = "@"+userInfo.userName
+            cell.lblUserAge.text = userInfo.age
+            cell.imgAvatar.image = userInfo.profileImage
+            cell.userId = userInfo.userId
+            cell.updateAvatarUI(isPinOwner: userInfo.userId == self.pinUserId)
+            cell.updatePrivacyUI(showGender: userInfo.showGender,
+                                 gender: userInfo.gender,
+                                 showAge: userInfo.showAge,
+                                 age: userInfo.age)
+//            cell.lblUserAge.text = "userInfo.age"
+            switch userInfo.gender {
+            case "male":
+                cell.imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")
+                break
+            case "female":
+                cell.imgUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
+                break
+            default:
+                cell.imgUserGender.image = nil
+                break
+            }
+            return cell
+        } else {
+            return UITableViewCell()
         }
     }
     

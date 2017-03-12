@@ -189,6 +189,7 @@
 		B81775701E69516D001FC073 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B817756F1E69516D001FC073 /* PlacePin.swift */; };
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
+		B823196B1E736EE200189778 /* PDUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B823196A1E736EE200189778 /* PDUserInfoCell.swift */; };
 		B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
@@ -517,6 +518,7 @@
 		B817756F1E69516D001FC073 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
+		B823196A1E736EE200189778 /* PDUserInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDUserInfoCell.swift; sourceTree = "<group>"; };
 		B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDScrollCtrl.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
@@ -1290,6 +1292,7 @@
 				B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */,
 				B8612E401DF2504E0092C606 /* PDInputToolbar.swift */,
 				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
+				B823196A1E736EE200189778 /* PDUserInfoCell.swift */,
 				B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */,
 			);
 			name = PinExtension;
@@ -1992,6 +1995,7 @@
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B8CAA03D1DDD931D00DEC329 /* FMSelfPosition.swift in Sources */,
+				B823196B1E736EE200189778 /* PDUserInfoCell.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,

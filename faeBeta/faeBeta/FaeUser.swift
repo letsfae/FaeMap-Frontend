@@ -433,8 +433,8 @@ class FaeUser : NSObject {
         }
     }
     
-    func getOthersProfile(_ otherUser:String, completion:@escaping (Int,Any?)->Void){
-        getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+    func getOthersProfile(_ otherUser: String, completion:@escaping (Int, Any?) -> Void) {
+        getFromURL("users/\(otherUser)/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
             //self.clearKeyValue()
             completion(status, message);
         }

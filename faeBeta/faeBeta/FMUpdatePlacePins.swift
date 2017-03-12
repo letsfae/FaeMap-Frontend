@@ -18,7 +18,7 @@ extension FaeMapViewController {
         if timerLoadRegionPlacePins != nil {
             timerLoadRegionPlacePins.invalidate()
         }
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 750, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func loadCurrentRegionPlacePins() {

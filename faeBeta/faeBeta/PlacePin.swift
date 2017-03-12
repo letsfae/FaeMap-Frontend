@@ -23,6 +23,7 @@ struct PlacePin {
     let position: CLLocationCoordinate2D
     var category = [String]()
     var primaryCate: String
+    var markerAvatar: UIImage
     
     init(json: JSON) {
         var tmp_cate = [String]()
@@ -39,59 +40,78 @@ struct PlacePin {
         self.category = tmp_cate
         if tmp_cate.contains("burgers") {
             self.primaryCate = "burgers"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBurger")
         }
         else if tmp_cate.contains("pizza") {
             self.primaryCate = "pizza"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinPizza")
         }
         else if tmp_cate.contains("coffee") {
             self.primaryCate = "coffee"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinCoffee")
         }
         else if tmp_cate.contains("desserts") {
             self.primaryCate = "desserts"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinDesert")
         }
         else if tmp_cate.contains("icecream") {
             self.primaryCate = "desserts"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinDesert")
         }
         else if tmp_cate.contains("movietheaters") {
             self.primaryCate = "movietheaters"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinCinema")
         }
         else if tmp_cate.contains("museums") {
             self.primaryCate = "museums"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinArt")
         }
         else if tmp_cate.contains("galleries") {
             self.primaryCate = "museums"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinArt")
         }
         else if tmp_cate.contains("beautysvc") {
             self.primaryCate = "beautysvc"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if tmp_cate.contains("spas") {
             self.primaryCate = "beautysvc"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if tmp_cate.contains("barbers") {
             self.primaryCate = "beautysvc"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if tmp_cate.contains("skincare") {
             self.primaryCate = "beautysvc"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if tmp_cate.contains("massage") {
             self.primaryCate = "beautysvc"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoutique")
         }
         else if tmp_cate.contains("playgrounds") {
             self.primaryCate = "playgrounds"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinSport")
         }
         else if tmp_cate.contains("countryclubs") {
             self.primaryCate = "playgrounds"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinSport")
         }
         else if tmp_cate.contains("sports_clubs") {
             self.primaryCate = "playgrounds"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinSport")
         }
         else if tmp_cate.contains("bubbletea") {
             self.primaryCate = "juicebars"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoba")
         }
         else if tmp_cate.contains("juicebars") {
             self.primaryCate = "juicebars"
+            self.markerAvatar = #imageLiteral(resourceName: "placePinBoba")
         } else {
             self.primaryCate = ""
+            self.markerAvatar = UIImage()
         }
     }
 }

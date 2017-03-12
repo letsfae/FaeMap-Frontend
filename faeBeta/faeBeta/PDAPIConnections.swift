@@ -63,42 +63,24 @@ extension PinDetailViewController {
             self.pinComments = pinCommentJsonArray.map{PinComment(json: $0)}
             self.pinComments.reverse()
             self.tableCommentsForPin.reloadData()
-            let realm = try! Realm()
+            
+            self.userNameCard(self.pinUserId, -1, completion: { (id, index) in
+                if id != 0 {
+                    self.userNameGetter(userid: id, index: index)
+                    self.userAvatarGetter(self.pinUserId, index: index, isPeople: true)
+                }
+            })
+            
             if self.pinComments.count >= 1 {
                 for i in 0...self.pinComments.count - 1 {
-                    let indexPath = IndexPath(row: i, section: 0)
-                    let getUser = FaeUser()
                     let userid = self.pinComments[i].userId
-                    getUser.getNamecardOfSpecificUser("\(userid)", completion: { (status, message) in
-                        if status / 100 != 2 {
-                            print("[getNamecardOfSpecificUser] fail to get user")
-                        } else {
-                            let userJSON = JSON(message!)
-                            let displayName = userJSON["nick_name"].stringValue
-                            self.pinComments[i].displayName = displayName
-                            self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    self.userNameCard(userid, i, completion: { (id, index) in
+                        if id != 0 {
+                            self.userNameGetter(userid: id, index: index)
+                            self.userAvatarGetter(userid, index: index, isPeople: true)
                         }
                     })
-                    if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
-                        let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)
-                        self.pinComments[i].profileImage = profileImage!
-                        self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                    } else {
-                        let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
-                        UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                            if let profileImage = image {
-                                self.pinComments[i].profileImage = profileImage
-                                let userAvatar = UserAvatar()
-                                userAvatar.userId = userid
-                                userAvatar.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
-                                try! realm.write {
-                                    realm.add(userAvatar)
-                                }
-                                self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                            }
-                        })
-                    }
-                    
+                    self.userAvatarGetter(userid, index: i, isPeople: false)
                 }
                 if sendMessageFlag {
                     let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
@@ -106,6 +88,81 @@ extension PinDetailViewController {
                 }
             }
         }
+    }
+    
+    fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
+        let indexPath = IndexPath(row: index, section: 0)
+        let realm = try! Realm()
+        if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
+            let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)
+            if isPeople {
+                self.pinDetailUsers[index].profileImage = profileImage!
+            } else {
+                self.pinComments[index].profileImage = profileImage!
+                self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        } else {
+            let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
+            UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                if let profileImage = image {
+                    if isPeople {
+                        self.pinDetailUsers[index].profileImage = profileImage
+                    } else {
+                        self.pinComments[index].profileImage = profileImage
+                        self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    }
+                    let userAvatar = UserAvatar()
+                    userAvatar.userId = userid
+                    userAvatar.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
+                    try! realm.write {
+                        realm.add(userAvatar)
+                    }
+                }
+            })
+        }
+    }
+    
+    fileprivate func userNameCard(_ userid: Int, _ index: Int, completion: @escaping (Int, Int)->()) {
+        let getUser = FaeUser()
+        getUser.getNamecardOfSpecificUser("\(userid)", completion: { (status, message) in
+            if status / 100 != 2 {
+                print("[getNamecardOfSpecificUser] fail to get user")
+            } else {
+                
+                let userJSON = JSON(message!)
+                
+                if index != -1 {
+                    let displayName = userJSON["nick_name"].stringValue
+                    self.pinComments[index].displayName = displayName
+                    let indexPath = IndexPath(row: index, section: 0)
+                    self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
+                
+                var userDetail = PinDetailUser(json: userJSON)
+                userDetail.userId = userid
+                if self.pinDetailUsers.contains(userDetail) {
+                    print("[userNameCard], exists this user")
+                    completion(0, 0)
+                } else {
+                    self.pinDetailUsers.append(userDetail)
+                    guard let userIndex = self.pinDetailUsers.index(of: userDetail) else { return }
+                    completion(userid, userIndex)
+                }
+            }
+        })
+    }
+    
+    fileprivate func userNameGetter(userid: Int, index: Int) {
+        let getUser = FaeUser()
+        getUser.getOthersProfile("\(userid)", completion: { (status, message) in
+            if status / 100 != 2 {
+                print("[getOthersProfile] fail to get user")
+            } else {
+                let userJSON = JSON(message!)
+                let userName = userJSON["user_name"].stringValue
+                self.pinDetailUsers[index].userName = userName
+            }
+        })
     }
     
     func getPinInfo() {
@@ -133,7 +190,6 @@ extension PinDetailViewController {
                 for fileID in fileIDs {
                     if fileID != nil {
                         self.fileIdArray.append(fileID!)
-                        //Changed by Yao, decide to pass fileIdArray to editPinViewController rather than fileIdString
                     }
                 }
                 self.loadMedias()
@@ -177,7 +233,6 @@ extension PinDetailViewController {
                 }
             }
             if let toGetUserName = pinInfoJSON["user_id"].int {
-                //                getAvatarFromRealm(id: toGetUserName, imgView: self.imagePinUserAvatar)
                 let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
                 self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
