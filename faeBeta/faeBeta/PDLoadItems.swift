@@ -116,6 +116,7 @@ extension PinDetailViewController {
         tableCommentsForPin.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
         tableCommentsForPin.register(PDEmptyCell.self, forCellReuseIdentifier: "pinEmptyCell")
         tableCommentsForPin.register(PDUserInfoCell.self, forCellReuseIdentifier: "pdUserInfoCell")
+        tableCommentsForPin.register(PDFeelingCell.self, forCellReuseIdentifier: "pdFeelingCell")
         tableCommentsForPin.rowHeight = UITableViewAutomaticDimension
         tableCommentsForPin.estimatedRowHeight = 140
         tableCommentsForPin.isScrollEnabled = false

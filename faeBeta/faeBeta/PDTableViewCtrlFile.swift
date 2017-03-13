@@ -23,6 +23,8 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return 1
         } else if self.pinComments.count > 0 && tableMode == .talktalk {
             return pinComments.count
+        } else if tableMode == .feelings {
+            return 1
         } else if tableMode == .people {
             return pinDetailUsers.count
         } else {
@@ -33,11 +35,9 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.pinComments.count == 0 && tableMode == .talktalk {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinEmptyCell", for: indexPath) as! PDEmptyCell
-            cell.separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
             return cell
         } else if self.pinComments.count > 0 && tableMode == .talktalk {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
-            
             let comment = self.pinComments[indexPath.row]
             cell.delegate = self
             cell.pinID = self.pinIDPinDetailView
@@ -63,7 +63,9 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.lblContent.attributedText = comment.attributedText
             cell.imgAvatar.image = comment.profileImage
-
+            return cell
+        } else if tableMode == .feelings {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pdFeelingCell", for: indexPath) as! PDFeelingCell
             return cell
         } else if tableMode == .people {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDUserInfoCell
@@ -78,7 +80,6 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                                  gender: userInfo.gender,
                                  showAge: userInfo.showAge,
                                  age: userInfo.age)
-//            cell.lblUserAge.text = "userInfo.age"
             switch userInfo.gender {
             case "male":
                 cell.imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")

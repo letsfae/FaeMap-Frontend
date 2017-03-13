@@ -19,7 +19,7 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             tableMode = .talktalk
         } else if sender.tag == 3 {
-            
+            tableMode = .feelings
         } else if sender.tag == 5 {
             tableMode = .people
         }

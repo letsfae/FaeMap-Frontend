@@ -14,6 +14,7 @@ class PDEmptyCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
         loadCellContent()
     }
     

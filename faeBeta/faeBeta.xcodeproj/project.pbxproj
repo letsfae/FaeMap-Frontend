@@ -219,6 +219,7 @@
 		B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86849781DE0E3BB0016FC6E /* Register.storyboard */; };
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
+		B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */; };
 		B883AE5B1E0DDD9C00D2E3CE /* PDMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */; };
@@ -548,6 +549,7 @@
 		B86849791DE0E3BB0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Register.storyboard; sourceTree = "<group>"; };
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
+		B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFeelingCell.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPImageDelegateCtrl.swift; sourceTree = "<group>"; };
 		B883AE5A1E0DDD9C00D2E3CE /* PDMoreOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDMoreOptions.swift; sourceTree = "<group>"; };
@@ -1294,6 +1296,7 @@
 				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
 				B823196A1E736EE200189778 /* PDUserInfoCell.swift */,
 				B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */,
+				B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */,
 			);
 			name = PinExtension;
 			sourceTree = "<group>";
@@ -1999,6 +2002,7 @@
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
+				B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
