@@ -109,6 +109,7 @@ class PinDetailViewController: UIViewController {
     var buttonSend : UIButton!
     var buttonKeyBoard : UIButton!
     var buttonSticker : UIButton!
+    var btnCommentOption: UIButton!
     
     var animatingHeartTimer: Timer! // Timer for animating heart
     var buttonNextPin: UIButton!
@@ -198,6 +199,13 @@ class PinDetailViewController: UIViewController {
     var uiviewToolBar: UIView!
     var textViewInput: UITextView!
     var emojiView: StickerPickView!
+    
+    var uiviewAnonymous: UIView!
+    var btnHideAnony: UIButton!
+    var switchAnony: UISwitch!
+    var btnDoAnony: UIButton!
+    
+    var keyboardHeight: CGFloat = 0
     
     enum TableMode: Int {
         case talktalk = 0

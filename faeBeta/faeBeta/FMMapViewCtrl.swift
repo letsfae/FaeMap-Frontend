@@ -113,6 +113,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
 
+//        print("[didChange]", mapView.camera.zoom)
+        
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
@@ -192,6 +194,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         let currentZoomLevel = mapView.camera.zoom
  
         if currentZoomLevel >= 11 {
+//            self.updateTimerForAllPins()
             let coorDistance = Double(cameraDiagonalDistance()) / 1000
             
             if let curPosition = previousPosition {
@@ -216,6 +219,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        
         if marker.userData == nil {
             return false
         }
@@ -228,9 +232,12 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             return false
         }
         
+        let zoomLv = mapView.camera.zoom
+        
         self.renewSelfLocation()
         var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.0012,
-                                              longitude: marker.position.longitude, zoom: 17)
+                                              longitude: marker.position.longitude, zoom: zoomLv)
+        
         
         if type == 0 {
             guard let mapPin = userData.values.first as? MapPin else {
@@ -243,9 +250,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             invalidateAllTimer()
             
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
-                                              longitude: marker.position.longitude, zoom: 17)
+                                              longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)
-            marker.icon = UIImage()
             self.canOpenAnotherPin = false
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
@@ -257,18 +263,20 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             pinDetailVC.pinStateEnum = self.selectPinState(pinState: mapPin.status)
             pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
             pinDetailVC.pinUserId = mapPin.userId
-            if let storedList = readByKey("openedPinList"){
-                var openedPinListArray = storedList as! [String]
-                let pinTypeID = "\(mapPin.type)%\(mapPin.pinId)"
-                if openedPinListArray.contains(pinTypeID) == false {
-                    openedPinListArray.insert(pinTypeID, at: 0)
-                }
-                self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-            }
+//            if let storedList = readByKey("openedPinList"){
+//                var openedPinListArray = storedList as! [String]
+//                let pinTypeID = "\(mapPin.type)%\(mapPin.pinId)"
+//                if openedPinListArray.contains(pinTypeID) == false {
+//                    openedPinListArray.insert(pinTypeID, at: 0)
+//                }
+//                self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+//            }
             
             self.clearMap(type: "user")
-            self.present(pinDetailVC, animated: false, completion: {
-                self.canOpenAnotherPin = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                self.present(pinDetailVC, animated: false, completion: {
+                    self.canOpenAnotherPin = true
+                })
             })
             return true
         } else if type == 1 { // user pin
@@ -294,7 +302,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             invalidateAllTimer()
             
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
-                                              longitude: marker.position.longitude, zoom: 17)
+                                              longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)
             
             let pinDetailVC = PinDetailViewController()
@@ -343,8 +351,10 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
             
             self.clearMap(type: "user")
-            self.present(pinDetailVC, animated: false, completion: {
-                self.canOpenAnotherPin = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                self.present(pinDetailVC, animated: false, completion: {
+                    self.canOpenAnotherPin = true
+                })
             })
             return true
         }

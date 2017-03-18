@@ -191,7 +191,7 @@ extension FaeMapViewController {
                                                 self.mapPlaces.append(result)
                                                 self.pinPlacesOnMap(results: [result])
                                             }
-                                            //                                            self.calculateZoomLevel(results: self.mapPlaces)
+//                                            self.calculateZoomLevel(results: self.mapPlaces)
                                         })
                                     })
                                 })

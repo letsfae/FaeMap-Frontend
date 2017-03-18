@@ -90,19 +90,19 @@ extension PinDetailViewController {
     
     func keyboardWillShow(_ notification: Notification) {
         
-        buttonKeyBoard.isHidden = true
-        buttonSticker.isHidden = false
+        actionHideEmojiView()
         
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
+        keyboardHeight = keyboardRectangle.height
         
         UIView.animate(withDuration: 0.3, animations: {
             if self.isKeyboardInThisView {
-                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
-                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - keyboardHeight
-                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
+                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - self.keyboardHeight
+                self.uiviewAnonymous.frame.origin.y = screenHeight - 51 - self.keyboardHeight
+                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - self.keyboardHeight
+                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - self.keyboardHeight
             }
         }, completion: {(done: Bool) in
             
@@ -114,9 +114,16 @@ extension PinDetailViewController {
     }
     
     func keyboardWillHide(_ notification: Notification) {
+        
+        uiviewAnonymous.isHidden = true
+        uiviewToolBar.isHidden = false
+        keyboardHeight = 0
+        self.uiviewAnonymous.frame.origin.y = screenHeight
+        
         UIView.animate(withDuration: 0.3, animations: {
             if self.isKeyboardInThisView {
                 self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                self.uiviewAnonymous.frame.origin.y = screenHeight - 51
                 self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height
                 self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
             }
