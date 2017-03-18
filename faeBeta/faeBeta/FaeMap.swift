@@ -41,6 +41,25 @@ class FaeMap {
         }
     }
     
+    
+    // Get saved pins
+    func getSavedPins(completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("pins/saved", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    
+    // Get my pins
+    func getMyPins(completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("pins/users", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    
     func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
         if type != nil && pinId != nil {
             getFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in

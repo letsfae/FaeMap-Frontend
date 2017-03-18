@@ -59,6 +59,24 @@ extension String {
         // convert to required string
         return "Invalid Date"
     }
+    func formatNSDate() -> String {
+        
+        // convert to NSDate
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        let myDate = dateFormatter.date(from: self)
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = DateFormatter.Style.long
+        let localTimeZone = NSTimeZone.local.abbreviation()
+        if localTimeZone != nil {
+            formatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
+        }
+        
+        return formatter.string(from: myDate!)
+        
+    }
     
     func isNewPin() -> Bool {
         // convert to NSDate

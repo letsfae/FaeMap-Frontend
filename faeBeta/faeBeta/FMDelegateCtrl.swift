@@ -101,6 +101,26 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let moodAvatarVC = MoodAvatarViewController()
         self.present(moodAvatarVC, animated: true, completion: nil)
     }
+    
+    
+    // LeftSlidingMenuDelegate
+    func jumpToPinCollection() {
+        
+        let pinColVC = PinColViewController()
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromLeft
+        view.window!.layer.add(transition, forKey: kCATransition)
+ 
+        //        pinsearchVC.modalPresentationStyle = .overCurrentContext
+        self.present(pinColVC, animated: false, completion: nil)
+        
+
+        
+    }
+    
+    
     // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)

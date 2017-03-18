@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
+		37C725491E7346E8001A5060 /* PinColViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725441E7346E8001A5060 /* PinColViewController.swift */; };
+		37C7254A1E7346E8001A5060 /* PinColViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725451E7346E8001A5060 /* PinColViewControllerExtensions.swift */; };
+		37C7254B1E7346E8001A5060 /* PinsearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725461E7346E8001A5060 /* PinsearchViewController.swift */; };
+		37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725471E7346E8001A5060 /* PinTableViewCell.swift */; };
+		37C7254D1E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
 		853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */; };
@@ -312,6 +317,11 @@
 
 /* Begin PBXFileReference section */
 		0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		37C725441E7346E8001A5060 /* PinColViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinColViewController.swift; sourceTree = "<group>"; };
+		37C725451E7346E8001A5060 /* PinColViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinColViewControllerExtensions.swift; sourceTree = "<group>"; };
+		37C725461E7346E8001A5060 /* PinsearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsearchViewController.swift; sourceTree = "<group>"; };
+		37C725471E7346E8001A5060 /* PinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTableViewCell.swift; sourceTree = "<group>"; };
+		37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceAndLocationTableViewCell.swift; sourceTree = "<group>"; };
 		46C97AEA4C8FC73A227B084E /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB0AB1BF8CA20B4039D774D /* Pods-faeBetaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -720,6 +730,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		37C725431E7346C1001A5060 /* PinCollection */ = {
+			isa = PBXGroup;
+			children = (
+				37C725441E7346E8001A5060 /* PinColViewController.swift */,
+				37C725451E7346E8001A5060 /* PinColViewControllerExtensions.swift */,
+				37C725461E7346E8001A5060 /* PinsearchViewController.swift */,
+				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
+				37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */,
+			);
+			name = PinCollection;
+			sourceTree = "<group>";
+		};
 		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1014,6 +1036,7 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
+				37C725431E7346C1001A5060 /* PinCollection */,
 				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				B0CFC9B51CED39CF00EC356A /* SmallViewControllers */,
@@ -1769,6 +1792,7 @@
 				B8E4C3CA1E30174B004E68A5 /* GMUStaticCluster.m in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
+				37C725491E7346E8001A5060 /* PinColViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
@@ -1858,15 +1882,18 @@
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
+				37C7254D1E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B81775701E69516D001FC073 /* PlacePin.swift in Sources */,
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
+				37C7254A1E7346E8001A5060 /* PinColViewControllerExtensions.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */,
 				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
+				37C7254B1E7346E8001A5060 /* PinsearchViewController.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */,
@@ -1897,6 +1924,7 @@
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */,
+				37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */,
 				B89AB3F31E3D775F00C5116D /* FMLoadingMapFilter.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				853F278A1E2848C400DD80DF /* CMPTableViewDelegate.swift in Sources */,

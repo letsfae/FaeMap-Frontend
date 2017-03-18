@@ -15,7 +15,9 @@ protocol LeftSlidingMenuDelegate: class {
     func jumpToMoodAvatar()
     func logOutInLeftMenu()
     func jumpToFaeUserMainPage()
+    func jumpToPinCollection()
     func reloadSelfPosition()
+    
 }
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -174,6 +176,11 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         // Map Board
         else if indexPath.row == 0 {
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
+        }
+        // Pin Collection
+        else if indexPath.row == 3 {
+            self.tableSelections = .pins
+            self.actionCloseMenu(self.buttonBackground)
         }
         // Mood Avatar
         else if indexPath.row == 4 {
@@ -362,6 +369,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     break
                 case .pins:
                     self.tableSelections = .none
+                    self.delegate?.jumpToPinCollection()
                     break
                 case .myActivities:
                     self.tableSelections = .none
