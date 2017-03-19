@@ -10,9 +10,6 @@ import UIKit
 
 class MoodAvatarTableViewCell: UITableViewCell {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    
     var maleImage: UIImageView!
     var femaleImage: UIImageView!
     var maleRedBtn: UIImageView!
@@ -23,10 +20,11 @@ class MoodAvatarTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
         loadAvatarItems()
     }
     
-    func loadAvatarItems() {
+    private func loadAvatarItems() {
         maleRedBtn = UIImageView()
         maleRedBtn.image = UIImage(named: "unselectedMoodButton")
         self.addSubview(maleRedBtn)
