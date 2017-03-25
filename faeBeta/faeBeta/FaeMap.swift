@@ -58,8 +58,8 @@ class FaeMap {
     }
     
     
-    // Get my pins
-    func getMyPins(completion: @escaping (Int, Any?) -> Void) {
+    // Get created pins
+    func getCreatedPins(completion: @escaping (Int, Any?) -> Void) {
         getFromURL("pins/users", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)

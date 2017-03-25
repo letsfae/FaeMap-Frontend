@@ -101,22 +101,23 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     
     // LeftSlidingMenuDelegate
-    func jumpToPinCollection() {
+    func jumpToCollections() {
         
-        let pinColVC = PinColViewController()
+        let CollectionsBoardVC = CollectionsBoardViewController()
+        
+        //弹出的动画效果
         let transition = CATransition()
         transition.duration = 0.5
         transition.type = kCATransitionPush
         transition.subtype = kCATransitionFromLeft
         view.window!.layer.add(transition, forKey: kCATransition)
  
-        //        pinsearchVC.modalPresentationStyle = .overCurrentContext
-        self.present(pinColVC, animated: false, completion: nil)
+        //        CollectionsBoardVC.modalPresentationStyle = .overCurrentContext
+        self.present(CollectionsBoardVC, animated: false, completion: nil)
         
 
-        
-    }
     
+    }
     
     // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
