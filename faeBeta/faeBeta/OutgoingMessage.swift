@@ -96,12 +96,12 @@ class OutgoingMessage {
         
         item["messageId"] = reference.key
         
-        reference.setValue(item) { (error, ref) -> Void in
+        /* reference.setValue(item) { (error, ref) -> Void in
             
             if error != nil {
                 print("Error, couldn't send message: \(error)")
             }
-        }
+        } */
 
     }
 }

@@ -10,6 +10,8 @@ import UIKit
 import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
+import GoogleMaps
+import GooglePlaces
 
 extension ChatViewController: OutgoingMessageProtocol{
     
@@ -242,8 +244,18 @@ extension ChatViewController: OutgoingMessageProtocol{
     }
     
     //MARK: - locationSend Delegate
-    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: Data) {
-        sendMessage(location: CLLocation(latitude: lat, longitude: lon), snapImage : screenShot, date: Date())
+    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: UIImage) {
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(lat, lon)) { (response, error) in
+            if(error == nil) {
+                if response != nil {
+                    self.locExtendView.setAvator(image: screenShot)
+                    self.addResponseToLocationExtend(response: response!, withMini: false)
+                }
+            } else {
+                print(error ?? "ohhhh")
+            }
+        }
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int){

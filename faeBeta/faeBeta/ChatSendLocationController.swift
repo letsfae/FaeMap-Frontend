@@ -12,7 +12,7 @@ import GooglePlaces
 import CoreLocation
 
 protocol LocationSendDelegate: class {
-    func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : Data)
+    func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : UIImage)
 }
 
 class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
@@ -211,7 +211,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         self.faeMapView.layer.render(in: UIGraphicsGetCurrentContext()!)
         if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
             _ = self.navigationController?.popViewController(animated: true)
-            locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
+            locationDelegate.sendPickedLocation(self.latitudeForPin, lon: self.longitudeForPin, screenShot: screenShotImage)
         }
     }
     
