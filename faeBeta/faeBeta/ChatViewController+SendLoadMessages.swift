@@ -171,6 +171,12 @@ extension ChatViewController: OutgoingMessageProtocol{
         //unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
+        //filter for garbage information
+        
+        if(item.count < 9) {
+            return false
+        }
+        
         let message = incomingMessage.createMessage(item)
         if(item["hasTimeStamp"] != nil && item["hasTimeStamp"] as! Bool){
             let date = dateFormatter().date(from: (item["date"] as? String)!)

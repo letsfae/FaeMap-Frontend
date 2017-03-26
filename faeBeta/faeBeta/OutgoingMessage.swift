@@ -75,13 +75,16 @@ class OutgoingMessage {
                 print("Error, couldn't send message: \(error)")
             }else{
                 //WARNING : I changed item["type"] to "text" here to make backend work
-                postToURL("chats", parameter: ["receiver_id": user.userId as AnyObject, "message": item["message"] as! String, "type": "sticker"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                
+                //comment this api for now to avoid crash, it will make last message in first VC wrong. Will use it after negotiate with backend.
+                
+                /* postToURL("chats", parameter: ["receiver_id": user.userId as AnyObject, "message": item["message"] as! String, "type": "sticker"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
                         if let resultDic = result as? NSDictionary{
                             self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)
                         }
                     }
-                })
+                }) */
             }
         }
     }
