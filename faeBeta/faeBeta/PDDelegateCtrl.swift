@@ -96,7 +96,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
-        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false)
+        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false) 
     }
     
     func cancelTouchToReplyTimerFromPinCell() {
