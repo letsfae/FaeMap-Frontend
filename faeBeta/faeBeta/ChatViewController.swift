@@ -156,7 +156,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.setup(initializeType)
         //miniLocation.isHidden = true
         //view.addSubview(miniLocation)
-        locExtendView.isHidden = true
         self.view.addSubview(locExtendView)
 
     }
@@ -187,6 +186,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.toolbarContentView.miniLocation.buttonSearch.addTarget(self, action: #selector(self.showFullLocationView), for: .touchUpInside)
         self.toolbarContentView.miniLocation.buttonSend.addTarget(self, action: #selector(self.sendLocationMessageFromMini), for: .touchUpInside)
         
+        locExtendView.isHidden = true
+        locExtendView.buttonCancel.addTarget(self, action: #selector(self.closeLocExtendView(_:)), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -460,11 +461,21 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func keyboardDidShow(_ notification: Notification){
+        /* let inset = self.collectionView.contentInset.bottom
+        if(!locExtendView.isHidden) {
+            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset + self.locExtendView.frame.height, right: 0.0)
+            self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset + self.locExtendView.frame.height, right: 0.0)
+        } */
         toolbarContentView.keyboardShow = true
         scrollToBottom(true)
     }
     
     func keyboardDidHide(_ notification: Notification){
+        /* let inset = self.collectionView.contentInset.bottom
+        if(!locExtendView.isHidden) {
+            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - self.locExtendView.frame.height, right: 0.0)
+            self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - self.locExtendView.frame.height, right: 0.0)
+        } */
         toolbarContentView.keyboardShow = false
     }
     
@@ -650,7 +661,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
         buttonVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
         buttonLocation.setImage(UIImage(named : "shareLocation"), for: UIControlState())
-        buttonSend.isEnabled = false
+        buttonSend.isEnabled = !self.locExtendView.isHidden
     }
     
     func endEdit()
@@ -816,40 +827,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    func closeLocExtendView(_ sender : UIButton) {
+        locExtendView.isHidden = true
+        let inset = self.collectionView.contentInset.bottom
+        self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - self.locExtendView.frame.height, right: 0.0)
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - self.locExtendView.frame.height, right: 0.0)
+        buttonSend.isEnabled = !self.locExtendView.isHidden
+    }
     
     func sendLocationMessageFromMini(_ sender : UIButton) {
         if let mapview = self.toolbarContentView.miniLocation.mapView {
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
-                //sendPickedLocation(mapview.camera.target.latitude, lon: mapview.camera.target.longitude, screenShot: UIImageJPEGRepresentation(screenShotImage, 0.7)!)
                 locExtendView.setAvator(image: screenShotImage)
                 let geocoder = GMSGeocoder()
                 geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(mapview.camera.target.latitude, mapview.camera.target.longitude)) { (response, error) in
                     
                     if(error == nil) {
-                        var texts : [String] = []
-                        texts.append((response?.firstResult()?.thoroughfare)!)
-                        var cityText = response?.firstResult()?.locality
-                        
-                        if(response?.firstResult()?.administrativeArea != nil) {
-                            cityText = cityText! + ", " + (response?.firstResult()?.administrativeArea)!
+                        if response != nil {
+                            self.addResponseToLocationExtend(response: response!, withMini: true)
                         }
-                        
-                        if(response?.firstResult()?.postalCode != nil) {
-                            cityText = cityText! + " " + (response?.firstResult()?.postalCode)!
-                        }
-                        texts.append(cityText!)
-                        texts.append((response?.firstResult()?.country)!)
-                        
-                        self.locExtendView.setLabel(texts: texts)
-                        self.locExtendView.location = CLLocation(latitude: mapview.camera.target.latitude, longitude: mapview.camera.target.longitude)
-                        self.locExtendView.isHidden = false
-                        let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
-                        self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
-                        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
-                        self.scrollToBottom(true)
-                        self.buttonSend.isEnabled = true
                     } else {
                         print(error ?? "ohhhh")
                     }
@@ -857,6 +855,36 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 
             }
         }
+    }
+    
+    func addResponseToLocationExtend(response : GMSReverseGeocodeResponse, withMini: Bool) {
+        var texts : [String] = []
+        texts.append((response.firstResult()?.thoroughfare)!)
+        var cityText = response.firstResult()?.locality
+        
+        if(response.firstResult()?.administrativeArea != nil) {
+            cityText = cityText! + ", " + (response.firstResult()?.administrativeArea)!
+        }
+        
+        if(response.firstResult()?.postalCode != nil) {
+            cityText = cityText! + " " + (response.firstResult()?.postalCode)!
+        }
+        texts.append(cityText!)
+        texts.append((response.firstResult()?.country)!)
+        
+        self.locExtendView.setLabel(texts: texts)
+        self.locExtendView.location = CLLocation(latitude: self.toolbarContentView.miniLocation.mapView.camera.target.latitude, longitude: self.toolbarContentView.miniLocation.mapView.camera.target.longitude)
+        self.locExtendView.isHidden = false
+        let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
+        if(withMini) {
+            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+            self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + self.inputToolbar.frame.height + extendHeight, right: 0.0)
+        } else {
+            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.inputToolbar.frame.height + extendHeight, right: 0.0)
+            self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.inputToolbar.frame.height + extendHeight, right: 0.0)
+        }
+        self.scrollToBottom(true)
+        self.buttonSend.isEnabled = true
     }
 }
 

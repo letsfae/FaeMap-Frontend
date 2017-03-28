@@ -89,6 +89,12 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
             self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
             self.present(self.imagePicker,animated:true,completion:nil)
+            // add code here to change imagePickerStyle [mingjie jin]
+            
+            
+            
+            
+            
         }
         let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .camera
