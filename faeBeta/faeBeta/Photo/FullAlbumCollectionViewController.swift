@@ -335,7 +335,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
                 if isCSP {
-                    showAlertView(withWarning: "You can only have up to 6 items for your story")
+                    showAlertView(withWarning: "You can only have up to 6 items for your story") 
                 } else {
                     showAlertView(withWarning: "You can only select up to \(maximumSelectedPhotoNum) images at the same time")
                 }
