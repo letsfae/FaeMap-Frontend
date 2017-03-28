@@ -268,8 +268,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 print("[showGenderAge] Fail to update namecard")
             }
         }
-        
-        print(user_id)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

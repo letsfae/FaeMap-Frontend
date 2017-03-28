@@ -102,7 +102,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func validation() {
         var isValid = false
         
-        let userNameRegEx = ".*[^a-z0-9_].*"
+        let userNameRegEx = ".*[^a-zA-Z0-9_-.].*"
         let range = username!.range(of: userNameRegEx, options:.regularExpression)
         let result = range != nil ? false : true
         
