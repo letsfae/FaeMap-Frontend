@@ -222,7 +222,7 @@ extension PinDetailViewController {
             }
             
             if pinInfoJSON["anonymous"].boolValue {
-                self.labelPinUserName.text = "Anonymous"
+                self.labelPinUserName.text = "Someone"
             } else {
                 self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
             }

@@ -14,6 +14,18 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func animateNameCard() {
+        self.imageUserGender.isHidden = true
+        self.lblUserAge.isHidden = true
+        self.labelDisplayName.isHidden = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            if self.imageUserGender.image != nil {
+                self.imageUserGender.isHidden = false
+            }
+            if self.lblUserAge.text != nil {
+                self.lblUserAge.isHidden = false
+            }
+            self.labelDisplayName.isHidden = false
+        })
         let targetFrame = CGRect(x: 73, y: 158, width: 268, height: 293)
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.buttonFakeTransparentClosingView.alpha = 1
@@ -401,11 +413,12 @@ extension FaeMapViewController {
         else {
             return
         }
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+0.0012, longitude: currentLongitude, zoom: 17)
+        let zoomLv = faeMapView.camera.zoom
+        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
+                                              longitude: currentLongitude, zoom: zoomLv)
         faeMapView.animate (to: camera)
-        UIView.animate(withDuration: 0.25, animations: {
-            self.buttonFakeTransparentClosingView.alpha = 1
-        })
+        animateNameCard()
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
             if status / 100 == 2 {
