@@ -35,6 +35,7 @@ class PinDetailViewController: UIViewController {
     var pinStatus = ""
     var pinMarker = GMSMarker()
     var pinUserId = 0
+    var pinLikeCount = 0
     
     // Pin options
     var buttonShareOnPinDetail: UIButton!
@@ -92,7 +93,6 @@ class PinDetailViewController: UIViewController {
     var pinSizeTo: CGFloat = 0
     
     // Like Function
-    var pinLikeCount: Int = 0
     var isUpVoting = false
     var isDownVoting = false
     
@@ -125,8 +125,7 @@ class PinDetailViewController: UIViewController {
     var selectedMarkerPosition: CLLocationCoordinate2D!
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
-//    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
-    //Change by Yao, abandon fileIdString
+    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     
     var imageViewHotPin: UIImageView!
     var stringPlainTextViewTxt = ""
@@ -259,7 +258,6 @@ class PinDetailViewController: UIViewController {
         }, completion: { (done: Bool) in
             if self.pinTypeEnum != .place {
                 self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
-//                self.loadExtendView() // call func for loading extend view (mingjie jin)
             }
         })
     }

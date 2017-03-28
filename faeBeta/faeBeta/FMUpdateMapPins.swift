@@ -117,7 +117,7 @@ extension FaeMapViewController {
             pinMap.zIndex = 1
             pinMap.map = self.faeMapView
             self.mapPinsArray.append(pinMap)
-            let delay: Double = Double(arc4random_uniform(300)) / 100 // Delay 0-3 seconds, randomly
+            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-3 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
                 icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
             }, completion: {(done: Bool) in

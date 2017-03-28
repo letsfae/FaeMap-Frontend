@@ -268,6 +268,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 print("[showGenderAge] Fail to update namecard")
             }
         }
+        
+        print(user_id)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -426,7 +428,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
             self.faeMapView.camera = camera
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)

@@ -22,14 +22,14 @@ struct MapPin {
     var type: String
     var status: String
     let position: CLLocationCoordinate2D
-    
+
     init(json: JSON) {
         let tmp_type = json["type"].stringValue
         self.type = tmp_type
-        self.pinId = json["\(tmp_type)_id"].intValue
-        self.userId = json["user_id"].intValue
-        self.position = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue,
-                                               longitude: json["geolocation"]["longitude"].doubleValue)
+        self.pinId = json["pin_id"].intValue
+        self.userId = json["pin_object"]["user_id"].intValue
+        self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
+                                               longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
         self.status = "normal"
         if json["created_at"].stringValue.isNewPin() {
             self.status = "new"
@@ -42,9 +42,9 @@ struct MapPin {
         if self.userId == Int(user_id) {
             self.status = "normal"
         }
-        let likeCount = json["liked_count"].intValue
-        let commentCount = json["comment_count"].intValue
-        let readInfo = json["user_pin_operations"]["is_read"].boolValue
+        let likeCount = json["pin_object"]["liked_count"].intValue
+        let commentCount = json["pin_object"]["comment_count"].intValue
+        let readInfo = json["pin_object"]["user_pin_operations"]["is_read"].boolValue
         if commentCount >= 10 || likeCount >= 15 {
             if readInfo {
                 self.status = "hot and read"
