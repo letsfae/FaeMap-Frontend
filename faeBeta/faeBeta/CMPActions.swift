@@ -209,11 +209,11 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     
     func actionSubmitMedia(_ sender: UIButton) {
         if selectedMediaArray.count == 0 {
-            showAlert(title: "Please add at least one image", message: "and try again")
+            showAlert(title: "Please add at least one image!", message: "")
             return
         }
         else if textViewForMediaPin.text == "" {
-            showAlert(title: "Please add description for your story", message: "and try again")
+            showAlert(title: "Please add a description for your story!", message: "")
             return
         }
         if sender.tag == 0 {
