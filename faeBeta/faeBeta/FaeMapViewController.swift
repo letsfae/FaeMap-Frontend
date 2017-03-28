@@ -376,6 +376,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             getSelfAccountInfo()
         } else {
             subviewSelfMarker.isHidden = true
+            faeMapView.isMyLocationEnabled = true
         }
     }
     

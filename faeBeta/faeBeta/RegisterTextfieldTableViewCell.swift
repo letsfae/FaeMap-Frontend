@@ -122,11 +122,11 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
     func textFieldDidChange(_ textField: UITextField) {
-        if isUsernameField {
-            if textfield.text != nil {
-                textfield.text = textField.text!.lowercased()
-            }
-        }
+//        if isUsernameField {
+//            if textfield.text != nil {
+//                textfield.text = textField.text!.lowercased()
+//            }
+//        }
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
     }
     
