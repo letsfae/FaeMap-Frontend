@@ -231,19 +231,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
-        
-        self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 120, height: 120))
-        self.view.addSubview(self.subviewSelfMarker)
-        selfMarkerIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-        selfMarkerIcon.layer.zPosition = 5
-        selfMarkerIcon.contentMode = .scaleAspectFit
-        let point = CGPoint(x: 60, y: 60)
-        selfMarkerIcon.center = point
-        self.subviewSelfMarker.addSubview(selfMarkerIcon)
-        let tapToOpenSelfNameCard = UITapGestureRecognizer(target: self, action: #selector(self.getSelfNameCard(_:)))
-        selfMarkerIcon.addGestureRecognizer(tapToOpenSelfNameCard)
-        loadSelfMarker()
-        
+        loadSelfMarkerSubview()
+        reloadSelfMarker()
         didLoadFirstLoad = true
     }
 
@@ -393,7 +382,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
             subviewSelfMarker.isHidden = false
-            loadSelfMarker()
+            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
             subviewSelfMarker.isHidden = true
