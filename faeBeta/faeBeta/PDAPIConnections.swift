@@ -13,6 +13,12 @@ import RealmSwift
 
 extension PinDetailViewController {
     
+    func getSeveralInfo() {
+        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+        getPinInfo()
+        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
+    }
+    
     func getPinAttributeNum(_ type: String, pinID: String) {
         let getPinAttr = FaePinAction()
         getPinAttr.getPinAttribute(type, pinID: pinID) {(status: Int, message: Any?) in
@@ -55,7 +61,6 @@ extension PinDetailViewController {
                 return
             }
             let commentsJSON = JSON(message!)
-//            print(message)
             guard let pinCommentJsonArray = commentsJSON.array else {
                 print("[getPinComments] fail to parse pin comments")
                 return
@@ -63,6 +68,8 @@ extension PinDetailViewController {
             self.pinComments = pinCommentJsonArray.map{PinComment(json: $0)}
             self.pinComments.reverse()
             self.tableCommentsForPin.reloadData()
+            
+//            print(self.pinComments)
             
             self.userNameCard(self.pinUserId, -1, completion: { (id, index) in
                 if id != 0 {
@@ -169,18 +176,12 @@ extension PinDetailViewController {
         self.buttonBackToPinLists.isEnabled = false
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
-            let opinType = "\(self.pinTypeEnum)"
-            let opinId = self.pinIDPinDetailView
-            var opinContent = ""
-            var opinLat = self.selectedMarkerPosition.latitude
-            var opinLon = self.selectedMarkerPosition.longitude
-            var opinTime = ""
             let pinInfoJSON = JSON(message!)
+            self.labelPinTimestamp.text = pinInfoJSON["created_at"].stringValue.formatFaeDate()
             if let userid = pinInfoJSON["user_id"].int {
                 if userid == Int(user_id) {
                     self.thisIsMyPin = true
-                }
-                else {
+                } else {
                     self.thisIsMyPin = false
                 }
             }
@@ -193,106 +194,47 @@ extension PinDetailViewController {
                     }
                 }
                 self.loadMedias()
-                if let content = pinInfoJSON["description"].string {
-                    self.stringPlainTextViewTxt = "\(content)"
-                    self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
-                    opinContent = "\(content)"
-                }
+                self.stringPlainTextViewTxt = pinInfoJSON["description"].stringValue
+                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
+            } else if self.pinTypeEnum == .comment {
+                self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
+                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
             }
-            else if self.pinTypeEnum == .comment {
-                if let content = pinInfoJSON["content"].string {
-                    self.stringPlainTextViewTxt = "\(content)"
-                    self.textviewPinDetail.attributedText = "\(content)".convertStringWithEmoji()
-                    opinContent = "\(content)"
-                }
-            }
-            if let isLiked = pinInfoJSON["user_pin_operations"]["is_liked"].bool {
-                if isLiked == false {
-                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
-                    self.buttonPinLike.tag = 0
-                    if self.animatingHeart != nil {
-                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
-                    }
-                }
-                else {
-                    self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-                    self.buttonPinLike.tag = 1
-                    if self.animatingHeart != nil {
-                        self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
-                    }
-                }
-            }
-            if let isSaved = pinInfoJSON["user_pin_operations"]["is_saved"].bool {
-                if isSaved == false {
-                    self.isSavedByMe = false
-                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
-                }
-                else {
-                    self.isSavedByMe = true
-                    self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
-                }
-            }
-            if let toGetUserName = pinInfoJSON["user_id"].int {
-                let stringHeaderURL = "\(baseURL)/files/users/\(toGetUserName)/avatar"
-                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
-                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image != nil {
-                        UIView.animate(withDuration: 0.2, animations: {
-                            self.imagePinUserAvatar.alpha = 1
-                        })
-                    }
-                })
-                let getUserName = FaeUser()
-                getUserName.getNamecardOfSpecificUser("\(toGetUserName)") {(status, message) in
-                    let userProfile = JSON(message!)
-                    if let username = userProfile["nick_name"].string {
-                        self.labelPinUserName.text = username
-                    } else {
-                        self.labelPinUserName.text = "Anonymous"
-                    }
+            if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
+                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
+                self.buttonPinLike.tag = 0
+                if self.animatingHeart != nil {
+                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
                 }
             } else {
-                self.labelPinUserName.text = "Anonymous"
+                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
+                self.buttonPinLike.tag = 1
+                if self.animatingHeart != nil {
+                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+                }
+            }
+            if !pinInfoJSON["user_pin_operations"]["is_saved"].boolValue {
+                self.isSavedByMe = false
+                self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+            } else {
+                self.isSavedByMe = true
+                self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
             }
             
-            if let time = pinInfoJSON["created_at"].string {
-                self.labelPinTimestamp.text = time.formatFaeDate()
-                opinTime = time
+            if pinInfoJSON["anonymous"].boolValue {
+                self.labelPinUserName.text = "Someone"
+            } else {
+                self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
             }
-            
-            if let latitudeInfo = pinInfoJSON["geolocation"]["latitude"].double {
-                opinLat = latitudeInfo
-            }
-            else {
-                print("DEBUG: Cannot get geoInfo: Latitude")
-                return
-            }
-            if let longitudeInfo = pinInfoJSON["geolocation"]["longitude"].double {
-                opinLon = longitudeInfo
-            }
-            else {
-                print("DEBUG: Cannot get geoInfo: Longitude")
-                return
-            }
-            
-            let realm = try! Realm()
-            let opinListElem = OPinListElem()
-            opinListElem.pinTypeId = "\(opinType)\(opinId)"
-            opinListElem.pinContent = opinContent
-            opinListElem.pinLat = opinLat
-            opinListElem.pinLon = opinLon
-            opinListElem.pinTime = opinTime
-            try! realm.write {
-                realm.add(opinListElem, update: true)
-                self.buttonBackToPinLists.isEnabled = true
+            if let pinUserId = pinInfoJSON["user_id"].int {
+                let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
+                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.imagePinUserAvatar.alpha = 1
+                    })
+                })
             }
         }
-    }
-    
-    func getSeveralInfo() {
-        getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
-        getPinInfo()
-        getPinComments("\(self.pinTypeEnum)", pinID: pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func checkPinStatus() {
@@ -337,6 +279,7 @@ extension PinDetailViewController {
     func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
+        commentThisPin.whereKey("anonymous", value: "true")
         if pinIDPinDetailView != "-999" {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {

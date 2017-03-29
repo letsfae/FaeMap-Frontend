@@ -161,7 +161,6 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         if let miniAvatar = userMiniAvatar {
-            print(miniAvatar)
             userAvatarMap = "miniAvatar_\(miniAvatar)"
             updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
             updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in

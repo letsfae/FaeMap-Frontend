@@ -41,6 +41,7 @@ extension EditMoreOptionsViewController {
         let selectLocationVC = SelectLocationViewController()
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
+        selectLocationVC.isCreatingMode = false
         if pinType == "media"{
             selectLocationVC.pinType = "moment"
         }else {

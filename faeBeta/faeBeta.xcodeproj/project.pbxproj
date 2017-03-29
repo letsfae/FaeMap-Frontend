@@ -17,10 +17,10 @@
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
 		853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */; };
 		853F27721E23184E00DD80DF /* EditMoreOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27711E23184E00DD80DF /* EditMoreOptionsViewController.swift */; };
-		853F27751E231B4A00DD80DF /* EditOptionLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */; };
-		853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */; };
-		853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */; };
-		853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */; };
+		853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27741E231B4A00DD80DF /* EOLoadItems.swift */; };
+		853F27771E231CA800DD80DF /* EOButtonActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27761E231CA800DD80DF /* EOButtonActions.swift */; };
+		853F27791E231E1300DD80DF /* EOHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27781E231E1300DD80DF /* EOHandleDelegate.swift */; };
+		853F277B1E23287600DD80DF /* EOTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EOTableViewCell.swift */; };
 		853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */; };
 		853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */; };
 		853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27811E26FDB900DD80DF /* ECPLoadItems.swift */; };
@@ -330,10 +330,10 @@
 		8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlideWindowCell.swift; sourceTree = "<group>"; };
 		853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinCollectionViewCell.swift; sourceTree = "<group>"; };
 		853F27711E23184E00DD80DF /* EditMoreOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMoreOptionsViewController.swift; sourceTree = "<group>"; };
-		853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionLoadItems.swift; sourceTree = "<group>"; };
-		853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionButtonActions.swift; sourceTree = "<group>"; };
-		853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionHandleDelegate.swift; sourceTree = "<group>"; };
-		853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionTableViewCell.swift; sourceTree = "<group>"; };
+		853F27741E231B4A00DD80DF /* EOLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOLoadItems.swift; sourceTree = "<group>"; };
+		853F27761E231CA800DD80DF /* EOButtonActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOButtonActions.swift; sourceTree = "<group>"; };
+		853F27781E231E1300DD80DF /* EOHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOHandleDelegate.swift; sourceTree = "<group>"; };
+		853F277A1E23287600DD80DF /* EOTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOTableViewCell.swift; sourceTree = "<group>"; };
 		853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPToolBarDelegate.swift; sourceTree = "<group>"; };
 		853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPHandleDelegate.swift; sourceTree = "<group>"; };
 		853F27811E26FDB900DD80DF /* ECPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPLoadItems.swift; sourceTree = "<group>"; };
@@ -763,10 +763,10 @@
 		853F27731E231B2000DD80DF /* EditOptionsExtension */ = {
 			isa = PBXGroup;
 			children = (
-				853F27741E231B4A00DD80DF /* EditOptionLoadItems.swift */,
-				853F27761E231CA800DD80DF /* EditOptionButtonActions.swift */,
-				853F27781E231E1300DD80DF /* EditOptionHandleDelegate.swift */,
-				853F277A1E23287600DD80DF /* EditOptionTableViewCell.swift */,
+				853F27741E231B4A00DD80DF /* EOLoadItems.swift */,
+				853F27761E231CA800DD80DF /* EOButtonActions.swift */,
+				853F27781E231E1300DD80DF /* EOHandleDelegate.swift */,
+				853F277A1E23287600DD80DF /* EOTableViewCell.swift */,
 			);
 			name = EditOptionsExtension;
 			sourceTree = "<group>";
@@ -1788,7 +1788,7 @@
 				B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */,
 				B0C0CAA61D422D2A00E2E251 /* NameCardAddCollectionViewCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */,
-				853F27771E231CA800DD80DF /* EditOptionButtonActions.swift in Sources */,
+				853F27771E231CA800DD80DF /* EOButtonActions.swift in Sources */,
 				B8E4C3CA1E30174B004E68A5 /* GMUStaticCluster.m in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
@@ -1872,7 +1872,7 @@
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
-				853F27791E231E1300DD80DF /* EditOptionHandleDelegate.swift in Sources */,
+				853F27791E231E1300DD80DF /* EOHandleDelegate.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
 				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
@@ -1964,7 +1964,7 @@
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
-				853F277B1E23287600DD80DF /* EditOptionTableViewCell.swift in Sources */,
+				853F277B1E23287600DD80DF /* EOTableViewCell.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */,
@@ -2010,7 +2010,7 @@
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
-				853F27751E231B4A00DD80DF /* EditOptionLoadItems.swift in Sources */,
+				853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
@@ -2116,6 +2116,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 			};
 			name = Debug;
 		};
@@ -2156,6 +2157,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

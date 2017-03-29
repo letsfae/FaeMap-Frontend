@@ -42,7 +42,13 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             cell.pinID = self.pinIDPinDetailView
             cell.pinType = "\(self.pinTypeEnum)"
-            cell.lblUsername.text = comment.displayName
+            if comment.anonymous {
+                cell.lblUsername.text = "Anonymous"
+                cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
+            } else {
+                cell.lblUsername.text = comment.displayName
+                cell.imgAvatar.image = comment.profileImage
+            }
             cell.pinCommentID = "\(comment.commentId)"
             cell.lblTime.text = comment.date
             cell.lblVoteCount.text = "\(comment.numVoteCount)"
@@ -62,7 +68,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 break
             }
             cell.lblContent.attributedText = comment.attributedText
-            cell.imgAvatar.image = comment.profileImage
+            
             return cell
         } else if tableMode == .feelings {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdFeelingCell", for: indexPath) as! PDFeelingCell

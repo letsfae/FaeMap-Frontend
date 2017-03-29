@@ -113,7 +113,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
 
-//        print("[didChange]", mapView.camera.zoom)
+        print("[didChange]", mapView.camera.zoom)
         
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
@@ -233,13 +233,12 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
         }
         
         let zoomLv = mapView.camera.zoom
-        
+        var offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
         self.renewSelfLocation()
-        var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.0012,
+        var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
-        
-        
-        if type == 0 {
+
+        if type == 0 { // fae map pin
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
@@ -248,8 +247,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
             
             invalidateAllTimer()
-            
-            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
+            offset = 0.00148 * pow(2, Double(17 - zoomLv))
+            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)
             self.canOpenAnotherPin = false
@@ -263,14 +262,6 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             pinDetailVC.pinStateEnum = self.selectPinState(pinState: mapPin.status)
             pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
             pinDetailVC.pinUserId = mapPin.userId
-//            if let storedList = readByKey("openedPinList"){
-//                var openedPinListArray = storedList as! [String]
-//                let pinTypeID = "\(mapPin.type)%\(mapPin.pinId)"
-//                if openedPinListArray.contains(pinTypeID) == false {
-//                    openedPinListArray.insert(pinTypeID, at: 0)
-//                }
-//                self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-//            }
             
             self.clearMap(type: "user")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {

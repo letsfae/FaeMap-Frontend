@@ -276,14 +276,6 @@ extension PinDetailViewController {
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         if buttonPinDetailDragToLargeSize.tag == 1 && sender == buttonPinAddComment {
             self.textViewInput.becomeFirstResponder()
-//            UIView.animate(withDuration: 0.5, animations: ({
-//                let toolbarHeight = self.uiviewToolBar.frame.size.height
-//                self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
-//                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
-//                self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
-//                self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
-//            }), completion: { (done: Bool) in
-//            })
             return
         }
         readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
@@ -429,23 +421,5 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.reloadData()
             }
         })
-    }
-    
-    func actionShowActionSheet(_ username: String) {
-        let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-        menu.view.tintColor = UIColor.faeAppRedColor()
-        let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-//            self.inputToolbar.contentView.textView.text = "@\(username) "
-        }
-        let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-            self.actionReportThisPin(self.buttonReportOnPinDetail)
-        }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
-            
-        }
-        menu.addAction(writeReply)
-        menu.addAction(report)
-        menu.addAction(cancel)
-        self.present(menu, animated: true, completion: nil)
     }
 }

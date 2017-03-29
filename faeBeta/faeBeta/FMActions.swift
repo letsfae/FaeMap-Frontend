@@ -51,7 +51,7 @@ extension FaeMapViewController {
             currentLongitude = currentLocation.coordinate.longitude
             self.renewSelfLocation()
             // let curZoomLevel = faeMapView.camera.zoom
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: faeMapView.camera.zoom)
             faeMapView.camera = camera
 //            reloadSelfPosAnimation()
         }

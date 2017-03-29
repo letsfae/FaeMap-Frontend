@@ -23,6 +23,9 @@ extension FaeMapViewController {
         selfMarkerIcon.contentMode = .scaleAspectFit
         let point = CGPoint(x: 60, y: 60)
         selfMarkerIcon.center = point
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.addTarget(self, action: #selector(self.getSelfNameCard(_:)))
+        subviewSelfMarker.addGestureRecognizer(tapGesture)
         
         myPositionCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))

@@ -34,7 +34,8 @@ extension EditMoreOptionsViewController{
         labelTitle = UILabel()
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         labelTitle.text = "Edit Options"
-        labelTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        labelTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        labelTitle.textAlignment = .center
         self.view.addSubview(labelTitle)
         self.view.addConstraintsWithFormat("H:[v0(133)]", options: [], views: labelTitle)
         self.view.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelTitle)
@@ -55,7 +56,6 @@ extension EditMoreOptionsViewController{
         self.view.addSubview(tableMoreOptions)
         
         uiviewLineBottom = UIView(frame: CGRect(x: 0, y: 685 * screenHeightFactor, width: screenWidth, height: 1))
-        //uiviewLineBottom.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
         uiviewLineBottom.layer.borderWidth = screenWidth
         uiviewLineBottom.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         self.view.addSubview(uiviewLineBottom)
@@ -66,9 +66,7 @@ extension EditMoreOptionsViewController{
         btnFooter.setTitleColor(UIColor.lightGray, for: .highlighted)
         btnFooter.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         self.view.addSubview(btnFooter)
-        btnFooter.addTarget(self,
-                                         action: #selector(self.actionCancel(_:)),
-                                         for: .touchUpInside)
+        btnFooter.addTarget(self, action: #selector(self.actionCancel(_:)), for: .touchUpInside)
         
         geoCode = CLGeocoder.init()
         let currentLocation = CLLocation.init(latitude: pinGeoLocation.latitude, longitude: pinGeoLocation.longitude)

@@ -85,12 +85,34 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
     }
     
+    func directReplyFromPinCell(_ username: String) {
+        self.replyToUser = "<a>@\(username)</a> "
+        self.lblTxtPlaceholder.text = "@\(username):"
+        textViewInput.becomeFirstResponder()
+    }
+    
     func showActionSheetFromPinCell(_ username: String) {
+        textViewInput.resignFirstResponder()
+        if touchToReplyTimer != nil {
+            touchToReplyTimer.invalidate()
+        }
+        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false) 
+    }
+    
+    func cancelTouchToReplyTimerFromPinCell() {
+        textViewInput.resignFirstResponder()
+        if touchToReplyTimer != nil {
+            touchToReplyTimer.invalidate()
+        }
+    }
+    
+    func showActionSheetWithTimer() {
         self.replyToUser = "<a>@\(username)</a> "
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
             self.lblTxtPlaceholder.text = "@\(username):"
+            self.textViewInput.becomeFirstResponder()
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
             self.actionReportThisPin(self.buttonReportOnPinDetail)
@@ -102,34 +124,6 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         menu.addAction(report)
         menu.addAction(cancel)
         self.present(menu, animated: true, completion: nil)
-    }
-    
-//    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) {
-//        if touchToReplyTimer != nil {
-//            touchToReplyTimer.invalidate()
-//        }
-//    }
-    
-    func showActionSheetWithTimer(_ timer: Timer) {
-        if let usernameInfo = timer.userInfo as? Dictionary<String, AnyObject> {
-            let userN = usernameInfo["argumentInt"] as! String
-            self.replyToUser = "<a>@\(userN)</a> "
-            let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-            menu.view.tintColor = UIColor.faeAppRedColor()
-            let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-                self.lblTxtPlaceholder.text = "@\(userN):"
-            }
-            let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-                self.actionReportThisPin(self.buttonReportOnPinDetail)
-            }
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
-                
-            }
-            menu.addAction(writeReply)
-            menu.addAction(report)
-            menu.addAction(cancel)
-            self.present(menu, animated: true, completion: nil)
-        }
     }
 }
 
