@@ -99,11 +99,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imageCurrentAvatar = UIImageView()
-        if userMiniAvatar != nil {
-            imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar!+1)")
-        } else {
-            imageCurrentAvatar.image = UIImage(named: "miniAvatar_1")
-        }
+        imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar+1)")
         self.headerView.addSubview(imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
@@ -160,19 +156,17 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
-        if let miniAvatar = userMiniAvatar {
-            userAvatarMap = "miniAvatar_\(miniAvatar)"
-            updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
-            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully update miniavatar")
-                    self.dismiss(animated: true, completion: nil)
-                }
-                else {
-                    print("Fail to update miniavatar")
-                }
-            })
-        }
+        userAvatarMap = "miniAvatar_\(userMiniAvatar)"
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
+        updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("Successfully update miniavatar")
+                self.dismiss(animated: true, completion: nil)
+            }
+            else {
+                print("Fail to update miniavatar")
+            }
+        })
     }
     
     func changeAvatar(_ sender: UIButton) {
