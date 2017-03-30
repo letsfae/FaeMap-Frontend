@@ -131,7 +131,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     func getSavedPins() {
         let getSavedPinsData = FaeMap()
         getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
-            if status == 200 {
+            if status / 100 == 2 {
                 print("Successfully get saved pins!")
                 self.pinDataArr.removeAll()
                 let PinsOfSavedPinsJSON = JSON(message!)

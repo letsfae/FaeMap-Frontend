@@ -18,6 +18,7 @@ extension PinDetailViewController {
         loadTableHeader()
         loadAnotherToolbar()
         loadPinCtrlButton()
+        loadFeelingBar()
         loadInputToolBar()
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
     }
@@ -25,8 +26,35 @@ extension PinDetailViewController {
     fileprivate func loadFeelingBar() {
         uiviewFeelingBar = UIView()
         self.view.addSubview(uiviewFeelingBar)
-        view.addConstraintsWithFormat("H:|-2-[v0(31)]", options: [], views: btnCommentOption)
-        view.addConstraintsWithFormat("V:[v0(25)]-11-|", options: [], views: btnCommentOption)
+        view.addConstraintsWithFormat("H:|-67-[v0(281)]", options: [], views: uiviewFeelingBar)
+        view.addConstraintsWithFormat("V:|-409-[v0(52)]", options: [], views: uiviewFeelingBar)
+        uiviewFeelingBar.layer.cornerRadius = 26
+        uiviewFeelingBar.backgroundColor = UIColor.white
+        
+        btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_01)
+        btnFeelingBar_01.setImage(#imageLiteral(resourceName: "pdFeeling_01"), for: .normal)
+        btnFeelingBar_01.adjustsImageWhenHighlighted = false
+        
+        btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_02)
+        btnFeelingBar_02.setImage(#imageLiteral(resourceName: "pdFeeling_02"), for: .normal)
+        btnFeelingBar_02.adjustsImageWhenHighlighted = false
+        
+        btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_03)
+        btnFeelingBar_03.setImage(#imageLiteral(resourceName: "pdFeeling_03"), for: .normal)
+        btnFeelingBar_03.adjustsImageWhenHighlighted = false
+        
+        btnFeelingBar_04 = UIButton(frame: CGRect(x: 176, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_04)
+        btnFeelingBar_04.setImage(#imageLiteral(resourceName: "pdFeeling_04"), for: .normal)
+        btnFeelingBar_04.adjustsImageWhenHighlighted = false
+        
+        btnFeelingBar_05 = UIButton(frame: CGRect(x: 228, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_05)
+        btnFeelingBar_05.setImage(#imageLiteral(resourceName: "pdFeeling_05"), for: .normal)
+        btnFeelingBar_05.adjustsImageWhenHighlighted = false
     }
     
     fileprivate func loadInputToolBar() {
