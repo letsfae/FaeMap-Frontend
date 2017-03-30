@@ -9,20 +9,31 @@
 import Foundation
 import SwiftyJSON
 
+extension PinDetailUser: Equatable {
+    static func ==(lhs: PinDetailUser, rhs: PinDetailUser) -> Bool {
+        return lhs.userId == rhs.userId
+    }
+}
+
 struct PinDetailUser {
     
-    let userId: Int
-    let displayName: String
-//    let age: Int?
-//    let gender: Bool?
-//    let isPinOwner: Bool
-//    let profileImage: UIImage
+    var userId: Int
+    var displayName: String
+    var userName: String
+    let showAge: Bool
+    let showGender: Bool
+    let age: String
+    let gender: String
+    var profileImage: UIImage
     
-    init(id: Int, name: String) {
-        self.userId = id
-        self.displayName = name
-//        self.age = age
-//        self.gender = gender
-//        self.profileImage = image
+    init(json: JSON) {
+        self.userId = 0
+        self.displayName = json["nick_name"].stringValue
+        self.userName = ""
+        self.showGender = json["show_gender"].boolValue
+        self.gender = json["gender"].stringValue
+        self.showAge = json["show_age"].boolValue
+        self.age = json["age"].stringValue
+        self.profileImage = UIImage()
     }
 }

@@ -189,10 +189,7 @@ class FaeUser : NSObject {
      */
     func checkUserExistence(_ completion:@escaping (Int, Any?) -> Void){
         if let username = keyValue["user_name"] as? String{
-            getFromURL("existence/user_name/"+username, parameter:keyValue, authentication: nil){ (status: Int, message: Any?) in
-
-//                print(message)
-                //self.clearKeyValue()
+            getFromURL("existence/user_name/"+username, parameter: keyValue, authentication: nil){ (status: Int, message: Any?) in
                 completion(status, message);
             }
         }
@@ -433,8 +430,8 @@ class FaeUser : NSObject {
         }
     }
     
-    func getOthersProfile(_ otherUser:String, completion:@escaping (Int,Any?)->Void){
-        getFromURL("users/"+otherUser+"/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+    func getOthersProfile(_ otherUser: String, completion:@escaping (Int, Any?) -> Void) {
+        getFromURL("users/\(otherUser)/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
             //self.clearKeyValue()
             completion(status, message);
         }

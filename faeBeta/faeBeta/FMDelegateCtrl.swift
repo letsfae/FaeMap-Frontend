@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import RealmSwift
 
 extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
     
@@ -16,7 +17,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
-        updateTimerForAllPins()
+        updateTimerForUserPin()
+        timerSetup()
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
@@ -24,7 +26,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
         print("back from comment pin detail")
-        updateTimerForAllPins()
+        updateTimerForUserPin()
+        timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
@@ -63,7 +66,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
-        updateTimerForAllPins()
+        timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
@@ -71,7 +74,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     // PinMenuDelegate
     func whenDismissPinMenu() {
-        updateTimerForAllPins()
+        timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
@@ -122,6 +125,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
     }
     // LeftSlidingMenuDelegate
     func jumpToFaeUserMainPage() {

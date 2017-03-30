@@ -15,18 +15,13 @@ extension EditCommentPinViewController {
     }
     
     func actionUpdateCommentPinEditing(_ sender: UIButton) {
-        //        if previousCommentContent == textViewUpdateComment.text && newAddedFileIDs =={
-        //            textViewUpdateComment.endEditing(true)
-        //            self.dismiss(animated: true, completion: nil)
-        //        }
-        //        else {
         let updateComment = FaeMap()
         print("[updatePin] \(pinGeoLocation.latitude), \(pinGeoLocation.longitude)")
         updateComment.whereKey("geo_latitude", value: "\(pinGeoLocation.latitude)")
         updateComment.whereKey("geo_longitude", value: "\(pinGeoLocation.longitude)")
         if pinType == "comment" {
             updateComment.whereKey("content", value: textViewUpdateComment.text) //content or description
-        }else if pinType == "media" {
+        } else if pinType == "media" {
             updateComment.whereKey("description", value: textViewUpdateComment.text)
             var fileIdString = ""
             for ID in mediaIdArray {
@@ -38,7 +33,7 @@ extension EditCommentPinViewController {
             }
             updateComment.whereKey("file_ids", value: fileIdString)
             print("newAddedFileIDs: \(fileIdString)")
-        }else if pinType == "chat_room"{
+        } else if pinType == "chat_room"{
             
         }
         updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
@@ -52,7 +47,6 @@ extension EditCommentPinViewController {
                 print("Fail -> Update \(self.pinType)")
             }
         }
-        //}
     }
     func moreOptions(_ sender: UIButton) {
         let editMoreOptions = EditMoreOptionsViewController()

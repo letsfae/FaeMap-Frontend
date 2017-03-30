@@ -76,7 +76,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func loadTableView() {
-        tableView = UITableView(frame: CGRect(x: 0, y: 209, width: screenWidth, height: screenHeight-209))
+        tableView = UITableView(frame: CGRect(x: 0, y: 206, width: screenWidth, height: screenHeight-206))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
@@ -85,7 +85,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func loadAvatarHeader() {
-        headerView = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 145))
+        headerView = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 141))
         self.view.addSubview(headerView)
         
         labelCurrentAvatar = UILabel()
@@ -99,35 +99,21 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imageCurrentAvatar = UIImageView()
-        if userMiniAvatar != nil {
-            imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar!+1)")
-        } else {
-            imageCurrentAvatar.image = UIImage(named: "miniAvatar_1")
-        }
+        imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar+1)")
         self.headerView.addSubview(imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
         self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
         NSLayoutConstraint(item: imageCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
-        let uiviewLine01 = UIView(frame: CGRect(x: 0, y: 122, width: screenWidth, height: 1))
-        uiviewLine01.layer.borderWidth = 1
-        uiviewLine01.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
-        self.headerView.addSubview(uiviewLine01)
-        
         // Gray Block
-        let uiviewGrayBlock = UIView(frame: CGRect(x: 0, y: 123, width: screenWidth, height: 20))
+        let uiviewGrayBlock = UIView(frame: CGRect(x: 0, y: 123, width: screenWidth, height: 12))
         uiviewGrayBlock.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
         self.headerView.addSubview(uiviewGrayBlock)
-        
-        let uiviewLine02 = UIView(frame: CGRect(x: 0, y: 143, width: screenWidth, height: 1))
-        uiviewLine02.layer.borderWidth = 1
-        uiviewLine02.layer.borderColor = UIColor(red: 197/255, green: 196/255, blue: 201/255, alpha: 1.0).cgColor
-        self.headerView.addSubview(uiviewLine02)
     }
     
     //table view delegate function
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 65
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -161,8 +147,6 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         else {
             cell.femaleRedBtn.image = UIImage(named: "unselectedMoodButton")
         }
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
         return cell
     }
     
@@ -172,20 +156,17 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
-        if let miniAvatar = userMiniAvatar {
-            print(miniAvatar)
-            userAvatarMap = "miniAvatar_\(miniAvatar)"
-            updateMiniAvatar.whereKey("mini_avatar", value: "\(miniAvatar-1)")
-            updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully update miniavatar")
-                    self.dismiss(animated: true, completion: nil)
-                }
-                else {
-                    print("Fail to update miniavatar")
-                }
-            })
-        }
+        userAvatarMap = "miniAvatar_\(userMiniAvatar)"
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
+        updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("Successfully update miniavatar")
+                self.dismiss(animated: true, completion: nil)
+            }
+            else {
+                print("Fail to update miniavatar")
+            }
+        })
     }
     
     func changeAvatar(_ sender: UIButton) {

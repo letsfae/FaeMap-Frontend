@@ -17,11 +17,11 @@ extension FaeMapViewController {
             selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
             selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
-                if status/100 == 2 {
-                    print("Successfully renew self position")
+                if status / 100 == 2 {
+//                    print("Successfully renew self position")
                 }
                 else {
-                    print("fail to renew self position")
+                    print("[renewSelfLocation] fail")
                 }
             }
         }
@@ -34,7 +34,6 @@ extension FaeMapViewController {
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton!) {
         invalidateAllTimer()
-        faeMapView.clear()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
         pinMenuVC.currentLatitude = self.currentLatitude
@@ -43,7 +42,6 @@ extension FaeMapViewController {
         self.present(pinMenuVC, animated: false, completion: nil)
     }
     
-    // MARK: Actions for these buttons
     func actionSelfPosition(_ sender: UIButton!) {
         if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
             currentLocation = locManager.location
@@ -53,9 +51,9 @@ extension FaeMapViewController {
             currentLongitude = currentLocation.coordinate.longitude
             self.renewSelfLocation()
             // let curZoomLevel = faeMapView.camera.zoom
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: faeMapView.camera.zoom)
             faeMapView.camera = camera
-            reloadSelfPosAnimation()
+//            reloadSelfPosAnimation()
         }
     }
 }

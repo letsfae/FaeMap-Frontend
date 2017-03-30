@@ -13,7 +13,7 @@ import AVFoundation
 
 func firebaseWelcome() {
     
-    let text = "Hey there! Welcome to Fae Map! Super Happy to see you. We are here to ensure that you have the best experience on our platform. Let us know of any problems you encounter or what we can do to make your experience better. We'll be hitting you up with recommendations, favorite places, cool deals, and surprises from time to time. Feel free to chat with us here about anything. Let's Fae!"
+    let text = "Hey there! Welcome to Fae Map! Super Happy to see you. We are here to ensure that you have the best experience on our platform. Let us know of any problems you encounter or what we can do to make your experience better. We'll be hitting you up with favorite places, recommendations, cool deals, and surprises from time to time. Feel free to chat with us here about anything. Let's Fae!"
     
     let message = OutgoingMessage.init(message : text, senderId : "1", senderName : "Fae Map Crew", date: Date(), status : "Delivered", type : "text", index : 1, hasTimeStamp: true)
     

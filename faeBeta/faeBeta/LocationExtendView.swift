@@ -12,7 +12,7 @@ class LocationExtendView : UIView {
     
     private var dataDic : [String : String] = [:]
     private var imageView : UIImageView!
-    private var buttonCancel : UIButton!
+    var buttonCancel : UIButton!
     private var LabelLine1 : UILabel!
     private var LabelLine2 : UILabel!
     private var LabelLine3 : UILabel!
@@ -27,8 +27,8 @@ class LocationExtendView : UIView {
         // location avatar
         imageView = UIImageView(frame: CGRect(x: 13, y: 10, width: 66, height: 66))
         imageView.image = UIImage(named: "locationExtendViewHolder")
-        imageView.contentMode = .scaleAspectFit
-        //imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         self.addSubview(imageView)
         
         // address label
@@ -55,7 +55,7 @@ class LocationExtendView : UIView {
         buttonCancel = UIButton(frame: CGRect(x: screenWidth - 43, y: 17, width: 16.5, height: 16.5))
         buttonCancel.setImage(UIImage(named : "locationExtendCancel"), for: .normal)
         buttonCancel.adjustsImageWhenHighlighted = false
-        buttonCancel.addTarget(self, action: #selector(self.hiddenSelf), for: .touchUpInside);
+        //buttonCancel.addTarget(self, action: #selector(self.hiddenSelf), for: .touchUpInside);
         self.addSubview(buttonCancel)
         
         let topBorder: CALayer = CALayer()

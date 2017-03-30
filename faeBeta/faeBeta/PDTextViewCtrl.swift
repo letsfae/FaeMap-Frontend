@@ -39,15 +39,15 @@ extension PinDetailViewController: UITextViewDelegate {
             if numLines <= numlineOnDevice {
                 let txtHeight = ceil(textView.contentSize.height)
                 textView.frame.size.height = txtHeight
-                uiviewToolBar.frame.size.height = txtHeight + 66
-                uiviewToolBar.frame.origin.y = screenHeight - txtHeight - 66 - keyboardHeight
-                tableCommentsForPin.frame.size.height = screenHeight - txtHeight - 66 - 65 - keyboardHeight
+                uiviewToolBar.frame.size.height = txtHeight + 26
+                uiviewToolBar.frame.origin.y = screenHeight - txtHeight - 26 - keyboardHeight
+                tableCommentsForPin.frame.size.height = screenHeight - txtHeight - 26 - 65 - keyboardHeight
                 textView.setContentOffset(CGPoint.zero, animated: false)
             } else {
                 textView.frame.size.height = 98
-                uiviewToolBar.frame.size.height = 164
-                uiviewToolBar.frame.origin.y = screenHeight - 164 - keyboardHeight
-                tableCommentsForPin.frame.size.height = screenHeight - 164 - 65 - keyboardHeight
+                uiviewToolBar.frame.size.height = 124
+                uiviewToolBar.frame.origin.y = screenHeight - 124 - keyboardHeight
+                tableCommentsForPin.frame.size.height = screenHeight - 124 - 65 - keyboardHeight
             }
         }
     }

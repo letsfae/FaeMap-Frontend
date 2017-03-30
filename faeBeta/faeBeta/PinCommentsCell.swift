@@ -10,17 +10,17 @@ import UIKit
 import SwiftyJSON
 
 protocol PinCommentsCellDelegate: class {
-    func showActionSheetFromPinCell(_ username: String) // Reply to this user
-//    func cancelTouchToReplyTimerFromPinCell(_ cancel: Bool) // CancelTimerForTouchingCell
+    func directReplyFromPinCell(_ username: String) // Reply to this user
+    func showActionSheetFromPinCell(_ username: String)
+    func cancelTouchToReplyTimerFromPinCell() // CancelTimerForTouchingCell
     func showFullCellImage(_ image: UIImage)
 }
 
-class PinCommentsCell: UITableViewCell, UITextViewDelegate {
+class PinCommentsCell: UITableViewCell {
     
     weak var delegate: PinCommentsCellDelegate?
+    var uiviewCell: UIButton!
     var imgAvatar: UIImageView!
-    var imgSticker: UIImageView!
-    var imgPicture: UIImageView!
     var lblUsername: UILabel!
     var lblTime: UILabel!
     var lblVoteCount: UILabel!
@@ -30,78 +30,29 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
     var btnDownVote: UIButton!
     var btnReply: UIButton!
     var pinID = ""
-//    var isSticker = false
-//    var isImage = false
-    
-//    var commentConstraint = [NSLayoutConstraint]()
-//    var stickerConstraint = [NSLayoutConstraint]()
-//    var imageConstraint = [NSLayoutConstraint]()
-    
     var voteType: String = "null"    
     var pinType = ""
     var pinCommentID = ""
-//    var userId = "" {
-//        didSet {
-//            self.updateUI()
-//        }
-//    }
-//    var displayName = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.separatorInset = UIEdgeInsets.zero
         self.layoutMargins = UIEdgeInsets.zero
         loadCellContent()
-//        commentConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
-//        stickerConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(50)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgSticker, lblVoteCount)
-//        imageConstraint = returnConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1(100)]-13-[v2(22)]-16-|", options: [], views: imgAvatar, imgPicture, lblVoteCount)
-//        addConstraints(commentConstraint)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func updateUI() {
-//        let getUser = FaeUser()
-//        getUser.getNamecardOfSpecificUser(userId, completion: { (status, message) in
-//            if status / 100 != 2 {
-//                print("[getNamecardOfSpecificUser] fail to get user")
-//            } else {
-//                let userJSON = JSON(message!)
-//                let displayName = userJSON["nick_name"].stringValue
-//                self.lblUsername.text = displayName
-////                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayNameDidLoad"), object: self)
-//            }
-//        })
-//    }
-    
-//    func updateLayout() {
-//        if isSticker {
-//            removeConstraints(commentConstraint)
-//            removeConstraints(imageConstraint)
-//            addConstraints(stickerConstraint)
-//            imgSticker.isHidden = false
-//            imgPicture.isHidden = true
-//            lblContent.isHidden = true
-//        } else if isImage {
-//            removeConstraints(commentConstraint)
-//            removeConstraints(stickerConstraint)
-//            addConstraints(imageConstraint)
-//            imgSticker.isHidden = true
-//            imgPicture.isHidden = false
-//            lblContent.isHidden = true
-//        } else {
-//            removeConstraints(imageConstraint)
-//            removeConstraints(stickerConstraint)
-//            addConstraints(commentConstraint)
-//            imgSticker.isHidden = true
-//            imgPicture.isHidden = true
-//            lblContent.isHidden = false
-//        }
-//    }
-    
-    func loadCellContent() {
+    fileprivate func loadCellContent() {
+        
+        uiviewCell = UIButton()
+        addSubview(uiviewCell)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewCell)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewCell)
+        uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
+        uiviewCell.addTarget(self, action: #selector(self.cancelActionSheet(_:)), for: [.touchUpInside, .touchUpOutside])
         
         imgAvatar = UIImageView()
         addSubview(imgAvatar)
@@ -109,21 +60,6 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = .scaleAspectFill
         addConstraintsWithFormat("H:|-15-[v0(39)]", options: [], views: imgAvatar)
-        
-        imgSticker = UIImageView()
-        addSubview(imgSticker)
-        imgSticker.clipsToBounds = true
-        imgSticker.contentMode = .scaleAspectFit
-        addConstraintsWithFormat("H:|-27-[v0(100)]", options: [], views: imgSticker)
-        
-        imgPicture = UIImageView()
-        addSubview(imgPicture)
-        imgPicture.layer.cornerRadius = 5
-        imgPicture.clipsToBounds = true
-        imgPicture.contentMode = .scaleAspectFit
-        addConstraintsWithFormat("H:|-27-[v0(100)]", options: [], views: imgPicture)
-//        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
-//        imgPicture.addGestureRecognizer(tapRecognizer)
         
         lblContent = UILabel()
         addSubview(lblContent)
@@ -173,7 +109,7 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         // Add Comment
         btnReply = UIButton()
         btnReply.setImage(#imageLiteral(resourceName: "pinCommentReply"), for: UIControlState())
-        btnReply.addTarget(self, action: #selector(showActionSheet(_:)), for: .touchUpInside)
+        btnReply.addTarget(self, action: #selector(directReply(_:)), for: .touchUpInside)
         addSubview(btnReply)
         addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: btnReply)
         
@@ -184,16 +120,20 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
         addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnReply)
     }
     
+    func directReply(_ sender: UIButton) {
+        if let username = lblUsername.text {
+            delegate?.directReplyFromPinCell(username)
+        }
+    }
+    
     func showActionSheet(_ sender: UIButton) {
         if let username = lblUsername.text {
             delegate?.showActionSheetFromPinCell(username)
         }
     }
     
-    func openThisMedia(_ sender: UIGestureRecognizer) {
-        if imgPicture.image != nil {
-            delegate?.showFullCellImage(imgPicture.image!)
-        }
+    func cancelActionSheet(_ sender: UIButton) {
+        delegate?.cancelTouchToReplyTimerFromPinCell()
     }
     
     func upVoteThisComment(_ sender: UIButton) {
@@ -309,8 +249,4 @@ class PinCommentsCell: UITableViewCell, UITextViewDelegate {
             }
         }
     }
-    
-    //    func cancelTouchToReplyTimer(_ sender: UIButton) {
-    //        delegate?.cancelTouchToReplyTimerFromPinCell(true)
-    //    }
 }

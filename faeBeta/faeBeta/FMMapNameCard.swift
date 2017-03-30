@@ -14,8 +14,20 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func animateNameCard() {
+        self.imageUserGender.isHidden = true
+        self.lblUserAge.isHidden = true
+        self.labelDisplayName.isHidden = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            if self.imageUserGender.image != nil {
+                self.imageUserGender.isHidden = false
+            }
+            if self.lblUserAge.text != nil {
+                self.lblUserAge.isHidden = false
+            }
+            self.labelDisplayName.isHidden = false
+        })
         let targetFrame = CGRect(x: 73, y: 158, width: 268, height: 293)
-        UIView.animate(withDuration: 0.8, delay: 0.1, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.buttonFakeTransparentClosingView.alpha = 1
             self.imageBackground.frame = targetFrame
             self.imageCover.frame = CGRect(x: 73, y: 158, width: 268, height: 125)
@@ -59,11 +71,10 @@ extension FaeMapViewController {
             }
             if sender.tag == 1 || sender == self.buttonClosingOptionsInNameCard {
                 self.buttonOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
-                self.buttonClosingOptionsInNameCard.isHidden = true
                 sender.tag = 0
-                let subviewXBefore: CGFloat = 243 / 414 * screenWidth
-                let subviewYBefore: CGFloat = 151 / 414 * screenWidth
-                let buttonY: CGFloat = 191 / 414 * screenWidth
+                let subviewXBefore: CGFloat = 243 * screenWidthFactor
+                let subviewYBefore: CGFloat = 151 * screenWidthFactor
+                let buttonY: CGFloat = 191 * screenWidthFactor
                 self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
                 self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
                 self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
@@ -71,12 +82,15 @@ extension FaeMapViewController {
                 self.shareNameCard.alpha = 0
                 self.editNameCard.alpha = 0
                 self.reportNameCard.alpha = 0
+                self.buttonClosingOptionsInNameCard.alpha = 0
             }
         }), completion: {(done: Bool) in
-            self.canDoNextUserUpdate = true
-            self.uiviewUserGender.isHidden = true
-            self.imageUserGender.image = nil
-            self.lblUserAge.text = nil
+            if sender == self.buttonFakeTransparentClosingView {
+                self.canDoNextUserUpdate = true
+                self.uiviewUserGender.isHidden = true
+                self.imageUserGender.image = nil
+                self.lblUserAge.text = nil
+            }
         })
     }
     
@@ -199,7 +213,7 @@ extension FaeMapViewController {
         buttonClosingOptionsInNameCard = UIButton(frame: CGRect(x: 73, y: 158, width: 268, height: 293))
         buttonClosingOptionsInNameCard.layer.zPosition = 920
         self.view.addSubview(buttonClosingOptionsInNameCard)
-        buttonClosingOptionsInNameCard.isHidden = true
+        buttonClosingOptionsInNameCard.alpha = 0
         buttonClosingOptionsInNameCard.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
     }
     
@@ -290,7 +304,7 @@ extension FaeMapViewController {
     }
     
     func buttonChatAction(_ sender: UIButton) {
-        hideNameCard(UIButton())
+        hideNameCard(buttonFakeTransparentClosingView)
         let withUserId: NSNumber = NSNumber(value: sender.tag)
         //First get chatroom id
         getFromURL("chats/users/\(user_id.stringValue)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
@@ -326,7 +340,7 @@ extension FaeMapViewController {
     }
     
     func showNameCardOptions(_ sender: UIButton) {
-        buttonClosingOptionsInNameCard.isHidden = false
+        buttonClosingOptionsInNameCard.alpha = 1
         buttonFakeTransparentClosingView.tag = 1
         var thisIsMe = false
         if sender.tag == Int(user_id) {
@@ -399,11 +413,12 @@ extension FaeMapViewController {
         else {
             return
         }
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+0.0012, longitude: currentLongitude, zoom: 17)
+        let zoomLv = faeMapView.camera.zoom
+        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
+                                              longitude: currentLongitude, zoom: zoomLv)
         faeMapView.animate (to: camera)
-        UIView.animate(withDuration: 0.25, animations: {
-            self.buttonFakeTransparentClosingView.alpha = 1
-        })
+        animateNameCard()
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
             if status / 100 == 2 {

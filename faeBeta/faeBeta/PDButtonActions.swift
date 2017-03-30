@@ -13,19 +13,67 @@ import SwiftyJSON
 
 extension PinDetailViewController {
     
+    func actionDoAnony() {
+        switchAnony.setOn(!switchAnony.isOn, animated: true)
+    }
+
+    // Animation of the red sliding line
+    func animationRedSlidingLine(_ sender: UIButton) {
+        if sender.tag == 1 {
+            tableMode = .talktalk
+        } else if sender.tag == 3 {
+            tableMode = .feelings
+        } else if sender.tag == 5 {
+            tableMode = .people
+        }
+        endEdit()
+        tableCommentsForPin.reloadData()
+        let tag = CGFloat(sender.tag)
+        let centerAtOneSix = screenWidth / 6
+        let targetCenter = CGFloat(tag * centerAtOneSix)
+        UIView.animate(withDuration: 0.25, animations:({
+            self.uiviewRedSlidingLine.center.x = targetCenter
+            self.anotherRedSlidingLine.center.x = targetCenter
+        }), completion: { (done: Bool) in
+            if done {
+                
+            }
+        })
+    }
+    
     func endEdit() {
-        buttonKeyBoard.tag = 0
-        buttonKeyBoard.isHidden = false
-        buttonSticker.isHidden = true
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
         self.emojiView.tag = 0
         if buttonPinAddComment.tag == 1 {
             UIView.animate(withDuration: 0.3) {
                 self.emojiView.frame.origin.y = screenHeight
-                self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
-                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height
-                self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                if self.uiviewAnonymous.isHidden {
+                    if self.tableMode == .talktalk {
+                        self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height
+                        self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                        self.uiviewAnonymous.frame.origin.y = screenHeight - 51
+                    } else {
+                        self.tableCommentsForPin.frame.size.height = screenHeight - 65
+                        self.draggingButtonSubview.frame.origin.y = screenHeight
+                        self.uiviewToolBar.frame.origin.y = screenHeight
+                        self.uiviewAnonymous.frame.origin.y = screenHeight
+                    }
+                    
+                } else {
+                    if self.tableMode == .talktalk {
+                        self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 51
+                        self.draggingButtonSubview.frame.origin.y = screenHeight - 51
+                        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
+                        self.uiviewAnonymous.frame.origin.y = screenHeight - 51
+                    } else {
+                        self.tableCommentsForPin.frame.size.height = screenHeight - 65
+                        self.draggingButtonSubview.frame.origin.y = screenHeight
+                        self.uiviewToolBar.frame.origin.y = screenHeight
+                        self.uiviewAnonymous.frame.origin.y = screenHeight
+                    }
+                }
             }
         }
     }
@@ -34,21 +82,32 @@ extension PinDetailViewController {
         endEdit()
     }
     
+    func actionShowHideAnony(_ sender: UIButton) {
+        if sender == btnCommentOption {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - 51 - keyboardHeight
+            self.draggingButtonSubview.frame.origin.y = screenHeight - 51 - keyboardHeight
+            uiviewAnonymous.isHidden = false
+            uiviewToolBar.isHidden = true
+        } else if sender == btnHideAnony {
+            self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - keyboardHeight
+            self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - keyboardHeight
+            uiviewAnonymous.isHidden = true
+            uiviewToolBar.isHidden = false
+        }
+    }
+    
     func actionSwitchKeyboard(_ sender: UIButton) {
-        if sender == buttonKeyBoard {
+        if emojiView.tag == 1 {
             textViewInput.becomeFirstResponder()
             actionHideEmojiView()
-            buttonKeyBoard.isHidden = true
-            buttonSticker.isHidden = false
         } else {
             textViewInput.resignFirstResponder()
             actionShowEmojiView()
-            buttonKeyBoard.isHidden = false
-            buttonSticker.isHidden = true
         }
     }
     
     private func actionShowEmojiView() {
+        buttonSticker.setImage(#imageLiteral(resourceName: "stickerChosen"), for: .normal)
         self.emojiView.tag = 1
         self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
         UIView.animate(withDuration: 0.3) { 
@@ -58,7 +117,8 @@ extension PinDetailViewController {
         }
     }
     
-    private func actionHideEmojiView() {
+    func actionHideEmojiView() {
+        buttonSticker.setImage(#imageLiteral(resourceName: "sticker"), for: .normal)
         self.emojiView.tag = 0
         UIView.animate(withDuration: 0.3) {
             self.emojiView.frame.origin.y = screenHeight
@@ -178,13 +238,11 @@ extension PinDetailViewController {
             replyToUser = ""
             lblTxtPlaceholder.text = "Write a Comment..."
             endEdit()
-            sender.tag = 0
             buttonPinDetailDragToLargeSize.tag = 0
             buttonPinAddComment.tag = 0
             buttonPinBackToMap.tag = 1
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
-            buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
             UIView.animate(withDuration: 0.5, animations: ({
                 self.buttonBackToPinLists.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
@@ -212,21 +270,12 @@ extension PinDetailViewController {
                     }
                 })
             }
-//            toolBarExtendView.isHidden = true
             return
         }
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
-        buttonPinAddComment.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsFull"), for: .normal)
-        if buttonPinDetailDragToLargeSize.tag == 1 {
-            UIView.animate(withDuration: 0.5, animations: ({
-                let toolbarHeight = self.uiviewToolBar.frame.size.height
-                self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
-                self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
-                self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
-                self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
-            }), completion: { (done: Bool) in
-            })
+        if buttonPinDetailDragToLargeSize.tag == 1 && sender == buttonPinAddComment {
+            self.textViewInput.becomeFirstResponder()
             return
         }
         readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
@@ -279,6 +328,9 @@ extension PinDetailViewController {
         }), completion: { (done: Bool) in
             if done {
                 self.tableCommentsForPin.reloadData()
+                if sender == self.buttonPinAddComment {
+                    self.textViewInput.becomeFirstResponder()
+                }
             }
         })
     }
@@ -369,23 +421,5 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.reloadData()
             }
         })
-    }
-    
-    func actionShowActionSheet(_ username: String) {
-        let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-        menu.view.tintColor = UIColor.faeAppRedColor()
-        let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-//            self.inputToolbar.contentView.textView.text = "@\(username) "
-        }
-        let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-            self.actionReportThisPin(self.buttonReportOnPinDetail)
-        }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
-            
-        }
-        menu.addAction(writeReply)
-        menu.addAction(report)
-        menu.addAction(cancel)
-        self.present(menu, animated: true, completion: nil)
     }
 }

@@ -131,7 +131,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         viewPopUp.isHidden = true
         
         buttonShare = UIButton(frame: CGRect(x:26, y: 30, width: 40, height: 51))
-        buttonShare.setImage(UIImage(named: "map_namecard_share"), for: UIControlState())
+        buttonShare.setImage(UIImage(named: "buttonShareOnCommentDetail"), for: UIControlState())
         buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), for: .touchUpInside)
         
         buttonSave = UIButton(frame: CGRect(x:91, y: 30, width: 44, height: 51))
@@ -158,8 +158,8 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         self.view.addSubview(buttonMiddleRight)
         
         buttonTopRight = UIButton(frame: CGRect(x:screenWidth-15-31, y: 26, width: 30, height: 30))
-        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for: UIControlState())
-        buttonTopRight.setImage(UIImage(named: "chat_map_topRight")!, for: .highlighted)
+        buttonTopRight.setImage(UIImage(named: "mainScreenMore")!, for: UIControlState())
+        buttonTopRight.setImage(UIImage(named: "mainScreenMore")!, for: .highlighted)
         buttonTopRight.addTarget(self, action: #selector(buttonTopRightAction(_:)), for: .touchUpInside)
         self.view.addSubview(buttonTopRight)
         

@@ -14,7 +14,7 @@ extension PinDetailViewController: UIScrollViewDelegate {
         if scrollView == tableCommentsForPin {
 //            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
             if self.controlBoard != nil {
-                self.controlBoard.isHidden = tableCommentsForPin.contentOffset.y < 227
+                self.controlBoard.isHidden = tableCommentsForPin.contentOffset.y < 232
             }
         }
     }

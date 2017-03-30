@@ -10,13 +10,6 @@ import UIKit
 
 class FaeMap {
     
-    class var shared: FaeMap {
-        struct Singleton {
-            static let instance = FaeMap()
-        }
-        return Singleton.instance
-    }
-    
     var keyValue = [String:AnyObject]()
     func whereKey(_ key: String, value: String?) -> Void {
         keyValue[key] = value as AnyObject?

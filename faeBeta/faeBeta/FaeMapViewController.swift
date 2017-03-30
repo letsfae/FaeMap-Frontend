@@ -213,6 +213,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var referrenceCount = 0
     var canDoNextMapPinUpdate = true
+    var canDoNextPlacePinUpdate = true
     
     // System Functions
     override func viewDidLoad() {
@@ -230,7 +231,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
-        loadSelfMarker()
+        loadSelfMarkerSubview()
+        reloadSelfMarker()
         didLoadFirstLoad = true
     }
 
@@ -247,19 +249,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         renewSelfLocation()
-        
         animateMapFilterArrow()
         filterCircleAnimation()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-        
         checkFirstLoginInRealm()
-        
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
-        updateGenderAge.whereKey("show_age", value: "false")
+        updateGenderAge.whereKey("show_age", value: "true")
         updateGenderAge.updateNameCard { (status, message) in
             if status / 100 == 2 {
                 print("[showGenderAge] Successfully update namecard")
@@ -267,6 +264,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 print("[showGenderAge] Fail to update namecard")
             }
         }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -286,40 +284,62 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
-    func openedPinListSetup() {
+    fileprivate func openedPinListSetup() {
         let emptyArrayList = [String]()
         self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
     }
     
-    func filterAndYelpSetup() {
+    fileprivate func filterAndYelpSetup() {
         checkFilterShowAll(btnMFilterShowAll)
         yelpQuery.setCatagoryToAll()
     }
     
     func timerSetup() {
+        invalidateAllTimer()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
-        timerUpdateSelfLocation.invalidate()
-        timerLoadRegionPins.invalidate()
-        timerLoadRegionPlacePins.invalidate()
+        if timerLoadRegionPins != nil {
+            timerLoadRegionPins.invalidate()
+        }
+        if timerUpdateSelfLocation != nil {
+            timerUpdateSelfLocation.invalidate()
+        }
+        if timerLoadRegionPlacePins != nil {
+            timerLoadRegionPlacePins.invalidate()
+        }
     }
     
     func isFirstTimeLogin(_ notification: NSNotification) {
         print("[isFirstTimeLogin] yes it is")
         loadFirstLoginVC()
+        if let gender = userUserGender {
+            if gender == "female" {
+                let updateMiniAvatar = FaeUser()
+                self.selfMarkerIcon.image = UIImage(named: "miniAvatar_19")
+                updateMiniAvatar.whereKey("mini_avatar", value: "18")
+                updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        print("Successfully update miniavatar")
+                    }
+                    else {
+                        print("Fail to update miniavatar")
+                    }
+                })
+            }
+        }
     }
     
-    func loadFirstLoginVC() {
+    fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         self.present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
-    func checkFirstLoginInRealm() {
+    fileprivate func checkFirstLoginInRealm() {
         if user_id != nil {
             let realm = try! Realm()
             if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
@@ -332,7 +352,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     // Check if location is enabled
-    func checkLocationEnablibity() {
+    fileprivate func checkLocationEnablibity() {
         if CLLocationManager.authorizationStatus() == .notDetermined {
             print("Not Authorised")
             self.locManager.requestAlwaysAuthorization()
@@ -345,7 +365,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func updateTimerForAllPins() {
         self.updateTimerForLoadRegionPin()
-        self.updateTimerForSelfLoc()
+        self.updateTimerForUserPin()
         self.updateTimerForLoadRegionPlacePin()
     }
     
@@ -362,10 +382,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
             subviewSelfMarker.isHidden = false
-            loadSelfMarker()
+            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
             subviewSelfMarker.isHidden = true
+            faeMapView.isMyLocationEnabled = true
         }
     }
     
@@ -388,7 +409,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     // MARK: -- Load Navigation Items
-    func loadTransparentNavBarItems() {
+    fileprivate func loadTransparentNavBarItems() {
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
         self.navigationController?.navigationBar.isHidden = true
@@ -399,9 +420,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
-        
         if users {
-            self.updateTimerForSelfLoc()
+            self.updateTimerForUserPin()
         }
         if pins {
             self.updateTimerForLoadRegionPin()
@@ -418,7 +438,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 15)
+            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
             self.faeMapView.camera = camera
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)

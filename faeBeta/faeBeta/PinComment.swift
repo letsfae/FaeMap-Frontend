@@ -22,15 +22,17 @@ struct PinComment {
     let isImage: Bool
     let attributedText: NSAttributedString?
     var profileImage: UIImage
+    let anonymous: Bool
     
     init(json: JSON) {
         self.commentId = json["pin_comment_id"].intValue
         self.userId = json["user_id"].intValue
-        self.displayName = ""
+        self.displayName = json["nick_name"].stringValue
         self.date = json["created_at"].stringValue.formatFaeDate()
         self.numVoteCount = json["vote_up_count"].intValue - json["vote_down_count"].intValue
         self.voteType = json["pin_comment_operations"]["vote"].stringValue
         self.profileImage = UIImage()
+        self.anonymous = json["anonymous"].boolValue
         let contentJson = json["content"].stringValue
         if let stickerName = contentJson.getFaeStickerName() {
             self.content = stickerName

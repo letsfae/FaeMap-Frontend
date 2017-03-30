@@ -122,11 +122,11 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
     func textFieldDidChange(_ textField: UITextField) {
-        if isUsernameField {
-            if textfield.text != nil {
-                textfield.text = textField.text!.lowercased()
-            }
-        }
+//        if isUsernameField {
+//            if textfield.text != nil {
+//                textfield.text = textField.text!.lowercased()
+//            }
+//        }
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
     }
     
@@ -141,6 +141,13 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if isUsernameField {
+            let set = NSCharacterSet(charactersIn: "ABCDEFGHIJKLMONPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-.").inverted
+            let isValid = string.rangeOfCharacter(from: set) == nil
+            if !isValid {
+                return false
+            }
+        }
         let currentCharacterCount = textField.text?.characters.count ?? 0
         if (range.length + range.location > currentCharacterCount) {
             return false
