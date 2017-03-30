@@ -27,34 +27,45 @@ extension PinDetailViewController {
         uiviewFeelingBar = UIView()
         self.view.addSubview(uiviewFeelingBar)
         view.addConstraintsWithFormat("H:|-67-[v0(281)]", options: [], views: uiviewFeelingBar)
-        view.addConstraintsWithFormat("V:|-409-[v0(52)]", options: [], views: uiviewFeelingBar)
+        view.addConstraintsWithFormat("V:|-(\(409 * screenHeightFactor))-[v0(52)]", options: [], views: uiviewFeelingBar)
         uiviewFeelingBar.layer.cornerRadius = 26
         uiviewFeelingBar.backgroundColor = UIColor.white
+        uiviewFeelingBar.alpha = 0
         
         btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
         uiviewFeelingBar.addSubview(btnFeelingBar_01)
         btnFeelingBar_01.setImage(#imageLiteral(resourceName: "pdFeeling_01"), for: .normal)
         btnFeelingBar_01.adjustsImageWhenHighlighted = false
+        btnFeelingBar_01.tag = 0
+        btnFeelingBar_01.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
         uiviewFeelingBar.addSubview(btnFeelingBar_02)
         btnFeelingBar_02.setImage(#imageLiteral(resourceName: "pdFeeling_02"), for: .normal)
         btnFeelingBar_02.adjustsImageWhenHighlighted = false
+        btnFeelingBar_02.tag = 1
+        btnFeelingBar_02.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
         uiviewFeelingBar.addSubview(btnFeelingBar_03)
         btnFeelingBar_03.setImage(#imageLiteral(resourceName: "pdFeeling_03"), for: .normal)
         btnFeelingBar_03.adjustsImageWhenHighlighted = false
+        btnFeelingBar_03.tag = 2
+        btnFeelingBar_03.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingBar_04 = UIButton(frame: CGRect(x: 176, y: 11, width: 32, height: 32))
         uiviewFeelingBar.addSubview(btnFeelingBar_04)
         btnFeelingBar_04.setImage(#imageLiteral(resourceName: "pdFeeling_04"), for: .normal)
         btnFeelingBar_04.adjustsImageWhenHighlighted = false
+        btnFeelingBar_04.tag = 3
+        btnFeelingBar_04.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingBar_05 = UIButton(frame: CGRect(x: 228, y: 11, width: 32, height: 32))
         uiviewFeelingBar.addSubview(btnFeelingBar_05)
         btnFeelingBar_05.setImage(#imageLiteral(resourceName: "pdFeeling_05"), for: .normal)
         btnFeelingBar_05.adjustsImageWhenHighlighted = false
+        btnFeelingBar_05.tag = 4
+        btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
     }
     
     fileprivate func loadInputToolBar() {
@@ -573,7 +584,7 @@ extension PinDetailViewController {
         buttonPrevPin.alpha = 0
         self.view.addSubview(buttonPrevPin)
         
-        buttonNextPin = UIButton(frame: CGRect(x: 399, y: 477 * screenHeightFactor, width: 52, height: 52))
+        buttonNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
         buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         buttonNextPin.layer.zPosition = 60
         buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
@@ -582,7 +593,5 @@ extension PinDetailViewController {
         buttonNextPin.layer.shadowRadius = 3.0
         buttonNextPin.alpha = 0
         self.view.addSubview(buttonNextPin)
-        self.view.addConstraintsWithFormat("H:[v0(52)]-15-|", options: [], views: buttonNextPin)
-        self.view.addConstraintsWithFormat("V:|-477-[v0(52)]", options: [], views: buttonNextPin)
     }
 }

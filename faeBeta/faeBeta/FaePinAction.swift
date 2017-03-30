@@ -20,6 +20,16 @@ class FaePinAction : NSObject {
         self.keyValue = [String: AnyObject]()
     }
     
+    // Post feeling to this pin
+    func postFeelingToPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
+        if pinID != nil && type != nil {
+            postToURL("pins/"+type!+"/"+pinID!+"/feeling/", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
     // Comment this pin
     func commentThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         postToURL("pins/"+type!+"/"+pinID!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
@@ -38,7 +48,7 @@ class FaePinAction : NSObject {
     
     // Unlike this pin
     func unlikeThisPin(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
-        if pinID != nil{
+        if pinID != nil {
             deleteFromURL("pins/"+type!+"/"+pinID!+"/like", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)

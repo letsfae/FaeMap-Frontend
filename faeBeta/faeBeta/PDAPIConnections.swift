@@ -13,6 +13,114 @@ import RealmSwift
 
 extension PinDetailViewController {
     
+    func getPinInfo() {
+        self.buttonBackToPinLists.isEnabled = false
+        let getPinById = FaeMap()
+        getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
+            let pinInfoJSON = JSON(message!)
+            // Time
+            self.labelPinTimestamp.text = pinInfoJSON["created_at"].stringValue.formatFaeDate()
+            // Check if pin is mine
+            if let userid = pinInfoJSON["user_id"].int {
+                if userid == Int(user_id) {
+                    self.thisIsMyPin = true
+                } else {
+                    self.thisIsMyPin = false
+                }
+            }
+            // Feelings
+            self.feelingArray.removeAll()
+            let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
+            for feeling in feelings {
+                if feeling != nil {
+                    self.feelingArray.append(feeling!)
+                }
+            }
+            if self.tableMode == .feelings {
+                self.tableCommentsForPin.reloadData()
+            }
+            // Images
+            if self.pinTypeEnum == .media {
+                self.fileIdArray.removeAll()
+                let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.stringValue)})
+                for fileID in fileIDs {
+                    if fileID != nil {
+                        self.fileIdArray.append(fileID!)
+                    }
+                }
+                self.loadMedias()
+                self.stringPlainTextViewTxt = pinInfoJSON["description"].stringValue
+                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
+            } else if self.pinTypeEnum == .comment {
+                self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
+                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
+            }
+            // Liked or not
+            if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
+                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
+                self.buttonPinLike.tag = 0
+                if self.animatingHeart != nil {
+                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
+                }
+            } else {
+                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
+                self.buttonPinLike.tag = 1
+                if self.animatingHeart != nil {
+                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+                }
+            }
+            // Saved or not
+            if !pinInfoJSON["user_pin_operations"]["is_saved"].boolValue {
+                self.isSavedByMe = false
+                self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
+            } else {
+                self.isSavedByMe = true
+                self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
+            }
+            // Get nick name
+            if pinInfoJSON["anonymous"].boolValue {
+                self.labelPinUserName.text = "Someone"
+            } else {
+                self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
+            }
+            // Get avatar
+            if let pinUserId = pinInfoJSON["user_id"].int {
+                let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
+                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.imagePinUserAvatar.alpha = 1
+                    })
+                })
+            }
+        }
+    }
+    
+    func postFeeling(_ sender: UIButton) {
+        let postFeeling = FaePinAction()
+        postFeeling.whereKey("feeling", value: "\(sender.tag)")
+        postFeeling.postFeelingToPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
+            if status / 100 != 2 {
+                return
+            }
+            let xOffset = Int(sender.tag * 52 + 12)
+            sender.frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+            let getPinById = FaeMap()
+            getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+                let pinInfoJSON = JSON(message!)
+                self.feelingArray.removeAll()
+                let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
+                for feeling in feelings {
+                    if feeling != nil {
+                        self.feelingArray.append(feeling!)
+                    }
+                }
+                if self.tableMode == .feelings {
+                    self.tableCommentsForPin.reloadData()
+                }
+            }
+        }
+    }
+    
     func getSeveralInfo() {
         getPinAttributeNum("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
         getPinInfo()
@@ -172,71 +280,6 @@ extension PinDetailViewController {
         })
     }
     
-    func getPinInfo() {
-        self.buttonBackToPinLists.isEnabled = false
-        let getPinById = FaeMap()
-        getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: pinIDPinDetailView) {(status: Int, message: Any?) in
-            let pinInfoJSON = JSON(message!)
-            self.labelPinTimestamp.text = pinInfoJSON["created_at"].stringValue.formatFaeDate()
-            if let userid = pinInfoJSON["user_id"].int {
-                if userid == Int(user_id) {
-                    self.thisIsMyPin = true
-                } else {
-                    self.thisIsMyPin = false
-                }
-            }
-            if self.pinTypeEnum == .media {
-                self.fileIdArray.removeAll()
-                let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.string!)})
-                for fileID in fileIDs {
-                    if fileID != nil {
-                        self.fileIdArray.append(fileID!)
-                    }
-                }
-                self.loadMedias()
-                self.stringPlainTextViewTxt = pinInfoJSON["description"].stringValue
-                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
-            } else if self.pinTypeEnum == .comment {
-                self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
-                self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
-            }
-            if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
-                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
-                self.buttonPinLike.tag = 0
-                if self.animatingHeart != nil {
-                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
-                }
-            } else {
-                self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-                self.buttonPinLike.tag = 1
-                if self.animatingHeart != nil {
-                    self.animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
-                }
-            }
-            if !pinInfoJSON["user_pin_operations"]["is_saved"].boolValue {
-                self.isSavedByMe = false
-                self.imageViewSaved.image = #imageLiteral(resourceName: "pinUnsaved")
-            } else {
-                self.isSavedByMe = true
-                self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
-            }
-            
-            if pinInfoJSON["anonymous"].boolValue {
-                self.labelPinUserName.text = "Someone"
-            } else {
-                self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
-            }
-            if let pinUserId = pinInfoJSON["user_id"].int {
-                let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
-                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.imagePinUserAvatar.alpha = 1
-                    })
-                })
-            }
-        }
-    }
-    
     func checkPinStatus() {
         if pinStatus == "new" {
             let realm = try! Realm()
@@ -252,27 +295,6 @@ extension PinDetailViewController {
                 }
             }
             self.delegate?.changeIconImage(marker: pinMarker, type: "\(pinTypeEnum)", status: "normal")
-        }
-    }
-    
-    func uploadingFile(image: UIImage) {
-        let imgData = UIImageJPEGRepresentation(image, 0.1) as NSData?
-        let imgNew = UIImage.sd_image(with: imgData as Data!)
-        let mediaImage = FaeImage()
-        mediaImage.type = "image"
-        mediaImage.image = imgNew
-        mediaImage.faeUploadFile { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                print("[uploadingFile] Successfully upload Image File")
-                let fileIDJSON = JSON(message!)
-                if let file_Id = fileIDJSON["file_id"].int {
-                    self.sendMessage("<faeImg>\(file_Id)</faeImg>")
-                    self.buttonSend.isEnabled = false
-                    self.buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
-                }
-            } else {
-                print("[uploadingFile] Fail to upload Image File")
-            }
         }
     }
     

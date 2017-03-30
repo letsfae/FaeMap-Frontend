@@ -8,8 +8,36 @@
 
 import UIKit
 import CoreLocation
+import SwiftyJSON
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
+    
+    // PinFeelingCellDelegate
+    func postFeelingFromFeelingCell(_ feeling: String) {
+        let postFeeling = FaePinAction()
+        postFeeling.whereKey("feeling", value: feeling)
+        postFeeling.postFeelingToPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
+            if status / 100 != 2 {
+                return
+            }
+            let getPinById = FaeMap()
+            getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+                let pinInfoJSON = JSON(message!)
+                self.feelingArray.removeAll()
+                let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
+                for feeling in feelings {
+                    if feeling != nil {
+                        self.feelingArray.append(feeling!)
+                    }
+                }
+                if self.tableMode == .feelings {
+                    self.tableCommentsForPin.reloadData()
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
+                }
+            }
+        }
+    }
     
     // SendStickerDelegate
     func sendStickerWithImageName(_ name : String) {

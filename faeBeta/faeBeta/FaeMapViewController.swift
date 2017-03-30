@@ -211,7 +211,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var myPositionCircle_2: UIImageView!
     var myPositionCircle_3: UIImageView!
     
-    var referrenceCount = 0
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
     

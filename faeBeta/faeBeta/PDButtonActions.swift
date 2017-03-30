@@ -45,7 +45,7 @@ extension PinDetailViewController {
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
         self.emojiView.tag = 0
-        if buttonPinAddComment.tag == 1 {
+        if buttonPinAddComment.tag == 1 || buttonPinDetailDragToLargeSize.tag == 1 {
             UIView.animate(withDuration: 0.3) {
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
@@ -222,6 +222,7 @@ extension PinDetailViewController {
             self.pinIcon.alpha = 0
             self.buttonPrevPin.alpha = 0
             self.buttonNextPin.alpha = 0
+            self.uiviewFeelingBar.alpha = 0
             if self.uiviewPlaceDetail != nil {
                 self.uiviewPlaceDetail.center.y -= screenHeight
             }
