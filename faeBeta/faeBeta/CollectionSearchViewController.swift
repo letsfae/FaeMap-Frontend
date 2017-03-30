@@ -1,5 +1,5 @@
 //
-//  PinsearchViewController.swift
+//  CollectionSearchViewController
 //  faeBeta
 //
 //  Created by Shiqi Wei on 02/12/17.
@@ -11,7 +11,7 @@ import SwiftyJSON
 
 
 
-class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource{
+class CollectionSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource{
 
     var willAppearFirstLoad = false
     
@@ -51,8 +51,8 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
         loadNavBarUnderLine()
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(PinsearchViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PinsearchViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
         
     }
@@ -142,14 +142,14 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
         let buttonBackToFaeMap = UIButton(frame: CGRect(x: 15, y: 32, width: 10.5, height: 18))
         buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
         self.searchBarSubview.addSubview(buttonBackToFaeMap)
-        buttonBackToFaeMap.addTarget(self, action: #selector(PinsearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
+        buttonBackToFaeMap.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
         buttonBackToFaeMap.layer.zPosition = 3
         
         buttonClearSearchBar = UIButton()
         buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())
         self.searchBarSubview.addSubview(buttonClearSearchBar)
         buttonClearSearchBar.addTarget(self,
-                                       action: #selector(PinsearchViewController.actionClearSearchBar(_:)),
+                                       action: #selector(self.actionClearSearchBar(_:)),
                                        for: .touchUpInside)
         buttonClearSearchBar.layer.zPosition = 3
         self.searchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
@@ -212,7 +212,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
             
             switch tableTypeName {
                 
-            case "My Pins":
+            case "Created Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-keyboardHeight-66)
             case "Saved Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-keyboardHeight-66)
@@ -231,7 +231,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
             
             switch tableTypeName {
                 
-            case "My Pins":
+            case "Created Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66)
             case "Saved Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66)
@@ -285,7 +285,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
 
             switch self.tableTypeName {
                 
-            case "My Pins":
+            case "Created Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: 0)
             case "Saved Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: 0)
@@ -307,7 +307,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
             
             switch self.tableTypeName {
                 
-            case "My Pins":
+            case "Created Pins":
                 self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66-self.keyboardHeight)
                 
 
@@ -335,7 +335,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
         
         switch tableTypeName {
             
-        case "My Pins":
+        case "Created Pins":
             uiviewTableSubview = UIView(frame: CGRect(x: 8, y: 66, width: resultTableWidth, height: 0))
             
             tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
@@ -397,7 +397,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch tableTypeName {
             
-        case "My Pins":
+        case "Created Pins":
             tblSearchResults.backgroundColor = .clear
             uiviewTableSubview = UIView(frame: CGRect(x: 0, y: 66, width: resultTableWidth, height: 0))
             return 10
@@ -421,7 +421,7 @@ class PinsearchViewController: UIViewController, UISearchResultsUpdating, UISear
         
         switch tableTypeName {
             
-        case "My Pins":
+        case "Created Pins":
             let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for: indexPath) as! PinTableViewCell
             cell.setValueForCell(_: filteredArray[indexPath.section])
             // Hide the separator line
