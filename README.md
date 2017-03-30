@@ -126,17 +126,18 @@ Then, in the class "YourSecondClass", the first two functions in the protocol ar
 Yes
 
 ### parameters
-Name				Type			Description
-message			string()			密码
-senderID			string()			ID
-senderName			string()			用户名
-date				string()			日期
-index				int()				在聊天中的序号
-status				string()			是否发送成功
-hasTimeStamp		boolean()		是否显示时间戳
-data(optional)		string()			只有text和location**不**需要
-snapImage(optional)	string()			只有video和location需要
-longitude(optional)	string()			只有location需要
-latitude(optional)		string()			只有location需要
-videoDuration(opt)	int()				只有video需要
-isHeartSticker(opt)	boolean()		只有sticker需要
+| Name | Type | Description |
+| --- | --- | --- |
+| message | string() | 消息 |
+| senderID | string() | ID |
+| senderName | string() | 用户名|
+| date | string() | 日期 |
+| index | int() | 在聊天中的序号 |
+| status | string() | 是否发送成功 |
+| hasTimeStamp | boolean() | 是否显示时间戳 |
+| data(optional) | string() | 只有text和location**不**需要 |
+| snapImage(optional) | string() | 只有video和location需要 |
+| longitude(optional) | string() | 只有location需要 |
+| latitude(optional) | string() | 只有location需要 |
+| videoDuration(optional) | int() | 只有video需要 |
+| isHeartSticker(opt) | boolean() | 只有sticker需要 |
