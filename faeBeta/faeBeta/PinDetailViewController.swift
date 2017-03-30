@@ -213,6 +213,13 @@ class PinDetailViewController: UIViewController {
     }
     var tableMode: TableMode = .talktalk
     
+    var uiviewFeelingBar: UIView!
+    var btnFeelingBar_01: UIButton!
+    var btnFeelingBar_02: UIButton!
+    var btnFeelingBar_03: UIButton!
+    var btnFeelingBar_04: UIButton!
+    var btnFeelingBar_05: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
