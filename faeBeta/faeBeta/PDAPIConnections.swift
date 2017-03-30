@@ -39,6 +39,7 @@ extension PinDetailViewController {
             if self.tableMode == .feelings {
                 self.tableCommentsForPin.reloadData()
             }
+            self.loadFeelingQuickView()
             // Images
             if self.pinTypeEnum == .media {
                 self.fileIdArray.removeAll()
@@ -117,6 +118,52 @@ extension PinDetailViewController {
                 if self.tableMode == .feelings {
                     self.tableCommentsForPin.reloadData()
                 }
+                self.loadFeelingQuickView()
+            }
+        }
+    }
+    
+    func loadFeelingQuickView() {
+        uiviewFeeling.removeFromSuperview()
+        uiviewFeeling = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
+        uiviewPinDetailMainButtons.addSubview(uiviewFeeling)
+        uiviewFeeling.layer.zPosition = 109
+        var count = 0
+        for i in 0..<feelingArray.count {
+            if feelingArray[i] != 0 {
+                let offset = count * 30
+                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
+                if i+1 < 10 {
+                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)")
+                } else {
+                    feeling.image = UIImage(named: "pdFeeling_\(i+1)")
+                }
+                uiviewFeeling.addSubview(feeling)
+                count += 1
+            }
+        }
+    }
+    
+    func deleteFeeling() {
+        let deleteFeeling = FaePinAction()
+        deleteFeeling.deleteFeeling("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
+            if status / 100 != 2 {
+                return
+            }
+            let getPinById = FaeMap()
+            getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+                let pinInfoJSON = JSON(message!)
+                self.feelingArray.removeAll()
+                let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
+                for feeling in feelings {
+                    if feeling != nil {
+                        self.feelingArray.append(feeling!)
+                    }
+                }
+                if self.tableMode == .feelings {
+                    self.tableCommentsForPin.reloadData()
+                }
+                self.loadFeelingQuickView()
             }
         }
     }

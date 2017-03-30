@@ -279,8 +279,13 @@ extension PinDetailViewController {
         
         // ----
         // Main buttons' container of pin detail
-        uiviewPinDetailMainButtons = UIView(frame: CGRect(x: 0, y: 190, width: screenWidth, height: 22))
+        uiviewPinDetailMainButtons = UIView(frame: CGRect(x: 0, y: 185, width: screenWidth, height: 27))
         uiviewPinDetail.addSubview(uiviewPinDetailMainButtons)
+        
+        // Feeling quick view
+        uiviewFeeling = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
+        uiviewPinDetailMainButtons.addSubview(uiviewFeeling)
+        uiviewFeeling.layer.zPosition = 109
         
         // Pin Like
         buttonPinLike = UIButton()
@@ -289,7 +294,7 @@ extension PinDetailViewController {
         buttonPinLike.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewPinDetailMainButtons.addSubview(buttonPinLike)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonPinLike)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonPinLike)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: buttonPinLike)
         buttonPinLike.tag = 0
         buttonPinLike.layer.zPosition = 109
         
@@ -300,7 +305,7 @@ extension PinDetailViewController {
         buttonPinAddComment.tag = 0
         uiviewPinDetailMainButtons.addSubview(buttonPinAddComment)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonPinAddComment)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonPinAddComment)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: buttonPinAddComment)
         
         // Label of Like Count
         labelPinLikeCount = UILabel()
@@ -310,7 +315,7 @@ extension PinDetailViewController {
         labelPinLikeCount.textAlignment = .right
         uiviewPinDetailMainButtons.addSubview(labelPinLikeCount)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelPinLikeCount)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelPinLikeCount)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: labelPinLikeCount)
         
         // Label of Comments of Coment Pin Count
         labelPinCommentsCount = UILabel()
@@ -320,7 +325,7 @@ extension PinDetailViewController {
         labelPinCommentsCount.textAlignment = .right
         uiviewPinDetailMainButtons.addSubview(labelPinCommentsCount)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelPinCommentsCount)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelPinCommentsCount)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: labelPinCommentsCount)
         
         // ----
         // Gray Block

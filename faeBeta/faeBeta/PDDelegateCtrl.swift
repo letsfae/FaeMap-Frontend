@@ -35,8 +35,13 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
                     let indexPath = IndexPath(row: 0, section: 0)
                     self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
                 }
+                self.loadFeelingQuickView()
             }
         }
+    }
+    // PinFeelingCellDelegate
+    func deleteFeelingFromFeelingCell() {
+        deleteFeeling()
     }
     
     // SendStickerDelegate
@@ -139,7 +144,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.lblTxtPlaceholder.text = "@\(username):"
+            self.lblTxtPlaceholder.text = "@\(username)"
             self.textViewInput.becomeFirstResponder()
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in

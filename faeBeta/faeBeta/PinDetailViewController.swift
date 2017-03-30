@@ -188,6 +188,7 @@ class PinDetailViewController: UIViewController {
     var uiviewPlaceLine: UIView!
     var uiviewRedSlidingLine: UIView!
     var uiviewToolBar: UIView! // Input tool bar
+    var uiviewFeeling: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

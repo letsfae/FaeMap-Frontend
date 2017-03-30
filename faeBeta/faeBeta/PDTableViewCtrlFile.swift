@@ -114,11 +114,5 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
     }
-    
-    func showFullCellImage(_ image: UIImage) {
-        let photos = IDMPhoto.photos(withImages: [image])
-        let browser = IDMPhotoBrowser(photos: photos)
-        self.present(browser!, animated: true, completion: nil)
-    }
 }
 
