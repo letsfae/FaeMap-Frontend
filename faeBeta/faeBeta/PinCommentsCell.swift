@@ -13,7 +13,6 @@ protocol PinCommentsCellDelegate: class {
     func directReplyFromPinCell(_ username: String) // Reply to this user
     func showActionSheetFromPinCell(_ username: String)
     func cancelTouchToReplyTimerFromPinCell() // CancelTimerForTouchingCell
-    func showFullCellImage(_ image: UIImage)
 }
 
 class PinCommentsCell: UITableViewCell {

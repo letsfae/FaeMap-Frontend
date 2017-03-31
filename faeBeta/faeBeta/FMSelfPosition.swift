@@ -11,25 +11,32 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     
-    func loadSelfMarker() {
-        if subviewSelfMarker != nil {
-            myPositionCircle_1.removeFromSuperview()
-            myPositionCircle_2.removeFromSuperview()
-            myPositionCircle_3.removeFromSuperview()
-            subviewSelfMarker.removeFromSuperview()
-        }
+    func loadSelfMarkerSubview() {
         self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 120, height: 120))
+        self.view.addSubview(self.subviewSelfMarker)
         selfMarkerIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        selfMarkerIcon.layer.zPosition = 5
         selfMarkerIcon.contentMode = .scaleAspectFit
         let point = CGPoint(x: 60, y: 60)
         selfMarkerIcon.center = point
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.addTarget(self, action: #selector(self.getSelfNameCard(_:)))
-        subviewSelfMarker.addGestureRecognizer(tapGesture)
-        
+        self.subviewSelfMarker.addSubview(selfMarkerIcon)
+        let tapToOpenSelfNameCard = UITapGestureRecognizer(target: self, action: #selector(self.getSelfNameCard(_:)))
+        subviewSelfMarker.addGestureRecognizer(tapToOpenSelfNameCard)
+    }
+    
+    func reloadSelfMarker() {
+        if myPositionCircle_1 != nil {
+            myPositionCircle_1.removeFromSuperview()
+            myPositionCircle_2.removeFromSuperview()
+            myPositionCircle_3.removeFromSuperview()
+        }
+        let point = CGPoint(x: 60, y: 60)
         myPositionCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        myPositionCircle_1.layer.zPosition = 0
+        myPositionCircle_2.layer.zPosition = 1
+        myPositionCircle_3.layer.zPosition = 2
         myPositionCircle_1.center = point
         myPositionCircle_2.center = point
         myPositionCircle_3.center = point
@@ -37,10 +44,8 @@ extension FaeMapViewController {
         self.subviewSelfMarker.addSubview(myPositionCircle_3)
         self.subviewSelfMarker.addSubview(myPositionCircle_2)
         self.subviewSelfMarker.addSubview(myPositionCircle_1)
-        self.subviewSelfMarker.addSubview(selfMarkerIcon)
         
-        let tapToOpenSelfNameCard = UITapGestureRecognizer(target: self, action: #selector(self.getSelfNameCard(_:)))
-        selfMarkerIcon.addGestureRecognizer(tapToOpenSelfNameCard)
+        selfMarkerAnimation()
         
 //        selfMarker.iconView = subviewSelfMarker
 //        selfMarker.position.latitude = currentLatitude
@@ -48,8 +53,6 @@ extension FaeMapViewController {
 //        selfMarker.map = faeMapView
 //        selfMarker.zIndex = 10
 //        selfMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
-        self.view.addSubview(self.subviewSelfMarker)
-        selfMarkerAnimation()
     }
     
     func selfMarkerAnimation() {
@@ -83,37 +86,19 @@ extension FaeMapViewController {
                 return
             }
             let selfUserInfoJSON = JSON(message!)
-            if let firstName = selfUserInfoJSON["first_name"].string {
-                userFirstname = firstName
+            userFirstname = selfUserInfoJSON["first_name"].stringValue
+            userLastname = selfUserInfoJSON["last_name"].stringValue
+            userBirthday = selfUserInfoJSON["birthday"].stringValue
+            userUserGender = selfUserInfoJSON["gender"].stringValue
+            userUserName = selfUserInfoJSON["user_name"].stringValue
+            if userStatus == 5 {
+                return
             }
-            if let lastName = selfUserInfoJSON["last_name"].string {
-                userLastname = lastName
-            }
-            if let birthday = selfUserInfoJSON["birthday"].string {
-                userBirthday = birthday
-            }
-            if let gender = selfUserInfoJSON["gender"].string {
-                userUserGender = gender
-            }
-            if let userName = selfUserInfoJSON["user_name"].string {
-                userUserName = userName
-            }
-            if let miniAvatar = selfUserInfoJSON["mini_avatar"].int {
-                if userStatus == 5 {
-                    return
-                }
-                userMiniAvatar = miniAvatar
-
-                self.myPositionCircle_1.image = UIImage(named: "myPosition_outside")
-                self.myPositionCircle_2.image = UIImage(named: "myPosition_outside")
-                self.myPositionCircle_3.image = UIImage(named: "myPosition_outside")
-                if let miniAvatar = userMiniAvatar {
-                    self.selfMarkerIcon.image = UIImage(named: "miniAvatar_\(miniAvatar+1)")
-                }
-                else {
-                    self.selfMarkerIcon.image = UIImage(named: "miniAvatar_\(miniAvatar+1)")
-                }
-            }
+            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue
+            self.myPositionCircle_1.image = UIImage(named: "myPosition_outside")
+            self.myPositionCircle_2.image = UIImage(named: "myPosition_outside")
+            self.myPositionCircle_3.image = UIImage(named: "myPosition_outside")
+            self.selfMarkerIcon.image = UIImage(named: "miniAvatar_\(userMiniAvatar+1)")
         })
     }
 }

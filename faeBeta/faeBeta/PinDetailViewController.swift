@@ -27,136 +27,27 @@ protocol PinDetailDelegate: class {
 
 class PinDetailViewController: UIViewController {
     
-    // Delegate of this class
-    weak var delegate: PinDetailDelegate?
-    
-    // Pin ID To Use In This Controller
-    var pinIdSentBySegue: String = "-999"
-    var pinStatus = ""
-    var pinMarker = GMSMarker()
-    var pinUserId = 0
-    var pinLikeCount = 0
-    
-    // Pin options
-    var buttonShareOnPinDetail: UIButton!
-    var buttonEditOnPinDetail: UIButton!
-    var buttonSaveOnPinDetail: UIButton!
-    var buttonDeleteOnPinDetail: UIButton!
-    var buttonReportOnPinDetail: UIButton!
-    
-    var subviewTable: UIView!
-    var animatingHeart: UIImageView!
-    var anotherRedSlidingLine: UIView!
-    var boolPinLiked = false
-    var buttonBackToPinLists: UIButton!
-    var buttonMoreOnPinCellExpanded = false
-    var buttonOptionOfPin: UIButton!
-    var buttonPinAddComment: UIButton!
-    var buttonPinBackToMap: UIButton!
-    var buttonPinDetailDragToLargeSize: UIButton!
-    var buttonPinDetailViewComments: UIButton!
-    var buttonPinDetailViewFeelings: UIButton!
-    var buttonPinDetailViewPeople: UIButton!
-    var buttonPinDownVote: UIButton!
-    var buttonPinLike: UIButton!
-    var buttonPinUpVote: UIButton!
-    var imagePinUserAvatar: UIImageView!
-    var imageViewSaved: UIImageView!
-    var labelPinCommentsCount: UILabel!
-    var labelPinDetailViewComments: UILabel!
-    var labelPinDetailViewFeelings: UILabel!
-    var labelPinDetailViewPeople: UILabel!
-    var labelPinLikeCount: UILabel!
-    var labelPinTimestamp: UILabel!
-    var labelPinTitle: UILabel!
-    var labelPinUserName: UILabel!
-    var labelPinVoteCount: UILabel!
-    var lblTxtPlaceholder: UILabel!
-    var moreButtonDetailSubview: UIImageView!
-    var pinDetailLiked = false
-    var pinDetailShowed = false
-    var pinIDPinDetailView: String = "-999"
-    var subviewNavigation: UIView!
-    var tableCommentsForPin: UITableView!
-    var textviewPinDetail: UITextView!
-    var uiviewGrayBaseLine: UIView!
-    var uiviewPinDetail: UIView!
-    var uiviewPinDetailGrayBlock: UIView!
-    var uiviewPinDetailMainButtons: UIView!
-    var uiviewPinDetailThreeButtons: UIView!
-    var uiviewPinUnderLine01: UIView!
-    var uiviewPinUnderLine02: UIView!
-    var uiviewRedSlidingLine: UIView!
-    
-    // For Dragging
-    var pinSizeFrom: CGFloat = 0
-    var pinSizeTo: CGFloat = 0
-    
-    // Like Function
-    var isUpVoting = false
-    var isDownVoting = false
-    
-    var buttonFakeTransparentClosingView: UIButton! // Fake Transparent View For Closing
-    var thisIsMyPin = false // Check if this pin belongs to current user
-    var backJustOnce = true // Control the back to pin detail button, prevent the more than once action
-    
-    var controlBoard: UIView! // A duplicate ControlBoard to hold
-    
-    var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
-    var isAnonymous = false // var to record is user is anonymous;
-    
-    //custom toolBar the bottom toolbar button
-    var buttonSend : UIButton!
-    var buttonKeyBoard : UIButton!
-    var buttonSticker : UIButton!
-    var btnCommentOption: UIButton!
-    
-    var animatingHeartTimer: Timer! // Timer for animating heart
-    var buttonNextPin: UIButton!
-    var buttonPrevPin: UIButton!
-    var draggingButtonSubview: UIView! // Another dragging button for UI effect
-    var fileIdArray = [Int]()
-    var firstLoadInputToolBar = true
-    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
-    var imageViewMediaArray = [UIImageView]()
-    var pinIcon: UIImageView! // Icon to indicate pin type
-    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
-    var scrollViewMedia: UIScrollView! // container to display pin's media
-    var selectedMarkerPosition: CLLocationCoordinate2D!
-    var subviewInputToolBar: UIView! // subview to hold input toolbar
-    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
-    
-    var imageViewHotPin: UIImageView!
-    var stringPlainTextViewTxt = ""
-    
-    var pinCommentsCount = 0
-    
     enum MediaMode {
         case small
         case large
     }
-    var mediaMode: MediaMode = .small
-
-    var lastContentOffset: CGFloat = 0
-    
-    var isSavedByMe = false
-    
     enum PinType: String {
         case comment = "comment"
         case media = "media"
         case chat_room = "chat_room"
         case place = "place"
     }
-    var pinTypeEnum: PinType = .media
-    
     enum PinState: String {
         case normal = "normal"
         case read = "read"
         case hot = "hot"
         case hotRead = "hot and read"
     }
-    var pinStateEnum: PinState = .normal
+    enum TableMode: Int {
+        case talktalk = 0
+        case feelings = 1
+        case people = 2
+    }
     
     var textViewOriginalHeight: CGFloat = 0 {
         didSet {
@@ -173,45 +64,131 @@ class PinDetailViewController: UIViewController {
         }
     }
     
-    var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
-    
-    var placeType = "burgers"
-    var uiviewPlaceDetail: UIView!
-    var uiviewPlaceLine: UIView!
+    weak var delegate: PinDetailDelegate? // Delegate of this class
+    var animatingHeart: UIImageView!
+    var animatingHeartTimer: Timer! // Timer for animating heart
+    var anotherRedSlidingLine: UIView!
+    var backJustOnce = true // Control the back to pin detail button, prevent the more than once action
+    var boolPinLiked = false
+    var btnCommentOption: UIButton! //Custom toolBar the bottom toolbar button
+    var btnDoAnony: UIButton!
+    var btnFeelingBar_01: UIButton!
+    var btnFeelingBar_02: UIButton!
+    var btnFeelingBar_03: UIButton!
+    var btnFeelingBar_04: UIButton!
+    var btnFeelingBar_05: UIButton!
+    var btnGoToPinList_Place: UIButton!
+    var btnHideAnony: UIButton!
+    var btnMoreOptions_Place: UIButton!
+    var buttonBackToPinLists: UIButton!
+    var buttonDeleteOnPinDetail: UIButton! // Pin options
+    var buttonEditOnPinDetail: UIButton! // Pin options
+    var buttonFakeTransparentClosingView: UIButton! // Fake Transparent View For Closing
+    var buttonKeyBoard : UIButton! //Custom toolBar the bottom toolbar button
+    var buttonMoreOnPinCellExpanded = false
+    var buttonNextPin: UIButton!
+    var buttonOptionOfPin: UIButton!
+    var buttonPinAddComment: UIButton!
+    var buttonPinBackToMap: UIButton!
+    var buttonPinDetailDragToLargeSize: UIButton!
+    var buttonPinDetailViewComments: UIButton!
+    var buttonPinDetailViewFeelings: UIButton!
+    var buttonPinDetailViewPeople: UIButton!
+    var buttonPinDownVote: UIButton!
+    var buttonPinLike: UIButton!
+    var buttonPinUpVote: UIButton!
+    var buttonPrevPin: UIButton!
+    var buttonReportOnPinDetail: UIButton! // Pin options
+    var buttonSaveOnPinDetail: UIButton! // Pin options
+    var buttonSend : UIButton! //Custom toolBar the bottom toolbar button
+    var buttonShareOnPinDetail: UIButton! // Pin options
+    var buttonSticker : UIButton! //Custom toolBar the bottom toolbar button
+    var controlBoard: UIView! // A duplicate ControlBoard to hold
+    var draggingButtonSubview: UIView! // Another dragging button for UI effect
+    var emojiView: StickerPickView! // Input tool bar
+    var fileIdArray = [Int]()
+    var feelingArray = [Int]()
+    var firstLoadInputToolBar = true
+    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
+    var imagePinUserAvatar: UIImageView!
+    var imageViewHotPin: UIImageView!
+    var imageViewMediaArray = [UIImageView]()
+    var imageViewSaved: UIImageView!
     var imgPlaceQuickView: UIImageView!
     var imgPlaceType: UIImageView!
-    var lblPlaceTitle: UILabel!
-    var lblPlaceStreet: UILabel!
+    var isAnonymous = false // var to record is user is anonymous;
+    var isDownVoting = false // Like Function
+    var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
+    var isSavedByMe = false
+    var isUpVoting = false // Like Function
+    var keyboardHeight: CGFloat = 0
+    var labelPinCommentsCount: UILabel!
+    var labelPinDetailViewComments: UILabel!
+    var labelPinDetailViewFeelings: UILabel!
+    var labelPinDetailViewPeople: UILabel!
+    var labelPinLikeCount: UILabel!
+    var labelPinTimestamp: UILabel!
+    var labelPinTitle: UILabel!
+    var labelPinUserName: UILabel!
+    var labelPinVoteCount: UILabel!
+    var lastContentOffset: CGFloat = 0
     var lblPlaceCity: UILabel!
-    var btnGoToPinList_Place: UIButton!
-    var btnMoreOptions_Place: UIButton!
-    
-    var strPlaceTitle = ""
-    var strPlaceStreet = ""
+    var lblPlaceStreet: UILabel!
+    var lblPlaceTitle: UILabel!
+    var lblTxtPlaceholder: UILabel!
+    var mediaMode: MediaMode = .small
+    var moreButtonDetailSubview: UIImageView!
+    var pinComments = [PinComment]()
+    var pinCommentsCount = 0
+    var pinDetailLiked = false
+    var pinDetailShowed = false
+    var pinDetailUsers = [PinDetailUser]()
+    var pinIDPinDetailView: String = "-999"
+    var pinIcon: UIImageView! // Icon to indicate pin type
+    var pinIdSentBySegue: String = "-999" // Pin ID To Use In This Controller
+    var pinLikeCount = 0
+    var pinMarker = GMSMarker()
+    var pinSizeFrom: CGFloat = 0 // For Dragging
+    var pinSizeTo: CGFloat = 0 // For Dragging
+    var pinStateEnum: PinState = .normal
+    var pinStatus = ""
+    var pinTypeEnum: PinType = .media
+    var pinUserId = 0
+    var placeType = "burgers"
+    var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
+    var scrollViewMedia: UIScrollView! // container to display pin's media
+    var selectedMarkerPosition: CLLocationCoordinate2D!
     var strPlaceCity = ""
     var strPlaceImageURL = ""
-    
-    var pinComments = [PinComment]()
-    var pinDetailUsers = [PinDetailUser]()
-    
-    // Input tool bar
-    var uiviewToolBar: UIView!
-    var textViewInput: UITextView!
-    var emojiView: StickerPickView!
-    
-    var uiviewAnonymous: UIView!
-    var btnHideAnony: UIButton!
+    var strPlaceStreet = ""
+    var strPlaceTitle = ""
+    var stringPlainTextViewTxt = ""
+    var subviewInputToolBar: UIView! // subview to hold input toolbar
+    var subviewNavigation: UIView!
+    var subviewTable: UIView!
     var switchAnony: UISwitch!
-    var btnDoAnony: UIButton!
-    
-    var keyboardHeight: CGFloat = 0
-    
-    enum TableMode: Int {
-        case talktalk = 0
-        case feelings = 1
-        case people = 2
-    }
+    var switchedToFullboard = true // FullboardScrollView and TableViewCommentsOnPin control
+    var tableCommentsForPin: UITableView!
     var tableMode: TableMode = .talktalk
+    var textViewInput: UITextView! // Input tool bar
+    var textviewPinDetail: UITextView!
+    var thisIsMyPin = false // Check if this pin belongs to current user
+    var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
+    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
+    var uiviewAnonymous: UIView!
+    var uiviewFeelingBar: UIView!
+    var uiviewGrayBaseLine: UIView!
+    var uiviewPinDetail: UIView!
+    var uiviewPinDetailGrayBlock: UIView!
+    var uiviewPinDetailMainButtons: UIView!
+    var uiviewPinDetailThreeButtons: UIView!
+    var uiviewPinUnderLine01: UIView!
+    var uiviewPinUnderLine02: UIView!
+    var uiviewPlaceDetail: UIView!
+    var uiviewPlaceLine: UIView!
+    var uiviewRedSlidingLine: UIView!
+    var uiviewToolBar: UIView! // Input tool bar
+    var uiviewFeeling: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -238,20 +215,20 @@ class PinDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("[viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.subviewNavigation.frame.origin.y = 0
-            self.tableCommentsForPin.frame.origin.y = 65
-            self.subviewTable.frame.origin.y = 65
+            self.buttonNextPin.alpha = 1
+            self.buttonPrevPin.alpha = 1
             self.draggingButtonSubview.frame.origin.y = 292
             self.grayBackButton.alpha = 1
             self.pinIcon.alpha = 1
-            self.buttonPrevPin.alpha = 1
-            self.buttonNextPin.alpha = 1
+            self.subviewNavigation.frame.origin.y = 0
+            self.subviewTable.frame.origin.y = 65
+            self.tableCommentsForPin.frame.origin.y = 65
+            self.uiviewFeelingBar.alpha = 1
             if self.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             }

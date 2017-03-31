@@ -299,24 +299,6 @@ class PinTableViewCell: UITableViewCell {
 
     }
     
-    
-    
-    // get the height of the text view
-//    func getTextHeight() -> CGFloat{
-//        
-//        //desc.isScrollEnabled = false
-//        let numLines = desc.description.sizeForWidth(width: screenWidth - 18-40, font: desc.font!).height / desc.font!.lineHeight
-//        let lineHeight: CGFloat = desc.font!.lineHeight
-//        if(numLines > 3){
-//            return 3*lineHeight + 16.0
-//        }
-//        else{
-//            return numLines*lineHeight + 16.0
-//        }
-//        
-//    }
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -336,16 +318,3 @@ class PinTableViewCell: UITableViewCell {
     }
     
 }
-
-
-
-
-
-//calculate the height based on given font, width and text content
-//extension String {
-//    func sizeForWidth(width: CGFloat, font: UIFont) -> CGSize {
-//        let attr = [NSFontAttributeName: font]
-//        let height = NSString(string: self).boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude), options:.usesLineFragmentOrigin, attributes: attr, context: nil).height
-//        return CGSize(width: width,height: ceil(height))
-//    }
-//}

@@ -18,10 +18,10 @@ extension MapPin: Equatable {
 
 struct MapPin {
     var pinId: Int
-    let userId: Int
+    var userId: Int
     var type: String
     var status: String
-    let position: CLLocationCoordinate2D
+    var position: CLLocationCoordinate2D
 
     init(json: JSON) {
         let tmp_type = json["type"].stringValue

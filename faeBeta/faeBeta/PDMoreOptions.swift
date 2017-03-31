@@ -39,7 +39,7 @@ extension PinDetailViewController {
             let secondButtonX: CGFloat = 262 * screenWidthFactor
             let thirdButtonX: CGFloat = 332 * screenWidthFactor
             let buttonY: CGFloat = (97 + menuOffset) * screenWidthFactor
-            let buttonWidth: CGFloat = 44 * screenWidthFactor
+            let buttonWidth: CGFloat = 50 * screenWidthFactor
             let buttonHeight: CGFloat = 51 * screenWidthFactor
             
             moreButtonDetailSubview = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))

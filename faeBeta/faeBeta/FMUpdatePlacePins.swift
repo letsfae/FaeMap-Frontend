@@ -26,11 +26,8 @@ extension FaeMapViewController {
         let coorDistance = cameraDiagonalDistance()
         let placeAllType = allTypePlacesPin()
         if self.canDoNextPlacePinUpdate {
-            print("[referrenceCount - Outside]", self.referrenceCount)
-            self.referrenceCount += 1
             self.canDoNextPlacePinUpdate = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                print("[referrenceCount - Inside]", self.referrenceCount)
                 self.refreshPlacePins(radius: coorDistance, all: placeAllType)
                 self.canDoNextPlacePinUpdate = true
             })

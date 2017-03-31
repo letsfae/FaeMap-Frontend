@@ -173,7 +173,10 @@ extension FaeMapViewController {
             var mapPin = MapPin(json: mapPinJson)
             mapPin.pinId = Int(pinID)!
             mapPin.type = type
-            print("[loadMarkerWithpinID]", mapPin)
+            mapPin.userId = mapPinJson["user_id"].intValue
+            mapPin.status = "normal"
+            mapPin.position.latitude = mapPinJson["geolocation"]["latitude"].doubleValue
+            mapPin.position.longitude = mapPinJson["geolocation"]["longitude"].doubleValue
             self.mapPins.append(mapPin)
             let pinMap = GMSMarker()
             pinMap.icon = self.pinIconSelector(type: type, status: mapPin.status)
@@ -189,13 +192,6 @@ extension FaeMapViewController {
             })
         }
     }
-    
-//    func calculateRadius() -> Int {
-//        let currentZoomLevel = faeMapView.camera.zoom
-//        let powFactor: Double = Double(21 - currentZoomLevel)
-//        let coorDistance: Double = 67*pow(2.0, powFactor) // 0.0004 * 111 * 1500
-//        return Int(coorDistance)
-//    }
     
     func cameraDiagonalDistance() -> Int {
         let region = faeMapView.projection.visibleRegion()

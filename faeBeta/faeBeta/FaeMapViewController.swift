@@ -211,7 +211,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var myPositionCircle_2: UIImageView!
     var myPositionCircle_3: UIImageView!
     
-    var referrenceCount = 0
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
     
@@ -231,7 +230,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
-        loadSelfMarker()
+        loadSelfMarkerSubview()
+        reloadSelfMarker()
         didLoadFirstLoad = true
     }
 
@@ -263,6 +263,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 print("[showGenderAge] Fail to update namecard")
             }
         }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -380,7 +381,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func reloadSelfPosAnimation() {
         if userStatus != 5  {
             subviewSelfMarker.isHidden = false
-            loadSelfMarker()
+            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
             subviewSelfMarker.isHidden = true
