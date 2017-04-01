@@ -16,10 +16,12 @@ extension PinDetailViewController {
         loadNavigationBar()
         loadingOtherParts()
         loadTableHeader()
-        loadAnotherToolbar()
         loadPinCtrlButton()
-        loadFeelingBar()
+        loadAnotherToolbar()
         loadInputToolBar()
+        if pinTypeEnum != .place {
+            loadFeelingBar()
+        }
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
     }
     

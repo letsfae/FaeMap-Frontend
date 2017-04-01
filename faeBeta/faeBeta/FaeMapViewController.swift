@@ -82,7 +82,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapPins = [MapPin]()
     var mapUserPinsDic = [GMSMarker]() // Map User Pin
     var userPins = [UserPin]()
-    var mapPlacePinsDic = [GMSMarker]() // Map User Pin
+    var placeMarkers = [GMSMarker]()
     var mapPlaces = [PlacePin]()
     var placeNames = [Double]()
     var markerMask: UIView! // mask to prevent UI action
@@ -213,6 +213,19 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
+    
+    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
+    var placePizza = #imageLiteral(resourceName: "placePinPizza")
+    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
+    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
+    var placeArt = #imageLiteral(resourceName: "placePinArt")
+    var placeSport = #imageLiteral(resourceName: "placePinSport")
+    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
+    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
+    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
+    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
+    
+    var previousZoom: Float = 13.8
     
     // System Functions
     override func viewDidLoad() {

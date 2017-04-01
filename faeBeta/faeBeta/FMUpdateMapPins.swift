@@ -198,7 +198,7 @@ extension FaeMapViewController {
         let farLeft = region.farLeft
         let nearLeft = region.nearRight
         let distance = GMSGeometryDistance(farLeft, nearLeft)
-        return Int(distance)
+        return Int(distance*4)
     }
     
     func pinIconSelector(type: String, status: String) -> UIImage {

@@ -228,9 +228,10 @@ class PinDetailViewController: UIViewController {
             self.subviewNavigation.frame.origin.y = 0
             self.subviewTable.frame.origin.y = 65
             self.tableCommentsForPin.frame.origin.y = 65
-            self.uiviewFeelingBar.alpha = 1
             if self.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
+            } else {
+                self.uiviewFeelingBar.alpha = 1
             }
         }, completion: { (done: Bool) in
             if self.pinTypeEnum != .place {

@@ -35,37 +35,54 @@ extension FaeMapViewController {
     }
     
     fileprivate func pinPlacesOnMap(results: [PlacePin]) {
+        let coord_1 = faeMapView.projection.coordinate(for: CGPoint(x: 0, y: 0))
+        let coord_2 = faeMapView.projection.coordinate(for: CGPoint(x: 0, y: 50))
+        let absDistance = GMSGeometryDistance(coord_1, coord_2)
         for result in results {
-            var iconImage = UIImage()
             let categoryList = result.category
-            iconImage = self.placesPinIconImage(categoryList: categoryList)
+            let iconImage = self.placesPinIconImage(categoryList: categoryList)
             let pinMap = GMSMarker()
-            let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 64))
-            let icon = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
-            iconSub.addSubview(icon)
-            icon.contentMode = .scaleAspectFit
-            icon.image = iconImage
-            pinMap.iconView = iconSub
-            let delay: Double = Double(arc4random_uniform(200)) / 100
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
             pinMap.position = result.position
+            pinMap.icon = iconImage
             pinMap.userData = [2: result]
-            pinMap.map = self.faeMapView
-            self.mapPlacePinsDic.append(pinMap)
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                icon.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
-            }, completion: {(done: Bool) in
-                if done {
-                    pinMap.iconView = nil
-                    pinMap.icon = iconImage
+            var conflict = false
+            for marker in placeMarkers {
+                let distance = GMSGeometryDistance(pinMap.position, marker.position)
+                if distance <= absDistance && marker.map != nil {
+                    conflict = true
+                    break
                 }
-            })
+            }
+            if !conflict {
+                placePinAnimation(marker: pinMap, animated: true)
+            }
+            self.placeMarkers.append(pinMap)
         }
     }
     
+    func placePinAnimation(marker: GMSMarker, animated: Bool) {
+        let iconImage = marker.icon
+        let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 64))
+        let icon = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
+        iconSub.addSubview(icon)
+        icon.contentMode = .scaleAspectFit
+        icon.image = iconImage
+        marker.tracksViewChanges = true
+        marker.iconView = iconSub
+        marker.map = self.faeMapView
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            icon.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+        }, completion: {(done: Bool) in
+            if done {
+                marker.tracksViewChanges = false
+                marker.iconView = nil
+                marker.icon = iconImage
+            }
+        })
+    }
+    
     fileprivate func refreshPlacePins(radius: Int, all: Bool) {
-        return
-        mapPlacePinsDic.removeAll()
+        placeMarkers.removeAll()
         mapPlaces.removeAll()
         placeNames.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
@@ -95,10 +112,13 @@ extension FaeMapViewController {
                     self.placeNames.append(latPlusLon)
                 }
                 self.pinPlacesOnMap(results: self.mapPlaces)
-                //                self.calculateZoomLevel(results: self.mapPlaces)
             })
         } else {
-            yelpQuery.setResultLimit(count: 4)
+            
+            let count = 16
+            let count_1 = count/2
+            
+            yelpQuery.setResultLimit(count: count)
             yelpQuery.setCatagoryToRestaurant()
             yelpManager.query(request: yelpQuery, completion: { (results) in
                 for result in results {
@@ -111,7 +131,7 @@ extension FaeMapViewController {
                     self.pinPlacesOnMap(results: [result])
                 }
                 
-                self.yelpQuery.setResultLimit(count: 2)
+                self.yelpQuery.setResultLimit(count: count_1)
                 self.yelpQuery.setCatagoryToDessert()
                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                     for result in results {
@@ -189,7 +209,6 @@ extension FaeMapViewController {
                                                 self.mapPlaces.append(result)
                                                 self.pinPlacesOnMap(results: [result])
                                             }
-//                                            self.calculateZoomLevel(results: self.mapPlaces)
                                         })
                                     })
                                 })
@@ -228,58 +247,58 @@ extension FaeMapViewController {
         }
     }
     
-    fileprivate func placesPinIconImage(categoryList: [String]) -> UIImage {
+    func placesPinIconImage(categoryList: [String]) -> UIImage {
         var iconImage = UIImage()
         if categoryList.contains("burgers") {
-            iconImage = #imageLiteral(resourceName: "placePinBurger")
+            iconImage = placeBurger
         }
         else if categoryList.contains("pizza") {
-            iconImage = #imageLiteral(resourceName: "placePinPizza")
+            iconImage = placePizza
         }
         else if categoryList.contains("coffee") {
-            iconImage = #imageLiteral(resourceName: "placePinCoffee")
+            iconImage = placeCoffee
         }
         else if categoryList.contains("desserts") {
-            iconImage = #imageLiteral(resourceName: "placePinDesert")
+            iconImage = placeDessert
         }
         else if categoryList.contains("icecream") {
-            iconImage = #imageLiteral(resourceName: "placePinDesert")
+            iconImage = placeDessert
         }
         else if categoryList.contains("movietheaters") {
-            iconImage = #imageLiteral(resourceName: "placePinCinema")
+            iconImage = placeCinema
         }
         else if categoryList.contains("museums") {
-            iconImage = #imageLiteral(resourceName: "placePinArt")
+            iconImage = placeArt
         }
         else if categoryList.contains("galleries") {
-            iconImage = #imageLiteral(resourceName: "placePinArt")
+            iconImage = placeArt
         }
         else if categoryList.contains("spas") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+            iconImage = placeBeauty
         }
         else if categoryList.contains("barbers") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+            iconImage = placeBeauty
         }
         else if categoryList.contains("skincare") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+            iconImage = placeBeauty
         }
         else if categoryList.contains("massage") {
-            iconImage = #imageLiteral(resourceName: "placePinBoutique")
+            iconImage = placeBeauty
         }
         else if categoryList.contains("playgrounds") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
+            iconImage = placeSport
         }
         else if categoryList.contains("countryclubs") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
+            iconImage = placeSport
         }
         else if categoryList.contains("sports_clubs") {
-            iconImage = #imageLiteral(resourceName: "placePinSport")
+            iconImage = placeSport
         }
         else if categoryList.contains("bubbletea") {
-            iconImage = #imageLiteral(resourceName: "placePinBoba")
+            iconImage = placeBoba
         }
         else if categoryList.contains("juicebars") {
-            iconImage = #imageLiteral(resourceName: "placePinBoba")
+            iconImage = placeBoba
         }
         return iconImage
     }

@@ -76,7 +76,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
         }
         if type == "all" || type == "place" {
-            for marker in mapPlacePinsDic {
+            for marker in placeMarkers {
                 let delay: Double = Double(arc4random_uniform(100)) / 100
                 let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
                 icon.image = marker.icon
@@ -105,7 +105,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             }
         }
         if type == "all" || type == "place" {
-            for marker in mapPlacePinsDic {
+            for marker in placeMarkers {
                 marker.map = nil
             }
         }
@@ -124,6 +124,55 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             let points = self.faeMapView.projection.point(for: position)
             self.subviewSelfMarker.center = points
         }
+        
+        if placeMarkers.count == 0 {
+            return
+        }
+        let currentZoom = mapView.camera.zoom
+        let coord_1 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 0))
+        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 50))
+        let absDistance = GMSGeometryDistance(coord_1, coord_2)
+        
+        if currentZoom == previousZoom {
+            return
+        } else if currentZoom > previousZoom {
+            for i in 0..<placeMarkers.count {
+                if placeMarkers[i].map != nil {
+                    continue
+                }
+                var conflict = false
+                for j in 0..<placeMarkers.count {
+                    if j == i {
+                        continue
+                    }
+                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
+                    if distance <= absDistance && placeMarkers[j].map != nil {
+                        conflict = true
+                        break
+                    }
+                }
+                if !conflict {
+                    placePinAnimation(marker: placeMarkers[i], animated: true)
+                }
+            }
+        } else {
+            for i in 0..<placeMarkers.count {
+                if placeMarkers[i].map == nil {
+                    continue
+                }
+                for j in i+1..<placeMarkers.count {
+                    if placeMarkers[j].map == nil {
+                        continue
+                    }
+                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
+                    // Collision occurs
+                    if distance <= absDistance {
+                        placeMarkers[j].map = nil
+                    }
+                }
+            }
+        }
+        previousZoom = mapView.camera.zoom
     }
     
     fileprivate func regionContainsMarker(marker: GMSMarker) {
@@ -179,7 +228,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-        
+        /*
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let currentPosition = mapCenterCoordinate
@@ -208,6 +257,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             invalidateAllTimer()
             faeMapView.clear()
         }
+        */
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -284,7 +334,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             
             invalidateAllTimer()
             
-            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+0.00148,
+            offset = 0.00148 * pow(2, Double(17 - zoomLv))
+            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)
             
@@ -315,12 +366,13 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             opinListElem.pinLat = marker.position.latitude
             opinListElem.pinLon = marker.position.longitude
             opinListElem.pinTime = "\(street), \(city)"
-            opinListElem.pinTypeId = "\(type)\(title)\(street)"
+            opinListElem.pinTypeId = "\(title)\(street)"
             
             // for opened pin list
             if let storedList = readByKey("openedPinList"){
                 var openedPinListArray = storedList as! [String]
-                pinTypeID = "\(type)%\(title)\(street)%\(category)"
+                pinTypeID = "\(title)\(street)%\(category)"
+                print("[didTap] pinTypeID:", pinTypeID)
                 if openedPinListArray.contains(pinTypeID) == false {
                     openedPinListArray.insert(pinTypeID, at: 0)
                 }
