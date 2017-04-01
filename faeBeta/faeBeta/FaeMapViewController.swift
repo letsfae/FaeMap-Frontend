@@ -206,7 +206,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // Self Position Marker: 02-17-2016 Yue Shen
     var selfMarker = GMSMarker()
     var subviewSelfMarker: UIView!
-    var selfMarkerIcon: UIImageView!
+    var selfMarkerIcon: UIButton!
     var myPositionCircle_1: UIImageView!
     var myPositionCircle_2: UIImageView!
     var myPositionCircle_3: UIImageView!
@@ -331,7 +331,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         if let gender = userUserGender {
             if gender == "female" {
                 let updateMiniAvatar = FaeUser()
-                self.selfMarkerIcon.image = UIImage(named: "miniAvatar_19")
+                self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_19"), for: .normal)
                 updateMiniAvatar.whereKey("mini_avatar", value: "18")
                 updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
                     if status / 100 == 2 {
