@@ -30,6 +30,9 @@ struct MapPin {
         self.userId = json["pin_object"]["user_id"].intValue
         self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
                                                longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
+//        if json["pin_object"]["anonymous"].boolValue {
+//            self.userId = -1
+//        }
         self.status = "normal"
         if json["created_at"].stringValue.isNewPin() {
             self.status = "new"
