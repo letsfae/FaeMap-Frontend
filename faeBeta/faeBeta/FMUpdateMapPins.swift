@@ -37,7 +37,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin")
+        clearMap(type: "pin", animated: true)
         let coorDistance = cameraDiagonalDistance()
         if self.canDoNextMapPinUpdate {
             self.canDoNextMapPinUpdate = false
@@ -53,7 +53,6 @@ extension FaeMapViewController {
     fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
         self.mapPinsArray.removeAll()
         self.mapPins.removeAll()
-        self.clearMapNonAnimated(type: "pin")
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()

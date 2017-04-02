@@ -11,102 +11,73 @@ import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 
-extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, GMUClusterRendererDelegate {
+extension FaeMapViewController: GMSMapViewDelegate {
     
-    // Setup Cluster Manager
-    func setupClusterManager() {
-        let iconGenerator = GMUDefaultClusterIconGenerator()
-        let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
-        let renderer = GMUDefaultClusterRenderer(mapView: faeMapView, clusterIconGenerator: iconGenerator)
-        renderer.delegate = self
-        renderer.animatesClusters = false
-        clusterManager = GMUClusterManager(map: faeMapView, algorithm: algorithm, renderer: renderer)
-    }
-    
-    // MARK: - GMUClusterRendererDelegate
-    func renderer(_ renderer: GMUClusterRenderer, willRenderMarker marker: GMSMarker) {
-        let pinInfo = JSON(marker.userData!)
-        if let type = pinInfo["type"].string {
-            if type != "user" && type != "comment" && type != "media" {
-                
-            }
-        }
-        marker.icon = #imageLiteral(resourceName: "markerRainbow")
-    }
-    
-    // MARK: - GMUClusterManagerDelegate
-    func clusterManager(_ clusterManager: GMUClusterManager, didTap cluster: GMUCluster) {
-        let newCamera = GMSCameraPosition.camera(withTarget: cluster.position,
-                                                 zoom: faeMapView.camera.zoom + 1)
-        let update = GMSCameraUpdate.setCamera(newCamera)
-        faeMapView.moveCamera(update)
-    }
-    
-    func clearMap(type: String) {
+    func clearMap(type: String, animated: Bool) {
         if type == "all" || type == "pin" {
-            for marker in mapPinsArray {
-                let delay: Double = Double(arc4random_uniform(100)) / 100
-                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
-                icon.image = marker.icon
-                icon.contentMode = .scaleAspectFit
-                icon.alpha = 1
-                marker.iconView = icon
-                marker.icon = nil
-                UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                    icon.alpha = 0
-                }, completion: {(done: Bool) in
+            if !animated {
+                for marker in mapPinsArray {
                     marker.map = nil
-                })
+                }
+            } else {
+                for marker in mapPinsArray {
+                    let delay: Double = Double(arc4random_uniform(100)) / 100
+                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
+                    icon.image = marker.icon
+                    icon.contentMode = .scaleAspectFit
+                    icon.alpha = 1
+                    marker.iconView = icon
+                    marker.icon = nil
+                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
+                        icon.alpha = 0
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                    })
+                }
             }
         }
         if type == "all" || type == "user" {
-            for marker in mapUserPinsDic {
-                let delay: Double = Double(arc4random_uniform(100)) / 100
-                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-                icon.image = marker.icon
-                icon.contentMode = .scaleAspectFit
-                icon.alpha = 1
-                marker.iconView = icon
-                marker.icon = nil
-                UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                    icon.alpha = 0
-                }, completion: {(done: Bool) in
+            if !animated {
+                for marker in mapUserPinsDic {
                     marker.map = nil
-                })
+                }
+            } else {
+                for marker in mapUserPinsDic {
+                    let delay: Double = Double(arc4random_uniform(100)) / 100
+                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+                    icon.image = marker.icon
+                    icon.contentMode = .scaleAspectFit
+                    icon.alpha = 1
+                    marker.iconView = icon
+                    marker.icon = nil
+                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
+                        icon.alpha = 0
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                    })
+                }
             }
         }
         if type == "all" || type == "place" {
-            for marker in placeMarkers {
-                let delay: Double = Double(arc4random_uniform(100)) / 100
-                let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
-                icon.image = marker.icon
-                icon.contentMode = .scaleAspectFit
-                icon.alpha = 1
-                marker.iconView = icon
-                marker.icon = nil
-                UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                    icon.alpha = 0
-                }, completion: {(done: Bool) in
+            if !animated {
+                for marker in placeMarkers {
                     marker.map = nil
-                })
-            }
-        }
-    }
-    
-    func clearMapNonAnimated(type: String) {
-        if type == "all" || type == "pin" {
-            for marker in mapPinsArray {
-                marker.map = nil
-            }
-        }
-        if type == "all" || type == "user" {
-            for marker in mapUserPinsDic {
-                marker.map = nil
-            }
-        }
-        if type == "all" || type == "place" {
-            for marker in placeMarkers {
-                marker.map = nil
+                }
+            } else {
+                for marker in placeMarkers {
+                    let delay: Double = Double(arc4random_uniform(100)) / 100
+                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
+                    icon.image = marker.icon
+                    icon.contentMode = .scaleAspectFit
+                    icon.alpha = 1
+                    marker.iconView = icon
+                    marker.icon = nil
+                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
+                        icon.alpha = 0
+                    }, completion: {(done: Bool) in
+                        marker.map = nil
+                    })
+                }
             }
         }
     }
@@ -305,7 +276,7 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
             pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
             pinDetailVC.pinUserId = mapPin.userId
             
-            self.clearMap(type: "user")
+            self.clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
@@ -385,8 +356,8 @@ extension FaeMapViewController: GMSMapViewDelegate, GMUClusterManagerDelegate, G
                 realm.add(opinListElem, update: true)
             }
             
-            self.clearMap(type: "user")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+            self.clearMap(type: "user", animated: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
                 })

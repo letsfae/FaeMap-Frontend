@@ -32,7 +32,7 @@ extension CreateCommentPinViewController {
         lableTextViewPlaceholder.text = "Type a comment..."
         textViewForCommentPin.addSubview(lableTextViewPlaceholder)
         
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(CreateCommentPinViewController.tapOutsideToDismissKeyboard(_:)))
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         uiviewCreateCommentPin.addGestureRecognizer(tapToDismissKeyboard)
         
         let imageCreateCommentPin = UIImageView(frame: CGRect(x: 166, y: 36, width: 84, height: 91))
@@ -50,14 +50,14 @@ extension CreateCommentPinViewController {
         NSLayoutConstraint(item: labelCreateCommentPinTitle, attribute: .centerX, relatedBy: .equal, toItem: uiviewCreateCommentPin, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         let buttonBackToPinSelection = UIButton()
-        buttonBackToPinSelection.setImage(UIImage(named: "backToPinMenu"), for: UIControlState())
+        buttonBackToPinSelection.setImage(UIImage(named: "backToPinMenu"), for: .normal)
         uiviewCreateCommentPin.addSubview(buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: buttonBackToPinSelection)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonBackToPinSelection)
-        buttonBackToPinSelection.addTarget(self, action: #selector(CreateCommentPinViewController.actionBackToPinSelections(_:)), for: UIControlEvents.touchUpInside)
+        buttonBackToPinSelection.addTarget(self, action: #selector(CreateCommentPinViewController.actionBackToPinSelections(_:)), for: .touchUpInside)
         
         let buttonCloseCreateComment = UIButton()
-        buttonCloseCreateComment.setImage(UIImage(named: "closePinCreation"), for: UIControlState())
+        buttonCloseCreateComment.setImage(UIImage(named: "closePinCreation"), for: .normal)
         uiviewCreateCommentPin.addSubview(buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: buttonCloseCreateComment)
         uiviewCreateCommentPin.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonCloseCreateComment)
@@ -97,8 +97,8 @@ extension CreateCommentPinViewController {
         uiviewSelectLocation.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonSelectLocation)
         
         buttonCommentSubmit = UIButton()
-        buttonCommentSubmit.setTitle("Submit!", for: UIControlState())
-        buttonCommentSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
+        buttonCommentSubmit.setTitle("Submit!", for: .normal)
+        buttonCommentSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: .normal)
         buttonCommentSubmit.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonCommentSubmit.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonCommentSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
@@ -112,10 +112,33 @@ extension CreateCommentPinViewController {
         
         loadMoreOptionsButton()
         loadMoreOptionsItems()
-        loadAnonymousButton()
+//        loadAnonymousButton()
+        loadAnonymous()
     }
     
-    private func loadAnonymousButton() {
+    fileprivate func loadAnonymous() {
+        switchAnony = UISwitch(frame: CGRect(x: 0, y: 0, width: 39, height: 23))
+        switchAnony.onTintColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1)
+        switchAnony.transform = CGAffineTransform(scaleX: 35/51, y: 21/31)
+        uiviewCreateCommentPin.addSubview(switchAnony)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(35)]-130-|", options: [], views: switchAnony)
+        uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(21)]-79-|", options: [], views: switchAnony)
+        
+        btnDoAnony = UIButton()
+        btnDoAnony.setTitle("Anonymous", for: .normal)
+        btnDoAnony.setTitleColor(UIColor.white, for: .normal)
+        btnDoAnony.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        uiviewCreateCommentPin.addSubview(btnDoAnony)
+        uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(100)]-14-|", options: [], views: btnDoAnony)
+        uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(25)]-74-|", options: [], views: btnDoAnony)
+        btnDoAnony.addTarget(self, action: #selector(self.actionDoAnony), for: .touchUpInside)
+    }
+    
+    func actionDoAnony() {
+        switchAnony.setOn(!switchAnony.isOn, animated: true)
+    }
+    
+    fileprivate func loadAnonymousButton() {
         buttonAnonymous = UIButton()
         buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
         buttonAnonymous.adjustsImageWhenHighlighted = false
@@ -302,8 +325,8 @@ extension CreateCommentPinViewController {
         
         // Button Back
         buttonBack = UIButton()
-        buttonBack.setTitle("Back", for: UIControlState())
-        buttonBack.setTitleColor(UIColor.white, for: UIControlState())
+        buttonBack.setTitle("Back", for: .normal)
+        buttonBack.setTitleColor(UIColor.white, for: .normal)
         buttonBack.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonBack.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonBack.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1.0)

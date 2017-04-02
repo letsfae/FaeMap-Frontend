@@ -89,7 +89,7 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("content", value: commentContent)
         postSingleComment.whereKey("interaction_radius", value: "99999999")
         postSingleComment.whereKey("duration", value: "180")
-        postSingleComment.whereKey("anonymous", value: "\(anonymous)")
+        postSingleComment.whereKey("anonymous", value: "\(switchAnony.isOn)")
         
         postSingleComment.postPin(type: "comment") {(status: Int, message: Any?) in
             if let getMessage = message as? NSDictionary{

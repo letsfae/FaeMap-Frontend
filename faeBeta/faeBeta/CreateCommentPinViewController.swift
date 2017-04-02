@@ -64,6 +64,8 @@ class CreateCommentPinViewController: UIViewController {
     
     var buttonBack: UIButton!
     
+    var btnDoAnony: UIButton!
+    var switchAnony: UISwitch!
 
     
     override func viewDidLoad() {

@@ -55,8 +55,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-//        self.imageViewAvatar.image = image
-//        picker.dismiss(animated: true, completion: nil)
         
         selectedMediaArray.append(image)
         collectionViewMedia.isHidden = false
@@ -313,7 +311,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }
         postSingleMedia.whereKey("interaction_radius", value: "99999999")
         postSingleMedia.whereKey("duration", value: "180")
-        postSingleMedia.whereKey("anonymous", value: "\(anonymous)")
+        postSingleMedia.whereKey("anonymous", value: "\(switchAnony.isOn)")
         
         postSingleMedia.postPin(type: "media") {(status: Int, message: Any?) in
             let getMessage = JSON(message!)

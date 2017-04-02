@@ -143,11 +143,12 @@ extension CreateMomentPinViewController {
         
         loadAddDescriptionButton()
         loadMoreOptionsButton()
-        loadAnonymousButton()
+//        loadAnonymousButton()
         loadAddMediaButton()
+        loadAnonymous()
     }
     
-    private func loadAddMediaButton() {
+    fileprivate func loadAddMediaButton() {
         buttonAddMedia = UIButton()
         buttonAddMedia.tag = 0
         buttonAddMedia.alpha = 0
@@ -156,6 +157,28 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addSubview(buttonAddMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(88)]-0-|", options: [], views: buttonAddMedia)
         uiviewCreateMediaPin.addConstraintsWithFormat("V:|-200-[v0(200)]", options: [], views: buttonAddMedia)
+    }
+    
+    fileprivate func loadAnonymous() {
+        switchAnony = UISwitch(frame: CGRect(x: 0, y: 0, width: 39, height: 23))
+        switchAnony.onTintColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1)
+        switchAnony.transform = CGAffineTransform(scaleX: 35/51, y: 21/31)
+        uiviewCreateMediaPin.addSubview(switchAnony)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(35)]-130-|", options: [], views: switchAnony)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(21)]-79-|", options: [], views: switchAnony)
+        
+        btnDoAnony = UIButton()
+        btnDoAnony.setTitle("Anonymous", for: .normal)
+        btnDoAnony.setTitleColor(UIColor.white, for: .normal)
+        btnDoAnony.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        uiviewCreateMediaPin.addSubview(btnDoAnony)
+        uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(100)]-14-|", options: [], views: btnDoAnony)
+        uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-74-|", options: [], views: btnDoAnony)
+        btnDoAnony.addTarget(self, action: #selector(self.actionDoAnony), for: .touchUpInside)
+    }
+    
+    func actionDoAnony() {
+        switchAnony.setOn(!switchAnony.isOn, animated: true)
     }
     
     private func loadAnonymousButton() {

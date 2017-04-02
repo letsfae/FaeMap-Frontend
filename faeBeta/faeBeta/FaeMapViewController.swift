@@ -19,7 +19,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Map main screen Objects
     var faeMapView: GMSMapView!
-    var clusterManager: GMUClusterManager!
     
     var buttonLeftTop: UIButton!
     var buttonMainScreenSearch: UIButton!
@@ -233,7 +232,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         isUserLoggedIn()
         getUserStatus()
         loadMapView()
-        setupClusterManager()
         loadTransparentNavBarItems()
         loadButton()
         loadNameCard()

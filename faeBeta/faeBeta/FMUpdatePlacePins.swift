@@ -22,7 +22,7 @@ extension FaeMapViewController {
     }
     
     func loadCurrentRegionPlacePins() {
-        clearMap(type: "place")
+        clearMap(type: "place", animated: true)
         let coorDistance = cameraDiagonalDistance()
         let placeAllType = allTypePlacesPin()
         if self.canDoNextPlacePinUpdate {
