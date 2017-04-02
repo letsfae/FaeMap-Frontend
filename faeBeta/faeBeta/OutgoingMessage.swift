@@ -38,20 +38,20 @@ class OutgoingMessage {
     init(message : String, picture : Data, senderId : String, senderName : String, date: Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         
         let pic = picture.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message"as NSCopying, "picture" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
+        messageDictionary = NSMutableDictionary(objects: [message, pic, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message"as NSCopying, "data" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
     }
     
     // outgoing message for sticker
     init (message : String, sticker : Data, isHeartSticker: Bool, senderId : String, senderName : String, date : Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         let stick = sticker.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-        messageDictionary = NSMutableDictionary(objects: [message, stick, isHeartSticker, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "picture" as NSCopying,"isHeartSticker" as NSCopying ,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
+        messageDictionary = NSMutableDictionary(objects: [message, stick, isHeartSticker, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "data" as NSCopying,"isHeartSticker" as NSCopying ,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
     }
     
     // outgoing message for audio
     init (message : String, audio : Data, senderId : String, senderName : String, date : Date, status : String, type : String, index : Int, hasTimeStamp: Bool) {
         
         let voice = audio.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, voice, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "audio" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
+        messageDictionary = NSMutableDictionary(objects: [message, voice, senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp], forKeys: ["message" as NSCopying, "data" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying])
     }
     
     // outgoing message for video
@@ -59,7 +59,7 @@ class OutgoingMessage {
         
         let video = video.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
         let snap = snapImage.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
-        messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "video" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
+        messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "data" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
         
     func sendMessage(_ chatRoomId : String, withUser user: FaeWithUser) {
