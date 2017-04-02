@@ -10,6 +10,7 @@
 		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
 		37820AB81E86061800841C6E /* CollectionsBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */; };
 		37820ABA1E864A6300841C6E /* PlacesAndLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */; };
+		37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */; };
 		37C725491E7346E8001A5060 /* PinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725441E7346E8001A5060 /* PinsViewController.swift */; };
 		37C7254B1E7346E8001A5060 /* CollectionSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */; };
 		37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725471E7346E8001A5060 /* PinTableViewCell.swift */; };
@@ -320,6 +321,7 @@
 		0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsBoardViewController.swift; sourceTree = "<group>"; };
 		37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesAndLocationsViewController.swift; sourceTree = "<group>"; };
+		37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		37C725441E7346E8001A5060 /* PinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsViewController.swift; sourceTree = "<group>"; };
 		37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSearchViewController.swift; sourceTree = "<group>"; };
 		37C725471E7346E8001A5060 /* PinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTableViewCell.swift; sourceTree = "<group>"; };
@@ -736,10 +738,11 @@
 			isa = PBXGroup;
 			children = (
 				37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */,
-				37C725441E7346E8001A5060 /* PinsViewController.swift */,
-				37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */,
-				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
 				37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */,
+				37C725441E7346E8001A5060 /* PinsViewController.swift */,
+				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
+				37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */,
+				37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */,
 				37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */,
 			);
 			name = PinCollection;
@@ -1635,9 +1638,8 @@
 				TargetAttributes = {
 					B0A2AC941CE3A3C6002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = J9H8DRZ5QS;
 						LastSwiftMigration = 0810;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1936,6 +1938,7 @@
 				B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */,
 				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
+				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
@@ -2177,7 +2180,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
@@ -2206,7 +2209,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
