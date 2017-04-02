@@ -13,17 +13,64 @@ extension PinDetailViewController {
     
     // Load pin detail window
     func loadPinDetailWindow() {
-        
         loadNavigationBar()
         loadingOtherParts()
         loadTableHeader()
-        loadAnotherToolbar()
         loadPinCtrlButton()
+        loadAnotherToolbar()
         loadInputToolBar()
+        if pinTypeEnum != .place {
+            loadFeelingBar()
+        }
         tableCommentsForPin.tableHeaderView = uiviewPinDetail
     }
     
-    private func loadInputToolBar() {
+    fileprivate func loadFeelingBar() {
+        uiviewFeelingBar = UIView()
+        self.view.addSubview(uiviewFeelingBar)
+        view.addConstraintsWithFormat("H:|-67-[v0(281)]", options: [], views: uiviewFeelingBar)
+        view.addConstraintsWithFormat("V:|-(\(409 * screenHeightFactor))-[v0(52)]", options: [], views: uiviewFeelingBar)
+        uiviewFeelingBar.layer.cornerRadius = 26
+        uiviewFeelingBar.backgroundColor = UIColor.white
+        uiviewFeelingBar.alpha = 0
+        
+        btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_01)
+        btnFeelingBar_01.setImage(#imageLiteral(resourceName: "pdFeeling_01"), for: .normal)
+        btnFeelingBar_01.adjustsImageWhenHighlighted = false
+        btnFeelingBar_01.tag = 0
+        btnFeelingBar_01.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_02)
+        btnFeelingBar_02.setImage(#imageLiteral(resourceName: "pdFeeling_02"), for: .normal)
+        btnFeelingBar_02.adjustsImageWhenHighlighted = false
+        btnFeelingBar_02.tag = 1
+        btnFeelingBar_02.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_03)
+        btnFeelingBar_03.setImage(#imageLiteral(resourceName: "pdFeeling_03"), for: .normal)
+        btnFeelingBar_03.adjustsImageWhenHighlighted = false
+        btnFeelingBar_03.tag = 2
+        btnFeelingBar_03.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingBar_04 = UIButton(frame: CGRect(x: 176, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_04)
+        btnFeelingBar_04.setImage(#imageLiteral(resourceName: "pdFeeling_04"), for: .normal)
+        btnFeelingBar_04.adjustsImageWhenHighlighted = false
+        btnFeelingBar_04.tag = 3
+        btnFeelingBar_04.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingBar_05 = UIButton(frame: CGRect(x: 228, y: 11, width: 32, height: 32))
+        uiviewFeelingBar.addSubview(btnFeelingBar_05)
+        btnFeelingBar_05.setImage(#imageLiteral(resourceName: "pdFeeling_05"), for: .normal)
+        btnFeelingBar_05.adjustsImageWhenHighlighted = false
+        btnFeelingBar_05.tag = 4
+        btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+    }
+    
+    fileprivate func loadInputToolBar() {
         uiviewToolBar = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 51))
         uiviewToolBar.backgroundColor = UIColor.white
         uiviewToolBar.layer.zPosition = 200
@@ -33,20 +80,11 @@ extension PinDetailViewController {
         line_0.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
         uiviewToolBar.addSubview(line_0)
         
-//        let line_1 = UIView()
-//        line_1.layer.borderWidth = 1
-//        line_1.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-//        uiviewToolBar.addSubview(line_1)
-//        uiviewToolBar.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: line_1)
-//        uiviewToolBar.addConstraintsWithFormat("V:[v0(1)]-42.5-|", options: [], views: line_1)
-        
         textViewInput = UITextView(frame: CGRect(x: 28, y: 14.5, width: screenWidth-142, height: 25))
         textViewInput.delegate = self
         textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
         textViewInput.tintColor = UIColor.faeAppRedColor()
-//        textViewInput.layer.borderWidth = 1
-//        textViewInput.layer.borderColor = UIColor.black.cgColor
         textViewInput.textContainerInset = .zero
         textViewInput.showsVerticalScrollIndicator = false
         textViewInput.autocorrectionType = .no
@@ -60,14 +98,6 @@ extension PinDetailViewController {
         uiviewToolBar.addSubview(lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("H:|-33-[v0]-68-|", options: [], views: lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("V:|-14-[v0(25)]", options: [], views: lblTxtPlaceholder)
-        
-//        buttonKeyBoard = UIButton()
-//        buttonKeyBoard.tag = 0
-//        buttonKeyBoard.setImage(#imageLiteral(resourceName: "keyboard"), for: .normal)
-//        uiviewToolBar.addSubview(buttonKeyBoard)
-//        uiviewToolBar.addConstraintsWithFormat("H:|-10-[v0(47)]", options: [], views: buttonKeyBoard)
-//        uiviewToolBar.addConstraintsWithFormat("V:[v0(43)]-0-|", options: [], views: buttonKeyBoard)
-//        buttonKeyBoard.addTarget(self, action: #selector(self.actionSwitchKeyboard(_:)), for: .touchUpInside)
         
         buttonSticker = UIButton()
         buttonSticker.tag = 0
@@ -97,7 +127,7 @@ extension PinDetailViewController {
         loadAnonymous()
     }
     
-    private func loadAnonymous() {
+    fileprivate func loadAnonymous() {
         uiviewAnonymous = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 51))
         uiviewAnonymous.backgroundColor = UIColor.white
         uiviewAnonymous.layer.zPosition = 200
@@ -133,14 +163,14 @@ extension PinDetailViewController {
         btnDoAnony.addTarget(self, action: #selector(self.actionDoAnony), for: .touchUpInside)
     }
     
-    private func loadEmojiView(){
+    fileprivate func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
         emojiView.layer.zPosition = 130
         self.view.addSubview(emojiView)
     }
     
-    private func loadingOtherParts() {
+    fileprivate func loadingOtherParts() {
         subviewTable = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         subviewTable.backgroundColor = UIColor.white
         subviewTable.center.y -= screenHeight
@@ -192,7 +222,7 @@ extension PinDetailViewController {
         buttonPinDetailDragToLargeSize.tag = 0
     }
     
-    private func loadTableHeader() {
+    fileprivate func loadTableHeader() {
         // Header
         uiviewPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 274))
         uiviewPinDetail.backgroundColor = UIColor.white
@@ -251,8 +281,13 @@ extension PinDetailViewController {
         
         // ----
         // Main buttons' container of pin detail
-        uiviewPinDetailMainButtons = UIView(frame: CGRect(x: 0, y: 190, width: screenWidth, height: 22))
+        uiviewPinDetailMainButtons = UIView(frame: CGRect(x: 0, y: 185, width: screenWidth, height: 27))
         uiviewPinDetail.addSubview(uiviewPinDetailMainButtons)
+        
+        // Feeling quick view
+        uiviewFeeling = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
+        uiviewPinDetailMainButtons.addSubview(uiviewFeeling)
+        uiviewFeeling.layer.zPosition = 109
         
         // Pin Like
         buttonPinLike = UIButton()
@@ -261,7 +296,7 @@ extension PinDetailViewController {
         buttonPinLike.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewPinDetailMainButtons.addSubview(buttonPinLike)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-90-|", options: [], views: buttonPinLike)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonPinLike)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: buttonPinLike)
         buttonPinLike.tag = 0
         buttonPinLike.layer.zPosition = 109
         
@@ -272,7 +307,7 @@ extension PinDetailViewController {
         buttonPinAddComment.tag = 0
         uiviewPinDetailMainButtons.addSubview(buttonPinAddComment)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: buttonPinAddComment)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: buttonPinAddComment)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: buttonPinAddComment)
         
         // Label of Like Count
         labelPinLikeCount = UILabel()
@@ -282,7 +317,7 @@ extension PinDetailViewController {
         labelPinLikeCount.textAlignment = .right
         uiviewPinDetailMainButtons.addSubview(labelPinLikeCount)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: labelPinLikeCount)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelPinLikeCount)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: labelPinLikeCount)
         
         // Label of Comments of Coment Pin Count
         labelPinCommentsCount = UILabel()
@@ -292,7 +327,7 @@ extension PinDetailViewController {
         labelPinCommentsCount.textAlignment = .right
         uiviewPinDetailMainButtons.addSubview(labelPinCommentsCount)
         uiviewPinDetailMainButtons.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: labelPinCommentsCount)
-        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(22)]-0-|", options: [], views: labelPinCommentsCount)
+        uiviewPinDetailMainButtons.addConstraintsWithFormat("V:[v0(27)]-0-|", options: [], views: labelPinCommentsCount)
         
         // ----
         // Gray Block
@@ -403,16 +438,16 @@ extension PinDetailViewController {
         
         // image view appears when saved pin button pressed
         imageViewSaved = UIImageView()
-        imageViewSaved.image = UIImage(named: "imageSavedThisPin")
+        imageViewSaved.image = UIImage(named: "pinSaved")
         view.addSubview(imageViewSaved)
         view.addConstraintsWithFormat("H:[v0(182)]", options: [], views: imageViewSaved)
         view.addConstraintsWithFormat("V:|-107-[v0(58)]", options: [], views: imageViewSaved)
         NSLayoutConstraint(item: imageViewSaved, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        imageViewSaved.layer.zPosition = 104
+        imageViewSaved.layer.zPosition = 200
         imageViewSaved.alpha = 0.0
     }
     
-    private func loadNavigationBar() {
+    fileprivate func loadNavigationBar() {
         subviewNavigation = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewNavigation.backgroundColor = UIColor.white
         self.view.addSubview(subviewNavigation)
@@ -462,7 +497,7 @@ extension PinDetailViewController {
         NSLayoutConstraint(item: labelPinTitle, attribute: .centerX, relatedBy: .equal, toItem: subviewNavigation, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
     }
     
-    private func loadAnotherToolbar() {
+    fileprivate func loadAnotherToolbar() {
         // Gray Block
         controlBoard = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 42))
         controlBoard.backgroundColor = UIColor.white
@@ -536,7 +571,7 @@ extension PinDetailViewController {
         threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: comments, feelings, people)
     }
     
-    private func loadPinCtrlButton() {
+    fileprivate func loadPinCtrlButton() {
         pinIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 80))
         pinIcon.image = pinIconHeavyShadow
         pinIcon.contentMode = .scaleAspectFit
@@ -556,7 +591,7 @@ extension PinDetailViewController {
         buttonPrevPin.alpha = 0
         self.view.addSubview(buttonPrevPin)
         
-        buttonNextPin = UIButton(frame: CGRect(x: 399, y: 477 * screenHeightFactor, width: 52, height: 52))
+        buttonNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
         buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         buttonNextPin.layer.zPosition = 60
         buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
@@ -565,7 +600,5 @@ extension PinDetailViewController {
         buttonNextPin.layer.shadowRadius = 3.0
         buttonNextPin.alpha = 0
         self.view.addSubview(buttonNextPin)
-        self.view.addConstraintsWithFormat("H:[v0(52)]-15-|", options: [], views: buttonNextPin)
-        self.view.addConstraintsWithFormat("V:|-477-[v0(52)]", options: [], views: buttonNextPin)
     }
 }

@@ -78,6 +78,9 @@ class CreateMomentPinViewController: UIViewController {
     
     var labelAddDesContent: UILabel!
     
+    var btnDoAnony: UIButton!
+    var switchAnony: UISwitch!
+    
     enum Direction {
         case left
         case right

@@ -45,7 +45,7 @@ extension PinDetailViewController {
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
         self.emojiView.tag = 0
-        if buttonPinAddComment.tag == 1 {
+        if buttonPinAddComment.tag == 1 || buttonPinDetailDragToLargeSize.tag == 1 {
             UIView.animate(withDuration: 0.3) {
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
@@ -225,6 +225,9 @@ extension PinDetailViewController {
             if self.uiviewPlaceDetail != nil {
                 self.uiviewPlaceDetail.center.y -= screenHeight
             }
+            if self.pinTypeEnum != .place {
+                self.uiviewFeelingBar.alpha = 0
+            }
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -252,9 +255,9 @@ extension PinDetailViewController {
                 self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
                 self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
-                self.uiviewPinDetailMainButtons.frame.origin.y = 190
+                self.uiviewPinDetailMainButtons.frame.origin.y = 185
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
+                self.uiviewPinDetailThreeButtons.frame.origin.y = 232
                 self.uiviewToolBar.frame.origin.y = screenHeight
             }), completion: { (done: Bool) in
             })
@@ -331,94 +334,6 @@ extension PinDetailViewController {
                 if sender == self.buttonPinAddComment {
                     self.textViewInput.becomeFirstResponder()
                 }
-            }
-        })
-    }
-    
-    // When clicking dragging button in pin detail window
-    func actionDraggingThisPin(_ sender: UIButton) {
-        if sender.tag == 1 {
-            sender.tag = 0
-            buttonPinAddComment.tag = 0
-            textviewPinDetail.isScrollEnabled = true
-            tableCommentsForPin.isScrollEnabled = false
-            UIView.animate(withDuration: 0.5, animations: ({
-                self.buttonBackToPinLists.alpha = 1.0
-                self.buttonPinBackToMap.alpha = 0.0
-                self.draggingButtonSubview.frame.origin.y = 292
-                self.tableCommentsForPin.scrollToTop(animated: true)
-                self.tableCommentsForPin.frame.size.height = 227
-                self.subviewTable.frame.size.height = 255
-                self.uiviewPinDetail.frame.size.height = 281
-                self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
-                self.uiviewPinDetailMainButtons.frame.origin.y = 190
-                self.uiviewPinDetailGrayBlock.frame.origin.y = 227
-                self.uiviewPinDetailThreeButtons.frame.origin.y = 239
-            }), completion: { (done: Bool) in
-            })
-            if pinTypeEnum == .media {
-                mediaMode = .small
-                zoomMedia(.small)
-                UIView.animate(withDuration: 0.5, animations: ({
-                    self.scrollViewMedia.frame.origin.y = 80
-                }), completion: { (done: Bool) in
-                    if done {
-                        self.textviewPinDetail.isHidden = true
-                    }
-                })
-            }
-            return
-        }
-        readThisPin("\(pinTypeEnum)", pinID: pinIDPinDetailView)
-        sender.tag = 1
-        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
-        textviewPinDetail.isScrollEnabled = false
-        tableCommentsForPin.isScrollEnabled = true
-        if pinTypeEnum == .media {
-            mediaMode = .large
-            zoomMedia(.large)
-            textviewPinDetail.frame.size.height = 0
-            textviewPinDetail.isHidden = false
-            UIView.animate(withDuration: 0.5, animations: ({
-                self.uiviewPinDetail.frame.size.height += 65
-                self.textviewPinDetail.frame.size.height += 65
-                self.uiviewPinDetailThreeButtons.center.y += 65
-                self.uiviewPinDetailGrayBlock.center.y += 65
-                self.uiviewPinDetailMainButtons.center.y += 65
-                if self.textviewPinDetail.text != "" {
-                    self.uiviewPinDetail.frame.size.height += textViewHeight
-                    self.textviewPinDetail.frame.size.height += textViewHeight
-                    self.uiviewPinDetailThreeButtons.center.y += textViewHeight
-                    self.uiviewPinDetailGrayBlock.center.y += textViewHeight
-                    self.uiviewPinDetailMainButtons.center.y += textViewHeight
-                    self.scrollViewMedia.frame.origin.y += textViewHeight
-                }
-            }), completion: nil)
-            self.scrollViewMedia.scrollToLeft(animated: true)
-        }
-        else if pinTypeEnum == .comment {
-            let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
-            if numLines > 4 {
-                let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
-                UIView.animate(withDuration: 0.5, animations: ({
-                    self.uiviewPinDetail.frame.size.height += diffHeight
-                    self.textviewPinDetail.frame.size.height += diffHeight
-                    self.uiviewPinDetailThreeButtons.center.y += diffHeight
-                    self.uiviewPinDetailGrayBlock.center.y += diffHeight
-                    self.uiviewPinDetailMainButtons.center.y += diffHeight
-                }), completion: nil)
-            }
-            
-        }
-        UIView.animate(withDuration: 0.5, animations: ({
-            self.buttonBackToPinLists.alpha = 0.0
-            self.buttonPinBackToMap.alpha = 1.0
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 28
-            self.tableCommentsForPin.frame.size.height = screenHeight - 93
-            self.subviewTable.frame.size.height = screenHeight - 65
-        }), completion: { (done: Bool) in
-            if done {
-                self.tableCommentsForPin.reloadData()
             }
         })
     }

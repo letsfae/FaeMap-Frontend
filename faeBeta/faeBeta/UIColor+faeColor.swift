@@ -70,4 +70,11 @@ extension UIColor
     class func femaleBackgroundColor() -> UIColor {
         return UIColor(red: 253/255, green: 175/255, blue: 222/255, alpha: 1.0)
     }
+    
+    class func faeAppNavBarBorderGrayColor() -> CGColor
+    {
+        return UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
+        
+    }
+    
 }

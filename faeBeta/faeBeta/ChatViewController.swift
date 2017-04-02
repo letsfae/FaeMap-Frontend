@@ -886,6 +886,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.scrollToBottom(true)
         self.buttonSend.isEnabled = true
     }
+    
+    func appendEmoji(_ name: String) {}
+    func deleteLastEmoji() {}
 }
 
 

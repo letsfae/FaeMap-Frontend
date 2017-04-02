@@ -3,7 +3,7 @@
 * [Use of SwiftyJSON](#use-of-swiftyjson)
 * [Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
 * [Use of Delegate](#use-of-delegate-in-swift)
-* [License](#license)
+* [Parameter for Chat](#parameter-for-chat)
 
 ## Use of SwiftyJSON
 [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) is a public framework, aims to deal with the JSON data from Backend. 
@@ -117,6 +117,27 @@ Example:
 ```
 Then, in the class "YourSecondClass", the first two functions in the protocol are optional to use, but the third function must be implemented.
 
-## License
-2016 Faevorite Inc.
-    
+    
+## Parameter for Chat
+## 发送信息
+`POST /xxx`
+
+### auth
+Yes
+
+### parameters
+| Name | Type | Description |
+| --- | --- | --- |
+| message | string() | 消息 |
+| senderID | string() | ID |
+| senderName | string() | 用户名|
+| date | string() | 日期 |
+| index | int() | 在聊天中的序号 |
+| status | string() | 是否发送成功 |
+| hasTimeStamp | boolean() | 是否显示时间戳 |
+| data(optional) | string() | 只有text和location**不**需要 |
+| snapImage(optional) | string() | 只有video和location需要 |
+| longitude(optional) | string() | 只有location需要 |
+| latitude(optional) | string() | 只有location需要 |
+| videoDuration(optional) | int() | 只有video需要 |
+| isHeartSticker(opt) | boolean() | 只有sticker需要 |

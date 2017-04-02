@@ -15,7 +15,7 @@ protocol LeftSlidingMenuDelegate: class {
     func jumpToMoodAvatar()
     func logOutInLeftMenu()
     func jumpToFaeUserMainPage()
-    func jumpToPinCollection()
+    func jumpToCollections()
     func reloadSelfPosition()
     
 }
@@ -50,7 +50,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         case goInvisible
         case relations
         case moodAvatar
-        case pins
+        case collections
         case myActivities
         case logOut
         case myFaeMainPage
@@ -147,7 +147,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Map Boards", "Go Invisible", "Relations", "Pin Collection", "Mood Avatar", "Activity Log", "Log Out"]
+        let array = ["Map Boards", "Go Invisible", "Relations", "Collections", "Mood Avatar", "Activity Log", "Log Out"]
         cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
         if indexPath.row < 2 {
@@ -177,9 +177,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         else if indexPath.row == 0 {
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
         }
-        // Pin Collection
+        // Collections
         else if indexPath.row == 3 {
-            self.tableSelections = .pins
+            self.tableSelections = .collections
             self.actionCloseMenu(self.buttonBackground)
         }
         // Mood Avatar
@@ -367,9 +367,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.tableSelections = .none
                     self.delegate?.jumpToMoodAvatar()
                     break
-                case .pins:
+                case .collections:
                     self.tableSelections = .none
-                    self.delegate?.jumpToPinCollection()
+                    self.delegate?.jumpToCollections()
                     break
                 case .myActivities:
                     self.tableSelections = .none
