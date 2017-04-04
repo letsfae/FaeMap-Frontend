@@ -103,43 +103,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // locationExtendView
     var locExtendView = LocationExtendView()
     
-    //typing indicator
-    //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
-    //    var userTypingQuery : FIRDatabaseQuery!
-    //    private var localTyping = false
-    //    var isTyping : Bool {
-    //        get {
-    //            return localTyping
-    //        }
-    //        set {
-    //            localTyping = newValue
-    //            userIsTypingRef.setValue(newValue)
-    //        }
-    //    }
-    
-    
-    fileprivate func observeTyping() {
-        //        print("the senderId is \(self.senderId)")
-        //        userIsTypingRef = userIsTypingRef.child(self.senderId)
-        //        userIsTypingRef.onDisconnectRemoveValue()
-        //        userTypingQuery = firebase.database.reference().child("typingIndicator").queryOrderedByChild(self.senderId)
-        //        userTypingQuery = userIsTypingRef.queryOrderedByKey().queryEqualToValue(withUser?.objectId)
-        //        userTypingQuery.observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
-        //            if snapshot.exists() {
-        //                print("it is exist")
-        //                print(snapshot)
-        //                if snapshot.value as! Bool {
-        //                    self.showTypingIndicator = true
-        //                    self.scrollToBottomAnimated(true)
-        //                } else {
-        //                    self.showTypingIndicator = false
-        //                }
-        //            } else {
-        //                print("it is not exist")
-        //                self.showTypingIndicator = false
-        //            }
-        //        }
-    }
+    fileprivate func observeTyping() {}
     
     // MARK: - view life cycle
     
@@ -150,17 +114,25 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         removeObservers()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        print("view did disappear")
+        self.toolbarContentView.clearToolBarViews()
+        messages = []
+        objects = []
+        loaded = []
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("view did appear")
+        print("set up tool bar views")
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
-        //miniLocation.isHidden = true
-        //view.addSubview(miniLocation)
         self.view.addSubview(locExtendView)
-
     }
     
     override func viewDidLoad() {
+        print("view did load")
         super.viewDidLoad()
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -192,8 +164,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
+        print("view will appear")
         super.viewWillAppear(true)
-        
         addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
@@ -206,6 +178,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             roomRef?.removeAllObservers()
         }
     }
+    
+    func navigationBarPopView() {
+        self.toolbarContentView.clearToolBarViews()
+        self.navigationController?.popViewController(animated:)
+    }
+    
     // MARK: - setup
     
     private func navigationBarSet() {
@@ -414,7 +392,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func sendLocation() {
         resetToolbarButtonIcon()
-        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())//closeToolbarContentView()
+        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())
+        //closeToolbarContentView()
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showMiniLocation()
         moveUpInputBarContentView(animated)
@@ -815,7 +794,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func animationDidStart(_ anim: CAAnimation) {
         if anim.duration == 1{
             animHeartDic[anim] = animatingHeart
-            
             let seconds = 0.5
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
