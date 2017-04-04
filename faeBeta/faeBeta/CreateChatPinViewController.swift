@@ -15,25 +15,18 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     private var switchButtonBackgroundImageView: UIImageView!
     private var switchButtonLeft: UIButton!
     private var switchButtonRight: UIButton!
-    
     private var createChatPinImageImageView: UIImageView!
     private var createChatPinImageButton: UIButton!
-    
     private var createChatPinTextField: UITextField!
-    
     private var createChatPinOptionsTableView: CreatePinOptionsTableView!
-    
     private var bubbleTextView: CreatePinTextView!
-    
     var descriptionTextView: CreatePinTextView!
-    
     var addTagsTextView: CreatePinAddTagsTextView!
-    
     private var moreOptionsTableView: CreatePinOptionsTableView!
-    
     var labelSelectLocationContent: String!
-    
     private var submitButtonEnabled: Bool = false
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     
     enum OptionViewMode{
         case pin
@@ -260,6 +253,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.pinType = "chat"
+        selectLocationVC.currentLocation2D = self.currentLocation2D
+        selectLocationVC.zoomLevel = self.zoomLevel
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     
@@ -279,6 +274,15 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     // MARK: - helper
+    
+    func randomLocation() -> CLLocationCoordinate2D {
+        let lat = currentLocation2D.latitude
+        let lon = currentLocation2D.longitude
+        let random_lat = Double.random(min: -0.004, max: 0.004)
+        let random_lon = Double.random(min: -0.004, max: 0.004)
+        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
+    }
+    
     func switchToDescription()
     {
         self.currentViewingContent = .description

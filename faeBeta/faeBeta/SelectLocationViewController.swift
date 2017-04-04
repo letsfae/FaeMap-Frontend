@@ -16,7 +16,7 @@ protocol SelectLocationViewControllerDelegate {
     func sendGeoInfo(_ latitude: String, longitude: String)
 }
 
-class SelectLocationViewController: UIViewController, CLLocationManagerDelegate {
+class SelectLocationViewController: UIViewController {
     
     var delegate: SelectLocationViewControllerDelegate?
     
@@ -31,6 +31,8 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
     var willAppearFirstLoad = false
@@ -86,22 +88,20 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        locManager.requestAlwaysAuthorization()        
+//        locManager.requestAlwaysAuthorization()        
         willAppearFirstLoad = true
     }
-    
-    
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if willAppearFirstLoad {
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            mapSelectLocation.camera = camera
-            willAppearFirstLoad = false
-        }
-    }
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        if willAppearFirstLoad {
+//            currentLocation = locManager.location
+//            currentLatitude = currentLocation.coordinate.latitude
+//            currentLongitude = currentLocation.coordinate.longitude
+//            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+//            mapSelectLocation.camera = camera
+//            willAppearFirstLoad = false
+//        }
+//    }
     
     func searchBarTableHideAnimation() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({

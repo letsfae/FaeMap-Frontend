@@ -12,14 +12,18 @@ import GoogleMaps
 extension SelectLocationViewController {
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: currentLocation2D.latitude, longitude: currentLocation2D.longitude, zoom: zoomLevel)
         self.mapSelectLocation = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapSelectLocation.isMyLocationEnabled = true
         mapSelectLocation.delegate = self
         self.view = mapSelectLocation
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
+        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
+        do {
+            // Set the map style by passing a valid JSON string.
+            mapSelectLocation.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
+        } catch {
+            NSLog("The style definition could not be loaded: \(error)")
+        }
         
         imagePinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
         imagePinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")

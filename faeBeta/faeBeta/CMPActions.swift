@@ -296,8 +296,9 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         var submitLongitude = selectedLongitude
         
         if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         postSingleMedia.whereKey("file_ids", value: fileIDs)

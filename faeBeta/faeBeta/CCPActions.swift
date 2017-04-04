@@ -76,8 +76,9 @@ extension CreateCommentPinViewController {
         let commentContent = textViewForCommentPin.text
         
         if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         if commentContent == "" {

@@ -14,6 +14,8 @@ extension CreateCommentPinViewController: SelectLocationViewControllerDelegate {
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.pinType = "comment"
+        selectLocationVC.currentLocation2D = self.currentLocation2D
+        selectLocationVC.zoomLevel = self.zoomLevel
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     

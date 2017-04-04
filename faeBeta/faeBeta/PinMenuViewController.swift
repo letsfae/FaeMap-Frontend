@@ -46,6 +46,8 @@ class PinMenuViewController: UIViewController {
     // MARK: Geo Info pass to create pin view controller
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     
     override func viewDidLoad() {
         super.viewDidLoad()

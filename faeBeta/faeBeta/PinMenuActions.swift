@@ -10,40 +10,42 @@ import UIKit
 
 extension PinMenuViewController {
     func actionCreateCommentPin(_ sender: UIButton) {
+        let createCommentPinVC = CreateCommentPinViewController()
+        createCommentPinVC.modalPresentationStyle = .overCurrentContext
+        createCommentPinVC.currentLocation2D = self.currentLocation
+        createCommentPinVC.zoomLevel = self.zoomLevel
+        createCommentPinVC.delegate = self
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
-            let createCommentPinVC = CreateCommentPinViewController()
-            createCommentPinVC.modalPresentationStyle = .overCurrentContext
-            createCommentPinVC.currentLatitude = self.currentLatitude
-            createCommentPinVC.currentLongitude = self.currentLongitude
-            createCommentPinVC.delegate = self
+            
             self.present(createCommentPinVC, animated: false, completion: nil)
         })
     }
     
     func actionCreateMediaPin(_ sender: UIButton) {
+        let createMediaPinVC = CreateMomentPinViewController()
+        createMediaPinVC.modalPresentationStyle = .overCurrentContext
+        createMediaPinVC.currentLocation2D = self.currentLocation
+        createMediaPinVC.zoomLevel = zoomLevel
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
-            let createMediaPinVC = CreateMomentPinViewController()
-            createMediaPinVC.modalPresentationStyle = .overCurrentContext
-            createMediaPinVC.currentLatitude = self.currentLatitude
-            createMediaPinVC.currentLongitude = self.currentLongitude
             createMediaPinVC.delegate = self
             self.present(createMediaPinVC, animated: false, completion: nil)
         })
     }
     
     func actionCreateChatPin(_ sender: UIButton) {
+        let createChatPinVC = CreateChatPinViewController()
+        createChatPinVC.modalPresentationStyle = .overCurrentContext
+        createChatPinVC.delegate = self
+        createChatPinVC.currentLocation2D = self.currentLocation
+        createChatPinVC.zoomLevel = zoomLevel
+        createChatPinVC.modalTransitionStyle = .crossDissolve
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
-            let createChatPinVC = CreateChatPinViewController()
-            createChatPinVC.modalPresentationStyle = .overCurrentContext
-            createChatPinVC.delegate = self
-            createChatPinVC.currentLocation = CLLocation(latitude: self.currentLatitude, longitude: self.currentLongitude)
-            createChatPinVC.modalTransitionStyle = .crossDissolve
             self.present(createChatPinVC, animated: true, completion: nil)
         })
     }

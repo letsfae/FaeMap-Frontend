@@ -39,6 +39,8 @@ class CreateMomentPinViewController: UIViewController {
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     
     // MARK: -- Buttons
     var buttonMediaSubmit: UIButton!
@@ -139,7 +141,11 @@ class CreateMomentPinViewController: UIViewController {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func randomLocation() -> CLLocationCoordinate2D {
+        let lat = currentLocation2D.latitude
+        let lon = currentLocation2D.longitude
+        let random_lat = Double.random(min: -0.004, max: 0.004)
+        let random_lon = Double.random(min: -0.004, max: 0.004)
+        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
     }
 }

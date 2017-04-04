@@ -14,6 +14,8 @@ extension CreateMomentPinViewController: SelectLocationViewControllerDelegate {
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.pinType = "moment" //Should it be changed to "media"
+        selectLocationVC.currentLocation2D = self.currentLocation2D
+        selectLocationVC.zoomLevel = self.zoomLevel
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     
