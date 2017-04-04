@@ -8,13 +8,14 @@
 
 import UIKit
 
-class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeigh = UIScreen.main.bounds.height
     //7 : 736 5 : 
     var scroll : UIScrollView!
     var imageViewAvatar : UIImageView!
     var imagePicker : UIImagePickerController!
+    var fullAlbumVC : FullAlbumCollectionViewController!
     var buttonImage : UIButton!
     var label1 : UILabel!
     var label2 : UILabel!
@@ -63,6 +64,10 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         loadName()
         loadBird()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
     func loadAvatar() {
         imageViewAvatar = UIImageView(frame: CGRect(x: 0, y: 44, width: 100, height: 100))
         imageViewAvatar.center.x = screenWidth / 2
@@ -86,15 +91,16 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     func showPhotoSelected() {
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .photoLibrary
+            //self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
-            self.present(self.imagePicker,animated:true,completion:nil)
+            //self.present(self.imagePicker,animated:true,completion:nil)
             // add code here to change imagePickerStyle [mingjie jin]
-            
-            
-            
-            
-            
+            self.fullAlbumVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")
+            as! FullAlbumCollectionViewController
+            self.fullAlbumVC._maximumSelectedPhotoNum = 1
+            self.fullAlbumVC.imageDelegate = self
+            self.navigationController?.pushViewController(self.fullAlbumVC, animated: true)
+            //self.present(self.fullAlbumVC, animated: true, completion: nil)
         }
         let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .camera
@@ -241,6 +247,20 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        print("send image for avatar")
+        imageViewAvatar.image = images[0]
+        let avatar = FaeImage()
+        avatar.image = images[0]
+        avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
+            if code / 100 == 2 {
+            } else {
+            }
+        }
+        //self.navigationController?.navigationBar.backgroundColor = UIColor.clear
+        //self.navigationController?.navigationBar.isTranslucent = true
     }
     
 

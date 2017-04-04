@@ -331,6 +331,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionLeaveLikeButton(_:)), for:  .touchDragOutside)
         
     }
     
@@ -675,7 +676,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
         }
-        animateHeart()
+        //animateHeart()
         if !userJustSentHeart{
             sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true ,date: Date())
             userJustSentHeart = true
@@ -683,8 +684,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc private func actionHoldingLikeButton(_ sender: UIButton) {
-        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
+        if(animatingHeartTimer == nil) {
+            animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
+        }
+    }
+    
+    @objc private func actionLeaveLikeButton(_ sender: UIButton) {
+        if(animatingHeartTimer != nil) {
+            animatingHeartTimer.invalidate()
+            animatingHeartTimer = nil;
+        }
         
+        print("[drag out]")
     }
     
     @objc private func animateHeart() {
