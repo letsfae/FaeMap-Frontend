@@ -10,21 +10,21 @@ import UIKit
 
 class FaeCellForMainScreenSearch: UITableViewCell {
     
-    let titleColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
-    let subTitleColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
     var labelTitle: UILabel!
     var labelSubTitle: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadCellLabel()
+        separatorInset = UIEdgeInsets.zero
+        layoutMargins = UIEdgeInsets.zero
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadCellLabel() {
+    fileprivate func loadCellLabel() {
         let fontSize_18 = 18 * screenWidthFactor
         let fontSize_13 = 13 * screenWidthFactor
         let labelWidth = 362 * screenWidthFactor
@@ -37,14 +37,14 @@ class FaeCellForMainScreenSearch: UITableViewCell {
         labelTitle.text = ""
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_18)
         labelTitle.textAlignment = .left
-        labelTitle.textColor = titleColor
+        labelTitle.textColor = UIColor.faeAppInputTextGrayColor()
         self.addSubview(labelTitle)
         
         labelSubTitle = UILabel(frame: CGRect(x: labelX, y: labelSubTitleY, width: labelWidth, height: labelHeight))
         labelSubTitle.text = ""
         labelSubTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_13)
         labelSubTitle.textAlignment = .left
-        labelSubTitle.textColor = subTitleColor
+        labelSubTitle.textColor = UIColor.faeAppTimeTextBlackColor()
         self.addSubview(labelSubTitle)
     }
 }

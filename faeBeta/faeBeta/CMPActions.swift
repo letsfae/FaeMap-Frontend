@@ -105,7 +105,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -125,7 +124,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -148,7 +146,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 self.labelCreateMediaPinTitle.alpha = 1
                 self.buttonMediaSubmit.alpha = 1
                 self.collectionViewMedia.alpha = 1
-                self.buttonAnonymous.alpha = 1
                 if self.selectedMediaArray.count > 0 {
                     self.buttonAddMedia.alpha = 1
                     self.buttonSelectMedia.alpha = 0

@@ -87,21 +87,9 @@ class SelectLocationViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-//        locManager.requestAlwaysAuthorization()        
+    override func viewWillAppear(_ animated: Bool) {   
         willAppearFirstLoad = true
     }
-
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        if willAppearFirstLoad {
-//            currentLocation = locManager.location
-//            currentLatitude = currentLocation.coordinate.latitude
-//            currentLongitude = currentLocation.coordinate.longitude
-//            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-//            mapSelectLocation.camera = camera
-//            willAppearFirstLoad = false
-//        }
-//    }
     
     func searchBarTableHideAnimation() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
@@ -112,8 +100,8 @@ class SelectLocationViewController: UIViewController {
     
     func searchBarTableShowAnimation() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 240)
-            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 240)
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 305*screenHeightFactor)
+            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 305*screenHeightFactor)
         }), completion: nil)
     }
 }

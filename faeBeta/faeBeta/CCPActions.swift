@@ -35,7 +35,6 @@ extension CreateCommentPinViewController {
             self.uiviewMoreOptions.alpha = fromValue
             self.labelCreateCommentPinTitle.alpha = fromValue
             self.buttonCommentSubmit.alpha = fromValue
-            self.buttonAnonymous.alpha = fromValue
             
             self.labelCommentPinMoreOptions.alpha = toValue
             self.uiviewDuration.alpha = toValue
