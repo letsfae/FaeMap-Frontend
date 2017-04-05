@@ -9,7 +9,6 @@
 import Foundation
 import RealmSwift
 
-
 class RealmChat {
     
     class Recent: Object {
@@ -73,6 +72,14 @@ class RealmChat {
     }
     
     func removeRecentWith(userID: Int) {
+        
+    }
+    
+    func cleanDatabase() {
+        
+    }
+    
+    func printDatabase(object : Object, numerOfItem : Int, offset: Int) {
         
     }
     
