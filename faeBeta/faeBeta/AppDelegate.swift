@@ -183,6 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             let push = FaePush()
             push.getSync({ (status:Int!, message: Any?) in
+                print("[runSync] status", status)
                 if status / 100 == 2 {
                     //success
                 } else if status == 401 {

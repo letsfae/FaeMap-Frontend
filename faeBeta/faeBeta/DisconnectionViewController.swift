@@ -16,6 +16,7 @@ class DisconnectionViewController: UIViewController {
     private var reachability: Reachability!
     
     var uiviewNavBarMenu: UIView!
+    var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +47,17 @@ class DisconnectionViewController: UIViewController {
         lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
         view.addSubview(lblFailMessage)
         lblFailMessage.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        preStatusBarStyle = UIApplication.shared.statusBarStyle
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
     func actionReconnect(_ sender: UIButton) {
