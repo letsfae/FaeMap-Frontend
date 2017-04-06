@@ -55,7 +55,7 @@ extension CreateCommentPinViewController {
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCCP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
@@ -103,7 +103,7 @@ extension CreateCommentPinViewController {
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendCommentGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long)
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                         })
                     }
                 }

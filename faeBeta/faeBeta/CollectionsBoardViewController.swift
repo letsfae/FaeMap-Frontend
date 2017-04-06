@@ -38,7 +38,7 @@ class CollectionsBoardViewController: UIViewController {
         if(firstAppear){
             
             super.viewDidAppear(animated)
-            UIView.animate(withDuration: 0.3, animations: ({
+            UIView.animate(withDuration: 0.5, animations: ({
                 self.viewBackground.center.x -= screenWidth
             }))
             firstAppear = false
@@ -53,7 +53,7 @@ class CollectionsBoardViewController: UIViewController {
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: ({
+        UIView.animate(withDuration: 0.5, animations: ({
             self.viewBackground.center.x += screenWidth
         }), completion: { (done: Bool) in
             if done {

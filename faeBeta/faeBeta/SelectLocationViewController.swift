@@ -13,7 +13,7 @@ import CoreLocation
 
 protocol SelectLocationViewControllerDelegate {
     func sendAddress(_ value: String)
-    func sendGeoInfo(_ latitude: String, longitude: String)
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float)
 }
 
 class SelectLocationViewController: UIViewController {

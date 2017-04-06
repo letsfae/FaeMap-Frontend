@@ -62,8 +62,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
 
     // PinMenuDelegate
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: zoom)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()

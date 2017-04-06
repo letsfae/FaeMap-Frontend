@@ -53,6 +53,8 @@ class EditCommentPinViewController: UIViewController {
     var emojiView: StickerPickView!
     var isShowingEmoji: Bool = false
     
+    var zoomLevelCallBack: Float = 13.8
+    
     
     //New Added ID array
     var newAddedImageArray: [UIImage] = []

@@ -191,14 +191,14 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCMP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
     
     func actionCloseSubmitPins(_ sender: UIButton!) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.closePinMenuCMP(close: true)
+            self.delegate?.closePinMenu(close: true)
         })
     }
     
@@ -330,7 +330,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                     let long = CLLocationDegrees(longDouble!)
                     self.dismiss(animated: false, completion: {
                         self.activityIndicator.stopAnimating()
-                        self.delegate?.sendMediaGeoInfo(mediaID: "\(mediaID)", latitude: lat, longitude: long)
+                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                     })
                 }
             }

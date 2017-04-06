@@ -27,6 +27,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     private var submitButtonEnabled: Bool = false
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
     var zoomLevel: Float = 13.8
+    var zoomLevelCallBack: Float = 13.8
     
     enum OptionViewMode{
         case pin
@@ -486,7 +487,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                             let long = CLLocationDegrees(longDouble!)
                             UIScreenService.hideActivityIndicator()
                             self.dismiss(animated: false, completion: {
-                                self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
+                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                             })
                         }
                     }
@@ -515,11 +516,12 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         createChatPinOptionsTableView.reloadData()
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String)
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float)
     {
         selectedLatitude = latitude
         selectedLongitude = longitude
         createChatPinOptionsTableView.reloadData()
+        zoomLevelCallBack = zoom
     }
     
     //MARK: - SendMutipleImagesDelegate

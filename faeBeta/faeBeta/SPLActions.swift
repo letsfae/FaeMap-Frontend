@@ -20,7 +20,7 @@ extension SelectLocationViewController {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = mapSelectLocation.projection.coordinate(for: mapCenter)
             delegate?.sendAddress(searchText)
-            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)")
+            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)", zoom: mapSelectLocation.camera.zoom)
         }
         self.dismiss(animated: false, completion: nil)
     }

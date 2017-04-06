@@ -23,8 +23,9 @@ extension CreateCommentPinViewController: SelectLocationViewControllerDelegate {
         labelSelectLocationContent.text = value
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String) {
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
         selectedLatitude = latitude
         selectedLongitude = longitude
+        zoomLevelCallBack = zoom
     }
 }

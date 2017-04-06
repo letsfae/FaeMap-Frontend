@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSource,SelectLocationViewControllerDelegate {
+extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSource, SelectLocationViewControllerDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreOption", for: indexPath) as! EditOptionTableViewCell
@@ -151,8 +151,9 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
         cell.labelMiddle.text = value
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String) {
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
         pinGeoLocation.latitude = Double(latitude)!
         pinGeoLocation.longitude = Double(longitude)!
+        zoomLevelCallBack = zoom
     }
 }
