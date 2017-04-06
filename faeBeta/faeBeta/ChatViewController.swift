@@ -117,9 +117,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewDidDisappear(_ animated: Bool) {
         print("view did disappear")
         self.toolbarContentView.clearToolBarViews()
-        messages = []
-        objects = []
-        loaded = []
+//        messages = []
+//        objects = []
+//        loaded = []
     }
     
     override func viewDidAppear(_ animated: Bool) {
