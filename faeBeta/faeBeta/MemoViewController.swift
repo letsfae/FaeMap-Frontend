@@ -38,26 +38,18 @@ class MemoViewController: UIViewController, UITextViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.memoText.becomeFirstResponder()
-//        UIView.animate(withDuration: 0.5, animations: ({
-//            self.blurViewMemo.effect = UIBlurEffect(style: .prominent)
-//        }), completion: { (done: Bool) in
-//            if done {
-//                self.memoText.becomeFirstResponder()
-//            }
-//        })
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.blurViewMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0.3)
+
+        }))
     }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        self.memoText.resignFirstResponder()
-//    }
 
     
     
     func loadBlurView() {
         blurViewMemo = UIView()
         blurViewMemo.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        blurViewMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0.3)
+        blurViewMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0)
         self.view.addSubview(blurViewMemo)
 
         

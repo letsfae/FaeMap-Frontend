@@ -64,7 +64,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         super.viewDidAppear(animated)
         if(firstAppear){
             super.viewDidAppear(animated)
-            UIView.animate(withDuration: 0.5, animations: ({
+            UIView.animate(withDuration: 0.3, animations: ({
                 self.viewBackground.center.x -= screenWidth
             }))
             firstAppear = false
@@ -76,7 +76,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, animations: ({
+        UIView.animate(withDuration: 0.3, animations: ({
             self.viewBackground.center.x += screenWidth
         }), completion: { (done: Bool) in
             if done {

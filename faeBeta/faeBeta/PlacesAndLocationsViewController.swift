@@ -67,7 +67,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         super.viewDidAppear(animated)
         if(firstAppear){
             super.viewDidAppear(animated)
-            UIView.animate(withDuration: 0.5, animations: ({
+            UIView.animate(withDuration: 0.3, animations: ({
                 self.viewBackground.center.x -= screenWidth
             }))
             firstAppear = false
@@ -79,7 +79,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, animations: ({
+        UIView.animate(withDuration: 0.3, animations: ({
             self.viewBackground.center.x += screenWidth
         }), completion: { (done: Bool) in
             if done {
@@ -529,6 +529,14 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
                 btnMemo.alpha = 1
                 btnRemove.alpha = 1
             }
+            else{
+                btnShare.isEnabled = false
+                btnMemo.isEnabled = false
+                btnShare.alpha = 0.6
+                btnMemo.alpha = 0.6
+
+            }
+
             arrSelectedItem.append(sectionId)
             cellInGivenId.btnSelected.layer.borderColor = UIColor.faeAppRedColor().cgColor
             cellInGivenId.btnSelected.layer.backgroundColor = UIColor.faeAppRedColor().cgColor
@@ -546,6 +554,12 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
                 btnShare.alpha = 0.6
                 btnMemo.alpha = 0.6
                 btnRemove.alpha = 0.6
+            }
+            if(arrSelectedItem.count == 1){
+                btnShare.isEnabled = true
+                btnMemo.isEnabled = true
+                btnShare.alpha = 1
+                btnMemo.alpha = 1
             }
         }
         
