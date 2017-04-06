@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // PinFeelingCellDelegate
     func postFeelingFromFeelingCell(_ feeling: String) {
@@ -66,10 +66,13 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.textViewDidChange(textViewInput)
     }
     
-    func reloadCommentContent() {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
+        selectedMarkerPosition = coordinate
+        zoomLevel = zoom
+        self.delegate?.reloadMapPins(selectedMarkerPosition, zoom: zoom, pinID: pinIDPinDetailView, marker: pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate

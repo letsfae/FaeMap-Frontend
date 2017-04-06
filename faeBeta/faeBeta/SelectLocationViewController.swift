@@ -11,17 +11,14 @@ import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
-protocol SelectLocationViewControllerDelegate {
+protocol SelectLocationViewControllerDelegate: class {
     func sendAddress(_ value: String)
     func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float)
 }
 
 class SelectLocationViewController: UIViewController {
     
-    var delegate: SelectLocationViewControllerDelegate?
-    
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+    weak var delegate: SelectLocationViewControllerDelegate?
     
     var mapSelectLocation: GMSMapView!
 

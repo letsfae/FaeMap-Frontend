@@ -37,7 +37,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin", animated: true)
+        clearMap(type: "pin", animated: false)
         let coorDistance = cameraDiagonalDistance()
         if self.canDoNextMapPinUpdate {
             self.canDoNextMapPinUpdate = false

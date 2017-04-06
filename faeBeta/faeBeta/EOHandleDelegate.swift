@@ -152,8 +152,8 @@ extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
-        pinGeoLocation.latitude = Double(latitude)!
-        pinGeoLocation.longitude = Double(longitude)!
-        zoomLevelCallBack = zoom
+        self.pinGeoLocation = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
+        zoomLevel = zoom
+        self.delegate?.sendMapCameraInfo(latitude: latitude, longitude: longitude, zoom: zoom)
     }
 }

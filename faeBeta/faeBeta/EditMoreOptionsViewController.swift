@@ -9,9 +9,13 @@
 import UIKit
 import GoogleMaps
 
+protocol EditPinMoreOptionsDelegate: class {
+    func sendMapCameraInfo(latitude: String, longitude: String, zoom: Float)
+}
+
 class EditMoreOptionsViewController: UIViewController {
     
-    var delegate: EditCommentPinViewControllerDelegate!
+    weak var delegate: EditPinMoreOptionsDelegate?
     
     //Parameter passed by last view
     var pinID = ""
@@ -33,6 +37,7 @@ class EditMoreOptionsViewController: UIViewController {
     // Google Map
     var geoCode: CLGeocoder!
     var currentLocation: CLLocation!
+    var zoomLevel: Float = 13.8
     var zoomLevelCallBack: Float = 13.8
     
     //Data Structure

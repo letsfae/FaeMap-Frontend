@@ -1,5 +1,5 @@
 
-//  EditCommentPinViewController.swift
+//  EditPinViewController.swift
 //  faeBeta
 //
 //  Created by Yue on 10/30/16.
@@ -9,13 +9,13 @@
 import UIKit
 import SwiftyJSON
 
-protocol EditCommentPinViewControllerDelegate: class {
-    func reloadCommentContent()
+protocol EditPinViewControllerDelegate: class {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float)
 }
 
-class EditCommentPinViewController: UIViewController {
+class EditPinViewController: UIViewController {
     
-    weak var delegate: EditCommentPinViewControllerDelegate?
+    weak var delegate: EditPinViewControllerDelegate?
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -53,6 +53,7 @@ class EditCommentPinViewController: UIViewController {
     var emojiView: StickerPickView!
     var isShowingEmoji: Bool = false
     
+    var zoomLevel: Float = 13.8
     var zoomLevelCallBack: Float = 13.8
     
     
@@ -103,7 +104,7 @@ class EditCommentPinViewController: UIViewController {
         }
     }
         
-    private func addObservers() {
+    fileprivate func addObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.keyboardWillShow(_:)),
                                                name:NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -112,8 +113,7 @@ class EditCommentPinViewController: UIViewController {
                                                name:NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillShow(_ notification:Notification)
-    {
+    func keyboardWillShow(_ notification:Notification) {
         
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
@@ -126,8 +126,7 @@ class EditCommentPinViewController: UIViewController {
         }, completion: nil)
     }
     
-    func keyboardWillHide(_ notification: Notification)
-    {
+    func keyboardWillHide(_ notification: Notification) {
         if(!isShowingEmoji){
             UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
                 Void in
@@ -138,8 +137,7 @@ class EditCommentPinViewController: UIViewController {
         }
     }
     
-    func showEmojiViewAnimated(animated: Bool)
-    {
+    func showEmojiViewAnimated(animated: Bool) {
         if(animated){
             UIView.animate(withDuration: 0.3, animations: {
                 self.inputToolbar.frame.origin.y = self.screenHeight - 271 - 100
@@ -154,8 +152,7 @@ class EditCommentPinViewController: UIViewController {
         }
     }
     
-    func hideEmojiViewAnimated(animated: Bool)
-    {
+    func hideEmojiViewAnimated(animated: Bool) {
         if(animated){
             UIView.animate(withDuration: 0.3, animations: {
                 self.inputToolbar.frame.origin.y = self.screenHeight - 100
