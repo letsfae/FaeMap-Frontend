@@ -181,7 +181,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func navigationBarPopView() {
         self.toolbarContentView.clearToolBarViews()
-        self.navigationController?.popViewController(animated:)
+//        self.navigationController?.popViewController(animated:)
     }
     
     // MARK: - setup
