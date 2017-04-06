@@ -23,6 +23,14 @@ extension UIColor
         return UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1)
     }
     
+    class func faeAppPurpleColor() -> UIColor {
+        return UIColor(red: 194/255, green: 166/255, blue: 217/255, alpha: 1)
+    }
+    
+    class func faeAppDarkblueColor() -> UIColor {
+        return UIColor(red: 49/255, green: 63/255, blue: 72/255, alpha: 1)
+    }
+    
     class func faeAppWeakPasswordYellowColor() -> UIColor {
         return UIColor(red: 251/255, green: 201/255, blue: 64/255, alpha: 1)
     }

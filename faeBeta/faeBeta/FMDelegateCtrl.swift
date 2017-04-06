@@ -107,15 +107,8 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     func jumpToCollections() {
         
         let CollectionsBoardVC = CollectionsBoardViewController()
-        
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
  
-        //        CollectionsBoardVC.modalPresentationStyle = .overCurrentContext
+        CollectionsBoardVC.modalPresentationStyle = .overCurrentContext
         self.present(CollectionsBoardVC, animated: false, completion: nil)
         
 
