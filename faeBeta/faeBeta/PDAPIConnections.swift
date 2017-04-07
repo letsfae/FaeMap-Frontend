@@ -79,19 +79,22 @@ extension PinDetailViewController {
                 self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
             }
             // Get nick name
-            if pinInfoJSON["anonymous"].boolValue {
+            let anonymous = pinInfoJSON["anonymous"].boolValue
+            if anonymous {
                 self.labelPinUserName.text = "Someone"
-            } else {
-                self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
+                self.isAnonymous = true
             }
-            // Get avatar
-            if let pinUserId = pinInfoJSON["user_id"].int {
-                let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
-                self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.imagePinUserAvatar.alpha = 1
+            else {
+                self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
+                // Get avatar
+                if let pinUserId = pinInfoJSON["user_id"].int {
+                    let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
+                    self.imagePinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                        UIView.animate(withDuration: 0.2, animations: {
+                            self.imagePinUserAvatar.alpha = 1
+                        })
                     })
-                })
+                }
             }
         }
     }
@@ -253,6 +256,9 @@ extension PinDetailViewController {
     }
     
     fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
+//        if userid == -1 {
+//            return
+//        }
         let indexPath = IndexPath(row: index, section: 0)
         let realm = try! Realm()
         if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
@@ -288,7 +294,7 @@ extension PinDetailViewController {
         let getUser = FaeUser()
         getUser.getNamecardOfSpecificUser("\(userid)", completion: { (status, message) in
             if status / 100 != 2 {
-                print("[getNamecardOfSpecificUser] fail to get user")
+                print("[userNameCard] fail to get user")
             } else {
                 
                 let userJSON = JSON(message!)
@@ -315,10 +321,13 @@ extension PinDetailViewController {
     }
     
     fileprivate func userNameGetter(userid: Int, index: Int) {
+//        if userid == -1 {
+//            self.pinDetailUsers[index].userName = "Someone"
+//        }
         let getUser = FaeUser()
         getUser.getOthersProfile("\(userid)", completion: { (status, message) in
             if status / 100 != 2 {
-                print("[getOthersProfile] fail to get user")
+                print("[userNameGetter] fail to get user")
             } else {
                 let userJSON = JSON(message!)
                 let userName = userJSON["user_name"].stringValue

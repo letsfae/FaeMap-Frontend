@@ -181,7 +181,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func navigationBarPopView() {
         self.toolbarContentView.clearToolBarViews()
-        self.navigationController?.popViewController(animated:)
+//        self.navigationController?.popViewController(animated:)
     }
     
     // MARK: - setup
@@ -673,13 +673,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil;
         }
-        
-        print("[drag out]")
     }
     
     @objc private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
         animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+        animatingHeart.layer.opacity = 0
         self.inputToolbar.contentView.addSubview(animatingHeart)
         
         let randomX = CGFloat(arc4random_uniform(150))

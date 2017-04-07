@@ -26,7 +26,7 @@ extension FaeMapViewController {
         }
         let coorDistance = cameraDiagonalDistance()
         userPins.removeAll()
-        clearMap(type: "user")
+        clearMap(type: "user", animated: true)
         canDoNextUserUpdate = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)

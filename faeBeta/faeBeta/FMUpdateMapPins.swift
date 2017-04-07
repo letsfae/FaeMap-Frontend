@@ -37,7 +37,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin")
+        clearMap(type: "pin", animated: false)
         let coorDistance = cameraDiagonalDistance()
         if self.canDoNextMapPinUpdate {
             self.canDoNextMapPinUpdate = false
@@ -53,7 +53,6 @@ extension FaeMapViewController {
     fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
         self.mapPinsArray.removeAll()
         self.mapPins.removeAll()
-        self.clearMapNonAnimated(type: "pin")
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         let loadPinsByZoomLevel = FaeMap()
@@ -82,7 +81,6 @@ extension FaeMapViewController {
                 return
             }
             self.processMapPins(results: mapPinJsonArray)
-//            self.mapPins = mapPinJsonArray.map{MapPin(json: $0)}
             Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
             completion(self.mapPins)
         }
@@ -117,7 +115,7 @@ extension FaeMapViewController {
             pinMap.zIndex = 1
             pinMap.map = self.faeMapView
             self.mapPinsArray.append(pinMap)
-            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-3 seconds, randomly
+            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
                 icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
             }, completion: {(done: Bool) in
@@ -198,7 +196,7 @@ extension FaeMapViewController {
         let farLeft = region.farLeft
         let nearLeft = region.nearRight
         let distance = GMSGeometryDistance(farLeft, nearLeft)
-        return Int(distance)
+        return Int(distance*4)
     }
     
     func pinIconSelector(type: String, status: String) -> UIImage {

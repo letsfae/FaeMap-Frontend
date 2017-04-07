@@ -23,6 +23,8 @@ protocol PinDetailDelegate: class {
     func changeIconImage(marker: GMSMarker, type: String, status: String)
     // Disable self marker on main map true or not
     func disableSelfMarker(yes: Bool)
+    // Reload map pins because of location changed
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker)
 }
 
 class PinDetailViewController: UIViewController {
@@ -189,6 +191,7 @@ class PinDetailViewController: UIViewController {
     var uiviewRedSlidingLine: UIView!
     var uiviewToolBar: UIView! // Input tool bar
     var uiviewFeeling: UIView!
+    var zoomLevel: Float = 13.8
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -228,9 +231,10 @@ class PinDetailViewController: UIViewController {
             self.subviewNavigation.frame.origin.y = 0
             self.subviewTable.frame.origin.y = 65
             self.tableCommentsForPin.frame.origin.y = 65
-            self.uiviewFeelingBar.alpha = 1
             if self.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
+            } else {
+                self.uiviewFeelingBar.alpha = 1
             }
         }, completion: { (done: Bool) in
             if self.pinTypeEnum != .place {

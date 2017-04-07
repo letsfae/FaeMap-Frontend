@@ -10,16 +10,41 @@ import UIKit
 import SwiftyJSON
 
 class CollectionsBoardViewController: UIViewController {
+    var firstAppear = true
+    
+    //background view
+    var viewBackground: UIView!
+    
+    var savedPinsCount : UILabel!
+    var createdPinsCount : UILabel!
+    var savedLocationsCount : UILabel!
+    var savedPlacesCount : UILabel!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        self.view.addSubview(viewBackground)
+        viewBackground.center.x += screenWidth
         // Do any additional setup after loading the view.
         loadColBoard()
         loadNavBar()
         
+        
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if(firstAppear){
+            
+            super.viewDidAppear(animated)
+            UIView.animate(withDuration: 0.5, animations: ({
+                self.viewBackground.center.x -= screenWidth
+            }))
+            firstAppear = false
+        }
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -27,8 +52,15 @@ class CollectionsBoardViewController: UIViewController {
     }
     
     // Dismiss current View
-    func actionDimissCurrentView(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+    func actionDismissCurrentView(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.5, animations: ({
+            self.viewBackground.center.x += screenWidth
+        }), completion: { (done: Bool) in
+            if done {
+                self.dismiss(animated: false, completion: nil)
+            }
+        })
+        
     }
     
     // Load the Navigation Bar
@@ -39,7 +71,7 @@ class CollectionsBoardViewController: UIViewController {
         viewNavBar.layer.borderWidth = 1
         viewNavBar.backgroundColor = UIColor.white
         
-        self.view.addSubview(viewNavBar)
+        viewBackground.addSubview(viewNavBar)
         
         let title = UILabel(frame: CGRect(x: (screenWidth-103)/2, y: 28, width: 103, height: 27))
         title.font = UIFont(name: "AvenirNext-Medium",size: 20)
@@ -56,7 +88,7 @@ class CollectionsBoardViewController: UIViewController {
         btnBackNavBar.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
         
         
-        btnBackNavBar.addTarget(self, action: #selector(self.actionDimissCurrentView(_:)), for: .touchUpInside)
+        btnBackNavBar.addTarget(self, action: #selector(self.actionDismissCurrentView(_:)), for: .touchUpInside)
         
         
         viewNavBar.addSubview(btnBackNavBar)
@@ -69,7 +101,7 @@ class CollectionsBoardViewController: UIViewController {
         
         let viewBoard = UIView(frame: CGRect(x: 0,y: 62,width: screenWidth,height: screenHeight-62))
         viewBoard.backgroundColor = UIColor.white
-        self.view.addSubview(viewBoard)
+        viewBackground.addSubview(viewBoard)
         
         let myPins = UILabel()
         myPins.font = UIFont(name: "AvenirNext-DemiBold",size: 13)
@@ -87,8 +119,8 @@ class CollectionsBoardViewController: UIViewController {
         let createdPinsAvatar = getAvatar()
         viewBoard.addSubview(createdPinsAvatar)
         
-        let CreatedPinsCount = getitemCount(_: String(getCreatedPinsCount()))
-        viewBoard.addSubview(CreatedPinsCount)
+        createdPinsCount = getitemCount(_: String(getCreatedPinsCount()))
+        viewBoard.addSubview(createdPinsCount)
         
         
         
@@ -101,7 +133,7 @@ class CollectionsBoardViewController: UIViewController {
         let savedPinsAvatar = getAvatar()
         viewBoard.addSubview(savedPinsAvatar)
         
-        let savedPinsCount = getitemCount(_: String(getSavedPinsCount()))
+        savedPinsCount = getitemCount(_: String(getSavedPinsCount()))
         viewBoard.addSubview(savedPinsCount)
         
         let myLists = UILabel()
@@ -120,9 +152,9 @@ class CollectionsBoardViewController: UIViewController {
         let savedLocationsAvatar = getAvatar()
         viewBoard.addSubview(savedLocationsAvatar)
         
-        let savedLocationsCount = getitemCount(_: String(getSavedLocationsCount()))
+        savedLocationsCount = getitemCount(_: String(getSavedLocationsCount()))
         viewBoard.addSubview(savedLocationsCount)
-
+        
         
         let savedPlaces = UIButton()
         savedPlaces.setImage(#imageLiteral(resourceName: "placebtnbackground"), for: UIControlState.normal)
@@ -133,7 +165,7 @@ class CollectionsBoardViewController: UIViewController {
         let savedPlacesAvatar = getAvatar()
         viewBoard.addSubview(savedPlacesAvatar)
         
-        let savedPlacesCount = getitemCount(_: String(getSavedPlacesCount()))
+        savedPlacesCount = getitemCount(_: String(getSavedPlacesCount()))
         viewBoard.addSubview(savedPlacesCount)
         
         
@@ -142,20 +174,20 @@ class CollectionsBoardViewController: UIViewController {
         
         viewBoard.addConstraintsWithFormat("V:|-52-[v0(176)]-50-[v1(176)]", options: [], views: savedPins,savedPlaces)
         
-        viewBoard.addConstraintsWithFormat("H:|-15-[v0]-12-[v1]-15-|", options: [], views: createdPins,savedPins)
+        viewBoard.addConstraintsWithFormat("H:|-15-[v0(\(screenWidth/2-21))]-12-[v1(\(screenWidth/2-21))]-15-|", options: [], views: createdPins,savedPins)
         
-        viewBoard.addConstraintsWithFormat("H:|-15-[v0]-12-[v1]-15-|", options: [], views: savedLocations, savedPlaces)
-        viewBoard.addConstraintsWithFormat("H:|-15-[v0]-12-[v1]-15-|", options: [], views: savedLocations, savedPlaces)
+        viewBoard.addConstraintsWithFormat("H:|-15-[v0(\(screenWidth/2-21))]-12-[v1(\(screenWidth/2-21))]-15-|", options: [], views: savedLocations, savedPlaces)
+        
         viewBoard.addConstraintsWithFormat("H:|-15-[v0]", options: [], views: myPins)
         viewBoard.addConstraintsWithFormat("H:|-15-[v0]", options: [], views: myLists)
         
         
         // 给头像和itemslabel加Constraints
-        viewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views:createdPinsAvatar, CreatedPinsCount, savedLocationsAvatar, savedLocationsCount)
+        viewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views:createdPinsAvatar, createdPinsCount, savedLocationsAvatar, savedLocationsCount)
         viewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views:savedPinsAvatar, savedPinsCount, savedPlacesAvatar, savedPlacesCount)
-        viewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-46)-[v1(36)]", options: [], views: createdPinsAvatar, savedPinsAvatar)
-        viewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-46)-[v1(36)]", options: [], views: savedLocationsAvatar, savedPlacesAvatar)
-        viewBoard.addConstraintsWithFormat("H:|-30-[v0(100)]-\(screenWidth/2-109)-[v1]", options: [], views: CreatedPinsCount, savedPinsCount)
+        viewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: createdPinsAvatar, savedPinsAvatar)
+        viewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: savedLocationsAvatar, savedPlacesAvatar)
+        viewBoard.addConstraintsWithFormat("H:|-30-[v0(100)]-\(screenWidth/2-109)-[v1]", options: [], views: createdPinsCount, savedPinsCount)
         viewBoard.addConstraintsWithFormat("H:|-30-[v0(100)]-\(screenWidth/2-109)-[v1]", options: [], views: savedLocationsCount, savedPlacesCount)
         
         
@@ -211,9 +243,10 @@ class CollectionsBoardViewController: UIViewController {
         var count = 0
         let getCreatedPinsData = FaeMap()
         getCreatedPinsData.getCreatedPins() {(status: Int, message: Any?) in
-            if status == 200 {
+            if status / 100 == 2 {
                 let PinsOfCreatedPinsJSON = JSON(message!)
                 count = PinsOfCreatedPinsJSON.count
+                self.createdPinsCount.text = String(count)+" items"
             }
         }
         return count
@@ -223,11 +256,11 @@ class CollectionsBoardViewController: UIViewController {
         var count = 0
         let getSavedPinsData = FaeMap()
         getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
-            if status == 200 {
+            if status / 100 == 2 {
                 
                 let PinsOfSavedPinsJSON = JSON(message!)
-                
                 count = PinsOfSavedPinsJSON.count
+                self.savedPinsCount.text = String(count)+" items"
             }
         }
         return count
@@ -235,30 +268,24 @@ class CollectionsBoardViewController: UIViewController {
     
     func getSavedPlacesCount() -> Int {
         let count = 0
-        
+        //savedPlacesCount.text = String(count)+" items"
         return count
     }
-
+    
     
     func getSavedLocationsCount() -> Int {
         let count = 0
         return count
     }
-
+    
     
     
     func actionCreatedPins(_ sender: UIButton){
-    
+        
         let createdPinVC = PinsViewController()
         createdPinVC.tblTitle = "Created Pins"
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        createdPinVC.modalPresentationStyle = .overCurrentContext
         
-        //        createdPinVC.modalPresentationStyle = .overCurrentContext
         self.present(createdPinVC, animated: false, completion: nil)
     }
     
@@ -266,14 +293,8 @@ class CollectionsBoardViewController: UIViewController {
         
         let savedPinVC = PinsViewController()
         savedPinVC.tblTitle = "Saved Pins"
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        savedPinVC.modalPresentationStyle = .overCurrentContext
         
-        //        savedPinVC.modalPresentationStyle = .overCurrentContext
         self.present(savedPinVC, animated: false, completion: nil)
     }
     
@@ -281,14 +302,8 @@ class CollectionsBoardViewController: UIViewController {
         
         let savedPlaceVC = PlacesAndLocationsViewController()
         savedPlaceVC.tblTitle = "Saved Places"
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        savedPlaceVC.modalPresentationStyle = .overCurrentContext
         
-        //        savedPlaceVC.modalPresentationStyle = .overCurrentContext
         self.present(savedPlaceVC, animated: false, completion: nil)
     }
     
@@ -296,17 +311,11 @@ class CollectionsBoardViewController: UIViewController {
         
         let savedLocationsVC = PlacesAndLocationsViewController()
         savedLocationsVC.tblTitle = "Saved Locations"
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        savedLocationsVC.modalPresentationStyle = .overCurrentContext
         
-        //        savedLocationsVC.modalPresentationStyle = .overCurrentContext
         self.present(savedLocationsVC, animated: false, completion: nil)
     }
-
+    
     
     
     

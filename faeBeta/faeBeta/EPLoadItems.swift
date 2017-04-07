@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension EditCommentPinViewController {
+extension EditPinViewController {
     func loadEditCommentPinItems() {
         buttonCancel = UIButton()
         buttonCancel.setImage(UIImage(named: "cancelEditCommentPin"), for: UIControlState())

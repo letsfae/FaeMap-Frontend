@@ -8,7 +8,6 @@
 
 import UIKit
 import GoogleMaps
-import SwiftyJSON
 
 extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
@@ -64,9 +63,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID, pinType: pinType)
+            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID)
         })
     }
     
@@ -94,6 +93,4 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         }
         
     }
-    
-    
 }

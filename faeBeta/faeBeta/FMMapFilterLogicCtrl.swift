@@ -26,7 +26,7 @@ extension FaeMapViewController {
             checkFilterDistance(sender)
             break
         case .people:
-            clearMap(type: "pin")
+            clearMap(type: "pin", animated: false)
             timerLoadRegionPins.invalidate()
             checkFilterPeople(sender)
             refreshMap(pins: false, users: true, places: false)

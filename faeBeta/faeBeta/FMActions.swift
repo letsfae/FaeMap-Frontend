@@ -33,11 +33,15 @@ extension FaeMapViewController {
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton!) {
+        let mapCenter_point = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenter_coor = faeMapView.projection.coordinate(for: mapCenter_point)
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
         pinMenuVC.currentLatitude = self.currentLatitude
         pinMenuVC.currentLongitude = self.currentLongitude
+        pinMenuVC.currentLocation = mapCenter_coor
+        pinMenuVC.zoomLevel = faeMapView.camera.zoom
         pinMenuVC.delegate = self
         self.present(pinMenuVC, animated: false, completion: nil)
     }

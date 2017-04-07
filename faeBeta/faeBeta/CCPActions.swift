@@ -35,7 +35,6 @@ extension CreateCommentPinViewController {
             self.uiviewMoreOptions.alpha = fromValue
             self.labelCreateCommentPinTitle.alpha = fromValue
             self.buttonCommentSubmit.alpha = fromValue
-            self.buttonAnonymous.alpha = fromValue
             
             self.labelCommentPinMoreOptions.alpha = toValue
             self.uiviewDuration.alpha = toValue
@@ -56,7 +55,7 @@ extension CreateCommentPinViewController {
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCCP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
@@ -76,8 +75,9 @@ extension CreateCommentPinViewController {
         let commentContent = textViewForCommentPin.text
         
         if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         if commentContent == "" {
@@ -89,7 +89,7 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("content", value: commentContent)
         postSingleComment.whereKey("interaction_radius", value: "99999999")
         postSingleComment.whereKey("duration", value: "180")
-        postSingleComment.whereKey("anonymous", value: "\(anonymous)")
+        postSingleComment.whereKey("anonymous", value: "\(switchAnony.isOn)")
         
         postSingleComment.postPin(type: "comment") {(status: Int, message: Any?) in
             if let getMessage = message as? NSDictionary{
@@ -103,7 +103,7 @@ extension CreateCommentPinViewController {
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendCommentGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long)
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                         })
                     }
                 }

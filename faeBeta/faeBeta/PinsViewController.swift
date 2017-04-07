@@ -14,9 +14,12 @@ import SwiftyJSON
 
 class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate {
     
+    var firstAppear = true
+    
+    //background view
+    var viewBackground: UIView!
     
     // Table bar
-    var viewTable: UIView!
     var TblResult: UITableView!
     var viewSearchBarCover: UIView! //Transparent view to cover the searchbar for detect the click event
     var SearchBar: UISearchBar!
@@ -30,14 +33,16 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     var tblTitle : String!
     
     //The set of pin data
-
+    
     var pinDataArr = [[String: AnyObject]]()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        self.view.addSubview(viewBackground)
+        viewBackground.center.x += screenWidth
         loadTblResult()
         loadNavBar()
         switch tblTitle {
@@ -51,14 +56,43 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         default: break
         }
         
-
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        if(firstAppear){
+            super.viewDidAppear(animated)
+            UIView.animate(withDuration: 0.3, animations: ({
+                self.viewBackground.center.x -= screenWidth
+            }))
+            firstAppear = false
+            
+        }
+    }
+    
+    
+    
+    // Dismiss current View
+    func actionDismissCurrentView(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.viewBackground.center.x += screenWidth
+        }), completion: { (done: Bool) in
+            if done {
+                self.dismiss(animated: false, completion: nil)
+            }
+        })
+        
+    }
+    
+    
     
     // get the Created Pins
     func getCreatedPins() {
         let getCreatedPinsData = FaeMap()
         getCreatedPinsData.getCreatedPins() {(status: Int, message: Any?) in
-            if status == 200 {
+            if status / 100 == 2 {
                 print("Successfully get Created pins!")
                 self.pinDataArr.removeAll()
                 let PinsOfCreatedPinsJSON = JSON(message!)
@@ -143,7 +177,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
                         if let time = PinsOfSavedPinsJSON[i]["created_at"].string {
                             dicCell["created_at"] = time as AnyObject?
                         }
-
+                        
                         if let type = PinsOfSavedPinsJSON[i]["type"].string {
                             dicCell["type"] = type as AnyObject?
                         }
@@ -210,7 +244,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         
         
         
-        self.view.addSubview(uiviewNavBar)
+        viewBackground.addSubview(uiviewNavBar)
         
         
         let btnBack = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
@@ -231,16 +265,11 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         
     }
     
-    //dismiss current view
-    func actionDismissCurrentView(_ sender: UIButton) {
-        self.dismiss(animated: false, completion: nil)
-    }
-    
     
     private func loadSearchBar(){
         
         SearchBar = UISearchBar()
-        SearchBar.frame = CGRect(x: 0,y: 64,width: screenWidth,height: 50)
+        SearchBar.frame = CGRect(x: 0,y: 0,width: screenWidth,height: 50)
         SearchBar.placeholder = "Search Pins"
         SearchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         
@@ -260,7 +289,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         viewSearchBarCover = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 50))
         viewSearchBarCover.backgroundColor = .clear
         
-        self.view.addSubview(SearchBar)
         SearchBar.addSubview(viewSearchBarCover)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDown(_:)))
@@ -273,21 +301,19 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     
     private func loadTblResult(){
         
-        viewTable = UIView(frame: CGRect(x: 0,y: 62,width: screenWidth,height: screenHeight-62))
-        viewTable.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        TblResult = UITableView(frame: CGRect(x: 0,y: 44,width: screenWidth,height: screenHeight-106), style: UITableViewStyle.plain)
+        viewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        TblResult = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
         TblResult.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         TblResult.register(PinTableViewCell.self, forCellReuseIdentifier: "PinCell")
         TblResult.delegate = self
         TblResult.dataSource = self
         TblResult.showsVerticalScrollIndicator = false
-        TblResult.tableFooterView = UIView(frame: CGRect(x: 0,y: screenHeight-10,width: screenWidth,height: 10))
+        
         
         //for auto layout
         TblResult.rowHeight = UITableViewAutomaticDimension
         TblResult.estimatedRowHeight = 340
         
-        self.view.addSubview(viewTable)
         
         emptyTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
         emptyTblImgView.image = #imageLiteral(resourceName: "empty_table_bg")
@@ -297,11 +323,12 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedtable_bg")
         emptySavedTblImgView.isHidden = true
         
-
-        viewTable.addSubview(emptyTblImgView)
-        viewTable.addSubview(emptySavedTblImgView)
-        viewTable.addSubview(TblResult)
+        
+        viewBackground.addSubview(emptyTblImgView)
+        viewBackground.addSubview(emptySavedTblImgView)
+        viewBackground.addSubview(TblResult)
         loadSearchBar()
+        TblResult.tableHeaderView = SearchBar
     }
     
     // Creat the search view when tap the fake searchbar
@@ -324,7 +351,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     
     
     // Make the background color show through
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView
@@ -338,8 +365,8 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     /* To add the space between the cells, we use indexPath.section to get the current cell index. And there is just one row in every section. When we want to get the index of cell, we use indexPath.section rather than indexPath.row */
     
     // Set the spacing between sections
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
         return 10
         
     }
@@ -357,6 +384,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         cell.setValueForCell(_: pinDataArr[indexPath.section])
         // Hide the separator line
         cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+        
         cell.layer.cornerRadius = 10.0
         cell.selectionStyle = .none
         return cell
@@ -371,17 +399,17 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
     }
     
     
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-//        return UITableViewCellEditingStyle.none
-//    }
-//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-//        return false
-//    }
-//    
-//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-
+    //    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    //        return UITableViewCellEditingStyle.none
+    //    }
+    //    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+    //        return false
+    //    }
+    //
+    //    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    //        return true
+    //    }
+    
     
     
     

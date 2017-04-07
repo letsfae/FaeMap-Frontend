@@ -8,16 +8,16 @@
 
 import UIKit
 
-extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegate, CreatePinBaseDelegate {
-    // CCP
-    func backFromCCP(back: Bool) {
+extension PinMenuViewController: CreatePinDelegate {
+    // CreatePinDelegate
+    func backFromPinCreating(back: Bool) {
         if back {
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewPinSelections.alpha = 1.0
             })
         }
     }
-    // CCP
+    // CreatePinDelegate
     func closePinMenu(close: Bool) {
         if close {
             self.dismiss(animated: false, completion: {
@@ -25,38 +25,10 @@ extension PinMenuViewController: CreateCommentPinDelegate, CreateMediaPinDelegat
             })
         }
     }
-    // CCP
-    func sendCommentGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    // CreatePinDelegate
+    func sendGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.sendPinGeoInfo(pinID: pinID, type: "comment", latitude: latitude, longitude: longitude)
-        })
-    }
-    // CMP
-    func backFromCMP(back: Bool) {
-        if back {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewPinSelections.alpha = 1.0
-            })
-        }
-    }
-    // CMP
-    func closePinMenuCMP(close: Bool) {
-        if close {
-            self.dismiss(animated: false, completion: {
-                self.delegate?.whenDismissPinMenu()
-            })
-        }
-    }
-    // CMP
-    func sendMediaGeoInfo(mediaID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        self.dismiss(animated: false, completion: {
-            self.delegate?.sendPinGeoInfo(pinID: mediaID, type: "media", latitude: latitude, longitude: longitude)
-        })
-    }
-    
-    func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        self.dismiss(animated: false, completion: {
-            self.delegate?.sendPinGeoInfo(pinID: chatID, type: "chat_room", latitude: latitude, longitude: longitude)
+            self.delegate?.sendPinGeoInfo(pinID: pinID, type: "comment", latitude: latitude, longitude: longitude, zoom: zoom)
         })
     }
 }

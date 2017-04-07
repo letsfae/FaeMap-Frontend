@@ -35,6 +35,10 @@ extension SelectLocationViewController: GMSMapViewDelegate {
         })
     }
     
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        faeSearchController.faeSearchBar.endEditing(true)
+    }
+    
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         faeSearchController.faeSearchBar.endEditing(true)
     }

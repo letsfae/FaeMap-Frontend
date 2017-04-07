@@ -222,9 +222,11 @@ extension PinDetailViewController {
             self.pinIcon.alpha = 0
             self.buttonPrevPin.alpha = 0
             self.buttonNextPin.alpha = 0
-            self.uiviewFeelingBar.alpha = 0
             if self.uiviewPlaceDetail != nil {
                 self.uiviewPlaceDetail.center.y -= screenHeight
+            }
+            if self.pinTypeEnum != .place {
+                self.uiviewFeelingBar.alpha = 0
             }
         }), completion: { (done: Bool) in
             if done {

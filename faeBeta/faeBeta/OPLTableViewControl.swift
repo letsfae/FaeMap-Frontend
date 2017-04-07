@@ -7,10 +7,8 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 import CoreLocation
-import SDWebImage
 import RealmSwift
 
 extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -20,7 +18,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tableOpenedPin {
-            print("number of cells is \(self.openedPinListArray.count)")
+//            print("number of cells is \(self.openedPinListArray.count)")
             return self.openedPinListArray.count
         }
         else{
@@ -31,41 +29,23 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         if tableView == self.tableOpenedPin {
             let cell = tableView.dequeueReusableCell(withIdentifier: "openedPinCell", for: indexPath) as! OPLTableViewCell
             cell.delegate = self
-            let pinInfo = openedPinListArray[indexPath.row]
-            print("[OPLTableViewControl] pinInfo = \(pinInfo) row = \(indexPath.row)")
-            let pinType = pinInfo.components(separatedBy: "%")[0]
-            let pinID = pinInfo.components(separatedBy: "%")[1]
+            let pinTypeID = openedPinListArray[indexPath.row]
+            print("[OPLTableViewControl] pinInfo = \(pinTypeID) row = \(indexPath.row)")
+            let pinID = pinTypeID.components(separatedBy: "%")[0]
             cell.pinID = pinID
             cell.indexPathInCell = indexPath
             
             let realm = try! Realm()
-            if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinType)\(pinID)'").first {
+            if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinID)'").first {
                 cell.content.text = opinListElem.pinContent
-                if pinType == "place" {
-                    cell.time.text = opinListElem.pinTime
-                } else {
-                    cell.time.text = opinListElem.pinTime.formatFaeDate()
-                }
+                cell.time.text = opinListElem.pinTime
                 cell.location = CLLocationCoordinate2DMake(opinListElem.pinLat+0.00148, opinListElem.pinLon)
                 cell.deleteButton.isEnabled = true
                 cell.jumpToDetail.isEnabled = true
             }
-            if pinType == "comment"{
-                cell.pinType = .comment
-                cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinComment")
-            } else if pinType == "media" {
-                cell.pinType = .media
-                cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinMoment")
-            } else if pinType == "chat_room" {
-                cell.pinType = .chat_room
-                cell.imageViewAvatar.image = #imageLiteral(resourceName: "openedPinChat")
-            } else if pinType == "place" {
-                cell.pinType = .place
-                let category = pinInfo.components(separatedBy: "%")[2]
-                cell.imageViewAvatar.image = placeCategory(placeType: category)
-            }
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
+            let category = pinTypeID.components(separatedBy: "%")[1]
+            cell.imageViewAvatar.image = placeCategory(placeType: category)
+            
             return cell
         }
         else {

@@ -13,19 +13,41 @@ import GoogleMaps
 
 extension FaeMapViewController {
     
+    func getSelfNameCard(_ sender: UIButton) {
+        buttonOptions.tag = Int(user_id)
+        buttonShowSelfOnMap.isHidden = false
+        buttonFavorite.isHidden = true
+        if user_id != nil {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+            imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            buttonChat.tag = Int(user_id)
+        }
+        else {
+            return
+        }
+        let zoomLv = faeMapView.camera.zoom
+        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
+                                              longitude: currentLongitude, zoom: zoomLv)
+        faeMapView.animate (to: camera)
+        animateNameCard()
+        let userNameCard = FaeUser()
+        userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
+            if status / 100 == 2 {
+                print("[updateNameCard] \(message!)")
+                let profileInfo = JSON(message!)
+                let canShowGender = profileInfo["show_gender"].boolValue
+                let gender = profileInfo["gender"].stringValue
+                let canShowAge = profileInfo["show_age"].boolValue
+                let age = profileInfo["age"].stringValue
+                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
+                self.labelDisplayName.text = profileInfo["nick_name"].stringValue
+                self.labelShortIntro.text = profileInfo["short_intro"].stringValue
+            }
+        }
+    }
+    
     func animateNameCard() {
-        self.imageUserGender.isHidden = true
-        self.lblUserAge.isHidden = true
-        self.labelDisplayName.isHidden = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-            if self.imageUserGender.image != nil {
-                self.imageUserGender.isHidden = false
-            }
-            if self.lblUserAge.text != nil {
-                self.lblUserAge.isHidden = false
-            }
-            self.labelDisplayName.isHidden = false
-        })
         let targetFrame = CGRect(x: 73, y: 158, width: 268, height: 293)
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.buttonFakeTransparentClosingView.alpha = 1
@@ -35,6 +57,7 @@ extension FaeMapViewController {
             self.imageAvatarNameCard.frame = CGRect(x: 170, y: 240, width: 74, height: 74)
             self.buttonChat.frame = CGRect(x: 193.5, y: 393, width: 27, height: 27)
             self.labelDisplayName.frame = CGRect(x: 114, y: 323, width: 186, height: 25)
+            self.labelDisplayName.alpha = 1
             self.labelShortIntro.frame = CGRect(x: 122, y: 349, width: 171, height: 18)
             self.imageOneLine.frame = CGRect(x: 73, y: 380.5, width: 268, height: 1)
             self.buttonFavorite.frame = CGRect(x: 116, y: 393, width: 27, height: 27)
@@ -45,6 +68,7 @@ extension FaeMapViewController {
             self.uiviewUserGender.frame = CGRect(x: 88, y: 292, width: 46, height: 18)
             self.imageUserGender.frame = CGRect(x: 97, y: 295, width: 10, height: 12)
             self.lblUserAge.frame = CGRect(x: 113, y: 293, width: 16, height: 14)
+            self.lblUserAge.alpha = 1
         }, completion: nil)
     }
     
@@ -90,6 +114,8 @@ extension FaeMapViewController {
                 self.uiviewUserGender.isHidden = true
                 self.imageUserGender.image = nil
                 self.lblUserAge.text = nil
+                self.lblUserAge.alpha = 0
+                self.labelDisplayName.alpha = 0
             }
         })
     }
@@ -160,11 +186,12 @@ extension FaeMapViewController {
         
         labelDisplayName = UILabel(frame: CGRect(x: 114, y: 451, width: 0, height: 0))
         labelDisplayName.layer.anchorPoint = nameCardAnchor
-        labelDisplayName.text = "YueYueYueYueYue"
+        labelDisplayName.text = nil
         labelDisplayName.textAlignment = .center
         labelDisplayName.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         labelDisplayName.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
         labelDisplayName.layer.zPosition = 907
+        labelDisplayName.alpha = 0
         self.view.addSubview(labelDisplayName)
         
         labelShortIntro = UILabel(frame: startFrame)
@@ -234,6 +261,7 @@ extension FaeMapViewController {
         lblUserAge.textColor = UIColor.white
         lblUserAge.font = UIFont(name: "AvenirNext-Demibold", size: 13)
         lblUserAge.layer.zPosition = 913
+        lblUserAge.alpha = 0
         self.view.addSubview(lblUserAge)
 //        lblUserAge.text = "21"
     }
@@ -261,7 +289,7 @@ extension FaeMapViewController {
         }
     }
     
-    private func showGenderAge(showGender: Bool, gender: String, showAge: Bool, age: String) {
+    fileprivate func showGenderAge(showGender: Bool, gender: String, showAge: Bool, age: String) {
         if !showGender && !showAge {
             uiviewUserGender.isHidden = true
             imageUserGender.image = nil
@@ -399,39 +427,5 @@ extension FaeMapViewController {
                 self.reportNameCard.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
             }
         }))
-    }
-    
-    func getSelfNameCard(_ sender: UITapGestureRecognizer) {
-        buttonOptions.tag = Int(user_id)
-        buttonShowSelfOnMap.isHidden = false
-        buttonFavorite.isHidden = true
-        if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
-            imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
-            buttonChat.tag = Int(user_id)
-        }
-        else {
-            return
-        }
-        let zoomLv = faeMapView.camera.zoom
-        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
-                                              longitude: currentLongitude, zoom: zoomLv)
-        faeMapView.animate (to: camera)
-        animateNameCard()
-        let userNameCard = FaeUser()
-        userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
-            if status / 100 == 2 {
-                print("[updateNameCard] \(message!)")
-                let profileInfo = JSON(message!)
-                let canShowGender = profileInfo["show_gender"].boolValue
-                let gender = profileInfo["gender"].stringValue
-                let canShowAge = profileInfo["show_age"].boolValue
-                let age = profileInfo["age"].stringValue
-                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
-                self.labelDisplayName.text = profileInfo["nick_name"].stringValue
-                self.labelShortIntro.text = profileInfo["short_intro"].stringValue
-            }
-        }
     }
 }

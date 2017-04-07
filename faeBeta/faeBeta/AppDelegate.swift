@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Reachability variables
     var vcPresented = false
-    let reachaVC = DisconnectionViewController()
+    var reachaVC = DisconnectionViewController()
     private var reachability: Reachability!
     
     // Q: Firebase? - Yue Shen
@@ -59,18 +59,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             migrationBlock: { migration, oldSchemaVersion in
                 // The enumerateObjects:block: method iterates
                 // over every 'Person' object stored in the Realm file
-            
-                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
-                    if oldSchemaVersion < 3 {
-                        newObject!["pinType"] = "\(oldObject?["pinType"])"
-                    }
-                }
+//            
+//                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
+//                    if oldSchemaVersion < 3 {
+//                        newObject!["pinType"] = "\(oldObject?["pinType"])"
+//                    }
+//                }
         })
         
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
+//        let realm = try! Realm()
+//        try! realm.write {
+//            realm.deleteAll()
+//        }
         
         return true
     }
@@ -79,17 +79,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func reachabilityChanged(notification: Notification) {
         let reachability = notification.object as! Reachability
         if reachability.isReachable {
-            if vcPresented {
-                // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-                reachaVC.dismiss(animated: true, completion: nil)
-            }
+            // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
+            reachaVC.dismiss(animated: true, completion: nil)
         } else {
             // print("[AppDelegate | reachabilityChanged] Network not reachable")
-            if !vcPresented {
-                vcPresented = true
-                self.window?.makeKeyAndVisible()
-                self.window?.rootViewController!.present(reachaVC, animated: true, completion: nil)
-            }
+            self.window?.makeKeyAndVisible()
+            self.window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
         }
     }
     
@@ -180,18 +175,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func runSync() {
         if is_Login == 0 {
             print("not log in, sync fail")
+            if reachability.isReachable {
+                
+            } else {
+                
+            }
         } else {
             let push = FaePush()
-            push.getSync({ (status:Int!, message: Any?) in
+            push.getSync({ (status: Int!, message: Any?) in
+                print("[runSync] status", status)
                 if status / 100 == 2 {
                     //success
                 } else if status == 401 {
                     self.popUpWelcomeView()
                 } else {
-//                     self.popUpWelcomeView()
                     let vc = DisconnectionViewController()
                     self.window?.makeKeyAndVisible()
-                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
+                    self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
                 }
             })
         }

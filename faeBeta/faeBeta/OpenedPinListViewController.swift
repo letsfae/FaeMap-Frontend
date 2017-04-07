@@ -9,13 +9,12 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
-import SDWebImage
 
 protocol OpenedPinListViewControllerDelegate {
     // Directly back to main map
     func directlyReturnToMap()
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String)
 }
 
 class OpenedPinListViewController: UIViewController {
@@ -83,8 +82,6 @@ class OpenedPinListViewController: UIViewController {
         if openedPinListArray.count > 3 {
             tableHeight = CGFloat(228)
         }
-        
-        print("subview = \(subviewTableHeight) table = \(tableHeight)")
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         subviewWhite.backgroundColor = UIColor.white
         self.view.addSubview(subviewWhite)
@@ -159,44 +156,5 @@ class OpenedPinListViewController: UIViewController {
         subviewWhite.addConstraintsWithFormat("H:[v0(120)]", options: [], views: labelCommentPinListTitle)
         subviewWhite.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: labelCommentPinListTitle)
         NSLayoutConstraint(item: labelCommentPinListTitle, attribute: .centerX, relatedBy: .equal, toItem: self.subviewWhite, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-    }
-    
-    func cropToBounds(_ image: UIImage) -> UIImage {
-        
-        let contextImage: UIImage = UIImage(cgImage: image.cgImage!)
-        
-        let contextSize: CGSize = contextImage.size
-        
-        var posX: CGFloat = 0.0
-        var posY: CGFloat = 0.0
-        var cgwidth: CGFloat = CGFloat(contextSize.width)
-        var cgheight: CGFloat = CGFloat(contextSize.height)
-        
-        print("DEBUG: cgwidth cgheight")
-        print(cgwidth)
-        print(cgheight)
-        
-        // See what size is longer and create the center off of that
-        if contextSize.width > contextSize.height {
-            posX = ((contextSize.width - contextSize.height) / 2)
-            posY = 0
-            cgwidth = contextSize.height
-            cgheight = contextSize.height
-        } else {
-            posX = 0
-            posY = ((contextSize.height - contextSize.width) / 2)
-            cgwidth = contextSize.width
-            cgheight = contextSize.width
-        }
-        
-        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
-        
-        // Create bitmap image from context using the rect
-        let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
-        
-        // Create a new image based on the imageRef and rotate back to the original orientation
-        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
-        
-        return image
     }
 }

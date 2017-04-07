@@ -10,6 +10,7 @@
 		221D2962B63364772DB824E3 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFF548DB0A15AB6929256E5 /* Pods_faeBeta.framework */; };
 		37820AB81E86061800841C6E /* CollectionsBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */; };
 		37820ABA1E864A6300841C6E /* PlacesAndLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */; };
+		37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */; };
 		37C725491E7346E8001A5060 /* PinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725441E7346E8001A5060 /* PinsViewController.swift */; };
 		37C7254B1E7346E8001A5060 /* CollectionSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */; };
 		37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725471E7346E8001A5060 /* PinTableViewCell.swift */; };
@@ -24,9 +25,9 @@
 		853F277B1E23287600DD80DF /* EOTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277A1E23287600DD80DF /* EOTableViewCell.swift */; };
 		853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */; };
 		853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */; };
-		853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27811E26FDB900DD80DF /* ECPLoadItems.swift */; };
-		853F27861E26FE5200DD80DF /* ECPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27851E26FE5200DD80DF /* ECPActions.swift */; };
-		853F27881E26FEC300DD80DF /* ECPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */; };
+		853F27821E26FDB900DD80DF /* EPLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27811E26FDB900DD80DF /* EPLoadItems.swift */; };
+		853F27861E26FE5200DD80DF /* EPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27851E26FE5200DD80DF /* EPActions.swift */; };
+		853F27881E26FEC300DD80DF /* EPHandleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27871E26FEC300DD80DF /* EPHandleDelegate.swift */; };
 		853F278A1E2848C400DD80DF /* CMPTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F27891E2848C400DD80DF /* CMPTableViewDelegate.swift */; };
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
@@ -203,6 +204,7 @@
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
 		B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */; };
 		B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */; };
+		B84663D91E942E8F0010259B /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84663D81E942E8F0010259B /* DoubleExtension.swift */; };
 		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */; };
 		B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90C31DE7DB01005B6F38 /* CreateMomentPinViewController.swift */; };
@@ -267,7 +269,7 @@
 		B8E4C3D41E301765004E68A5 /* GMUDefaultClusterRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3D11E301765004E68A5 /* GMUDefaultClusterRenderer.m */; };
 		B8E4C3DC1E30177E004E68A5 /* GQTPointQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3D81E30177E004E68A5 /* GQTPointQuadTree.m */; };
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
-		B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */; };
+		B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
 		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
 		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
@@ -320,6 +322,7 @@
 		0A610C08000D7B4EB871E081 /* Pods_faeBetaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBetaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsBoardViewController.swift; sourceTree = "<group>"; };
 		37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesAndLocationsViewController.swift; sourceTree = "<group>"; };
+		37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		37C725441E7346E8001A5060 /* PinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsViewController.swift; sourceTree = "<group>"; };
 		37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSearchViewController.swift; sourceTree = "<group>"; };
 		37C725471E7346E8001A5060 /* PinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTableViewCell.swift; sourceTree = "<group>"; };
@@ -338,9 +341,9 @@
 		853F277A1E23287600DD80DF /* EOTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOTableViewCell.swift; sourceTree = "<group>"; };
 		853F277D1E26B12B00DD80DF /* CCPToolBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPToolBarDelegate.swift; sourceTree = "<group>"; };
 		853F277F1E26C3CF00DD80DF /* CMPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPHandleDelegate.swift; sourceTree = "<group>"; };
-		853F27811E26FDB900DD80DF /* ECPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPLoadItems.swift; sourceTree = "<group>"; };
-		853F27851E26FE5200DD80DF /* ECPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPActions.swift; sourceTree = "<group>"; };
-		853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPHandleDelegate.swift; sourceTree = "<group>"; };
+		853F27811E26FDB900DD80DF /* EPLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPLoadItems.swift; sourceTree = "<group>"; };
+		853F27851E26FE5200DD80DF /* EPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPActions.swift; sourceTree = "<group>"; };
+		853F27871E26FEC300DD80DF /* EPHandleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPHandleDelegate.swift; sourceTree = "<group>"; };
 		853F27891E2848C400DD80DF /* CMPTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTableViewDelegate.swift; sourceTree = "<group>"; };
 		86239F661D9726DD00ACF789 /* faeBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = faeBeta.entitlements; sourceTree = "<group>"; };
 		86242F901D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesComposerTextViewCustom.h; sourceTree = "<group>"; };
@@ -539,6 +542,7 @@
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
 		B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapNameCard.swift; sourceTree = "<group>"; };
 		B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTimeLoginViewController.swift; sourceTree = "<group>"; };
+		B84663D81E942E8F0010259B /* DoubleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
 		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B84C90C31DE7DB01005B6F38 /* CreateMomentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMomentPinViewController.swift; sourceTree = "<group>"; };
@@ -625,7 +629,7 @@
 		B8E4C3D91E30177E004E68A5 /* GQTPointQuadTreeChild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeChild.h; sourceTree = "<group>"; };
 		B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GQTPointQuadTreeChild.m; sourceTree = "<group>"; };
 		B8E4C3DB1E30177E004E68A5 /* GQTPointQuadTreeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeItem.h; sourceTree = "<group>"; };
-		B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCommentPinViewController.swift; sourceTree = "<group>"; };
+		B8F065451DC70AB70080ADCB /* EditPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
@@ -736,10 +740,11 @@
 			isa = PBXGroup;
 			children = (
 				37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */,
-				37C725441E7346E8001A5060 /* PinsViewController.swift */,
-				37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */,
-				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
 				37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */,
+				37C725441E7346E8001A5060 /* PinsViewController.swift */,
+				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
+				37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */,
+				37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */,
 				37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */,
 			);
 			name = PinCollection;
@@ -778,9 +783,9 @@
 			isa = PBXGroup;
 			children = (
 				853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */,
-				853F27811E26FDB900DD80DF /* ECPLoadItems.swift */,
-				853F27851E26FE5200DD80DF /* ECPActions.swift */,
-				853F27871E26FEC300DD80DF /* ECPHandleDelegate.swift */,
+				853F27811E26FDB900DD80DF /* EPLoadItems.swift */,
+				853F27851E26FE5200DD80DF /* EPActions.swift */,
+				853F27871E26FEC300DD80DF /* EPHandleDelegate.swift */,
 			);
 			name = ECPExtension;
 			sourceTree = "<group>";
@@ -1350,7 +1355,7 @@
 		B898FF691E24975300AD763F /* EditPin */ = {
 			isa = PBXGroup;
 			children = (
-				B8F065451DC70AB70080ADCB /* EditCommentPinViewController.swift */,
+				B8F065451DC70AB70080ADCB /* EditPinViewController.swift */,
 				853F27831E26FDC400DD80DF /* ECPExtension */,
 				853F27701E23180D00DD80DF /* EditOptions */,
 			);
@@ -1595,6 +1600,7 @@
 				DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */,
 				B88905711E36094B00E68D58 /* Reachability.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+				B84663D81E942E8F0010259B /* DoubleExtension.swift */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1635,9 +1641,8 @@
 				TargetAttributes = {
 					B0A2AC941CE3A3C6002E0C9D = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = J9H8DRZ5QS;
 						LastSwiftMigration = 0810;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1801,13 +1806,14 @@
 				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
 				B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */,
 				B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */,
-				853F27881E26FEC300DD80DF /* ECPHandleDelegate.swift in Sources */,
+				853F27881E26FEC300DD80DF /* EPHandleDelegate.swift in Sources */,
 				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
+				B84663D91E942E8F0010259B /* DoubleExtension.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				B8612E3D1DF24E3D0092C606 /* PDAPIConnections.swift in Sources */,
@@ -1851,7 +1857,7 @@
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B89AB3F91E3D79AA00C5116D /* FMMapFilterSlider.swift in Sources */,
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
-				853F27861E26FE5200DD80DF /* ECPActions.swift in Sources */,
+				853F27861E26FE5200DD80DF /* EPActions.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */,
@@ -1918,7 +1924,7 @@
 				B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
-				B8F065461DC70AB70080ADCB /* EditCommentPinViewController.swift in Sources */,
+				B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */,
 				B8612E391DF249DC0092C606 /* PDLoadItems.swift in Sources */,
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
 				B8E4C3BF1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m in Sources */,
@@ -1936,6 +1942,7 @@
 				B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */,
 				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
+				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
@@ -1950,7 +1957,7 @@
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
 				B8E4C3BE1E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */,
-				853F27821E26FDB900DD80DF /* ECPLoadItems.swift in Sources */,
+				853F27821E26FDB900DD80DF /* EPLoadItems.swift in Sources */,
 				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
@@ -2175,7 +2182,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = faeBeta/Info.plist;
@@ -2204,7 +2211,7 @@
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J9H8DRZ5QS;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",

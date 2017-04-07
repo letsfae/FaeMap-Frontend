@@ -9,15 +9,9 @@
 import UIKit
 import CoreLocation
 
-protocol CreateMediaPinDelegate: class {
-    func sendMediaGeoInfo(mediaID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
-    func backFromCMP(back: Bool)
-    func closePinMenuCMP(close: Bool)
-}
-
 class CreateMomentPinViewController: UIViewController {
     
-    weak var delegate: CreateMediaPinDelegate?
+    weak var delegate: CreatePinDelegate?
     
     // MARK: -- Create Media Pin
     var uiviewCreateMediaPin: UIView!
@@ -39,6 +33,9 @@ class CreateMomentPinViewController: UIViewController {
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
+    var zoomLevelCallBack: Float = 13.8
     
     // MARK: -- Buttons
     var buttonMediaSubmit: UIButton!
@@ -77,6 +74,9 @@ class CreateMomentPinViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView!
     
     var labelAddDesContent: UILabel!
+    
+    var btnDoAnony: UIButton!
+    var switchAnony: UISwitch!
     
     enum Direction {
         case left
@@ -136,7 +136,11 @@ class CreateMomentPinViewController: UIViewController {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func randomLocation() -> CLLocationCoordinate2D {
+        let lat = currentLocation2D.latitude
+        let lon = currentLocation2D.longitude
+        let random_lat = Double.random(min: -0.004, max: 0.004)
+        let random_lon = Double.random(min: -0.004, max: 0.004)
+        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
     }
 }

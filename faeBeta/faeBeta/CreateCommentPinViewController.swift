@@ -9,15 +9,15 @@
 import UIKit
 import CoreLocation
 
-protocol CreateCommentPinDelegate: class {
-    func sendCommentGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
-    func backFromCCP(back: Bool)
+protocol CreatePinDelegate: class {
+    func sendGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
+    func backFromPinCreating(back: Bool)
     func closePinMenu(close: Bool)
 }
 
 class CreateCommentPinViewController: UIViewController {
     
-    weak var delegate: CreateCommentPinDelegate?
+    weak var delegate: CreatePinDelegate?
 
     // MARK: -- Create Comment Pin
     var uiviewCreateCommentPin: UIView!
@@ -37,6 +37,9 @@ class CreateCommentPinViewController: UIViewController {
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
+    var zoomLevelCallBack: Float = 13.8
     
     // MARK: -- Buttons
     var buttonCommentSubmit: UIButton!
@@ -64,6 +67,8 @@ class CreateCommentPinViewController: UIViewController {
     
     var buttonBack: UIButton!
     
+    var btnDoAnony: UIButton!
+    var switchAnony: UISwitch!
 
     
     override func viewDidLoad() {
@@ -116,9 +121,12 @@ class CreateCommentPinViewController: UIViewController {
             }, completion: nil)
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    
+    func randomLocation() -> CLLocationCoordinate2D {
+        let lat = currentLocation2D.latitude
+        let lon = currentLocation2D.longitude
+        let random_lat = Double.random(min: -0.004, max: 0.004)
+        let random_lon = Double.random(min: -0.004, max: 0.004)
+        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
     }
-
 }

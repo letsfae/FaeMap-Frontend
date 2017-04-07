@@ -9,10 +9,9 @@
 import UIKit
 import IDMPhotoBrowser
 
-extension EditCommentPinViewController: UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, EditMediaCollectionCellDelegate {
+extension EditPinViewController: UITextViewDelegate, CreatePinInputToolbarDelegate, SendStickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, EditMediaCollectionCellDelegate, EditPinMoreOptionsDelegate {
     
-    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar)
-    {
+    func inputToolbarFinishButtonTapped(inputToolbar: CreatePinInputToolbar) {
         self.view.endEditing(true)
         if(isShowingEmoji){
             isShowingEmoji = false
@@ -31,17 +30,14 @@ extension EditCommentPinViewController: UITextViewDelegate, CreatePinInputToolba
         }
     }
     
-    func sendStickerWithImageName(_ name : String)
-    {
+    func sendStickerWithImageName(_ name : String) {
         // do nothing here, won't send sticker
     }
-    func appendEmojiWithImageName(_ name: String)
-    {
+    func appendEmojiWithImageName(_ name: String) {
         self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
         self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
     }
-    func deleteEmoji()
-    {
+    func deleteEmoji() {
         self.textViewUpdateComment.text = self.textViewUpdateComment.text.stringByDeletingLastEmoji()
         self.textViewDidChange(self.textViewUpdateComment)
     }
@@ -158,5 +154,10 @@ extension EditCommentPinViewController: UITextViewDelegate, CreatePinInputToolba
             uploadFile(image: newAddedImageArray[0], count: 0, total: images.count)
             checkButtonState()
         }
+    }
+    
+    func sendMapCameraInfo(latitude: String, longitude: String, zoom: Float) {
+        pinGeoLocation = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
+        zoomLevelCallBack = zoom
     }
 }

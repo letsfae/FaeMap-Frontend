@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditCommentPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // PinFeelingCellDelegate
     func postFeelingFromFeelingCell(_ feeling: String) {
@@ -66,15 +66,17 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.textViewDidChange(textViewInput)
     }
     
-    func reloadCommentContent() {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
         if pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
+        selectedMarkerPosition = coordinate
+        zoomLevel = zoom
+        self.delegate?.reloadMapPins(selectedMarkerPosition, zoom: zoom, pinID: pinIDPinDetailView, marker: pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String, pinType: PinDetailViewController.PinType) {
-        self.pinTypeEnum = pinType
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         self.selectedMarkerPosition = coordinate
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
@@ -82,29 +84,15 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
         self.pinIDPinDetailView = pinID
-        if pinType == .place {
-            if uiviewPlaceDetail == nil {
-                loadPlaceDetail()
-            }
-            loadPlaceFromRealm(pinTypeId: "place\(pinID)")
-            uiviewPlaceDetail.frame.origin.y = 0
-            pinIcon.frame.size.width = 48
-            pinIcon.center.x = screenWidth / 2
-            pinIcon.center.y = 507 * screenHeightFactor
-            UIApplication.shared.statusBarStyle = .lightContent
-        } else {
-            if uiviewPlaceDetail != nil {
-                uiviewPlaceDetail.center.y -= screenHeight
-            }
-            if pinIDPinDetailView != "-999" {
-                getSeveralInfo()
-            }
-            self.initPinBasicInfo()
-            pinIcon.frame.size.width = 60
-            pinIcon.center.x = screenWidth / 2
-            pinIcon.center.y = 510 * screenHeightFactor
-            UIApplication.shared.statusBarStyle = .default
+        if uiviewPlaceDetail == nil {
+            loadPlaceDetail()
         }
+        loadPlaceFromRealm(pinTypeId: "place\(pinID)")
+        uiviewPlaceDetail.frame.origin.y = 0
+        pinIcon.frame.size.width = 48
+        pinIcon.center.x = screenWidth / 2
+        pinIcon.center.y = 507 * screenHeightFactor
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     // OpenedPinListViewControllerDelegate

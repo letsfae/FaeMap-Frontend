@@ -166,16 +166,17 @@ extension PinDetailViewController {
             return
         }
         self.isKeyboardInThisView = false
-        let editMomentPinVC = EditCommentPinViewController()
-        editMomentPinVC.delegate = self
-        editMomentPinVC.previousCommentContent = self.stringPlainTextViewTxt
-        editMomentPinVC.pinID = "\(pinIdSentBySegue)"
-        editMomentPinVC.pinMediaImageArray = imageViewMediaArray
-        editMomentPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude, longitude: selectedMarkerPosition.longitude)
-        editMomentPinVC.editPinMode = self.pinTypeEnum
-        editMomentPinVC.pinType = "\(self.pinTypeEnum)"
-        editMomentPinVC.mediaIdArray = fileIdArray
-        self.present(editMomentPinVC, animated: true, completion: nil)
+        let editPinVC = EditPinViewController()
+        editPinVC.zoomLevel = zoomLevel
+        editPinVC.delegate = self
+        editPinVC.previousCommentContent = self.stringPlainTextViewTxt
+        editPinVC.pinID = "\(pinIdSentBySegue)"
+        editPinVC.pinMediaImageArray = imageViewMediaArray
+        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude, longitude: selectedMarkerPosition.longitude)
+        editPinVC.editPinMode = self.pinTypeEnum
+        editPinVC.pinType = "\(self.pinTypeEnum)"
+        editPinVC.mediaIdArray = fileIdArray
+        self.present(editPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
     }
     
