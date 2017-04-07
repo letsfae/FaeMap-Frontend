@@ -13,6 +13,7 @@ class DisconnectionViewController: UIViewController {
     var uiviewNavBar: UIView!
     var btnNavBar: UIButton!
     var lblFailMessage: UILabel!
+    var btnReconnect: UIButton!
     private var reachability: Reachability!
     
     var uiviewNavBarMenu: UIView!
@@ -30,7 +31,7 @@ class DisconnectionViewController: UIViewController {
         img.image = #imageLiteral(resourceName: "disconnectionPic")
         img.contentMode = .scaleAspectFit
         view.addSubview(img)
-        let btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
+        btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
         btnReconnect.layer.cornerRadius = 25*screenWidthFactor
         btnReconnect.setTitle("Reconnect", for: .normal)
         btnReconnect.setTitleColor(UIColor.white, for: .normal)
