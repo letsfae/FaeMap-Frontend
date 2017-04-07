@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
 
     var uiViewSetPicture: UIView!
     var labelTitle: UILabel!
@@ -202,9 +202,12 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
-            imagePicker.sourceType = .photoLibrary
-            menu.removeFromParentViewController()
-            self.present(imagePicker,animated:true,completion:nil)
+            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            imagePicker.imageDelegate = self
+            imagePicker.isCSP = false
+            imagePicker._maximumSelectedPhotoNum = 1
+            self.present(nav, animated: true, completion: nil)
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
             imagePicker.sourceType = .camera
@@ -230,6 +233,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        print("send image for avatar")
+        imageViewAvatar.image = images[0]
     }
     
 }

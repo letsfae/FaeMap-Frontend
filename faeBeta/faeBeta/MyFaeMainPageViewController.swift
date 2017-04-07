@@ -9,8 +9,6 @@
 import UIKit
 
 class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeigh = UIScreen.main.bounds.height
     //7 : 736 5 : 
     var scroll : UIScrollView!
     var imageViewAvatar : UIImageView!
@@ -51,8 +49,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll = UIScrollView(frame: CGRect(x: 0,y: 0 - 64,width: screenWidth,height: screenHeight + 64))
         scroll.contentSize = CGSize(width: screenWidth, height: 650)
         scroll.isPagingEnabled = true
-        print(screenHeigh + 64)
-        if 650 > screenHeigh + 64 {
+        print(screenHeight + 64)
+        if 650 > screenHeight + 64 {
             scroll.isScrollEnabled = true
         } else {
             scroll.isScrollEnabled = false
@@ -85,11 +83,12 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         self.scroll.addSubview(imageViewAvatar)
         buttonImage = UIButton(frame: CGRect(x: 0,y: 44,width: 100,height: 100))
         buttonImage.center.x = screenWidth / 2
-        buttonImage.addTarget(self, action: #selector(MyFaeMainPageViewController.showPhotoSelected), for: .touchUpInside)
+        buttonImage.addTarget(self, action: #selector(self.showPhotoSelected), for: .touchUpInside)
         self.scroll.addSubview(buttonImage)
     }
     func showPhotoSelected() {
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        menu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
             //self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
@@ -102,7 +101,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
             self.navigationController?.pushViewController(self.fullAlbumVC, animated: true)
             //self.present(self.fullAlbumVC, animated: true, completion: nil)
         }
-        let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
+        let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .camera
             menu.removeFromParentViewController()
             self.present(self.imagePicker,animated:true,completion:nil)
