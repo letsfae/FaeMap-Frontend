@@ -79,10 +79,12 @@ extension PinDetailViewController {
                 self.imageViewSaved.image = #imageLiteral(resourceName: "pinSaved")
             }
             // Get nick name
-            if pinInfoJSON["anonymous"].boolValue {
+            let anonymous = pinInfoJSON["anonymous"].boolValue
+            if anonymous {
                 self.labelPinUserName.text = "Someone"
                 self.isAnonymous = true
-            } else {
+            }
+            else {
                 self.labelPinUserName.text = pinInfoJSON["nick_name"].stringValue
                 // Get avatar
                 if let pinUserId = pinInfoJSON["user_id"].int {

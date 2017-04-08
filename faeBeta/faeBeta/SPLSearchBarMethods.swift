@@ -56,7 +56,7 @@ extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDele
     }
     
     func didChangeSearchText(_ searchText: String) {
-        if(searchText != "") {
+        if searchText != ""  {
             let placeClient = GMSPlacesClient()
             placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
                 (results: [GMSAutocompletePrediction]?, error : Error?) -> Void in
@@ -76,8 +76,7 @@ extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDele
                     self.searchBarTableShowAnimation()
                 }
             }
-        }
-        else {
+        } else {
             self.placeholder.removeAll()
             searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()

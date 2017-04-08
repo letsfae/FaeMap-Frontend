@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension EditCommentPinViewController {
+extension EditPinViewController {
     func actionCancelCommentPinEditing(_ sender: UIButton) {
         textViewUpdateComment.endEditing(true)
         self.dismiss(animated: true, completion: nil)
@@ -39,7 +39,7 @@ extension EditCommentPinViewController {
         updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("Success -> Update \(self.pinType)")
-                self.delegate?.reloadCommentContent()
+                self.delegate?.reloadPinContent(self.pinGeoLocation, zoom: self.zoomLevelCallBack)
                 self.textViewUpdateComment.endEditing(true)
                 self.dismiss(animated: true, completion: nil)
             }
@@ -50,8 +50,10 @@ extension EditCommentPinViewController {
     }
     func moreOptions(_ sender: UIButton) {
         let editMoreOptions = EditMoreOptionsViewController()
+        editMoreOptions.delegate = self
         editMoreOptions.pinID = pinID
         editMoreOptions.pinType = pinType
+        editMoreOptions.zoomLevel = zoomLevel
         editMoreOptions.pinGeoLocation = pinGeoLocation
         self.present(editMoreOptions, animated: true, completion: nil)
     }

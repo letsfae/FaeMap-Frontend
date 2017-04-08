@@ -105,7 +105,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -125,7 +124,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -148,7 +146,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 self.labelCreateMediaPinTitle.alpha = 1
                 self.buttonMediaSubmit.alpha = 1
                 self.collectionViewMedia.alpha = 1
-                self.buttonAnonymous.alpha = 1
                 if self.selectedMediaArray.count > 0 {
                     self.buttonAddMedia.alpha = 1
                     self.buttonSelectMedia.alpha = 0
@@ -194,14 +191,14 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCMP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
     
     func actionCloseSubmitPins(_ sender: UIButton!) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.closePinMenuCMP(close: true)
+            self.delegate?.closePinMenu(close: true)
         })
     }
     
@@ -296,8 +293,9 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         var submitLongitude = selectedLongitude
         
         if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         postSingleMedia.whereKey("file_ids", value: fileIDs)
@@ -332,7 +330,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                     let long = CLLocationDegrees(longDouble!)
                     self.dismiss(animated: false, completion: {
                         self.activityIndicator.stopAnimating()
-                        self.delegate?.sendMediaGeoInfo(mediaID: "\(mediaID)", latitude: lat, longitude: long)
+                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                     })
                 }
             }

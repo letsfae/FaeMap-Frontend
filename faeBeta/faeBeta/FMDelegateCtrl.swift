@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import RealmSwift
+import SwiftyJSON
 
 extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
     
@@ -33,12 +34,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
-    // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
         self.faeMapView.animate(to: camera)
     }
-    // PinDetailDelegate
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
         guard let userData = marker.userData as? [Int: AnyObject] else {
             return
@@ -51,19 +50,24 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         marker.userData = [0: mapPin_new]
         marker.icon = pinIconSelector(type: type, status: status)
     }
-    // PinDetailDelegate
     func disableSelfMarker(yes: Bool) {
         if yes {
-//            self.selfMarker.map = nil
             self.subviewSelfMarker.isHidden = true
         } else {
             reloadSelfPosAnimation()
         }
     }
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker) {
+        let offset = 0.00148 * pow(2, Double(17 - zoom))
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
+                                          longitude: coordinate.longitude, zoom: zoom)
+        faeMapView.camera = camera
+        marker.position = coordinate
+    }
 
     // PinMenuDelegate
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: zoom)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()
@@ -72,7 +76,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
-    // PinMenuDelegate
     func whenDismissPinMenu() {
         timerSetup()
         renewSelfLocation()
@@ -96,33 +99,17 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.subviewSelfMarker.isHidden = true
         }
     }
-    // LeftSlidingMenuDelegate
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         self.present(moodAvatarVC, animated: true, completion: nil)
     }
-    
-    
-    // LeftSlidingMenuDelegate
     func jumpToCollections() {
         
-        let CollectionsBoardVC = CollectionsBoardViewController()
-        
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        let collectionsBoardVC = CollectionsBoardViewController()
  
-        //        CollectionsBoardVC.modalPresentationStyle = .overCurrentContext
-        self.present(CollectionsBoardVC, animated: false, completion: nil)
-        
-
-    
+        collectionsBoardVC.modalPresentationStyle = .overCurrentContext
+        self.present(collectionsBoardVC, animated: false, completion: nil)
     }
-    
-    // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
         let realm = try! Realm()
@@ -130,11 +117,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             realm.deleteAll()
         }
     }
-    // LeftSlidingMenuDelegate
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
-    // LeftSlidingMenuDelegate
     func reloadSelfPosition() {
         reloadSelfPosAnimation()
     }
