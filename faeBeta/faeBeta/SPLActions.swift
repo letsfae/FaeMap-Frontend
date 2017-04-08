@@ -20,18 +20,25 @@ extension SelectLocationViewController {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = mapSelectLocation.projection.coordinate(for: mapCenter)
             delegate?.sendAddress(searchText)
-            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)")
+            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)", zoom: mapSelectLocation.camera.zoom)
         }
         self.dismiss(animated: false, completion: nil)
     }
     
     func actionSelfPosition(_ sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+        if CLLocationManager.authorizationStatus() == .authorizedAlways {
             currentLocation = locManager.location
         }
         currentLatitude = currentLocation.coordinate.latitude
         currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: mapSelectLocation.camera.zoom)
         mapSelectLocation.camera = camera
+    }
+    
+    func actionClearSearchBar(_ sender: UIButton) {
+        faeSearchController.faeSearchBar.text = nil
+        self.placeholder.removeAll()
+        searchBarTableHideAnimation()
+        self.tblSearchResults.reloadData()
     }
 }

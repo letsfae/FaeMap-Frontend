@@ -8,19 +8,12 @@
 
 import UIKit
 
-@objc protocol CreatePinBaseDelegate {
-    func backFromCMP(back: Bool)
-    func closePinMenuCMP(close: Bool)
-    @objc optional func sendChatPinGeoInfo(chatID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
-}
-
-
 /// This class this the BASE of the create pin views, which include the title image, title, left arrow & cross button, bottom submit button, anonymous button. 
 ///A subclass of this class will automatically have all the elements above. 
 ///This class also contains the logic for the input Toolbar, including it's position, and timing to show.
 class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, CreatePinInputToolbarDelegate, CreatePinTextViewDelegate, SendStickerDelegate {
     //MARK: - properties
-    weak var delegate : CreatePinBaseDelegate!
+    weak var delegate : CreatePinDelegate?
     private var submitButton: UIButton!
     var titleImageView: UIImageView!
     var titleLabel: UILabel!
@@ -177,7 +170,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCMP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
@@ -185,7 +178,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     @objc private func actionCloseSubmitPins(_ sender: UIButton)
     {
         self.dismiss(animated: false, completion: {
-            self.delegate?.closePinMenuCMP(close: true)
+            self.delegate?.closePinMenu(close: true)
         })
     }
     
@@ -308,11 +301,11 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
             //the input view can either be a textfield or a textView, so we need to check it first
             if previousFirstResponder is CreatePinTextView{
                 let textView = previousFirstResponder as! CreatePinTextView
-                textView.text = textView.text as String + "[\(name)]"
+                textView.insertText("[\(name)]")
                 textView.textViewDidChange(textView)
             }else if previousFirstResponder is UITextField{
                 let textField = previousFirstResponder as! UITextField
-                textField.text = textField.text! as String + "[\(name)]"
+                textField.insertText("[\(name)]")
             }
         }
     }

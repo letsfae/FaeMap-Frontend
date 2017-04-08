@@ -409,14 +409,24 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         audioRecorderContentView.isHidden = true
         audioRecorderContentView.switchToRecordMode()
         }
-        
+        recordShow = false
         if miniLocationShow {
             miniLocationShow = false
             miniLocation.isHidden = true
         }
-        
-        
+    }
+    
+    func clearToolBarViews() {
+        stickerPicker = nil
+        stickerViewShow = false
+        imageQuickPickerShow = false
+        photoQuickCollectionView = nil
+        audioRecorderContentView = nil
         recordShow = false
+        audioInitialized = false
+        photoInitialized = false
+        stickerInitialized = false
+        print("clear tool bar views")
     }
     
     // MARK: - helper
@@ -639,7 +649,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         print("[appendEmojiWithImageName]")
         self.delegate.appendEmoji!(name)
         if inputToolbar != nil{
-            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+            inputToolbar.contentView.textView.insertText("[\(name)]")
         }
     }
     

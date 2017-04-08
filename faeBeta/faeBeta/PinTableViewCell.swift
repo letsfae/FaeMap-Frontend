@@ -10,7 +10,7 @@ import UIKit
 class PinTableViewCell: UITableViewCell {
     
     let screenWidth = UIScreen.main.bounds.width
-
+    
     var date : UILabel!
     var time : UILabel!
     var desc : UILabel!
@@ -42,13 +42,13 @@ class PinTableViewCell: UITableViewCell {
     func setUpUI() {
         
         
-         //set the date
+        //set the date
         date = UILabel()
         date.font = UIFont(name: "AvenirNext-Medium",size: 13)
         date.textAlignment = NSTextAlignment.left
         date.textColor = UIColor.faeAppTimeTextBlackColor()
         self.addSubview(date)
-
+        
         
         
         //set the time
@@ -56,9 +56,9 @@ class PinTableViewCell: UITableViewCell {
         time.font = UIFont(name: "AvenirNext-Medium",size: 13)
         time.textAlignment = NSTextAlignment.right
         time.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-
+        
         self.addSubview(time)
-
+        
         
         // set description
         desc = UILabel()
@@ -69,7 +69,7 @@ class PinTableViewCell: UITableViewCell {
         desc.textAlignment = NSTextAlignment.left
         desc.textColor = UIColor.faeAppInputTextGrayColor()
         self.addSubview(desc)
-
+        
         //desc.layer.borderColor = UIColor.black.cgColor
         //self.desc.textContainerInset.top = -4
         //desc.isScrollEnabled = false
@@ -80,14 +80,14 @@ class PinTableViewCell: UITableViewCell {
         like.textAlignment = NSTextAlignment.right
         like.textColor = UIColor.faeAppTimeTextBlackColor()
         self.addSubview(like)
-
+        
         
         // set like button
         likeimg = UIImage(named: "like")!
         likebtn = UIButton(type:UIButtonType.custom) as UIButton
         likebtn.setImage(likeimg,for:UIControlState.normal)
         self.addSubview(likebtn)
-
+        
         
         
         // set comment number
@@ -96,24 +96,24 @@ class PinTableViewCell: UITableViewCell {
         comment.textAlignment = NSTextAlignment.right
         comment.textColor = UIColor.faeAppTimeTextBlackColor()
         self.addSubview(comment)
-
+        
         
         // set comment button
         commimg = UIImage(named: "comment")!
         commbtn = UIButton(type:UIButtonType.custom) as UIButton
         commbtn.setImage(commimg,for:UIControlState.normal)
         self.addSubview(commbtn)
-
+        
         
         // set tab
         tab = UIImageView()
         self.addSubview(tab!)
-
+        
         
         // set hot
         hotimgview = UIImageView()
         self.addSubview(hotimgview!)
-
+        
         
         
         //set pics
@@ -141,23 +141,23 @@ class PinTableViewCell: UITableViewCell {
     func setValueForCell(_ pin: [String: AnyObject]) {
         //The cell is reuseable, so clear the constrains when reuse the cell
         self.removeConstraints(self.constraints)
-
+        
         firstImgView.isHidden = true
         secondImgView.isHidden = true
         thirdImgView.isHidden = true
         moreThanThreePics.isHidden = true
-
+        
         
         // set the value to those data
         
         
         let createat = pin["created_at"] as! String?
         date.text = createat?.formatNSDate()
-
+        
         time.text = (createat?.formatFaeDate())! + " on Map"
         
         hot_status = ""
-
+        
         if let likeCount = pin["liked_count"] as! Int? {
             like.text = String(likeCount)
             if likeCount >= 15 {
@@ -201,7 +201,7 @@ class PinTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("H:[v0(18)]-134-|", options: [], views: hotimgview)
         self.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: hotimgview)
         
-
+        
         // hot or not
         if(hot_status == "hot"){
             hotimgview.image = UIImage(named: "hot")
@@ -221,16 +221,15 @@ class PinTableViewCell: UITableViewCell {
             if let imgArr = pin["file_ids"]{
                 let count = imgArr.count
                 // no pic
-                if(count!==0){
+                if(count! == 0){
                     self.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: desc)
                 }
                 // the first image
                 if(count!>0){
                     
                     firstImgView.isHidden = false
-                    
                     let imgId = imgArr[0]?.description
-                    let fileURL = "https://dev.letsfae.com/files/"+imgId!+"/data"
+                    let fileURL = "https://dev.letsfae.com/files/\(imgId!)/data"
                     self.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: firstImgView)
                     
                     firstImgView.contentMode = .scaleAspectFill
@@ -249,7 +248,7 @@ class PinTableViewCell: UITableViewCell {
                 if(count!>1){
                     secondImgView.isHidden = false
                     let imgId = imgArr[1]?.description
-                    let fileURL = "https://dev.letsfae.com/files/"+imgId!+"/data"
+                    let fileURL = "https://dev.letsfae.com/files/\(imgId!)/data"
                     self.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: firstImgView,secondImgView)
                     secondImgView.contentMode = .scaleAspectFill
                     secondImgView.layer.cornerRadius = 13.5
@@ -266,7 +265,8 @@ class PinTableViewCell: UITableViewCell {
                 if(count!>2){
                     thirdImgView.isHidden = false
                     let imgId = imgArr[2]?.description
-                    let fileURL = "https://dev.letsfae.com/files/"+imgId!+"/data"
+                    let fileURL = "https://dev.letsfae.com/files/\(imgId!)/data"
+                    
                     self.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: secondImgView,thirdImgView)
                     
                     thirdImgView.contentMode = .scaleAspectFill
@@ -296,7 +296,7 @@ class PinTableViewCell: UITableViewCell {
             self.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: desc)
             
         }
-
+        
     }
     
     override func awakeFromNib() {
@@ -314,7 +314,7 @@ class PinTableViewCell: UITableViewCell {
     // Resize the width of the cell
     override func layoutSubviews() {
         self.bounds = CGRect(x: 0,y: 0, width: screenWidth - 18, height:  self.bounds.size.height)
-
+        
     }
     
 }

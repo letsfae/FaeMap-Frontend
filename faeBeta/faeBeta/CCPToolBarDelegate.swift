@@ -36,7 +36,7 @@ extension CreateCommentPinViewController: CreatePinInputToolbarDelegate, SendSti
     }
     
     func appendEmojiWithImageName(_ name: String) {
-        self.textViewForCommentPin.text = self.textViewForCommentPin.text + "[\(name)]"
+        self.textViewForCommentPin.insertText("[\(name)]")
         self.textViewDidChange(textViewForCommentPin)
     }
     

@@ -9,15 +9,14 @@ import UIKit
 
 class PlaceAndLocationTableViewCell: UITableViewCell {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     
     var imgview : UIImageView!
     var name : UILabel!
     var address : UILabel!
     var distance : UILabel!
+    var memo : UILabel!
     var btnSelected: UIButton!
-//    var sparator: UIView!
+    //    var sparator: UIView!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -34,8 +33,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         //showImage!.layer.masksToBounds = true
         self.addSubview(imgview)
         //Add the constraints
-        self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
-        self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
+        
         
         
         name = UILabel()
@@ -43,17 +41,15 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         name.textAlignment = NSTextAlignment.left
         name.textColor = UIColor.faeAppInputTextGrayColor()
         self.addSubview(name)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: name)
-        self.addConstraintsWithFormat("V:|-18-[v0(20)]", options: [], views: name)
+        
         
         distance = UILabel()
         distance.font = UIFont(name: "AvenirNext-Medium",size: 16)
         distance.textAlignment = NSTextAlignment.right
         distance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         self.addSubview(distance)
-        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: distance)
-        self.addConstraintsWithFormat("V:|-34-[v0(22)]-34-|", options: [], views: distance)
-
+        
+        
         address = UILabel()
         address.font = UIFont(name: "AvenirNext-Medium",size: 12)
         address.textAlignment = NSTextAlignment.left
@@ -61,8 +57,19 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         address.lineBreakMode = NSLineBreakMode.byWordWrapping
         address.numberOfLines = 0;
         self.addSubview(address)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: address)
-        self.addConstraintsWithFormat("V:|-40-[v0(38)]", options: [], views: address)
+        
+        
+        
+        memo = UILabel()
+        memo.font = UIFont(name: "AvenirNext-DemiBoldItalic",size: 12)
+        memo.textAlignment = NSTextAlignment.left
+        memo.textColor = UIColor.faeAppTimeTextBlackColor()
+        memo.lineBreakMode = NSLineBreakMode.byWordWrapping
+        memo.numberOfLines = 0;
+        self.addSubview(memo)
+        
+        
+        
         
         btnSelected = UIButton()
         btnSelected.layer.cornerRadius = 11
@@ -72,19 +79,42 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         btnSelected.isHidden = true
         
         self.addSubview(btnSelected)
-        self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
-        self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
-        
         
     }
     
     func setValueForCell(_ location: [String: AnyObject]) {
         /*API 写完后再写这里*/
-//        name?.text = location[0]
-//        address?.text = location[1]
-//        distance?.text = location[2]
-        /*API 写完后再写这里*/
+        name?.text = location["name"] as! String?
+        address?.text = location["address"] as! String?
+        distance?.text = location["distance"] as! String?
+        memo?.text = location["memo"] as! String?
         imgview?.image = UIImage(named: "Location")
+        /*API 写完后再写这里*/
+        
+        
+        self.removeConstraints(self.constraints)
+        
+        
+        self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
+        self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: name)
+        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: distance)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: address)
+        
+        self.addConstraintsWithFormat("H:|-93-[v0]-47-|", options: [], views: memo)
+        
+        self.addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: distance)
+        
+        self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
+        self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
+        self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: name)
+        if(memo?.text == ""){
+            self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: address)
+        }else{
+            self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: address,memo)
+        }
+        
+        
     }
     
     override func awakeFromNib() {
@@ -92,7 +122,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         //print("啦啦啦啦啦啦啦啦啦啦啦")

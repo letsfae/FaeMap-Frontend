@@ -13,9 +13,11 @@ class DisconnectionViewController: UIViewController {
     var uiviewNavBar: UIView!
     var btnNavBar: UIButton!
     var lblFailMessage: UILabel!
+    var btnReconnect: UIButton!
     private var reachability: Reachability!
     
     var uiviewNavBarMenu: UIView!
+    var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ class DisconnectionViewController: UIViewController {
         img.image = #imageLiteral(resourceName: "disconnectionPic")
         img.contentMode = .scaleAspectFit
         view.addSubview(img)
-        let btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
+        btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
         btnReconnect.layer.cornerRadius = 25*screenWidthFactor
         btnReconnect.setTitle("Reconnect", for: .normal)
         btnReconnect.setTitleColor(UIColor.white, for: .normal)
@@ -46,6 +48,17 @@ class DisconnectionViewController: UIViewController {
         lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
         view.addSubview(lblFailMessage)
         lblFailMessage.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        preStatusBarStyle = UIApplication.shared.statusBarStyle
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
     func actionReconnect(_ sender: UIButton) {

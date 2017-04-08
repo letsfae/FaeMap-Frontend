@@ -298,62 +298,40 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults) {
-            return placeholder.count
-        }
-        else {
-            return 0
-        }
+        return placeholder.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == self.tblSearchResults {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForMainScreenSearch", for: indexPath) as! FaeCellForMainScreenSearch
-            cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
-            if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
-                cell.labelSubTitle.text = secondaryText.string
-            }
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForMainScreenSearch", for: indexPath) as! FaeCellForMainScreenSearch
+        cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
+        if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
+            cell.labelSubTitle.text = secondaryText.string
         }
-        else {
-            return UITableViewCell()
-        }
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(tableView == self.tblSearchResults) {
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-                (place, error) -> Void in
-                // Get place.coordinate
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
-                        self.dismiss(animated: false, completion: nil)
-                    }
-                })
+        let placesClient = GMSPlacesClient()
+        placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
+            (place, error) -> Void in
+            GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
+                (response, error) -> Void in
+                if let selectedAddress = place?.coordinate {
+                    self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
+                    self.dismiss(animated: false, completion: nil)
+                }
             })
-            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.faeSearchController.faeSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
+        })
+        self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+        self.faeSearchController.faeSearchBar.resignFirstResponder()
+        self.searchBarTableHideAnimation()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(tableView == self.tblSearchResults) {
-            return 60 * screenWidthFactor
-        }
-        else{
-            return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
+        return 61 * screenWidthFactor
     }
 }
