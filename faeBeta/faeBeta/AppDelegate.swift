@@ -93,19 +93,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpEnableLocationViewController() {
-        let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        
+        let vc: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
-        
+        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func popUpWelcomeView() {
         let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
-        
+        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {

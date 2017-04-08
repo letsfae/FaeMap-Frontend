@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-extension UIColor
-{
+extension UIColor {
     convenience init(red: Int, green: Int, blue: Int) {
         let newRed = CGFloat(red)/255
         let newGreen = CGFloat(green)/255

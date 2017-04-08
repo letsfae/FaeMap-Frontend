@@ -58,7 +58,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         
     }
     func appendEmojiWithImageName(_ name: String) {
-        self.textViewInput.text = self.textViewInput.text + "[\(name)]"
+        self.textViewInput.insertText("[\(name)]")
         self.textViewDidChange(textViewInput)
     }
     func deleteEmoji() {

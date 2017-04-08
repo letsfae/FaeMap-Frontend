@@ -40,7 +40,7 @@ extension CreateMomentPinViewController: CreatePinInputToolbarDelegate, SendStic
     }
     
     func appendEmojiWithImageName(_ name: String) {
-        self.textViewForMediaPin.text = self.textViewForMediaPin.text + "[\(name)]"
+        self.textViewForMediaPin.insertText("[\(name)]")
         self.textViewDidChange(textViewForMediaPin)
     }
     

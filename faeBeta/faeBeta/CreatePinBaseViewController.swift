@@ -301,11 +301,11 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
             //the input view can either be a textfield or a textView, so we need to check it first
             if previousFirstResponder is CreatePinTextView{
                 let textView = previousFirstResponder as! CreatePinTextView
-                textView.text = textView.text as String + "[\(name)]"
+                textView.insertText("[\(name)]")
                 textView.textViewDidChange(textView)
             }else if previousFirstResponder is UITextField{
                 let textField = previousFirstResponder as! UITextField
-                textField.text = textField.text! as String + "[\(name)]"
+                textField.insertText("[\(name)]")
             }
         }
     }
