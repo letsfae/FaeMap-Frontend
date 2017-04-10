@@ -345,7 +345,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                         showAlertView(withWarning: "You can't select photo with video")
                         return
                     }else if(photoPicker.gifAssetDict.count > 0){
-                        showAlertView(withWarning: "You can't select Image with GIF")
+                        showAlertView(withWarning: "Sorry Gifs must be sent alone!")
                         return
                     }
                     
@@ -376,7 +376,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
 //                    }
                 }else{
                     if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
-                        showAlertView(withWarning: "You can't select video while selecting photos")
+                        showAlertView(withWarning: "Sorry Videos must be sent alone!")
                         return
                     }else if(self.photoPicker.videoAsset != nil){
                         showAlertView(withWarning: "You can only send one video at the same time")
