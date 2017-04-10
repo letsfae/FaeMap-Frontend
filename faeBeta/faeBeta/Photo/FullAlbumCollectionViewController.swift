@@ -330,7 +330,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
-        let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.row] as! PHAsset
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         
         if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
