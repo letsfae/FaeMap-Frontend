@@ -104,7 +104,6 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         requestOption.resizeMode = .fast
         requestOption.deliveryMode = .highQualityFormat
         self.collectionView?.decelerationRate = UIScrollViewDecelerationRateNormal
-        navigationBarSet()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
@@ -112,6 +111,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         //fetch photo from collection
         self.navigationController?.hidesBarsOnTap = false
         self.collectionView?.reloadData()
+        navigationBarSet()
         prepareTableView()
     }
     
@@ -153,7 +153,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         self.navigationController?.navigationBar.isTranslucent = false
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = "All Photos"
+        titleLabel.text = self.photoPicker.currentAlbum.albumName
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
