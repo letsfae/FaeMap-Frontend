@@ -262,7 +262,7 @@ class IncomingMessage {
     private func imageFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         
-        if let decodedData = Data(base64Encoded: (item["picture"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
         
             image = UIImage(data: decodedData)
             result(image)
@@ -272,7 +272,7 @@ class IncomingMessage {
     private func gifFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         
-        if let decodedData = Data(base64Encoded: (item["picture"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
             
             image = UIImage.gif(data: decodedData)
             result(image)
@@ -281,13 +281,13 @@ class IncomingMessage {
         
     private func voiceFromData(_ item : NSDictionary, result : (_ voiceData : Data?) -> Void) {
         
-        if let decodedData = Data(base64Encoded: (item["audio"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
             result(decodedData)
         }
     }
     
     private func videoFromData(_ item : NSDictionary, result : (_ videoData : URL?) -> Void) {
-        let str = item["video"] as? String
+        let str = item["data"] as? String
         let filePath = self.documentsPathForFileName("/\(str!.substring(with: str!.characters.index(str!.endIndex, offsetBy: -33) ..< str!.characters.index(str!.endIndex, offsetBy: -1)))).mov")
 
         let fileManager = FileManager.default
