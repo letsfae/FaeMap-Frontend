@@ -26,9 +26,9 @@ extension PinMenuViewController: CreatePinDelegate {
         }
     }
     // CreatePinDelegate
-    func sendGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
+    func sendGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.sendPinGeoInfo(pinID: pinID, type: "comment", latitude: latitude, longitude: longitude, zoom: zoom)
+            self.delegate?.sendPinGeoInfo(pinID: pinID, type: type, latitude: latitude, longitude: longitude, zoom: zoom)
         })
     }
 }

@@ -62,12 +62,9 @@ extension PinDetailViewController {
     
     func zoomMedia(_ type: MediaMode) {
         var width = 95
-        var space = 10
-        var inset = 15
+        let space = 10
         if type == .large {
             width = 160
-            space = 18
-            inset = 27
         }
         for index in 0...imageViewMediaArray.count-1 {
             UIView.animate(withDuration: 0.5, animations: {
@@ -76,12 +73,6 @@ extension PinDetailViewController {
                 self.imageViewMediaArray[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
-        }
-        UIView.animate(withDuration: 0.5) {
-            var insets = self.scrollViewMedia.contentInset
-            insets.left = CGFloat(inset)
-            insets.right = CGFloat(inset)
-            self.scrollViewMedia.contentInset = insets
         }
         self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width+space) - space), height: CGFloat(width))
     }

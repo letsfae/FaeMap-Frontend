@@ -233,16 +233,16 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
-        loadButton()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
+        loadSelfMarkerSubview()
+        reloadSelfMarker()
+        loadButton()
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
-        loadSelfMarkerSubview()
-        reloadSelfMarker()
         didLoadFirstLoad = true
     }
 

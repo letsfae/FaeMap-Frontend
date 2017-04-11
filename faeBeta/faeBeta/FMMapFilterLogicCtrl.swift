@@ -24,6 +24,7 @@ extension FaeMapViewController {
             break
         case .distance:
             checkFilterDistance(sender)
+            actionHideFilterMenu(UIButton())
             break
         case .people:
             clearMap(type: "pin", animated: false)
