@@ -88,11 +88,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
         
+        let latitude = currentLocation.coordinate.latitude
+        let longitude = currentLocation.coordinate.longitude
+        let position = CLLocationCoordinate2DMake(latitude, longitude)
+        let points = self.faeMapView.projection.point(for: position)
+        self.uiviewDistanceRadius.center = points
+        
         if !didLoadFirstLoad && self.subviewSelfMarker != nil {
-            let latitude = currentLocation.coordinate.latitude
-            let longitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let points = self.faeMapView.projection.point(for: position)
             self.subviewSelfMarker.center = points
         }
         

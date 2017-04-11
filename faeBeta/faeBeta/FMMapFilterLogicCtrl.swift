@@ -171,10 +171,14 @@ extension FaeMapViewController {
         if sender.tag == 0 {
             makeFilterBtnRed(sender)
             filterSlider.isHidden = false
+            lblDistanceDisplay.isHidden = false
+            uiviewDistanceRadius.isHidden = false
         }
         else {
             makeFilterBtnGray(sender)
             filterSlider.isHidden = true
+            lblDistanceDisplay.isHidden = true
+            uiviewDistanceRadius.isHidden = true
         }
     }
     

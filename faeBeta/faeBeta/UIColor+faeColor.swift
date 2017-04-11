@@ -10,12 +10,13 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        let newRed = CGFloat(red)/255
-        let newGreen = CGFloat(green)/255
-        let newBlue = CGFloat(blue)/255
+    
+    convenience init(r: Int, g: Int, b: Int, alpha: CGFloat) {
+        let newRed = CGFloat(r)/255
+        let newGreen = CGFloat(g)/255
+        let newBlue = CGFloat(b)/255
         
-        self.init(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+        self.init(red: newRed, green: newGreen, blue: newBlue, alpha: alpha)
     }
     
     class func faeAppRedColor() -> UIColor {

@@ -226,6 +226,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var previousZoom: Float = 13.8
     
+    var uiviewDistanceRadius: UIView!
+    var lblDistanceDisplay: UILabel!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -459,8 +462,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             })
         }
         
-        // userStatus == 5, invisible
-        if userStatus == 5 {
+        if userStatus == 5 { // userStatus == 5, invisible
             return
         }
         
@@ -469,8 +471,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let longitude = location.coordinate.longitude
             let position = CLLocationCoordinate2DMake(latitude, longitude)
             let points = self.faeMapView.projection.point(for: position)
-//            self.selfMarker.position = position
             self.subviewSelfMarker.center = points
+            self.uiviewDistanceRadius.center = points
         }
     }
 }

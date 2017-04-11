@@ -48,7 +48,7 @@ extension PinDetailViewController {
         uiviewPlaceDetail.layer.zPosition = 110
         
         uiviewPlaceLine = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 1))
-        uiviewPlaceLine.backgroundColor = UIColor(red: 200, green: 199, blue: 204)
+        uiviewPlaceLine.backgroundColor = UIColor(r: 200, g: 199, b: 204, alpha: 1.0)
         uiviewPlaceDetail.addSubview(uiviewPlaceLine)
         
         imgPlaceQuickView = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 170))
@@ -59,7 +59,7 @@ extension PinDetailViewController {
         
         imgPlaceType = UIImageView(frame: CGRect(x: 0, y: 128, width: 58, height: 58))
         imgPlaceType.center.x = screenWidth / 2
-        imgPlaceType.layer.borderColor = UIColor(red: 225, green: 225, blue: 225).cgColor
+        imgPlaceType.layer.borderColor = UIColor(r: 225, g: 225, b: 225, alpha: 1.0).cgColor
         imgPlaceType.layer.borderWidth = 2
         imgPlaceType.layer.cornerRadius = 5
         imgPlaceType.clipsToBounds = true
