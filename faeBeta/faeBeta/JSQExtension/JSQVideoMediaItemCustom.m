@@ -86,18 +86,17 @@
     if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
         UIImage *playIcon = [UIImage imageNamed:@"videoPlayButtonIcon"];
+        
         UIImageView *imageView ;
         if(self.snapImage != nil){
-            UIGraphicsBeginImageContext(size);
-            
+            //UIGraphicsBeginImageContext(size);
+            UIGraphicsBeginImageContextWithOptions(size, false, 20);
             [self.snapImage drawInRect:CGRectMake(0,0,size.width, size.height)];
             [playIcon drawInRect:CGRectMake(size.width / 2 - playIcon.size.width / 2, size.height / 2 - playIcon.size.height / 2 - 5,playIcon.size.width,playIcon.size.height)];
-            
+            //[playIcon drawInRect:CGRectMake(size.width / 2 - 25, size.height / 2 - 25 - 5,50,50)];
             UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
             
             UIGraphicsEndImageContext();
-
-            
             imageView = [[UIImageView alloc] initWithImage:finalImage];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
         }
