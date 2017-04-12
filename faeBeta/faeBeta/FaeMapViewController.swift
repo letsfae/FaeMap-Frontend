@@ -226,6 +226,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var previousZoom: Float = 13.8
     
+    var uiviewDistanceRadius: UIView!
+    var lblDistanceDisplay: UILabel!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -233,16 +236,16 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
-        loadButton()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
+        loadSelfMarkerSubview()
+        reloadSelfMarker()
+        loadButton()
         loadMFilterSlider()
         loadMapFilter()
         filterAndYelpSetup()
-        loadSelfMarkerSubview()
-        reloadSelfMarker()
         didLoadFirstLoad = true
     }
 
@@ -450,27 +453,23 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
             self.faeMapView.camera = camera
-            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-            let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-            self.previousPosition = mapCenterCoordinate
+//            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+//            let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+//            self.previousPosition = mapCenterCoordinate
             reloadSelfPosAnimation()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true)
             })
         }
         
-        // userStatus == 5, invisible
-        if userStatus == 5 {
+        if userStatus == 5 { // userStatus == 5, invisible
             return
         }
         
         if let location = locations.last {
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let points = self.faeMapView.projection.point(for: position)
-//            self.selfMarker.position = position
+            let points = self.faeMapView.projection.point(for: location.coordinate)
             self.subviewSelfMarker.center = points
+            self.uiviewDistanceRadius.center = points
         }
     }
 }

@@ -53,7 +53,6 @@
 		B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0301B121D4A886700A05996 /* FaeAccountViewController.swift */; };
 		B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
 		B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
-		B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9DC1CEDB3DB009B9531 /* Query.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
 		B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
@@ -168,7 +167,6 @@
 		B0CFC99E1CED342000EC356A /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC99D1CED342000EC356A /* Keys.swift */; };
 		B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
 		B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
-		B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9AD1CED35D900EC356A /* Transaction.swift */; };
 		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */; };
 		B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
@@ -215,6 +213,8 @@
 		B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */; };
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
+		B85609051E99661E00F68DA4 /* Sophie+Chat+Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */; };
+		B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609261E9D411000F68DA4 /* FMDistanceChange.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
 		B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E341DF202680092C606 /* PinDetailViewController.swift */; };
@@ -239,7 +239,6 @@
 		B89AB3F31E3D775F00C5116D /* FMLoadingMapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */; };
 		B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */; };
 		B89AB3F71E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */; };
-		B89AB3F91E3D79AA00C5116D /* FMMapFilterSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F81E3D79AA00C5116D /* FMMapFilterSlider.swift */; };
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
@@ -378,7 +377,6 @@
 		B0301B121D4A886700A05996 /* FaeAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAccountViewController.swift; sourceTree = "<group>"; };
 		B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSettingViewController.swift; sourceTree = "<group>"; };
 		B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSettingViewController.swift; sourceTree = "<group>"; };
-		B04BB9DC1CEDB3DB009B9531 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -505,7 +503,6 @@
 		B0CFC99D1CED342000EC356A /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
-		B0CFC9AD1CED35D900EC356A /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "faeBeta-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
 		B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeGeneralTableViewCell.swift; sourceTree = "<group>"; };
@@ -553,6 +550,8 @@
 		B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewControl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
+		B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sophie+Chat+Detail.swift"; sourceTree = "<group>"; };
+		B85609261E9D411000F68DA4 /* FMDistanceChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDistanceChange.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B8612E341DF202680092C606 /* PinDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailViewController.swift; sourceTree = "<group>"; };
@@ -577,7 +576,6 @@
 		B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLoadingMapFilter.swift; sourceTree = "<group>"; };
 		B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterAnimation.swift; sourceTree = "<group>"; };
 		B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterLogicCtrl.swift; sourceTree = "<group>"; };
-		B89AB3F81E3D79AA00C5116D /* FMMapFilterSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterSlider.swift; sourceTree = "<group>"; };
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
@@ -1137,15 +1135,12 @@
 		B0CFC9981CED2CE700EC356A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CE97A9B81E391EC9005BBF6C /* Yelp */,
 				B82767531DF5DD2E00CFB912 /* Database.swift */,
 				B05E2DBE1DD24FEE00D6745A /* Key.swift */,
 				B0CFC99D1CED342000EC356A /* Keys.swift */,
 				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
 				B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */,
-				B0CFC9AD1CED35D900EC356A /* Transaction.swift */,
 				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
-				B04BB9DC1CEDB3DB009B9531 /* Query.swift */,
 				B05E2DBA1DCE357700D6745A /* FaePush.swift */,
 				B04BB9E41CEDB796009B9531 /* FaeUser.swift */,
 				B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */,
@@ -1153,6 +1148,7 @@
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
+				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1305,6 +1301,7 @@
 			isa = PBXGroup;
 			children = (
 				B8612E341DF202680092C606 /* PinDetailViewController.swift */,
+				B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */,
 				B8612E331DF201BF0092C606 /* PinExtension */,
 			);
 			name = PinDetail;
@@ -1313,8 +1310,8 @@
 		B8612E331DF201BF0092C606 /* PinExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B8612E361DF20B180092C606 /* PDButtonActions.swift */,
 				B8612E381DF249DC0092C606 /* PDLoadItems.swift */,
+				B8612E361DF20B180092C606 /* PDButtonActions.swift */,
 				B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */,
 				B8612E3E1DF24FB90092C606 /* PDTableViewCtrlFile.swift */,
 				B8612E3C1DF24E3D0092C606 /* PDAPIConnections.swift */,
@@ -1368,7 +1365,7 @@
 				B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */,
 				B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */,
 				B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */,
-				B89AB3F81E3D79AA00C5116D /* FMMapFilterSlider.swift */,
+				B85609261E9D411000F68DA4 /* FMDistanceChange.swift */,
 			);
 			name = FMMapFilter;
 			sourceTree = "<group>";
@@ -1784,7 +1781,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */,
-				B04BB9DD1CEDB3DB009B9531 /* Query.swift in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B8B2C15E1E66C2BD00F253EA /* UserPin.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
@@ -1855,7 +1851,6 @@
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
-				B89AB3F91E3D79AA00C5116D /* FMMapFilterSlider.swift in Sources */,
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewControll.swift in Sources */,
 				853F27861E26FE5200DD80DF /* EPActions.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
@@ -1898,6 +1893,7 @@
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */,
+				B85609051E99661E00F68DA4 /* Sophie+Chat+Detail.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
@@ -1911,7 +1907,6 @@
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B8E4C3DC1E30177E004E68A5 /* GQTPointQuadTree.m in Sources */,
-				B0CFC9AE1CED35D900EC356A /* Transaction.swift in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B8CBDEF71E4C475700E4BDDB /* PDLoadPlacePin.swift in Sources */,
 				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
@@ -1996,6 +1991,7 @@
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B8E4C3D31E301765004E68A5 /* GMUDefaultClusterIconGenerator.m in Sources */,
 				B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */,
+				B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B8E4C3C01E30172D004E68A5 /* GMUWrappingDictionaryKey.m in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
@@ -2103,9 +2099,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = V9GDX67TF4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2150,9 +2148,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = V9GDX67TF4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2180,11 +2180,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
+					"DISABLE_PUSH_NOTIFICATIONS=1",
+				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2209,7 +2216,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = faeBeta/faeBeta.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2217,6 +2224,13 @@
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
+					"DISABLE_PUSH_NOTIFICATIONS=1",
+				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

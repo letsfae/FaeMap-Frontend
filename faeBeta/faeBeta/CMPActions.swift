@@ -330,7 +330,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                     let long = CLLocationDegrees(longDouble!)
                     self.dismiss(animated: false, completion: {
                         self.activityIndicator.stopAnimating()
-                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
+                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", type: "media", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                     })
                 }
             }

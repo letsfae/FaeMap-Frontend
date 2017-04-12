@@ -94,7 +94,7 @@ extension PinDetailViewController {
         lblTxtPlaceholder = UILabel()
         lblTxtPlaceholder.text = "Write a Comment..."
         lblTxtPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblTxtPlaceholder.textColor = UIColor(red: 146, green: 146, blue: 146)
+        lblTxtPlaceholder.textColor = UIColor(r: 146, g: 146, b: 146, alpha: 100)
         uiviewToolBar.addSubview(lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("H:|-33-[v0]-68-|", options: [], views: lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("V:|-14-[v0(25)]", options: [], views: lblTxtPlaceholder)

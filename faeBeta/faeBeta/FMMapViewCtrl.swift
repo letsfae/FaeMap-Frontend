@@ -88,11 +88,10 @@ extension FaeMapViewController: GMSMapViewDelegate {
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
         
+        let points = self.faeMapView.projection.point(for: currentLocation.coordinate)
+        self.uiviewDistanceRadius.center = points
+        
         if !didLoadFirstLoad && self.subviewSelfMarker != nil {
-            let latitude = currentLocation.coordinate.latitude
-            let longitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let points = self.faeMapView.projection.point(for: position)
             self.subviewSelfMarker.center = points
         }
         
@@ -199,36 +198,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-        /*
-        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-        let currentPosition = mapCenterCoordinate
-        let currentZoomLevel = mapView.camera.zoom
- 
-        if currentZoomLevel >= 11 {
-//            self.updateTimerForAllPins()
-            let coorDistance = Double(cameraDiagonalDistance()) / 1000
-            
-            if let curPosition = previousPosition {
-                let latitudeOffset = abs(currentPosition.latitude-curPosition.latitude)
-                let longitudeOffset = abs(currentPosition.longitude-curPosition.longitude)
-                var coorOffset = pow(latitudeOffset, 2.0) + pow(longitudeOffset, 2.0)
-                coorOffset = pow(coorOffset, 0.5)*111
-                if coorOffset > coorDistance {
-                    self.previousPosition = currentPosition
-                    print("DEBUG: Position offset \(coorOffset)km > \(coorDistance)km")
-                    self.updateTimerForAllPins()
-                }
-                else {
-                    print("DEBUG: Position offset = \(coorOffset)km <= \(coorDistance)km")
-                }
-            }
-        }
-        else {
-            invalidateAllTimer()
-            faeMapView.clear()
-        }
-        */
+
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -246,7 +216,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         
         let zoomLv = mapView.camera.zoom
-        var offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+        // 0.0012
+        var offset: Double = 0.001 * pow(2, Double(17 - zoomLv))
         self.renewSelfLocation()
         var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
@@ -260,14 +231,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
             }
             
             invalidateAllTimer()
-            offset = 0.00148 * pow(2, Double(17 - zoomLv))
+            offset = 0.00117 * pow(2, Double(17 - zoomLv))
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)
             self.canOpenAnotherPin = false
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+            pinDetailVC.selectedMarkerPosition = marker.position
             pinDetailVC.pinMarker = marker
             pinDetailVC.delegate = self
             pinDetailVC.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
@@ -304,8 +275,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
             }
             
             invalidateAllTimer()
-            
-            offset = 0.00148 * pow(2, Double(17 - zoomLv))
+            // 0.00148 Los Angeles
+            offset = 0.00117 * pow(2, Double(17 - zoomLv))
             camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
             mapView.animate(to: camera)

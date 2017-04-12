@@ -265,7 +265,7 @@ class PinDetailViewController: UIViewController {
         }
     }
     
-    func initPinBasicInfo() {
+    fileprivate func initPinBasicInfo() {
         switch pinTypeEnum {
         case .comment:
             self.labelPinTitle.text = "Comment"
@@ -300,7 +300,7 @@ class PinDetailViewController: UIViewController {
         labelPinTitle.textAlignment = .center
     }
     
-    func loadTransparentButtonBackToMap() {
+    fileprivate func loadTransparentButtonBackToMap() {
         grayBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         grayBackButton.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.3)
         grayBackButton.alpha = 0

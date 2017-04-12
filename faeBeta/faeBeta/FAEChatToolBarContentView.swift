@@ -649,7 +649,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         print("[appendEmojiWithImageName]")
         self.delegate.appendEmoji!(name)
         if inputToolbar != nil{
-            inputToolbar.contentView.textView.text = inputToolbar.contentView.textView.text + "[\(name)]"
+            inputToolbar.contentView.textView.insertText("[\(name)]")
         }
     }
     

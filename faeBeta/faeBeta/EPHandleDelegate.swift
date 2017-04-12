@@ -34,7 +34,7 @@ extension EditPinViewController: UITextViewDelegate, CreatePinInputToolbarDelega
         // do nothing here, won't send sticker
     }
     func appendEmojiWithImageName(_ name: String) {
-        self.textViewUpdateComment.text = self.textViewUpdateComment.text + "[\(name)]"
+        self.textViewUpdateComment.insertText("[\(name)]")
         self.textViewDidChange(textViewUpdateComment) //Don't forget adding this line, otherwise there will be a little bug if textfield is null while appending Emoji
     }
     func deleteEmoji() {

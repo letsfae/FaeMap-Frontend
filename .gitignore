@@ -18,6 +18,7 @@ faeBeta/*.perspectivev3
 faeBeta/!default.perspectivev3
 faeBeta/xcuserdata
 profile
+Podfile.lock
 *.moved-aside
 DerivedData
 .idea/
