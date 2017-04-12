@@ -8,206 +8,177 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     
-    var chatSpotBar: UIView!
-    var imgChatSpot: UIImageView!
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    var uiviewchatSpotBar: UIView!
+    var imgviewChatSpot: UIImageView!
     var btnChatEnter: UIButton!
-    var lineChatSpotTop: UIView!
-    var lineChatSpotBottom: UIView!
-    var btnChatSpotLine: UIView!
-    var btnChatSpotLinebtn: UIView!
+    var uiviewChatSpotLineTop: UIView!
+    var uiviewChatSpotLineFirstBottom: UIView!
+    var uiviewChatSpotLine: UIView!
+    var uiviewChatSpotLineSecondBottom: UIView!
     var btnDropDown: UIButton!
     var chatSpotEmojiBubble: UIButton!
-    var chatSpotLeftArrow: UIButton!
-    var chatSpotRightArrow: UIButton!
-    var chatMemberCollection: UICollectionView!
-    var chatPeopleNum: UIView!
-    var chatDescription: UIView!
-    
-    //var InfiniteScrollingCell: UICollectionView!
-    //private let reuseIdentifier = "InfiniteScrollingCell"
-    
-    
+    var btnChatSpotLeftArrow: UIButton!
+    var btnChatSpotRightArrow: UIButton!
+    var cllcviewChatMember: UICollectionView!
+    var uiviewChatPeopleNum: UIView!
+    var uiviewChatDescription: UIView!
+    var lblChatMemberNum: UILabel!
+    var mutableAttrStringMemberNum: NSMutableAttributedString!
+    var mutableAttrStringMemberTotal: NSMutableAttributedString!
+    var lblDescriptionText: UILabel!
     //Chat Spot Variable Initialization
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
         
-        chatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 236))
-        chatSpotBar.backgroundColor = UIColor.white
+        uiviewchatSpotBar = UIView(frame: CGRect(x: 0, y:66, width: screenWidth, height: 236))
+        uiviewchatSpotBar.backgroundColor = UIColor.white
         
-        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40 ,y: 18 , width:80 , height:80 )) //should add auto layout
-        imgChatSpot.image = #imageLiteral(resourceName: "Group 20")
-        chatSpotBar.addSubview(imgChatSpot)
+        imgviewChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 18, width: 80, height: 80))
+        imgviewChatSpot.image = #imageLiteral(resourceName: "Group 20")
+        uiviewchatSpotBar.addSubview(imgviewChatSpot)
         
-        let chatGroupName = UILabel(frame: CGRect(x: 0,y: 111, width: screenWidth,height: 30 ))
-        chatGroupName.textAlignment = NSTextAlignment.center
-        chatGroupName.text = "California Chat"
-        chatGroupName.font = UIFont(name: "AvenirNext-Medium",size: 20)
-        chatGroupName.textColor = UIColor.darkGray
-        chatSpotBar.addSubview(chatGroupName)//should add auto layout
+        let lblChatGroupName = UILabel(frame: CGRect(x: 0, y: 111, width: screenWidth, height: 30))
+        lblChatGroupName.textAlignment = NSTextAlignment.center
+        lblChatGroupName.text = "California Chat"
+        lblChatGroupName.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblChatGroupName.textColor = UIColor.faeAppInputTextGrayColor()
+        uiviewchatSpotBar.addSubview(lblChatGroupName)
         
-        let chatMemberNum = UILabel(frame: CGRect(x: 0,y: 143, width: screenWidth,height: 30 ))
-        chatMemberNum.textAlignment = NSTextAlignment.center
-        chatMemberNum.text = "39 Members"
-        chatMemberNum.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        chatMemberNum.textColor = UIColor.lightGray
-        chatSpotBar.addSubview(chatMemberNum)//should add auto layout
+        lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 143, width: screenWidth, height: 30))
+        lblChatMemberNum.textAlignment = NSTextAlignment.center
+        lblChatMemberNum.text = "39 Members"
+        lblChatMemberNum.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblChatMemberNum.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         
-        btnChatEnter = UIButton(frame: CGRect(x: (screenWidth/2)-105 ,y: 185,width: 210 , height:40 ))
+        uiviewchatSpotBar.addSubview(lblChatMemberNum)
+        
+        btnChatEnter = UIButton(frame: CGRect(x: 0, y: 185, width: 210 , height: 40))
         btnChatEnter.center.x = screenWidth/2
         btnChatEnter.setTitle("Enter Chat", for: .normal)
         btnChatEnter.setTitleColor(UIColor.white, for: .normal)
         btnChatEnter.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnChatEnter.titleLabel?.textAlignment = .center
-        btnChatEnter.backgroundColor = UIColor(red:249/255, green:90/255, blue:90/255,alpha:100)
+        btnChatEnter.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
         btnChatEnter.layer.cornerRadius = 20
-        chatSpotBar.addSubview(btnChatEnter)//should add auto layout
+        uiviewchatSpotBar.addSubview(btnChatEnter)
         
-        lineChatSpotBottom = UIView(frame: CGRect(x: 0, y: 236, width: screenWidth, height: 4))
-        lineChatSpotBottom.center.x = screenWidth/2
-        lineChatSpotBottom.backgroundColor = UIColor(red:241/255, green:241/255, blue:241/255,alpha:100)
+        uiviewChatSpotLineFirstBottom = UIView(frame: CGRect(x: 0, y: 236, width: screenWidth, height: 4))
+        uiviewChatSpotLineFirstBottom.center.x = screenWidth/2
+        uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 100)
         
-        chatSpotBar.addSubview(lineChatSpotBottom)
+        uiviewchatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
+        //add first bottom line
         
+        uiviewChatSpotLineTop = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 1))
+        uiviewChatSpotLineTop.center.x = screenWidth/2
+        uiviewChatSpotLineTop.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
+        self.view.addSubview(uiviewChatSpotLineTop)
+        //add top line
         
-        lineChatSpotTop = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 1))
-        lineChatSpotTop.center.x = screenWidth/2
-        lineChatSpotTop.backgroundColor = UIColor(red:200/255, green:199/255, blue:204/255,alpha:100)
-        self.view.addSubview(lineChatSpotTop)
+        self.view.addSubview(uiviewchatSpotBar)
         
-        
-        self.view.addSubview(chatSpotBar)
-        //self.chatSpotBar.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: chatSpotImg)
-        //self.chatSpotBar.addConstraintsWithFormat("V:|-0-[v0(50)]", options: [], views: chatSpotImg)
-        
-        //construct chatSpotBar
-        
-        chatPeopleNum = UIView(frame: CGRect(x: 0, y: 306, width: screenWidth, height: 33))
-        chatPeopleNum.backgroundColor = UIColor.white
+        uiviewChatPeopleNum = UIView(frame: CGRect(x: 0, y: 306, width: screenWidth, height: 33))
+        uiviewChatPeopleNum.backgroundColor = UIColor.white
         let peopleLabel = UILabel(frame: CGRect(x: 16, y: 10, width: screenWidth-16, height: 20))
         
-        let titleFontAttri = [ NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
-        let memberTitle = NSMutableAttributedString(string: "People 39/50", attributes: titleFontAttri )
-        let memberTitleFirst = NSRange(location: 0, length: 6)
-        let titleColorAttri = [ NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor() ]
-        memberTitle.addAttributes(titleColorAttri, range: memberTitleFirst)
+        let attriMemberStrPeople = [ NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),                     NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         
-        let memberTitleSecond = NSRange(location: 7, length: 2)
-        memberTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppRedColor(), range: memberTitleSecond)
+        let attriMemberNum = [ NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         
-        let memberTitleThird = NSRange(location: 9, length: 3)
-        memberTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppInputPlaceholderGrayColor(), range: memberTitleThird)
-        peopleLabel.attributedText = memberTitle
+        let attriMemberTotal = [ NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(),NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
+        //set attributes
         
+        let mutableAttrStringPeople = NSMutableAttributedString(string: "People  ", attributes: attriMemberStrPeople)
+        mutableAttrStringMemberNum = NSMutableAttributedString(string: "39", attributes: attriMemberNum)
+        let mutableAttrStringSlash = NSMutableAttributedString(string: "/", attributes: attriMemberTotal)
+        mutableAttrStringMemberTotal = NSMutableAttributedString(string: "50", attributes: attriMemberTotal)
+        //set attributed parts
         
-        //  peopleLabel.text = "People 39/50"
-        chatPeopleNum.addSubview(peopleLabel)
+        let mutableStrIniTitle = NSMutableAttributedString(string:"")
+        mutableStrIniTitle.append(mutableAttrStringPeople)
+        mutableStrIniTitle.append(mutableAttrStringMemberNum)
+        mutableStrIniTitle.append(mutableAttrStringSlash)
+        mutableStrIniTitle.append(mutableAttrStringMemberTotal)
+        peopleLabel.attributedText = mutableStrIniTitle
         
-        self.view.addSubview(chatPeopleNum)
+        uiviewChatPeopleNum.addSubview(peopleLabel)
         
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top:10 ,left: 15,bottom:19, right:0)
-        layout.itemSize = CGSize(width: 50, height:50 )
+        self.view.addSubview(uiviewChatPeopleNum)
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 15, bottom: 19, right: 0)
+        layout.itemSize = CGSize(width: 50, height: 50)
         layout.scrollDirection = .horizontal
-        //chatMemberCollection = UICollectionView(frame: CGRect(x: 0 ,y: 282,width: screenWidth , height:40))
-        chatMemberCollection = UICollectionView(frame: CGRect(x: 0 ,y: 339,width: screenWidth , height:85), collectionViewLayout: layout)
-        chatMemberCollection.dataSource = self
-        chatMemberCollection.delegate = self
-        chatMemberCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier:"MemberCell")
-        chatMemberCollection.backgroundColor = UIColor.white
+        cllcviewChatMember = UICollectionView(frame: CGRect(x: 0, y: 339, width: screenWidth, height: 85), collectionViewLayout: layout)
+        cllcviewChatMember.dataSource = self
+        cllcviewChatMember.delegate = self
+        cllcviewChatMember.register(UICollectionViewCell.self, forCellWithReuseIdentifier:"MemberCell")
+        cllcviewChatMember.backgroundColor = UIColor.white
         
-        
-        self.view.addSubview(chatMemberCollection)
+        self.view.addSubview(cllcviewChatMember)
         //construct collectionview
         
-        btnChatSpotLine = UIView(frame: CGRect(x: 0, y: 424, width: screenWidth, height: 1))
-        btnChatSpotLine.center.x = screenWidth/2
-        btnChatSpotLine.backgroundColor = UIColor(red:200/255, green:199/255, blue:204/255,alpha:100)
-        self.view.addSubview(btnChatSpotLine)
+        uiviewChatSpotLine = UIView(frame: CGRect(x: 0, y: 424, width: screenWidth, height: 1))
+        uiviewChatSpotLine.center.x = screenWidth/2
+        uiviewChatSpotLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
+        self.view.addSubview(uiviewChatSpotLine)
         
-        chatDescription = UIView(frame: CGRect(x: 0 ,y: 425,width: screenWidth , height:310))
-        chatDescription.backgroundColor = UIColor.white
-        let description = UILabel(frame: CGRect(x: 15, y: 428-425,width: screenWidth, height:22))
-        description.text = "Description"
-        description.textColor = UIColor(red:89/255,green:89/255,blue:89/255, alpha:100)
-        description.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        chatDescription.addSubview(description)
+        uiviewChatDescription = UIView(frame: CGRect(x: 0 , y: 425, width: screenWidth , height: 310))
+        uiviewChatDescription.backgroundColor = UIColor.white
+        let lbldescription = UILabel(frame: CGRect(x: 15, y: 14, width: screenWidth, height: 22))
+        lbldescription.text = "Description"
+        lbldescription.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 100)
+        lbldescription.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewChatDescription.addSubview(lbldescription)
         
-        let descriptionText = UILabel()
-        descriptionText.lineBreakMode = NSLineBreakMode.byTruncatingTail
-        descriptionText.numberOfLines = 20
-        descriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
-        descriptionText.textColor = UIColor(red:146/255,green:146/255,blue:146/255, alpha:100)
-        descriptionText.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        chatDescription.addSubview(descriptionText)
-        chatDescription.addConstraintsWithFormat("H:|-20-[v0]-20-|", options:[], views:descriptionText)
-        chatDescription.addConstraintsWithFormat("V:|-40-[v0]", options:[], views:descriptionText)
+        lblDescriptionText = UILabel()
+        lblDescriptionText.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        lblDescriptionText.numberOfLines = 20
+        lblDescriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
+        lblDescriptionText.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 100)
+        lblDescriptionText.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewChatDescription.addSubview(lblDescriptionText)
+        uiviewChatDescription.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)
+        uiviewChatDescription.addConstraintsWithFormat("V:|-40-[v0]", options: [], views: lblDescriptionText)
         
-        btnChatSpotLinebtn = UIView(frame: CGRect(x: 0 ,y: 280,width: screenWidth , height:1))
-        btnChatSpotLinebtn.center.x = screenWidth/2
-        btnChatSpotLinebtn.backgroundColor = UIColor(red:200/255, green:199/255, blue:204/255,alpha:100)
-        chatDescription.addSubview(btnChatSpotLinebtn)
-        
-        btnDropDown = UIButton(frame: CGRect(x: (screenWidth/2)-18 ,y: 290,width: 36 , height:9 ))
+        uiviewChatSpotLineSecondBottom = UIView(frame: CGRect(x: 0 , y: 280, width: screenWidth, height: 1))
+        uiviewChatSpotLineSecondBottom.center.x = screenWidth/2
+        uiviewChatSpotLineSecondBottom.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha:100)
+        uiviewChatDescription.addSubview(uiviewChatSpotLineSecondBottom)
+        btnDropDown = UIButton(frame: CGRect(x: (screenWidth/2)-18, y: 290, width: 36, height: 9))
         btnDropDown.center.x = screenWidth/2
-        btnDropDown.backgroundColor = UIColor(red:234/255, green:234/255, blue:234/255,alpha:100)
+        btnDropDown.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 100)
         btnDropDown.layer.cornerRadius = 5
-        chatDescription.addSubview(btnDropDown)//should add auto layout
-        
-        
-        
-        self.view.addSubview(chatDescription)
-        
-        
-        
-        
-        
-        
+        uiviewChatDescription.addSubview(btnDropDown)
+        self.view.addSubview(uiviewChatDescription)
     }
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 14
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemberCell",
                                                       for: indexPath)
-        
-        //let newsize = CGSize(width: 30, height:30)
-        
-        if(indexPath.row == 0){
+        if indexPath.row == 0
+        {
             cell.layer.cornerRadius = cell.frame.size.width / 2
             cell.backgroundColor = UIColor.yellow
-            
-            
             cell.layer.borderWidth = 2
-            let cellbordercolor: UIColor = UIColor(red:249/255 ,green: 90/255,blue:90/255,alpha:100)
-            cell.layer.borderColor = cellbordercolor.cgColor  //supposed to be resized to 52
-            
-            
+            let cellbordercolor: UIColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
+            cell.layer.borderColor = cellbordercolor.cgColor
         }
         else{
-            
             cell.layer.cornerRadius = cell.frame.size.width / 2
             cell.backgroundColor = UIColor.yellow
             cell.layer.borderWidth = 0
-            
         }
-        
         return cell
     }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
 }

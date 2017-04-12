@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import GoogleMaps
 
 extension FaeMapViewController {
     
     func loadMFilterSlider() {
+        loadDistanceRadiusCircle()
+        loadDistanceLabel()
         filterSlider = UISlider(frame: CGRect(x: 100, y: screenWidth, width: 448*screenWidthFactor, height: 28))
         filterSlider.setThumbImage(#imageLiteral(resourceName: "mapFilterSliderIcon"), for: .normal)
         filterSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
@@ -23,8 +26,7 @@ extension FaeMapViewController {
         view.addSubview(filterSlider)
         filterSlider.isHidden = true
         filterSlider.layer.zPosition = 600
-        loadDistanceLabel()
-        loadDistanceRadiusCircle()
+        
     }
     
     fileprivate func loadDistanceLabel() {
@@ -42,24 +44,25 @@ extension FaeMapViewController {
     }
     
     fileprivate func loadDistanceRadiusCircle() {
-        uiviewDistanceRadius = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        uiviewDistanceRadius = UIView(frame: CGRect(x: 0, y: 0, width: 378, height: 378))
         uiviewDistanceRadius.backgroundColor = UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 0.2)
         uiviewDistanceRadius.layer.borderWidth = 2
         uiviewDistanceRadius.layer.borderColor = UIColor.faeAppDisabledRedColor().cgColor
+        uiviewDistanceRadius.layer.cornerRadius = 100
         uiviewDistanceRadius.isHidden = true
         self.view.addSubview(uiviewDistanceRadius)
     }
     
     func printSliderValue(_ sender: UISlider) {
-        let latitude = currentLocation.coordinate.latitude
-        let longitude = currentLocation.coordinate.longitude
-        let position = CLLocationCoordinate2DMake(latitude, longitude)
-        let points = self.faeMapView.projection.point(for: position)
-        uiviewDistanceRadius.frame.size.width = CGFloat(sender.value)
-        uiviewDistanceRadius.frame.size.height = CGFloat(sender.value)
-        uiviewDistanceRadius.layer.cornerRadius = CGFloat(sender.value / 2)
+        let points = self.faeMapView.projection.point(for: currentLocation.coordinate)
+        let radius = Int(faeMapView.projection.points(forMeters: Double(sender.value)*1000.0, at: currentLocation.coordinate))
+        uiviewDistanceRadius.frame.size.width = CGFloat(radius)
+        uiviewDistanceRadius.frame.size.height = CGFloat(radius)
+        uiviewDistanceRadius.layer.cornerRadius = CGFloat(radius/2)
         uiviewDistanceRadius.center = points
         
         lblDistanceDisplay.text = "\(Int(sender.value/4)) km"
+
+        print(radius)
     }
 }
