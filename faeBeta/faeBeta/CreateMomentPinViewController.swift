@@ -90,8 +90,6 @@ class CreateMomentPinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateMediaPinView()
-        loadKeyboardToolBar()
-        loadEmojiView()
         addObservers()
     }
     

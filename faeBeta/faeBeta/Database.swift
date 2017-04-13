@@ -7,7 +7,6 @@
 //
 
 import RealmSwift
-import SDWebImage
 
 class FileObject: Object {
     dynamic var fileId = -999

@@ -33,6 +33,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // MARK: -- Location
     let locManager = CLLocationManager()
     var currentLocation: CLLocation!
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
     var didLoadFirstLoad = false
@@ -451,25 +452,23 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
+            self.currentLocation2D = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
             self.faeMapView.camera = camera
-//            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-//            let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-//            self.previousPosition = mapCenterCoordinate
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true)
             })
         }
         
-        if userStatus == 5 { // userStatus == 5, invisible
-            return
-        }
-        
         if let location = locations.last {
             let points = self.faeMapView.projection.point(for: location.coordinate)
             self.subviewSelfMarker.center = points
             self.uiviewDistanceRadius.center = points
+            self.currentLocation = location
+            self.currentLocation2D = location.coordinate
+            self.currentLatitude = location.coordinate.latitude
+            self.currentLongitude = location.coordinate.longitude
         }
     }
 }

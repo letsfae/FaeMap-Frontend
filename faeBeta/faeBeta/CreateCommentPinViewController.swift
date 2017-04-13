@@ -74,8 +74,7 @@ class CreateCommentPinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateCommentPinView()
-        loadKeyboardToolBar()
-        loadEmojiView()
+        
         addObservers()
     }
     

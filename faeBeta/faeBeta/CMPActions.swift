@@ -292,7 +292,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         var submitLatitude = selectedLatitude
         var submitLongitude = selectedLongitude
         
-        if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
+        if labelSelectLocationContent.text == "Current Map View" { //Changed by Yao cause the default text is "Current Map View"
             let defaultLoc = randomLocation()
             submitLatitude = "\(defaultLoc.latitude)"
             submitLongitude = "\(defaultLoc.longitude)"

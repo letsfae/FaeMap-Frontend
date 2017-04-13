@@ -54,8 +54,8 @@ extension FaeMapViewController {
     }
     
     func printSliderValue(_ sender: UISlider) {
-        let points = self.faeMapView.projection.point(for: currentLocation.coordinate)
-        let radius = Int(faeMapView.projection.points(forMeters: Double(sender.value)*1000.0, at: currentLocation.coordinate))
+        let points = self.faeMapView.projection.point(for: currentLocation2D)
+        let radius = Int(faeMapView.projection.points(forMeters: Double(sender.value)*1000.0, at: currentLocation2D))
         uiviewDistanceRadius.frame.size.width = CGFloat(radius)
         uiviewDistanceRadius.frame.size.height = CGFloat(radius)
         uiviewDistanceRadius.layer.cornerRadius = CGFloat(radius/2)
