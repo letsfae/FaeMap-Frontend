@@ -193,6 +193,24 @@ class PinDetailViewController: UIViewController {
     var uiviewFeeling: UIView!
     var zoomLevel: Float = 13.8
     
+    // Load Chat
+    var uiviewChatRoom: UIView!
+    var btnChatEnter: UIButton!
+    var btnChatSpotLeftArrow: UIButton!
+    var btnChatSpotRightArrow: UIButton!
+    var btnDropDown: UIButton!
+    var chatSpotEmojiBubble: UIButton!
+    var cllcviewChatMember: UICollectionView!
+    var imgChatSpot: UIImageView!
+    var lblChatMemberNum: UILabel!
+    var lblDescriptionText: UILabel!
+    var mutableAttrStringMemberNum: NSMutableAttributedString!
+    var mutableAttrStringMemberTotal: NSMutableAttributedString!
+    var uiviewChatSpotBar: UIView!
+    var uiviewChatSpotLine: UIView!
+    var uiviewChatSpotLineFirstBottom: UIView!
+    var lblPeopleCount: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -291,7 +309,7 @@ class PinDetailViewController: UIViewController {
             selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .chat_room:
-            self.labelPinTitle.text = "Chat"
+            self.labelPinTitle.text = "Chat Spot"
             selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
             break
         case .place:
@@ -334,7 +352,8 @@ class PinDetailViewController: UIViewController {
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.fromValue = 1.0
         fadeAnimation.toValue = 0.0
-        fadeAnimation.duration = 1
+        fadeAnimation.duration = 0.3
+        fadeAnimation.beginTime = CACurrentMediaTime() + 0.7
         
         let orbit = CAKeyframeAnimation(keyPath: "position")
         orbit.duration = 1

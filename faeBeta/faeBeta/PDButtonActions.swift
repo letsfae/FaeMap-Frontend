@@ -321,18 +321,23 @@ extension PinDetailViewController {
             
         }
         UIView.animate(withDuration: 0.5, animations: ({
-            let toolbarHeight = self.uiviewToolBar.frame.size.height
             self.buttonBackToPinLists.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
+            var toolbarHeight = self.uiviewToolBar.frame.size.height
+            if self.pinTypeEnum == .chat_room {
+                toolbarHeight = 0
+            }
             self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
             self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
             self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
         }), completion: { (done: Bool) in
             if done {
-                self.tableCommentsForPin.reloadData()
-                if sender == self.buttonPinAddComment {
-                    self.textViewInput.becomeFirstResponder()
+                if self.pinTypeEnum != .chat_room {
+                    self.tableCommentsForPin.reloadData()
+                    if sender == self.buttonPinAddComment {
+                        self.textViewInput.becomeFirstResponder()
+                    }
                 }
             }
         })

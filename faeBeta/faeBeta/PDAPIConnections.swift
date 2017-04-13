@@ -126,28 +126,12 @@ extension PinDetailViewController {
         }
     }
     
-    func loadFeelingQuickView() {
-        uiviewFeeling.removeFromSuperview()
-        uiviewFeeling = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
-        uiviewPinDetailMainButtons.addSubview(uiviewFeeling)
-        uiviewFeeling.layer.zPosition = 109
-        var count = 0
-        for i in 0..<feelingArray.count {
-            if feelingArray[i] != 0 {
-                let offset = count * 30
-                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
-                if i+1 < 10 {
-                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)")
-                } else {
-                    feeling.image = UIImage(named: "pdFeeling_\(i+1)")
-                }
-                uiviewFeeling.addSubview(feeling)
-                count += 1
-            }
-        }
-    }
-    
     func deleteFeeling() {
+        btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+        btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+        btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+        btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+        btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
         let deleteFeeling = FaePinAction()
         deleteFeeling.deleteFeeling("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
@@ -167,6 +151,27 @@ extension PinDetailViewController {
                     self.tableCommentsForPin.reloadData()
                 }
                 self.loadFeelingQuickView()
+            }
+        }
+    }
+    
+    func loadFeelingQuickView() {
+        uiviewFeeling.removeFromSuperview()
+        uiviewFeeling = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
+        uiviewPinDetailMainButtons.addSubview(uiviewFeeling)
+        uiviewFeeling.layer.zPosition = 109
+        var count = 0
+        for i in 0..<feelingArray.count {
+            if feelingArray[i] != 0 {
+                let offset = count * 30
+                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
+                if i+1 < 10 {
+                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)")
+                } else {
+                    feeling.image = UIImage(named: "pdFeeling_\(i+1)")
+                }
+                uiviewFeeling.addSubview(feeling)
+                count += 1
             }
         }
     }
@@ -357,7 +362,7 @@ extension PinDetailViewController {
     func commentThisPin(_ type: String, pinID: String, text: String) {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
-        commentThisPin.whereKey("anonymous", value: "true")
+        commentThisPin.whereKey("anonymous", value: "\(switchAnony.isOn)")
         if pinIDPinDetailView != "-999" {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {

@@ -14,15 +14,122 @@ extension PinDetailViewController {
     // Load pin detail window
     func loadPinDetailWindow() {
         loadNavigationBar()
+        if pinTypeEnum != .place {
+            loadFeelingBar()
+        }
         loadingOtherParts()
         loadTableHeader()
         loadPinCtrlButton()
         loadAnotherToolbar()
         loadInputToolBar()
-        if pinTypeEnum != .place {
-            loadFeelingBar()
+        if pinTypeEnum == .chat_room {
+            loadChatView()
+            uiviewFeelingBar.isHidden = true
+            tableCommentsForPin.tableHeaderView = uiviewChatRoom
+        } else {
+            tableCommentsForPin.tableHeaderView = uiviewPinDetail
         }
-        tableCommentsForPin.tableHeaderView = uiviewPinDetail
+    }
+    
+    fileprivate func loadChatView() {
+        uiviewChatRoom = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight-65))
+        
+        uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 227))
+        uiviewChatSpotBar.backgroundColor = UIColor.white
+        
+        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 15, width: 80, height: 80))
+        imgChatSpot.layer.cornerRadius = 40
+        imgChatSpot.clipsToBounds = true
+        imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
+        uiviewChatSpotBar.addSubview(imgChatSpot)
+        
+        let lblChatGroupName = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
+        lblChatGroupName.textAlignment = NSTextAlignment.center
+        lblChatGroupName.text = "California Chat"
+        lblChatGroupName.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblChatGroupName.textColor = UIColor.faeAppInputTextGrayColor()
+        uiviewChatSpotBar.addSubview(lblChatGroupName)
+        
+        lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 139, width: screenWidth, height: 30))
+        lblChatMemberNum.textAlignment = NSTextAlignment.center
+        lblChatMemberNum.text = "39 Members"
+        lblChatMemberNum.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblChatMemberNum.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        
+        uiviewChatSpotBar.addSubview(lblChatMemberNum)
+        
+        btnChatEnter = UIButton(frame: CGRect(x: 0, y: 173, width: 210 , height: 40))
+        btnChatEnter.center.x = screenWidth/2
+        btnChatEnter.setTitle("Enter Chat", for: .normal)
+        btnChatEnter.setTitleColor(UIColor.white, for: .normal)
+        btnChatEnter.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        btnChatEnter.titleLabel?.textAlignment = .center
+        btnChatEnter.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
+        btnChatEnter.layer.cornerRadius = 20
+        uiviewChatSpotBar.addSubview(btnChatEnter)
+        
+        uiviewChatSpotLineFirstBottom = UIView(frame: CGRect(x: 0, y: 227, width: screenWidth, height: 5))
+        uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 100)
+        uiviewChatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
+        
+        self.uiviewChatRoom.addSubview(uiviewChatSpotBar)
+        
+        lblPeopleCount = UILabel(frame: CGRect(x: 15, y: 247, width: 200, height: 22))
+        
+        let attriMemberStrPeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        
+        let attriMemberNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+                              NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        
+        let attriMemberTotal = [ NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(),NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
+        //set attributes
+        
+        let mutableAttrStringPeople = NSMutableAttributedString(string: "People  ", attributes: attriMemberStrPeople)
+        mutableAttrStringMemberNum = NSMutableAttributedString(string: "39", attributes: attriMemberNum)
+        let mutableAttrStringSlash = NSMutableAttributedString(string: "/", attributes: attriMemberTotal)
+        mutableAttrStringMemberTotal = NSMutableAttributedString(string: "50", attributes: attriMemberTotal)
+        //set attributed parts
+        
+        let mutableStrIniTitle = NSMutableAttributedString(string:"")
+        mutableStrIniTitle.append(mutableAttrStringPeople)
+        mutableStrIniTitle.append(mutableAttrStringMemberNum)
+        mutableStrIniTitle.append(mutableAttrStringSlash)
+        mutableStrIniTitle.append(mutableAttrStringMemberTotal)
+        lblPeopleCount.attributedText = mutableStrIniTitle
+        uiviewChatRoom.addSubview(lblPeopleCount)
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.scrollDirection = .horizontal
+        cllcviewChatMember = UICollectionView(frame: CGRect(x: 0, y: 282, width: screenWidth, height: 50), collectionViewLayout: layout)
+        cllcviewChatMember.dataSource = self
+        cllcviewChatMember.delegate = self
+        cllcviewChatMember.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MemberCell")
+        cllcviewChatMember.backgroundColor = UIColor.white
+        cllcviewChatMember.showsHorizontalScrollIndicator = false
+        self.uiviewChatRoom.addSubview(cllcviewChatMember)
+        
+        uiviewChatSpotLine = UIView(frame: CGRect(x: 0, y: 351, width: screenWidth, height: 1))
+        uiviewChatSpotLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
+        self.uiviewChatRoom.addSubview(uiviewChatSpotLine)
+        
+        let lblDesTitle = UILabel(frame: CGRect(x: 15, y: 363, width: screenWidth, height: 22))
+        lblDesTitle.text = "Description"
+        lblDesTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        lblDesTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.uiviewChatRoom.addSubview(lblDesTitle)
+        
+        lblDescriptionText = UILabel()
+        lblDescriptionText.lineBreakMode = .byTruncatingTail
+        lblDescriptionText.numberOfLines = 0
+        lblDescriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
+        lblDescriptionText.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 100)
+        lblDescriptionText.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.uiviewChatRoom.addSubview(lblDescriptionText)
+        uiviewChatRoom.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)
+        uiviewChatRoom.addConstraintsWithFormat("V:|-391-[v0]", options: [], views: lblDescriptionText)
     }
     
     fileprivate func loadFeelingBar() {
@@ -227,7 +334,6 @@ extension PinDetailViewController {
         uiviewPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 274))
         uiviewPinDetail.backgroundColor = UIColor.white
         uiviewPinDetail.layer.zPosition = 100
-        self.view.addSubview(uiviewPinDetail)
         
         // Textview width based on different resolutions
         var textViewWidth: CGFloat = 0
