@@ -76,22 +76,25 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int) {
         buttonPrevPin.isHidden = false
         buttonNextPin.isHidden = false
-        PinDetailViewController.selectedMarkerPosition = coordinate
-        self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
+        self.uiviewPlaceDetail.frame.origin.y = 0
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
-        PinDetailViewController.pinIDPinDetailView = pinID
         
-        loadPlaceFromRealm(pinTypeId: "place\(pinID)")
-        uiviewPlaceDetail.frame.origin.y = 0
-        pinIcon.frame.size.width = 48
-        pinIcon.center.x = screenWidth / 2
-        pinIcon.center.y = 507 * screenHeightFactor
+        PinDetailViewController.selectedMarkerPosition = coordinate
+        PinDetailViewController.placeType = OpenedPlaces.openedPlaces[index].category
+        PinDetailViewController.strPlaceTitle = OpenedPlaces.openedPlaces[index].title
+        PinDetailViewController.strPlaceStreet = OpenedPlaces.openedPlaces[index].street
+        PinDetailViewController.strPlaceCity = OpenedPlaces.openedPlaces[index].city
+        PinDetailViewController.strPlaceImageURL = OpenedPlaces.openedPlaces[index].imageURL
+        initPlaceBasicInfo()
+        manageYelpData()
+        
+        self.delegate?.animateToCamera(coordinate, pinID: "ddd")
         UIApplication.shared.statusBarStyle = .lightContent
     }
     func directlyReturnToMap() {

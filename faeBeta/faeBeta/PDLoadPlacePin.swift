@@ -11,22 +11,6 @@ import SDWebImage
 import RealmSwift
 
 extension PinDetailViewController {
-    func loadPlaceFromRealm(pinTypeId: String) {
-        let realm = try! Realm()
-        if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinTypeId)'").first {
-            self.lblPlaceTitle.text = opinListElem.pinContent
-            self.lblPlaceStreet.text = opinListElem.street
-            self.lblPlaceCity.text = opinListElem.city
-            let imageURL = opinListElem.imageURL
-            self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imgPlaceQuickView.alpha = 1
-                })
-            })
-            PinDetailViewController.placeType = opinListElem.category
-            initPlaceBasicInfo()
-        }
-    }
     
     func manageYelpData() {
         self.lblPlaceTitle.text = PinDetailViewController.strPlaceTitle

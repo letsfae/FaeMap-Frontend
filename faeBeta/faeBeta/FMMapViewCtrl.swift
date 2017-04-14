@@ -222,7 +222,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
                                               longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
         faeMapView.camera = camera
         
-        PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
+        PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude,
+                                                                                longitude: marker.position.longitude)
         PinDetailViewController.pinMarker = marker
         PinDetailViewController.pinTypeEnum = .place
         PinDetailViewController.placeType = placePin.primaryCate

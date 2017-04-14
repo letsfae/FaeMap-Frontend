@@ -14,7 +14,7 @@ protocol OpenedPinListViewControllerDelegate: class {
     // Directly back to main map
     func directlyReturnToMap()
     // Pass location to fae map view via CommentPinDetailViewController
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int)
 }
 
 class OpenedPinListViewController: UIViewController {

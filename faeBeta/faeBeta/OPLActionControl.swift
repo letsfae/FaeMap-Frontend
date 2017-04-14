@@ -64,9 +64,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         actionBackToMap(buttonSubviewBackToMap)
     }
     
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String) {
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, index: Int) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, pinID: pinID)
+            self.delegate?.animateToCameraFromOpenedPinListView(coordinate, index: index)
         })
     }
     

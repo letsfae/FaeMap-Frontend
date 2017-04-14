@@ -35,8 +35,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         reloadSelfPosAnimation()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.animate(to: camera)
+        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
+                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
     }
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
         guard let userData = marker.userData as? [Int: AnyObject] else {
