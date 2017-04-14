@@ -10,7 +10,7 @@ import UIKit
 import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
-//import Photos
+import Photos
 import MobileCoreServices
 import CoreMedia
 import GooglePlaces
@@ -374,6 +374,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func showLibrary() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        if(status != .authorized) {
+            print("not authorized!")
+            showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+            return
+        }
         resetToolbarButtonIcon()
         buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
