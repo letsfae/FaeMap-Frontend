@@ -57,11 +57,4 @@ extension FaeMapViewController {
         
         navigationController?.pushViewController(chatVC, animated: true)
     }
-    
-    func animationMapChatHide(_ sender: UIButton!) {
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.mapChatSubview.alpha = 0.0
-            self.mapChatWindow.alpha = 0.0
-        }))
-    }
 }

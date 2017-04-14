@@ -20,7 +20,7 @@ extension PinDetailViewController {
         endEdit()
         if buttonMoreOnPinCellExpanded == false {
             var menuOffset: CGFloat = 0
-            if pinTypeEnum == .place {
+            if PinDetailViewController.pinTypeEnum == .place {
                 menuOffset = 148
             }
             buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
@@ -134,7 +134,7 @@ extension PinDetailViewController {
     func hidePinMoreButtonDetails() {
         buttonMoreOnPinCellExpanded = false
         var menuOffset: CGFloat = 0
-        if pinTypeEnum == .place {
+        if PinDetailViewController.pinTypeEnum == .place {
             menuOffset = 148
         }
         let subviewXBefore: CGFloat = 400 * screenWidthFactor
@@ -162,7 +162,7 @@ extension PinDetailViewController {
     }
     
     func actionEditComment(_ sender: UIButton) {
-        if pinIdSentBySegue == "-999" {
+        if PinDetailViewController.pinIDPinDetailView == "-999" {
             return
         }
         self.isKeyboardInThisView = false
@@ -170,11 +170,11 @@ extension PinDetailViewController {
         editPinVC.zoomLevel = zoomLevel
         editPinVC.delegate = self
         editPinVC.previousCommentContent = self.stringPlainTextViewTxt
-        editPinVC.pinID = "\(pinIdSentBySegue)"
+        editPinVC.pinID = "\(PinDetailViewController.pinIDPinDetailView)"
         editPinVC.pinMediaImageArray = imageViewMediaArray
-        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude, longitude: selectedMarkerPosition.longitude)
-        editPinVC.editPinMode = self.pinTypeEnum
-        editPinVC.pinType = "\(self.pinTypeEnum)"
+        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: PinDetailViewController.selectedMarkerPosition.latitude, longitude: PinDetailViewController.selectedMarkerPosition.longitude)
+        editPinVC.editPinMode = PinDetailViewController.pinTypeEnum
+        editPinVC.pinType = "\(PinDetailViewController.pinTypeEnum)"
         editPinVC.mediaIdArray = fileIdArray
         self.present(editPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(buttonFakeTransparentClosingView)
@@ -183,7 +183,7 @@ extension PinDetailViewController {
     func actionReportThisPin(_ sender: UIButton) {
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
-        if pinTypeEnum == .place {
+        if PinDetailViewController.pinTypeEnum == .place {
             reportPinVC.isPlacePin = true
         }
         self.isKeyboardInThisView = false
@@ -196,7 +196,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete pin")
                     self.actionBackToMap(self.buttonPinBackToMap)
@@ -218,12 +218,12 @@ extension PinDetailViewController {
     
     // When clicking save button in comment pin detail window's more options button
     func actionSaveThisPin(_ sender: UIButton) {
-        if pinIDPinDetailView != "-999" {
+        if PinDetailViewController.pinIDPinDetailView != "-999" {
             if isSavedByMe {
-                self.unsaveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+                self.unsaveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
             }
             else {
-                self.saveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+                self.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
             }
         }
         actionToCloseOtherViews(buttonFakeTransparentClosingView)

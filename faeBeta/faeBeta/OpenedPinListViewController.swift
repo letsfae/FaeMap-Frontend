@@ -28,7 +28,6 @@ class OpenedPinListViewController: UIViewController {
     var commentListExpand = false
     var commentListShowed = false
     var labelCommentPinListTitle: UILabel!
-    var openedPinListArray = [String]()
     var subviewTable: UIView!
     var subviewWhite: UIView!
     var tableOpenedPin: UITableView!
@@ -47,9 +46,6 @@ class OpenedPinListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let listArray = readByKey("openedPinList") {
-            self.openedPinListArray = listArray as! [String]
-        }
         buttonSubviewBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(buttonSubviewBackToMap)
         self.view.sendSubview(toBack: buttonSubviewBackToMap)
@@ -77,9 +73,9 @@ class OpenedPinListViewController: UIViewController {
     
     // Load comment pin list
     func loadPinList() {
-        var tableHeight = CGFloat(openedPinListArray.count * 76)
+        var tableHeight = CGFloat(OpenedPlaces.openedPlaces.count * 76)
         let subviewTableHeight = CGFloat(255)
-        if openedPinListArray.count > 3 {
+        if OpenedPlaces.openedPlaces.count > 3 {
             tableHeight = CGFloat(228)
         }
         subviewWhite = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
@@ -98,7 +94,7 @@ class OpenedPinListViewController: UIViewController {
         tableOpenedPin.dataSource = self
         tableOpenedPin.tableFooterView = UIView.init(frame: CGRect.zero)
         subviewTable.addSubview(tableOpenedPin)
-        if self.openedPinListArray.count > 3 {
+        if OpenedPlaces.openedPlaces.count > 3 {
             self.tableOpenedPin.isScrollEnabled = true
         }
         else {

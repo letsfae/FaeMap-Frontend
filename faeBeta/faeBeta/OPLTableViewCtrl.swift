@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
-import RealmSwift
 
 extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -18,8 +17,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tableOpenedPin {
-//            print("number of cells is \(self.openedPinListArray.count)")
-            return self.openedPinListArray.count
+            return OpenedPlaces.openedPlaces.count
         }
         else{
             return 0
@@ -28,23 +26,16 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableOpenedPin {
             let cell = tableView.dequeueReusableCell(withIdentifier: "openedPinCell", for: indexPath) as! OPLTableViewCell
-            cell.delegate = self
-            let pinTypeID = openedPinListArray[indexPath.row]
-            print("[OPLTableViewControl] pinInfo = \(pinTypeID) row = \(indexPath.row)")
-            let pinID = pinTypeID.components(separatedBy: "%")[0]
-            cell.pinID = pinID
-            cell.indexPathInCell = indexPath
             
-            let realm = try! Realm()
-            if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinID)'").first {
-                cell.content.text = opinListElem.pinContent
-                cell.time.text = opinListElem.pinTime
-                cell.location = CLLocationCoordinate2DMake(opinListElem.pinLat+0.00148, opinListElem.pinLon)
-                cell.deleteButton.isEnabled = true
-                cell.jumpToDetail.isEnabled = true
-            }
-            let category = pinTypeID.components(separatedBy: "%")[1]
-            cell.imageViewAvatar.image = placeCategory(placeType: category)
+            cell.delegate = self
+            cell.pinID = OpenedPlaces.openedPlaces[indexPath.row].pinId
+            cell.indexPathInCell = indexPath
+            cell.content.text = OpenedPlaces.openedPlaces[indexPath.row].title
+            cell.time.text = OpenedPlaces.openedPlaces[indexPath.row].pinTime
+            cell.location = OpenedPlaces.openedPlaces[indexPath.row].position
+            cell.deleteButton.isEnabled = true
+            cell.jumpToDetail.isEnabled = true
+            cell.imageViewAvatar.image = placeCategory(placeType: OpenedPlaces.openedPlaces[indexPath.row].category)
             
             return cell
         }
@@ -53,7 +44,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    fileprivate func placeCategory(placeType: String) -> UIImage {
+    fileprivate func placeCategory(placeType: String) -> UIImage? {
         switch placeType {
         case "burgers":
             return #imageLiteral(resourceName: "openedPinBurger")
@@ -76,7 +67,7 @@ extension OpenedPinListViewController: UITableViewDelegate, UITableViewDataSourc
         case "juicebars":
             return #imageLiteral(resourceName: "openedPinBoba")
         default:
-            return UIImage()
+            return nil
         }
     }
     

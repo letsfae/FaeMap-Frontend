@@ -108,7 +108,6 @@
 		B0714D581D5E435200356705 /* MapChatTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2E1D5E435200356705 /* MapChatTableCell.swift */; };
 		B0714D611D5E435200356705 /* MoreVisibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */; };
 		B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */; };
-		B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D341D5E435200356705 /* RightSlideWindow.swift */; };
 		B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D351D5E435200356705 /* FMMapTableDelegate.swift */; };
 		B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */; };
 		B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* FMUpdateMapPins.swift */; };
@@ -211,7 +210,7 @@
 		B84C90CB1DE7DE1D005B6F38 /* CMPActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */; };
 		B84C90CD1DE7DF58005B6F38 /* CMPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */; };
 		B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */; };
-		B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */; };
+		B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
 		B85609051E99661E00F68DA4 /* Sophie+Chat+Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */; };
 		B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609261E9D411000F68DA4 /* FMDistanceChange.swift */; };
@@ -259,6 +258,7 @@
 		B8CBDEF71E4C475700E4BDDB /* PDLoadPlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */; };
 		B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */; };
 		B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */; };
+		B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */; };
 		B8E4C3BD1E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */; };
 		B8E4C3BE1E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3B81E30172D004E68A5 /* GMUNonHierarchicalDistanceBasedAlgorithm.m */; };
 		B8E4C3BF1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3BA1E30172D004E68A5 /* GMUSimpleClusterAlgorithm.m */; };
@@ -433,7 +433,6 @@
 		B0714D2E1D5E435200356705 /* MapChatTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapChatTableCell.swift; sourceTree = "<group>"; };
 		B0714D311D5E435200356705 /* MoreVisibleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVisibleTableViewCell.swift; sourceTree = "<group>"; };
 		B0714D321D5E435200356705 /* MoreVisibleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreVisibleTableViewCell.xib; sourceTree = "<group>"; };
-		B0714D341D5E435200356705 /* RightSlideWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSlideWindow.swift; sourceTree = "<group>"; };
 		B0714D351D5E435200356705 /* FMMapTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapTableDelegate.swift; sourceTree = "<group>"; };
 		B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUnreadChatCtrl.swift; sourceTree = "<group>"; };
 		B0714D371D5E435200356705 /* FMUpdateMapPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdateMapPins.swift; sourceTree = "<group>"; };
@@ -549,7 +548,7 @@
 		B84C90CA1DE7DE1D005B6F38 /* CMPActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPActions.swift; sourceTree = "<group>"; };
 		B84C90CC1DE7DF58005B6F38 /* CMPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPSelectLocation.swift; sourceTree = "<group>"; };
 		B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForMainScreenSearch.swift; sourceTree = "<group>"; };
-		B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewControl.swift; sourceTree = "<group>"; };
+		B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCtrl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
 		B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sophie+Chat+Detail.swift"; sourceTree = "<group>"; };
 		B85609261E9D411000F68DA4 /* FMDistanceChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDistanceChange.swift; sourceTree = "<group>"; };
@@ -597,6 +596,7 @@
 		B8CBDEF61E4C475700E4BDDB /* PDLoadPlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadPlacePin.swift; sourceTree = "<group>"; };
 		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8DDC63F1E00A23B00BBB7F1 /* PDLoadMedias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadMedias.swift; sourceTree = "<group>"; };
+		B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPlaces.swift; sourceTree = "<group>"; };
 		B8E4C3B41E30172D004E68A5 /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUClusterAlgorithm.h; sourceTree = "<group>"; };
 		B8E4C3B51E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMUGridBasedClusterAlgorithm.h; sourceTree = "<group>"; };
 		B8E4C3B61E30172D004E68A5 /* GMUGridBasedClusterAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMUGridBasedClusterAlgorithm.m; sourceTree = "<group>"; };
@@ -889,7 +889,6 @@
 				B8CAA03C1DDD931D00DEC329 /* FMSelfPosition.swift */,
 				B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */,
 				B0714D2C1D5E435200356705 /* LeftSlideWindow.swift */,
-				B0714D341D5E435200356705 /* RightSlideWindow.swift */,
 				B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
@@ -1284,7 +1283,7 @@
 		B84E1A5C1DCBE1F1000E29B9 /* OpenedPinListExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B84E1A5D1DCBE279000E29B9 /* OPLTableViewControl.swift */,
+				B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */,
 				B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */,
 				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
@@ -1587,6 +1586,7 @@
 		DCEB8CA01DEFBE5A00B516E9 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
 				B817756F1E69516D001FC073 /* PlacePin.swift */,
 				B8B2C15D1E66C2BD00F253EA /* UserPin.swift */,
 				B8B2C15B1E65EDFF00F253EA /* MapPin.swift */,
@@ -1875,12 +1875,12 @@
 				B0714D521D5E435200356705 /* LeftSlideWindow.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
-				B0714D6A1D5E435200356705 /* RightSlideWindow.swift in Sources */,
 				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
+				B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				853F27791E231E1300DD80DF /* EOHandleDelegate.swift in Sources */,
 				B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */,
@@ -1943,7 +1943,7 @@
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
-				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
+				B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
 				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,

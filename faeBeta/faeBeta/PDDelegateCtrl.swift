@@ -16,12 +16,12 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     func postFeelingFromFeelingCell(_ feeling: String) {
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: feeling)
-        postFeeling.postFeelingToPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
+        postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
                 return
             }
             let getPinById = FaeMap()
-            getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
                 self.feelingArray.removeAll()
                 let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
@@ -67,23 +67,23 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
-        if pinIDPinDetailView != "-999" {
+        if PinDetailViewController.pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
-        selectedMarkerPosition = coordinate
+        PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = zoom
-        self.delegate?.reloadMapPins(selectedMarkerPosition, zoom: zoom, pinID: pinIDPinDetailView, marker: pinMarker)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: PinDetailViewController.pinIDPinDetailView, marker: PinDetailViewController.pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        self.selectedMarkerPosition = coordinate
+        PinDetailViewController.selectedMarkerPosition = coordinate
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
-        self.pinIDPinDetailView = pinID
+        PinDetailViewController.pinIDPinDetailView = pinID
         if uiviewPlaceDetail == nil {
             loadPlaceDetail()
         }

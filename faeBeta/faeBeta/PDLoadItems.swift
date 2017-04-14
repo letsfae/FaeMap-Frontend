@@ -14,7 +14,7 @@ extension PinDetailViewController {
     // Load pin detail window
     func loadPinDetailWindow() {
         loadNavigationBar()
-        if pinTypeEnum != .place {
+        if PinDetailViewController.pinTypeEnum != .place {
             loadFeelingBar()
         }
         loadingOtherParts()
@@ -22,7 +22,7 @@ extension PinDetailViewController {
         loadPinCtrlButton()
         loadAnotherToolbar()
         loadInputToolBar()
-        if pinTypeEnum == .chat_room {
+        if PinDetailViewController.pinTypeEnum == .chat_room {
             loadChatView()
             uiviewFeelingBar.isHidden = true
             tableCommentsForPin.tableHeaderView = uiviewChatRoom
@@ -358,7 +358,7 @@ extension PinDetailViewController {
         textviewPinDetail.isScrollEnabled = true
         textviewPinDetail.textContainerInset = .zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
-        if pinTypeEnum == .media {
+        if PinDetailViewController.pinTypeEnum == .media {
             textviewPinDetail.isHidden = true
         }
         uiviewPinDetail.addSubview(textviewPinDetail)
@@ -695,6 +695,7 @@ extension PinDetailViewController {
         buttonPrevPin.layer.shadowOpacity = 0.6
         buttonPrevPin.layer.shadowRadius = 3.0
         buttonPrevPin.alpha = 0
+        buttonPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonPrevPin)
         
         buttonNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
@@ -705,6 +706,7 @@ extension PinDetailViewController {
         buttonNextPin.layer.shadowOpacity = 0.6
         buttonNextPin.layer.shadowRadius = 3.0
         buttonNextPin.alpha = 0
+        buttonNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonNextPin)
     }
 }

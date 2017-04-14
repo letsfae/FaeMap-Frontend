@@ -57,11 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
             migrationBlock: { migration, oldSchemaVersion in
-                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
-                    if oldSchemaVersion < 3 {
-                        newObject!["pinType"] = "\(oldObject?["pinType"])"
-                    }
-                }
+//                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
+//                    if oldSchemaVersion < 3 {
+//                        newObject!["pinType"] = "\(oldObject?["pinType"])"
+//                    }
+//                }
         })
         
 //        let realm = try! Realm()

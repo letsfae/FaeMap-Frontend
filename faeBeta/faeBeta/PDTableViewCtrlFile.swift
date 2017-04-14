@@ -40,8 +40,8 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             let comment = self.pinComments[indexPath.row]
             cell.delegate = self
-            cell.pinID = self.pinIDPinDetailView
-            cell.pinType = "\(self.pinTypeEnum)"
+            cell.pinID = PinDetailViewController.pinIDPinDetailView
+            cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
             if comment.anonymous {
                 cell.lblUsername.text = "Anonymous"
                 cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
@@ -93,7 +93,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.lblUserAge.text = userInfo.age
             cell.imgAvatar.image = userInfo.profileImage
             cell.userId = userInfo.userId
-            cell.updateAvatarUI(isPinOwner: userInfo.userId == self.pinUserId)
+            cell.updateAvatarUI(isPinOwner: userInfo.userId == PinDetailViewController.pinUserId)
             cell.updatePrivacyUI(showGender: userInfo.showGender,
                                  gender: userInfo.gender,
                                  showAge: userInfo.showAge,

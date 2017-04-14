@@ -15,12 +15,13 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     func actionDraggingThisList(_ sender: UIButton) {
         if sender.tag == 1 {
             sender.tag = 0
+            
             UIView.animate(withDuration: 0.5, animations: ({
                 self.draggingButtonSubview.frame.origin.y = 227
                 self.subviewTable.frame.size.height = 256
-                if self.openedPinListArray.count <= 3 {
-                    self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
-                }else{
+                if OpenedPlaces.openedPlaces.count <= 3 {
+                    self.tableOpenedPin.frame.size.height = CGFloat(OpenedPlaces.openedPlaces.count * 76)
+                } else {
                     self.tableOpenedPin.frame.size.height = CGFloat(227)
                 }
             }), completion: { (done: Bool) in
@@ -32,8 +33,8 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         sender.tag = 1
         UIView.animate(withDuration: 0.5, animations: ({
             self.draggingButtonSubview.frame.origin.y = screenHeight - 93
+            self.tableOpenedPin.frame.size.height = screenHeight - 92
             self.subviewTable.frame.size.height = screenHeight - 65
-            self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
         }), completion: { (done: Bool) in
             if done {
             }
@@ -56,8 +57,7 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
     // Reset comment pin list window and remove all saved data
     func actionClearCommentPinList(_ sender: UIButton) {
-        self.openedPinListArray.removeAll()
-        self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+        OpenedPlaces.openedPlaces.removeAll()
         self.tableOpenedPin.frame.size.height = 0
         self.tableOpenedPin.reloadData()
         actionBackToMap(buttonSubviewBackToMap)
@@ -70,16 +70,17 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     }
     
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath) {
-        self.openedPinListArray.remove(at: indexPath.row)
-        self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
+        OpenedPlaces.openedPlaces.remove(at: indexPath.row)
         self.tableOpenedPin.deleteRows(at: [indexPath], with: .fade)
-        if self.openedPinListArray.count <= 3 {
-            self.tableOpenedPin.frame.size.height = CGFloat(self.openedPinListArray.count * 76)
-        }else{
+        if buttonCommentPinListDragToLargeSize.tag == 1 {
+            self.tableOpenedPin.frame.size.height = screenHeight - 92
+        } else if OpenedPlaces.openedPlaces.count <= 3 {
+            self.tableOpenedPin.frame.size.height = CGFloat(OpenedPlaces.openedPlaces.count * 76)
+        } else {
             self.tableOpenedPin.frame.size.height = CGFloat(228)
         }
         self.tableOpenedPin.reloadData()
-        if openedPinListArray.count == 0 {
+        if OpenedPlaces.openedPlaces.count == 0 {
             UIView.animate(withDuration: 0.5, animations: ({
                 self.subviewWhite.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
