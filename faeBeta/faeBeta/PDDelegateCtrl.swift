@@ -77,6 +77,8 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
+        buttonPrevPin.isHidden = false
+        buttonNextPin.isHidden = false
         PinDetailViewController.selectedMarkerPosition = coordinate
         self.delegate?.animateToCamera(coordinate, pinID: pinID)
         self.backJustOnce = true
@@ -84,9 +86,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
         PinDetailViewController.pinIDPinDetailView = pinID
-        if uiviewPlaceDetail == nil {
-            loadPlaceDetail()
-        }
+        
         loadPlaceFromRealm(pinTypeId: "place\(pinID)")
         uiviewPlaceDetail.frame.origin.y = 0
         pinIcon.frame.size.width = 48
@@ -94,8 +94,6 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         pinIcon.center.y = 507 * screenHeightFactor
         UIApplication.shared.statusBarStyle = .lightContent
     }
-    
-    // OpenedPinListViewControllerDelegate
     func directlyReturnToMap() {
         actionBackToMap(UIButton())
     }

@@ -102,7 +102,7 @@ private func normalizeSpringValue(_ value:Double) -> Double {
         return 0
     }
     else if value.isInfinite {
-        return (value.sign == .minus) ? -DBL_MAX : DBL_MAX
+        return (value.sign == .minus) ? -.greatestFiniteMagnitude : .greatestFiniteMagnitude
     }
     else {
         return value

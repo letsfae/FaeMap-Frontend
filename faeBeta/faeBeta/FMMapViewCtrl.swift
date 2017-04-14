@@ -235,7 +235,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
                                   street: placePin.address1, city: placePin.address2,
                                   imageURL: placePin.imageURL,
                                   position: marker.position)
-        OpenedPlaces.openedPlaces.append(opPlace)
+        if !OpenedPlaces.openedPlaces.contains(opPlace) {
+            OpenedPlaces.openedPlaces.append(opPlace)
+        }
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {

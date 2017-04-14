@@ -16,7 +16,7 @@ extension FaeMapViewController {
         loadDistanceLabel()
         filterSlider = UISlider(frame: CGRect(x: 100, y: screenWidth, width: 448*screenWidthFactor, height: 28))
         filterSlider.setThumbImage(#imageLiteral(resourceName: "mapFilterSliderIcon"), for: .normal)
-        filterSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        filterSlider.transform = CGAffineTransform(rotationAngle: -.pi/2)
         filterSlider.center = CGPoint(x: screenWidth-29, y: 340)
         filterSlider.maximumTrackTintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         filterSlider.minimumTrackTintColor = UIColor.faeAppRedColor()

@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-protocol OpenedPinListViewControllerDelegate {
+protocol OpenedPinListViewControllerDelegate: class {
     // Directly back to main map
     func directlyReturnToMap()
     // Pass location to fae map view via CommentPinDetailViewController
@@ -19,7 +19,7 @@ protocol OpenedPinListViewControllerDelegate {
 
 class OpenedPinListViewController: UIViewController {
     
-    var delegate: OpenedPinListViewControllerDelegate?
+    weak var delegate: OpenedPinListViewControllerDelegate?
 
     var buttonBackToMap: UIButton!
     var buttonSubviewBackToMap: UIButton!

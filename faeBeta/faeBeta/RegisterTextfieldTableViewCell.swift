@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol RegisterTextfieldProtocol {
+protocol RegisterTextfieldProtocol: class {
     func textFieldShouldReturn(_ indexPath: IndexPath)
     func textFieldDidBeginEditing(_ indexPath: IndexPath)
     func textFieldDidChange(_ text: String, indexPath: IndexPath)
@@ -22,7 +22,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     // MARK: - Variables
     
-    var delegate: RegisterTextfieldProtocol?
+    weak var delegate: RegisterTextfieldProtocol?
     var indexPath: IndexPath!
     var isUsernameField = false
     var isCharacterLimit = false

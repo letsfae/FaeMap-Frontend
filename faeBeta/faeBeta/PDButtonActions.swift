@@ -207,6 +207,8 @@ extension PinDetailViewController {
             let openedPinListVC = OpenedPinListViewController()
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .overCurrentContext
+            buttonPrevPin.isHidden = true
+            buttonNextPin.isHidden = true
             self.present(openedPinListVC, animated: false, completion: {
                 if self.uiviewPlaceDetail != nil {
                     self.uiviewPlaceDetail.center.y -= screenHeight

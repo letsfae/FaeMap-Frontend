@@ -43,13 +43,14 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
     // Back to main map from opened pin list
     func actionBackToMap(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, animations: ({
+        self.delegate?.directlyReturnToMap()
+        UIView.animate(withDuration: 0.4, animations: ({
             self.subviewWhite.center.y -= screenHeight
             self.subviewTable.center.y -= screenHeight
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: {
-                    self.delegate?.directlyReturnToMap()
+                    
                 })
             }
         })
@@ -81,13 +82,14 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         }
         self.tableOpenedPin.reloadData()
         if OpenedPlaces.openedPlaces.count == 0 {
-            UIView.animate(withDuration: 0.5, animations: ({
+            self.delegate?.directlyReturnToMap()
+            UIView.animate(withDuration: 0.4, animations: ({
                 self.subviewWhite.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
             }), completion: { (done: Bool) in
                 if done {
                     self.dismiss(animated: false, completion: {
-                        self.delegate?.directlyReturnToMap()
+                        
                     })
                 }
             })
