@@ -26,7 +26,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
-        print("back from comment pin detail")
         updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()

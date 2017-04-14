@@ -13,31 +13,10 @@ import SwiftyJSON
 extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // PinFeelingCellDelegate
-    func postFeelingFromFeelingCell(_ feeling: String) {
-        let postFeeling = FaePinAction()
-        postFeeling.whereKey("feeling", value: feeling)
-        postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
-            if status / 100 != 2 {
-                return
-            }
-            let getPinById = FaeMap()
-            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
-                let pinInfoJSON = JSON(message!)
-                self.feelingArray.removeAll()
-                let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
-                for feeling in feelings {
-                    if feeling != nil {
-                        self.feelingArray.append(feeling!)
-                    }
-                }
-                if self.tableMode == .feelings {
-                    self.tableCommentsForPin.reloadData()
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                }
-                self.loadFeelingQuickView()
-            }
-        }
+    func postFeelingFromFeelingCell(_ feeling: Int) {
+        let tmpBtn = UIButton()
+        tmpBtn.tag = feeling
+        self.postFeeling(tmpBtn)
     }
     // PinFeelingCellDelegate
     func deleteFeelingFromFeelingCell() {
@@ -78,7 +57,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int) {
         buttonPrevPin.isHidden = false
-        buttonNextPin.isHidden = false
+        btnNextPin.isHidden = false
         self.backJustOnce = true
         self.uiviewPlaceDetail.frame.origin.y = 0
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)

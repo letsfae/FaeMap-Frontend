@@ -208,7 +208,7 @@ extension PinDetailViewController {
             openedPinListVC.delegate = self
             openedPinListVC.modalPresentationStyle = .overCurrentContext
             buttonPrevPin.isHidden = true
-            buttonNextPin.isHidden = true
+            btnNextPin.isHidden = true
             self.present(openedPinListVC, animated: false, completion: {
                 if self.uiviewPlaceDetail != nil {
                     self.uiviewPlaceDetail.center.y -= screenHeight
@@ -233,7 +233,7 @@ extension PinDetailViewController {
             self.grayBackButton.alpha = 0
             self.pinIcon.alpha = 0
             self.buttonPrevPin.alpha = 0
-            self.buttonNextPin.alpha = 0
+            self.btnNextPin.alpha = 0
             if self.uiviewPlaceDetail != nil {
                 self.uiviewPlaceDetail.center.y -= screenHeight
             }
@@ -259,7 +259,7 @@ extension PinDetailViewController {
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.5, animations: ({
-                self.buttonBackToPinLists.alpha = 1.0
+                self.btnToPinList.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
@@ -333,7 +333,7 @@ extension PinDetailViewController {
             
         }
         UIView.animate(withDuration: 0.5, animations: ({
-            self.buttonBackToPinLists.alpha = 0.0
+            self.btnToPinList.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             var toolbarHeight = self.uiviewToolBar.frame.size.height
             if PinDetailViewController.pinTypeEnum == .chat_room {

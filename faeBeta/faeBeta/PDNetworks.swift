@@ -14,7 +14,7 @@ import RealmSwift
 extension PinDetailViewController {
     
     func getPinInfo() {
-        self.buttonBackToPinLists.isEnabled = false
+        self.btnToPinList.isEnabled = false
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
@@ -39,7 +39,18 @@ extension PinDetailViewController {
             if self.tableMode == .feelings {
                 self.tableCommentsForPin.reloadData()
             }
+            // Has posted feeling or not
+            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
+                self.chosenFeeling = chosenFeel
+                if chosenFeel < 5 {
+                    let xOffset = Int(chosenFeel * 52 + 12)
+                    self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                }
+            } else {
+                self.chosenFeeling = -1
+            }
             self.loadFeelingQuickView()
+            
             // Images
             if PinDetailViewController.pinTypeEnum == .media {
                 self.fileIdArray.removeAll()
@@ -56,6 +67,8 @@ extension PinDetailViewController {
                 self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
                 self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
             }
+            
+            
             // Liked or not
             if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
                 self.buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
@@ -100,14 +113,31 @@ extension PinDetailViewController {
     }
     
     func postFeeling(_ sender: UIButton) {
+        if sender.tag == chosenFeeling {
+            deleteFeeling()
+            chosenFeeling = -1
+            return
+        }
+        
+        chosenFeeling = sender.tag
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: "\(sender.tag)")
         postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
                 return
             }
-            let xOffset = Int(sender.tag * 52 + 12)
-            sender.frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+            
+            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+            
+            if sender.tag < 5 {
+                let xOffset = Int(sender.tag * 52 + 12)
+                self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+            }
+            
             let getPinById = FaeMap()
             getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
@@ -127,11 +157,6 @@ extension PinDetailViewController {
     }
     
     func deleteFeeling() {
-        btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-        btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-        btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-        btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-        btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
         let deleteFeeling = FaePinAction()
         deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
@@ -150,9 +175,18 @@ extension PinDetailViewController {
                 if self.tableMode == .feelings {
                     self.tableCommentsForPin.reloadData()
                 }
+                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
                 self.loadFeelingQuickView()
             }
         }
+    }
+    
+    func updateFeelingPicker() {
+        
     }
     
     func loadFeelingQuickView() {

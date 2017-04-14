@@ -175,6 +175,12 @@ extension PinDetailViewController {
         btnFeelingBar_05.adjustsImageWhenHighlighted = false
         btnFeelingBar_05.tag = 4
         btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingArray.append(btnFeelingBar_01)
+        btnFeelingArray.append(btnFeelingBar_02)
+        btnFeelingArray.append(btnFeelingBar_03)
+        btnFeelingArray.append(btnFeelingBar_04)
+        btnFeelingArray.append(btnFeelingBar_05)
     }
     
     fileprivate func loadInputToolBar() {
@@ -577,20 +583,20 @@ extension PinDetailViewController {
         buttonPinBackToMap.tag = 1
         
         // Back to Comment Pin List
-        buttonBackToPinLists = UIButton()
-        buttonBackToPinLists.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
-        buttonBackToPinLists.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(buttonBackToPinLists)
-        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToPinLists)
-        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToPinLists)
+        btnToPinList = UIButton()
+        btnToPinList.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
+        btnToPinList.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnToPinList)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnToPinList)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnToPinList)
         
         // Comment Pin Option
-        buttonOptionOfPin = UIButton()
-        buttonOptionOfPin.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
-        buttonOptionOfPin.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(buttonOptionOfPin)
-        subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: buttonOptionOfPin)
-        subviewNavigation.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfPin)
+        btnShowOptions = UIButton()
+        btnShowOptions.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
+        btnShowOptions.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnShowOptions)
+        subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: btnShowOptions)
+        subviewNavigation.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: btnShowOptions)
         
         // Label of Title
         labelPinTitle = UILabel()
@@ -698,15 +704,15 @@ extension PinDetailViewController {
         buttonPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonPrevPin)
         
-        buttonNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
-        buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
-        buttonNextPin.layer.zPosition = 60
-        buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-        buttonNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        buttonNextPin.layer.shadowOpacity = 0.6
-        buttonNextPin.layer.shadowRadius = 3.0
-        buttonNextPin.alpha = 0
-        buttonNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
-        self.view.addSubview(buttonNextPin)
+        btnNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
+        btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
+        btnNextPin.layer.zPosition = 60
+        btnNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        btnNextPin.layer.shadowOpacity = 0.6
+        btnNextPin.layer.shadowRadius = 3.0
+        btnNextPin.alpha = 0
+        btnNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
+        self.view.addSubview(btnNextPin)
     }
 }
