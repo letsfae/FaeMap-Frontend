@@ -46,12 +46,12 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = zoom
-        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: PinDetailViewController.pinIDPinDetailView, marker: PinDetailViewController.pinMarker)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.pinIDPinDetailView, marker: PinDetailViewController.pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate

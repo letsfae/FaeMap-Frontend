@@ -69,13 +69,12 @@ class PinDetailViewController: UIViewController {
     }
     
     weak var delegate: PinDetailDelegate? // Delegate of this class
-    static var pinIDPinDetailView = "-999"
     static var pinMarker = GMSMarker()
     static var pinStateEnum: PinState = .normal
     static var pinStatus = ""
     static var pinTypeEnum: PinType = .media
     static var pinUserId = 0
-    static var placeType = "burgers"
+    static var placeType = ""
     static var selectedMarkerPosition: CLLocationCoordinate2D!
     static var strPlaceCity = ""
     static var strPlaceImageURL = ""
@@ -88,6 +87,7 @@ class PinDetailViewController: UIViewController {
     var boolPinLiked = false
     var btnCommentOption: UIButton! //Custom toolBar the bottom toolbar button
     var btnDoAnony: UIButton!
+    var btnFeelingArray = [UIButton]()
     var btnFeelingBar_01: UIButton!
     var btnFeelingBar_02: UIButton!
     var btnFeelingBar_03: UIButton!
@@ -96,13 +96,12 @@ class PinDetailViewController: UIViewController {
     var btnGoToPinList_Place: UIButton!
     var btnHideAnony: UIButton!
     var btnMoreOptions_Place: UIButton!
-    var btnToPinList: UIButton!
+    var btnNextPin: UIButton!
     var btnOptionDelete: UIButton! // Pin options
     var btnOptionEdit: UIButton! // Pin options
-    var btnTransparentClose: UIButton! // Fake Transparent View For Closing
-    var optionsExpanded = false
-    var btnNextPin: UIButton!
     var btnShowOptions: UIButton!
+    var btnToPinList: UIButton!
+    var btnTransparentClose: UIButton! // Fake Transparent View For Closing
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
     var buttonPinDetailDragToLargeSize: UIButton!
@@ -118,6 +117,7 @@ class PinDetailViewController: UIViewController {
     var buttonSend : UIButton! //Custom toolBar the bottom toolbar button
     var buttonShareOnPinDetail: UIButton! // Pin options
     var buttonSticker : UIButton! //Custom toolBar the bottom toolbar button
+    var chosenFeeling: Int = -1
     var controlBoard: UIView! // A duplicate ControlBoard to hold
     var draggingButtonSubview: UIView! // Another dragging button for UI effect
     var emojiView: StickerPickView! // Input tool bar
@@ -153,11 +153,13 @@ class PinDetailViewController: UIViewController {
     var lblTxtPlaceholder: UILabel!
     var mediaMode: MediaMode = .small
     var moreButtonDetailSubview: UIImageView!
+    var optionsExpanded = false
     var pinComments = [PinComment]()
     var pinCommentsCount = 0
     var pinDetailLiked = false
     var pinDetailShowed = false
     var pinDetailUsers = [PinDetailUser]()
+    var pinIDPinDetailView = "-1"
     var pinIcon: UIImageView! // Icon to indicate pin type
     var pinLikeCount = 0
     var pinSizeFrom: CGFloat = 0 // For Dragging
@@ -192,8 +194,6 @@ class PinDetailViewController: UIViewController {
     var uiviewRedSlidingLine: UIView!
     var uiviewToolBar: UIView! // Input tool bar
     var zoomLevel: Float = 13.8
-    var chosenFeeling: Int = -1
-    var btnFeelingArray = [UIButton]()
     
     // Load Chat
     var uiviewChatRoom: UIView!
@@ -221,18 +221,21 @@ class PinDetailViewController: UIViewController {
         loadPinDetailWindow()
         if PinDetailViewController.pinTypeEnum == .place {
             loadPlaceDetail()
+            initPinBasicInfo()
             pinIcon.frame.size.width = 48
             pinIcon.center.x = screenWidth / 2
             pinIcon.center.y = 507 * screenHeightFactor
             UIApplication.shared.statusBarStyle = .lightContent
+            
+        } else {
+            checkPinStatus()
+            addObservers()
         }
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
-        initPinBasicInfo()
-        checkPinStatus()
         self.delegate?.disableSelfMarker(yes: true)
-        addObservers()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

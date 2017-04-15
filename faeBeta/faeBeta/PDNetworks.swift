@@ -16,7 +16,7 @@ extension PinDetailViewController {
     func getPinInfo() {
         self.btnToPinList.isEnabled = false
         let getPinById = FaeMap()
-        getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
+        getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
             // Time
             self.labelPinTimestamp.text = pinInfoJSON["created_at"].stringValue.formatFaeDate()
@@ -122,7 +122,7 @@ extension PinDetailViewController {
         chosenFeeling = sender.tag
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: "\(sender.tag)")
-        postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
+        postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
                 return
             }
@@ -139,7 +139,7 @@ extension PinDetailViewController {
             }
             
             let getPinById = FaeMap()
-            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
+            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
                 self.feelingArray.removeAll()
                 let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
@@ -158,12 +158,12 @@ extension PinDetailViewController {
     
     func deleteFeeling() {
         let deleteFeeling = FaePinAction()
-        deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView) { (status, message) in
+        deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
                 return
             }
             let getPinById = FaeMap()
-            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
+            getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
                 self.feelingArray.removeAll()
                 let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
@@ -211,9 +211,9 @@ extension PinDetailViewController {
     }
     
     func getSeveralInfo() {
-        getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+        getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         getPinInfo()
-        getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView, sendMessageFlag: false)
+        getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: false)
     }
     
     func getPinAttributeNum(_ type: String, pinID: String) {
@@ -378,11 +378,11 @@ extension PinDetailViewController {
     func checkPinStatus() {
         if PinDetailViewController.pinStatus == "new" {
             let realm = try! Realm()
-            if realm.objects(NewFaePin.self).filter("pinId == \(PinDetailViewController.pinIDPinDetailView) AND pinType == '\(PinDetailViewController.pinTypeEnum)'").first != nil {
+            if realm.objects(NewFaePin.self).filter("pinId == \(self.pinIDPinDetailView) AND pinType == '\(PinDetailViewController.pinTypeEnum)'").first != nil {
                 print("[checkPinStatus] newPin exists!")
             } else {
                 let newPin = NewFaePin()
-                newPin.pinId = Int(PinDetailViewController.pinIDPinDetailView)!
+                newPin.pinId = Int(self.pinIDPinDetailView)!
                 newPin.pinType = "\(PinDetailViewController.pinTypeEnum)"
                 try! realm.write {
                     realm.add(newPin)
@@ -397,12 +397,12 @@ extension PinDetailViewController {
         let commentThisPin = FaePinAction()
         commentThisPin.whereKey("content", value: text)
         commentThisPin.whereKey("anonymous", value: "\(switchAnony.isOn)")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             commentThisPin.commentThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("Successfully comment this pin!")
-                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
-                    self.getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView, sendMessageFlag: true)
+                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
+                    self.getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView, sendMessageFlag: true)
                 }
                 else {
                     print("Fail to comment this pin!")
@@ -414,11 +414,11 @@ extension PinDetailViewController {
     func likeThisPin(_ type: String, pinID: String) {
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             likeThisPin.likeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("[likeThisPin] Successfully like this pin!")
-                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to like this pin!")
@@ -430,12 +430,12 @@ extension PinDetailViewController {
     func saveThisPin(_ type: String, pinID: String) {
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             saveThisPin.saveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully save this pin!")
                     self.getPinSavedState()
-                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
                         self.imageViewSaved.alpha = 1.0
                     }), completion: { (done: Bool) in
@@ -456,12 +456,12 @@ extension PinDetailViewController {
     func unsaveThisPin(_ type: String, pinID: String) {
         let unsaveThisPin = FaePinAction()
         unsaveThisPin.whereKey("", value: "")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             unsaveThisPin.unsaveThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully unsave this pin!")
                     self.getPinSavedState()
-                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                     UIView.animate(withDuration: 0.5, animations: ({
                         self.imageViewSaved.alpha = 1.0
                     }), completion: { (done: Bool) in
@@ -483,7 +483,7 @@ extension PinDetailViewController {
     func readThisPin(_ type: String, pinID: String) {
         let readThisPin = FaePinAction()
         readThisPin.whereKey("", value: "")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             readThisPin.haveReadThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully read this pin!")
@@ -507,11 +507,11 @@ extension PinDetailViewController {
     func unlikeThisPin(_ type: String, pinID: String) {
         let unlikeThisPin = FaePinAction()
         unlikeThisPin.whereKey("", value: "")
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             unlikeThisPin.unlikeThisPin(type , pinID: pinID) {(status: Int, message: Any?) in
                 if status/100 == 2 {
                     print("Successfully unlike this pin!")
-                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                    self.getPinAttributeNum("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
                 }
                 else {
                     print("Fail to unlike this pin!")
@@ -522,7 +522,7 @@ extension PinDetailViewController {
     
     func getPinSavedState() {
         let getPinSavedState = FaeMap()
-        getPinSavedState.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
+        getPinSavedState.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
             let commentInfoJSON = JSON(message!)
             if let isSaved = commentInfoJSON["user_pin_operations"]["is_saved"].bool {
                 if isSaved == false {

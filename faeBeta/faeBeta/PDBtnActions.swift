@@ -14,13 +14,15 @@ import SwiftyJSON
 extension PinDetailViewController {
     
     func actionGotoPin(_ sender: UIButton) {
-        if sender == buttonPrevPin {
-            self.delegate?.goTo(nextPin: false)
-        } else {
-            self.delegate?.goTo(nextPin: true)
+        if PinDetailViewController.pinTypeEnum == .place {
+            if sender == buttonPrevPin {
+                self.delegate?.goTo(nextPin: false)
+            } else {
+                self.delegate?.goTo(nextPin: true)
+            }
+            initPlaceBasicInfo()
+            manageYelpData()
         }
-        initPlaceBasicInfo()
-        manageYelpData()
     }
     
     func actionDoAnony() {
@@ -143,22 +145,22 @@ extension PinDetailViewController {
             animatingHeartTimer.invalidate()
         }
         
-        if sender.tag == 1 && PinDetailViewController.pinIDPinDetailView != "-999" {
+        if sender.tag == 1 && self.pinIDPinDetailView != "-999" {
             buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
-            unlikeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+            unlikeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             print("debug animating sender.tag 1")
             print(sender.tag)
             sender.tag = 0
             return
         }
         
-        if sender.tag == 0 && PinDetailViewController.pinIDPinDetailView != "-999" {
+        if sender.tag == 0 && self.pinIDPinDetailView != "-999" {
             buttonPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
-            likeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+            likeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             print("debug animating sender.tag 0")
             print(sender.tag)
             sender.tag = 1
@@ -183,8 +185,8 @@ extension PinDetailViewController {
             animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
         }
         
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
-            likeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+        if self.pinIDPinDetailView != "-999" {
+            likeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         }
     }
     
@@ -194,8 +196,8 @@ extension PinDetailViewController {
         if animatingHeart != nil {
             animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollowNew")
         }
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
-            unlikeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+        if self.pinIDPinDetailView != "-999" {
+            unlikeThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         }
     }
     
@@ -293,7 +295,7 @@ extension PinDetailViewController {
             self.textViewInput.becomeFirstResponder()
             return
         }
-        readThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+        readThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
         if PinDetailViewController.pinTypeEnum == .media {

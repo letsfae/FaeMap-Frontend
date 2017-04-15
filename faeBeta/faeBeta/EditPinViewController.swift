@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Photos
 
 protocol EditPinViewControllerDelegate: class {
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float)
@@ -177,15 +178,26 @@ class EditPinViewController: UIViewController {
     func pickMedia() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
+        imagePicker.sourceType = .camera
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
             self.actionTakeMedia()
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
-            imagePicker.sourceType = .camera
-            menu.removeFromParentViewController()
-            self.present(imagePicker,animated:true,completion:nil)
+            var photoStatus = PHPhotoLibrary.authorizationStatus()
+            if photoStatus != .authorized {
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    photoStatus = status
+                    if photoStatus != .authorized {
+                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                        return
+                    }
+                    self.present(imagePicker, animated: true, completion: nil)
+                })
+            } else {
+                self.present(imagePicker, animated: true, completion: nil)
+            }
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             
@@ -199,17 +211,36 @@ class EditPinViewController: UIViewController {
     func actionTakeMedia() {
         let numMediaLeft = 6 - pinMediaImageArray.count
         if numMediaLeft == 0 {
-            self.showAlert(title: "Up to 6 pictures can be uploaded at the same time", message: "please try again")
+            self.showAlert(title: "You can only have up to 6 items for your story", message: "please try again")
             return
         }
-        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-        imagePicker.imageDelegate = self
-        imagePicker.isCSP = true
-        imagePicker._maximumSelectedPhotoNum = numMediaLeft
-        self.present(nav, animated: true, completion: {
-            UIApplication.shared.statusBarStyle = .default
-        })
+        var photoStatus = PHPhotoLibrary.authorizationStatus()
+        if photoStatus != .authorized {
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                photoStatus = status
+                if photoStatus != .authorized {
+                    self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                    return
+                }
+                let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                imagePicker.imageDelegate = self
+                imagePicker.isCSP = false
+                imagePicker._maximumSelectedPhotoNum = numMediaLeft
+                self.present(nav, animated: true, completion: {
+                    UIApplication.shared.statusBarStyle = .default
+                })
+            })
+        } else {
+            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            imagePicker.imageDelegate = self
+            imagePicker.isCSP = true
+            imagePicker._maximumSelectedPhotoNum = numMediaLeft
+            self.present(nav, animated: true, completion: {
+                UIApplication.shared.statusBarStyle = .default
+            })
+        }
     }
     
     func deleteMedia(cell: EditPinCollectionViewCell){

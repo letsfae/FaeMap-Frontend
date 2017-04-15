@@ -21,7 +21,7 @@ extension PinDetailViewController {
     // MARK: - send messages
     func sendMessage(_ text : String?) {
         if let realText = text {
-            commentThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
+            commentThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView, text: "\(self.replyToUser)\(realText)")
         }
         self.replyToUser = ""
         self.textViewInput.text = ""

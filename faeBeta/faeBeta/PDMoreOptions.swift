@@ -162,7 +162,7 @@ extension PinDetailViewController {
     }
     
     func actionEditComment(_ sender: UIButton) {
-        if PinDetailViewController.pinIDPinDetailView == "-999" {
+        if self.pinIDPinDetailView == "-999" {
             return
         }
         self.isKeyboardInThisView = false
@@ -170,7 +170,7 @@ extension PinDetailViewController {
         editPinVC.zoomLevel = zoomLevel
         editPinVC.delegate = self
         editPinVC.previousCommentContent = self.stringPlainTextViewTxt
-        editPinVC.pinID = "\(PinDetailViewController.pinIDPinDetailView)"
+        editPinVC.pinID = "\(self.pinIDPinDetailView)"
         editPinVC.pinMediaImageArray = imageViewMediaArray
         editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: PinDetailViewController.selectedMarkerPosition.latitude, longitude: PinDetailViewController.selectedMarkerPosition.longitude)
         editPinVC.editPinMode = PinDetailViewController.pinTypeEnum
@@ -196,7 +196,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: PinDetailViewController.pinIDPinDetailView) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete pin")
                     self.actionBackToMap(self.buttonPinBackToMap)
@@ -218,12 +218,12 @@ extension PinDetailViewController {
     
     // When clicking save button in comment pin detail window's more options button
     func actionSaveThisPin(_ sender: UIButton) {
-        if PinDetailViewController.pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             if isSavedByMe {
-                self.unsaveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                self.unsaveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             }
             else {
-                self.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: PinDetailViewController.pinIDPinDetailView)
+                self.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             }
         }
         actionToCloseOtherViews(btnTransparentClose)

@@ -212,7 +212,6 @@ extension FaeMapViewController: GMSMapViewDelegate {
         PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
         PinDetailViewController.pinStatus = mapPin.status
         PinDetailViewController.pinStateEnum = self.selectPinState(pinState: mapPin.status)
-        PinDetailViewController.pinIDPinDetailView = "\(mapPin.pinId)"
         PinDetailViewController.pinUserId = mapPin.userId
     }
     
@@ -276,6 +275,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.delegate = self
             pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.pinIDPinDetailView = "\(mapPin.pinId)"
             
             self.clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {

@@ -40,7 +40,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             let comment = self.pinComments[indexPath.row]
             cell.delegate = self
-            cell.pinID = PinDetailViewController.pinIDPinDetailView
+            cell.pinID = self.pinIDPinDetailView
             cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
             if comment.anonymous {
                 cell.lblUsername.text = "Anonymous"

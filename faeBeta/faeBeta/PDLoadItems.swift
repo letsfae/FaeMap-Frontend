@@ -17,9 +17,9 @@ extension PinDetailViewController {
         if PinDetailViewController.pinTypeEnum != .place {
             loadFeelingBar()
         }
+        loadPinCtrlButton()
         loadingOtherParts()
         loadTableHeader()
-        loadPinCtrlButton()
         loadAnotherToolbar()
         loadInputToolBar()
         if PinDetailViewController.pinTypeEnum == .chat_room {
