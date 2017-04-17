@@ -7,7 +7,6 @@
 //
 
 import RealmSwift
-import SDWebImage
 
 class FileObject: Object {
     dynamic var fileId = -999
@@ -31,6 +30,7 @@ class NewFaePin: Object {
     dynamic var pinId = -999
 }
 
+// ready to be deleted
 class OPinListElem: Object { // Opened Pin List Element
     dynamic var pinTypeId = ""
     dynamic var pinContent = "" // content or place title

@@ -67,7 +67,6 @@ extension FaeMapViewController {
         buttonRightTop = UIButton()
         buttonRightTop.setImage(UIImage(named: "mainScreenWindBell"), for: .normal)
         self.view.addSubview(buttonRightTop)
-        buttonRightTop.addTarget(self, action: #selector(self.animationWindBellShow(_:)), for: .touchUpInside)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
         

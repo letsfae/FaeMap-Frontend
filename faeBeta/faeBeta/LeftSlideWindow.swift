@@ -27,7 +27,6 @@ extension FaeMapViewController {
         else {
             leftMenuVC.displayName = "someone"
         }
-        self.selfMarker.map = nil
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)
@@ -55,7 +54,7 @@ extension FaeMapViewController {
             let realm = try! Realm()
             let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
             if selfInfoRealm.count == 0 {
-                imageViewAvatarMore = UIImageView()
+                let imageViewAvatarMore = UIImageView()
                 let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
                 imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {

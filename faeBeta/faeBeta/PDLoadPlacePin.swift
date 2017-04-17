@@ -11,28 +11,12 @@ import SDWebImage
 import RealmSwift
 
 extension PinDetailViewController {
-    func loadPlaceFromRealm(pinTypeId: String) {
-        let realm = try! Realm()
-        if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinTypeId)'").first {
-            self.lblPlaceTitle.text = opinListElem.pinContent
-            self.lblPlaceStreet.text = opinListElem.street
-            self.lblPlaceCity.text = opinListElem.city
-            let imageURL = opinListElem.imageURL
-            self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imgPlaceQuickView.alpha = 1
-                })
-            })
-            placeType = opinListElem.category
-            initPlaceBasicInfo()
-        }
-    }
     
-    fileprivate func manageYelpData() {
-        self.lblPlaceTitle.text = strPlaceTitle
-        self.lblPlaceStreet.text = strPlaceStreet
-        self.lblPlaceCity.text = strPlaceCity
-        let imageURL = strPlaceImageURL
+    func manageYelpData() {
+        self.lblPlaceTitle.text = PinDetailViewController.strPlaceTitle
+        self.lblPlaceStreet.text = PinDetailViewController.strPlaceStreet
+        self.lblPlaceCity.text = PinDetailViewController.strPlaceCity
+        let imageURL = PinDetailViewController.strPlaceImageURL
         self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
             UIView.animate(withDuration: 0.3, animations: {
                 self.imgPlaceQuickView.alpha = 1
@@ -48,7 +32,7 @@ extension PinDetailViewController {
         uiviewPlaceDetail.layer.zPosition = 110
         
         uiviewPlaceLine = UIView(frame: CGRect(x: 0, y: 292, width: screenWidth, height: 1))
-        uiviewPlaceLine.backgroundColor = UIColor(red: 200, green: 199, blue: 204)
+        uiviewPlaceLine.backgroundColor = UIColor(r: 200, g: 199, b: 204, alpha: 100)
         uiviewPlaceDetail.addSubview(uiviewPlaceLine)
         
         imgPlaceQuickView = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 170))
@@ -59,7 +43,7 @@ extension PinDetailViewController {
         
         imgPlaceType = UIImageView(frame: CGRect(x: 0, y: 128, width: 58, height: 58))
         imgPlaceType.center.x = screenWidth / 2
-        imgPlaceType.layer.borderColor = UIColor(red: 225, green: 225, blue: 225).cgColor
+        imgPlaceType.layer.borderColor = UIColor(r: 225, g: 225, b: 225, alpha: 100).cgColor
         imgPlaceType.layer.borderWidth = 2
         imgPlaceType.layer.cornerRadius = 5
         imgPlaceType.clipsToBounds = true
@@ -107,8 +91,8 @@ extension PinDetailViewController {
         manageYelpData()
     }
     
-    fileprivate func initPlaceBasicInfo() {
-        switch placeType {
+    func initPlaceBasicInfo() {
+        switch PinDetailViewController.placeType {
         case "burgers":
             pinIcon.image = #imageLiteral(resourceName: "placePinBurger")
             imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBurger")

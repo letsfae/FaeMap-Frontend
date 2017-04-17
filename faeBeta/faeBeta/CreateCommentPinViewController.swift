@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 
 protocol CreatePinDelegate: class {
-    func sendGeoInfo(pinID: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
+    func sendGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
     func backFromPinCreating(back: Bool)
     func closePinMenu(close: Bool)
 }
@@ -74,8 +74,7 @@ class CreateCommentPinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCreateCommentPinView()
-        loadKeyboardToolBar()
-        loadEmojiView()
+        
         addObservers()
     }
     

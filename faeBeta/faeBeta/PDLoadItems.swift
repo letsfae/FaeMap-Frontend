@@ -14,15 +14,122 @@ extension PinDetailViewController {
     // Load pin detail window
     func loadPinDetailWindow() {
         loadNavigationBar()
-        loadingOtherParts()
-        loadTableHeader()
-        loadPinCtrlButton()
-        loadAnotherToolbar()
-        loadInputToolBar()
-        if pinTypeEnum != .place {
+        if PinDetailViewController.pinTypeEnum != .place {
             loadFeelingBar()
         }
-        tableCommentsForPin.tableHeaderView = uiviewPinDetail
+        loadPinCtrlButton()
+        loadingOtherParts()
+        loadTableHeader()
+        loadAnotherToolbar()
+        loadInputToolBar()
+        if PinDetailViewController.pinTypeEnum == .chat_room {
+            loadChatView()
+            uiviewFeelingBar.isHidden = true
+            tableCommentsForPin.tableHeaderView = uiviewChatRoom
+        } else {
+            tableCommentsForPin.tableHeaderView = uiviewPinDetail
+        }
+    }
+    
+    fileprivate func loadChatView() {
+        uiviewChatRoom = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight-65))
+        
+        uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 227))
+        uiviewChatSpotBar.backgroundColor = UIColor.white
+        
+        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 15, width: 80, height: 80))
+        imgChatSpot.layer.cornerRadius = 40
+        imgChatSpot.clipsToBounds = true
+        imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
+        uiviewChatSpotBar.addSubview(imgChatSpot)
+        
+        let lblChatGroupName = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
+        lblChatGroupName.textAlignment = NSTextAlignment.center
+        lblChatGroupName.text = "California Chat"
+        lblChatGroupName.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblChatGroupName.textColor = UIColor.faeAppInputTextGrayColor()
+        uiviewChatSpotBar.addSubview(lblChatGroupName)
+        
+        lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 139, width: screenWidth, height: 30))
+        lblChatMemberNum.textAlignment = NSTextAlignment.center
+        lblChatMemberNum.text = "39 Members"
+        lblChatMemberNum.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblChatMemberNum.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        
+        uiviewChatSpotBar.addSubview(lblChatMemberNum)
+        
+        btnChatEnter = UIButton(frame: CGRect(x: 0, y: 173, width: 210 , height: 40))
+        btnChatEnter.center.x = screenWidth/2
+        btnChatEnter.setTitle("Enter Chat", for: .normal)
+        btnChatEnter.setTitleColor(UIColor.white, for: .normal)
+        btnChatEnter.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        btnChatEnter.titleLabel?.textAlignment = .center
+        btnChatEnter.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
+        btnChatEnter.layer.cornerRadius = 20
+        uiviewChatSpotBar.addSubview(btnChatEnter)
+        
+        uiviewChatSpotLineFirstBottom = UIView(frame: CGRect(x: 0, y: 227, width: screenWidth, height: 5))
+        uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 100)
+        uiviewChatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
+        
+        self.uiviewChatRoom.addSubview(uiviewChatSpotBar)
+        
+        lblPeopleCount = UILabel(frame: CGRect(x: 15, y: 247, width: 200, height: 22))
+        
+        let attriMemberStrPeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        
+        let attriMemberNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+                              NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        
+        let attriMemberTotal = [ NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(),NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
+        //set attributes
+        
+        let mutableAttrStringPeople = NSMutableAttributedString(string: "People  ", attributes: attriMemberStrPeople)
+        mutableAttrStringMemberNum = NSMutableAttributedString(string: "39", attributes: attriMemberNum)
+        let mutableAttrStringSlash = NSMutableAttributedString(string: "/", attributes: attriMemberTotal)
+        mutableAttrStringMemberTotal = NSMutableAttributedString(string: "50", attributes: attriMemberTotal)
+        //set attributed parts
+        
+        let mutableStrIniTitle = NSMutableAttributedString(string:"")
+        mutableStrIniTitle.append(mutableAttrStringPeople)
+        mutableStrIniTitle.append(mutableAttrStringMemberNum)
+        mutableStrIniTitle.append(mutableAttrStringSlash)
+        mutableStrIniTitle.append(mutableAttrStringMemberTotal)
+        lblPeopleCount.attributedText = mutableStrIniTitle
+        uiviewChatRoom.addSubview(lblPeopleCount)
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.scrollDirection = .horizontal
+        cllcviewChatMember = UICollectionView(frame: CGRect(x: 0, y: 282, width: screenWidth, height: 50), collectionViewLayout: layout)
+        cllcviewChatMember.dataSource = self
+        cllcviewChatMember.delegate = self
+        cllcviewChatMember.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MemberCell")
+        cllcviewChatMember.backgroundColor = UIColor.white
+        cllcviewChatMember.showsHorizontalScrollIndicator = false
+        self.uiviewChatRoom.addSubview(cllcviewChatMember)
+        
+        uiviewChatSpotLine = UIView(frame: CGRect(x: 0, y: 351, width: screenWidth, height: 1))
+        uiviewChatSpotLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
+        self.uiviewChatRoom.addSubview(uiviewChatSpotLine)
+        
+        let lblDesTitle = UILabel(frame: CGRect(x: 15, y: 363, width: screenWidth, height: 22))
+        lblDesTitle.text = "Description"
+        lblDesTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        lblDesTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.uiviewChatRoom.addSubview(lblDesTitle)
+        
+        lblDescriptionText = UILabel()
+        lblDescriptionText.lineBreakMode = .byTruncatingTail
+        lblDescriptionText.numberOfLines = 0
+        lblDescriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
+        lblDescriptionText.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 100)
+        lblDescriptionText.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.uiviewChatRoom.addSubview(lblDescriptionText)
+        uiviewChatRoom.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)
+        uiviewChatRoom.addConstraintsWithFormat("V:|-391-[v0]", options: [], views: lblDescriptionText)
     }
     
     fileprivate func loadFeelingBar() {
@@ -68,6 +175,12 @@ extension PinDetailViewController {
         btnFeelingBar_05.adjustsImageWhenHighlighted = false
         btnFeelingBar_05.tag = 4
         btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        
+        btnFeelingArray.append(btnFeelingBar_01)
+        btnFeelingArray.append(btnFeelingBar_02)
+        btnFeelingArray.append(btnFeelingBar_03)
+        btnFeelingArray.append(btnFeelingBar_04)
+        btnFeelingArray.append(btnFeelingBar_05)
     }
     
     fileprivate func loadInputToolBar() {
@@ -94,7 +207,7 @@ extension PinDetailViewController {
         lblTxtPlaceholder = UILabel()
         lblTxtPlaceholder.text = "Write a Comment..."
         lblTxtPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblTxtPlaceholder.textColor = UIColor(red: 146, green: 146, blue: 146)
+        lblTxtPlaceholder.textColor = UIColor(r: 146, g: 146, b: 146, alpha: 100)
         uiviewToolBar.addSubview(lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("H:|-33-[v0]-68-|", options: [], views: lblTxtPlaceholder)
         uiviewToolBar.addConstraintsWithFormat("V:|-14-[v0(25)]", options: [], views: lblTxtPlaceholder)
@@ -227,7 +340,6 @@ extension PinDetailViewController {
         uiviewPinDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 274))
         uiviewPinDetail.backgroundColor = UIColor.white
         uiviewPinDetail.layer.zPosition = 100
-        self.view.addSubview(uiviewPinDetail)
         
         // Textview width based on different resolutions
         var textViewWidth: CGFloat = 0
@@ -252,7 +364,7 @@ extension PinDetailViewController {
         textviewPinDetail.isScrollEnabled = true
         textviewPinDetail.textContainerInset = .zero
         textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
-        if pinTypeEnum == .media {
+        if PinDetailViewController.pinTypeEnum == .media {
             textviewPinDetail.isHidden = true
         }
         uiviewPinDetail.addSubview(textviewPinDetail)
@@ -471,20 +583,20 @@ extension PinDetailViewController {
         buttonPinBackToMap.tag = 1
         
         // Back to Comment Pin List
-        buttonBackToPinLists = UIButton()
-        buttonBackToPinLists.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
-        buttonBackToPinLists.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(buttonBackToPinLists)
-        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonBackToPinLists)
-        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToPinLists)
+        btnToPinList = UIButton()
+        btnToPinList.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
+        btnToPinList.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnToPinList)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnToPinList)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnToPinList)
         
         // Comment Pin Option
-        buttonOptionOfPin = UIButton()
-        buttonOptionOfPin.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
-        buttonOptionOfPin.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(buttonOptionOfPin)
-        subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: buttonOptionOfPin)
-        subviewNavigation.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: buttonOptionOfPin)
+        btnShowOptions = UIButton()
+        btnShowOptions.setImage(#imageLiteral(resourceName: "pinDetailMoreOptions"), for: UIControlState())
+        btnShowOptions.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnShowOptions)
+        subviewNavigation.addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: btnShowOptions)
+        subviewNavigation.addConstraintsWithFormat("V:|-23-[v0(37)]", options: [], views: btnShowOptions)
         
         // Label of Title
         labelPinTitle = UILabel()
@@ -589,16 +701,18 @@ extension PinDetailViewController {
         buttonPrevPin.layer.shadowOpacity = 0.6
         buttonPrevPin.layer.shadowRadius = 3.0
         buttonPrevPin.alpha = 0
+        buttonPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonPrevPin)
         
-        buttonNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
-        buttonNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
-        buttonNextPin.layer.zPosition = 60
-        buttonNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
-        buttonNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        buttonNextPin.layer.shadowOpacity = 0.6
-        buttonNextPin.layer.shadowRadius = 3.0
-        buttonNextPin.alpha = 0
-        self.view.addSubview(buttonNextPin)
+        btnNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
+        btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
+        btnNextPin.layer.zPosition = 60
+        btnNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        btnNextPin.layer.shadowOpacity = 0.6
+        btnNextPin.layer.shadowRadius = 3.0
+        btnNextPin.alpha = 0
+        btnNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
+        self.view.addSubview(btnNextPin)
     }
 }

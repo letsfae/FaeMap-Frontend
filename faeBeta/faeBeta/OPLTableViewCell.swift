@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol OpenedPinTableCellDelegate: class {
     // Pass CL2D location to OpenedPinTableViewController
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, index: Int)
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath)
 }
 
@@ -99,7 +99,7 @@ class OPLTableViewCell: UITableViewCell {
     }
     
     func jumpToDetailAndAnimate(_ sender: UIButton) {
-        self.delegate?.passCL2DLocationToOpenedPinList(location, pinID: pinID)
+        self.delegate?.passCL2DLocationToOpenedPinList(location, index: indexPathInCell.row)
     }
     
     func deleteThisCell(_ sender: UIButton) {

@@ -13,6 +13,7 @@ extension FaeMapViewController {
     
     func loadSelfMarkerSubview() {
         self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 120, height: 120))
+        subviewSelfMarker.layer.zPosition = 400
         self.view.addSubview(self.subviewSelfMarker)
         selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         selfMarkerIcon.adjustsImageWhenHighlighted = false
@@ -45,13 +46,6 @@ extension FaeMapViewController {
         self.subviewSelfMarker.addSubview(myPositionCircle_1)
         
         selfMarkerAnimation()
-        
-//        selfMarker.iconView = subviewSelfMarker
-//        selfMarker.position.latitude = currentLatitude
-//        selfMarker.position.longitude = currentLongitude
-//        selfMarker.map = faeMapView
-//        selfMarker.zIndex = 10
-//        selfMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
     }
     
     func selfMarkerAnimation() {

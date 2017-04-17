@@ -221,13 +221,9 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        
         if startUpdatingLocation {
             currentLocation = locManager.location
-            self.currentLatitude = currentLocation.coordinate.latitude
-            self.currentLongitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(self.currentLatitude, self.currentLongitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
+            let selfPositionToPoint = faeMapView.projection.point(for: currentLocation.coordinate)
             myPositionIcon.center = selfPositionToPoint
         }
     }
@@ -245,10 +241,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         }
         
         if let location = locations.last {
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
+            let selfPositionToPoint = faeMapView.projection.point(for: location.coordinate)
             myPositionIcon.center = selfPositionToPoint
         }
     }

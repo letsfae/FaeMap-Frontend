@@ -39,7 +39,7 @@
 #import <JSQMessagesViewController/NSBundle+JSQMessages.h>
 
 #import <objc/runtime.h>
-#import "faeBeta-swift.h"
+#import "faeBeta-Swift.h"
 
 #import "EmojiService.h"
 // Fixes rdar://26295020

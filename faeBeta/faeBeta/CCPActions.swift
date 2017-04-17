@@ -74,7 +74,7 @@ extension CreateCommentPinViewController {
         
         let commentContent = textViewForCommentPin.text
         
-        if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
+        if labelSelectLocationContent.text == "Current Map View" { //Changed by Yao cause the default text is "Current Map View"
             let defaultLoc = randomLocation()
             submitLatitude = "\(defaultLoc.latitude)"
             submitLongitude = "\(defaultLoc.longitude)"
@@ -103,7 +103,7 @@ extension CreateCommentPinViewController {
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "comment", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                         })
                     }
                 }

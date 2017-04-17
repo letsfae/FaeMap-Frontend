@@ -30,7 +30,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
-        downloadCurrentUserAvatar()
+        //downloadCurrentUserAvatar()
 
         if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
@@ -45,6 +45,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        downloadCurrentUserAvatar()
     }
     
     /*
@@ -161,13 +162,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     /// download current user's avatar from server
     private func downloadCurrentUserAvatar()
     {
-        if(avatarDic[user_id] == nil){
+        //if(avatarDic[user_id] == nil){
             getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
                 if status / 100 == 2 {
                     avatarDic[user_id] = image as? UIImage
                 }
             })
-        }
+        //}
     }
     
     //MARK: load recents form server

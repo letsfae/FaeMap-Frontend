@@ -30,19 +30,16 @@ extension PinDetailViewController {
             imageView.addGestureRecognizer(tapRecognizer)
             let realm = try! Realm()
             if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil").first {
-                let picture = UIImage.sd_image(with: mediaRealm.picture as Data!)
-                imageView.image = picture
-                print("[cellForItemAt] \(index) read from Realm done!")
+                imageView.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
             } else {
                 let fileURL = "\(baseURL)/files/\(self.fileIdArray[index])/data"
                 imageView.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {
                         let mediaImage = FileObject()
                         mediaImage.fileId = self.fileIdArray[index]
-                        mediaImage.picture = UIImageJPEGRepresentation(image!, 1.0) as NSData?
+                        mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
                         try! realm.write {
                             realm.add(mediaImage)
-                            print("[cellForItemAt] \(index) save in Realm done!")
                         }
                     }
                 })
@@ -62,12 +59,9 @@ extension PinDetailViewController {
     
     func zoomMedia(_ type: MediaMode) {
         var width = 95
-        var space = 10
-        var inset = 15
+        let space = 10
         if type == .large {
             width = 160
-            space = 18
-            inset = 27
         }
         for index in 0...imageViewMediaArray.count-1 {
             UIView.animate(withDuration: 0.5, animations: {
@@ -76,12 +70,6 @@ extension PinDetailViewController {
                 self.imageViewMediaArray[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
-        }
-        UIView.animate(withDuration: 0.5) {
-            var insets = self.scrollViewMedia.contentInset
-            insets.left = CGFloat(inset)
-            insets.right = CGFloat(inset)
-            self.scrollViewMedia.contentInset = insets
         }
         self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width+space) - space), height: CGFloat(width))
     }

@@ -11,22 +11,22 @@ import UIKit
 extension PinDetailViewController {
     // Close more options button when it is open, the subview is under it
     func actionToCloseOtherViews(_ sender: UIButton) {
-        if buttonMoreOnPinCellExpanded == true {
+        if optionsExpanded == true {
             hidePinMoreButtonDetails()
         }
     }
     // Show more options button in comment pin detail window
     func showPinMoreButtonDetails(_ sender: UIButton!) {
         endEdit()
-        if buttonMoreOnPinCellExpanded == false {
+        if optionsExpanded == false {
             var menuOffset: CGFloat = 0
-            if pinTypeEnum == .place {
+            if PinDetailViewController.pinTypeEnum == .place {
                 menuOffset = 148
             }
-            buttonFakeTransparentClosingView = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-            buttonFakeTransparentClosingView.layer.zPosition = 110
-            self.view.addSubview(buttonFakeTransparentClosingView)
-            buttonFakeTransparentClosingView.addTarget(self,
+            btnTransparentClose = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            btnTransparentClose.layer.zPosition = 110
+            self.view.addSubview(btnTransparentClose)
+            btnTransparentClose.addTarget(self,
                                                        action: #selector(self.actionToCloseOtherViews(_:)),
                                                        for: .touchUpInside)
             let subviewXBefore: CGFloat = 400 * screenWidthFactor
@@ -57,13 +57,13 @@ extension PinDetailViewController {
                                              action: #selector(self.actionShareComment(_:)),
                                              for: .touchUpInside)
             
-            buttonEditOnPinDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            buttonEditOnPinDetail.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: UIControlState())
-            buttonEditOnPinDetail.layer.zPosition = 111
-            self.view.addSubview(buttonEditOnPinDetail)
-            buttonEditOnPinDetail.clipsToBounds = true
-            buttonEditOnPinDetail.alpha = 0.0
-            buttonEditOnPinDetail.addTarget(self,
+            btnOptionEdit = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnOptionEdit.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: UIControlState())
+            btnOptionEdit.layer.zPosition = 111
+            self.view.addSubview(btnOptionEdit)
+            btnOptionEdit.clipsToBounds = true
+            btnOptionEdit.alpha = 0.0
+            btnOptionEdit.addTarget(self,
                                             action: #selector(self.actionEditComment(_:)),
                                             for: .touchUpInside)
             
@@ -82,13 +82,13 @@ extension PinDetailViewController {
                                             action: #selector(self.actionSaveThisPin(_:)),
                                             for: .touchUpInside)
             
-            buttonDeleteOnPinDetail = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            buttonDeleteOnPinDetail.setImage(#imageLiteral(resourceName: "pinDetailDelete"), for: UIControlState())
-            buttonDeleteOnPinDetail.layer.zPosition = 111
-            self.view.addSubview(buttonDeleteOnPinDetail)
-            buttonDeleteOnPinDetail.clipsToBounds = true
-            buttonDeleteOnPinDetail.alpha = 0.0
-            buttonDeleteOnPinDetail.addTarget(self,
+            btnOptionDelete = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnOptionDelete.setImage(#imageLiteral(resourceName: "pinDetailDelete"), for: UIControlState())
+            btnOptionDelete.layer.zPosition = 111
+            self.view.addSubview(btnOptionDelete)
+            btnOptionDelete.clipsToBounds = true
+            btnOptionDelete.alpha = 0.0
+            btnOptionDelete.addTarget(self,
                                               action: #selector(self.actionDeleteThisPin(_:)),
                                               for: .touchUpInside)
             
@@ -109,13 +109,13 @@ extension PinDetailViewController {
                                                             width: subviewWidthAfter,
                                                             height: subviewHeightAfter)
                 self.buttonShareOnPinDetail.frame = CGRect(x: firstButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.buttonEditOnPinDetail.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+                self.btnOptionEdit.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
                 self.buttonSaveOnPinDetail.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.buttonDeleteOnPinDetail.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+                self.btnOptionDelete.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
                 self.buttonReportOnPinDetail.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
                 if self.thisIsMyPin == true {
-                    self.buttonEditOnPinDetail.alpha = 1.0
-                    self.buttonDeleteOnPinDetail.alpha = 1.0
+                    self.btnOptionEdit.alpha = 1.0
+                    self.btnOptionDelete.alpha = 1.0
                 }
                 else {
                     self.buttonSaveOnPinDetail.alpha = 1.0
@@ -123,7 +123,7 @@ extension PinDetailViewController {
                 }
                 self.buttonShareOnPinDetail.alpha = 1.0
             }))
-            buttonMoreOnPinCellExpanded = true
+            optionsExpanded = true
         }
         else {
             hidePinMoreButtonDetails()
@@ -132,9 +132,9 @@ extension PinDetailViewController {
     
     // Hide comment pin more options' button
     func hidePinMoreButtonDetails() {
-        buttonMoreOnPinCellExpanded = false
+        optionsExpanded = false
         var menuOffset: CGFloat = 0
-        if pinTypeEnum == .place {
+        if PinDetailViewController.pinTypeEnum == .place {
             menuOffset = 148
         }
         let subviewXBefore: CGFloat = 400 * screenWidthFactor
@@ -142,27 +142,27 @@ extension PinDetailViewController {
         UIView.animate(withDuration: 0.25, animations: ({
             self.moreButtonDetailSubview.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
             self.buttonShareOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonEditOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.btnOptionEdit.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
             self.buttonSaveOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.buttonDeleteOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.btnOptionDelete.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
             self.buttonReportOnPinDetail.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
             self.buttonShareOnPinDetail.alpha = 0.0
-            self.buttonEditOnPinDetail.alpha = 0.0
+            self.btnOptionEdit.alpha = 0.0
             self.buttonSaveOnPinDetail.alpha = 0.0
-            self.buttonDeleteOnPinDetail.alpha = 0.0
+            self.btnOptionDelete.alpha = 0.0
             self.buttonReportOnPinDetail.alpha = 0.0
         }))
-        buttonFakeTransparentClosingView.removeFromSuperview()
+        btnTransparentClose.removeFromSuperview()
     }
     
     // When clicking share button in comment pin detail window's more options button
     func actionShareComment(_ sender: UIButton) {
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        actionToCloseOtherViews(btnTransparentClose)
         print("Share Clicks!")
     }
     
     func actionEditComment(_ sender: UIButton) {
-        if pinIdSentBySegue == "-999" {
+        if self.pinIDPinDetailView == "-999" {
             return
         }
         self.isKeyboardInThisView = false
@@ -170,25 +170,25 @@ extension PinDetailViewController {
         editPinVC.zoomLevel = zoomLevel
         editPinVC.delegate = self
         editPinVC.previousCommentContent = self.stringPlainTextViewTxt
-        editPinVC.pinID = "\(pinIdSentBySegue)"
+        editPinVC.pinID = "\(self.pinIDPinDetailView)"
         editPinVC.pinMediaImageArray = imageViewMediaArray
-        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: selectedMarkerPosition.latitude, longitude: selectedMarkerPosition.longitude)
-        editPinVC.editPinMode = self.pinTypeEnum
-        editPinVC.pinType = "\(self.pinTypeEnum)"
+        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: PinDetailViewController.selectedMarkerPosition.latitude, longitude: PinDetailViewController.selectedMarkerPosition.longitude)
+        editPinVC.editPinMode = PinDetailViewController.pinTypeEnum
+        editPinVC.pinType = "\(PinDetailViewController.pinTypeEnum)"
         editPinVC.mediaIdArray = fileIdArray
         self.present(editPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        actionToCloseOtherViews(btnTransparentClose)
     }
     
     func actionReportThisPin(_ sender: UIButton) {
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
-        if pinTypeEnum == .place {
+        if PinDetailViewController.pinTypeEnum == .place {
             reportPinVC.isPlacePin = true
         }
         self.isKeyboardInThisView = false
         self.present(reportPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        actionToCloseOtherViews(btnTransparentClose)
     }
     
     func actionDeleteThisPin(_ sender: UIButton) {
@@ -196,7 +196,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete pin")
                     self.actionBackToMap(self.buttonPinBackToMap)
@@ -213,19 +213,19 @@ extension PinDetailViewController {
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
         self.present(alertController, animated: true, completion: nil)
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        actionToCloseOtherViews(btnTransparentClose)
     }
     
     // When clicking save button in comment pin detail window's more options button
     func actionSaveThisPin(_ sender: UIButton) {
-        if pinIDPinDetailView != "-999" {
+        if self.pinIDPinDetailView != "-999" {
             if isSavedByMe {
-                self.unsaveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+                self.unsaveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             }
             else {
-                self.saveThisPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView)
+                self.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             }
         }
-        actionToCloseOtherViews(buttonFakeTransparentClosingView)
+        actionToCloseOtherViews(btnTransparentClose)
     }
 }

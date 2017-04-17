@@ -50,7 +50,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
                 cell.setupCell(withTitle: ((descriptionTextView != nil && descriptionTextView.text != "" ) ? descriptionTextView.text! : "Add Description"), leadingIcon: #imageLiteral(resourceName: "addDescription"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
                 break
             case CreateChatPinNormalOptions.ChooseLocation.rawValue:
-                cell.setupCell(withTitle: labelSelectLocationContent ?? "Choose Location", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))
+                cell.setupCell(withTitle: labelSelectLocationContent ?? "Current Map View", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))
                 
                 break
             case CreateChatPinNormalOptions.MoreOptions.rawValue:
@@ -64,7 +64,7 @@ extension CreateChatPinViewController : UITableViewDelegate, UITableViewDataSour
         case .bubble:
             switch indexPath.row{
             case CreateChatPinBubbleOptions.ChooseLocation.rawValue:
-                cell.setupCell(withTitle: labelSelectLocationContent ?? "Choose Location", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))
+                cell.setupCell(withTitle: labelSelectLocationContent ?? "Current Map View", leadingIcon: #imageLiteral(resourceName: "pinSelectLocation01"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "whiteRightPointer"))
                 break
             case CreateChatPinBubbleOptions.DurationOnMap.rawValue:
                 cell.setupCell(withTitle: "Duration On Map", leadingIcon: #imageLiteral(resourceName: "durationIcon"), trailingText: "30 min", trailingIcon: nil)

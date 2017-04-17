@@ -57,9 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
             migrationBlock: { migration, oldSchemaVersion in
-                // The enumerateObjects:block: method iterates
-                // over every 'Person' object stored in the Realm file
-//            
 //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
 //                    if oldSchemaVersion < 3 {
 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
@@ -172,11 +169,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func runSync() {
         if is_Login == 0 {
             print("not log in, sync fail")
-            if reachability.isReachable {
-                
-            } else {
-                
-            }
         } else {
             let push = FaePush()
             push.getSync({ (status: Int!, message: Any?) in
@@ -184,6 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if status / 100 == 2 {
                     //success
                 } else if status == 401 {
+                    is_Login = 0
                     self.popUpWelcomeView()
                 } else {
                     let vc = DisconnectionViewController()

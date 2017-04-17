@@ -104,7 +104,6 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         requestOption.resizeMode = .fast
         requestOption.deliveryMode = .highQualityFormat
         self.collectionView?.decelerationRate = UIScrollViewDecelerationRateNormal
-        navigationBarSet()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
@@ -112,6 +111,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         //fetch photo from collection
         self.navigationController?.hidesBarsOnTap = false
         self.collectionView?.reloadData()
+        navigationBarSet()
         prepareTableView()
     }
     
@@ -153,7 +153,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         self.navigationController?.navigationBar.isTranslucent = false
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = "All Photos"
+        titleLabel.text = self.photoPicker.currentAlbum.albumName
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
@@ -330,7 +330,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
-        let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.row] as! PHAsset
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         
         if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
@@ -345,7 +345,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                         showAlertView(withWarning: "You can't select photo with video")
                         return
                     }else if(photoPicker.gifAssetDict.count > 0){
-                        showAlertView(withWarning: "You can't select Image with GIF")
+                        showAlertView(withWarning: "Sorry Gifs must be sent alone!")
                         return
                     }
                     
@@ -376,7 +376,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
 //                    }
                 }else{
                     if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
-                        showAlertView(withWarning: "You can't select video while selecting photos")
+                        showAlertView(withWarning: "Sorry Videos must be sent alone!")
                         return
                     }else if(self.photoPicker.videoAsset != nil){
                         showAlertView(withWarning: "You can only send one video at the same time")

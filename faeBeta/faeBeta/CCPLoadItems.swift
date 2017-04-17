@@ -82,7 +82,7 @@ extension CreateCommentPinViewController {
         uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
         
         labelSelectLocationContent = UILabel()
-        labelSelectLocationContent.text = "Choose Location"
+        labelSelectLocationContent.text = "Current Map View"
         labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelSelectLocationContent.textAlignment = .left
         labelSelectLocationContent.textColor = UIColor.white
@@ -112,8 +112,9 @@ extension CreateCommentPinViewController {
         
         loadMoreOptionsButton()
         loadMoreOptionsItems()
-//        loadAnonymousButton()
         loadAnonymous()
+        loadKeyboardToolBar()
+        loadEmojiView()
     }
     
     fileprivate func loadAnonymous() {
@@ -149,7 +150,7 @@ extension CreateCommentPinViewController {
         uiviewCreateCommentPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
-    func loadKeyboardToolBar() {
+    fileprivate func loadKeyboardToolBar() {
         inputToolbar = CreatePinInputToolbar()
         inputToolbar.delegate = self
         self.view.addSubview(inputToolbar)
@@ -157,13 +158,13 @@ extension CreateCommentPinViewController {
         self.view.layoutIfNeeded()
     }
     
-    func loadEmojiView(){
+    fileprivate func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
         self.view.addSubview(emojiView)
     }
     
-    private func loadMoreOptionsButton() {
+    fileprivate func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateCommentPin.addSubview(uiviewMoreOptions)
         uiviewCreateCommentPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
@@ -199,7 +200,7 @@ extension CreateCommentPinViewController {
         uiviewMoreOptions.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonMoreOptions)
     }
     
-    private func loadMoreOptionsItems() {
+    fileprivate func loadMoreOptionsItems() {
         // Title Label
         labelCommentPinMoreOptions = UILabel(frame: CGRect(x: 109, y: 146, width: 196, height: 27))
         labelCommentPinMoreOptions.text = "More Options"
@@ -243,7 +244,6 @@ extension CreateCommentPinViewController {
         
         let buttonDuration = UIButton()
         uiviewDuration.addSubview(buttonDuration)
-        buttonDuration.addTarget(self, action: #selector(CreateCommentPinViewController.actionSelectLocation(_:)), for: .touchUpInside)
         uiviewDuration.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonDuration)
         uiviewDuration.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonDuration)
         
@@ -281,7 +281,6 @@ extension CreateCommentPinViewController {
         
         let buttonInterRaidus = UIButton()
         uiviewInterRadius.addSubview(buttonInterRaidus)
-        buttonInterRaidus.addTarget(self, action: #selector(CreateCommentPinViewController.actionSelectLocation(_:)), for: .touchUpInside)
         uiviewInterRadius.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonInterRaidus)
         uiviewInterRadius.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonInterRaidus)
         
@@ -319,7 +318,6 @@ extension CreateCommentPinViewController {
         
         let buttonPinPromot = UIButton()
         uiviewPinPromot.addSubview(buttonPinPromot)
-        buttonPinPromot.addTarget(self, action: #selector(CreateCommentPinViewController.actionSelectLocation(_:)), for: .touchUpInside)
         uiviewPinPromot.addConstraintsWithFormat("H:[v0(295)]-0-|", options: [], views: buttonPinPromot)
         uiviewPinPromot.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonPinPromot)
         
