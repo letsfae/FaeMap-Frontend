@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 public var isDraggingRecentTableViewCell = false
 public var avatarDic = [NSNumber:UIImage]() // an dictionary to store avatar, this should be moved to else where later

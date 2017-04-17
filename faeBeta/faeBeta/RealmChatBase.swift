@@ -11,6 +11,7 @@ import RealmSwift
 
 class RealmChat {
     
+    
     class Recent: Object {
         
         dynamic var userID : Int = -1
@@ -28,8 +29,8 @@ class RealmChat {
         }
     }
     
-    class ChatRoom: Object {
-        
+    class Message: Object {
+        dynamic var withUserID : Int = -1
         dynamic var senderID : Int = -1
         dynamic var date : String = ""
         dynamic var message : String = ""
@@ -55,19 +56,25 @@ class RealmChat {
         
     }
     
-    func sendMessage(message : ChatRoom, completion : () -> ()) {
+    func sendMessage(message : Message, completion : () -> ()){
+        let realm = try! Realm()
+        try! realm.write{
+            realm.add(message);
+        }
+    }
+    
+    func updateRecent(recent : Message) {
         
     }
     
-    func updateRecent(recent : Recent) {
-        
+    func receiveMessage(message : Message) {
+        let realm = try! Realm()
+        try! realm.write{
+            realm.add(message);
+        }
     }
     
-    func receiveMessage(messsage : ChatRoom) {
-        
-    }
-    
-    func fetchMessageWith(userID: Int, numberOfItem: Int, offset: Int) -> [ChatRoom] {
+    func fetchMessageWith(userID: Int, numberOfItem: Int, offset: Int) -> [Message] {
         return []
     }
     

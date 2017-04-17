@@ -271,6 +271,7 @@
 		B8E4C3DD1E30177E004E68A5 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C3DA1E30177E004E68A5 /* GQTPointQuadTreeChild.m */; };
 		B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */; };
 		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
 		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
 		CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */; };
@@ -631,6 +632,7 @@
 		B8E4C3DB1E30177E004E68A5 /* GQTPointQuadTreeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeItem.h; sourceTree = "<group>"; };
 		B8F065451DC70AB70080ADCB /* EditPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChatBase.swift; sourceTree = "<group>"; };
 		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
 		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
@@ -923,6 +925,7 @@
 		B0714D7F1D5E463B00356705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				C1DE0DE71E9F00C6003188BE /* Realm */,
 				B0BF35481D8DC7E200B0540B /* Chat.storyboard */,
 				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
@@ -931,9 +934,9 @@
 				B0714DC21D5E471400356705 /* StickerAlbum */,
 				B0714DBD1D5E46EF00356705 /* UIviewController */,
 				B0714DAC1D5E46D600356705 /* FireBaseData */,
-				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
+				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -1442,6 +1445,14 @@
 			name = ReportPin;
 			sourceTree = "<group>";
 		};
+		C1DE0DE71E9F00C6003188BE /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */,
+			);
+			name = Realm;
+			sourceTree = "<group>";
+		};
 		CE97A9B81E391EC9005BBF6C /* Yelp */ = {
 			isa = PBXGroup;
 			children = (
@@ -1943,6 +1954,7 @@
 				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
 				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
+				C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewControl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
