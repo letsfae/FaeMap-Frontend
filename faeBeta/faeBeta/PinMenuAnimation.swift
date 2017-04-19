@@ -46,7 +46,7 @@ extension PinMenuViewController {
             self.labelMenuMedia.alpha = 1.0
             }, completion: nil)
         UIView.animate(withDuration: 0.883, delay: 0.25, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.reCreateCGRectForButton(self.buttonChats, x: buttonOriginX_2, y: buttonOriginY_1)
+            self.reCreateCGRectForButton(self.btnChats, x: buttonOriginX_2, y: buttonOriginY_1)
             self.labelMenuChats.center.y += labelDiff
             self.labelMenuChats.alpha = 1.0
             }, completion: nil)

@@ -63,8 +63,10 @@ extension FaeMapViewController {
             for userPin in self.userPins {
                 if count > 5 {
                     break
-                } else if userPin.userId == Int(user_id) {
-                    continue
+                } else if let userID = user_id as? Int {
+                    if userPin.userId == userID {
+                        continue
+                    }
                 }
                 count += 1
                 let pinUser = GMSMarker()

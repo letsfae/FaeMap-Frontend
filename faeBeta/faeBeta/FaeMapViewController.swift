@@ -49,22 +49,20 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterTypeAll: MFilterButton! // Filter Item
     var btnMFilterUnread: MFilterButton! // Filter Item
     var btnMapFilter: UIButton! // Filter Button
-    var buttonCancelSelectLocation: UIButton!
-    var buttonChat: UIButton! // Map Namecard
-    var buttonChatOnMap: UIButton!
-    var buttonClosingOptionsInNameCard: UIButton! // Map Namecard
-    var buttonEmoji: UIButton! // Map Namecard
-    var buttonFakeTransparentClosingView: UIButton! // Map Namecard
-    var buttonFavorite: UIButton! // Map Namecard
-    var buttonLeftTop: UIButton!
-    var buttonMainScreenSearch: UIButton!
-    var buttonOptions: UIButton! // Map Namecard
-    var buttonPinOnMap: UIButton!
-    var buttonPinOnMapInside: UIButton!
-    var buttonRightTop: UIButton!
-    var buttonSelfPosition: UIButton!
-    var buttonShowSelfOnMap: UIButton! // Map Namecard
-    var buttonToNorth: UIButton!
+    var btnChat: UIButton! // Map Namecard
+    var btnChatOnMap: UIButton!
+    var btnCloseNameCardOptions: UIButton! // Map Namecard
+    var btnEmoji: UIButton! // Map Namecard
+    var btnTransparentClose: UIButton! // Map Namecard
+    var btnFavorite: UIButton! // Map Namecard
+    var btnLeftWindow: UIButton!
+    var btnMainMapSearch: UIButton!
+    var btnOptions: UIButton! // Map Namecard
+    var btnPinOnMap: UIButton!
+    var btnWindBell: UIButton!
+    var btnSelfLocation: UIButton!
+    var btnShowSelfOnMap: UIButton! // Map Namecard
+    var btnToNorth: UIButton!
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -151,15 +149,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
+        loadSelfMarkerSubview()
+        loadButton()
+        loadMFilterSlider()
+        loadMapFilter()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadSelfMarkerSubview()
         reloadSelfMarker()
-        loadButton()
-        loadMFilterSlider()
-        loadMapFilter()
         filterAndYelpSetup()
         didLoadFirstLoad = true
     }
@@ -170,7 +168,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         checkLocationEnablibity()
         self.loadTransparentNavBarItems()
         self.loadMapChat()
-        buttonFakeTransparentClosingView.alpha = 0
+        btnTransparentClose.alpha = 0
         reloadSelfPosAnimation()
     }
     

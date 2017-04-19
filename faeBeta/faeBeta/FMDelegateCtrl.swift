@@ -97,7 +97,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             guard let placePin = userData.values.first as? PlacePin else {
                 return
             }
-            openPlacePin(marker: tmpMarkers[i], placePin: placePin)
+            openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
         }
     }
 

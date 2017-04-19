@@ -40,6 +40,9 @@ extension FaeMapViewController {
         myPositionCircle_1.center = point
         myPositionCircle_2.center = point
         myPositionCircle_3.center = point
+        myPositionCircle_1.isUserInteractionEnabled = false
+        myPositionCircle_2.isUserInteractionEnabled = false
+        myPositionCircle_3.isUserInteractionEnabled = false
         
         self.subviewSelfMarker.addSubview(myPositionCircle_3)
         self.subviewSelfMarker.addSubview(myPositionCircle_2)
