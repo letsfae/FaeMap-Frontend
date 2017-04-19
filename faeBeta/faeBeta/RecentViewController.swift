@@ -34,6 +34,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 
         if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
+            print(self.recents!)
             self.tableView.reloadData()
         }
 
@@ -189,6 +190,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
 //                }
 
                 let json = JSON(result!)
+                print(json)
                 self.recents = json
                     UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
 

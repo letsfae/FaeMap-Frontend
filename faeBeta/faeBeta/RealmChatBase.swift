@@ -14,10 +14,10 @@ class RealmChat {
     
     class Recent: Object {
         
-        dynamic var userID : Int = -1
+        dynamic var withUserID : Int = -1
         dynamic var date : String = ""
         dynamic var avatar : NSData? = nil
-        dynamic var message : String = ""
+        dynamic var message : Message?
         dynamic var unread = false
         
         override static func indexedProperties() -> [String] {
