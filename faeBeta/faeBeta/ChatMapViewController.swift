@@ -135,7 +135,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), for: .touchUpInside)
         
         buttonSave = UIButton(frame: CGRect(x:91, y: 30, width: 44, height: 51))
-        buttonSave.setImage(UIImage(named: "chat_map_save"), for: UIControlState())
+        buttonSave.setImage(UIImage(named: "pinDetailSave"), for: UIControlState())
         buttonSave.addTarget(self, action: #selector(buttonSaveAction(_:)), for: .touchUpInside)
         
         viewPopUp.addSubview(buttonShare)

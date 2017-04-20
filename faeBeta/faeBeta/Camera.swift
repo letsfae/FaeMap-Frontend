@@ -83,6 +83,7 @@ class Camera {
         }
         imagePicker.allowsEditing = canEdit
         imagePicker.showsCameraControls = true
+        imagePicker.videoMaximumDuration = 60
         imagePicker.delegate = delegate
         target.present(imagePicker, animated: true, completion: nil)
     }
