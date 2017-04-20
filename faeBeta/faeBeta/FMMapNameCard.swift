@@ -341,29 +341,29 @@ extension FaeMapViewController {
                 resultJson1 = JSON(result!)
             }
             // then get with user name
-            getFromURL("users/\(withUserId.stringValue)/profile", parameter: nil, authentication: headerAuthentication()) { (status, result) in
-                if(status / 100 == 2){
+            getFromURL("users/\(withUserId.stringValue)/name_card", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+                if status / 100 == 2 {
                     let resultJson2 = JSON(result!)
                     var chat_id: String?
                     if let id = resultJson1["chat_id"].number {
                         chat_id = id.stringValue
                     }
-                    if let withUserName = resultJson2["user_name"].string {
-                        self.startChat(chat_id ,withUserId: withUserId, withUserName: withUserName)
+                    if let withNickName = resultJson2["nick_name"].string {
+                        self.startChat(chat_id ,withUserId: withUserId, withNickName: withNickName)
                     } else {
-                        self.startChat(chat_id, withUserId: withUserId, withUserName: nil)
+                        self.startChat(chat_id, withUserId: withUserId, withNickName: nil)
                     }
                 }
             }
         }
     }
     
-    func startChat(_ chat_id: String? ,withUserId: NSNumber, withUserName: String?){
+    func startChat(_ chat_id: String? ,withUserId: NSNumber, withNickName: String?){
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
         chatVC.chat_id = chat_id
-        let withUserName = withUserName ?? "Chat"
-        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        let nickName = withNickName ?? "Chat"
+        chatVC.withUser = FaeWithUser(userName: nickName, userId: withUserId.stringValue, userAvatar: nil)
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
     

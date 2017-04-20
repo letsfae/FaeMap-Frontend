@@ -87,6 +87,10 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.white
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
+        subviewTable.layer.shadowColor = UIColor.gray.cgColor
+        subviewTable.layer.shadowOffset = CGSize.zero
+        subviewTable.layer.shadowOpacity = 1
+        subviewTable.layer.shadowRadius = 25
         
         tableOpenedPin = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: tableHeight))
         tableOpenedPin.register(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
