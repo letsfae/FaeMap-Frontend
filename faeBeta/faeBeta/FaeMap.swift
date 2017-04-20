@@ -41,33 +41,6 @@ class FaeMap {
         }
     }
     
-    func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
-        if type != nil && pinId != nil {
-            getFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
-                self.clearKeyValue()
-                completion(status, message)
-            }
-        }
-    }
-    
-    func updatePin(_ pinType: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
-        if pinId != nil && pinType != nil {
-            postToURL("\(pinType!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
-                self.clearKeyValue()
-                completion(status, message)
-            }
-        }
-    }
-    
-    func deletePin(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
-        if type != nil && pinId != nil {
-            deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-                self.clearKeyValue()
-                completion(status, message)
-            }
-        }
-    }
-    
     
     // Get saved pins
     func getSavedPins(completion: @escaping (Int, Any?) -> Void) {
@@ -86,6 +59,34 @@ class FaeMap {
         }
     }
     
+    
+    func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
+        if type != nil && pinId != nil {
+            getFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
+    func updateComment(_ commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if commentId != nil {
+            postToURL("comments/"+commentId!, parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
+    func updatePin(_ pinType: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if pinId != nil && pinType != nil {
+            postToURL("\(pinType!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) {(status: Int, message: Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
     func getUserAllPinWithType(type: String?, userId: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && userId != nil {
             getFromURL("\(type!)s/users/\(userId!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
@@ -94,5 +95,23 @@ class FaeMap {
             }
         }
     }
-
+    
+    func deletePin(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if type != nil && pinId != nil {
+            deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
+    func unsavePin(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+        if type != nil && pinId != nil {
+            deleteFromURL("pins/\(type!)/\(pinId!)/save", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
+                self.clearKeyValue()
+                completion(status, message)
+            }
+        }
+    }
+    
 }

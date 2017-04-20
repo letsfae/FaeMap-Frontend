@@ -356,7 +356,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         
         
         //        tblSearchResults.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tblSearchResults.register(PinTableViewCell.self, forCellReuseIdentifier: "PinCell")
+        //tblSearchResults.register(PinTableViewCell.self, forCellReuseIdentifier: "PinCell")
         tblSearchResults.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
@@ -426,7 +426,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         switch tableTypeName {
             
         case "Created Pins":
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for: indexPath) as! PinTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
             cell.setValueForCell(_: filteredArray[indexPath.section])
             // Hide the separator line
             cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
@@ -434,7 +434,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
             cell.selectionStyle = .none
             return cell
         case "Saved Pins":
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for: indexPath) as! PinTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
             cell.setValueForCell(_: filteredArray[indexPath.section])
             // Hide the separator line
             cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)

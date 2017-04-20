@@ -340,7 +340,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         viewBackground.addSubview(uiviewNavBar)
         
         
-        let btnBack = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
         
@@ -471,11 +471,11 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         self.view.addSubview(viewBackground)
         
         emptyTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptyTblImgView.image = #imageLiteral(resourceName: "empty_table_bg")
+        emptyTblImgView.image = #imageLiteral(resourceName: "empty_mypins_bg")
         emptyTblImgView.isHidden = true
         
         emptySavedTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedtable_bg")
+        emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedpins_bg")
         emptySavedTblImgView.isHidden = true
         
         
@@ -690,8 +690,6 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         
         return cell
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)

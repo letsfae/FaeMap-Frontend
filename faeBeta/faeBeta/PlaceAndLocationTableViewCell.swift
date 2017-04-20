@@ -34,8 +34,6 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addSubview(imgview)
         //Add the constraints
         
-        
-        
         name = UILabel()
         name.font = UIFont(name: "AvenirNext-Medium",size: 16)
         name.textAlignment = NSTextAlignment.left
@@ -93,7 +91,6 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         
         
         self.removeConstraints(self.constraints)
-        
         
         self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
         self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)

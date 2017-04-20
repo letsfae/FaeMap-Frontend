@@ -38,7 +38,7 @@ class CollectionsBoardViewController: UIViewController {
         if(firstAppear){
             
             super.viewDidAppear(animated)
-            UIView.animate(withDuration: 0.5, animations: ({
+            UIView.animate(withDuration: 0.3, animations: ({
                 self.viewBackground.center.x -= screenWidth
             }))
             firstAppear = false
@@ -53,7 +53,7 @@ class CollectionsBoardViewController: UIViewController {
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, animations: ({
+        UIView.animate(withDuration: 0.3, animations: ({
             self.viewBackground.center.x += screenWidth
         }), completion: { (done: Bool) in
             if done {
@@ -83,7 +83,7 @@ class CollectionsBoardViewController: UIViewController {
         
         
         
-        let btnBackNavBar = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
+        let btnBackNavBar = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         
         btnBackNavBar.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
         
@@ -282,8 +282,8 @@ class CollectionsBoardViewController: UIViewController {
     
     func actionCreatedPins(_ sender: UIButton){
         
-        let createdPinVC = PinsViewController()
-        createdPinVC.tblTitle = "Created Pins"
+        let createdPinVC = CreatedPinsViewController()
+        createdPinVC.strTableTitle = "Created Pins"
         createdPinVC.modalPresentationStyle = .overCurrentContext
         
         self.present(createdPinVC, animated: false, completion: nil)
@@ -291,8 +291,8 @@ class CollectionsBoardViewController: UIViewController {
     
     func actionSavedPins(_ sender: UIButton){
         
-        let savedPinVC = PinsViewController()
-        savedPinVC.tblTitle = "Saved Pins"
+        let savedPinVC = SavedPinsViewController()
+        savedPinVC.strTableTitle = "Saved Pins"
         savedPinVC.modalPresentationStyle = .overCurrentContext
         
         self.present(savedPinVC, animated: false, completion: nil)

@@ -7,13 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		37820AB81E86061800841C6E /* CollectionsBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */; };
-		37820ABA1E864A6300841C6E /* PlacesAndLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */; };
-		37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */; };
-		37C725491E7346E8001A5060 /* PinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725441E7346E8001A5060 /* PinsViewController.swift */; };
-		37C7254B1E7346E8001A5060 /* CollectionSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */; };
-		37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725471E7346E8001A5060 /* PinTableViewCell.swift */; };
-		37C7254D1E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
 		853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F276E1E21655500DD80DF /* EditPinCollectionViewCell.swift */; };
@@ -209,6 +202,16 @@
 		B85609291E9F6AD200F68DA4 /* PDCllcViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
+		B85FFE931EA84CEB0079D1A7 /* CollectionsBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */; };
+		B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */; };
+		B85FFE951EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */; };
+		B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */; };
+		B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */; };
+		B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell.swift */; };
+		B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */; };
+		B85FFE9A1EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */; };
+		B85FFE9B1EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */; };
+		B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */; };
 		B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E341DF202680092C606 /* PinDetailViewController.swift */; };
 		B8612E371DF20B180092C606 /* PDBtnActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E361DF20B180092C606 /* PDBtnActions.swift */; };
 		B8612E391DF249DC0092C606 /* PDLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E381DF249DC0092C606 /* PDLoadItems.swift */; };
@@ -296,13 +299,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsBoardViewController.swift; sourceTree = "<group>"; };
-		37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesAndLocationsViewController.swift; sourceTree = "<group>"; };
-		37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
-		37C725441E7346E8001A5060 /* PinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsViewController.swift; sourceTree = "<group>"; };
-		37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSearchViewController.swift; sourceTree = "<group>"; };
-		37C725471E7346E8001A5060 /* PinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTableViewCell.swift; sourceTree = "<group>"; };
-		37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceAndLocationTableViewCell.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSlidingMenuViewController.swift; sourceTree = "<group>"; };
@@ -518,6 +514,16 @@
 		B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDCllcViewCtrl.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsBoardViewController.swift; sourceTree = "<group>"; };
+		B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSearchViewController.swift; sourceTree = "<group>"; };
+		B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedPinsTableViewCell.swift; sourceTree = "<group>"; };
+		B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedPinsViewController.swift; sourceTree = "<group>"; };
+		B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
+		B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsTableViewCell.swift; sourceTree = "<group>"; };
+		B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceAndLocationTableViewCell.swift; sourceTree = "<group>"; };
+		B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesAndLocationsViewController.swift; sourceTree = "<group>"; };
+		B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedPinsTableViewCell.swift; sourceTree = "<group>"; };
+		B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedPinsViewController.swift; sourceTree = "<group>"; };
 		B8612E341DF202680092C606 /* PinDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailViewController.swift; sourceTree = "<group>"; };
 		B8612E361DF20B180092C606 /* PDBtnActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDBtnActions.swift; sourceTree = "<group>"; };
 		B8612E381DF249DC0092C606 /* PDLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDLoadItems.swift; sourceTree = "<group>"; };
@@ -636,13 +642,16 @@
 		37C725431E7346C1001A5060 /* PinCollection */ = {
 			isa = PBXGroup;
 			children = (
-				37820AB91E864A6300841C6E /* PlacesAndLocationsViewController.swift */,
-				37C725481E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift */,
-				37C725441E7346E8001A5060 /* PinsViewController.swift */,
-				37C725471E7346E8001A5060 /* PinTableViewCell.swift */,
-				37897B6C1E90C06B0099DBB0 /* MemoViewController.swift */,
-				37C725461E7346E8001A5060 /* CollectionSearchViewController.swift */,
-				37820AB71E86061700841C6E /* CollectionsBoardViewController.swift */,
+				B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */,
+				B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */,
+				B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */,
+				B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */,
+				B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */,
+				B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell.swift */,
+				B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */,
+				B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */,
+				B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */,
+				B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */,
 			);
 			name = PinCollection;
 			sourceTree = "<group>";
@@ -1635,7 +1644,6 @@
 				853F27771E231CA800DD80DF /* EOButtonActions.swift in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B00EC3DD1D2C47FB00AD9673 /* PhoneConnectViewController.swift in Sources */,
-				37C725491E7346E8001A5060 /* PinsViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B0714D761D5E435200356705 /* WindBellTableViewCell.swift in Sources */,
 				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
@@ -1645,6 +1653,7 @@
 				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
+				B85FFE951EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
@@ -1652,7 +1661,6 @@
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				B8612E3D1DF24E3D0092C606 /* PDNetworks.swift in Sources */,
-				37820ABA1E864A6300841C6E /* PlacesAndLocationsViewController.swift in Sources */,
 				B8612E3F1DF24FB90092C606 /* PDTableCtrl.swift in Sources */,
 				CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
@@ -1667,6 +1675,7 @@
 				B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */,
 				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
 				853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */,
+				B85FFE931EA84CEB0079D1A7 /* CollectionsBoardViewController.swift in Sources */,
 				853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */,
 				DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */,
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
@@ -1679,7 +1688,6 @@
 				B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				CE97A9C31E399D52005BBF6C /* YelpQuery.swift in Sources */,
-				37820AB81E86061800841C6E /* CollectionsBoardViewController.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
@@ -1692,6 +1700,7 @@
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewCtrl.swift in Sources */,
 				853F27861E26FE5200DD80DF /* EPActions.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
+				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1726,7 +1735,6 @@
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
-				37C7254D1E7346E8001A5060 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B81775701E69516D001FC073 /* PlacePin.swift in Sources */,
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
@@ -1736,11 +1744,11 @@
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
-				37C7254B1E7346E8001A5060 /* CollectionSearchViewController.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B00EC3E51D2C49DF00AD9673 /* VerificationPhoneViewController.swift in Sources */,
 				B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */,
 				B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */,
+				B85FFE9A1EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
@@ -1761,9 +1769,9 @@
 				B883AE5B1E0DDD9C00D2E3CE /* PDMoreOptions.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
+				B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */,
 				B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */,
 				B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */,
-				37C7254C1E7346E8001A5060 /* PinTableViewCell.swift in Sources */,
 				B89AB3F31E3D775F00C5116D /* FMLoadingMapFilter.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				853F278A1E2848C400DD80DF /* CMPTableCtrl.swift in Sources */,
@@ -1771,7 +1779,7 @@
 				B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */,
 				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
-				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
+				B85FFE9B1EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
@@ -1799,10 +1807,12 @@
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
+				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell.swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
+				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,
 				853F277B1E23287600DD80DF /* EOTableViewCell.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
@@ -1850,6 +1860,8 @@
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
+				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController.swift in Sources */,
+				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
