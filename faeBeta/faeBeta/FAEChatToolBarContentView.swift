@@ -718,10 +718,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             Void in
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.failed:
-                print("failed import video: \(exportSession!.error)")
+                print("failed import video: \(String(describing: exportSession!.error))")
                 break
             case AVAssetExportSessionStatus.cancelled:
-                print("cancelled import video: \(exportSession!.error)")
+                print("cancelled import video: \(String(describing: exportSession!.error))")
                 break
             default:
                 print("completed import video")
