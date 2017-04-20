@@ -24,7 +24,7 @@ extension FaeMapViewController {
         self.btnMapFilter.addGestureRecognizer(draggingGesture)
     }
     
-    private func loadFilterMenu() {
+    fileprivate func loadFilterMenu() {
         uiviewFilterMenu = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 700))
         uiviewFilterMenu.backgroundColor = UIColor.white
         uiviewFilterMenu.layer.zPosition = 600
@@ -57,7 +57,7 @@ extension FaeMapViewController {
     }
     
     // Item collection titles
-    private func loadFilterItemTitles() {
+    fileprivate func loadFilterItemTitles() {
         let lblGeneral = MFilterLabel(frame: CGRect(x: 25, y: 86, width: 89, height: 22))
         lblGeneral.text = "General"
         uiviewFilterMenu.addSubview(lblGeneral)
@@ -79,7 +79,7 @@ extension FaeMapViewController {
         uiviewFilterMenu.addSubview(lblCollections)
     }
     
-    private func loadFilterItems() {
+    fileprivate func loadFilterItems() {
         loadMFilterGeneral()
         loadMFilterPinType()
         loadMFilterPinStatus()
@@ -87,7 +87,7 @@ extension FaeMapViewController {
         loadMFilterCollections()
     }
     
-    private func loadMFilterGeneral() {
+    fileprivate func loadMFilterGeneral() {
         btnMFilterShowAll = MFilterButton(frame: CGRect(x: 50, y: 118, width: 78, height: 25))
         btnMFilterShowAll.setTitle("Show All", for: .normal)
         btnMFilterShowAll.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
@@ -107,7 +107,7 @@ extension FaeMapViewController {
         btnMFilterPeople.filterType = .people
     }
     
-    private func loadMFilterPinType() {
+    fileprivate func loadMFilterPinType() {
         btnMFilterTypeAll = MFilterButton(frame: CGRect(x: 50, y: 195, width: 29, height: 25))
         btnMFilterTypeAll.setTitle("All", for: .normal)
         btnMFilterTypeAll.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
@@ -133,7 +133,7 @@ extension FaeMapViewController {
         btnMFilterStories.filterType = .media
     }
     
-    private func loadMFilterPinStatus() {
+    fileprivate func loadMFilterPinStatus() {
         btnMFilterStatusAll = MFilterButton(frame: CGRect(x: 50, y: 272, width: 29, height: 25))
         btnMFilterStatusAll.setTitle("All", for: .normal)
         btnMFilterStatusAll.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
@@ -165,7 +165,7 @@ extension FaeMapViewController {
         btnMFilterRead.filterType = .read
     }
     
-    private func loadMFilterPlaces() {
+    fileprivate func loadMFilterPlaces() {
         btnMFilterPlacesAll = MFilterButton(frame: CGRect(x: 50, y: 349, width: 29, height: 25))
         btnMFilterPlacesAll.setTitle("All", for: .normal)
         btnMFilterPlacesAll.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)
@@ -215,7 +215,7 @@ extension FaeMapViewController {
         btnMFilterGallery.filterType = .gallery
     }
     
-    private func loadMFilterCollections() {
+    fileprivate func loadMFilterCollections() {
         btnMFilterMyPins = MFilterButton(frame: CGRect(x: 50, y: 461, width: 70, height: 25))
         btnMFilterMyPins.setTitle("My Pins", for: .normal)
         btnMFilterMyPins.addTarget(self, action: #selector(self.actionFilterBtnCtrl(_:)), for: .touchUpInside)

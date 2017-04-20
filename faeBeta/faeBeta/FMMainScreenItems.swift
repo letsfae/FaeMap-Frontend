@@ -39,7 +39,7 @@ extension FaeMapViewController {
         locManager.startUpdatingLocation()
         
         // Default is true, if true, panGesture could not be detected
-//        self.faeMapView.settings.consumesGesturesInView = false
+        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -48,7 +48,7 @@ extension FaeMapViewController {
         btnLeftWindow = UIButton()
         btnLeftWindow.setImage(UIImage(named: "mainScreenMore"), for: .normal)
         self.view.addSubview(btnLeftWindow)
-        btnLeftWindow.addTarget(self, action: #selector(self.animationMoreShow(_:)), for: .touchUpInside)
+        btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: btnLeftWindow)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnLeftWindow)
         btnLeftWindow.layer.zPosition = 500
@@ -91,7 +91,7 @@ extension FaeMapViewController {
         // Open chat view
         btnChatOnMap = UIButton()
         btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
-        btnChatOnMap.addTarget(self, action: #selector(self.animationMapChatShow(_:)), for: .touchUpInside)
+        btnChatOnMap.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
         view.addSubview(btnChatOnMap)
         view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: btnChatOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnChatOnMap)
@@ -117,12 +117,5 @@ extension FaeMapViewController {
         view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: btnPinOnMap)
         view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnPinOnMap)
         btnPinOnMap.layer.zPosition = 500
-    }
-    
-    func actionMainScreenSearch(_ sender: UIButton) {
-        let mainScreenSearchVC = MainScreenSearchViewController()
-        mainScreenSearchVC.modalPresentationStyle = .overCurrentContext
-        mainScreenSearchVC.delegate = self
-        self.present(mainScreenSearchVC, animated: false, completion: nil)
     }
 }

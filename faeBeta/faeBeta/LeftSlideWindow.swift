@@ -18,19 +18,6 @@ extension FaeMapViewController {
         let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController") as! MyFaeMainPageViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
-
-    func animationMoreShow(_ sender: UIButton!) {
-        let leftMenuVC = LeftSlidingMenuViewController()
-        if let displayName = nickname {
-            leftMenuVC.displayName = displayName
-        }
-        else {
-            leftMenuVC.displayName = "someone"
-        }
-        leftMenuVC.delegate = self
-        leftMenuVC.modalPresentationStyle = .overCurrentContext
-        self.present(leftMenuVC, animated: false, completion: nil)
-    }
     
     func getUserStatus() {
         let storageForUserStatus = LocalStorageManager()

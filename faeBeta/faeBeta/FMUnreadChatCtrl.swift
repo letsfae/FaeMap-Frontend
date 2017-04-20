@@ -38,12 +38,6 @@ extension FaeMapViewController {
             }
         }
     }
-    
-    func animationMapChatShow(_ sender: UIButton!) {
-        UINavigationBar.appearance().shadowImage = navBarDefaultShadowImage
-        // check if the user's logged in the backendless
-        self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
-    }
 
     func segueToChat(_ withUserId: NSNumber, withUserName: String ){
         let chatVC = ChatViewController()
