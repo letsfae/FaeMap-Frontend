@@ -80,11 +80,11 @@ PODS:
   - JSQSystemSoundPlayer (2.0.1)
   - pop (1.0.9)
   - Protobuf (3.2.1)
-  - Realm (2.5.1):
-    - Realm/Headers (= 2.5.1)
-  - Realm/Headers (2.5.1)
-  - RealmSwift (2.5.1):
-    - Realm (= 2.5.1)
+  - Realm (2.6.1):
+    - Realm/Headers (= 2.6.1)
+  - Realm/Headers (2.6.1)
+  - RealmSwift (2.6.1):
+    - Realm (= 2.6.1)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
@@ -128,11 +128,11 @@ SPEC CHECKSUMS:
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   Protobuf: 2ccbaf193f6c65adc67745453ca0c13234c32796
-  Realm: 32f86104d37c8521f864d4274050b38ba6190733
-  RealmSwift: f719e7511c902b8908593e8f143f59e47931bdb6
-  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
+  Realm: 9abfd4f87519376daa5ae3a4603155de408bf8b3
+  RealmSwift: a54d3e8931cf7d3afa5a1fac9c8f88109d7f02b3
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: 3f51467533775b20e362a871c098cd69417c74af
 
-COCOAPODS: 1.2.0.rc.1
+COCOAPODS: 1.2.0

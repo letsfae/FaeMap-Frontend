@@ -342,7 +342,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             } else {
                 if(asset.mediaType == .image){
                     if(photoPicker.videoAsset != nil){
-                        showAlertView(withWarning: "You can't select photo with video")
+                        showAlertView(withWarning: "Sorry, Videos must be sent alone!")
                         return
                     }else if(photoPicker.gifAssetDict.count > 0){
                         showAlertView(withWarning: "Sorry Gifs must be sent alone!")
