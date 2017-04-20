@@ -17,6 +17,7 @@ extension FaeMapViewController {
         btnMapFilter.addTarget(self, action: #selector(self.animateMapFilterPolygon(_:)), for: .touchUpInside)
         btnMapFilter.adjustsImageWhenDisabled = false
         btnMapFilter.adjustsImageWhenHighlighted = false
+        btnMapFilter.clipsToBounds = true
         btnMapFilter.layer.zPosition = 601
         self.view.addSubview(btnMapFilter)
         loadFilterMenu()

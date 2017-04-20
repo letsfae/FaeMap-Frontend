@@ -16,7 +16,7 @@ protocol PinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map
     // true  -> just means user want to back to main screen
     // false -> delete this pin from map
-    func dismissMarkerShadow(_ dismiss: Bool)
+    func backToMainMap()
     // Pass location data to fae map view
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Change marker icon based on status

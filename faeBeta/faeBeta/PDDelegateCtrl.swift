@@ -58,6 +58,9 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int) {
         buttonPrevPin.isHidden = false
         btnNextPin.isHidden = false
+        pinIcon.isHidden = false
+        grayBackButton.isHidden = false
+        
         self.backJustOnce = true
         self.uiviewPlaceDetail.frame.origin.y = 0
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)

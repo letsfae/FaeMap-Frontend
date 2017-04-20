@@ -25,13 +25,24 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     
     // PinDetailDelegate
-    func dismissMarkerShadow(_ dismiss: Bool) {
+    func backToMainMap() {
         updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.btnMapFilter.frame = CGRect(x: screenWidth/2-22, y: screenHeight-47, width: 44, height: 44)
+            self.btnToNorth.frame = CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnSelfLocation.frame = CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnChatOnMap.frame = CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79)
+            self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
+            self.updateUnreadChatIndicator()
+            self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
+        }, completion: {(finished) in
+            
+        })
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada

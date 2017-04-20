@@ -314,7 +314,7 @@ class PinsTableViewCell: UITableViewCell {
             }
             imgPinTab.image = UIImage(named: "tab_comment")
             
-            if let imgArr = pin["file_ids"]{
+            if let imgArr = pin["file_ids"] as? [Int] { // changed by Yue Shen to get compiled
                 
                 let count = imgArr.count
                 
@@ -323,10 +323,10 @@ class PinsTableViewCell: UITableViewCell {
                     uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: labelDescription)
                 }
                 // the first image
-                if(count!>0){
+                if(count>0){
                     imgFirstPic.isHidden = false
                     
-                    let imgId = imgArr[0].description
+                    let imgId = imgArr[0]// changed by Yue Shen to get compiled
                     let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
                     
                     uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: imgFirstPic)
@@ -342,9 +342,9 @@ class PinsTableViewCell: UITableViewCell {
                 }
                 
                 // the second image
-                if(count!>1){
+                if(count>1){
                     imgSecondPic.isHidden = false
-                    let imgId = imgArr[1].description
+                    let imgId = imgArr[1]// changed by Yue Shen to get compiled
                     let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
                     uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgFirstPic,imgSecondPic)
                     imgSecondPic.contentMode = .scaleAspectFill
@@ -359,9 +359,9 @@ class PinsTableViewCell: UITableViewCell {
                 }
                 
                 //the third image
-                if(count!>2){
+                if(count>2){
                     imgThirdPic.isHidden = false
-                    let imgId = imgArr[2].description
+                    let imgId = imgArr[2]// changed by Yue Shen to get compiled
                     let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
                     uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgSecondPic,imgThirdPic)
                     imgThirdPic.contentMode = .scaleAspectFill
@@ -375,7 +375,7 @@ class PinsTableViewCell: UITableViewCell {
                     uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgThirdPic)
                 }
                 // more than 3 pics
-                if(count!>3){
+                if(count>3){
                     labelMoreThanThreePics.isHidden = false
                     uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: labelDescription,labelMoreThanThreePics)
                     uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: imgThirdPic,labelMoreThanThreePics)

@@ -19,7 +19,7 @@ extension PinMenuViewController {
     }
     
     // MARK: -- Pins Creating Selections View
-    private func loadPinSelections() {
+    fileprivate func loadPinSelections() {
         // initial position of buttons for cool animation
         let buttonCenterX_1: CGFloat = 79/414 * screenWidth
         let buttonCenterX_2: CGFloat = 208/414 * screenWidth

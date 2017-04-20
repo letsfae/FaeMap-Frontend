@@ -20,8 +20,8 @@ extension FaeMapViewController {
         
         faeMapView.preferredFrameRate = GMSFrameRate.maximum
         faeMapView.isIndoorEnabled = false
-        faeMapView.isBuildingsEnabled = false
-        faeMapView.settings.tiltGestures = false
+//        faeMapView.isBuildingsEnabled = false
+//        faeMapView.settings.tiltGestures = false
         faeMapView.setMinZoom(9, maxZoom: 21)
 
         self.view = faeMapView
@@ -71,30 +71,30 @@ extension FaeMapViewController {
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnWindBell)
         
         // Click to back to north
-        btnToNorth = UIButton()
+        btnToNorth = UIButton(frame: CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59))
         view.addSubview(btnToNorth)
         btnToNorth.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
         btnToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: btnToNorth)
-        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnToNorth)
+//        view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: btnToNorth)
+//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnToNorth)
         btnToNorth.layer.zPosition = 500
         
         // Click to locate the current location
-        btnSelfLocation = UIButton()
+        btnSelfLocation = UIButton(frame: CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59))
         view.addSubview(btnSelfLocation)
         btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: .normal)
         btnSelfLocation.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: btnSelfLocation)
-        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnSelfLocation)
+//        view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: btnSelfLocation)
+//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnSelfLocation)
         btnSelfLocation.layer.zPosition = 500
         
         // Open chat view
-        btnChatOnMap = UIButton()
+        btnChatOnMap = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
         btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
         btnChatOnMap.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
         view.addSubview(btnChatOnMap)
-        view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: btnChatOnMap)
-        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnChatOnMap)
+//        view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: btnChatOnMap)
+//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnChatOnMap)
         btnChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
@@ -110,12 +110,12 @@ extension FaeMapViewController {
         btnChatOnMap.addSubview(labelUnreadMessages)
         
         // Create pin on main map
-        btnPinOnMap = UIButton(frame: CGRect(x: 323, y: 646, width: 79, height: 79))
+        btnPinOnMap = UIButton(frame: CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79))
         btnPinOnMap.setImage(UIImage(named: "mainScreenPinMap"), for: .normal)
         view.addSubview(btnPinOnMap)
         btnPinOnMap.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: btnPinOnMap)
-        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnPinOnMap)
+//        view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: btnPinOnMap)
+//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnPinOnMap)
         btnPinOnMap.layer.zPosition = 500
     }
 }

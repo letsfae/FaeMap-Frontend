@@ -211,6 +211,8 @@ extension PinDetailViewController {
             openedPinListVC.modalPresentationStyle = .overCurrentContext
             buttonPrevPin.isHidden = true
             btnNextPin.isHidden = true
+            pinIcon.isHidden = true
+            grayBackButton.isHidden = true
             self.present(openedPinListVC, animated: false, completion: {
                 if self.uiviewPlaceDetail != nil {
                     self.uiviewPlaceDetail.center.y -= screenHeight
@@ -226,7 +228,7 @@ extension PinDetailViewController {
     func actionBackToMap(_ sender: UIButton) {
         endEdit()
         controlBoard.removeFromSuperview()
-        self.delegate?.dismissMarkerShadow(true)
+        self.delegate?.backToMainMap()
         UIView.animate(withDuration: 0.5, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight

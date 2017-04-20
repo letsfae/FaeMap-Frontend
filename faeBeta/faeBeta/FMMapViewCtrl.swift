@@ -252,6 +252,32 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
     }
     
+    fileprivate func dismissMainBtns() {
+        if mapFilterArrow != nil {
+            mapFilterArrow.removeFromSuperview()
+        }
+        if filterCircle_1 != nil {
+            filterCircle_1.removeFromSuperview()
+        }
+        if filterCircle_2 != nil {
+            filterCircle_2.removeFromSuperview()
+        }
+        if filterCircle_3 != nil {
+            filterCircle_3.removeFromSuperview()
+        }
+        if filterCircle_4 != nil {
+            filterCircle_4.removeFromSuperview()
+        }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.btnMapFilter.frame = CGRect(x: screenWidth/2, y: screenHeight-25, width: 0, height: 0)
+            self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5*screenWidthFactor, width: 0, height: 0)
+            self.btnSelfLocation.frame = CGRect(x: 362.5*screenWidthFactor, y: 611.5*screenWidthFactor, width: 0, height: 0)
+            self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5*screenWidthFactor, width: 0, height: 0)
+            self.labelUnreadMessages.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            self.btnPinOnMap.frame = CGRect(x: 362.5*screenWidthFactor, y: 685.5*screenWidthFactor, width: 0, height: 0)
+        }, completion: nil)
+    }
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if marker.userData == nil {
@@ -275,12 +301,12 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
-            
             if !self.canOpenAnotherPin {
                 return true
             }
-            self.canOpenAnotherPin = false
             
+            self.dismissMainBtns()
+            self.canOpenAnotherPin = false
             invalidateAllTimer()
             openMapPin(marker: marker, mapPin: mapPin, animated: true)
             
@@ -313,10 +339,11 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
-            
             if !self.canOpenAnotherPin {
                 return true
             }
+            
+            self.dismissMainBtns()
             self.canOpenAnotherPin = false
             
             invalidateAllTimer()

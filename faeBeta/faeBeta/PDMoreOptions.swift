@@ -200,7 +200,7 @@ extension PinDetailViewController {
                 if status / 100 == 2 {
                     print("Successfully delete pin")
                     self.actionBackToMap(self.buttonPinBackToMap)
-                    self.delegate?.dismissMarkerShadow(false)
+                    self.delegate?.backToMainMap()
                 }
                 else {
                     print("Fail to delete comment")
