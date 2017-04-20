@@ -221,7 +221,6 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        
         if startUpdatingLocation {
             currentLocation = locManager.location
             let selfPositionToPoint = faeMapView.projection.point(for: currentLocation.coordinate)

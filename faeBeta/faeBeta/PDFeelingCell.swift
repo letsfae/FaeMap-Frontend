@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PinFeelingCellDelegate: class {
-    func postFeelingFromFeelingCell(_ feeling: String)
+    func postFeelingFromFeelingCell(_ feeling: Int)
     func deleteFeelingFromFeelingCell()
 }
 
@@ -120,12 +120,7 @@ class PDFeelingCell: UITableViewCell {
     }
     
     func postFeeling(_ sender: PDFeelingItem) {
-        self.delegate?.postFeelingFromFeelingCell("\(sender.tag)")
-//        if sender.label.text == "0" {
-//            self.delegate?.postFeelingFromFeelingCell("\(sender.tag)")
-//        } else {
-//            self.delegate?.deleteFeelingFromFeelingCell()
-//        }
+        self.delegate?.postFeelingFromFeelingCell(sender.tag)
     }
     
 }

@@ -10,26 +10,24 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    var uiviewchatSpotBar: UIView!
-    var imgviewChatSpot: UIImageView!
     var btnChatEnter: UIButton!
-    var uiviewChatSpotLineTop: UIView!
-    var uiviewChatSpotLineFirstBottom: UIView!
-    var uiviewChatSpotLine: UIView!
-    var uiviewChatSpotLineSecondBottom: UIView!
-    var btnDropDown: UIButton!
-    var chatSpotEmojiBubble: UIButton!
     var btnChatSpotLeftArrow: UIButton!
     var btnChatSpotRightArrow: UIButton!
+    var btnDropDown: UIButton!
+    var chatSpotEmojiBubble: UIButton!
     var cllcviewChatMember: UICollectionView!
-    var uiviewChatPeopleNum: UIView!
-    var uiviewChatDescription: UIView!
+    var imgChatSpot: UIImageView!
     var lblChatMemberNum: UILabel!
+    var lblDescriptionText: UILabel!
     var mutableAttrStringMemberNum: NSMutableAttributedString!
     var mutableAttrStringMemberTotal: NSMutableAttributedString!
-    var lblDescriptionText: UILabel!
+    var uiviewChatDescription: UIView!
+    var uiviewChatPeopleNum: UIView!
+    var uiviewChatSpotBar: UIView!
+    var uiviewChatSpotLine: UIView!
+    var uiviewChatSpotLineFirstBottom: UIView!
+    var uiviewChatSpotLineSecondBottom: UIView!
+    var uiviewChatSpotLineTop: UIView!
     //Chat Spot Variable Initialization
     
     override func viewDidLoad() {
@@ -37,19 +35,21 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         
         self.view.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
         
-        uiviewchatSpotBar = UIView(frame: CGRect(x: 0, y:66, width: screenWidth, height: 236))
-        uiviewchatSpotBar.backgroundColor = UIColor.white
+        uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 236))
+        uiviewChatSpotBar.backgroundColor = UIColor.white
         
-        imgviewChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 18, width: 80, height: 80))
-        imgviewChatSpot.image = #imageLiteral(resourceName: "Group 20")
-        uiviewchatSpotBar.addSubview(imgviewChatSpot)
+        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 18, width: 80, height: 80))
+        imgChatSpot.layer.cornerRadius = 40
+        imgChatSpot.clipsToBounds = true
+        imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
+        uiviewChatSpotBar.addSubview(imgChatSpot)
         
         let lblChatGroupName = UILabel(frame: CGRect(x: 0, y: 111, width: screenWidth, height: 30))
         lblChatGroupName.textAlignment = NSTextAlignment.center
         lblChatGroupName.text = "California Chat"
         lblChatGroupName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblChatGroupName.textColor = UIColor.faeAppInputTextGrayColor()
-        uiviewchatSpotBar.addSubview(lblChatGroupName)
+        uiviewChatSpotBar.addSubview(lblChatGroupName)
         
         lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 143, width: screenWidth, height: 30))
         lblChatMemberNum.textAlignment = NSTextAlignment.center
@@ -57,7 +57,7 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         lblChatMemberNum.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblChatMemberNum.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         
-        uiviewchatSpotBar.addSubview(lblChatMemberNum)
+        uiviewChatSpotBar.addSubview(lblChatMemberNum)
         
         btnChatEnter = UIButton(frame: CGRect(x: 0, y: 185, width: 210 , height: 40))
         btnChatEnter.center.x = screenWidth/2
@@ -67,13 +67,13 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         btnChatEnter.titleLabel?.textAlignment = .center
         btnChatEnter.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
         btnChatEnter.layer.cornerRadius = 20
-        uiviewchatSpotBar.addSubview(btnChatEnter)
+        uiviewChatSpotBar.addSubview(btnChatEnter)
         
         uiviewChatSpotLineFirstBottom = UIView(frame: CGRect(x: 0, y: 236, width: screenWidth, height: 4))
         uiviewChatSpotLineFirstBottom.center.x = screenWidth/2
         uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 100)
         
-        uiviewchatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
+        uiviewChatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
         //add first bottom line
         
         uiviewChatSpotLineTop = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 1))
@@ -82,16 +82,17 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         self.view.addSubview(uiviewChatSpotLineTop)
         //add top line
         
-        self.view.addSubview(uiviewchatSpotBar)
+        self.view.addSubview(uiviewChatSpotBar)
         
         uiviewChatPeopleNum = UIView(frame: CGRect(x: 0, y: 306, width: screenWidth, height: 33))
         uiviewChatPeopleNum.backgroundColor = UIColor.white
         let peopleLabel = UILabel(frame: CGRect(x: 16, y: 10, width: screenWidth-16, height: 20))
         
-        let attriMemberStrPeople = [ NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),                     NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let attriMemberStrPeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         
-        let attriMemberNum = [ NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
-                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let attriMemberNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+                              NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         
         let attriMemberTotal = [ NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(),NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
         //set attributes
@@ -149,7 +150,7 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         uiviewChatDescription.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)
         uiviewChatDescription.addConstraintsWithFormat("V:|-40-[v0]", options: [], views: lblDescriptionText)
         
-        uiviewChatSpotLineSecondBottom = UIView(frame: CGRect(x: 0 , y: 280, width: screenWidth, height: 1))
+        uiviewChatSpotLineSecondBottom = UIView(frame: CGRect(x: 0, y: 280, width: screenWidth, height: 1))
         uiviewChatSpotLineSecondBottom.center.x = screenWidth/2
         uiviewChatSpotLineSecondBottom.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha:100)
         uiviewChatDescription.addSubview(uiviewChatSpotLineSecondBottom)
@@ -160,21 +161,22 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         uiviewChatDescription.addSubview(btnDropDown)
         self.view.addSubview(uiviewChatDescription)
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 14
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemberCell",
                                                       for: indexPath)
-        if indexPath.row == 0
-        {
+        if indexPath.row == 0 {
             cell.layer.cornerRadius = cell.frame.size.width / 2
             cell.backgroundColor = UIColor.yellow
             cell.layer.borderWidth = 2
             let cellbordercolor: UIColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
             cell.layer.borderColor = cellbordercolor.cgColor
         }
-        else{
+        else {
             cell.layer.cornerRadius = cell.frame.size.width / 2
             cell.backgroundColor = UIColor.yellow
             cell.layer.borderWidth = 0

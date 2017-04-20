@@ -13,31 +13,10 @@ import SwiftyJSON
 extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // PinFeelingCellDelegate
-    func postFeelingFromFeelingCell(_ feeling: String) {
-        let postFeeling = FaePinAction()
-        postFeeling.whereKey("feeling", value: feeling)
-        postFeeling.postFeelingToPin("\(self.pinTypeEnum)", pinID: pinIDPinDetailView) { (status, message) in
-            if status / 100 != 2 {
-                return
-            }
-            let getPinById = FaeMap()
-            getPinById.getPin(type: "\(self.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
-                let pinInfoJSON = JSON(message!)
-                self.feelingArray.removeAll()
-                let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
-                for feeling in feelings {
-                    if feeling != nil {
-                        self.feelingArray.append(feeling!)
-                    }
-                }
-                if self.tableMode == .feelings {
-                    self.tableCommentsForPin.reloadData()
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                }
-                self.loadFeelingQuickView()
-            }
-        }
+    func postFeelingFromFeelingCell(_ feeling: Int) {
+        let tmpBtn = UIButton()
+        tmpBtn.tag = feeling
+        self.postFeeling(tmpBtn)
     }
     // PinFeelingCellDelegate
     func deleteFeelingFromFeelingCell() {
@@ -67,35 +46,36 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
-        if pinIDPinDetailView != "-999" {
+        if PinDetailViewController.pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
-        selectedMarkerPosition = coordinate
+        PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = zoom
-        self.delegate?.reloadMapPins(selectedMarkerPosition, zoom: zoom, pinID: pinIDPinDetailView, marker: pinMarker)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: PinDetailViewController.pinIDPinDetailView, marker: PinDetailViewController.pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate
-    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        self.selectedMarkerPosition = coordinate
-        self.delegate?.animateToCamera(coordinate, pinID: pinID)
+    func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int) {
+        buttonPrevPin.isHidden = false
+        btnNextPin.isHidden = false
         self.backJustOnce = true
+        self.uiviewPlaceDetail.frame.origin.y = 0
         self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
         self.tableCommentsForPin.center.y += screenHeight
         self.draggingButtonSubview.center.y += screenHeight
-        self.pinIDPinDetailView = pinID
-        if uiviewPlaceDetail == nil {
-            loadPlaceDetail()
-        }
-        loadPlaceFromRealm(pinTypeId: "place\(pinID)")
-        uiviewPlaceDetail.frame.origin.y = 0
-        pinIcon.frame.size.width = 48
-        pinIcon.center.x = screenWidth / 2
-        pinIcon.center.y = 507 * screenHeightFactor
+        
+        PinDetailViewController.selectedMarkerPosition = coordinate
+        PinDetailViewController.placeType = OpenedPlaces.openedPlaces[index].category
+        PinDetailViewController.strPlaceTitle = OpenedPlaces.openedPlaces[index].title
+        PinDetailViewController.strPlaceStreet = OpenedPlaces.openedPlaces[index].street
+        PinDetailViewController.strPlaceCity = OpenedPlaces.openedPlaces[index].city
+        PinDetailViewController.strPlaceImageURL = OpenedPlaces.openedPlaces[index].imageURL
+        initPlaceBasicInfo()
+        manageYelpData()
+        
+        self.delegate?.animateToCamera(coordinate, pinID: "ddd")
         UIApplication.shared.statusBarStyle = .lightContent
     }
-    
-    // OpenedPinListViewControllerDelegate
     func directlyReturnToMap() {
         actionBackToMap(UIButton())
     }

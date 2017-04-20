@@ -16,9 +16,7 @@ target 'faeBeta' do
 	pod 'Firebase/RemoteConfig'
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
-	pod 'KTCenterFlowLayout'
 	pod 'RealmSwift'
-    
 end
 
 post_install do |installer|

@@ -14,220 +14,135 @@ import RealmSwift
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
     
-    // MARK: -- Common Used Vars and Constants
-    let navigationBarHeight : CGFloat = 20
-    
-    // MARK: -- Map main screen Objects
-    var faeMapView: GMSMapView!
-    
+    let filterMenuHeight = 542 * screenHeightFactor // Map Filter height
+    let locManager = CLLocationManager() // location manage
+    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451) // Map Namecard
+    let navigationBarHeight: CGFloat = 20
+    let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0) // Map Namecard
+    let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
+    let yelpManager = YelpManager() // Yelp API
+    let yelpQuery = YelpQuery() // Yelp API
+    var avatarBaseView: UIView! // Map Namecard
+    var btnDraggingMenu: UIButton! // Filter Menu
+    var btnMFilterBeauty: MFilterButton! // Filter Item
+    var btnMFilterCafe: MFilterButton! // Filter Item
+    var btnMFilterChats: MFilterButton! // Filter Item
+    var btnMFilterCinema: MFilterButton! // Filter Item
+    var btnMFilterComments: MFilterButton! // Filter Item
+    var btnMFilterDessert: MFilterButton! // Filter Item
+    var btnMFilterDistance: MFilterButton! // Filter Item
+    var btnMFilterGallery: MFilterButton! // Filter Item
+    var btnMFilterHot: MFilterButton! // Filter Item
+    var btnMFilterMyPins: MFilterButton! // Filter Item
+    var btnMFilterNew: MFilterButton! // Filter Item
+    var btnMFilterPeople: MFilterButton! // Filter Item
+    var btnMFilterPlacesAll: MFilterButton! // Filter Item
+    var btnMFilterRead: MFilterButton! // Filter Item
+    var btnMFilterRestr: MFilterButton! // Filter Item
+    var btnMFilterSavedLoc: MFilterButton! // Filter Item
+    var btnMFilterSavedPins: MFilterButton! // Filter Item
+    var btnMFilterSavedPlaces: MFilterButton! // Filter Item
+    var btnMFilterShowAll: MFilterButton! // Filter Item
+    var btnMFilterSports: MFilterButton! // Filter Item
+    var btnMFilterStatusAll: MFilterButton! // Filter Item
+    var btnMFilterStories: MFilterButton! // Filter Item
+    var btnMFilterTypeAll: MFilterButton! // Filter Item
+    var btnMFilterUnread: MFilterButton! // Filter Item
+    var btnMapFilter: UIButton! // Filter Button
+    var buttonCancelSelectLocation: UIButton!
+    var buttonChat: UIButton! // Map Namecard
+    var buttonChatOnMap: UIButton!
+    var buttonClosingOptionsInNameCard: UIButton! // Map Namecard
+    var buttonEmoji: UIButton! // Map Namecard
+    var buttonFakeTransparentClosingView: UIButton! // Map Namecard
+    var buttonFavorite: UIButton! // Map Namecard
     var buttonLeftTop: UIButton!
     var buttonMainScreenSearch: UIButton!
-    var buttonRightTop: UIButton!
-    var buttonToNorth: UIButton!
-    var buttonSelfPosition: UIButton!
-    var buttonChatOnMap: UIButton!
+    var buttonOptions: UIButton! // Map Namecard
     var buttonPinOnMap: UIButton!
     var buttonPinOnMapInside: UIButton!
-    var buttonCancelSelectLocation: UIButton!
-    
-    // MARK: -- Location
-    let locManager = CLLocationManager()
-    var currentLocation: CLLocation!
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var didLoadFirstLoad = false
-    var latitudeForPin: CLLocationDegrees = 0
-    var longitudeForPin: CLLocationDegrees = 0
-    
-    // Unread Messages Label
-    var labelUnreadMessages: UILabel!
-    
-    // MARK: -- More Button Vars
-    var uiviewMoreButton: UIView!
-    var dimBackgroundMoreButton: UIButton!
-    
-    // MARK: -- WindBell Vars
-    var uiviewWindBell: UIView!
-    var dimBackgroundWindBell: UIButton!
-    
-    // MARK: -- Map Chat
-    var mapChatSubview: UIButton!
-    var mapChatWindow: UIView!
-    var labelMapChat: UILabel!
-    var mapChatTable = UITableView()
-    
-    // More table view
-    let tableViewWeight : CGFloat = 290
-    var buttonImagePicker : UIButton!
-    var buttonMoreLeft : UIButton!
-    var buttonMoreRight : UIButton!
-    var imagePicker : UIImagePickerController! // MARK: new var Wenye
-    var imageViewAvatarMore : UIImageView!
-    var imageViewBackgroundMore : UIImageView!
-    var labelMoreName : UILabel!
-    var tableviewMore = UITableView()
-    var viewHeaderForMore : UIView!
-    
-    // Windbell table view
-    var labelWindbellTableTitle: UILabel!
-    var tableviewWindbell = UITableView()
-    
-    let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
-    var buttonCloseUserPinSubview: UIButton! // button to close user pin view
-    var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
-    var canLoadMapPin = true // if can load map pin when zoom level is valid for updating
-    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var mapPinsArray = [GMSMarker]() // Map Pin Array
-    var mapPins = [MapPin]()
-    var mapUserPinsDic = [GMSMarker]() // Map User Pin
-    var userPins = [UserPin]()
-    var placeMarkers = [GMSMarker]()
-    var mapPlaces = [PlacePin]()
-    var placeNames = [Double]()
-    var markerMask: UIView! // mask to prevent UI action
-    var pinIDFromOpenedPinCell = -999 // Determine if this pinID should change to heavy shadow style
-    var pinIdToPassBySegue: String = "" // segue to Comment Pin Popup Window
-    var previousPosition: CLLocationCoordinate2D!
-    var previousZoomLevel: Float = 0 // previous zoom level to check if map should reload pins
-    var tempMarker: UIImageView! // temp marker, it is a UIImageView
-    var timerLoadRegionPins: Timer! // timer to renew map pins
-    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
-    
-    // Map Namecard
-    var buttonChat: UIButton!
-    var buttonClosingOptionsInNameCard: UIButton!
-    var buttonEmoji: UIButton!
-    var buttonFakeTransparentClosingView: UIButton!
-    var buttonFavorite: UIButton!
-    var buttonOptions: UIButton!
-    var buttonShowSelfOnMap: UIButton!
-    var editNameCard: UIButton!
-    var imageAvatarNameCard: UIImageView!
-    var imageBackground: UIImageView!
-    var imageCover: UIImageView!
-    var imageGenderMen: UIImageView!
-    var imageOneLine: UIImageView!
-    var labelDisplayName: UILabel!
-    var labelNameTag: UILabel!
-    var labelShortIntro: UILabel!
-    var nameCardMoreOptions: UIImageView!
-    var reportNameCard: UIButton!
-    var shareNameCard: UIButton!
-    var uiViewNameCard: UIView!
-    var labelUserAge: UILabel!
-    var uiviewUserGender: UIView!
-    var imageUserGender: UIImageView!
-    var lblUserAge: UILabel!
-    var avatarBaseView: UIView!
-    let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0)
-    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451)
-    
-    // Map Filter
-    let filterMenuHeight = 542 * screenHeightFactor
-    
-    // Filter Button
-    var btnMapFilter: UIButton!
-    var polygonOutside: UIImageView!
-    var polygonInside: UIImageView!
-    var mapFilterArrow: UIImageView!
-    
-    // Filter Menu
-    var uiviewFilterMenu: UIView!
-    var btnDraggingMenu: UIButton!
-    
-    // Filter Item
-    var btnMFilterShowAll: MFilterButton!
-    var btnMFilterDistance: MFilterButton!
-    var btnMFilterPeople: MFilterButton!
-    
-    var btnMFilterTypeAll: MFilterButton!
-    var btnMFilterComments: MFilterButton!
-    var btnMFilterChats: MFilterButton!
-    var btnMFilterStories: MFilterButton!
-    
-    var btnMFilterStatusAll: MFilterButton!
-    var btnMFilterHot: MFilterButton!
-    var btnMFilterNew: MFilterButton!
-    var btnMFilterUnread: MFilterButton!
-    var btnMFilterRead: MFilterButton!
-    
-    var btnMFilterPlacesAll: MFilterButton!
-    var btnMFilterRestr: MFilterButton!
-    var btnMFilterCafe: MFilterButton!
-    var btnMFilterDessert: MFilterButton!
-    var btnMFilterCinema: MFilterButton!
-    var btnMFilterBeauty: MFilterButton!
-    var btnMFilterSports: MFilterButton!
-    var btnMFilterGallery: MFilterButton!
-    
-    var btnMFilterMyPins: MFilterButton!
-    var btnMFilterSavedPins: MFilterButton!
-    var btnMFilterSavedPlaces: MFilterButton!
-    var btnMFilterSavedLoc: MFilterButton!
-    
-    // Pan gesture var
-    var sizeFrom: CGFloat = 0
-    var sizeTo: CGFloat = 0
-    var spaceFilter: CGFloat = 0
-    var spaceMenu: CGFloat = 0
-    var end: CGFloat = 0
-    var percent: Double = 0
-    
-    // Filter data processing
-    var filterPinTypeDic = [String: MFilterButton]()
-    var filterPinStatusDic = [String: MFilterButton]()
-    var filterPlaceDic = [String: MFilterButton]()
-    
-    // Filter Slider
-    var filterSlider: UISlider!
-    var lblFilterDist: UILabel!
-    
-    // Filter btn inside circles
-    var filterCircle_1: UIImageView!
-    var filterCircle_2: UIImageView!
-    var filterCircle_3: UIImageView!
-    var filterCircle_4: UIImageView!
-    
-    // Class global variable to control the filter
-    var stringFilterValue = "comment,chat_room,media"
-    
-    // Yelp API
-    let yelpManager = YelpManager()
-    let yelpQuery = YelpQuery()
-    
-    // If below can be refreshed
-    var refreshPins = true
-    var refreshUsers = true
-    var refreshPlaces = true
-//    var refreshPlacesAll = true
-    
-    // Self Position Marker: 02-17-2016 Yue Shen
-    var selfMarker = GMSMarker()
-    var subviewSelfMarker: UIView!
-    var selfMarkerIcon: UIButton!
-    var myPositionCircle_1: UIImageView!
-    var myPositionCircle_2: UIImageView!
-    var myPositionCircle_3: UIImageView!
-    
+    var buttonRightTop: UIButton!
+    var buttonSelfPosition: UIButton!
+    var buttonShowSelfOnMap: UIButton! // Map Namecard
+    var buttonToNorth: UIButton!
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
-    
-    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
-    var placePizza = #imageLiteral(resourceName: "placePinPizza")
-    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
-    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
-    var placeArt = #imageLiteral(resourceName: "placePinArt")
-    var placeSport = #imageLiteral(resourceName: "placePinSport")
-    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
-    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
-    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
-    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
-    
-    var previousZoom: Float = 13.8
-    
-    var uiviewDistanceRadius: UIView!
+    var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
+    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
+    var currentLocation: CLLocation! // location manage
+    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
+    var didLoadFirstLoad = false // location manage
+    var editNameCard: UIButton! // Map Namecard
+    var end: CGFloat = 0 // Pan gesture var
+    var faeMapView: GMSMapView!
+    var filterCircle_1: UIImageView! // Filter btn inside circles
+    var filterCircle_2: UIImageView! // Filter btn inside circles
+    var filterCircle_3: UIImageView! // Filter btn inside circles
+    var filterCircle_4: UIImageView! // Filter btn inside circles
+    var filterPinStatusDic = [String: MFilterButton]() // Filter data processing
+    var filterPinTypeDic = [String: MFilterButton]() // Filter data processing
+    var filterPlaceDic = [String: MFilterButton]() // Filter data processing
+    var filterSlider: UISlider! // Filter Slider
+    var imageAvatarNameCard: UIImageView! // Map Namecard
+    var imageBackground: UIImageView! // Map Namecard
+    var imageCover: UIImageView! // Map Namecard
+    var imageOneLine: UIImageView! // Map Namecard
+    var imageUserGender: UIImageView! // Map Namecard
+    var labelDisplayName: UILabel! // Map Namecard
+    var labelShortIntro: UILabel! // Map Namecard
+    var labelUnreadMessages: UILabel! // Unread Messages Label
     var lblDistanceDisplay: UILabel!
+    var lblFilterDist: UILabel! // Filter Slider
+    var lblUserAge: UILabel! // Map Namecard
+    var mapFilterArrow: UIImageView! // Filter Button
+    var mapPins = [MapPin]()
+    var mapPinsMarkers = [GMSMarker]() // Map Pin Array
+    var mapUserPinsDic = [GMSMarker]() // Map User Pin
+    var markerMask: UIView! // mask to prevent UI action
+    var myPositionCircle_1: UIImageView! // Self Position Marker
+    var myPositionCircle_2: UIImageView! // Self Position Marker
+    var myPositionCircle_3: UIImageView! // Self Position Marker
+    var nameCardMoreOptions: UIImageView! // Map Namecard
+    var percent: Double = 0 // Pan gesture var
+    var placeArt = #imageLiteral(resourceName: "placePinArt")
+    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
+    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
+    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
+    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
+    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
+    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
+    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
+    var placeMarkers = [GMSMarker]()
+    var placeNames = [Double]()
+    var placePins = [PlacePin]()
+    var placePizza = #imageLiteral(resourceName: "placePinPizza")
+    var placeSport = #imageLiteral(resourceName: "placePinSport")
+    var polygonInside: UIImageView! // Filter Button
+    var polygonOutside: UIImageView! // Filter Button
+    var previousZoom: Float = 13.8
+    var refreshPins = true
+    var refreshPlaces = true
+    var refreshUsers = true
+    var reportNameCard: UIButton! // Map Namecard
+    var selfMarkerIcon: UIButton! // Self Position Marker
+    var shareNameCard: UIButton! // Map Namecard
+    var sizeFrom: CGFloat = 0 // Pan gesture var
+    var sizeTo: CGFloat = 0 // Pan gesture var
+    var spaceFilter: CGFloat = 0 // Pan gesture var
+    var spaceMenu: CGFloat = 0 // Pan gesture var
+    var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
+    var subviewSelfMarker: UIView! // Self Position Marker
+    var tempMarker: UIImageView! // temp marker, it is a UIImageView
+    var timerLoadRegionPins: Timer! // timer to renew map pins
+    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
+    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
+    var uiViewNameCard: UIView! // Map Namecard
+    var uiviewDistanceRadius: UIView!
+    var uiviewFilterMenu: UIView! // Filter Menu
+    var uiviewUserGender: UIView! // Map Namecard
+    var userPins = [UserPin]()
     
     // System Functions
     override func viewDidLoad() {
@@ -451,25 +366,23 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             self.currentLocation = locManager.location
             self.currentLatitude = currentLocation.coordinate.latitude
             self.currentLongitude = currentLocation.coordinate.longitude
+            self.currentLocation2D = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
             self.faeMapView.camera = camera
-//            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-//            let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-//            self.previousPosition = mapCenterCoordinate
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true)
             })
         }
         
-        if userStatus == 5 { // userStatus == 5, invisible
-            return
-        }
-        
         if let location = locations.last {
             let points = self.faeMapView.projection.point(for: location.coordinate)
             self.subviewSelfMarker.center = points
             self.uiviewDistanceRadius.center = points
+            self.currentLocation = location
+            self.currentLocation2D = location.coordinate
+            self.currentLatitude = location.coordinate.latitude
+            self.currentLongitude = location.coordinate.longitude
         }
     }
 }

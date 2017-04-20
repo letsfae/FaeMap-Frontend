@@ -47,17 +47,7 @@ extension FaeMapViewController {
     }
     
     func actionSelfPosition(_ sender: UIButton!) {
-        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
-            currentLocation = locManager.location
-        }
-        if currentLocation != nil {
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            self.renewSelfLocation()
-            // let curZoomLevel = faeMapView.camera.zoom
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: faeMapView.camera.zoom)
-            faeMapView.camera = camera
-//            reloadSelfPosAnimation()
-        }
+        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
     }
 }

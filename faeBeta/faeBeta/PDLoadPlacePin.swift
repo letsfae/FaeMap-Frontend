@@ -11,28 +11,12 @@ import SDWebImage
 import RealmSwift
 
 extension PinDetailViewController {
-    func loadPlaceFromRealm(pinTypeId: String) {
-        let realm = try! Realm()
-        if let opinListElem = realm.objects(OPinListElem.self).filter("pinTypeId == '\(pinTypeId)'").first {
-            self.lblPlaceTitle.text = opinListElem.pinContent
-            self.lblPlaceStreet.text = opinListElem.street
-            self.lblPlaceCity.text = opinListElem.city
-            let imageURL = opinListElem.imageURL
-            self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imgPlaceQuickView.alpha = 1
-                })
-            })
-            placeType = opinListElem.category
-            initPlaceBasicInfo()
-        }
-    }
     
-    fileprivate func manageYelpData() {
-        self.lblPlaceTitle.text = strPlaceTitle
-        self.lblPlaceStreet.text = strPlaceStreet
-        self.lblPlaceCity.text = strPlaceCity
-        let imageURL = strPlaceImageURL
+    func manageYelpData() {
+        self.lblPlaceTitle.text = PinDetailViewController.strPlaceTitle
+        self.lblPlaceStreet.text = PinDetailViewController.strPlaceStreet
+        self.lblPlaceCity.text = PinDetailViewController.strPlaceCity
+        let imageURL = PinDetailViewController.strPlaceImageURL
         self.imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
             UIView.animate(withDuration: 0.3, animations: {
                 self.imgPlaceQuickView.alpha = 1
@@ -107,8 +91,8 @@ extension PinDetailViewController {
         manageYelpData()
     }
     
-    fileprivate func initPlaceBasicInfo() {
-        switch placeType {
+    func initPlaceBasicInfo() {
+        switch PinDetailViewController.placeType {
         case "burgers":
             pinIcon.image = #imageLiteral(resourceName: "placePinBurger")
             imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBurger")

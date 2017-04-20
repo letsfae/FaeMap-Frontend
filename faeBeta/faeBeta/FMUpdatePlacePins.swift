@@ -84,7 +84,7 @@ extension FaeMapViewController {
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool) {
         placeMarkers.removeAll()
-        mapPlaces.removeAll()
+        placePins.removeAll()
         placeNames.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
@@ -104,7 +104,7 @@ extension FaeMapViewController {
         if !all {
             yelpQuery.setResultLimit(count: 10)
             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                self.mapPlaces = results
+                self.placePins = results
                 for result in results {
                     if checkPlaceExist(result) {
                         continue
@@ -112,7 +112,7 @@ extension FaeMapViewController {
                     let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                     self.placeNames.append(latPlusLon)
                 }
-                self.pinPlacesOnMap(results: self.mapPlaces)
+                self.pinPlacesOnMap(results: self.placePins)
             })
         } else {
             
@@ -128,7 +128,7 @@ extension FaeMapViewController {
                     }
                     let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                     self.placeNames.append(latPlusLon)
-                    self.mapPlaces.append(result)
+                    self.placePins.append(result)
 //                    self.pinPlacesOnMap(results: [result])
                 }
                 
@@ -141,7 +141,7 @@ extension FaeMapViewController {
                         }
                         let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                         self.placeNames.append(latPlusLon)
-                        self.mapPlaces.append(result)
+                        self.placePins.append(result)
 //                        self.pinPlacesOnMap(results: [result])
                     }
                     self.yelpQuery.setCatagoryToCafe()
@@ -152,7 +152,7 @@ extension FaeMapViewController {
                             }
                             let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                             self.placeNames.append(latPlusLon)
-                            self.mapPlaces.append(result)
+                            self.placePins.append(result)
 //                            self.pinPlacesOnMap(results: [result])
                         }
                         self.yelpQuery.setCatagoryToCinema()
@@ -163,7 +163,7 @@ extension FaeMapViewController {
                                 }
                                 let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                 self.placeNames.append(latPlusLon)
-                                self.mapPlaces.append(result)
+                                self.placePins.append(result)
 //                                self.pinPlacesOnMap(results: [result])
                             }
                             self.yelpQuery.setCatagoryToSport()
@@ -174,7 +174,7 @@ extension FaeMapViewController {
                                     }
                                     let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                     self.placeNames.append(latPlusLon)
-                                    self.mapPlaces.append(result)
+                                    self.placePins.append(result)
 //                                    self.pinPlacesOnMap(results: [result])
                                 }
                                 self.yelpQuery.setCatagoryToBeauty()
@@ -185,7 +185,7 @@ extension FaeMapViewController {
                                         }
                                         let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                         self.placeNames.append(latPlusLon)
-                                        self.mapPlaces.append(result)
+                                        self.placePins.append(result)
 //                                        self.pinPlacesOnMap(results: [result])
                                     }
                                     self.yelpQuery.setCatagoryToArt()
@@ -196,7 +196,7 @@ extension FaeMapViewController {
                                             }
                                             let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                             self.placeNames.append(latPlusLon)
-                                            self.mapPlaces.append(result)
+                                            self.placePins.append(result)
 //                                            self.pinPlacesOnMap(results: [result])
                                         }
                                         self.yelpQuery.setCatagoryToJuice()
@@ -207,10 +207,10 @@ extension FaeMapViewController {
                                                 }
                                                 let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                                 self.placeNames.append(latPlusLon)
-                                                self.mapPlaces.append(result)
+                                                self.placePins.append(result)
                                                 self.pinPlacesOnMap(results: [result])
                                             }
-                                            self.pinPlacesOnMap(results: self.mapPlaces)
+                                            self.pinPlacesOnMap(results: self.placePins)
                                         })
                                     })
                                 })

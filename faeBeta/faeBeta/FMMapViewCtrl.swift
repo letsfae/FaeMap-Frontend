@@ -16,11 +16,11 @@ extension FaeMapViewController: GMSMapViewDelegate {
     func clearMap(type: String, animated: Bool) {
         if type == "all" || type == "pin" {
             if !animated {
-                for marker in mapPinsArray {
+                for marker in mapPinsMarkers {
                     marker.map = nil
                 }
             } else {
-                for marker in mapPinsArray {
+                for marker in mapPinsMarkers {
                     let delay: Double = Double(arc4random_uniform(100)) / 100
                     let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
                     icon.image = marker.icon
@@ -88,7 +88,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
         buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
         
-        let points = self.faeMapView.projection.point(for: currentLocation.coordinate)
+        let points = self.faeMapView.projection.point(for: currentLocation2D)
         self.uiviewDistanceRadius.center = points
         
         if !didLoadFirstLoad && self.subviewSelfMarker != nil {
@@ -201,51 +201,81 @@ extension FaeMapViewController: GMSMapViewDelegate {
 
     }
     
+    func openMapPin(marker: GMSMarker, mapPin: MapPin) {
+        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
+                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
+        
+        PinDetailViewController.selectedMarkerPosition = marker.position
+        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
+        PinDetailViewController.pinStatus = mapPin.status
+        PinDetailViewController.pinStateEnum = self.selectPinState(pinState: mapPin.status)
+        PinDetailViewController.pinIDPinDetailView = "\(mapPin.pinId)"
+        PinDetailViewController.pinUserId = mapPin.userId
+    }
+    
+    func openPlacePin(marker: GMSMarker, placePin: PlacePin) {
+        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
+                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
+        
+        PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude,
+                                                                                longitude: marker.position.longitude)
+        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.pinTypeEnum = .place
+        PinDetailViewController.placeType = placePin.primaryCate
+        PinDetailViewController.strPlaceTitle = placePin.name
+        PinDetailViewController.strPlaceStreet = placePin.address1
+        PinDetailViewController.strPlaceCity = placePin.address2
+        PinDetailViewController.strPlaceImageURL = placePin.imageURL
+        
+        let opPlace = OpenedPlace(title: placePin.name, category: placePin.primaryCate,
+                                  street: placePin.address1, city: placePin.address2,
+                                  imageURL: placePin.imageURL,
+                                  position: marker.position)
+        if !OpenedPlaces.openedPlaces.contains(opPlace) {
+            OpenedPlaces.openedPlaces.append(opPlace)
+        }
+    }
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if marker.userData == nil {
             return false
         }
-        
         guard let userData = marker.userData as? [Int: AnyObject] else {
             return false
         }
-        
         guard let type = userData.keys.first else {
             return false
         }
         
         let zoomLv = mapView.camera.zoom
-        // 0.0012
-        var offset: Double = 0.001 * pow(2, Double(17 - zoomLv))
+        
+        let offset: Double = 0.001 * pow(2, Double(17 - zoomLv)) // 0.0012
         self.renewSelfLocation()
-        var camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
+        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
                                               longitude: marker.position.longitude, zoom: zoomLv)
 
         if type == 0 { // fae map pin
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
+            
             if !self.canOpenAnotherPin {
                 return true
             }
+            self.canOpenAnotherPin = false
             
             invalidateAllTimer()
-            offset = 0.00117 * pow(2, Double(17 - zoomLv))
-            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: zoomLv)
-            mapView.animate(to: camera)
-            self.canOpenAnotherPin = false
+            openMapPin(marker: marker, mapPin: mapPin)
+            
             let pinDetailVC = PinDetailViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.selectedMarkerPosition = marker.position
-            pinDetailVC.pinMarker = marker
             pinDetailVC.delegate = self
-            pinDetailVC.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
-            pinDetailVC.pinStatus = mapPin.status
-            pinDetailVC.pinStateEnum = self.selectPinState(pinState: mapPin.status)
-            pinDetailVC.pinIdSentBySegue = "\(mapPin.pinId)"
-            pinDetailVC.pinUserId = mapPin.userId
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
             
             self.clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
@@ -253,13 +283,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     self.canOpenAnotherPin = true
                 })
             })
+            
             return true
         } else if type == 1 { // user pin
             guard let userPin = userData.values.first as? UserPin else {
                 return false
             }
             self.canDoNextUserUpdate = false
-            mapView.animate (to: camera)
+            mapView.animate(to: camera)
             self.updateNameCard(withUserId: userPin.userId)
             self.animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
@@ -270,62 +301,18 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
+            
             if !self.canOpenAnotherPin {
                 return true
             }
+            self.canOpenAnotherPin = false
             
             invalidateAllTimer()
-            // 0.00148 Los Angeles
-            offset = 0.00117 * pow(2, Double(17 - zoomLv))
-            camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: zoomLv)
-            mapView.animate(to: camera)
+            openPlacePin(marker: marker, placePin: placePin)
             
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude, longitude: marker.position.longitude)
-            pinDetailVC.pinMarker = marker
             pinDetailVC.delegate = self
-            var pinTypeID = ""
-            let category = placePin.primaryCate
-            let title = placePin.name
-            let street = placePin.address1
-            let city = placePin.address2
-            pinDetailVC.pinTypeEnum = .place
-            
-            pinDetailVC.placeType = category
-            pinDetailVC.strPlaceTitle = title
-            pinDetailVC.strPlaceStreet = street
-            pinDetailVC.strPlaceCity = city
-            pinDetailVC.strPlaceImageURL = placePin.imageURL
-            
-            let opinListElem = OPinListElem()
-            opinListElem.pinContent = title
-            opinListElem.category = category
-            opinListElem.street = street
-            opinListElem.city = city
-            opinListElem.imageURL = placePin.imageURL
-            opinListElem.pinLat = marker.position.latitude
-            opinListElem.pinLon = marker.position.longitude
-            opinListElem.pinTime = "\(street), \(city)"
-            opinListElem.pinTypeId = "\(title)\(street)"
-            
-            // for opened pin list
-            if let storedList = readByKey("openedPinList"){
-                var openedPinListArray = storedList as! [String]
-                pinTypeID = "\(title)\(street)%\(category)"
-                print("[didTap] pinTypeID:", pinTypeID)
-                if openedPinListArray.contains(pinTypeID) == false {
-                    openedPinListArray.insert(pinTypeID, at: 0)
-                }
-                self.storageForOpenedPinList.set(openedPinListArray, forKey: "openedPinList")
-            }
-            
-            // write in realm swift
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(opinListElem, update: true)
-            }
             
             self.clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {

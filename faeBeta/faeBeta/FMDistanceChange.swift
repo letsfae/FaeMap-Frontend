@@ -16,7 +16,7 @@ extension FaeMapViewController {
         loadDistanceLabel()
         filterSlider = UISlider(frame: CGRect(x: 100, y: screenWidth, width: 448*screenWidthFactor, height: 28))
         filterSlider.setThumbImage(#imageLiteral(resourceName: "mapFilterSliderIcon"), for: .normal)
-        filterSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        filterSlider.transform = CGAffineTransform(rotationAngle: -.pi/2)
         filterSlider.center = CGPoint(x: screenWidth-29, y: 340)
         filterSlider.maximumTrackTintColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
         filterSlider.minimumTrackTintColor = UIColor.faeAppRedColor()
@@ -54,8 +54,8 @@ extension FaeMapViewController {
     }
     
     func printSliderValue(_ sender: UISlider) {
-        let points = self.faeMapView.projection.point(for: currentLocation.coordinate)
-        let radius = Int(faeMapView.projection.points(forMeters: Double(sender.value)*1000.0, at: currentLocation.coordinate))
+        let points = self.faeMapView.projection.point(for: currentLocation2D)
+        let radius = Int(faeMapView.projection.points(forMeters: Double(sender.value)*1000.0, at: currentLocation2D))
         uiviewDistanceRadius.frame.size.width = CGFloat(radius)
         uiviewDistanceRadius.frame.size.height = CGFloat(radius)
         uiviewDistanceRadius.layer.cornerRadius = CGFloat(radius/2)

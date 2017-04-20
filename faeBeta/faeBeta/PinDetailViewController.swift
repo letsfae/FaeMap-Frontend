@@ -25,6 +25,8 @@ protocol PinDetailDelegate: class {
     func disableSelfMarker(yes: Bool)
     // Reload map pins because of location changed
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker)
+    // Go to prev or next pin
+    func goTo(nextPin: Bool)
 }
 
 class PinDetailViewController: UIViewController {
@@ -67,6 +69,18 @@ class PinDetailViewController: UIViewController {
     }
     
     weak var delegate: PinDetailDelegate? // Delegate of this class
+    static var pinIDPinDetailView = "-999"
+    static var pinMarker = GMSMarker()
+    static var pinStateEnum: PinState = .normal
+    static var pinStatus = ""
+    static var pinTypeEnum: PinType = .media
+    static var pinUserId = 0
+    static var placeType = "burgers"
+    static var selectedMarkerPosition: CLLocationCoordinate2D!
+    static var strPlaceCity = ""
+    static var strPlaceImageURL = ""
+    static var strPlaceStreet = ""
+    static var strPlaceTitle = ""
     var animatingHeart: UIImageView!
     var animatingHeartTimer: Timer! // Timer for animating heart
     var anotherRedSlidingLine: UIView!
@@ -82,14 +96,13 @@ class PinDetailViewController: UIViewController {
     var btnGoToPinList_Place: UIButton!
     var btnHideAnony: UIButton!
     var btnMoreOptions_Place: UIButton!
-    var buttonBackToPinLists: UIButton!
-    var buttonDeleteOnPinDetail: UIButton! // Pin options
-    var buttonEditOnPinDetail: UIButton! // Pin options
-    var buttonFakeTransparentClosingView: UIButton! // Fake Transparent View For Closing
-    var buttonKeyBoard : UIButton! //Custom toolBar the bottom toolbar button
-    var buttonMoreOnPinCellExpanded = false
-    var buttonNextPin: UIButton!
-    var buttonOptionOfPin: UIButton!
+    var btnToPinList: UIButton!
+    var btnOptionDelete: UIButton! // Pin options
+    var btnOptionEdit: UIButton! // Pin options
+    var btnTransparentClose: UIButton! // Fake Transparent View For Closing
+    var optionsExpanded = false
+    var btnNextPin: UIButton!
+    var btnShowOptions: UIButton!
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
     var buttonPinDetailDragToLargeSize: UIButton!
@@ -108,8 +121,8 @@ class PinDetailViewController: UIViewController {
     var controlBoard: UIView! // A duplicate ControlBoard to hold
     var draggingButtonSubview: UIView! // Another dragging button for UI effect
     var emojiView: StickerPickView! // Input tool bar
-    var fileIdArray = [Int]()
     var feelingArray = [Int]()
+    var fileIdArray = [Int]()
     var firstLoadInputToolBar = true
     var grayBackButton: UIButton! // Background gray button, alpha = 0.3
     var imagePinUserAvatar: UIImageView!
@@ -145,25 +158,12 @@ class PinDetailViewController: UIViewController {
     var pinDetailLiked = false
     var pinDetailShowed = false
     var pinDetailUsers = [PinDetailUser]()
-    var pinIDPinDetailView: String = "-999"
     var pinIcon: UIImageView! // Icon to indicate pin type
-    var pinIdSentBySegue: String = "-999" // Pin ID To Use In This Controller
     var pinLikeCount = 0
-    var pinMarker = GMSMarker()
     var pinSizeFrom: CGFloat = 0 // For Dragging
     var pinSizeTo: CGFloat = 0 // For Dragging
-    var pinStateEnum: PinState = .normal
-    var pinStatus = ""
-    var pinTypeEnum: PinType = .media
-    var pinUserId = 0
-    var placeType = "burgers"
     var replyToUser = "" // Reply to specific user, set string as "" if no user is specified
     var scrollViewMedia: UIScrollView! // container to display pin's media
-    var selectedMarkerPosition: CLLocationCoordinate2D!
-    var strPlaceCity = ""
-    var strPlaceImageURL = ""
-    var strPlaceStreet = ""
-    var strPlaceTitle = ""
     var stringPlainTextViewTxt = ""
     var subviewInputToolBar: UIView! // subview to hold input toolbar
     var subviewNavigation: UIView!
@@ -178,6 +178,7 @@ class PinDetailViewController: UIViewController {
     var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
     var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     var uiviewAnonymous: UIView!
+    var uiviewFeeling: UIView!
     var uiviewFeelingBar: UIView!
     var uiviewGrayBaseLine: UIView!
     var uiviewPinDetail: UIView!
@@ -190,8 +191,27 @@ class PinDetailViewController: UIViewController {
     var uiviewPlaceLine: UIView!
     var uiviewRedSlidingLine: UIView!
     var uiviewToolBar: UIView! // Input tool bar
-    var uiviewFeeling: UIView!
     var zoomLevel: Float = 13.8
+    var chosenFeeling: Int = -1
+    var btnFeelingArray = [UIButton]()
+    
+    // Load Chat
+    var uiviewChatRoom: UIView!
+    var btnChatEnter: UIButton!
+    var btnChatSpotLeftArrow: UIButton!
+    var btnChatSpotRightArrow: UIButton!
+    var btnDropDown: UIButton!
+    var chatSpotEmojiBubble: UIButton!
+    var cllcviewChatMember: UICollectionView!
+    var imgChatSpot: UIImageView!
+    var lblChatMemberNum: UILabel!
+    var lblDescriptionText: UILabel!
+    var mutableAttrStringMemberNum: NSMutableAttributedString!
+    var mutableAttrStringMemberTotal: NSMutableAttributedString!
+    var uiviewChatSpotBar: UIView!
+    var uiviewChatSpotLine: UIView!
+    var uiviewChatSpotLineFirstBottom: UIView!
+    var lblPeopleCount: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,15 +219,14 @@ class PinDetailViewController: UIViewController {
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
-        if pinTypeEnum == .place {
+        if PinDetailViewController.pinTypeEnum == .place {
             loadPlaceDetail()
             pinIcon.frame.size.width = 48
             pinIcon.center.x = screenWidth / 2
             pinIcon.center.y = 507 * screenHeightFactor
             UIApplication.shared.statusBarStyle = .lightContent
         }
-        pinIDPinDetailView = pinIdSentBySegue
-        if pinIDPinDetailView != "-999" {
+        if PinDetailViewController.pinIDPinDetailView != "-999" {
             getSeveralInfo()
         }
         initPinBasicInfo()
@@ -223,7 +242,7 @@ class PinDetailViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.buttonNextPin.alpha = 1
+            self.btnNextPin.alpha = 1
             self.buttonPrevPin.alpha = 1
             self.draggingButtonSubview.frame.origin.y = 292
             self.grayBackButton.alpha = 1
@@ -231,14 +250,14 @@ class PinDetailViewController: UIViewController {
             self.subviewNavigation.frame.origin.y = 0
             self.subviewTable.frame.origin.y = 65
             self.tableCommentsForPin.frame.origin.y = 65
-            if self.pinTypeEnum == .place {
+            if PinDetailViewController.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             } else {
                 self.uiviewFeelingBar.alpha = 1
             }
         }, completion: { (done: Bool) in
-            if self.pinTypeEnum != .place {
-                self.delegate?.changeIconImage(marker: self.pinMarker, type: "\(self.pinTypeEnum)", status: self.pinStatus)
+            if PinDetailViewController.pinTypeEnum != .place {
+                self.delegate?.changeIconImage(marker: PinDetailViewController.pinMarker, type: "\(PinDetailViewController.pinTypeEnum)", status: PinDetailViewController.pinStatus)
             }
         })
     }
@@ -266,7 +285,7 @@ class PinDetailViewController: UIViewController {
     }
     
     fileprivate func initPinBasicInfo() {
-        switch pinTypeEnum {
+        switch PinDetailViewController.pinTypeEnum {
         case .comment:
             self.labelPinTitle.text = "Comment"
             textViewOriginalHeight = 100
@@ -277,7 +296,7 @@ class PinDetailViewController: UIViewController {
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = false
             }
-            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
+            selectPinState(pinState: PinDetailViewController.pinStateEnum, pinType: PinDetailViewController.pinTypeEnum)
             break
         case .media:
             self.labelPinTitle.text = "Story"
@@ -288,11 +307,11 @@ class PinDetailViewController: UIViewController {
             if textviewPinDetail != nil {
                 textviewPinDetail.isHidden = true
             }
-            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
+            selectPinState(pinState: PinDetailViewController.pinStateEnum, pinType: PinDetailViewController.pinTypeEnum)
             break
         case .chat_room:
-            self.labelPinTitle.text = "Chat"
-            selectPinState(pinState: pinStateEnum, pinType: pinTypeEnum)
+            self.labelPinTitle.text = "Chat Spot"
+            selectPinState(pinState: PinDetailViewController.pinStateEnum, pinType: PinDetailViewController.pinTypeEnum)
             break
         case .place:
             break
@@ -334,7 +353,8 @@ class PinDetailViewController: UIViewController {
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.fromValue = 1.0
         fadeAnimation.toValue = 0.0
-        fadeAnimation.duration = 1
+        fadeAnimation.duration = 0.3
+        fadeAnimation.beginTime = CACurrentMediaTime() + 0.7
         
         let orbit = CAKeyframeAnimation(keyPath: "position")
         orbit.duration = 1

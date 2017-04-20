@@ -16,7 +16,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: faeMapView.camera.zoom)
         self.faeMapView.animate(to: camera)
         updateTimerForUserPin()
         timerSetup()
@@ -26,7 +26,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // PinDetailDelegate
     func dismissMarkerShadow(_ dismiss: Bool) {
-        print("back from comment pin detail")
         updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
@@ -35,8 +34,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         reloadSelfPosAnimation()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.animate(to: camera)
+        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
+                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
     }
     func changeIconImage(marker: GMSMarker, type: String, status: String) {
         guard let userData = marker.userData as? [Int: AnyObject] else {
@@ -63,6 +64,41 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
                                           longitude: coordinate.longitude, zoom: zoom)
         faeMapView.camera = camera
         marker.position = coordinate
+    }
+    func goTo(nextPin: Bool) {
+        var tmpMarkers = [GMSMarker]()
+        for marker in placeMarkers {
+            if marker.map != nil {
+                tmpMarkers.append(marker)
+            }
+        }
+        if let index = tmpMarkers.index(of: PinDetailViewController.pinMarker) {
+            var i = index
+            if nextPin {
+                if index == tmpMarkers.count - 1 {
+                    i = 0
+                } else {
+                    i += 1
+                }
+            } else {
+                if index == 0 {
+                    i = tmpMarkers.count - 1
+                } else {
+                    i -= 1
+                }
+            }
+            PinDetailViewController.pinMarker = tmpMarkers[i]
+            if tmpMarkers[i].userData == nil {
+                return
+            }
+            guard let userData = tmpMarkers[i].userData as? [Int: AnyObject] else {
+                return
+            }
+            guard let placePin = userData.values.first as? PlacePin else {
+                return
+            }
+            openPlacePin(marker: tmpMarkers[i], placePin: placePin)
+        }
     }
 
     // PinMenuDelegate

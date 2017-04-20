@@ -13,6 +13,7 @@ import FirebaseDatabase
 import Photos
 import MobileCoreServices
 import CoreMedia
+import GoogleMaps
 import GooglePlaces
 import AVFoundation
 

@@ -57,9 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
             migrationBlock: { migration, oldSchemaVersion in
-                // The enumerateObjects:block: method iterates
-                // over every 'Person' object stored in the Realm file
-//            
 //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
 //                    if oldSchemaVersion < 3 {
 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"

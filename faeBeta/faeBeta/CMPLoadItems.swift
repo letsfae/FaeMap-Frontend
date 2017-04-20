@@ -112,7 +112,7 @@ extension CreateMomentPinViewController {
         uiviewSelectLocation.addConstraintsWithFormat("V:|-7-[v0(19)]", options: [], views: imageSelectLocation_2)
         
         labelSelectLocationContent = UILabel()
-        labelSelectLocationContent.text = "Choose Location"
+        labelSelectLocationContent.text = "Current Map View"
         labelSelectLocationContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelSelectLocationContent.textAlignment = .left
         labelSelectLocationContent.textColor = UIColor.white
@@ -122,7 +122,7 @@ extension CreateMomentPinViewController {
         
         let buttonSelectLocation = UIButton()
         uiviewSelectLocation.addSubview(buttonSelectLocation)
-        buttonSelectLocation.addTarget(self, action: #selector(CreateMomentPinViewController.actionSelectLocation(_:)), for: .touchUpInside)
+        buttonSelectLocation.addTarget(self, action: #selector(self.actionSelectLocation(_:)), for: .touchUpInside)
         uiviewSelectLocation.addConstraintsWithFormat("H:[v0(276)]-0-|", options: [], views: buttonSelectLocation)
         uiviewSelectLocation.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonSelectLocation)
         
@@ -143,9 +143,10 @@ extension CreateMomentPinViewController {
         
         loadAddDescriptionButton()
         loadMoreOptionsButton()
-//        loadAnonymousButton()
         loadAddMediaButton()
         loadAnonymous()
+        loadKeyboardToolBar()
+        loadEmojiView()
     }
     
     fileprivate func loadAddMediaButton() {
@@ -181,7 +182,7 @@ extension CreateMomentPinViewController {
         switchAnony.setOn(!switchAnony.isOn, animated: true)
     }
     
-    private func loadAnonymousButton() {
+    fileprivate func loadAnonymousButton() {
         buttonAnonymous = UIButton()
         buttonAnonymous.setImage(UIImage(named: "anonymousUnclicked"), for: .normal)
         buttonAnonymous.tag = 0
@@ -192,7 +193,7 @@ extension CreateMomentPinViewController {
         uiviewCreateMediaPin.addConstraintsWithFormat("V:[v0(25)]-77-|", options: [], views: buttonAnonymous)
     }
     
-    func loadKeyboardToolBar() {
+    fileprivate func loadKeyboardToolBar() {
         inputToolbar = CreatePinInputToolbar()
         inputToolbar.delegate = self
         self.view.addSubview(inputToolbar)
@@ -201,13 +202,13 @@ extension CreateMomentPinViewController {
         self.view.layoutIfNeeded()
     }
     
-    func loadEmojiView(){
+    fileprivate func loadEmojiView(){
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
         self.view.addSubview(emojiView)
     }
     
-    private func loadAddDescriptionButton() {
+    fileprivate func loadAddDescriptionButton() {
         uiviewAddDescription = UIView()
         uiviewCreateMediaPin.addSubview(uiviewAddDescription)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(293)]", options: [], views: uiviewAddDescription)
@@ -245,7 +246,7 @@ extension CreateMomentPinViewController {
         loadAddDescriptionItems()
     }
     
-    private func loadAddDescriptionItems() {
+    fileprivate func loadAddDescriptionItems() {
         // Title Label
         labelMediaPinAddDes = UILabel(frame: CGRect(x: 109, y: 146, width: 196, height: 27))
         labelMediaPinAddDes.text = "Add Description"
@@ -256,7 +257,7 @@ extension CreateMomentPinViewController {
         labelMediaPinAddDes.alpha = 0.0
     }
     
-    private func loadMoreOptionsButton() {
+    fileprivate func loadMoreOptionsButton() {
         uiviewMoreOptions = UIView()
         uiviewCreateMediaPin.addSubview(uiviewMoreOptions)
         uiviewCreateMediaPin.addConstraintsWithFormat("H:[v0(294)]", options: [], views: uiviewMoreOptions)
@@ -286,7 +287,7 @@ extension CreateMomentPinViewController {
         
         let buttonMoreOptions = UIButton()
         uiviewMoreOptions.addSubview(buttonMoreOptions)
-        buttonMoreOptions.addTarget(self, action: #selector(CreateMomentPinViewController.actionShowMoreOptions(_:)), for: .touchUpInside)
+        buttonMoreOptions.addTarget(self, action: #selector(self.actionShowMoreOptions(_:)), for: .touchUpInside)
         buttonMoreOptions.tag = 1
         uiviewMoreOptions.addConstraintsWithFormat("H:[v0(276)]-0-|", options: [], views: buttonMoreOptions)
         uiviewMoreOptions.addConstraintsWithFormat("V:[v0(29)]-0-|", options: [], views: buttonMoreOptions)
@@ -294,7 +295,7 @@ extension CreateMomentPinViewController {
         loadMoreOptionsItems()
     }
     
-    private func loadMoreOptionsItems() {
+    fileprivate func loadMoreOptionsItems() {
         // Title Label
         labelMediaPinMoreOptions = UILabel(frame: CGRect(x: 109, y: 146, width: 196, height: 27))
         labelMediaPinMoreOptions.text = "More Options"

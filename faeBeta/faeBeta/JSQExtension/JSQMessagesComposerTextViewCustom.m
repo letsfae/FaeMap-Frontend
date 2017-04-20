@@ -21,7 +21,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <JSQMessagesViewController/NSString+JSQMessages.h>
-#import "faeBeta-swift.h"
+#import "faeBeta-Swift.h"
 
 
 @implementation JSQMessagesComposerTextViewCustom 
