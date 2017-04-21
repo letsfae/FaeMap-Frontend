@@ -131,7 +131,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         userAlbums.enumerateObjects( {
             let collection = $0.0
-            print("album title: \(collection.localizedTitle)")
+            print("album title: \(String(describing: collection.localizedTitle))")
             //For each PHAssetCollection that is returned from userAlbums: PHFetchResult you can fetch PHAssets like so (you can even limit results to include only photo assets):
             let onlyImagesOptions = PHFetchOptions()
             onlyImagesOptions.predicate = NSPredicate(format: "mediaType = %i", PHAssetMediaType.image.rawValue)
@@ -255,10 +255,10 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             Void in
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.failed:
-                print("failed import video: \(exportSession!.error)")
+                print("failed import video: \(String(describing: exportSession!.error))")
                 break
             case AVAssetExportSessionStatus.cancelled:
-                print("cancelled import video: \(exportSession!.error)")
+                print("cancelled import video: \(String(describing: exportSession!.error))")
                 break
             default:
                 print("completed import video")
@@ -342,7 +342,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             } else {
                 if(asset.mediaType == .image){
                     if(photoPicker.videoAsset != nil){
-                        showAlertView(withWarning: "You can't select photo with video")
+                        showAlertView(withWarning: "Sorry, Videos must be sent alone!")
                         return
                     }else if(photoPicker.gifAssetDict.count > 0){
                         showAlertView(withWarning: "Sorry Gifs must be sent alone!")

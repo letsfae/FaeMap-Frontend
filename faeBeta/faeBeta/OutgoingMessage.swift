@@ -72,7 +72,7 @@ class OutgoingMessage {
         reference.setValue(item) { (error, ref) -> Void in
             
             if error != nil {
-                print("Error, couldn't send message: \(error)")
+                print("Error, couldn't send message: \(String(describing: error))")
             }else{
                 //WARNING : I changed item["type"] to "text" here to make backend work
                 

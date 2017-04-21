@@ -112,11 +112,11 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func showActionSheetWithTimer() {
-        self.replyToUser = "<a>@\(username)</a> "
+        self.replyToUser = "<a>@\(String(describing: username))</a> "
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.lblTxtPlaceholder.text = "@\(username)"
+            self.lblTxtPlaceholder.text = "@\(String(describing: username))"
             self.textViewInput.becomeFirstResponder()
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in

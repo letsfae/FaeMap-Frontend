@@ -349,7 +349,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             
         }, completion:{ (Bool) -> Void in
         })
-        scrollToBottom(true)
+        //scrollToBottom(true)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
         
     }
@@ -535,7 +535,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.locExtendView.frame.origin.y = screenHeight - 271 - 64 - 76 - 90
             self.collectionView.isScrollEnabled = true
         }
-        scrollToBottom(animated)
+        //scrollToBottom(animated)
     }
     
     func moveUpInputBar() {
@@ -607,7 +607,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //get the last item index
         if item >= 0 {
             let lastItemIndex = IndexPath(item: item, section: 0)
-            self.collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.top , animated: animated)
+            self.collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.bottom , animated: animated)
         }
     }
     
