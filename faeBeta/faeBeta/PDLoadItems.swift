@@ -676,7 +676,7 @@ extension PinDetailViewController {
         pinIcon.alpha = 0
         self.view.addSubview(pinIcon)
         
-        buttonPrevPin = UIButton(frame: CGRect(x: 15, y: 477 * screenHeightFactor, width: 52, height: 52))
+        buttonPrevPin = UIButton(frame: CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
         buttonPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         buttonPrevPin.layer.zPosition = 60
         buttonPrevPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
@@ -687,7 +687,7 @@ extension PinDetailViewController {
         buttonPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonPrevPin)
         
-        btnNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
+        btnNextPin = UIButton(frame: CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
         btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         btnNextPin.layer.zPosition = 60
         btnNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor

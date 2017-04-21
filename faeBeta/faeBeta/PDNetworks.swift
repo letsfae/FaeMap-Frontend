@@ -42,8 +42,10 @@ extension PinDetailViewController {
             if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
                 self.chosenFeeling = chosenFeel
                 if chosenFeel < 5 && chosenFeel >= 0 {
-                    let xOffset = Int(chosenFeel * 52 + 12)
-                    self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                    UIView.animate(withDuration: 0.2, animations: { 
+                        let xOffset = Int(chosenFeel * 52 + 12)
+                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                    })
                 }
             } else {
                 self.chosenFeeling = -1
@@ -128,12 +130,11 @@ extension PinDetailViewController {
             }
             
             UIView.animate(withDuration: 0.2, animations: {
-                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
-                
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                for i in 0..<self.btnFeelingArray.count {
+                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
+                }
                 if sender.tag < 5 {
                     let xOffset = Int(sender.tag * 52 + 12)
                     self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)

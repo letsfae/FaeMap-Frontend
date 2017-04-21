@@ -229,6 +229,14 @@ extension PinDetailViewController {
         endEdit()
         controlBoard.removeFromSuperview()
         self.delegate?.backToMainMap()
+        UIView.animate(withDuration: 0.2) { 
+            self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 461*screenHeightFactor, width: 0, height: 0)
+            for btn in self.btnFeelingArray {
+                btn.frame = CGRect.zero
+            }
+            self.buttonPrevPin.frame = CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
+            self.btnNextPin.frame = CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
+        }
         UIView.animate(withDuration: 0.5, animations: ({
             self.subviewNavigation.center.y -= screenHeight
             self.tableCommentsForPin.center.y -= screenHeight
@@ -244,10 +252,8 @@ extension PinDetailViewController {
             if PinDetailViewController.pinTypeEnum != .place {
                 self.uiviewFeelingBar.alpha = 0
             }
-        }), completion: { (done: Bool) in
-            if done {
-                self.dismiss(animated: false, completion: nil)
-            }
+        }), completion: { (finished) in
+            self.dismiss(animated: false, completion: nil)
         })
     }
     

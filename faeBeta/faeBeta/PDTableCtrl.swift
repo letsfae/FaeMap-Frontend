@@ -73,17 +73,14 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
         } else if tableMode == .feelings {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdFeelingCell", for: indexPath) as! PDFeelingCell
             cell.delegate = self
-            cell.img_01.label.text = "\(self.feelingArray[0])"
-            cell.img_02.label.text = "\(self.feelingArray[1])"
-            cell.img_03.label.text = "\(self.feelingArray[2])"
-            cell.img_04.label.text = "\(self.feelingArray[3])"
-            cell.img_05.label.text = "\(self.feelingArray[4])"
-            cell.img_06.label.text = "\(self.feelingArray[5])"
-            cell.img_07.label.text = "\(self.feelingArray[6])"
-            cell.img_08.label.text = "\(self.feelingArray[7])"
-            cell.img_09.label.text = "\(self.feelingArray[8])"
-            cell.img_10.label.text = "\(self.feelingArray[9])"
-            cell.img_11.label.text = "\(self.feelingArray[10])"
+            for i in 0..<11 {
+                cell.imgArray[i].label.text = "\(self.feelingArray[i])"
+                if i == self.chosenFeeling {
+                    cell.imgArray[i].avatar.isHidden = false
+                } else {
+                    cell.imgArray[i].avatar.isHidden = true
+                }
+            }
             return cell
         } else if tableMode == .people {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDUserInfoCell
