@@ -202,6 +202,7 @@ extension PinDetailViewController {
         textViewInput.showsVerticalScrollIndicator = false
         textViewInput.autocorrectionType = .no
         textViewInput.autocapitalizationType = .none
+        textViewInput.layoutManager.allowsNonContiguousLayout = false
         uiviewToolBar.addSubview(textViewInput)
         
         lblTxtPlaceholder = UILabel()
@@ -574,7 +575,7 @@ extension PinDetailViewController {
         
         // Back to Map
         buttonPinBackToMap = UIButton()
-        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
+        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailFullToHalf"), for: .normal)
         buttonPinBackToMap.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
         subviewNavigation.addSubview(buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonPinBackToMap)
@@ -583,12 +584,12 @@ extension PinDetailViewController {
         buttonPinBackToMap.tag = 1
         
         // Back to Comment Pin List
-        btnToPinList = UIButton()
-        btnToPinList.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
-        btnToPinList.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(btnToPinList)
-        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnToPinList)
-        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnToPinList)
+        btnHalfPinToMap = UIButton()
+        btnHalfPinToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
+        btnHalfPinToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnHalfPinToMap)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnHalfPinToMap)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnHalfPinToMap)
         
         // Comment Pin Option
         btnShowOptions = UIButton()

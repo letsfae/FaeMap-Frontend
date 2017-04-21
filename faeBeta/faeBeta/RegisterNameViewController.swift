@@ -160,7 +160,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
-            cell.setSubTitleLabelText("Enter your Full Name")
+            cell.setSubTitleLabelText("What’s your Name?")
             return cell
         case 2:
             if firstNameTableViewCell == nil {

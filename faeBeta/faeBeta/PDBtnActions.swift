@@ -263,7 +263,7 @@ extension PinDetailViewController {
             textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.5, animations: ({
-                self.btnToPinList.alpha = 1.0
+                self.btnHalfPinToMap.alpha = 1.0
                 self.buttonPinBackToMap.alpha = 0.0
                 self.draggingButtonSubview.frame.origin.y = 292
                 self.tableCommentsForPin.scrollToTop(animated: true)
@@ -337,7 +337,7 @@ extension PinDetailViewController {
             
         }
         UIView.animate(withDuration: 0.5, animations: ({
-            self.btnToPinList.alpha = 0.0
+            self.btnHalfPinToMap.alpha = 0.0
             self.buttonPinBackToMap.alpha = 1.0
             var toolbarHeight = self.uiviewToolBar.frame.size.height
             if PinDetailViewController.pinTypeEnum == .chat_room {

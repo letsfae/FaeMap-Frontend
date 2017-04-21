@@ -154,16 +154,16 @@ extension FaeMapViewController {
         
         avatarBaseView = UIView(frame: startFrame)
         avatarBaseView.layer.anchorPoint = nameCardAnchor
-        avatarBaseView.backgroundColor = UIColor.clear
+        avatarBaseView.backgroundColor = UIColor.white
         avatarBaseView.layer.cornerRadius = 37
         avatarBaseView.layer.borderColor = UIColor.white.cgColor
         avatarBaseView.layer.borderWidth = 6
         avatarBaseView.layer.shadowColor = UIColor.gray.cgColor
         avatarBaseView.layer.shadowOffset = CGSize.zero
-        avatarBaseView.layer.shadowOpacity = 0.75
-        avatarBaseView.layer.shadowRadius = 3
-        avatarBaseView.clipsToBounds = true
+        avatarBaseView.layer.shadowOpacity = 0.5
+        avatarBaseView.layer.shadowRadius = 6
         avatarBaseView.layer.zPosition = 904
+        
         self.view.addSubview(avatarBaseView)
         
         imageAvatarNameCard = UIImageView(frame: startFrame)
@@ -384,7 +384,7 @@ extension FaeMapViewController {
         let firstButtonX: CGFloat = 103 / 414 * screenWidth
         let secondButtonX: CGFloat = 172 / 414 * screenWidth
         let buttonY: CGFloat = 191 / 414 * screenWidth
-        let buttonWidth: CGFloat = 44 / 414 * screenWidth
+        let buttonWidth: CGFloat = 50 / 414 * screenWidth
         let buttonHeight: CGFloat = 51 / 414 * screenWidth
         
         btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
@@ -394,25 +394,25 @@ extension FaeMapViewController {
         self.btnCloseNameCardOptions.addSubview(nameCardMoreOptions)
         
         shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-        shareNameCard.setImage(#imageLiteral(resourceName: "buttonShareOnCommentDetail"), for: .normal)
+        shareNameCard.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(shareNameCard)
         shareNameCard.clipsToBounds = true
         shareNameCard.alpha = 0.0
 //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
         
         editNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-        editNameCard.setImage(#imageLiteral(resourceName: "buttonEditOnCommentDetail"), for: .normal)
+        editNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(editNameCard)
         editNameCard.clipsToBounds = true
         editNameCard.alpha = 0.0
 //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
         
         reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-        reportNameCard.setImage(#imageLiteral(resourceName: "buttonReportOnCommentDetail"), for: .normal)
+        reportNameCard.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(reportNameCard)
         reportNameCard.clipsToBounds = true
         reportNameCard.alpha = 0.0
-//        reportNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionReportThisPin(_:)), for: .touchUpInside)
+        reportNameCard.addTarget(self, action: #selector(self.actionReportThisPin(_:)), for: .touchUpInside)
         
         UIView.animate(withDuration: 0.3, animations: ({
             self.nameCardMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, width: subviewWidthAfter, height: subviewHeightAfter)

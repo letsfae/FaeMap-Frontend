@@ -82,4 +82,11 @@ extension FaeMapViewController {
         // check if the user's logged in the backendless
         self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }
+    
+    func actionReportThisPin(_ sender: UIButton) {
+        hideNameCard(btnTransparentClose)
+        let reportPinVC = ReportCommentPinViewController()
+        reportPinVC.reportType = 0
+        self.present(reportPinVC, animated: true, completion: nil)
+    }
 }

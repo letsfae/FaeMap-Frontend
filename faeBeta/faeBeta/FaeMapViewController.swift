@@ -178,11 +178,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         animateMapFilterArrow()
         filterCircleAnimation()
         checkDisplayNameExisitency()
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-//        checkFirstLoginInRealm()
         updateGenderAge()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

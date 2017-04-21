@@ -183,9 +183,6 @@ extension PinDetailViewController {
     func actionReportThisPin(_ sender: UIButton) {
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
-        if PinDetailViewController.pinTypeEnum == .place {
-            reportPinVC.isPlacePin = true
-        }
         self.isKeyboardInThisView = false
         self.present(reportPinVC, animated: true, completion: nil)
         actionToCloseOtherViews(btnTransparentClose)

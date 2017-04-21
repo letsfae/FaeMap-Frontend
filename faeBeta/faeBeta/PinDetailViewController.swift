@@ -100,7 +100,7 @@ class PinDetailViewController: UIViewController {
     var btnOptionDelete: UIButton! // Pin options
     var btnOptionEdit: UIButton! // Pin options
     var btnShowOptions: UIButton!
-    var btnToPinList: UIButton!
+    var btnHalfPinToMap: UIButton!
     var btnTransparentClose: UIButton! // Fake Transparent View For Closing
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
@@ -219,14 +219,13 @@ class PinDetailViewController: UIViewController {
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
+        initPinBasicInfo()
         if PinDetailViewController.pinTypeEnum == .place {
             loadPlaceDetail()
-            initPinBasicInfo()
             pinIcon.frame.size.width = 48
             pinIcon.center.x = screenWidth / 2
             pinIcon.center.y = 507 * screenHeightFactor
             UIApplication.shared.statusBarStyle = .lightContent
-            
         } else {
             checkPinStatus()
             addObservers()

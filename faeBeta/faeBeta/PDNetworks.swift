@@ -14,7 +14,6 @@ import RealmSwift
 extension PinDetailViewController {
     
     func getPinInfo() {
-        self.btnToPinList.isEnabled = false
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
@@ -127,16 +126,18 @@ extension PinDetailViewController {
                 return
             }
             
-            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
-            
-            if sender.tag < 5 {
-                let xOffset = Int(sender.tag * 52 + 12)
-                self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
-            }
+            UIView.animate(withDuration: 0.2, animations: {
+                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+                
+                if sender.tag < 5 {
+                    let xOffset = Int(sender.tag * 52 + 12)
+                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                }
+            })
             
             let getPinById = FaeMap()
             getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
