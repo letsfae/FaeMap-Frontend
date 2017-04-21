@@ -218,7 +218,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         print("Your choice is \(arrPinData[indexPath.section])")
     }
     
-    
     // PinTableViewCellDelegate protocol required function
     func itemSwiped(indexCell: Int){}
 
@@ -233,9 +232,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){}
     
     func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String){}
-    
-    
-    
 
 }
 

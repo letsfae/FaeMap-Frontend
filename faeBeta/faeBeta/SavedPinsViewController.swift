@@ -12,7 +12,6 @@ import UIKit.UIGestureRecognizerSubclass
 //import SDWebImage
 //import RealmSwift
 
-
 class SavedPinsViewController: PinsViewController, UITableViewDataSource{
     
     // get the Saved Pins
@@ -85,8 +84,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
             }
         }
     }
-
-    
     
     override func loadtblPinsData(){
         super.loadtblPinsData()
