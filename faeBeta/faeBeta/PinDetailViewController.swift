@@ -262,6 +262,16 @@ class PinDetailViewController: UIViewController {
                 self.delegate?.changeIconImage(marker: PinDetailViewController.pinMarker, type: "\(PinDetailViewController.pinTypeEnum)", status: PinDetailViewController.pinStatus)
             }
         })
+        if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
+            UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                self.uiviewFeelingBar.frame = CGRect(x: (screenWidth-281)/2, y: 409*screenHeightFactor, width: 281*screenWidthFactor, height: 52*screenWidthFactor)
+                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+            }, completion: nil)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

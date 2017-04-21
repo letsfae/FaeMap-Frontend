@@ -41,7 +41,7 @@ extension PinDetailViewController {
             // Has posted feeling or not
             if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
                 self.chosenFeeling = chosenFeel
-                if chosenFeel < 5 {
+                if chosenFeel < 5 && chosenFeel >= 0 {
                     let xOffset = Int(chosenFeel * 52 + 12)
                     self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
                 }
@@ -117,8 +117,9 @@ extension PinDetailViewController {
             chosenFeeling = -1
             return
         }
-        
+        print("[postFeeling] pre self.chosenFeeling", chosenFeeling)
         chosenFeeling = sender.tag
+        print("[postFeeling] aft self.chosenFeeling", chosenFeeling)
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: "\(sender.tag)")
         postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
@@ -158,6 +159,13 @@ extension PinDetailViewController {
     }
     
     func deleteFeeling() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+        })
         let deleteFeeling = FaePinAction()
         deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
@@ -176,11 +184,6 @@ extension PinDetailViewController {
                 if self.tableMode == .feelings {
                     self.tableCommentsForPin.reloadData()
                 }
-                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
                 self.loadFeelingQuickView()
             }
         }

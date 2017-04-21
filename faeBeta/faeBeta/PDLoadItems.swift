@@ -133,54 +133,36 @@ extension PinDetailViewController {
     }
     
     fileprivate func loadFeelingBar() {
-        uiviewFeelingBar = UIView()
+        let feelingBarAnchor = CGPoint(x: screenWidth/2, y: 461*screenHeightFactor)
+        
+        uiviewFeelingBar = UIView(frame: CGRect(x: screenWidth/2, y: 461*screenHeightFactor, width: 0, height: 0))
         self.view.addSubview(uiviewFeelingBar)
-        view.addConstraintsWithFormat("H:|-67-[v0(281)]", options: [], views: uiviewFeelingBar)
-        view.addConstraintsWithFormat("V:|-(\(409 * screenHeightFactor))-[v0(52)]", options: [], views: uiviewFeelingBar)
+        uiviewFeelingBar.layer.anchorPoint = feelingBarAnchor
         uiviewFeelingBar.layer.cornerRadius = 26
         uiviewFeelingBar.backgroundColor = UIColor.white
         uiviewFeelingBar.alpha = 0
         
         btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_01)
-        btnFeelingBar_01.setImage(#imageLiteral(resourceName: "pdFeeling_01"), for: .normal)
-        btnFeelingBar_01.adjustsImageWhenHighlighted = false
-        btnFeelingBar_01.tag = 0
-        btnFeelingBar_01.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_02)
-        btnFeelingBar_02.setImage(#imageLiteral(resourceName: "pdFeeling_02"), for: .normal)
-        btnFeelingBar_02.adjustsImageWhenHighlighted = false
-        btnFeelingBar_02.tag = 1
-        btnFeelingBar_02.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_03)
-        btnFeelingBar_03.setImage(#imageLiteral(resourceName: "pdFeeling_03"), for: .normal)
-        btnFeelingBar_03.adjustsImageWhenHighlighted = false
-        btnFeelingBar_03.tag = 2
-        btnFeelingBar_03.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_04 = UIButton(frame: CGRect(x: 176, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_04)
-        btnFeelingBar_04.setImage(#imageLiteral(resourceName: "pdFeeling_04"), for: .normal)
-        btnFeelingBar_04.adjustsImageWhenHighlighted = false
-        btnFeelingBar_04.tag = 3
-        btnFeelingBar_04.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_05 = UIButton(frame: CGRect(x: 228, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_05)
-        btnFeelingBar_05.setImage(#imageLiteral(resourceName: "pdFeeling_05"), for: .normal)
-        btnFeelingBar_05.adjustsImageWhenHighlighted = false
-        btnFeelingBar_05.tag = 4
-        btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingArray.append(btnFeelingBar_01)
         btnFeelingArray.append(btnFeelingBar_02)
         btnFeelingArray.append(btnFeelingBar_03)
         btnFeelingArray.append(btnFeelingBar_04)
         btnFeelingArray.append(btnFeelingBar_05)
+        
+        for i in 0..<btnFeelingArray.count {
+            btnFeelingArray[i].frame = CGRect.zero
+            uiviewFeelingBar.addSubview(btnFeelingArray[i])
+            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i+1)"), for: .normal)
+            btnFeelingArray[i].adjustsImageWhenHighlighted = false
+            btnFeelingArray[i].tag = i
+            btnFeelingArray[i].layer.anchorPoint = feelingBarAnchor
+            btnFeelingArray[i].addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        }
     }
     
     fileprivate func loadInputToolBar() {

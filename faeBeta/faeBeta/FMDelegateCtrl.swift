@@ -40,9 +40,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
             self.updateUnreadChatIndicator()
             self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
-        }, completion: {(finished) in
-            
-        })
+        }, completion: nil)
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
