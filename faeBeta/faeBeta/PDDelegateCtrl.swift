@@ -103,18 +103,6 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             showActionSheetWithTimer()
         }
         boolKeyboardShowed = false
-//        if touchToReplyTimer != nil {
-//            touchToReplyTimer.invalidate()
-//        }
-//        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false) 
-    }
-    
-    func cancelTouchToReplyTimerFromPinCell() {
-        textViewInput.resignFirstResponder()
-        boolKeyboardShowed = false
-        if touchToReplyTimer != nil {
-            touchToReplyTimer.invalidate()
-        }
     }
     
     func showActionSheetWithTimer() {

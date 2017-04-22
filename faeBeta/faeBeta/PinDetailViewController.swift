@@ -178,7 +178,6 @@ class PinDetailViewController: UIViewController {
     var textviewPinDetail: UITextView!
     var thisIsMyPin = false // Check if this pin belongs to current user
     var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     var uiviewAnonymous: UIView!
     var uiviewFeeling: UIView!
     var uiviewFeelingBar: UIView!

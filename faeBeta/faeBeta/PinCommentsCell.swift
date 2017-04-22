@@ -12,7 +12,6 @@ import SwiftyJSON
 protocol PinCommentsCellDelegate: class {
     func directReplyFromPinCell(_ username: String) // Reply to this user
     func showActionSheetFromPinCell(_ username: String)
-    func cancelTouchToReplyTimerFromPinCell() // CancelTimerForTouchingCell
 }
 
 class PinCommentsCell: UITableViewCell {
@@ -51,7 +50,6 @@ class PinCommentsCell: UITableViewCell {
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewCell)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewCell)
         uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
-//        uiviewCell.addTarget(self, action: #selector(self.cancelActionSheet(_:)), for: [.touchUpInside, .touchUpOutside])
         
         imgAvatar = UIImageView()
         addSubview(imgAvatar)
@@ -129,10 +127,6 @@ class PinCommentsCell: UITableViewCell {
         if let username = lblUsername.text {
             delegate?.showActionSheetFromPinCell(username)
         }
-    }
-    
-    func cancelActionSheet(_ sender: UIButton) {
-        delegate?.cancelTouchToReplyTimerFromPinCell()
     }
     
     func upVoteThisComment(_ sender: UIButton) {
