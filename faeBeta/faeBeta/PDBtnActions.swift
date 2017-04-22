@@ -56,6 +56,7 @@ extension PinDetailViewController {
     func endEdit() {
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
+        boolKeyboardShowed = false
         self.emojiView.tag = 0
         if buttonPinAddComment.tag == 1 || buttonPinDetailDragToLargeSize.tag == 1 {
             UIView.animate(withDuration: 0.3) {
@@ -111,14 +112,17 @@ extension PinDetailViewController {
     func actionSwitchKeyboard(_ sender: UIButton) {
         if emojiView.tag == 1 {
             textViewInput.becomeFirstResponder()
+            boolKeyboardShowed = true
             actionHideEmojiView()
         } else {
             textViewInput.resignFirstResponder()
+            boolKeyboardShowed = false
             actionShowEmojiView()
         }
     }
     
     private func actionShowEmojiView() {
+        boolStickerShowed = true
         buttonSticker.setImage(#imageLiteral(resourceName: "stickerChosen"), for: .normal)
         self.emojiView.tag = 1
         self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
@@ -130,6 +134,7 @@ extension PinDetailViewController {
     }
     
     func actionHideEmojiView() {
+        boolStickerShowed = false
         buttonSticker.setImage(#imageLiteral(resourceName: "sticker"), for: .normal)
         self.emojiView.tag = 0
         UIView.animate(withDuration: 0.3) {
@@ -301,6 +306,7 @@ extension PinDetailViewController {
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         if buttonPinDetailDragToLargeSize.tag == 1 && sender == buttonPinAddComment {
             self.textViewInput.becomeFirstResponder()
+            boolKeyboardShowed = true
             return
         }
         readThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
@@ -359,6 +365,7 @@ extension PinDetailViewController {
                     self.tableCommentsForPin.reloadData()
                     if sender == self.buttonPinAddComment {
                         self.textViewInput.becomeFirstResponder()
+                        self.boolKeyboardShowed = true
                     }
                 }
             }

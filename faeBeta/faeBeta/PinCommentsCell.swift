@@ -50,8 +50,8 @@ class PinCommentsCell: UITableViewCell {
         addSubview(uiviewCell)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewCell)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewCell)
-        uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
-        uiviewCell.addTarget(self, action: #selector(self.cancelActionSheet(_:)), for: [.touchUpInside, .touchUpOutside])
+        uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
+//        uiviewCell.addTarget(self, action: #selector(self.cancelActionSheet(_:)), for: [.touchUpInside, .touchUpOutside])
         
         imgAvatar = UIImageView()
         addSubview(imgAvatar)

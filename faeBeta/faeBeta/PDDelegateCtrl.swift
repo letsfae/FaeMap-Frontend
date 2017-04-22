@@ -94,18 +94,24 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.replyToUser = "<a>@\(username)</a> "
         self.lblTxtPlaceholder.text = "@\(username):"
         textViewInput.becomeFirstResponder()
+        boolKeyboardShowed = true
     }
     
     func showActionSheetFromPinCell(_ username: String) {
         textViewInput.resignFirstResponder()
-        if touchToReplyTimer != nil {
-            touchToReplyTimer.invalidate()
+        if !boolKeyboardShowed && !boolStickerShowed {
+            showActionSheetWithTimer()
         }
-        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false) 
+        boolKeyboardShowed = false
+//        if touchToReplyTimer != nil {
+//            touchToReplyTimer.invalidate()
+//        }
+//        touchToReplyTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(self.showActionSheetWithTimer), userInfo: nil, repeats: false) 
     }
     
     func cancelTouchToReplyTimerFromPinCell() {
         textViewInput.resignFirstResponder()
+        boolKeyboardShowed = false
         if touchToReplyTimer != nil {
             touchToReplyTimer.invalidate()
         }
@@ -118,6 +124,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
             self.lblTxtPlaceholder.text = "@\(String(describing: username))"
             self.textViewInput.becomeFirstResponder()
+            self.boolKeyboardShowed = true
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
             self.actionReportThisPin(self.buttonReportOnPinDetail)

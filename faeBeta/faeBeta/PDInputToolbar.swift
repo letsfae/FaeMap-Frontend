@@ -65,7 +65,7 @@ extension PinDetailViewController {
     }
     
     func keyboardDidShow(_ notification: Notification){
-        
+        boolKeyboardShowed = true
     }
     
     func keyboardWillHide(_ notification: Notification) {
@@ -86,6 +86,6 @@ extension PinDetailViewController {
     }
     
     func keyboardDidHide(_ notification: Notification){
-        
+        boolKeyboardShowed = false
     }
 }

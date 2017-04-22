@@ -127,7 +127,7 @@ class PDFeelingItem: UIButton {
         
         avatar = UIImageView(frame: CGRect(x: 27, y: 25, width: 20, height: 20))
         avatar.clipsToBounds = true
-        avatar.contentMode = .scaleAspectFit
+        avatar.contentMode = .scaleAspectFill
         avatar.layer.cornerRadius = 10
         addSubview(avatar)
         avatar.backgroundColor = UIColor.faeAppRedColor()

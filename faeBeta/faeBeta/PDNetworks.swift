@@ -14,6 +14,13 @@ import RealmSwift
 extension PinDetailViewController {
     
     func getPinInfo() {
+        
+        if user_id != nil {
+            let stringHeaderURL = "\(baseURL)/files/users/\(Int(user_id))/avatar"
+            imgCurUserAvatar = UIImageView()
+            imgCurUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
+        }
+        
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)

@@ -212,6 +212,9 @@ class PinDetailViewController: UIViewController {
     var uiviewChatSpotLine: UIView!
     var uiviewChatSpotLineFirstBottom: UIView!
     var lblPeopleCount: UILabel!
+    var imgCurUserAvatar: UIImageView!
+    var boolKeyboardShowed = false
+    var boolStickerShowed = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

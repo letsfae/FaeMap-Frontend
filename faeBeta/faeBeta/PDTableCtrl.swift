@@ -77,6 +77,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.imgArray[i].label.text = "\(self.feelingArray[i])"
                 if i == self.chosenFeeling {
                     cell.imgArray[i].avatar.isHidden = false
+                    cell.imgArray[i].avatar.image = self.imgCurUserAvatar.image
                 } else {
                     cell.imgArray[i].avatar.isHidden = true
                 }
