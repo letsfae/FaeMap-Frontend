@@ -71,9 +71,9 @@ class PDFeelingCell: UITableViewCell {
         
         for i in 0..<11 {
             if i >= 9 {
-                imgArray[i].image.image = UIImage(named: "pdFeeling_\(i+1)")
+                imgArray[i].image.image = UIImage(named: "pdFeeling_\(i+1)-1")
             } else {
-                imgArray[i].image.image = UIImage(named: "pdFeeling_0\(i+1)")
+                imgArray[i].image.image = UIImage(named: "pdFeeling_0\(i+1)-1")
             }
             addSubview(imgArray[i])
             imgArray[i].tag = i
@@ -115,7 +115,6 @@ class PDFeelingItem: UIButton {
         image = UIImageView(frame: CGRect(x: 0, y: 0, width: 46, height: 46))
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFit
-        image.image = #imageLiteral(resourceName: "pdFeeling_01")
         addSubview(image)
         
         label = UILabel(frame: CGRect(x: 0, y: 46, width: 46, height: 20))

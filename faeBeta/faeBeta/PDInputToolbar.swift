@@ -62,6 +62,9 @@ extension PinDetailViewController {
         }, completion: {(done: Bool) in
             
         })
+        if !directReplyFromUser {
+            tableCommentsForPin.setContentOffset(CGPoint(x: 0, y: uiviewPinDetail.frame.size.height - 42), animated: false)
+        }
     }
     
     func keyboardDidShow(_ notification: Notification){

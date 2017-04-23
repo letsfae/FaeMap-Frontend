@@ -67,6 +67,13 @@ class PinDetailViewController: UIViewController {
             }
         }
     }
+    var keyboardHeight: CGFloat = 0 {
+        didSet {
+            if uiviewToolBar != nil {
+                PDEmptyCell.padding = screenHeight - keyboardHeight - uiviewToolBar.frame.size.height - 189
+            }
+        }
+    }
     
     weak var delegate: PinDetailDelegate? // Delegate of this class
     static var pinMarker = GMSMarker()
@@ -136,7 +143,6 @@ class PinDetailViewController: UIViewController {
     var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
     var isSavedByMe = false
     var isUpVoting = false // Like Function
-    var keyboardHeight: CGFloat = 0
     var labelPinCommentsCount: UILabel!
     var labelPinDetailViewComments: UILabel!
     var labelPinDetailViewFeelings: UILabel!
@@ -214,6 +220,7 @@ class PinDetailViewController: UIViewController {
     var imgCurUserAvatar: UIImageView!
     var boolKeyboardShowed = false
     var boolStickerShowed = false
+    var directReplyFromUser = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -264,18 +271,37 @@ class PinDetailViewController: UIViewController {
                 self.delegate?.changeIconImage(marker: PinDetailViewController.pinMarker, type: "\(PinDetailViewController.pinTypeEnum)", status: PinDetailViewController.pinStatus)
             }
         })
-        if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
-            UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
                 self.uiviewFeelingBar.frame = CGRect(x: (screenWidth-281)/2, y: 409*screenHeightFactor, width: 281*screenWidthFactor, height: 52*screenWidthFactor)
                 let yAxis = 11 * screenHeightFactor
                 let width = 32 * screenHeightFactor
                 for i in 0..<self.btnFeelingArray.count {
                     self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
                 }
-                self.buttonPrevPin.frame = CGRect(x: 15*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
-                self.btnNextPin.frame = CGRect(x: 347*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
-            }, completion: nil)
-        }
+            }
+            self.buttonPrevPin.frame = CGRect(x: 15*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
+            self.btnNextPin.frame = CGRect(x: 347*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
+        }, completion: {(finished) in
+            if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
+                let getPinById = FaeMap()
+                getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+                    let pinInfoJSON = JSON(message!)
+                    // Has posted feeling or not
+                    if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
+                        self.chosenFeeling = chosenFeel
+                        if chosenFeel < 5 && chosenFeel >= 0 {
+                            UIView.animate(withDuration: 0.2, animations: {
+                                let xOffset = Int(chosenFeel * 52 + 12)
+                                self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                            })
+                        }
+                    } else {
+                        self.chosenFeeling = -1
+                    }
+                }
+            }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {

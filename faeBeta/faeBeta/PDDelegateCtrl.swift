@@ -90,38 +90,63 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
     }
     
-    func directReplyFromPinCell(_ username: String) {
+    func directReplyFromPinCell(_ username: String, index: IndexPath) {
         self.replyToUser = "<a>@\(username)</a> "
         self.lblTxtPlaceholder.text = "@\(username):"
         textViewInput.becomeFirstResponder()
+        directReplyFromUser = true
         boolKeyboardShowed = true
+        tableCommentsForPin.scrollToRow(at: index, at: .bottom, animated: true)
     }
     
-    func showActionSheetFromPinCell(_ username: String) {
+    func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath) {
         textViewInput.resignFirstResponder()
         if !boolKeyboardShowed && !boolStickerShowed {
-            showActionSheetWithTimer()
+            showActionSheet(name: username, userid: userid, index: index)
         }
         boolKeyboardShowed = false
     }
     
-    func showActionSheetWithTimer() {
-        self.replyToUser = "<a>@\(String(describing: username))</a> "
+    func showActionSheet(name: String, userid: Int, index: IndexPath) {
+        self.replyToUser = "<a>@\(name)</a> "
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.lblTxtPlaceholder.text = "@\(String(describing: username))"
+            self.lblTxtPlaceholder.text = "@\(name)"
             self.textViewInput.becomeFirstResponder()
+            self.directReplyFromUser = true
             self.boolKeyboardShowed = true
+            self.tableCommentsForPin.scrollToRow(at: index, at: .bottom, animated: true)
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
-            self.actionReportThisPin(self.buttonReportOnPinDetail)
+            self.actionReportThisPin()
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
+        let delete = UIAlertAction(title: "Delete", style: .default) { (alert: UIAlertAction) in
+            let deletePinComment = FaePinAction()
+            let pinCommentID = self.pinComments[index.row].commentId
+            deletePinComment.uncommentThisPin(pinCommentID: "\(pinCommentID)", completion: { (status, message) in
+                if status / 100 == 2 {
+                    print("[Delete Pin Comment] Success")
+                }
+            })
+            self.pinComments.remove(at: index.row)
+            self.tableCommentsForPin.reloadData()
             
         }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
+            self.replyToUser = ""
+            self.lblTxtPlaceholder.text = "Write a Comment..."
+        }
         menu.addAction(writeReply)
-        menu.addAction(report)
+        if let currentUserID = user_id as? Int {
+            if currentUserID == userid {
+                menu.addAction(delete)
+            } else {
+                menu.addAction(report)
+            }
+        } else {
+            menu.addAction(report)
+        }
         menu.addAction(cancel)
         self.present(menu, animated: true, completion: nil)
     }

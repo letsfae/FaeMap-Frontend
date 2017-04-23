@@ -72,7 +72,6 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath) {
         OpenedPlaces.openedPlaces.remove(at: indexPath.row)
-        self.tableOpenedPin.deleteRows(at: [indexPath], with: .fade)
         if buttonCommentPinListDragToLargeSize.tag == 1 {
             self.tableOpenedPin.frame.size.height = screenHeight - 92
         } else if OpenedPlaces.openedPlaces.count <= 3 {

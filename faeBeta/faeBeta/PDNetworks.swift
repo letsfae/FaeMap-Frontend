@@ -46,17 +46,17 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.reloadData()
             }
             // Has posted feeling or not
-            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
-                self.chosenFeeling = chosenFeel
-                if chosenFeel < 5 && chosenFeel >= 0 {
-                    UIView.animate(withDuration: 0.2, animations: { 
-                        let xOffset = Int(chosenFeel * 52 + 12)
-                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
-                    })
-                }
-            } else {
-                self.chosenFeeling = -1
-            }
+//            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
+//                self.chosenFeeling = chosenFeel
+//                if chosenFeel < 5 && chosenFeel >= 0 {
+//                    UIView.animate(withDuration: 0.2, animations: { 
+//                        let xOffset = Int(chosenFeel * 52 + 12)
+//                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+//                    })
+//                }
+//            } else {
+//                self.chosenFeeling = -1
+//            }
             self.loadFeelingQuickView()
             
             // Images
@@ -160,6 +160,8 @@ extension PinDetailViewController {
                 }
                 if self.tableMode == .feelings {
                     self.tableCommentsForPin.reloadData()
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
                 }
                 self.loadFeelingQuickView()
             }
@@ -212,9 +214,9 @@ extension PinDetailViewController {
                 let offset = count * 30
                 let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
                 if i+1 < 10 {
-                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)")
+                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)-1")
                 } else {
-                    feeling.image = UIImage(named: "pdFeeling_\(i+1)")
+                    feeling.image = UIImage(named: "pdFeeling_\(i+1)-1")
                 }
                 uiviewFeeling.addSubview(feeling)
                 count += 1

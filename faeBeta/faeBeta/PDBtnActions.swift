@@ -33,13 +33,18 @@ extension PinDetailViewController {
     func animationRedSlidingLine(_ sender: UIButton) {
         if sender.tag == 1 {
             tableMode = .talktalk
+            tableCommentsForPin.reloadData()
         } else if sender.tag == 3 {
             tableMode = .feelings
+            tableCommentsForPin.reloadData()
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
         } else if sender.tag == 5 {
             tableMode = .people
+            tableCommentsForPin.reloadData()
+            tableCommentsForPin.contentOffset.y = 0
         }
         endEdit()
-        tableCommentsForPin.reloadData()
         let tag = CGFloat(sender.tag)
         let centerAtOneSix = screenWidth / 6
         let targetCenter = CGFloat(tag * centerAtOneSix)
@@ -112,6 +117,7 @@ extension PinDetailViewController {
     func actionSwitchKeyboard(_ sender: UIButton) {
         if emojiView.tag == 1 {
             textViewInput.becomeFirstResponder()
+            directReplyFromUser = false
             boolKeyboardShowed = true
             actionHideEmojiView()
         } else {
@@ -121,15 +127,15 @@ extension PinDetailViewController {
         }
     }
     
-    private func actionShowEmojiView() {
+    fileprivate func actionShowEmojiView() {
         boolStickerShowed = true
         buttonSticker.setImage(#imageLiteral(resourceName: "stickerChosen"), for: .normal)
         self.emojiView.tag = 1
-        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
         UIView.animate(withDuration: 0.3) { 
             self.emojiView.frame.origin.y = screenHeight - 271
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - self.uiviewToolBar.frame.size.height - 271
             self.draggingButtonSubview.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
+            self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height - 271
         }
     }
     
@@ -234,13 +240,15 @@ extension PinDetailViewController {
         endEdit()
         controlBoard.removeFromSuperview()
         self.delegate?.backToMainMap()
-        UIView.animate(withDuration: 0.2) { 
-            self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 461*screenHeightFactor, width: 0, height: 0)
-            for btn in self.btnFeelingArray {
-                btn.frame = CGRect.zero
+        if PinDetailViewController.pinTypeEnum != .place {
+            UIView.animate(withDuration: 0.2) {
+                self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 461*screenHeightFactor, width: 0, height: 0)
+                for btn in self.btnFeelingArray {
+                    btn.frame = CGRect.zero
+                }
+                self.buttonPrevPin.frame = CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
+                self.btnNextPin.frame = CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
             }
-            self.buttonPrevPin.frame = CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
-            self.btnNextPin.frame = CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
         }
         UIView.animate(withDuration: 0.5, animations: ({
             self.subviewNavigation.center.y -= screenHeight
@@ -264,14 +272,13 @@ extension PinDetailViewController {
     
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
-        if sender.tag == 1 {
+        if sender.tag == 1 && sender != buttonPinAddComment {
             replyToUser = ""
             lblTxtPlaceholder.text = "Write a Comment..."
             endEdit()
             buttonPinDetailDragToLargeSize.tag = 0
             buttonPinAddComment.tag = 0
             buttonPinBackToMap.tag = 1
-            textviewPinDetail.isScrollEnabled = true
             tableCommentsForPin.isScrollEnabled = false
             UIView.animate(withDuration: 0.5, animations: ({
                 self.btnHalfPinToMap.alpha = 1.0
@@ -281,12 +288,13 @@ extension PinDetailViewController {
                 self.tableCommentsForPin.frame.size.height = 227
                 self.subviewTable.frame.size.height = 255
                 self.uiviewPinDetail.frame.size.height = 281
-                self.textviewPinDetail.frame.size.height = self.textViewOriginalHeight
+                self.textviewPinDetail.frame.size.height = 100
                 self.uiviewPinDetailMainButtons.frame.origin.y = 185
                 self.uiviewPinDetailGrayBlock.frame.origin.y = 227
                 self.uiviewPinDetailThreeButtons.frame.origin.y = 232
                 self.uiviewToolBar.frame.origin.y = screenHeight
-            }), completion: { (done: Bool) in
+            }), completion: {(finished) in
+                self.textviewPinDetail.isScrollEnabled = true
             })
             // deal with diff UI according to pinType
             if PinDetailViewController.pinTypeEnum == .media {
@@ -302,20 +310,33 @@ extension PinDetailViewController {
             }
             return
         }
+        
+        
+        if sender.tag == 1 && sender == buttonPinAddComment {
+            self.textViewInput.becomeFirstResponder()
+            self.directReplyFromUser = false
+            self.boolKeyboardShowed = true
+            self.replyToUser = ""
+            self.lblTxtPlaceholder.text = "Write a Comment..."
+            return
+        }
         sender.tag = 1
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         if buttonPinDetailDragToLargeSize.tag == 1 && sender == buttonPinAddComment {
             self.textViewInput.becomeFirstResponder()
+            self.directReplyFromUser = false
             boolKeyboardShowed = true
+            self.replyToUser = ""
+            self.lblTxtPlaceholder.text = "Write a Comment..."
             return
         }
         readThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
+//        tableCommentsForPin.contentSize.height = self.uiviewPinDetail.frame.size.height + screenHeight - 65 - self.uiviewToolBar.frame.size.height
         if PinDetailViewController.pinTypeEnum == .media {
             mediaMode = .large
             zoomMedia(.large)
-            textviewPinDetail.frame.size.height = textViewOriginalHeight
             textviewPinDetail.isHidden = false
             UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewPinDetail.frame.size.height += 65
@@ -335,18 +356,18 @@ extension PinDetailViewController {
             self.scrollViewMedia.scrollToLeft(animated: true)
         }
         else if PinDetailViewController.pinTypeEnum == .comment {
-            let numLines = Int(textviewPinDetail.contentSize.height / textviewPinDetail.font!.lineHeight)
-            if numLines > 4 {
-                let diffHeight: CGFloat = textviewPinDetail.contentSize.height - textviewPinDetail.frame.size.height
+            if textViewHeight > 100.0 {
+                let diffHeight: CGFloat = textViewHeight - 100
                 UIView.animate(withDuration: 0.5, animations: ({
                     self.uiviewPinDetail.frame.size.height += diffHeight
                     self.textviewPinDetail.frame.size.height += diffHeight
                     self.uiviewPinDetailThreeButtons.center.y += diffHeight
                     self.uiviewPinDetailGrayBlock.center.y += diffHeight
                     self.uiviewPinDetailMainButtons.center.y += diffHeight
-                }), completion: nil)
+                }), completion: {(finished) in
+                    
+                })
             }
-            
         }
         UIView.animate(withDuration: 0.5, animations: ({
             self.btnHalfPinToMap.alpha = 0.0
@@ -365,6 +386,7 @@ extension PinDetailViewController {
                     self.tableCommentsForPin.reloadData()
                     if sender == self.buttonPinAddComment {
                         self.textViewInput.becomeFirstResponder()
+                        self.directReplyFromUser = false
                         self.boolKeyboardShowed = true
                     }
                 }

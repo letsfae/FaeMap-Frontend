@@ -10,7 +10,7 @@ import UIKit
 
 extension PinDetailViewController {
     // Close more options button when it is open, the subview is under it
-    func actionToCloseOtherViews(_ sender: UIButton) {
+    func actionToCloseOtherViews() {
         if optionsExpanded == true {
             hidePinMoreButtonDetails()
         }
@@ -27,7 +27,7 @@ extension PinDetailViewController {
             btnTransparentClose.layer.zPosition = 110
             self.view.addSubview(btnTransparentClose)
             btnTransparentClose.addTarget(self,
-                                                       action: #selector(self.actionToCloseOtherViews(_:)),
+                                                       action: #selector(self.actionToCloseOtherViews),
                                                        for: .touchUpInside)
             let subviewXBefore: CGFloat = 400 * screenWidthFactor
             let subviewYBefore: CGFloat = (57 + menuOffset) * screenWidthFactor
@@ -99,7 +99,7 @@ extension PinDetailViewController {
             buttonReportOnPinDetail.clipsToBounds = true
             buttonReportOnPinDetail.alpha = 0.0
             buttonReportOnPinDetail.addTarget(self,
-                                              action: #selector(self.actionReportThisPin(_:)),
+                                              action: #selector(self.actionReportThisPin),
                                               for: .touchUpInside)
             
             
@@ -157,7 +157,7 @@ extension PinDetailViewController {
     
     // When clicking share button in comment pin detail window's more options button
     func actionShareComment(_ sender: UIButton) {
-        actionToCloseOtherViews(btnTransparentClose)
+        actionToCloseOtherViews()
         print("Share Clicks!")
     }
     
@@ -177,15 +177,15 @@ extension PinDetailViewController {
         editPinVC.pinType = "\(PinDetailViewController.pinTypeEnum)"
         editPinVC.mediaIdArray = fileIdArray
         self.present(editPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(btnTransparentClose)
+        actionToCloseOtherViews()
     }
     
-    func actionReportThisPin(_ sender: UIButton) {
+    func actionReportThisPin() {
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
         self.isKeyboardInThisView = false
         self.present(reportPinVC, animated: true, completion: nil)
-        actionToCloseOtherViews(btnTransparentClose)
+        actionToCloseOtherViews()
     }
     
     func actionDeleteThisPin(_ sender: UIButton) {
@@ -210,7 +210,7 @@ extension PinDetailViewController {
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
         self.present(alertController, animated: true, completion: nil)
-        actionToCloseOtherViews(btnTransparentClose)
+        actionToCloseOtherViews()
     }
     
     // When clicking save button in comment pin detail window's more options button
@@ -223,6 +223,6 @@ extension PinDetailViewController {
                 self.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
             }
         }
-        actionToCloseOtherViews(btnTransparentClose)
+        actionToCloseOtherViews()
     }
 }

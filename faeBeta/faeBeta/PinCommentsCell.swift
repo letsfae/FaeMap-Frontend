@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 protocol PinCommentsCellDelegate: class {
-    func directReplyFromPinCell(_ username: String) // Reply to this user
-    func showActionSheetFromPinCell(_ username: String)
+    func directReplyFromPinCell(_ username: String, index: IndexPath) // Reply to this user
+    func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath)
 }
 
 class PinCommentsCell: UITableViewCell {
@@ -31,6 +31,8 @@ class PinCommentsCell: UITableViewCell {
     var voteType: String = "null"    
     var pinType = ""
     var pinCommentID = ""
+    var userID = -1
+    var cellIndex: IndexPath!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -119,13 +121,13 @@ class PinCommentsCell: UITableViewCell {
     
     func directReply(_ sender: UIButton) {
         if let username = lblUsername.text {
-            delegate?.directReplyFromPinCell(username)
+            delegate?.directReplyFromPinCell(username, index: cellIndex)
         }
     }
     
     func showActionSheet(_ sender: UIButton) {
         if let username = lblUsername.text {
-            delegate?.showActionSheetFromPinCell(username)
+            delegate?.showActionSheetFromPinCell(username, userid: userID, index: cellIndex)
         }
     }
     

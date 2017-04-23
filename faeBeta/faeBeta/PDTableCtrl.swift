@@ -42,6 +42,8 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             cell.pinID = self.pinIDPinDetailView
             cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
+            cell.userID = comment.userId
+            cell.cellIndex = indexPath
             if comment.anonymous {
                 cell.lblUsername.text = "Anonymous"
                 cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
@@ -77,9 +79,19 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.imgArray[i].label.text = "\(self.feelingArray[i])"
                 if i == self.chosenFeeling {
                     cell.imgArray[i].avatar.isHidden = false
+                    cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
+                    UIView.animate(withDuration: 0.2, animations: { 
+                        cell.imgArray[i].avatar.frame = CGRect(x: 27, y: 25, width: 20, height: 20)
+                    })
                     cell.imgArray[i].avatar.image = self.imgCurUserAvatar.image
                 } else {
-                    cell.imgArray[i].avatar.isHidden = true
+                    if !cell.imgArray[i].avatar.isHidden {
+                        UIView.animate(withDuration: 0.2, animations: {
+                            cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
+                        }, completion: {(finished) in
+                            cell.imgArray[i].avatar.isHidden = true
+                        })
+                    }
                 }
             }
             return cell

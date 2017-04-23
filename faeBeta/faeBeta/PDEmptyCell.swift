@@ -11,6 +11,7 @@ import UIKit
 class PDEmptyCell: UITableViewCell {
 
     var lblEmptyCommentArea: UILabel!
+    static var padding: CGFloat = 150
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,7 +32,7 @@ class PDEmptyCell: UITableViewCell {
         lblEmptyCommentArea.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.addSubview(lblEmptyCommentArea)
         self.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblEmptyCommentArea)
-        self.addConstraintsWithFormat("V:|-38-[v0(44)]", options: [], views: lblEmptyCommentArea)
+        self.addConstraintsWithFormat("V:|-38-[v0(44)]-(\(PDEmptyCell.padding))-|", options: [], views: lblEmptyCommentArea)
     }
 
 }

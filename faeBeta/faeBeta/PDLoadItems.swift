@@ -157,7 +157,7 @@ extension PinDetailViewController {
         for i in 0..<btnFeelingArray.count {
             btnFeelingArray[i].frame = CGRect.zero
             uiviewFeelingBar.addSubview(btnFeelingArray[i])
-            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i+1)"), for: .normal)
+            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i+1)-1"), for: .normal)
             btnFeelingArray[i].adjustsImageWhenHighlighted = false
             btnFeelingArray[i].tag = i
             btnFeelingArray[i].layer.anchorPoint = feelingBarAnchor
@@ -337,7 +337,7 @@ extension PinDetailViewController {
         }
         
         // Textview of pin detail
-        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 200))
+        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
         textviewPinDetail.center.x = screenWidth / 2
         textviewPinDetail.text = ""
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)

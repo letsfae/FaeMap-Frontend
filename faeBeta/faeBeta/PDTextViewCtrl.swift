@@ -12,9 +12,7 @@ extension PinDetailViewController: UITextViewDelegate {
     //MARK: - TEXTVIEW delegate
     func textViewDidChange(_ textView: UITextView) {
         if textView == self.textViewInput {
-            
             let spacing = CharacterSet.whitespacesAndNewlines
-            
             if textView.text.trimmingCharacters(in: spacing).isEmpty == false {
                 self.lblTxtPlaceholder.isHidden = true
             } else {
