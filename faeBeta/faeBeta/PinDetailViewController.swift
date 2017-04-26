@@ -223,6 +223,7 @@ class PinDetailViewController: UIViewController {
     var directReplyFromUser = false
     var btnSelectedFeeling: UIButton?
     var previousIndex: Int = -1
+    var boolDetailShrinked = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -398,7 +399,7 @@ class PinDetailViewController: UIViewController {
         fadeAnimation.fromValue = 1.0
         fadeAnimation.toValue = 0.0
         fadeAnimation.duration = 0.3
-        fadeAnimation.beginTime = CACurrentMediaTime() + 0.7
+        fadeAnimation.beginTime = CACurrentMediaTime() + 0.72
         
         let orbit = CAKeyframeAnimation(keyPath: "position")
         orbit.duration = 1

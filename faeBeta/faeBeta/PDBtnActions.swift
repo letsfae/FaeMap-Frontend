@@ -29,7 +29,7 @@ extension PinDetailViewController {
         switchAnony.setOn(!switchAnony.isOn, animated: true)
     }
 
-    // Animation of the red sliding line
+    // Animation of the red sliding line (Talk Talk, Feelings, People)
     func animationRedSlidingLine(_ sender: UIButton) {
         if sender.tag == 1 {
             tableMode = .talktalk
@@ -37,8 +37,6 @@ extension PinDetailViewController {
         } else if sender.tag == 3 {
             tableMode = .feelings
             tableCommentsForPin.reloadData()
-            let indexPath = IndexPath(row: 0, section: 0)
-            self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
         } else if sender.tag == 5 {
             tableMode = .people
             tableCommentsForPin.reloadData()
@@ -51,10 +49,8 @@ extension PinDetailViewController {
         UIView.animate(withDuration: 0.25, animations:({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter
-        }), completion: { (done: Bool) in
-            if done {
-                
-            }
+        }), completion: { (_) in
+            
         })
     }
     
@@ -64,7 +60,7 @@ extension PinDetailViewController {
         boolKeyboardShowed = false
         self.emojiView.tag = 0
         if buttonPinAddComment.tag == 1 || buttonPinDetailDragToLargeSize.tag == 1 {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.3, animations:({
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
                     if self.tableMode == .talktalk {
@@ -92,7 +88,12 @@ extension PinDetailViewController {
                         self.uiviewAnonymous.frame.origin.y = screenHeight
                     }
                 }
-            }
+            }), completion: { (_) in
+                if self.tableMode == .feelings {
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                }
+            })
         }
     }
     
@@ -273,6 +274,7 @@ extension PinDetailViewController {
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
         if sender.tag == 1 && sender != buttonPinAddComment {
+            self.boolDetailShrinked = true
             replyToUser = ""
             lblTxtPlaceholder.text = "Write a Comment..."
             endEdit()
@@ -311,7 +313,7 @@ extension PinDetailViewController {
             return
         }
         
-        
+        self.boolDetailShrinked = false
         if sender.tag == 1 && sender == buttonPinAddComment {
             self.textViewInput.becomeFirstResponder()
             self.directReplyFromUser = false
@@ -364,7 +366,7 @@ extension PinDetailViewController {
                     self.uiviewPinDetailThreeButtons.center.y += diffHeight
                     self.uiviewPinDetailGrayBlock.center.y += diffHeight
                     self.uiviewPinDetailMainButtons.center.y += diffHeight
-                }), completion: {(finished) in
+                }), completion: {(_) in
                     
                 })
             }
@@ -380,15 +382,13 @@ extension PinDetailViewController {
             self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
             self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
             self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
-        }), completion: { (done: Bool) in
-            if done {
-                if PinDetailViewController.pinTypeEnum != .chat_room {
-                    self.tableCommentsForPin.reloadData()
-                    if sender == self.buttonPinAddComment {
-                        self.textViewInput.becomeFirstResponder()
-                        self.directReplyFromUser = false
-                        self.boolKeyboardShowed = true
-                    }
+        }), completion: { (_) in
+            if PinDetailViewController.pinTypeEnum != .chat_room {
+                self.tableCommentsForPin.reloadData()
+                if sender == self.buttonPinAddComment {
+                    self.textViewInput.becomeFirstResponder()
+                    self.directReplyFromUser = false
+                    self.boolKeyboardShowed = true
                 }
             }
         })

@@ -15,6 +15,8 @@ extension PinDetailViewController {
     
     func getPinInfo() {
         
+        // Cache the current user's profile pic and use it when current user post a feeling
+        // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
         if user_id != nil {
             let stringHeaderURL = "\(baseURL)/files/users/\(Int(user_id))/avatar"
             imgCurUserAvatar = UIImageView()
@@ -45,21 +47,10 @@ extension PinDetailViewController {
             if self.tableMode == .feelings {
                 self.tableCommentsForPin.reloadData()
             }
-            // Has posted feeling or not
-//            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
-//                self.chosenFeeling = chosenFeel
-//                if chosenFeel < 5 && chosenFeel >= 0 {
-//                    UIView.animate(withDuration: 0.2, animations: { 
-//                        let xOffset = Int(chosenFeel * 52 + 12)
-//                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
-//                    })
-//                }
-//            } else {
-//                self.chosenFeeling = -1
-//            }
+            // QuickView is the middle line of pin detail, displayed the chosen feeling the all users have posted
             self.loadFeelingQuickView()
             
-            // Images
+            // Images of story pin
             if PinDetailViewController.pinTypeEnum == .media {
                 self.fileIdArray.removeAll()
                 let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.stringValue)})
@@ -68,6 +59,7 @@ extension PinDetailViewController {
                         self.fileIdArray.append(fileID!)
                     }
                 }
+                // Use separate func to load pictures in a scrollView
                 self.loadMedias()
                 self.stringPlainTextViewTxt = pinInfoJSON["description"].stringValue
                 self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
@@ -75,7 +67,6 @@ extension PinDetailViewController {
                 self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
                 self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
             }
-            
             
             // Liked or not
             if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
@@ -158,7 +149,7 @@ extension PinDetailViewController {
                         self.feelingArray.append(feeling!)
                     }
                 }
-                if self.tableMode == .feelings {
+                if self.tableMode == .feelings && !self.boolDetailShrinked {
                     self.tableCommentsForPin.reloadData()
                     let indexPath = IndexPath(row: 0, section: 0)
                     self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
