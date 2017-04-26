@@ -221,6 +221,8 @@ class PinDetailViewController: UIViewController {
     var boolKeyboardShowed = false
     var boolStickerShowed = false
     var directReplyFromUser = false
+    var btnSelectedFeeling: UIButton?
+    var previousIndex: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()

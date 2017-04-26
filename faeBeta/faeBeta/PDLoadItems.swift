@@ -142,6 +142,10 @@ extension PinDetailViewController {
         uiviewFeelingBar.backgroundColor = UIColor.white
         uiviewFeelingBar.alpha = 0
         
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.addTarget(self, action: #selector(self.handleFeelingPanGesture(_:)))
+        uiviewFeelingBar.addGestureRecognizer(panGesture)
+        
         btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
         btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
         btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
@@ -162,6 +166,46 @@ extension PinDetailViewController {
             btnFeelingArray[i].tag = i
             btnFeelingArray[i].layer.anchorPoint = feelingBarAnchor
             btnFeelingArray[i].addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        }
+    }
+    
+    func handleFeelingPanGesture(_ gesture: UIPanGestureRecognizer) {
+        let location = gesture.location(in: uiviewFeelingBar)
+        
+        let index = Int((location.x - 20)/52)
+        
+        if index > 4 || index < 0 {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+            }, completion: nil)
+            return
+        }
+        
+        let button = btnFeelingArray[index]
+        
+        if btnSelectedFeeling != button {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+            }, completion: nil)
+        }
+        
+        btnSelectedFeeling = button
+        previousIndex = index
+        
+        uiviewFeelingBar.bringSubview(toFront: button)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+            let yAxis = 3 * screenHeightFactor
+            let width = 46 * screenHeightFactor
+            button.frame = CGRect(x: CGFloat(13+52*index), y: yAxis, width: width, height: width)
+        }, completion: nil)
+        
+        if gesture.state == .ended {
+            postFeeling(button)
         }
     }
     

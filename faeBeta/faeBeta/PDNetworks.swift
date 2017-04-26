@@ -143,8 +143,8 @@ extension PinDetailViewController {
                     self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
                 }
                 if sender.tag < 5 {
-                    let xOffset = Int(sender.tag * 52 + 12)
-                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                    let xOffset = Int(sender.tag * 52 + 13)
+                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 46, height: 46)
                 }
             })
             
