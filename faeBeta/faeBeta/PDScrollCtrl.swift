@@ -19,6 +19,13 @@ extension PinDetailViewController: UIScrollViewDelegate {
                 let offset: CGFloat = uiviewPinDetail.frame.size.height - 42
                 self.controlBoard.isHidden = tableCommentsForPin.contentOffset.y < offset
             }
+//            if scrollView.contentOffset.y > 60 {
+//                tableCommentsForPin.setContentOffset(CGPoint(x: 0, y: uiviewPinDetail.frame.size.height-42), animated: false)
+//            }
         }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("[scrollViewDidEndDragging] offset: \(scrollView.contentOffset.y)")
     }
 }

@@ -335,7 +335,6 @@ extension PinDetailViewController {
         readThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView)
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
-//        tableCommentsForPin.contentSize.height = self.uiviewPinDetail.frame.size.height + screenHeight - 65 - self.uiviewToolBar.frame.size.height
         if PinDetailViewController.pinTypeEnum == .media {
             mediaMode = .large
             zoomMedia(.large)

@@ -206,14 +206,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
     }
     
     func openMapPin(marker: GMSMarker, mapPin: MapPin, animated: Bool) {
-        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
-        if animated {
-            faeMapView.animate(to: camera)
-        } else {
-            faeMapView.camera = camera
-        }
+        
+        self.animateToCoordinate(type: 0, marker: marker, animated: animated)
         
         PinDetailViewController.selectedMarkerPosition = marker.position
         PinDetailViewController.pinMarker = marker
@@ -224,14 +218,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
     }
     
     func openPlacePin(marker: GMSMarker, placePin: PlacePin, animated: Bool) {
-        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
-        if animated {
-            faeMapView.animate(to: camera)
-        } else {
-            faeMapView.camera = camera
-        }
+        
+        self.animateToCoordinate(type: 2, marker: marker, animated: animated)
         
         PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude,
                                                                                 longitude: marker.position.longitude)
@@ -278,6 +266,29 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }, completion: nil)
     }
     
+    fileprivate func animateToCoordinate(type: Int, marker: GMSMarker, animated: Bool) {
+        
+        // Default is for user pin
+        var offset = 500*screenHeightFactor - screenHeight/2
+        
+        if type == 0 { // Map pin
+            offset = 530*screenHeightFactor - screenHeight/2
+        } else if type == 2 { // Place pin
+            offset = 534*screenHeightFactor - screenHeight/2
+        }
+        
+        var curPoint = faeMapView.projection.point(for: marker.position)
+        curPoint.y -= offset
+        let newCoor = faeMapView.projection.coordinate(for: curPoint)
+        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: faeMapView.camera.zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
+        
+        if animated {
+            faeMapView.animate(to: camera)
+        } else {
+            faeMapView.camera = camera
+        }
+    }
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if marker.userData == nil {
@@ -289,13 +300,6 @@ extension FaeMapViewController: GMSMapViewDelegate {
         guard let type = userData.keys.first else {
             return false
         }
-        
-        let zoomLv = mapView.camera.zoom
-        
-        let offset: Double = 0.001 * pow(2, Double(17 - zoomLv)) // 0.0012
-        self.renewSelfLocation()
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: zoomLv)
 
         if type == 0 { // fae map pin
             guard let mapPin = userData.values.first as? MapPin else {
@@ -328,7 +332,10 @@ extension FaeMapViewController: GMSMapViewDelegate {
                 return false
             }
             self.canDoNextUserUpdate = false
-            mapView.animate(to: camera)
+            
+            //
+            self.animateToCoordinate(type: type, marker: marker, animated: true)
+            
             self.updateNameCard(withUserId: userPin.userId)
             self.animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {

@@ -113,7 +113,7 @@ class OpenedPinListViewController: UIViewController {
         
         // Button: Back to Comment Detail
         buttonBackToMap = UIButton()
-        buttonBackToMap.setImage(#imageLiteral(resourceName: "openedPinBackToMap"), for: UIControlState())
+        buttonBackToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
         buttonBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
         subviewWhite.addSubview(buttonBackToMap)
         subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToMap)

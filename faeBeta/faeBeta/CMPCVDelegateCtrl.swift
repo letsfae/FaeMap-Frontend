@@ -98,62 +98,13 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
                 }
             }
             else {
-                UIView.animate(withDuration: 0.4) {
+                UIView.animate(withDuration: 0.1) {
                     self.buttonAddMedia.alpha = 0
                 }
             }
         }
     }
-    /*
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == collectionViewMedia {
-            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
-            if self.lastContentOffset < scrollView.contentOffset.x && scrollView.contentOffset.x > 0 {
-                print("[scrollViewDidScroll] left")
-//                if scrollView.contentOffset.x > 
-//                UIView.animate(withDuration: 0.3, animations: {
-//                    self.buttonAddMedia.alpha = 1
-//                })
-            }
-            /*
-            else if self.lastContentOffset > scrollView.contentOffset.x && self.lastContentOffset < (scrollView.contentSize.width - scrollView.frame.width) {
-                print("[scrollViewDidScroll] right")
-                if scrollView.contentOffset.x <= 0 {
-                    UIView.animate(withDuration: 0.5, animations: {
-                        if self.selectedMediaArray.count != 1 {
-                            self.buttonAddMedia.alpha = 0
-                        }
-                    })
-                }
-                else {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.collectionViewMedia.frame.size.width = screenWidth
-                        self.collectionViewMedia.frame.origin.x = 0
-                        if self.selectedMediaArray.count != 1 {
-                            self.buttonAddMedia.alpha = 0
-                        }
-                    })
-                }
-            }
-            */
-            self.lastContentOffset = scrollView.contentOffset.x
-        }
-    }
-     */
- 
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        if scrollView == collectionViewMedia {
-//            if direction == .right {
-//                print("[scrollViewDidEndDecelerating] direction: right")
-//                direction = .left
-//            }
-//            else if direction == .left {
-//                print("[scrollViewDidEndDecelerating] direction: left")
-//                direction = .right
-//            }
-//        }
-//    }
+
 }
 
 class CenterCellCollectionViewFlowLayout: UICollectionViewFlowLayout {

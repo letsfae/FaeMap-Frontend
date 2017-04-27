@@ -31,6 +31,11 @@ protocol PinDetailDelegate: class {
 
 class PinDetailViewController: UIViewController {
     
+    enum EnterMode: Int {
+        case mainMap = 0
+        case collections = 1
+    }
+    
     enum MediaMode {
         case small
         case large
@@ -87,6 +92,7 @@ class PinDetailViewController: UIViewController {
     static var strPlaceImageURL = ""
     static var strPlaceStreet = ""
     static var strPlaceTitle = ""
+    static var enterMode: EnterMode = .mainMap
     var animatingHeart: UIImageView!
     var animatingHeartTimer: Timer! // Timer for animating heart
     var anotherRedSlidingLine: UIView!
@@ -247,6 +253,53 @@ class PinDetailViewController: UIViewController {
         }
         self.delegate?.disableSelfMarker(yes: true)
         
+        if PinDetailViewController.enterMode == .collections {
+            loadFromCollections()
+        }
+    }
+    
+    func loadFromCollections() {
+        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        textviewPinDetail.isScrollEnabled = false
+        tableCommentsForPin.isScrollEnabled = true
+        if PinDetailViewController.pinTypeEnum == .media {
+            mediaMode = .large
+            zoomMedia(.large)
+            textviewPinDetail.isHidden = false
+            self.uiviewPinDetail.frame.size.height += 65
+            self.textviewPinDetail.frame.size.height += 65
+            self.uiviewPinDetailThreeButtons.center.y += 65
+            self.uiviewPinDetailGrayBlock.center.y += 65
+            self.uiviewPinDetailMainButtons.center.y += 65
+            if self.textviewPinDetail.text != "" {
+                self.uiviewPinDetail.frame.size.height += textViewHeight
+                self.textviewPinDetail.frame.size.height += textViewHeight
+                self.uiviewPinDetailThreeButtons.center.y += textViewHeight
+                self.uiviewPinDetailGrayBlock.center.y += textViewHeight
+                self.uiviewPinDetailMainButtons.center.y += textViewHeight
+                self.scrollViewMedia.frame.origin.y += textViewHeight
+            }
+        }
+        else if PinDetailViewController.pinTypeEnum == .comment {
+            if textViewHeight > 100.0 {
+                let diffHeight: CGFloat = textViewHeight - 100
+                self.uiviewPinDetail.frame.size.height += diffHeight
+                self.textviewPinDetail.frame.size.height += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailGrayBlock.center.y += diffHeight
+                self.uiviewPinDetailMainButtons.center.y += diffHeight
+            }
+        }
+        self.btnHalfPinToMap.alpha = 0.0
+        self.buttonPinBackToMap.alpha = 1.0
+        var toolbarHeight = self.uiviewToolBar.frame.size.height
+        if PinDetailViewController.pinTypeEnum == .chat_room {
+            toolbarHeight = 0
+        }
+        self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
+        self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
+        self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
+        self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
     }
     
     override func viewWillAppear(_ animated: Bool) {

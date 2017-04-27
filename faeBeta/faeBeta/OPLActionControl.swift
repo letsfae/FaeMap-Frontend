@@ -71,7 +71,9 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
     }
     
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath) {
+        
         OpenedPlaces.openedPlaces.remove(at: indexPath.row)
+        
         if buttonCommentPinListDragToLargeSize.tag == 1 {
             self.tableOpenedPin.frame.size.height = screenHeight - 92
         } else if OpenedPlaces.openedPlaces.count <= 3 {
@@ -79,19 +81,22 @@ extension OpenedPinListViewController: OpenedPinTableCellDelegate {
         } else {
             self.tableOpenedPin.frame.size.height = CGFloat(228)
         }
+        
+        // Scroll enabled or not
+        if OpenedPlaces.openedPlaces.count > 3 {
+            self.tableOpenedPin.isScrollEnabled = true
+        }
+        else {
+            self.tableOpenedPin.isScrollEnabled = false
+        }
+        
         self.tableOpenedPin.reloadData()
         if OpenedPlaces.openedPlaces.count == 0 {
             self.delegate?.directlyReturnToMap()
             UIView.animate(withDuration: 0.4, animations: ({
                 self.subviewWhite.center.y -= screenHeight
                 self.subviewTable.center.y -= screenHeight
-            }), completion: { (done: Bool) in
-                if done {
-                    self.dismiss(animated: false, completion: {
-                        
-                    })
-                }
-            })
+            }), completion: nil)
         }
         
     }

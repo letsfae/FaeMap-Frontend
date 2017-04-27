@@ -28,6 +28,7 @@ extension CreateMomentPinViewController {
         collectionViewMedia.isHidden = true
         collectionViewMedia.backgroundColor = UIColor.clear
         collectionViewMedia.showsHorizontalScrollIndicator = false
+        collectionViewMedia.layer.zPosition = 100
         uiviewCreateMediaPin.addSubview(collectionViewMedia)
         
         buttonTakeMedia = UIButton(frame: CGRect(x: 109, y: 268, width: 65, height: 65))
