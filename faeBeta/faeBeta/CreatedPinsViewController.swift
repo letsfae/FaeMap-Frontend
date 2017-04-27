@@ -112,8 +112,6 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(!gesturerecognizerTouch.isCellSwiped){
             tableView.deselectRow(at: indexPath, animated: false)
-
-            let pinType = tblPinsData.cellForRow(at: IndexPath) as! CreatedPinsTableViewCell
             
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
