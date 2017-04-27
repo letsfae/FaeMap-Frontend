@@ -277,6 +277,7 @@ class PinDetailViewController: UIViewController {
         grayBackButton.isHidden = true
         buttonPinBackToMap.isHidden = true
         btnShowOptions.isHidden = true
+        mediaMode = .large
         
         self.subviewNavigation.frame.origin.x = screenWidth
         self.tableCommentsForPin.frame.origin.x = screenWidth
@@ -284,7 +285,6 @@ class PinDetailViewController: UIViewController {
         self.subviewNavigation.frame.origin.y = 0
         self.tableCommentsForPin.frame.origin.y = 65
         self.subviewTable.frame.origin.y = 65
-        mediaMode = .large
         self.scrollViewMedia.frame.size.height = 160
         
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
@@ -292,8 +292,8 @@ class PinDetailViewController: UIViewController {
         tableCommentsForPin.isScrollEnabled = true
         buttonPinDetailDragToLargeSize.isHidden = true
         draggingButtonSubview.isHidden = true
+        
         if PinDetailViewController.pinTypeEnum == .media {
-            
             textviewPinDetail.isHidden = false
             self.uiviewPinDetail.frame.size.height += 65
             self.textviewPinDetail.frame.size.height += 65
@@ -328,7 +328,8 @@ class PinDetailViewController: UIViewController {
         self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
         self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
         self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
-        self.uiviewToolBar.frame.origin.y = screenHeight - toolbarHeight
+        self.uiviewToolBar.frame.origin.x = screenWidth
+        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -337,7 +338,7 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.btnNextPin.alpha = 1
             self.buttonPrevPin.alpha = 1
             self.draggingButtonSubview.frame.origin.y = 292
@@ -349,6 +350,7 @@ class PinDetailViewController: UIViewController {
             self.subviewNavigation.frame.origin.x = 0
             self.subviewTable.frame.origin.x = 0
             self.tableCommentsForPin.frame.origin.x = 0
+            self.uiviewToolBar.frame.origin.x = 0
             if PinDetailViewController.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             } else {
