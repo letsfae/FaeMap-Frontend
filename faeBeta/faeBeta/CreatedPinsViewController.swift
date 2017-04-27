@@ -116,12 +116,12 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
-            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"], arrPinData[indexPath.section]["longitude"])
+            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"] as! CLLocationDegrees, arrPinData[indexPath.section]["longitude"] as! CLLocationDegrees)
             
-                pinDetailVC.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
-            pinDetailVC.pinUserId = user_id
+                PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
+            PinDetailViewController.pinUserId = user_id as Int
             
-            pinDetailVC.enterMode = .collections
+            PinDetailViewController.enterMode = .collections
             self.present(pinDetailVC, animated: false, completion: nil)
      
         }
