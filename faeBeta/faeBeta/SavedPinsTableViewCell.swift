@@ -13,13 +13,13 @@ class SavedPinsTableViewCell: PinsTableViewCell {
     var imgAvatar : UIImageView!
     var labelUserName : UILabel!
     var btnUnSave : UIButton!
-    var btnLocate : UIButton!
+//    var btnLocate : UIButton!
     var btnShare : UIButton!
     
     // Vertical center the buttons when the cell is created
     override func verticalCenterButtons(){
         btnUnSave.center.y = uiviewCellView.center.y
-        btnLocate.center.y = uiviewCellView.center.y
+//        btnLocate.center.y = uiviewCellView.center.y
         btnShare.center.y = uiviewCellView.center.y
     
     }
@@ -38,14 +38,14 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         btnShare.setImage(#imageLiteral(resourceName: "imgShare"), for: UIControlState.normal)
         uiviewSwipedBtnsView.addSubview(btnShare)
         
-        btnLocate = UIButton()
-        btnLocate.frame = CGRect(x: screenWidth-210, y: 0, width: 50, height: 50)
-        btnLocate.setImage(#imageLiteral(resourceName: "imgLocation"), for: UIControlState.normal)
-        uiviewSwipedBtnsView.addSubview(btnLocate)
+//        btnLocate = UIButton()
+//        btnLocate.frame = CGRect(x: screenWidth-210, y: 0, width: 50, height: 50)
+//        btnLocate.setImage(#imageLiteral(resourceName: "imgLocation"), for: UIControlState.normal)
+//        uiviewSwipedBtnsView.addSubview(btnLocate)
         
         btnUnSave.addTarget(self, action: #selector(self.actionUnsaveCurrentCell(_:)), for: .touchUpInside)
         btnShare.addTarget(self, action: #selector(self.actionShareCurrentCell(_:)), for: .touchUpInside)
-        btnLocate.addTarget(self, action: #selector(self.actionLocateCurrentCell(_:)), for: .touchUpInside)
+//        btnLocate.addTarget(self, action: #selector(self.actionLocateCurrentCell(_:)), for: .touchUpInside)
         
         imgAvatar = UIImageView()
         imgAvatar.frame = CGRect(x: 13, y:11, width: 20, height: 20)
@@ -63,7 +63,7 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         labelDate.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         uiviewPinView.addSubview(labelUserName)
         
-        finishedPositionX = 231.0
+        finishedPositionX = 161.0 //231.0
     }
     
     // call this fuction when reuse cell, set value to the cell and rebuild the layout
@@ -71,7 +71,7 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         super.setValueForCell(pin)
         uiviewPinView.addConstraintsWithFormat("H:[v0(200)]-13-|", options: [], views: labelDate)
         if (pin["anonymous"] as? Bool)! {
-            labelUserName.text = "Someone"
+            labelUserName.text = "Anonymous"
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
         } else {
             labelUserName.text = pin["nick_name"]as? String

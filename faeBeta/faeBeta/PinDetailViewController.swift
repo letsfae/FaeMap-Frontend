@@ -233,6 +233,10 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewLoad()
+    }
+    
+    func viewLoad(){
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()

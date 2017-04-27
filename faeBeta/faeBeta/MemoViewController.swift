@@ -58,7 +58,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
         let leftcharscount = 50 - textView.text.characters.count
-        if(leftcharscount<0){
+        if leftcharscount < 0 {
             wordsCount.textColor = UIColor.faeAppRedColor()
             btnSave.isEnabled = false
             btnSave.alpha = 0.6

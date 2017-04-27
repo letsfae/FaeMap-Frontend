@@ -9,9 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-
-
-class CollectionSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource{
+class CollectionSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate {
     
     var willAppearFirstLoad = false
     
@@ -20,7 +18,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     var blurViewMainScreenSearch: UIView!
     
     // MARK: -- Search Bar
-    var uiviewTableSubview: UIView!
+
     var tblSearchResults = UITableView()
     var dataArray = [[String: AnyObject]]()
     var filteredArray = [[String: AnyObject]]()
@@ -60,7 +58,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
-            self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
+            self.searchBarSubview.center.y = self.searchBarSubview.frame.size.height/2
         }), completion: { (done: Bool) in
             if done {
                 self.faeSearchController.faeSearchBar.becomeFirstResponder()
@@ -83,26 +81,14 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     func loadBlurView() {
         blurViewMainScreenSearch = UIView()
         blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        blurViewMainScreenSearch.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         self.view.addSubview(blurViewMainScreenSearch)
-        
-        //为了一个事件加个假button并不好，用UITapGestureRecognizer来做
-        //        let buttonBackToMapSubview = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        //        blurViewMainScreenSearch.addSubview(buttonBackToMapSubview)
-        // dismiss this view when tap the blur view
-        //        buttonBackToMapSubview.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
-        
-        //Let the searchbar regisn the responser when tap outside(this view) of searchbar
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.actionResignResponserofSearchbar(_:)))
-        blurViewMainScreenSearch.addGestureRecognizer(tap)
-        
     }
-    
+
     func loadFunctionButtons() {
         searchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
         searchBarSubview.layer.zPosition = 1
-        self.view.addSubview(searchBarSubview)
-        self.searchBarSubview.center.y -= self.searchBarSubview.frame.size.height
+        blurViewMainScreenSearch.addSubview(searchBarSubview)
+        self.searchBarSubview.center.y = -self.searchBarSubview.frame.size.height/2
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.searchBarSubview.addSubview(backSubviewButton)
         backSubviewButton.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
@@ -177,10 +163,10 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     
-    func actionResignResponserofSearchbar(_ sender: UIButton){
-        faeSearchController.faeSearchBar.resignFirstResponder()
-        
-    }
+//    func actionResignResponserofSearchbar(_ sender: UIButton){
+//        faeSearchController.faeSearchBar.resignFirstResponder()
+//        
+//    }
     
     
     
@@ -208,38 +194,14 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.uiviewTableSubview.frame.width, height: screenHeight-keyboardHeight-66)
-            
-            switch tableTypeName {
-                
-            case "Created Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-keyboardHeight-66)
-            case "Saved Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-keyboardHeight-66)
-                
-            default:
-                self.uiviewTableSubview.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-keyboardHeight-66)
-            }
-            
+            tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-keyboardHeight-66)
         }
         
     }
     //resize the height of the view when the keyboard will hide
     func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.uiviewTableSubview.frame.width, height: screenHeight-66)
-            
-            switch tableTypeName {
-                
-            case "Created Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66)
-            case "Saved Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66)
-                
-            default:
-                self.uiviewTableSubview.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-66)
-            }
-            
+            tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-66)
         }
     }
     
@@ -255,13 +217,13 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     
     func didChangeSearchText(_ searchText: String) {
-        if(searchText != "") {
+        if searchText != "" {
             buttonClearSearchBar.isHidden = false
             filteredArray = dataArray.filter { (pinArr:[String: AnyObject]) -> Bool in
-                if(pinArr["type"]?.description == "media"){
+                if pinArr["type"]?.description == "media" {
                     return (pinArr["description"]?.lowercased.contains(searchText.lowercased()))!
                 }
-                else if (pinArr["type"]?.description == "comment"){
+                else if pinArr["type"]?.description == "comment" {
                     return (pinArr["content"]?.lowercased.contains(searchText.lowercased()))!
                 }
                 else{
@@ -285,49 +247,13 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func searchBarTableHideAnimation() {
         UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.uiviewTableSubview.frame.width, height: 0)
-            
-            switch self.tableTypeName {
-                
-            case "Created Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: 0)
-            case "Saved Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: 0)
-                
-            default:
-                self.uiviewTableSubview.frame = CGRect(x: 0, y: 66, width: screenWidth, height: 0)
-            }
-            
-            
-            
-            
+            self.tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: 0)
         }), completion: nil)
     }
     
     func searchBarTableShowAnimation() {
         UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.uiviewTableSubview.frame.width, height:screenHeight-66-self.keyboardHeight)
-            
-            switch self.tableTypeName {
-                
-            case "Created Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66-self.keyboardHeight)
-                
-                
-            case "Saved Pins":
-                self.uiviewTableSubview.frame = CGRect(x: 8, y: 66, width: self.resultTableWidth, height: screenHeight-66-self.keyboardHeight)
-                
-                
-                
-            default:
-                self.uiviewTableSubview.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-66-self.keyboardHeight)
-                
-                
-            }
-            
-            
-            
+            self.tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height:screenHeight-66-self.keyboardHeight)
             
         }), completion: nil)
     }
@@ -336,152 +262,30 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     // MARK: TableView Initialize
     
     func loadTableView() {
-        
-        switch tableTypeName {
-            
-        case "Created Pins":
-            uiviewTableSubview = UIView(frame: CGRect(x: 8, y: 66, width: resultTableWidth, height: 0))
-            
-            tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
-        case "Saved Pins":
-            uiviewTableSubview = UIView(frame: CGRect(x: 8, y: 66, width: resultTableWidth, height: 0))
-            
-            tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
-            
-        default:
-            uiviewTableSubview = UIView(frame: CGRect(x: 0, y: 66, width: screenWidth, height: 0))
-            
-            tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
-        }
-        
-        
-        //        tblSearchResults.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        //tblSearchResults.register(PinTableViewCell.self, forCellReuseIdentifier: "PinCell")
-        tblSearchResults.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")
-        tblSearchResults.delegate = self
-        tblSearchResults.dataSource = self
-        tblSearchResults.showsVerticalScrollIndicator = false
+
+        tblSearchResults = UITableView(frame: CGRect(x: 0,y: 66,width: screenWidth,height: screenHeight-66))
         tblSearchResults.backgroundColor = .clear
+        tblSearchResults.showsVerticalScrollIndicator = false
+        let headerView = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 10))
+        headerView.backgroundColor = UIColor.clear
+        tblSearchResults.tableHeaderView = headerView
+        blurViewMainScreenSearch.addSubview(tblSearchResults)
+        
         //for auto layout
         tblSearchResults.rowHeight = UITableViewAutomaticDimension
         tblSearchResults.estimatedRowHeight = 340
         
-        uiviewTableSubview.addSubview(tblSearchResults)
-        self.view.addSubview(uiviewTableSubview)
-        
-        //Let the searchbar regisn the responser when tap outside(this view) of searchbar
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.actionResignResponserofSearchbar(_:)))
-        uiviewTableSubview.addGestureRecognizer(tap)
-        
         // Clear out the empty cells
         tblSearchResults.tableFooterView = UIView()
-        
-        
     }
     
     
     // MARK: UITableView Delegate and Datasource functions
-    
-    // Make the background color show through
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = UIColor.clear
-        return headerView
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return filteredArray.count
-        
-    }
-    /* To add the space between the cells, we use indexPath.section to get the current cell index. And there is just one row in every section. When we want to get the index of cell, we use indexPath.section rather than indexPath.row */
-    
-    
-    // Set the spacing between sections
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch tableTypeName {
-            
-        case "Created Pins":
-            tblSearchResults.backgroundColor = .clear
-            uiviewTableSubview = UIView(frame: CGRect(x: 0, y: 66, width: resultTableWidth, height: 0))
-            return 10
-        case "Saved Pins":
-            tblSearchResults.backgroundColor = .clear
-            return 10
-            
-        default:
-            tblSearchResults.backgroundColor = .white
-            return 0
-        }
-    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return 1
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch tableTypeName {
-            
-        case "Created Pins":
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
-            cell.setValueForCell(_: filteredArray[indexPath.section])
-            // Hide the separator line
-            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-            cell.layer.cornerRadius = 10.0
-            cell.selectionStyle = .none
-            return cell
-        case "Saved Pins":
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
-            cell.setValueForCell(_: filteredArray[indexPath.section])
-            // Hide the separator line
-            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-            cell.layer.cornerRadius = 10.0
-            cell.selectionStyle = .none
-            return cell
-            
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceAndLocationCell", for: indexPath) as! PlaceAndLocationTableViewCell
-            cell.setValueForCell(_: filteredArray[indexPath.section])
-            // Hide the separator line
-            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-            cell.selectionStyle = .none
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 89.5, bottom: 0, right: 0)
-            return cell
-        }
-    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        
-        print("Your choice is \(filteredArray[indexPath.section])")
-        
-    }
-    
-    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        if(tableView == self.tblSearchResults) {
-    ////            let placesClient = GMSPlacesClient()
-    ////            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-    ////                (place, error) -> Void in
-    ////                // Get place.coordinate
-    ////                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-    ////                    (response, error) -> Void in
-    ////                    if let selectedAddress = place?.coordinate {
-    ////                        self.delegate?.animateToCameraFromMainScreenSearch(selectedAddress)
-    ////                        self.dismiss(animated: false, completion: nil)
-    ////                    }
-    ////                })
-    ////            })
-    ////            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-    //            self.faeSearchController.faeSearchBar.resignFirstResponder()
-    //            self.searchBarTableHideAnimation()
-    //            tableView.deselectRow(at: indexPath, animated: true)
-    //        }
-    //    }
-    
     
 }
