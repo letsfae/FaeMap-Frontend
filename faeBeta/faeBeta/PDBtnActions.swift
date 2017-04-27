@@ -278,6 +278,7 @@ extension PinDetailViewController {
             self.subviewNavigation.center.x += screenWidth
             self.tableCommentsForPin.center.x += screenWidth
             self.subviewTable.center.x += screenWidth
+            self.uiviewToolBar.center.x += screenWidth
             self.draggingButtonSubview.center.x += screenWidth
             if self.uiviewPlaceDetail != nil {
                 self.uiviewPlaceDetail.center.x += screenWidth

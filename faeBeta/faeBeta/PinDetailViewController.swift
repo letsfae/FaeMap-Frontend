@@ -273,14 +273,19 @@ class PinDetailViewController: UIViewController {
         uiviewFeelingBar.isHidden = true
         btnNextPin.isHidden = true
         buttonPrevPin.isHidden = true
+        pinIcon.isHidden = true
         grayBackButton.isHidden = true
         buttonPinBackToMap.isHidden = true
+        btnShowOptions.isHidden = true
+        
         self.subviewNavigation.frame.origin.x = screenWidth
         self.tableCommentsForPin.frame.origin.x = screenWidth
         self.subviewTable.frame.origin.x = screenWidth
         self.subviewNavigation.frame.origin.y = 0
         self.tableCommentsForPin.frame.origin.y = 65
         self.subviewTable.frame.origin.y = 65
+        mediaMode = .large
+        self.scrollViewMedia.frame.size.height = 160
         
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         textviewPinDetail.isScrollEnabled = false
@@ -288,8 +293,7 @@ class PinDetailViewController: UIViewController {
         buttonPinDetailDragToLargeSize.isHidden = true
         draggingButtonSubview.isHidden = true
         if PinDetailViewController.pinTypeEnum == .media {
-            mediaMode = .large
-            zoomMedia(.large)
+            
             textviewPinDetail.isHidden = false
             self.uiviewPinDetail.frame.size.height += 65
             self.textviewPinDetail.frame.size.height += 65

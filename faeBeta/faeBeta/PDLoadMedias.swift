@@ -19,7 +19,13 @@ extension PinDetailViewController {
             subview.removeFromSuperview()
         }
         for index in 0...fileIdArray.count-1 {
-            let imageView = UIImageView(frame: CGRect(x: 105*index, y: 0, width: 95, height: 95))
+            var offset = 105
+            var width: CGFloat = 95
+            if mediaMode == .large {
+                offset = 170
+                width = 160
+            }
+            let imageView = UIImageView(frame: CGRect(x: CGFloat(offset*index), y: 0, width: width, height: width))
             imageView.contentMode = .scaleAspectFill
             imageView.layer.cornerRadius = 13.5
             imageView.clipsToBounds = true
