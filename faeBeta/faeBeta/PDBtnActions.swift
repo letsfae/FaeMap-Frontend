@@ -271,6 +271,22 @@ extension PinDetailViewController {
         })
     }
     
+    func actionBackToCollections(_ sender: UIButton) {
+        endEdit()
+        controlBoard.removeFromSuperview()
+        UIView.animate(withDuration: 0.5, animations: ({
+            self.subviewNavigation.center.x += screenWidth
+            self.tableCommentsForPin.center.x += screenWidth
+            self.subviewTable.center.x += screenWidth
+            self.draggingButtonSubview.center.x += screenWidth
+            if self.uiviewPlaceDetail != nil {
+                self.uiviewPlaceDetail.center.x += screenWidth
+            }
+        }), completion: { (finished) in
+            self.dismiss(animated: false, completion: nil)
+        })
+    }
+    
     // When clicking reply button in pin detail window
     func actionReplyToThisPin(_ sender: UIButton) {
         if sender.tag == 1 && sender != buttonPinAddComment {

@@ -106,6 +106,7 @@ class PinDetailViewController: UIViewController {
     var btnFeelingBar_03: UIButton!
     var btnFeelingBar_04: UIButton!
     var btnFeelingBar_05: UIButton!
+    var btnBackToCollections: UIButton!
     var btnGoToPinList_Place: UIButton!
     var btnHideAnony: UIButton!
     var btnMoreOptions_Place: UIButton!
@@ -230,13 +231,10 @@ class PinDetailViewController: UIViewController {
     var btnSelectedFeeling: UIButton?
     var previousIndex: Int = -1
     var boolDetailShrinked = true
+    var strTextViewText = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewLoad()
-    }
-    
-    func viewLoad(){
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
@@ -263,9 +261,32 @@ class PinDetailViewController: UIViewController {
     }
     
     func loadFromCollections() {
+        
+        // Back to Map
+        btnBackToCollections = UIButton()
+        btnBackToCollections.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
+        btnBackToCollections.addTarget(self, action: #selector(self.actionBackToCollections(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnBackToCollections)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnBackToCollections)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnBackToCollections)
+        buttonPinBackToMap.tag = 1
+        uiviewFeelingBar.isHidden = true
+        btnNextPin.isHidden = true
+        buttonPrevPin.isHidden = true
+        grayBackButton.isHidden = true
+        buttonPinBackToMap.isHidden = true
+        self.subviewNavigation.frame.origin.x = screenWidth
+        self.tableCommentsForPin.frame.origin.x = screenWidth
+        self.subviewTable.frame.origin.x = screenWidth
+        self.subviewNavigation.frame.origin.y = 0
+        self.tableCommentsForPin.frame.origin.y = 65
+        self.subviewTable.frame.origin.y = 65
+        
         let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
         textviewPinDetail.isScrollEnabled = false
         tableCommentsForPin.isScrollEnabled = true
+        buttonPinDetailDragToLargeSize.isHidden = true
+        draggingButtonSubview.isHidden = true
         if PinDetailViewController.pinTypeEnum == .media {
             mediaMode = .large
             zoomMedia(.large)
@@ -321,6 +342,9 @@ class PinDetailViewController: UIViewController {
             self.subviewNavigation.frame.origin.y = 0
             self.subviewTable.frame.origin.y = 65
             self.tableCommentsForPin.frame.origin.y = 65
+            self.subviewNavigation.frame.origin.x = 0
+            self.subviewTable.frame.origin.x = 0
+            self.tableCommentsForPin.frame.origin.x = 0
             if PinDetailViewController.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             } else {

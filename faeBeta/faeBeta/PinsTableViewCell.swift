@@ -309,71 +309,101 @@ class PinsTableViewCell: UITableViewCell {
                 labelDescription.attributedText = descContent.convertStringWithEmoji()
             }
             imgPinTab.image = UIImage(named: "tab_comment")
-            
-            if let imgArr = pin["file_ids"] as? [Int] { // changed by Yue Shen to get compiled
-                
+            if let imgArr = pin["file_ids"] as? NSArray{
                 let count = imgArr.count
                 // no pic
                 if count == 0 {
                     uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: labelDescription)
                 }
                 // the first image
-                if(count>0){
-                    imgFirstPic.isHidden = false
-                    
-                    let imgId = imgArr[0]// changed by Yue Shen to get compiled
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    
-                    uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: imgFirstPic)
-                    imgFirstPic.contentMode = .scaleAspectFill
-                    imgFirstPic.layer.cornerRadius = 13.5
-                    imgFirstPic.clipsToBounds = true
-                    imgFirstPic.isUserInteractionEnabled = true
-                    imgFirstPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgFirstPic)
+                if count>0 {
+                    imgPinPic01.isHidden = false
+                    let imgId = String(describing: imgArr[0])
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic01.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic01.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+                    uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: imgPinPic01)
+                    imgPinPic01.contentMode = .scaleAspectFill
+                    imgPinPic01.layer.cornerRadius = 13.5
+                    imgPinPic01.clipsToBounds = true
+                    imgPinPic01.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic01)
                 }
                 
                 // the second image
-                if(count>1){
-                    imgSecondPic.isHidden = false
-                    let imgId = imgArr[1]// changed by Yue Shen to get compiled
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgFirstPic,imgSecondPic)
-                    imgSecondPic.contentMode = .scaleAspectFill
-                    imgSecondPic.layer.cornerRadius = 13.5
-                    imgSecondPic.clipsToBounds = true
-                    imgSecondPic.isUserInteractionEnabled = true
-                    imgSecondPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgSecondPic)
+                if count>1 {
+                    imgPinPic02.isHidden = false
+                    let imgId = String(describing: imgArr[1])
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic02.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic02.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgPinPic01,imgPinPic02)
+                    imgPinPic02.contentMode = .scaleAspectFill
+                    imgPinPic02.layer.cornerRadius = 13.5
+                    imgPinPic02.clipsToBounds = true
+                    imgPinPic02.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic02)
                 }
                 
                 //the third image
-                if(count>2){
-                    imgThirdPic.isHidden = false
-                    let imgId = imgArr[2]// changed by Yue Shen to get compiled
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgSecondPic,imgThirdPic)
-                    imgThirdPic.contentMode = .scaleAspectFill
-                    imgThirdPic.layer.cornerRadius = 13.5
-                    imgThirdPic.clipsToBounds = true
-                    imgThirdPic.isUserInteractionEnabled = true
-                    imgThirdPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgThirdPic)
+                if count>2 {
+                    imgPinPic03.isHidden = false
+                    let imgId = String(describing: imgArr[2])
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic03.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic03.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgPinPic02,imgPinPic03)
+                    imgPinPic03.contentMode = .scaleAspectFill
+                    imgPinPic03.layer.cornerRadius = 13.5
+                    imgPinPic03.clipsToBounds = true
+                    imgPinPic03.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic03)
                 }
                 // more than 3 pics
-                if(count>3){
-                    labelMoreThanThreePics.isHidden = false
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: labelDescription,labelMoreThanThreePics)
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: imgThirdPic,labelMoreThanThreePics)
+                if count>3 {
+                    labelPics3Plus.isHidden = false
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: labelDescription,labelPics3Plus)
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: imgPinPic03,labelPics3Plus)
                 }
             }
             

@@ -206,7 +206,11 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(!gesturerecognizerTouch.isCellSwiped){
             tableView.deselectRow(at: indexPath, animated: false)
-            let pinDetailVC = PinFullViewController()
+            let pinDetailVC = PinDetailViewController()
+            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(0, 0)
+            PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "comment")!
+            PinDetailViewController.pinUserId = 101
+            PinDetailViewController.enterMode = .collections
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
             self.present(pinDetailVC, animated: false, completion: nil)

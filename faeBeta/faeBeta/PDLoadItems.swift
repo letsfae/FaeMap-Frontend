@@ -383,7 +383,7 @@ extension PinDetailViewController {
         // Textview of pin detail
         textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
         textviewPinDetail.center.x = screenWidth / 2
-        textviewPinDetail.text = ""
+        textviewPinDetail.text = strTextViewText
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewPinDetail.isUserInteractionEnabled = true

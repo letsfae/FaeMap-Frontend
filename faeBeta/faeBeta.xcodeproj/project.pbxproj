@@ -239,7 +239,6 @@
 		B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */; };
 		B89AB3F71E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */; };
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
-		B8A4734C1EB175E10009A1C0 /* PinDetailFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A4734B1EB175E10009A1C0 /* PinDetailFullView.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
 		B8B2C15E1E66C2BD00F253EA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15D1E66C2BD00F253EA /* UserPin.swift */; };
@@ -556,7 +555,6 @@
 		B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterAnimation.swift; sourceTree = "<group>"; };
 		B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterLogicCtrl.swift; sourceTree = "<group>"; };
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
-		B8A4734B1EB175E10009A1C0 /* PinDetailFullView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailFullView.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
 		B8B2C15D1E66C2BD00F253EA /* UserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
@@ -1229,7 +1227,6 @@
 			isa = PBXGroup;
 			children = (
 				B8612E341DF202680092C606 /* PinDetailViewController.swift */,
-				B8A4734B1EB175E10009A1C0 /* PinDetailFullView.swift */,
 				B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */,
 				B8612E331DF201BF0092C606 /* PinExtension */,
 			);
@@ -1619,7 +1616,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		E38391E68675FBBB7D07EF60 /* [CP] Embed Pods Frameworks */ = {
@@ -1782,7 +1779,6 @@
 				B8612E391DF249DC0092C606 /* PDLoadItems.swift in Sources */,
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
-				B8A4734C1EB175E10009A1C0 /* PinDetailFullView.swift in Sources */,
 				B883AE5B1E0DDD9C00D2E3CE /* PDMoreOptions.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
