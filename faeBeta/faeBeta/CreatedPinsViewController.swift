@@ -109,7 +109,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     
     //click cell
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(!gesturerecognizerTouch.isCellSwiped){
             tableView.deselectRow(at: indexPath, animated: false)
             
@@ -119,7 +119,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
             PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"] as! CLLocationDegrees, arrPinData[indexPath.section]["longitude"] as! CLLocationDegrees)
             
                 PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
-            PinDetailViewController.pinUserId = user_id as Int
+            PinDetailViewController.pinUserId = user_id as! Int
             
             if let content = arrPinData[indexPath.section]["content"] {
                 pinDetailVC.strTextViewText = content as! String
@@ -129,7 +129,10 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                 pinDetailVC.strTextViewText = description as! String
             }
             
-            
+            if let pinID = arrPinData[indexPath.section]["pin_id"] {
+                pinDetailVC.pinIDPinDetailView = "\(pinID)"
+            }
+           
             PinDetailViewController.enterMode = .collections
             self.present(pinDetailVC, animated: false, completion: nil)
      
