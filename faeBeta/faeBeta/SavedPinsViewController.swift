@@ -13,6 +13,11 @@ import UIKit.UIGestureRecognizerSubclass
 //import RealmSwift
 
 class SavedPinsViewController: PinsViewController, UITableViewDataSource{
+
+    override func viewDidLoad() {
+        strTableTitle = "Saved Pins"
+        super.viewDidLoad()
+    }
     
     // get the Saved Pins
     func getPinsData() {
@@ -72,9 +77,9 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
                         }
                         self.arrPinData.append(dicCell)
                     }
-                    self.hideOrShowTable(true)
+                    self.tblPinsData.isHidden = false
                 }else{
-                    self.hideOrShowTable(false)
+                    self.tblPinsData.isHidden = true
                 }
                 // reload the table when get the data
                 self.tblPinsData.reloadData()
@@ -91,10 +96,9 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
         tblPinsData.delegate = self
         tblPinsData.dataSource = self
         getPinsData()
-
-        imgEmptyTbl.image = #imageLiteral(resourceName: "empty_savedpins_bg")
+        labelEmptyTbl.text = "There are no Pins saved. Explore some more and save the Pins you like. :)"
     }
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return arrPinData.count
     }
@@ -118,11 +122,12 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
         cellCurrSwiped = tblPinsData.cellForRow(at: path) as! SavedPinsTableViewCell
         tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
         gesturerecognizerTouch.cellInGivenId = cellCurrSwiped
+        gesturerecognizerTouch.isCellSwiped = true
     }
     
     override func toDoItemUnsaved(indexCell: Int, pinId: Int, pinType: String) {
-        let deleteMyPin = FaeMap()
-        deleteMyPin.unsavePin(type: pinType, pinId: pinId.description) {(status: Int, message: Any?) in
+        let unsaveSavedPin = FaePinAction()
+        unsaveSavedPin.unsaveThisPin(pinType, pinID: pinId.description) {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("Successfully unsave the pin!")
             }
@@ -135,8 +140,8 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
         }, completion: {
             self.tblPinsData.reloadData()
         })
-        if(self.arrPinData.count == 0){
-            hideOrShowTable(false)
+        if self.arrPinData.count == 0 {
+            self.tblPinsData.isHidden = true
         }
     }
     
@@ -147,7 +152,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
     
     
     override func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String){
-        
+
     }
     
 }

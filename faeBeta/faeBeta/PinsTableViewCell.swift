@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import RealmSwift
 
 // A protocol that the TableViewCell uses to inform its delegate of state change
 protocol PinTableViewCellDelegate {
@@ -23,18 +25,15 @@ protocol PinTableViewCellDelegate {
 class PinsTableViewCell: UITableViewCell {
     
     var labelDate : UILabel!
-//    var labelTime : UILabel!
     var labelDescription : UILabel!
     var labelLike : UILabel!
     var labelComment : UILabel!
-    var labelMoreThanThreePics : UILabel!
-    var imgFirstPic : UIImageView!
-    var imgSecondPic : UIImageView!
-    var imgThirdPic : UIImageView!
-    var imgLike : UIImage!
-    var btnLike : UIButton!
-    var imgComment : UIImage!
-    var btnComment : UIButton!
+    var imgPinPic01 : UIImageView!
+    var imgPinPic02 : UIImageView!
+    var imgPinPic03 : UIImageView!
+    var labelPics3Plus : UILabel!
+    var imgLike : UIImageView!
+    var imgComment : UIImageView!
     var imgPinTab : UIImageView!
     var imgHot : UIImageView!
     var strHotStatus: String!
@@ -43,6 +42,7 @@ class PinsTableViewCell: UITableViewCell {
     var uiviewPinView : UIView! // this view is for pin
     var uiviewSwipedBtnsView : UIView! // this view is for buttons when swiped
     var uiviewCellView : UIView! // this view contains view for pin and view for buttons when swiped
+    
     // The object that acts as delegate for this cell.
     var delegate: PinTableViewCellDelegate?
     var isCellSWiped = false
@@ -50,6 +50,7 @@ class PinsTableViewCell: UITableViewCell {
     var pinId = 0
     var pinType = ""
     var finishedPositionX : CGFloat = 0
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -62,10 +63,9 @@ class PinsTableViewCell: UITableViewCell {
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         recognizer.delegate = self
         uiviewPinView.addGestureRecognizer(recognizer)
-        
     }
     
-    // Initialize the position of swiped buttons
+    // Interface - Initialize the position of swiped buttons
     func verticalCenterButtons(){
     
     }
@@ -98,7 +98,6 @@ class PinsTableViewCell: UITableViewCell {
         
         // the gesture ends
         if recognizer.state == .ended || recognizer.state == .failed || recognizer.state == .cancelled{
-            
             let cellViewframe = uiviewCellView.frame
             // the frame this cell had before user dragged it
             let originalFrame = CGRect(x: -screenWidth, y: cellViewframe.origin.y,
@@ -110,7 +109,7 @@ class PinsTableViewCell: UITableViewCell {
             let bounceFrame = CGRect(x: -screenWidth + 35, y: cellViewframe.origin.y,
                                      width: cellViewframe.width, height: cellViewframe.height)
             if !swipedBtnsShowOnDragRelease {
-                if(uiviewCellView.center.x < 0){
+                if uiviewCellView.center.x < 0 {
                     // if the item is being swiped from right to left, bonuce back to the original location
                     UIView.animate(withDuration: 0.3,
                                    animations: {
@@ -129,7 +128,6 @@ class PinsTableViewCell: UITableViewCell {
                 UIView.animate(withDuration: 0.3, animations: {self.uiviewCellView.frame = finishFrame}, completion: { (finished) -> Void in
                     self.delegate?.itemSwiped(indexCell: self.indexForCurrentCell)
                 })
-                
             }
         }
     }
@@ -148,16 +146,18 @@ class PinsTableViewCell: UITableViewCell {
     
     // Setup the cell when creat it
     func setUpUI() {
-        
+        // The cell is an uiviewCellView which consists of uiviewPinView and uiviewSwipedBtnsView
         uiviewCellView = UIView()
         uiviewCellView.backgroundColor = .clear
         self.addSubview(uiviewCellView)
         
+        // The uiview is for pin contents
         uiviewPinView = UIView()
         uiviewPinView.backgroundColor = .white
         uiviewPinView.layer.cornerRadius = 10.0
         uiviewCellView.addSubview(uiviewPinView)
         
+        // The uiview is for buttons when swiped
         uiviewSwipedBtnsView = UIView()
         uiviewSwipedBtnsView.backgroundColor = .clear
         uiviewCellView.addSubview(uiviewSwipedBtnsView)
@@ -183,11 +183,10 @@ class PinsTableViewCell: UITableViewCell {
         labelLike.textColor = UIColor.faeAppTimeTextBlackColor()
         uiviewPinView.addSubview(labelLike)
         
-        // set like button
-        imgLike = UIImage(named: "like")!
-        btnLike = UIButton(type:UIButtonType.custom) as UIButton
-        btnLike.setImage(imgLike,for:UIControlState.normal)
-        uiviewPinView.addSubview(btnLike)
+        // set like
+        imgLike = UIImageView()
+        imgLike.image = #imageLiteral(resourceName: "like")
+        uiviewPinView.addSubview(imgLike)
         
         // set comment number
         labelComment = UILabel()
@@ -197,10 +196,9 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addSubview(labelComment)
         
         // set comment button
-        imgComment = UIImage(named: "comment")!
-        btnComment = UIButton(type:UIButtonType.custom) as UIButton
-        btnComment.setImage(imgComment,for:UIControlState.normal)
-        uiviewPinView.addSubview(btnComment)
+        imgComment = UIImageView()
+        imgComment.image = #imageLiteral(resourceName: "comment")
+        uiviewPinView.addSubview(imgComment)
         
         // set tab
         imgPinTab = UIImageView()
@@ -211,23 +209,22 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addSubview(imgHot!)
         
         //set pics
-        imgFirstPic = UIImageView()
-        uiviewPinView.addSubview(imgFirstPic!)
+        imgPinPic01 = UIImageView()
+        uiviewPinView.addSubview(imgPinPic01!)
         
-        imgSecondPic = UIImageView()
-        uiviewPinView.addSubview(imgSecondPic!)
+        imgPinPic02 = UIImageView()
+        uiviewPinView.addSubview(imgPinPic02!)
         
-        imgThirdPic = UIImageView()
-        uiviewPinView.addSubview(imgThirdPic!)
+        imgPinPic03 = UIImageView()
+        uiviewPinView.addSubview(imgPinPic03!)
         
-        labelMoreThanThreePics = UILabel()
-        labelMoreThanThreePics.text = "3+"
-        labelMoreThanThreePics.font = UIFont(name: "AvenirNext-Medium",size: 18)
-        labelMoreThanThreePics.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        uiviewPinView.addSubview(labelMoreThanThreePics)
+        labelPics3Plus = UILabel()
+        labelPics3Plus.text = "3+"
+        labelPics3Plus.font = UIFont(name: "AvenirNext-Medium",size: 18)
+        labelPics3Plus.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        uiviewPinView.addSubview(labelPics3Plus)
         
         //Add the constraints of uiviewPinView & uiviewSwipedBtnsView in the uiviewCellView
-        
         uiviewCellView.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]-9-[v1]-9-|", options: [], views: uiviewSwipedBtnsView, uiviewPinView)
         uiviewCellView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewPinView)
         uiviewCellView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewSwipedBtnsView)
@@ -244,10 +241,10 @@ class PinsTableViewCell: UITableViewCell {
         //The cell is reuseable, so clear the constrains in uiviewPinView when reuse the cell
         uiviewPinView.removeConstraints(uiviewPinView.constraints)
         
-        imgFirstPic.isHidden = true
-        imgSecondPic.isHidden = true
-        imgThirdPic.isHidden = true
-        labelMoreThanThreePics.isHidden = true
+        imgPinPic01.isHidden = true
+        imgPinPic02.isHidden = true
+        imgPinPic03.isHidden = true
+        labelPics3Plus.isHidden = true
         
         // set the value to those data
         if let type = pin["type"]{
@@ -284,14 +281,14 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addConstraintsWithFormat("H:[v0(27)]-95-|", options: [], views: labelLike)
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: labelLike)
         
-        uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-73-|", options: [], views: btnLike)
-        uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: btnLike)
+        uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-73-|", options: [], views: imgLike)
+        uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: imgLike)
         
         uiviewPinView.addConstraintsWithFormat("H:[v0(27)]-34-|", options: [], views: labelComment)
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: labelComment)
         
-        uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-13-|", options: [], views: btnComment)
-        uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: btnComment)
+        uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-13-|", options: [], views: imgComment)
+        uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: imgComment)
         
         uiviewPinView.addConstraintsWithFormat("H:|-0-[v0(20)]|", options: [], views: imgPinTab)
         uiviewPinView.addConstraintsWithFormat("V:[v0(11)]-14-|", options: [], views: imgPinTab)
@@ -300,100 +297,128 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: imgHot)
         
         // hot or not
-        if(strHotStatus == "hot"){
+        if strHotStatus == "hot" {
             imgHot.image = UIImage(named: "hot")
         }else{
             imgHot.image = UIImage()
         }
         
-        // pic or not(Pin with pics or just pin)
-        if(pinType == "media"){
-            
+        // for media pin
+        if pinType == "media" {
             if let descContent = pin["description"] as? String{
                 labelDescription.attributedText = descContent.convertStringWithEmoji()
             }
             imgPinTab.image = UIImage(named: "tab_comment")
-            
             if let imgArr = pin["file_ids"] as? NSArray{
-                
                 let count = imgArr.count
-                
                 // no pic
-                if(count == 0){
+                if count == 0 {
                     uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: labelDescription)
                 }
                 // the first image
-                if(count>0){
-                    imgFirstPic.isHidden = false
-                    
+                if count>0 {
+                    imgPinPic01.isHidden = false
                     let imgId = String(describing: imgArr[0])
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    
-                    uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: imgFirstPic)
-                    imgFirstPic.contentMode = .scaleAspectFill
-                    imgFirstPic.layer.cornerRadius = 13.5
-                    imgFirstPic.clipsToBounds = true
-                    imgFirstPic.isUserInteractionEnabled = true
-                    imgFirstPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgFirstPic)
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic01.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic01.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+                    uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(95)]", options: [], views: imgPinPic01)
+                    imgPinPic01.contentMode = .scaleAspectFill
+                    imgPinPic01.layer.cornerRadius = 13.5
+                    imgPinPic01.clipsToBounds = true
+                    imgPinPic01.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic01)
                 }
                 
                 // the second image
-                if(count>1){
-                    imgSecondPic.isHidden = false
+                if count>1 {
+                    imgPinPic02.isHidden = false
                     let imgId = String(describing: imgArr[1])
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgFirstPic,imgSecondPic)
-                    imgSecondPic.contentMode = .scaleAspectFill
-                    imgSecondPic.layer.cornerRadius = 13.5
-                    imgSecondPic.clipsToBounds = true
-                    imgSecondPic.isUserInteractionEnabled = true
-                    imgSecondPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgSecondPic)
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic02.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic02.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgPinPic01,imgPinPic02)
+                    imgPinPic02.contentMode = .scaleAspectFill
+                    imgPinPic02.layer.cornerRadius = 13.5
+                    imgPinPic02.clipsToBounds = true
+                    imgPinPic02.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic02)
                 }
                 
                 //the third image
-                if(count>2){
-                    imgThirdPic.isHidden = false
+                if count>2 {
+                    imgPinPic03.isHidden = false
                     let imgId = String(describing: imgArr[2])
-                    let fileURL = "https://dev.letsfae.com/files/\(imgId)/data"
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgSecondPic,imgThirdPic)
-                    imgThirdPic.contentMode = .scaleAspectFill
-                    imgThirdPic.layer.cornerRadius = 13.5
-                    imgThirdPic.clipsToBounds = true
-                    imgThirdPic.isUserInteractionEnabled = true
-                    imgThirdPic.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                        if image != nil {
-                        }
-                    })
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgThirdPic)
+                    let realm = try! Realm()
+                    if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(imgId) AND picture != nil").first {
+                        imgPinPic03.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
+                    } else {
+                        let fileURL = "\(baseURL)/files/\(imgId)/data"
+                        imgPinPic03.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                            if image != nil {
+                                let mediaImage = FileObject()
+                                mediaImage.fileId = Int(imgId) ?? 0
+                                mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                                try! realm.write {
+                                    realm.add(mediaImage)
+                                }
+                            }
+                        })
+                    }
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-10-[v1(95)]", options: [], views: imgPinPic02,imgPinPic03)
+                    imgPinPic03.contentMode = .scaleAspectFill
+                    imgPinPic03.layer.cornerRadius = 13.5
+                    imgPinPic03.clipsToBounds = true
+                    imgPinPic03.isUserInteractionEnabled = true
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-12-[v1(95)]-42-|", options: [], views: labelDescription,imgPinPic03)
                 }
                 // more than 3 pics
-                if(count>3){
-                    labelMoreThanThreePics.isHidden = false
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: labelDescription,labelMoreThanThreePics)
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: imgThirdPic,labelMoreThanThreePics)
+                if count>3 {
+                    labelPics3Plus.isHidden = false
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: labelDescription,labelPics3Plus)
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: imgPinPic03,labelPics3Plus)
                 }
             }
             
-        }else if pinType == "comment"{
-            
+        }
+        //For comment pin
+        if pinType == "comment"{
             if let descContent = pin["content"] as? String{
                 labelDescription.attributedText = descContent.convertStringWithEmoji()
             }
             imgPinTab.image = UIImage(named: "tab_story")
             uiviewPinView.addConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: labelDescription)
-        }else{}
+        }
         
     }
 
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state

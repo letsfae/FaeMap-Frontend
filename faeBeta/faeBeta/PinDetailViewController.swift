@@ -215,6 +215,10 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewLoad()
+    }
+    
+    func viewLoad(){
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
@@ -235,7 +239,6 @@ class PinDetailViewController: UIViewController {
             getSeveralInfo()
         }
         self.delegate?.disableSelfMarker(yes: true)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

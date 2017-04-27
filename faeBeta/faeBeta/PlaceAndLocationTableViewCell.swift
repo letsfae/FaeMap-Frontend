@@ -105,7 +105,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
         self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
         self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: name)
-        if(memo?.text == ""){
+        if memo?.text == "" {
             self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: address)
         }else{
             self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: address,memo)

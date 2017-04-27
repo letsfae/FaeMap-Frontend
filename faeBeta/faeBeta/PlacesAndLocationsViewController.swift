@@ -68,7 +68,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         if(firstAppear){
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
-                self.viewBackground.center.x -= screenWidth
+                self.viewBackground.center.x = screenWidth/2
             }))
             firstAppear = false
             
@@ -80,7 +80,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.viewBackground.center.x += screenWidth
+            self.viewBackground.center.x = 1.5 * screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -165,12 +165,12 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         //        }
         
         //API 能用后删掉下面的代码
-        if(placeAndLocationDataArr.count != 0){
+        if placeAndLocationDataArr.count != 0 {
             btnEdit.isHidden = false
         }
         
         
-        if(self.placeAndLocationDataArr.count == 0){
+        if self.placeAndLocationDataArr.count == 0 {
             self.emptySavedTblImgView.isHidden = false
             self.SearchBar.isHidden = true
             self.TblResult.isHidden = true
@@ -257,12 +257,12 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         
         
         //API 能用后删掉下面的代码
-        if(placeAndLocationDataArr.count != 0){
+        if placeAndLocationDataArr.count != 0 {
             btnEdit.isHidden = false
         }
         
         
-        if(self.placeAndLocationDataArr.count == 0){
+        if self.placeAndLocationDataArr.count == 0 {
             self.emptySavedTblImgView.isHidden = false
             self.SearchBar.isHidden = true
             self.TblResult.isHidden = true
@@ -456,7 +456,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         viewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         
-        viewBackground.center.x += screenWidth
+        viewBackground.center.x = 1.5 * screenWidth
         TblResult = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
         TblResult.backgroundColor = .white
         TblResult.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")
@@ -519,9 +519,9 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         let path : IndexPath = IndexPath(row: 0, section: sectionId)
         let  cellInGivenId : PlaceAndLocationTableViewCell = TblResult.cellForRow(at: path) as!   PlaceAndLocationTableViewCell
         
-        if(!arrSelectedItem.contains(sectionId)){
+        if !arrSelectedItem.contains(sectionId) {
             
-            if(arrSelectedItem.count == 0){
+            if arrSelectedItem.count == 0 {
                 btnShare.isEnabled = true
                 btnMemo.isEnabled = true
                 btnRemove.isEnabled = true
@@ -547,7 +547,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
             cellInGivenId.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
             cellInGivenId.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
             
-            if(arrSelectedItem.count == 0){
+            if arrSelectedItem.count == 0 {
                 btnShare.isEnabled = false
                 btnMemo.isEnabled = false
                 btnRemove.isEnabled = false
@@ -555,7 +555,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
                 btnMemo.alpha = 0.6
                 btnRemove.alpha = 0.6
             }
-            if(arrSelectedItem.count == 1){
+            if arrSelectedItem.count == 1 {
                 btnShare.isEnabled = true
                 btnMemo.isEnabled = true
                 btnShare.alpha = 1
@@ -581,7 +581,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     }
     // delegate func(transfer the memo data from memoVC to current VC)
     func memoContent(save: Bool, content: String){
-        if(save){
+        if save {
             for item in arrSelectedItem{
                 
                 placeAndLocationDataArr[item]["memo"] = content
@@ -660,8 +660,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 0, left: 89.5, bottom: 0, right: 0)
         
-        if(tableView.isEditing && self.tableView(tableView, canEditRowAt: indexPath))
-        {
+        if tableView.isEditing && self.tableView(tableView, canEditRowAt: indexPath) {
             cell.distance.isHidden = true
             cell.btnSelected.isHidden = false
             cell.btnSelected.tag = indexPath.section //因为每个section只有一个row
@@ -673,21 +672,16 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
             else{
                 cell.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
                 cell.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
-                
             }
             
             //每次刷新都把选中的button清空成灰色
             cell.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
             cell.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
-            
-            
         }
-        else
-        {
+        else{
             cell.distance.isHidden = false
             cell.btnSelected.isHidden = true
         }
-        
         return cell
     }
     
@@ -708,10 +702,6 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-    
-    
-    
 }
 
 

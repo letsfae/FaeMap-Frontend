@@ -15,13 +15,16 @@ import UIKit.UIGestureRecognizerSubclass
 class TouchGestureRecognizer : UIGestureRecognizer {
     // initialize the cellInGivenId
     var cellInGivenId = PinsTableViewCell()
+    var isCellSwiped = false
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         // This assignment is very importment for custom gesture
         self.state = UIGestureRecognizerState.began
         
         let frame = cellInGivenId.uiviewCellView.frame
         let originalFrame = CGRect(x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
-        UIView.animate(withDuration: 0.3, animations: {self.cellInGivenId.uiviewCellView.frame = originalFrame})
+        UIView.animate(withDuration: 0.3, animations: {self.cellInGivenId.uiviewCellView.frame = originalFrame}, completion: { (finished) -> Void in
+            self.isCellSwiped = false
+        })
     }
 }
 
@@ -38,10 +41,11 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     var uiviewSearchBarCover: UIView!
     var schbarPin: UISearchBar!
     var imgEmptyTbl: UIImageView!
+    var labelEmptyTbl: UILabel!
     //Nagivation Bar Init
     var uiviewNavBar: UIView!
     //Title for current table
-    var strTableTitle : String!
+    var strTableTitle: String!
     //The set of pin data
     var arrPinData = [[String: AnyObject]]()
     
@@ -51,10 +55,8 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         uiviewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         self.view.addSubview(uiviewBackground)
         uiviewBackground.center.x = 1.5 * screenWidth
-        
         loadtblPinsData()
         loadNavBar()
-
     }
     
     
@@ -66,7 +68,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // only the buttons in the siwped cell don't respond to the gesture
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if (touch.view?.isDescendant(of: cellCurrSwiped.uiviewSwipedBtnsView))!{
+        if (touch.view?.isDescendant(of: cellCurrSwiped.uiviewSwipedBtnsView))! {
             return false
         }
         return true
@@ -75,15 +77,13 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if(isFirstAppear){
-            super.viewDidAppear(animated)
+        if isFirstAppear {
             UIView.animate(withDuration: 0.3, animations: ({
                 self.uiviewBackground.center.x = screenWidth/2
             }))
             isFirstAppear = false
         }
     }
-    
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
@@ -96,19 +96,9 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         })
     }
     
-    func hideOrShowTable(_ willShow : Bool){
-        if(willShow){
-            self.imgEmptyTbl.isHidden = true
-            self.tblPinsData.isHidden = false
-        }else{
-            self.imgEmptyTbl.isHidden = false
-            self.tblPinsData.isHidden = true
-        }
-    }
-    
     func loadNavBar() {
         uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
-        uiviewNavBar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
+        uiviewNavBar.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
         uiviewNavBar.layer.borderWidth = 1
         uiviewNavBar.backgroundColor = UIColor.white
         uiviewBackground.addSubview(uiviewNavBar)
@@ -148,22 +138,37 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         uiviewSearchBarCover.isUserInteractionEnabled = true
     }
     
+    // Creat the search view when tap the fake searchbar
+    func searchBarTapDown(_ sender: UITapGestureRecognizer) {
+        let searchVC = PinSearchViewController()
+        searchVC.modalPresentationStyle = .overCurrentContext
+        self.present(searchVC, animated: false, completion: nil)
+        searchVC.tableTypeName = strTableTitle
+        searchVC.dataArray = arrPinData
+    }
     
     func loadtblPinsData(){
         uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         tblPinsData = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
         tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-
+        tblPinsData.isHidden = true
         tblPinsData.showsVerticalScrollIndicator = false
+        
         //for auto layout
         tblPinsData.rowHeight = UITableViewAutomaticDimension
         tblPinsData.estimatedRowHeight = 340
         
         imgEmptyTbl = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        imgEmptyTbl.isHidden = true
+        imgEmptyTbl.image = #imageLiteral(resourceName: "empty_bg")
+        labelEmptyTbl = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
+        labelEmptyTbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        labelEmptyTbl.numberOfLines = 3
+        labelEmptyTbl.font = UIFont(name: "AvenirNext-Medium",size: 18)
+        labelEmptyTbl.textAlignment = NSTextAlignment.left
+        labelEmptyTbl.textColor = UIColor.faeAppInputTextGrayColor()
+        imgEmptyTbl.addSubview(labelEmptyTbl)
         uiviewBackground.addSubview(imgEmptyTbl)
         uiviewBackground.addSubview(tblPinsData)
-
         
         // initialize the touch gesture
         gesturerecognizerTouch = TouchGestureRecognizer(target: self, action: #selector(handleAfterTouch))
@@ -173,22 +178,10 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         tblPinsData.tableHeaderView = schbarPin
     }
     
-    
-    // Creat the search view when tap the fake searchbar
-    func searchBarTapDown(_ sender: UITapGestureRecognizer) {
-        let searchVC = CollectionSearchViewController()
-        searchVC.modalPresentationStyle = .overCurrentContext
-        self.present(searchVC, animated: false, completion: nil)
-        searchVC.tableTypeName = strTableTitle
-        searchVC.dataArray = arrPinData
-    }
-    
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     //以下代码是table的构造
     // Make the background color show through
@@ -198,7 +191,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return headerView
     }
     
-    
     /* To add the space between the cells, we use indexPath.section to get the current cell index. And there is just one row in every section. When we want to get the index of cell, we use indexPath.section rather than indexPath.row */
     
     // Set the spacing between sections
@@ -206,21 +198,24 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return 10
     }
     
-    
     // Only one row for one section in the table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        print("Your choice is \(arrPinData[indexPath.section])")
+        if(!gesturerecognizerTouch.isCellSwiped){
+            tableView.deselectRow(at: indexPath, animated: false)
+            let pinDetailVC = PinFullViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
+            self.present(pinDetailVC, animated: false, completion: nil)
+        }
     }
     
     // PinTableViewCellDelegate protocol required function
     func itemSwiped(indexCell: Int){}
-
+    
     func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){}
     
     func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String){}
@@ -232,7 +227,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){}
     
     func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String){}
-
+    
 }
 
 extension UITableView {

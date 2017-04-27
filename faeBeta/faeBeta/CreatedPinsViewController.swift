@@ -12,8 +12,18 @@ import UIKit.UIGestureRecognizerSubclass
 //import SDWebImage
 //import RealmSwift
 
-class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
-
+class CreatedPinsViewController: PinsViewController, UITableViewDataSource, EditPinViewControllerDelegate{
+    
+    override func viewDidLoad() {
+        strTableTitle = "Created Pins"
+        super.viewDidLoad()
+    }
+    
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
+        getPinsData()
+    }
+    
+    
     // get the Created Pins
     func getPinsData() {
         let getCreatedPinsData = FaeMap()
@@ -50,7 +60,14 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
                             }
                             
                             if let comment_count = pinObject["comment_count"].int {
-                                dicCell["comment_count"] = comment_count as AnyObject?
+                                dicCell["comment_count"] = comment_count as AnyObject
+                            }
+                            
+                            if let latitude = pinObject["geolocation"]["latitude"].double, let longitude = pinObject["geolocation"]["longitude"].double {
+                                
+                                dicCell["latitude"] = latitude as AnyObject
+                                dicCell["longitude"] = longitude as AnyObject
+                                
                             }
                             
                             if let mediaImgArr = pinObject["file_ids"].array {
@@ -60,11 +77,11 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
                         self.arrPinData.append(dicCell)
                     }
                     /*有数据代表不是空表，要显示控件*/
-                    self.hideOrShowTable(true)
+                    self.tblPinsData.isHidden = false
                 }
                 else{
                     /*没有数据代表空表，要隐藏控件*/
-                    self.hideOrShowTable(false)
+                    self.tblPinsData.isHidden = true
                 }
                 // reload the table when get the data
                 self.tblPinsData.reloadData()
@@ -80,22 +97,10 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
         tblPinsData.register(CreatedPinsTableViewCell.self, forCellReuseIdentifier: "CreatedPinCell")
         tblPinsData.delegate = self
         tblPinsData.dataSource = self
-        
-
         getPinsData()
+        labelEmptyTbl.text = "You haven’t created any Pins, come again after you create some pins. :)"
+    }
 
-        imgEmptyTbl.image = #imageLiteral(resourceName: "empty_savedpins_bg")
-    }
-    
-    
-    // Creat the search view when tap the fake searchbar
-    override func searchBarTapDown(_ sender: UITapGestureRecognizer) {
-        let searchVC = CollectionSearchViewController()
-        searchVC.modalPresentationStyle = .overCurrentContext
-        self.present(searchVC, animated: false, completion: nil)
-        searchVC.tableTypeName = strTableTitle
-        searchVC.dataArray = arrPinData
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return arrPinData.count
@@ -129,8 +134,8 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
         }, completion: {
             self.tblPinsData.reloadData()
         })
-        if(self.arrPinData.count == 0){
-            hideOrShowTable(false)
+        if self.arrPinData.count == 0 {
+            self.tblPinsData.isHidden = true
         }
     }
     
@@ -140,10 +145,44 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource{
         cellCurrSwiped = tblPinsData.cellForRow(at: path) as! CreatedPinsTableViewCell
         tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
         gesturerecognizerTouch.cellInGivenId = cellCurrSwiped
+        gesturerecognizerTouch.isCellSwiped = true
     }
     
     override func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){
+        if pinId == -999 {
+            return
+        }
+        let editPinVC = EditPinViewController()
+//        editPinVC.zoomLevel = zoomLevel
+        editPinVC.delegate = self
         
+        if(pinType == "comment"){
+            editPinVC.previousCommentContent = arrPinData[indexCell]["content"] as! String
+            editPinVC.editPinMode = .comment
+        }
+        if(pinType == "media"){
+            editPinVC.previousCommentContent = arrPinData[indexCell]["description"] as! String
+            
+            var mediaIdArray : [Int] = []
+            let fileIDs = arrPinData[indexCell]["file_ids"] as! NSArray
+            for index in 0...fileIDs.count-1 {
+                    mediaIdArray.append(Int(String(describing: fileIDs[index]))!)
+            }
+            editPinVC.mediaIdArray = mediaIdArray
+            
+            editPinVC.editPinMode = .media
+        }
+        editPinVC.pinID = "\(pinId)"
+        editPinVC.pinType = pinType
+//        editPinVC.pinMediaImageArray = imageViewMediaArray
+        
+        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
+        
+
+        
+        self.present(editPinVC, animated: true, completion: {
+            self.tblPinsData.reloadData()
+            })
     }
     
     override func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){
