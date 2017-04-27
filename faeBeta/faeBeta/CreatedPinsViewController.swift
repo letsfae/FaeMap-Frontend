@@ -106,6 +106,36 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         return arrPinData.count
     }
     
+    
+    //click cell
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(!gesturerecognizerTouch.isCellSwiped){
+            tableView.deselectRow(at: indexPath, animated: false)
+            
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
+            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"] as! CLLocationDegrees, arrPinData[indexPath.section]["longitude"] as! CLLocationDegrees)
+            
+                PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
+            PinDetailViewController.pinUserId = user_id as Int
+            
+            if let content = arrPinData[indexPath.section]["content"] {
+                pinDetailVC.strTextViewText = content as! String
+            }
+            //media tab里面存的不叫content 叫description
+            if let description = arrPinData[indexPath.section]["description"] {
+                pinDetailVC.strTextViewText = description as! String
+            }
+            
+            
+            PinDetailViewController.enterMode = .collections
+            self.present(pinDetailVC, animated: false, completion: nil)
+     
+        }
+    }
+    
     //Customize each cell in the table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
