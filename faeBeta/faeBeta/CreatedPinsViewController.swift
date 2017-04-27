@@ -106,6 +106,29 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         return arrPinData.count
     }
     
+    
+    //click cell
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(!gesturerecognizerTouch.isCellSwiped){
+            tableView.deselectRow(at: indexPath, animated: false)
+
+            let pinType = tblPinsData.cellForRow(at: IndexPath) as! CreatedPinsTableViewCell
+            
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
+            pinDetailVC.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"], arrPinData[indexPath.section]["longitude"])
+            
+                pinDetailVC.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
+            pinDetailVC.pinUserId = user_id
+            
+            pinDetailVC.enterMode = .collections
+            self.present(pinDetailVC, animated: false, completion: nil)
+     
+        }
+    }
+    
     //Customize each cell in the table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell

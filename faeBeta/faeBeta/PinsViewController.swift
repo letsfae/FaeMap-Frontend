@@ -203,15 +203,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return 1
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(!gesturerecognizerTouch.isCellSwiped){
-            tableView.deselectRow(at: indexPath, animated: false)
-            let pinDetailVC = PinFullViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
-            self.present(pinDetailVC, animated: false, completion: nil)
-        }
-    }
     
     // PinTableViewCellDelegate protocol required function
     func itemSwiped(indexCell: Int){}
