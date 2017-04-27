@@ -121,6 +121,15 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                 PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
             PinDetailViewController.pinUserId = user_id as Int
             
+            if let content = arrPinData[indexPath.section]["content"] {
+                pinDetailVC.strTextViewText = content as! String
+            }
+            //media tab里面存的不叫content 叫description
+            if let description = arrPinData[indexPath.section]["description"] {
+                pinDetailVC.strTextViewText = description as! String
+            }
+            
+            
             PinDetailViewController.enterMode = .collections
             self.present(pinDetailVC, animated: false, completion: nil)
      
