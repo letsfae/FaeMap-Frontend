@@ -166,8 +166,12 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         centerView.addSubview(showTableButton)
         self.navigationItem.titleView = centerView
         
-        sendButton = UIButton(frame: CGRect(x: 0,y: 0,width: 50,height: 30))
-        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        var strSendBtn = "Send"
+        if isCSP {
+            strSendBtn = "Select"
+        }
+        sendButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
         sendButton.contentHorizontalAlignment = .right
         sendButton.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
@@ -312,8 +316,12 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     fileprivate func updateSendButtonStatus()
     {
+        var strSendBtn = "Send"
+        if isCSP {
+            strSendBtn = "Select"
+        }
         sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
-        let attributedText = NSAttributedString(string:"Send", attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
     }
     

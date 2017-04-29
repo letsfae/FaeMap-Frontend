@@ -26,7 +26,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSou
     func loadCellForChat(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Add Tags", trailingText: nil, trailingImagePlus: true)
         case 2:
@@ -47,7 +47,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSou
     func loadCellForComment(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Duration on Map", trailingText: "3HR", trailingImagePlus: nil)
         case 2:
@@ -64,7 +64,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSou
     func loadCellForMedia(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Tags", trailingText: nil, trailingImagePlus: true)
         case 2:

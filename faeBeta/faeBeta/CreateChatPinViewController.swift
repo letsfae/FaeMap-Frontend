@@ -261,8 +261,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     func randomLocation() -> CLLocationCoordinate2D {
         let lat = currentLocation2D.latitude
         let lon = currentLocation2D.longitude
-        let random_lat = Double.random(min: -0.004, max: 0.004)
-        let random_lon = Double.random(min: -0.004, max: 0.004)
+        let random_lat = Double.random(min: -0.01, max: 0.01)
+        let random_lon = Double.random(min: -0.01, max: 0.01)
         return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
     }
     

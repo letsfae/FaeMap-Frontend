@@ -103,7 +103,6 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.lblUserAge.text = userInfo.age
             cell.imgAvatar.image = userInfo.profileImage
             cell.userId = userInfo.userId
-            cell.updateAvatarUI(isPinOwner: userInfo.userId == PinDetailViewController.pinUserId)
             cell.updatePrivacyUI(showGender: userInfo.showGender,
                                  gender: userInfo.gender,
                                  showAge: userInfo.showAge,

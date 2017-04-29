@@ -52,6 +52,7 @@ extension FaeMapViewController {
         self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: btnLeftWindow)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnLeftWindow)
         btnLeftWindow.layer.zPosition = 500
+        btnLeftWindow.adjustsImageWhenDisabled = false
         
         // Open main map search
         btnMainMapSearch = UIButton()
@@ -62,6 +63,7 @@ extension FaeMapViewController {
         self.view.addConstraintsWithFormat("V:|-22-[v0(36)]", options: [], views: btnMainMapSearch)
         NSLayoutConstraint(item: btnMainMapSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         btnMainMapSearch.layer.zPosition = 500
+        btnMainMapSearch.adjustsImageWhenDisabled = false
         
         // Wind bell
         btnWindBell = UIButton()
@@ -69,6 +71,7 @@ extension FaeMapViewController {
         self.view.addSubview(btnWindBell)
         self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: btnWindBell)
         self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnWindBell)
+        btnWindBell.adjustsImageWhenDisabled = false
         
         // Click to back to north
         btnToNorth = UIButton(frame: CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59))

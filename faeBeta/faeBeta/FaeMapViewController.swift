@@ -141,6 +141,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var userPins = [UserPin]()
+    var faeUserPins = [FaeUserPin]()
+    var selectedUserMarker = GMSMarker()
     
     // System Functions
     override func viewDidLoad() {

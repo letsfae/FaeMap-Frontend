@@ -110,7 +110,7 @@ extension EditPinViewController: UITextViewDelegate, CreatePinInputToolbarDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinMedia", for: indexPath) as! EditPinCollectionViewCell
         if indexPath.row == 0 {
-            cell.media.image = #imageLiteral(resourceName: "AddMoreImage")
+            cell.media.image = #imageLiteral(resourceName: "editPinAddMedia")
             cell.buttonCancel.isHidden = true
         }else {
             cell.media.image = pinMediaImageArray[indexPath.row-1].image

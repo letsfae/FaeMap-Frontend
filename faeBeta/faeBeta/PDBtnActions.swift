@@ -224,7 +224,7 @@ extension PinDetailViewController {
             buttonPrevPin.isHidden = true
             btnNextPin.isHidden = true
             pinIcon.isHidden = true
-            grayBackButton.isHidden = true
+            btnGrayBackToMap.isHidden = true
             self.present(openedPinListVC, animated: false, completion: {
                 if self.uiviewPlaceDetail != nil {
                     self.uiviewPlaceDetail.center.y -= screenHeight
@@ -243,7 +243,7 @@ extension PinDetailViewController {
         self.delegate?.backToMainMap()
         if PinDetailViewController.pinTypeEnum != .place {
             UIView.animate(withDuration: 0.2) {
-                self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 461*screenHeightFactor, width: 0, height: 0)
+                self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 451*screenHeightFactor, width: 0, height: 0)
                 for btn in self.btnFeelingArray {
                     btn.frame = CGRect.zero
                 }
@@ -256,7 +256,7 @@ extension PinDetailViewController {
             self.tableCommentsForPin.center.y -= screenHeight
             self.subviewTable.center.y -= screenHeight
             self.draggingButtonSubview.center.y -= screenHeight
-            self.grayBackButton.alpha = 0
+            self.btnGrayBackToMap.alpha = 0
             self.pinIcon.alpha = 0
             self.buttonPrevPin.alpha = 0
             self.btnNextPin.alpha = 0
@@ -266,7 +266,7 @@ extension PinDetailViewController {
             if PinDetailViewController.pinTypeEnum != .place {
                 self.uiviewFeelingBar.alpha = 0
             }
-        }), completion: { (finished) in
+        }), completion: { (_) in
             self.dismiss(animated: false, completion: nil)
         })
     }
@@ -286,6 +286,9 @@ extension PinDetailViewController {
         }), completion: { (finished) in
             self.dismiss(animated: false, completion: nil)
         })
+        guard let likes = labelPinLikeCount.text else { return }
+        guard let comments = labelPinCommentsCount.text else { return }
+        self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments)
     }
     
     // When clicking reply button in pin detail window

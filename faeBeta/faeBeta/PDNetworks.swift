@@ -304,6 +304,18 @@ extension PinDetailViewController {
 //            return
 //        }
         let indexPath = IndexPath(row: index, section: 0)
+        let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
+        UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+            if let profileImage = image {
+                if isPeople {
+                    self.pinDetailUsers[index].profileImage = profileImage
+                } else {
+                    self.pinComments[index].profileImage = profileImage
+                    self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
+            }
+        })
+        return
         let realm = try! Realm()
         if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
             let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)

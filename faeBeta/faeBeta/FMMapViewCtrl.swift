@@ -308,7 +308,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             if !self.canOpenAnotherPin {
                 return true
             }
-            
+
             self.dismissMainBtns()
             self.canOpenAnotherPin = false
             invalidateAllTimer()
@@ -328,14 +328,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             
             return true
         } else if type == 1 { // user pin
-            guard let userPin = userData.values.first as? UserPin else {
+            guard let userPin = userData.values.first as? FaeUserPin else {
                 return false
             }
+            userPin.pause = true
+            selectedUserMarker = marker
             self.canDoNextUserUpdate = false
-            
-            //
             self.animateToCoordinate(type: type, marker: marker, animated: true)
-            
             self.updateNameCard(withUserId: userPin.userId)
             self.animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {

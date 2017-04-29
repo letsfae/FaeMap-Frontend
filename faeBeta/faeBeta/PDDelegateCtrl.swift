@@ -46,9 +46,11 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         self.textViewDidChange(textViewInput)
     }
     
+    // EditPinViewControllerDelegate
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
         if self.pinIDPinDetailView != "-999" {
             getSeveralInfo()
+            tableCommentsForPin.contentOffset.y = 0
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = zoom
@@ -60,7 +62,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         buttonPrevPin.isHidden = false
         btnNextPin.isHidden = false
         pinIcon.isHidden = false
-        grayBackButton.isHidden = false
+        btnGrayBackToMap.isHidden = false
         
         self.backJustOnce = true
         self.uiviewPlaceDetail.frame.origin.y = 0

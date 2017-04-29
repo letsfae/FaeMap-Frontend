@@ -116,6 +116,14 @@ extension FaeMapViewController {
                 self.lblUserAge.text = nil
                 self.lblUserAge.alpha = 0
                 self.labelDisplayName.alpha = 0
+                
+                guard let userData = self.selectedUserMarker.userData as? [Int: AnyObject] else {
+                    return
+                }
+                guard let userPin = userData.values.first as? FaeUserPin else {
+                    return
+                }
+                userPin.pause = false
             }
         })
     }

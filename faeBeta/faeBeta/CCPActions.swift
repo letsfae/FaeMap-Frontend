@@ -12,6 +12,13 @@ import CoreLocation
 
 extension CreateCommentPinViewController {
     
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func actionAnonymous(_ sender: UIButton) {
         if sender.tag == 0 {
             sender.tag = 1
@@ -30,6 +37,10 @@ extension CreateCommentPinViewController {
         let fromValue = 1.0-toValue
         
         UIView.animate(withDuration: 0.4) {
+            
+        }
+        
+        UIView.animate(withDuration: 0.4, animations: { 
             self.textViewForCommentPin.alpha = fromValue
             self.uiviewSelectLocation.alpha = fromValue
             self.uiviewMoreOptions.alpha = fromValue
@@ -41,6 +52,10 @@ extension CreateCommentPinViewController {
             self.uiviewInterRadius.alpha = toValue
             self.uiviewPinPromot.alpha = toValue
             self.buttonBack.alpha = toValue
+        }) { (_) in
+            if toValue == 1.0 {
+                self.showAlert(title: "This feature is coming soon in the next version!", message: "")
+            }
         }
     }
     
