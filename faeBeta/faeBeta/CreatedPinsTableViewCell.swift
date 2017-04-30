@@ -78,7 +78,7 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     override func setValueForCell(_ pin: [String: AnyObject]) {
         super.setValueForCell(pin)
         if let createat = pin["created_at"]{
-            labelTime.text = ((createat as! String).formatFaeDate()) + " on Map"
+            labelTime.text = ((createat as! String).formatLeftOnMap(DurationOnMap : 3))
         }
         
     //Add the constraints in uiviewPinView
