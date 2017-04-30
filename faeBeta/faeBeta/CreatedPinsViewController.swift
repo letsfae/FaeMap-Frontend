@@ -153,6 +153,32 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         return cell
     }
     
+    //full pin detail delegate
+    func backToCollections(likeCount: String, commentCount: String){
+        if self.indexCurrSelectRowAt != nil {
+            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
+            cellCurrSelect.lblComment.text = commentCount
+            cellCurrSelect.lblLike.text = likeCount
+            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+                cellCurrSelect.imgHot.isHidden = false
+            }else{
+                cellCurrSelect.imgHot.isHidden = true
+            }
+            arrPinData[self.indexCurrSelectRowAt.section]["liked_count"] = likeCount as AnyObject?
+            arrPinData[self.indexCurrSelectRowAt.section]["comment_count"] = commentCount as AnyObject?
+
+        }
+    }
+    
+    // PinTableViewCellDelegate protocol required function
+    override func itemSwiped(indexCell: Int){
+        let path : IndexPath = IndexPath(row: 0, section: indexCell)
+        cellCurrSwiped = tblPinsData.cellForRow(at: path) as! CreatedPinsTableViewCell
+        tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
+        gesturerecognizerTouch.cellInGivenId = cellCurrSwiped
+        gesturerecognizerTouch.isCellSwiped = true
+    }
+    
     override func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String){
         let deleteMyPin = FaeMap()
         deleteMyPin.deletePin(type: pinType, pinId: pinId.description) {(status: Int, message: Any?) in
@@ -171,29 +197,6 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         if self.arrPinData.count == 0 {
             self.tblPinsData.isHidden = true
         }
-    }
-    
-    //full pin detail delegate
-    func backToCollections(likeCount: String, commentCount: String){
-        if self.indexCurrSelectRowAt != nil {
-            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
-            cellCurrSelect.lblComment.text = commentCount
-            cellCurrSelect.lblLike.text = likeCount
-            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
-                cellCurrSelect.imgHot.isHidden = false
-            }else{
-                cellCurrSelect.imgHot.isHidden = true
-            }
-        }
-    }
-    
-    // PinTableViewCellDelegate protocol required function
-    override func itemSwiped(indexCell: Int){
-        let path : IndexPath = IndexPath(row: 0, section: indexCell)
-        cellCurrSwiped = tblPinsData.cellForRow(at: path) as! CreatedPinsTableViewCell
-        tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
-        gesturerecognizerTouch.cellInGivenId = cellCurrSwiped
-        gesturerecognizerTouch.isCellSwiped = true
     }
     
     override func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){
