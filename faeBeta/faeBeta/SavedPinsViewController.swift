@@ -162,6 +162,9 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             }else{
                 cellCurrSelect.imgHot.isHidden = true
             }
+            arrPinData[self.indexCurrSelectRowAt.section]["liked_count"] = Int(likeCount) as AnyObject
+            arrPinData[self.indexCurrSelectRowAt.section]["comment_count"] = Int(commentCount) as AnyObject
+            
         }
     }
     

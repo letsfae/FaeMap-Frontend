@@ -28,8 +28,14 @@ class TouchGestureRecognizer : UIGestureRecognizer {
     }
 }
 
+protocol CollectionsBoardDelegate: class {
+    // Go back to collections
+    func backToBoard(Count: Int)
+}
 
-class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate,PinTableViewCellDelegate, UIGestureRecognizerDelegate {
+class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate,PinTableViewCellDelegate, UIGestureRecognizerDelegate{
+
+    weak var backBoardDelegate: CollectionsBoardDelegate? // For collectionBoard
     var isFirstAppear = true
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
@@ -89,6 +95,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
+        self.backBoardDelegate?.backToBoard(Count: arrPinData.count)
         UIView.animate(withDuration: 0.3, animations: ({
             self.uiviewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in

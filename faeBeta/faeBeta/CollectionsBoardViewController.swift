@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class CollectionsBoardViewController: UIViewController {
+class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate {
     var firstAppear = true
     
     //background view
@@ -20,6 +20,9 @@ class CollectionsBoardViewController: UIViewController {
     var savedLocationsCount : UILabel!
     var savedPlacesCount : UILabel!
     
+    func backToBoard(Count: Int){
+        getPinCounts()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -277,7 +280,7 @@ class CollectionsBoardViewController: UIViewController {
         
         let createdPinVC = CreatedPinsViewController()
         createdPinVC.modalPresentationStyle = .overCurrentContext
-        
+        createdPinVC.backBoardDelegate = self
         self.present(createdPinVC, animated: false, completion: nil)
     }
     
@@ -285,7 +288,7 @@ class CollectionsBoardViewController: UIViewController {
         
         let savedPinVC = SavedPinsViewController()
         savedPinVC.modalPresentationStyle = .overCurrentContext
-        
+        savedPinVC.backBoardDelegate = self
         self.present(savedPinVC, animated: false, completion: nil)
     }
     
