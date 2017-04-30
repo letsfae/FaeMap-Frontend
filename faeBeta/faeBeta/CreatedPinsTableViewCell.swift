@@ -67,8 +67,8 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
         labelTime.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         uiviewPinView.addSubview(labelTime)
         
-        labelDate.textAlignment = NSTextAlignment.left
-        labelDate.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblDate.textAlignment = NSTextAlignment.left
+        lblDate.textColor = UIColor.faeAppTimeTextBlackColor()
         
         finishedPositionX = 370.0
         
@@ -82,7 +82,7 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
         }
         
     //Add the constraints in uiviewPinView
-        uiviewPinView.addConstraintsWithFormat("H:|-13-[v0(200)]", options: [], views: labelDate)
+        uiviewPinView.addConstraintsWithFormat("H:|-13-[v0(200)]", options: [], views: lblDate)
         uiviewPinView.addConstraintsWithFormat("H:[v0(160)]-13-|", options: [], views: labelTime)
         uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: labelTime)
         

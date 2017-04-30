@@ -68,7 +68,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         if(firstAppear){
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
-                self.viewBackground.center.x = screenWidth/2
+                self.viewBackground.frame.origin.x = 0
             }))
             firstAppear = false
             
@@ -80,7 +80,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.viewBackground.center.x = 1.5 * screenWidth
+            self.viewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -456,7 +456,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         viewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         
-        viewBackground.center.x = 1.5 * screenWidth
+        viewBackground.frame.origin.x = screenWidth
         TblResult = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
         TblResult.backgroundColor = .white
         TblResult.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")

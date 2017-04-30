@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class CollectionsBoardViewController: UIViewController {
+class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate {
     var firstAppear = true
     
     //background view
@@ -19,12 +19,15 @@ class CollectionsBoardViewController: UIViewController {
     var savedLocationsCount : UILabel!
     var savedPlacesCount : UILabel!
     
+    func backToBoard(Count: Int){
+        getPinCounts()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         self.view.addSubview(viewBackground)
-        viewBackground.center.x = 1.5 * screenWidth
+        viewBackground.frame.origin.x = screenWidth
         // Do any additional setup after loading the view.
         loadColBoard()
         loadNavBar()
@@ -37,7 +40,7 @@ class CollectionsBoardViewController: UIViewController {
         if firstAppear {
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
-                self.viewBackground.center.x = screenWidth/2
+                self.viewBackground.frame.origin.x = 0
             }))
             firstAppear = false
         }else{
@@ -54,7 +57,7 @@ class CollectionsBoardViewController: UIViewController {
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.viewBackground.center.x = 1.5 * screenWidth
+            self.viewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -276,7 +279,7 @@ class CollectionsBoardViewController: UIViewController {
         
         let createdPinVC = CreatedPinsViewController()
         createdPinVC.modalPresentationStyle = .overCurrentContext
-        
+        createdPinVC.backBoardDelegate = self
         self.present(createdPinVC, animated: false, completion: nil)
     }
     
@@ -284,7 +287,7 @@ class CollectionsBoardViewController: UIViewController {
         
         let savedPinVC = SavedPinsViewController()
         savedPinVC.modalPresentationStyle = .overCurrentContext
-        
+        savedPinVC.backBoardDelegate = self
         self.present(savedPinVC, animated: false, completion: nil)
     }
     
