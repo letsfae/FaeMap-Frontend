@@ -14,7 +14,6 @@ class CollectionsBoardViewController: UIViewController {
     
     //background view
     var viewBackground: UIView!
-    
     var savedPinsCount : UILabel!
     var createdPinsCount : UILabel!
     var savedLocationsCount : UILabel!
