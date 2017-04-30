@@ -48,13 +48,15 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     var strTableTitle: String!
     //The set of pin data
     var arrPinData = [[String: AnyObject]]()
+    //Current select row
+    var indexCurrSelectRowAt : IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // The background of this controller, all subviews are added to this view
         uiviewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         self.view.addSubview(uiviewBackground)
-        uiviewBackground.center.x = 1.5 * screenWidth
+        uiviewBackground.frame.origin.x = screenWidth
         loadtblPinsData()
         loadNavBar()
     }
@@ -79,7 +81,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         super.viewDidAppear(animated)
         if isFirstAppear {
             UIView.animate(withDuration: 0.3, animations: ({
-                self.uiviewBackground.center.x = screenWidth/2
+                self.uiviewBackground.frame.origin.x = 0
             }))
             isFirstAppear = false
         }
@@ -88,7 +90,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.uiviewBackground.center.x = 1.5 * screenWidth
+            self.uiviewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -201,20 +203,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     // Only one row for one section in the table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(!gesturerecognizerTouch.isCellSwiped){
-            tableView.deselectRow(at: indexPath, animated: false)
-            let pinDetailVC = PinDetailViewController()
-            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(0, 0)
-            PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "comment")!
-            PinDetailViewController.pinUserId = 101
-            PinDetailViewController.enterMode = .collections
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            //pinDetailVC.pinIDPinDetailView = "\(arrPinData[indexPath.section]["pin_id"])"
-            self.present(pinDetailVC, animated: false, completion: nil)
-        }
     }
     
     // PinTableViewCellDelegate protocol required function

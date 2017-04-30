@@ -12,7 +12,7 @@ import UIKit.UIGestureRecognizerSubclass
 //import SDWebImage
 //import RealmSwift
 
-class SavedPinsViewController: PinsViewController, UITableViewDataSource{
+class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDetailCollectionsDelegate{
 
     override func viewDidLoad() {
         strTableTitle = "Saved Pins"
@@ -61,7 +61,10 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
                             if let user_id = pinObject["user_id"].int {
                                 dicCell["user_id"] = user_id as AnyObject
                             }
-                            
+                            if let latitude = pinObject["geolocation"]["latitude"].double, let longitude = pinObject["geolocation"]["longitude"].double {
+                                dicCell["latitude"] = latitude as AnyObject
+                                dicCell["longitude"] = longitude as AnyObject
+                            }
                             
                             if let liked_count = pinObject["liked_count"].int {
                                 dicCell["liked_count"] = liked_count as AnyObject
@@ -103,6 +106,38 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
         return arrPinData.count
     }
     
+    //click cell
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(!gesturerecognizerTouch.isCellSwiped){
+            tableView.deselectRow(at: indexPath, animated: false)
+            
+            let pinDetailVC = PinDetailViewController()
+            pinDetailVC.modalPresentationStyle = .overCurrentContext
+            pinDetailVC.colDelegate = self
+            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"] as! CLLocationDegrees, arrPinData[indexPath.section]["longitude"] as! CLLocationDegrees)
+            
+            PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
+            if let user_id = arrPinData[indexPath.section]["user_id"]{
+                PinDetailViewController.pinUserId = user_id as! Int
+            }
+            if let content = arrPinData[indexPath.section]["content"] {
+                pinDetailVC.strTextViewText = content as! String
+            }
+            //media tab里面存的不叫content 叫description
+            if let description = arrPinData[indexPath.section]["description"] {
+                pinDetailVC.strTextViewText = description as! String
+            }
+            if let pinID = arrPinData[indexPath.section]["pin_id"] {
+                pinDetailVC.pinIDPinDetailView = "\(pinID)"
+            }
+            PinDetailViewController.enterMode = .collections
+            self.present(pinDetailVC, animated: false, completion: {
+                self.indexCurrSelectRowAt = indexPath
+            })
+            
+        }
+    }
+    
     //Customize each cell in the table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
@@ -114,6 +149,20 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource{
         cell.delegate = self
         cell.indexForCurrentCell = indexPath.section
         return cell
+    }
+    
+    //full pin detail delegate
+    func backToCollections(likeCount: String, commentCount: String){
+        if self.indexCurrSelectRowAt != nil {
+            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
+            cellCurrSelect.lblComment.text = commentCount
+            cellCurrSelect.lblLike.text = likeCount
+            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+                cellCurrSelect.imgHot.isHidden = false
+            }else{
+                cellCurrSelect.imgHot.isHidden = true
+            }
+        }
     }
     
     // PinTableViewCellDelegate protocol required function

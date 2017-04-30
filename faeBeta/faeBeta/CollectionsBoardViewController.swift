@@ -25,7 +25,7 @@ class CollectionsBoardViewController: UIViewController {
         super.viewDidLoad()
         viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         self.view.addSubview(viewBackground)
-        viewBackground.center.x = 1.5 * screenWidth
+        viewBackground.frame.origin.x = screenWidth
         // Do any additional setup after loading the view.
         loadColBoard()
         loadNavBar()
@@ -38,7 +38,7 @@ class CollectionsBoardViewController: UIViewController {
         if firstAppear {
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
-                self.viewBackground.center.x = screenWidth/2
+                self.viewBackground.frame.origin.x = 0
             }))
             firstAppear = false
         }else{
@@ -55,7 +55,7 @@ class CollectionsBoardViewController: UIViewController {
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
-            self.viewBackground.center.x = 1.5 * screenWidth
+            self.viewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)

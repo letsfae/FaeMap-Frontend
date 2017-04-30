@@ -58,7 +58,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
-            self.searchBarSubview.center.y = self.searchBarSubview.frame.size.height/2
+            self.searchBarSubview.frame.origin.y = 0
         }), completion: { (done: Bool) in
             if done {
                 self.faeSearchController.faeSearchBar.becomeFirstResponder()
@@ -88,7 +88,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         searchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
         searchBarSubview.layer.zPosition = 1
         blurViewMainScreenSearch.addSubview(searchBarSubview)
-        self.searchBarSubview.center.y = -self.searchBarSubview.frame.size.height/2
+        self.searchBarSubview.frame.origin.y = -self.searchBarSubview.frame.size.height
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.searchBarSubview.addSubview(backSubviewButton)
         backSubviewButton.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
