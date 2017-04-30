@@ -132,7 +132,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                 pinDetailVC.pinIDPinDetailView = "\(pinID)"
             }
             
-            PinDetailViewController.enterMode = .collections
+            pinDetailVC.enterMode = .collections
             self.present(pinDetailVC, animated: false, completion: {
                 self.indexCurrSelectRowAt = indexPath
             })

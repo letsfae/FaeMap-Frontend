@@ -99,7 +99,7 @@ class PinDetailViewController: UIViewController {
     static var strPlaceImageURL = ""
     static var strPlaceStreet = ""
     static var strPlaceTitle = ""
-    static var enterMode: EnterMode = .mainMap
+    var enterMode: EnterMode = .mainMap
     var animatingHeart: UIImageView!
     var animatingHeartTimer: Timer! // Timer for animating heart
     var anotherRedSlidingLine: UIView!
@@ -262,7 +262,7 @@ class PinDetailViewController: UIViewController {
         }
         self.delegate?.disableSelfMarker(yes: true)
         
-        if PinDetailViewController.enterMode == .collections {
+        if self.enterMode == .collections {
             loadFromCollections()
         }
     }

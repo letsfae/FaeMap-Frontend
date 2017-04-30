@@ -130,7 +130,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             if let pinID = arrPinData[indexPath.section]["pin_id"] {
                 pinDetailVC.pinIDPinDetailView = "\(pinID)"
             }
-            PinDetailViewController.enterMode = .collections
+            pinDetailVC.enterMode = .collections
             self.present(pinDetailVC, animated: false, completion: {
                 self.indexCurrSelectRowAt = indexPath
             })
