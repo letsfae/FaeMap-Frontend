@@ -42,7 +42,6 @@ class OPLTableViewCell: UITableViewCell {
     
     func loadAvatar() {
         imageViewAvatar = UIImageView(frame: CGRect(x: 14, y: 13, width: 50, height: 50))
-        imageViewAvatar.layer.cornerRadius = 25
         imageViewAvatar.clipsToBounds = true
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true

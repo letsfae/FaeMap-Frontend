@@ -62,10 +62,13 @@ extension PinDetailViewController {
         }, completion: {(done: Bool) in
             
         })
+        if !directReplyFromUser {
+            tableCommentsForPin.setContentOffset(CGPoint(x: 0, y: uiviewPinDetail.frame.size.height - 42), animated: false)
+        }
     }
     
     func keyboardDidShow(_ notification: Notification){
-        
+        boolKeyboardShowed = true
     }
     
     func keyboardWillHide(_ notification: Notification) {
@@ -86,6 +89,6 @@ extension PinDetailViewController {
     }
     
     func keyboardDidHide(_ notification: Notification){
-        
+        boolKeyboardShowed = false
     }
 }

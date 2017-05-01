@@ -28,21 +28,15 @@ extension FaeMapViewController {
                     }else{
                         self.labelUnreadMessages.frame.size.width = 22
                     }
-                    self.buttonChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
+                    self.btnChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
                     self.labelUnreadMessages.isHidden = totalUnread == 0
                     if totalUnread == 0 {
-                        self.buttonChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
+                        self.btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
                     }
                     UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
                 }
             }
         }
-    }
-    
-    func animationMapChatShow(_ sender: UIButton!) {
-        UINavigationBar.appearance().shadowImage = navBarDefaultShadowImage
-        // check if the user's logged in the backendless
-        self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }
 
     func segueToChat(_ withUserId: NSNumber, withUserName: String ){

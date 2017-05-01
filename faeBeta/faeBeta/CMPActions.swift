@@ -13,6 +13,13 @@ import Photos
 
 extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func actionAddMedia(_ sender: UIButton) { // Add or Cancel Adding
         if sender.tag == 0 {
             let angle: CGFloat = (-45 * 3.14 / 180.0) as CGFloat
@@ -130,7 +137,8 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func actionShowMoreOptions(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.4) {
+        
+        UIView.animate(withDuration: 0.4, animations: { 
             self.uiviewSelectLocation.alpha = 0
             self.uiviewMoreOptions.alpha = 0
             self.uiviewAddDescription.alpha = 0
@@ -145,6 +153,8 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelMediaPinMoreOptions.alpha = 1
             self.tableMoreOptions.alpha = 1
             self.buttonBack.alpha = 1
+        }) { (_) in
+            self.showAlert(title: "This feature is coming soon in the next version!", message: "")
         }
     }
     
@@ -248,6 +258,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }
         sender.tag = 0
         activityIndicator = UIActivityIndicatorView()
+        activityIndicator.layer.zPosition = 101
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
@@ -372,12 +383,5 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 print("[submitMediaPin] Cannot get media ID")
             }
         }
-    }
-    
-    fileprivate func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }

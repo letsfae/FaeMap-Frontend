@@ -9,23 +9,25 @@
 import UIKit
 import SwiftyJSON
 
-class CollectionsBoardViewController: UIViewController {
+class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate {
     var firstAppear = true
     
     //background view
     var viewBackground: UIView!
-    
     var savedPinsCount : UILabel!
     var createdPinsCount : UILabel!
     var savedLocationsCount : UILabel!
     var savedPlacesCount : UILabel!
     
+    func backToBoard(Count: Int){
+        getPinCounts()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
         self.view.addSubview(viewBackground)
-        viewBackground.center.x += screenWidth
+        viewBackground.frame.origin.x = screenWidth
         // Do any additional setup after loading the view.
         loadColBoard()
         loadNavBar()
@@ -35,13 +37,14 @@ class CollectionsBoardViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if(firstAppear){
-            
+        if firstAppear {
             super.viewDidAppear(animated)
-            UIView.animate(withDuration: 0.5, animations: ({
-                self.viewBackground.center.x -= screenWidth
+            UIView.animate(withDuration: 0.3, animations: ({
+                self.viewBackground.frame.origin.x = 0
             }))
             firstAppear = false
+        }else{
+            getPinCounts()
         }
     }
     
@@ -53,8 +56,8 @@ class CollectionsBoardViewController: UIViewController {
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, animations: ({
-            self.viewBackground.center.x += screenWidth
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.viewBackground.frame.origin.x = screenWidth
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
@@ -83,7 +86,7 @@ class CollectionsBoardViewController: UIViewController {
         
         
         
-        let btnBackNavBar = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
+        let btnBackNavBar = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         
         btnBackNavBar.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
         
@@ -119,11 +122,6 @@ class CollectionsBoardViewController: UIViewController {
         let createdPinsAvatar = getAvatar()
         viewBoard.addSubview(createdPinsAvatar)
         
-        createdPinsCount = getitemCount(_: String(getCreatedPinsCount()))
-        viewBoard.addSubview(createdPinsCount)
-        
-        
-        
         let savedPins = UIButton()
         savedPins.setImage(#imageLiteral(resourceName: "savedpinbtnbackground"), for: UIControlState.normal)
         savedPins.addTarget(self, action: #selector(self.actionSavedPins(_:)), for: .touchUpInside)
@@ -133,8 +131,11 @@ class CollectionsBoardViewController: UIViewController {
         let savedPinsAvatar = getAvatar()
         viewBoard.addSubview(savedPinsAvatar)
         
-        savedPinsCount = getitemCount(_: String(getSavedPinsCount()))
+        createdPinsCount = getitemCount()
+        viewBoard.addSubview(createdPinsCount)
+        savedPinsCount = getitemCount()
         viewBoard.addSubview(savedPinsCount)
+        getPinCounts()
         
         let myLists = UILabel()
         myLists.font = UIFont(name: "AvenirNext-DemiBold",size: 13)
@@ -152,7 +153,7 @@ class CollectionsBoardViewController: UIViewController {
         let savedLocationsAvatar = getAvatar()
         viewBoard.addSubview(savedLocationsAvatar)
         
-        savedLocationsCount = getitemCount(_: String(getSavedLocationsCount()))
+        savedLocationsCount = getitemCount()
         viewBoard.addSubview(savedLocationsCount)
         
         
@@ -165,10 +166,8 @@ class CollectionsBoardViewController: UIViewController {
         let savedPlacesAvatar = getAvatar()
         viewBoard.addSubview(savedPlacesAvatar)
         
-        savedPlacesCount = getitemCount(_: String(getSavedPlacesCount()))
+        savedPlacesCount = getitemCount()
         viewBoard.addSubview(savedPlacesCount)
-        
-        
         
         viewBoard.addConstraintsWithFormat("V:|-22-[v0(18)]-12-[v1(176)]-20-[v2(18)]-12-[v3(176)]", options: [], views: myPins, createdPins, myLists, savedLocations)
         
@@ -195,17 +194,23 @@ class CollectionsBoardViewController: UIViewController {
     }
     
     //生成头像对象
-    func getAvatar() -> UIImageView{
+    func getAvatar() -> UIView{
         
-        let imageAvatar = UIImageView()
-        
+        let imageAvatar = UIImageView(frame: CGRect(x: 0, y: 0, width: 36*screenWidthFactor, height: 36*screenWidthFactor))
         imageAvatar.layer.cornerRadius = 18*screenWidthFactor
-        imageAvatar.layer.borderColor = UIColor.white.cgColor
-        imageAvatar.layer.borderWidth = 3
         imageAvatar.contentMode = .scaleAspectFill
         imageAvatar.layer.masksToBounds = true
+        imageAvatar.layer.borderColor = UIColor.white.cgColor
+        imageAvatar.layer.borderWidth = 3*screenWidthFactor
         
-        
+        let imgShadow = UIView()
+        imgShadow.layer.shadowColor = UIColor.faeAppShadowGrayColor().cgColor
+        imgShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
+        imgShadow.layer.shadowOpacity = 0.5
+        imgShadow.layer.shadowRadius = 3.0
+        imgShadow.layer.cornerRadius = 18*screenWidthFactor
+        imgShadow.clipsToBounds = false
+        imgShadow.addSubview(imageAvatar)
         
         if let gender = userUserGender {
             if gender == "male" {
@@ -215,55 +220,45 @@ class CollectionsBoardViewController: UIViewController {
                 imageAvatar.image = #imageLiteral(resourceName: "defaultWomen")
             }
         }
+        
         if user_id != nil {
             let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
             imageAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                
+                if image != nil {
+
+                }
             })
         }
-        
-        return imageAvatar
+        return imgShadow
     }
     
     //生成itemslabel对象
-    func getitemCount(_ content: String) -> UILabel {
+    func getitemCount() -> UILabel {
         
-        let Count = UILabel()
-        Count.font = UIFont(name: "AvenirNext-Medium",size: 13)
-        Count.textAlignment = NSTextAlignment.left
-        Count.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        Count.text = content+" items"
+        let labelCount = UILabel()
+        labelCount.font = UIFont(name: "AvenirNext-Medium",size: 13)
+        labelCount.textAlignment = NSTextAlignment.left
+        labelCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        labelCount.text = "0 items"
         
-        return Count
+        return labelCount
         
         
     }
     
-    func getCreatedPinsCount() -> Int{
-        var count = 0
-        let getCreatedPinsData = FaeMap()
-        getCreatedPinsData.getCreatedPins() {(status: Int, message: Any?) in
+    func getPinCounts(){
+        let getPinCounts = FaeMap()
+        getPinCounts.getPinStatistics {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                let PinsOfCreatedPinsJSON = JSON(message!)
-                count = PinsOfCreatedPinsJSON.count
-                self.createdPinsCount.text = String(count)+" items"
+                let pinCountsJSON = JSON(message!)
+                if let createdComment = pinCountsJSON["count"]["created_comment_pin"].int, let createdmedia = pinCountsJSON["count"]["created_media_pin"].int {
+                    self.createdPinsCount.text = String(createdComment+createdmedia)+" items"
+                }
+                if let savedComment = pinCountsJSON["count"]["saved_comment_pin"].int, let savedmedia = pinCountsJSON["count"]["saved_media_pin"].int {
+                    self.savedPinsCount.text = String(savedComment+savedmedia)+" items"
+                }
             }
         }
-        return count
-    }
-    
-    func getSavedPinsCount() -> Int {
-        var count = 0
-        let getSavedPinsData = FaeMap()
-        getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                
-                let PinsOfSavedPinsJSON = JSON(message!)
-                count = PinsOfSavedPinsJSON.count
-                self.savedPinsCount.text = String(count)+" items"
-            }
-        }
-        return count
     }
     
     func getSavedPlacesCount() -> Int {
@@ -282,19 +277,17 @@ class CollectionsBoardViewController: UIViewController {
     
     func actionCreatedPins(_ sender: UIButton){
         
-        let createdPinVC = PinsViewController()
-        createdPinVC.tblTitle = "Created Pins"
+        let createdPinVC = CreatedPinsViewController()
         createdPinVC.modalPresentationStyle = .overCurrentContext
-        
+        createdPinVC.backBoardDelegate = self
         self.present(createdPinVC, animated: false, completion: nil)
     }
     
     func actionSavedPins(_ sender: UIButton){
         
-        let savedPinVC = PinsViewController()
-        savedPinVC.tblTitle = "Saved Pins"
+        let savedPinVC = SavedPinsViewController()
         savedPinVC.modalPresentationStyle = .overCurrentContext
-        
+        savedPinVC.backBoardDelegate = self
         self.present(savedPinVC, animated: false, completion: nil)
     }
     

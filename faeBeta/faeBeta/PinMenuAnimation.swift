@@ -9,30 +9,27 @@
 import UIKit
 
 extension PinMenuViewController {
-    private func initialCGRectForButton(_ button: UIButton, x: CGFloat, y: CGFloat) {
-        button.frame = CGRect(x: x, y: y, width: 0, height: 0)
-    }
     
-    private func reCreateCGRectForButton(_ button: UIButton, x: CGFloat, y: CGFloat) {
-        let width: CGFloat = 90/414 * screenWidth
+    fileprivate func reCreateCGRectForButton(_ button: UIButton, x: CGFloat, y: CGFloat) {
+        let width: CGFloat = 90 * screenWidthFactor
         button.frame = CGRect(x: x, y: y, width: width, height: width)
     }
     
     func pinSelectionShowAnimation() {
         // post-animated position of buttons for cool animation
-        let buttonOriginX_1: CGFloat = 34/414 * screenWidth
-        let buttonOriginX_2: CGFloat = 163/414 * screenWidth
-        let buttonOriginX_3: CGFloat = 292/414 * screenWidth
+        let buttonOriginX_1: CGFloat = 34 * screenWidthFactor
+        let buttonOriginX_2: CGFloat = 163 * screenWidthFactor
+        let buttonOriginX_3: CGFloat = 292 * screenWidthFactor
         
-        let buttonOriginY_1: CGFloat = 160/736 * screenHeight
+        let buttonOriginY_1: CGFloat = 160 * screenWidthFactor
         /*
         let buttonOriginY_2: CGFloat = 302/736 * screenHeight
         let buttonOriginY_3: CGFloat = 444/736 * screenHeight
          */
         
         // post-animated position of labels for cool animation
-        let labelDiff: CGFloat = 33/736 * screenHeight
-        let labelTitleDiff: CGFloat = 66/736 * screenHeight
+        let labelDiff: CGFloat = 33 * screenWidthFactor
+        let labelTitleDiff: CGFloat = 66 * screenWidthFactor
         
         UIView.animate(withDuration: 0.2, delay: 0.35, options: .transitionFlipFromBottom, animations: {
             self.buttonClosePinBlurView.alpha = 1.0
@@ -46,7 +43,7 @@ extension PinMenuViewController {
             self.labelMenuMedia.alpha = 1.0
             }, completion: nil)
         UIView.animate(withDuration: 0.883, delay: 0.25, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.reCreateCGRectForButton(self.buttonChats, x: buttonOriginX_2, y: buttonOriginY_1)
+            self.reCreateCGRectForButton(self.btnChats, x: buttonOriginX_2, y: buttonOriginY_1)
             self.labelMenuChats.center.y += labelDiff
             self.labelMenuChats.alpha = 1.0
             }, completion: nil)

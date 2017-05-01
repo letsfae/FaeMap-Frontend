@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Reachability variables
     var vcPresented = false
+    var reachaVCPresented = false
     var reachaVC = DisconnectionViewController()
     private var reachability: Reachability!
     
@@ -75,11 +76,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK:- Network Check
     func reachabilityChanged(notification: Notification) {
         let reachability = notification.object as! Reachability
-        if reachability.isReachable {
+        if reachability.isReachable && reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
             reachaVC.dismiss(animated: true, completion: nil)
-        } else {
+            reachaVCPresented = false
+        } else if !reachability.isReachable && !reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] Network not reachable")
+            reachaVCPresented = true
             self.window?.makeKeyAndVisible()
             self.window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
         }
@@ -174,14 +177,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             push.getSync({ (status: Int!, message: Any?) in
                 print("[runSync] status", status)
                 if status / 100 == 2 {
+                    self.reachaVCPresented = false
                     //success
                 } else if status == 401 {
+                    self.reachaVCPresented = false
                     is_Login = 0
                     self.popUpWelcomeView()
-                } else {
-                    let vc = DisconnectionViewController()
+                } else if !self.reachaVCPresented {
+                    self.reachaVCPresented = true
                     self.window?.makeKeyAndVisible()
-                    self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
+                    self.window?.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
                 }
             })
         }

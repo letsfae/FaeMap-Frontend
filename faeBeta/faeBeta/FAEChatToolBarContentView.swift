@@ -526,10 +526,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                 } else {
                     if(asset.mediaType == .image){
                         if(photoPicker.videoAsset != nil){
-                            self.delegate.showAlertView(withWarning: "You can't select photo with video")
+                            self.delegate.showAlertView(withWarning: "Sorry, Videos must be sent alone!")
                             return
                         }else if(photoPicker.gifAssetDict.count > 0){
-                            self.delegate.showAlertView(withWarning: "You can't select Image with GIF")
+                            self.delegate.showAlertView(withWarning: "Sorry Gifs must be sent alone!")
                             return
                         }
                         
@@ -565,7 +565,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                     // if is selecting video
                     else{
                         if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
-                            self.delegate.showAlertView(withWarning: "You can't select video while selecting photos")
+                            self.delegate.showAlertView(withWarning: "Sorry, Videos must be sent alone!")
                             return
                         }else if(self.photoPicker.videoAsset != nil){
                             self.delegate.showAlertView(withWarning: "You can only send one video at one time")
@@ -718,10 +718,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             Void in
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.failed:
-                print("failed import video: \(exportSession!.error)")
+                print("failed import video: \(String(describing: exportSession!.error))")
                 break
             case AVAssetExportSessionStatus.cancelled:
-                print("cancelled import video: \(exportSession!.error)")
+                print("cancelled import video: \(String(describing: exportSession!.error))")
                 break
             default:
                 print("completed import video")

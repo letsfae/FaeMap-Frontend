@@ -16,7 +16,7 @@ protocol PinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map
     // true  -> just means user want to back to main screen
     // false -> delete this pin from map
-    func dismissMarkerShadow(_ dismiss: Bool)
+    func backToMainMap()
     // Pass location data to fae map view
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
     // Change marker icon based on status
@@ -29,7 +29,17 @@ protocol PinDetailDelegate: class {
     func goTo(nextPin: Bool)
 }
 
+protocol PinDetailCollectionsDelegate: class {
+    // Go back to collections
+    func backToCollections(likeCount: String, commentCount: String)
+}
+
 class PinDetailViewController: UIViewController {
+    
+    enum EnterMode: Int {
+        case mainMap = 0
+        case collections = 1
+    }
     
     enum MediaMode {
         case small
@@ -67,8 +77,17 @@ class PinDetailViewController: UIViewController {
             }
         }
     }
+    var keyboardHeight: CGFloat = 0 {
+        didSet {
+            if uiviewToolBar != nil {
+                PDEmptyCell.padding = screenHeight - keyboardHeight - uiviewToolBar.frame.size.height - 189
+            }
+        }
+    }
     
     weak var delegate: PinDetailDelegate? // Delegate of this class
+    weak var colDelegate: PinDetailCollectionsDelegate? // For collections
+    
     static var pinMarker = GMSMarker()
     static var pinStateEnum: PinState = .normal
     static var pinStatus = ""
@@ -80,6 +99,7 @@ class PinDetailViewController: UIViewController {
     static var strPlaceImageURL = ""
     static var strPlaceStreet = ""
     static var strPlaceTitle = ""
+    var enterMode: EnterMode = .mainMap
     var animatingHeart: UIImageView!
     var animatingHeartTimer: Timer! // Timer for animating heart
     var anotherRedSlidingLine: UIView!
@@ -93,6 +113,7 @@ class PinDetailViewController: UIViewController {
     var btnFeelingBar_03: UIButton!
     var btnFeelingBar_04: UIButton!
     var btnFeelingBar_05: UIButton!
+    var btnBackToCollections: UIButton!
     var btnGoToPinList_Place: UIButton!
     var btnHideAnony: UIButton!
     var btnMoreOptions_Place: UIButton!
@@ -100,7 +121,7 @@ class PinDetailViewController: UIViewController {
     var btnOptionDelete: UIButton! // Pin options
     var btnOptionEdit: UIButton! // Pin options
     var btnShowOptions: UIButton!
-    var btnToPinList: UIButton!
+    var btnHalfPinToMap: UIButton!
     var btnTransparentClose: UIButton! // Fake Transparent View For Closing
     var buttonPinAddComment: UIButton!
     var buttonPinBackToMap: UIButton!
@@ -124,7 +145,7 @@ class PinDetailViewController: UIViewController {
     var feelingArray = [Int]()
     var fileIdArray = [Int]()
     var firstLoadInputToolBar = true
-    var grayBackButton: UIButton! // Background gray button, alpha = 0.3
+    var btnGrayBackToMap: UIButton! // Background gray button, alpha = 0.3
     var imagePinUserAvatar: UIImageView!
     var imageViewHotPin: UIImageView!
     var imageViewMediaArray = [UIImageView]()
@@ -136,7 +157,6 @@ class PinDetailViewController: UIViewController {
     var isKeyboardInThisView = true // trigger the function inside keyboard notification ctrl if in pin detail view
     var isSavedByMe = false
     var isUpVoting = false // Like Function
-    var keyboardHeight: CGFloat = 0
     var labelPinCommentsCount: UILabel!
     var labelPinDetailViewComments: UILabel!
     var labelPinDetailViewFeelings: UILabel!
@@ -178,7 +198,6 @@ class PinDetailViewController: UIViewController {
     var textviewPinDetail: UITextView!
     var thisIsMyPin = false // Check if this pin belongs to current user
     var toolBarExtendView : UIView! // an extend uiview for anynomus texting (mingjie jin)
-    var touchToReplyTimer: Timer! // Timer for touching pin comment cell
     var uiviewAnonymous: UIView!
     var uiviewFeeling: UIView!
     var uiviewFeelingBar: UIView!
@@ -212,6 +231,14 @@ class PinDetailViewController: UIViewController {
     var uiviewChatSpotLine: UIView!
     var uiviewChatSpotLineFirstBottom: UIView!
     var lblPeopleCount: UILabel!
+    var imgCurUserAvatar: UIImageView!
+    var boolKeyboardShowed = false
+    var boolStickerShowed = false
+    var directReplyFromUser = false
+    var btnSelectedFeeling: UIButton?
+    var previousIndex: Int = -1
+    var boolDetailShrinked = true
+    var strTextViewText = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -219,14 +246,13 @@ class PinDetailViewController: UIViewController {
         self.modalPresentationStyle = .overCurrentContext
         loadTransparentButtonBackToMap()
         loadPinDetailWindow()
+        initPinBasicInfo()
         if PinDetailViewController.pinTypeEnum == .place {
             loadPlaceDetail()
-            initPinBasicInfo()
             pinIcon.frame.size.width = 48
             pinIcon.center.x = screenWidth / 2
             pinIcon.center.y = 507 * screenHeightFactor
             UIApplication.shared.statusBarStyle = .lightContent
-            
         } else {
             checkPinStatus()
             addObservers()
@@ -236,6 +262,9 @@ class PinDetailViewController: UIViewController {
         }
         self.delegate?.disableSelfMarker(yes: true)
         
+        if self.enterMode == .collections {
+            loadFromCollections()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -244,15 +273,19 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.btnNextPin.alpha = 1
             self.buttonPrevPin.alpha = 1
             self.draggingButtonSubview.frame.origin.y = 292
-            self.grayBackButton.alpha = 1
+            self.btnGrayBackToMap.alpha = 1
             self.pinIcon.alpha = 1
             self.subviewNavigation.frame.origin.y = 0
             self.subviewTable.frame.origin.y = 65
             self.tableCommentsForPin.frame.origin.y = 65
+            self.subviewNavigation.frame.origin.x = 0
+            self.subviewTable.frame.origin.x = 0
+            self.tableCommentsForPin.frame.origin.x = 0
+            self.uiviewToolBar.frame.origin.x = 0
             if PinDetailViewController.pinTypeEnum == .place {
                 self.uiviewPlaceDetail.frame.origin.y = 0
             } else {
@@ -263,11 +296,113 @@ class PinDetailViewController: UIViewController {
                 self.delegate?.changeIconImage(marker: PinDetailViewController.pinMarker, type: "\(PinDetailViewController.pinTypeEnum)", status: PinDetailViewController.pinStatus)
             }
         })
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
+                self.uiviewFeelingBar.frame = CGRect(x: (screenWidth-281)/2, y: 409*screenHeightFactor, width: 281*screenWidthFactor, height: 52*screenWidthFactor)
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                for i in 0..<self.btnFeelingArray.count {
+                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
+                }
+            }
+            self.buttonPrevPin.frame = CGRect(x: 15*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
+            self.btnNextPin.frame = CGRect(x: 347*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
+        }, completion: {(_) in
+            if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
+                let getPinById = FaeMap()
+                getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
+                    let pinInfoJSON = JSON(message!)
+                    // Has posted feeling or not
+                    if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
+                        self.chosenFeeling = chosenFeel
+                        if chosenFeel < 5 && chosenFeel >= 0 {
+                            UIView.animate(withDuration: 0.2, animations: {
+                                let xOffset = Int(chosenFeel * 52 + 12)
+                                self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                            })
+                        }
+                    } else {
+                        self.chosenFeeling = -1
+                    }
+                }
+            }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+    }
+    
+    fileprivate func loadFromCollections() {
+        // Back to Map
+        btnBackToCollections = UIButton()
+        btnBackToCollections.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
+        btnBackToCollections.addTarget(self, action: #selector(self.actionBackToCollections(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnBackToCollections)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnBackToCollections)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnBackToCollections)
+        buttonPinBackToMap.tag = 1
+        uiviewFeelingBar.isHidden = true
+        btnNextPin.isHidden = true
+        buttonPrevPin.isHidden = true
+        pinIcon.isHidden = true
+        btnGrayBackToMap.isHidden = true
+        buttonPinBackToMap.isHidden = true
+        btnShowOptions.isHidden = true
+        mediaMode = .large
+        
+        self.subviewNavigation.frame.origin.x = screenWidth
+        self.tableCommentsForPin.frame.origin.x = screenWidth
+        self.subviewTable.frame.origin.x = screenWidth
+        self.subviewNavigation.frame.origin.y = 0
+        self.tableCommentsForPin.frame.origin.y = 65
+        self.subviewTable.frame.origin.y = 65
+        self.scrollViewMedia.frame.size.height = 160
+        
+        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        textviewPinDetail.isScrollEnabled = false
+        tableCommentsForPin.isScrollEnabled = true
+        buttonPinDetailDragToLargeSize.isHidden = true
+        draggingButtonSubview.isHidden = true
+        
+        if PinDetailViewController.pinTypeEnum == .media {
+            textviewPinDetail.isHidden = false
+            self.uiviewPinDetail.frame.size.height += 65
+            self.textviewPinDetail.frame.size.height += 65
+            self.uiviewPinDetailThreeButtons.center.y += 65
+            self.uiviewPinDetailGrayBlock.center.y += 65
+            self.uiviewPinDetailMainButtons.center.y += 65
+            if self.textviewPinDetail.text != "" {
+                self.uiviewPinDetail.frame.size.height += textViewHeight
+                self.textviewPinDetail.frame.size.height += textViewHeight
+                self.uiviewPinDetailThreeButtons.center.y += textViewHeight
+                self.uiviewPinDetailGrayBlock.center.y += textViewHeight
+                self.uiviewPinDetailMainButtons.center.y += textViewHeight
+                self.scrollViewMedia.frame.origin.y += textViewHeight
+            }
+        }
+        else if PinDetailViewController.pinTypeEnum == .comment {
+            if textViewHeight > 100.0 {
+                let diffHeight: CGFloat = textViewHeight - 100
+                self.uiviewPinDetail.frame.size.height += diffHeight
+                self.textviewPinDetail.frame.size.height += diffHeight
+                self.uiviewPinDetailThreeButtons.center.y += diffHeight
+                self.uiviewPinDetailGrayBlock.center.y += diffHeight
+                self.uiviewPinDetailMainButtons.center.y += diffHeight
+            }
+        }
+        self.btnHalfPinToMap.alpha = 0.0
+        self.buttonPinBackToMap.alpha = 1.0
+        var toolbarHeight = self.uiviewToolBar.frame.size.height
+        if PinDetailViewController.pinTypeEnum == .chat_room {
+            toolbarHeight = 0
+        }
+        self.draggingButtonSubview.frame.origin.y = screenHeight - toolbarHeight
+        self.tableCommentsForPin.frame.size.height = screenHeight - 65 - toolbarHeight
+        self.subviewTable.frame.size.height = screenHeight - 65 - toolbarHeight
+        self.uiviewToolBar.frame.origin.x = screenWidth
+        self.uiviewToolBar.frame.origin.y = screenHeight - self.uiviewToolBar.frame.size.height
     }
     
     func selectPinState(pinState: PinState, pinType: PinType) {
@@ -323,12 +458,12 @@ class PinDetailViewController: UIViewController {
     }
     
     fileprivate func loadTransparentButtonBackToMap() {
-        grayBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        grayBackButton.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.3)
-        grayBackButton.alpha = 0
-        self.view.addSubview(grayBackButton)
-        self.view.sendSubview(toBack: grayBackButton)
-        grayBackButton.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+        btnGrayBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        btnGrayBackToMap.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.5)
+        btnGrayBackToMap.alpha = 0
+        self.view.addSubview(btnGrayBackToMap)
+        self.view.sendSubview(toBack: btnGrayBackToMap)
+        btnGrayBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
     }
     
     func animateHeart() {
@@ -357,7 +492,7 @@ class PinDetailViewController: UIViewController {
         fadeAnimation.fromValue = 1.0
         fadeAnimation.toValue = 0.0
         fadeAnimation.duration = 0.3
-        fadeAnimation.beginTime = CACurrentMediaTime() + 0.7
+        fadeAnimation.beginTime = CACurrentMediaTime() + 0.72
         
         let orbit = CAKeyframeAnimation(keyPath: "position")
         orbit.duration = 1

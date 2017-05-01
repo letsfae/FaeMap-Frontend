@@ -17,7 +17,6 @@ protocol LeftSlidingMenuDelegate: class {
     func jumpToFaeUserMainPage()
     func jumpToCollections()
     func reloadSelfPosition()
-    
 }
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -48,7 +47,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         case none
         case mapBoard
         case goInvisible
-        case relations
+        case contacts
         case moodAvatar
         case collections
         case myActivities
@@ -147,7 +146,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Map Boards", "Go Invisible", "Relations", "Collections", "Mood Avatar", "Activity Log", "Log Out"]
+        let array = ["Map Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatar", "Activity Log", "Log Out"]
         cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
         if indexPath.row < 2 {
@@ -360,7 +359,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                         self.delegate?.userInvisible(isOn: true)
                     }
                     break
-                case .relations:
+                case .contacts:
                     self.tableSelections = .none
                     break
                 case .moodAvatar:

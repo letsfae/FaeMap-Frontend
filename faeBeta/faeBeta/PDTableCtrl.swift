@@ -42,6 +42,8 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             cell.pinID = self.pinIDPinDetailView
             cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
+            cell.userID = comment.userId
+            cell.cellIndex = indexPath
             if comment.anonymous {
                 cell.lblUsername.text = "Anonymous"
                 cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
@@ -73,17 +75,25 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
         } else if tableMode == .feelings {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdFeelingCell", for: indexPath) as! PDFeelingCell
             cell.delegate = self
-            cell.img_01.label.text = "\(self.feelingArray[0])"
-            cell.img_02.label.text = "\(self.feelingArray[1])"
-            cell.img_03.label.text = "\(self.feelingArray[2])"
-            cell.img_04.label.text = "\(self.feelingArray[3])"
-            cell.img_05.label.text = "\(self.feelingArray[4])"
-            cell.img_06.label.text = "\(self.feelingArray[5])"
-            cell.img_07.label.text = "\(self.feelingArray[6])"
-            cell.img_08.label.text = "\(self.feelingArray[7])"
-            cell.img_09.label.text = "\(self.feelingArray[8])"
-            cell.img_10.label.text = "\(self.feelingArray[9])"
-            cell.img_11.label.text = "\(self.feelingArray[10])"
+            for i in 0..<11 {
+                cell.imgArray[i].label.text = "\(self.feelingArray[i])"
+                if i == self.chosenFeeling {
+                    cell.imgArray[i].avatar.isHidden = false
+                    cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
+                    UIView.animate(withDuration: 0.2, animations: { 
+                        cell.imgArray[i].avatar.frame = CGRect(x: 27, y: 25, width: 20, height: 20)
+                    })
+                    cell.imgArray[i].avatar.image = self.imgCurUserAvatar.image
+                } else {
+                    if !cell.imgArray[i].avatar.isHidden {
+                        UIView.animate(withDuration: 0.2, animations: {
+                            cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
+                        }, completion: {(finished) in
+                            cell.imgArray[i].avatar.isHidden = true
+                        })
+                    }
+                }
+            }
             return cell
         } else if tableMode == .people {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDUserInfoCell
@@ -93,7 +103,6 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.lblUserAge.text = userInfo.age
             cell.imgAvatar.image = userInfo.profileImage
             cell.userId = userInfo.userId
-            cell.updateAvatarUI(isPinOwner: userInfo.userId == PinDetailViewController.pinUserId)
             cell.updatePrivacyUI(showGender: userInfo.showGender,
                                  gender: userInfo.gender,
                                  showAge: userInfo.showAge,

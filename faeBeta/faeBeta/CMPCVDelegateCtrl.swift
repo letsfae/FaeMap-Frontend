@@ -87,71 +87,24 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("[scrollViewWillEndDragging] \(targetContentOffset.pointee.x) : \(Int((targetContentOffset.pointee.x + 107) / 249))")
-        let index = Int((targetContentOffset.pointee.x + 107) / 249)
-        if index == selectedMediaArray.count - 1 {
-            UIView.animate(withDuration: 0.4) {
-                if self.selectedMediaArray.count != 6 {
-                    self.buttonAddMedia.alpha = 1
-                }
-            }
-        }
-        else {
-            UIView.animate(withDuration: 0.4) {
-                self.buttonAddMedia.alpha = 0
-            }
-        }
-    }
-    /*
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == collectionViewMedia {
-            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.x)")
-            if self.lastContentOffset < scrollView.contentOffset.x && scrollView.contentOffset.x > 0 {
-                print("[scrollViewDidScroll] left")
-//                if scrollView.contentOffset.x > 
-//                UIView.animate(withDuration: 0.3, animations: {
-//                    self.buttonAddMedia.alpha = 1
-//                })
-            }
-            /*
-            else if self.lastContentOffset > scrollView.contentOffset.x && self.lastContentOffset < (scrollView.contentSize.width - scrollView.frame.width) {
-                print("[scrollViewDidScroll] right")
-                if scrollView.contentOffset.x <= 0 {
-                    UIView.animate(withDuration: 0.5, animations: {
-                        if self.selectedMediaArray.count != 1 {
-                            self.buttonAddMedia.alpha = 0
-                        }
-                    })
-                }
-                else {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.collectionViewMedia.frame.size.width = screenWidth
-                        self.collectionViewMedia.frame.origin.x = 0
-                        if self.selectedMediaArray.count != 1 {
-                            self.buttonAddMedia.alpha = 0
-                        }
-                    })
+            print("[scrollViewWillEndDragging] \(targetContentOffset.pointee.x) : \(Int((targetContentOffset.pointee.x + 107) / 249))")
+            let index = Int((targetContentOffset.pointee.x + 107) / 249)
+            if index == selectedMediaArray.count - 1 {
+                UIView.animate(withDuration: 0.4) {
+                    if self.selectedMediaArray.count != 6 {
+                        self.buttonAddMedia.alpha = 1
+                    }
                 }
             }
-            */
-            self.lastContentOffset = scrollView.contentOffset.x
+            else {
+                UIView.animate(withDuration: 0.1) {
+                    self.buttonAddMedia.alpha = 0
+                }
+            }
         }
     }
-     */
- 
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        if scrollView == collectionViewMedia {
-//            if direction == .right {
-//                print("[scrollViewDidEndDecelerating] direction: right")
-//                direction = .left
-//            }
-//            else if direction == .left {
-//                print("[scrollViewDidEndDecelerating] direction: left")
-//                direction = .right
-//            }
-//        }
-//    }
+
 }
 
 class CenterCellCollectionViewFlowLayout: UICollectionViewFlowLayout {

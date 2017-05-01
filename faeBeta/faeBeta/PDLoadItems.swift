@@ -133,54 +133,101 @@ extension PinDetailViewController {
     }
     
     fileprivate func loadFeelingBar() {
-        uiviewFeelingBar = UIView()
+        let feelingBarAnchor = CGPoint(x: screenWidth/2, y: 461*screenHeightFactor)
+        
+        uiviewFeelingBar = UIView(frame: CGRect(x: screenWidth/2, y: 451*screenHeightFactor, width: 0, height: 0))
         self.view.addSubview(uiviewFeelingBar)
-        view.addConstraintsWithFormat("H:|-67-[v0(281)]", options: [], views: uiviewFeelingBar)
-        view.addConstraintsWithFormat("V:|-(\(409 * screenHeightFactor))-[v0(52)]", options: [], views: uiviewFeelingBar)
+        uiviewFeelingBar.layer.anchorPoint = feelingBarAnchor
         uiviewFeelingBar.layer.cornerRadius = 26
         uiviewFeelingBar.backgroundColor = UIColor.white
         uiviewFeelingBar.alpha = 0
         
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.addTarget(self, action: #selector(self.handleFeelingPanGesture(_:)))
+        uiviewFeelingBar.addGestureRecognizer(panGesture)
+        
         btnFeelingBar_01 = UIButton(frame: CGRect(x: 20, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_01)
-        btnFeelingBar_01.setImage(#imageLiteral(resourceName: "pdFeeling_01"), for: .normal)
-        btnFeelingBar_01.adjustsImageWhenHighlighted = false
-        btnFeelingBar_01.tag = 0
-        btnFeelingBar_01.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_02 = UIButton(frame: CGRect(x: 72, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_02)
-        btnFeelingBar_02.setImage(#imageLiteral(resourceName: "pdFeeling_02"), for: .normal)
-        btnFeelingBar_02.adjustsImageWhenHighlighted = false
-        btnFeelingBar_02.tag = 1
-        btnFeelingBar_02.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_03 = UIButton(frame: CGRect(x: 124, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_03)
-        btnFeelingBar_03.setImage(#imageLiteral(resourceName: "pdFeeling_03"), for: .normal)
-        btnFeelingBar_03.adjustsImageWhenHighlighted = false
-        btnFeelingBar_03.tag = 2
-        btnFeelingBar_03.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_04 = UIButton(frame: CGRect(x: 176, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_04)
-        btnFeelingBar_04.setImage(#imageLiteral(resourceName: "pdFeeling_04"), for: .normal)
-        btnFeelingBar_04.adjustsImageWhenHighlighted = false
-        btnFeelingBar_04.tag = 3
-        btnFeelingBar_04.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
-        
         btnFeelingBar_05 = UIButton(frame: CGRect(x: 228, y: 11, width: 32, height: 32))
-        uiviewFeelingBar.addSubview(btnFeelingBar_05)
-        btnFeelingBar_05.setImage(#imageLiteral(resourceName: "pdFeeling_05"), for: .normal)
-        btnFeelingBar_05.adjustsImageWhenHighlighted = false
-        btnFeelingBar_05.tag = 4
-        btnFeelingBar_05.addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
         
         btnFeelingArray.append(btnFeelingBar_01)
         btnFeelingArray.append(btnFeelingBar_02)
         btnFeelingArray.append(btnFeelingBar_03)
         btnFeelingArray.append(btnFeelingBar_04)
         btnFeelingArray.append(btnFeelingBar_05)
+        
+        for i in 0..<btnFeelingArray.count {
+            btnFeelingArray[i].frame = CGRect.zero
+            uiviewFeelingBar.addSubview(btnFeelingArray[i])
+            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i+1)-1"), for: .normal)
+            btnFeelingArray[i].adjustsImageWhenHighlighted = false
+            btnFeelingArray[i].tag = i
+            btnFeelingArray[i].layer.anchorPoint = feelingBarAnchor
+            btnFeelingArray[i].addTarget(self, action: #selector(self.postFeeling(_:)), for: .touchUpInside)
+        }
+    }
+    
+    func handleFeelingPanGesture(_ gesture: UIPanGestureRecognizer) {
+        let location = gesture.location(in: uiviewFeelingBar)
+        
+        print(location.y)
+        
+        if location.y < 0 || location.y > 52 {
+            if btnSelectedFeeling != nil {
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    let yAxis = 11 * screenHeightFactor
+                    let width = 32 * screenHeightFactor
+                    self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+                }, completion: nil)
+            }
+            return
+        }
+        
+        let index = Int((location.x - 20)/52)
+        
+        if index > 4 || index < 0 {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+            }, completion: nil)
+            return
+        }
+        
+        let button = btnFeelingArray[index]
+        
+        if btnSelectedFeeling != button {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+            }, completion: nil)
+        }
+        
+        btnSelectedFeeling = button
+        previousIndex = index
+        
+        uiviewFeelingBar.bringSubview(toFront: button)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+            let yAxis = -19 * screenHeightFactor
+            let width = 46 * screenHeightFactor
+            button.frame = CGRect(x: CGFloat(13+52*index), y: yAxis, width: width, height: width)
+        }, completion: nil)
+        
+        if gesture.state == .ended {
+            if index == chosenFeeling {
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    let yAxis = 3 * screenHeightFactor
+                    let width = 46 * screenHeightFactor
+                    button.frame = CGRect(x: CGFloat(13+52*index), y: yAxis, width: width, height: width)
+                }, completion: nil)
+                return
+            }
+            postFeeling(button)
+        }
     }
     
     fileprivate func loadInputToolBar() {
@@ -202,6 +249,7 @@ extension PinDetailViewController {
         textViewInput.showsVerticalScrollIndicator = false
         textViewInput.autocorrectionType = .no
         textViewInput.autocapitalizationType = .none
+        textViewInput.layoutManager.allowsNonContiguousLayout = false
         uiviewToolBar.addSubview(textViewInput)
         
         lblTxtPlaceholder = UILabel()
@@ -354,9 +402,9 @@ extension PinDetailViewController {
         }
         
         // Textview of pin detail
-        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 200))
+        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
         textviewPinDetail.center.x = screenWidth / 2
-        textviewPinDetail.text = ""
+        textviewPinDetail.text = strTextViewText
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewPinDetail.isUserInteractionEnabled = true
@@ -574,7 +622,7 @@ extension PinDetailViewController {
         
         // Back to Map
         buttonPinBackToMap = UIButton()
-        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailBackToMap"), for: UIControlState())
+        buttonPinBackToMap.setImage(#imageLiteral(resourceName: "pinDetailFullToHalf"), for: .normal)
         buttonPinBackToMap.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
         subviewNavigation.addSubview(buttonPinBackToMap)
         subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: buttonPinBackToMap)
@@ -583,12 +631,12 @@ extension PinDetailViewController {
         buttonPinBackToMap.tag = 1
         
         // Back to Comment Pin List
-        btnToPinList = UIButton()
-        btnToPinList.setImage(#imageLiteral(resourceName: "pinDetailJumpToOpenedPin"), for: UIControlState())
-        btnToPinList.addTarget(self, action: #selector(self.actionGoToList(_:)), for: .touchUpInside)
-        subviewNavigation.addSubview(btnToPinList)
-        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnToPinList)
-        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnToPinList)
+        btnHalfPinToMap = UIButton()
+        btnHalfPinToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
+        btnHalfPinToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+        subviewNavigation.addSubview(btnHalfPinToMap)
+        subviewNavigation.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnHalfPinToMap)
+        subviewNavigation.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnHalfPinToMap)
         
         // Comment Pin Option
         btnShowOptions = UIButton()
@@ -693,7 +741,7 @@ extension PinDetailViewController {
         pinIcon.alpha = 0
         self.view.addSubview(pinIcon)
         
-        buttonPrevPin = UIButton(frame: CGRect(x: 15, y: 477 * screenHeightFactor, width: 52, height: 52))
+        buttonPrevPin = UIButton(frame: CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
         buttonPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         buttonPrevPin.layer.zPosition = 60
         buttonPrevPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
@@ -704,7 +752,7 @@ extension PinDetailViewController {
         buttonPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         self.view.addSubview(buttonPrevPin)
         
-        btnNextPin = UIButton(frame: CGRect(x: 347 * screenHeightFactor, y: 477 * screenHeightFactor, width: 52, height: 52))
+        btnNextPin = UIButton(frame: CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
         btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         btnNextPin.layer.zPosition = 60
         btnNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor

@@ -87,6 +87,10 @@ class OpenedPinListViewController: UIViewController {
         subviewTable.backgroundColor = UIColor.white
         self.view.addSubview(subviewTable)
         subviewTable.layer.zPosition = 1
+        subviewTable.layer.shadowColor = UIColor.gray.cgColor
+        subviewTable.layer.shadowOffset = CGSize.zero
+        subviewTable.layer.shadowOpacity = 1
+        subviewTable.layer.shadowRadius = 25
         
         tableOpenedPin = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: tableHeight))
         tableOpenedPin.register(OPLTableViewCell.self, forCellReuseIdentifier: "openedPinCell")
@@ -109,7 +113,7 @@ class OpenedPinListViewController: UIViewController {
         
         // Button: Back to Comment Detail
         buttonBackToMap = UIButton()
-        buttonBackToMap.setImage(#imageLiteral(resourceName: "openedPinBackToMap"), for: UIControlState())
+        buttonBackToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
         buttonBackToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
         subviewWhite.addSubview(buttonBackToMap)
         subviewWhite.addConstraintsWithFormat("H:|-(-21)-[v0(101)]", options: [], views: buttonBackToMap)

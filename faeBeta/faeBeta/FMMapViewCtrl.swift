@@ -86,7 +86,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         let directionMap = position.bearing
         let direction: CGFloat = CGFloat(directionMap)
         let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
-        buttonToNorth.transform = CGAffineTransform(rotationAngle: angle)
+        btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
         
         let points = self.faeMapView.projection.point(for: currentLocation2D)
         self.uiviewDistanceRadius.center = points
@@ -197,15 +197,17 @@ extension FaeMapViewController: GMSMapViewDelegate {
         })
     }
     
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        print(coordinate)
+    }
+    
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
 
     }
     
-    func openMapPin(marker: GMSMarker, mapPin: MapPin) {
-        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
-        faeMapView.camera = camera
+    func openMapPin(marker: GMSMarker, mapPin: MapPin, animated: Bool) {
+        
+        self.animateToCoordinate(type: 0, marker: marker, animated: animated)
         
         PinDetailViewController.selectedMarkerPosition = marker.position
         PinDetailViewController.pinMarker = marker
@@ -215,11 +217,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
         PinDetailViewController.pinUserId = mapPin.userId
     }
     
-    func openPlacePin(marker: GMSMarker, placePin: PlacePin) {
-        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: faeMapView.camera.zoom)
-        faeMapView.camera = camera
+    func openPlacePin(marker: GMSMarker, placePin: PlacePin, animated: Bool) {
+        
+        self.animateToCoordinate(type: 2, marker: marker, animated: animated)
         
         PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude,
                                                                                 longitude: marker.position.longitude)
@@ -240,6 +240,55 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
     }
     
+    fileprivate func dismissMainBtns() {
+        if mapFilterArrow != nil {
+            mapFilterArrow.removeFromSuperview()
+        }
+        if filterCircle_1 != nil {
+            filterCircle_1.removeFromSuperview()
+        }
+        if filterCircle_2 != nil {
+            filterCircle_2.removeFromSuperview()
+        }
+        if filterCircle_3 != nil {
+            filterCircle_3.removeFromSuperview()
+        }
+        if filterCircle_4 != nil {
+            filterCircle_4.removeFromSuperview()
+        }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.btnMapFilter.frame = CGRect(x: screenWidth/2, y: screenHeight-25, width: 0, height: 0)
+            self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5*screenWidthFactor, width: 0, height: 0)
+            self.btnSelfLocation.frame = CGRect(x: 362.5*screenWidthFactor, y: 611.5*screenWidthFactor, width: 0, height: 0)
+            self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5*screenWidthFactor, width: 0, height: 0)
+            self.labelUnreadMessages.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            self.btnPinOnMap.frame = CGRect(x: 362.5*screenWidthFactor, y: 685.5*screenWidthFactor, width: 0, height: 0)
+        }, completion: nil)
+    }
+    
+    fileprivate func animateToCoordinate(type: Int, marker: GMSMarker, animated: Bool) {
+        
+        // Default is for user pin
+        var offset = 500*screenHeightFactor - screenHeight/2
+        
+        if type == 0 { // Map pin
+            offset = 530*screenHeightFactor - screenHeight/2
+        } else if type == 2 { // Place pin
+            offset = 534*screenHeightFactor - screenHeight/2
+        }
+        
+        var curPoint = faeMapView.projection.point(for: marker.position)
+        curPoint.y -= offset
+        let newCoor = faeMapView.projection.coordinate(for: curPoint)
+        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: faeMapView.camera.zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
+        
+        if animated {
+            faeMapView.animate(to: camera)
+        } else {
+            faeMapView.camera = camera
+        }
+    }
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if marker.userData == nil {
@@ -251,26 +300,19 @@ extension FaeMapViewController: GMSMapViewDelegate {
         guard let type = userData.keys.first else {
             return false
         }
-        
-        let zoomLv = mapView.camera.zoom
-        
-        let offset: Double = 0.001 * pow(2, Double(17 - zoomLv)) // 0.0012
-        self.renewSelfLocation()
-        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude+offset,
-                                              longitude: marker.position.longitude, zoom: zoomLv)
 
         if type == 0 { // fae map pin
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
-            
             if !self.canOpenAnotherPin {
                 return true
             }
+
+            self.dismissMainBtns()
             self.canOpenAnotherPin = false
-            
             invalidateAllTimer()
-            openMapPin(marker: marker, mapPin: mapPin)
+            openMapPin(marker: marker, mapPin: mapPin, animated: true)
             
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.delegate = self
@@ -286,29 +328,32 @@ extension FaeMapViewController: GMSMapViewDelegate {
             
             return true
         } else if type == 1 { // user pin
-            guard let userPin = userData.values.first as? UserPin else {
+            guard let userPin = userData.values.first as? FaeUserPin else {
                 return false
             }
+            userPin.pause = true
+            selectedUserMarker = marker
             self.canDoNextUserUpdate = false
-            mapView.animate(to: camera)
+            self.animateToCoordinate(type: type, marker: marker, animated: true)
             self.updateNameCard(withUserId: userPin.userId)
             self.animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
-                self.buttonFakeTransparentClosingView.alpha = 1
+                self.btnTransparentClose.alpha = 1
             })
             return true
         } else if type == 2 { // place pin
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
-            
             if !self.canOpenAnotherPin {
                 return true
             }
+            
+            self.dismissMainBtns()
             self.canOpenAnotherPin = false
             
             invalidateAllTimer()
-            openPlacePin(marker: marker, placePin: placePin)
+            openPlacePin(marker: marker, placePin: placePin, animated: true)
             
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.modalPresentationStyle = .overCurrentContext

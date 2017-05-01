@@ -174,26 +174,26 @@ class LogInViewController: UIViewController {
         user.logInBackground { (status: Int?, message: Any?) in
             if status! / 100 == 2 {
                 //success
-                let realm = try! Realm()
-                let userRealm = FaeUserRealm()
-                userRealm.userId = Int(user_id)
-                var isFirstTimeLogin = false
-                let messageJSON = JSON(message!)
-                if let _ = messageJSON["last_login_at"].string {
-                    userRealm.firstUpdate = true
-                } else {
-                    userRealm.firstUpdate = false
-                    isFirstTimeLogin = true
-                    print("[loginUser] is first time login!")
-                }
-                try! realm.write {
-                    realm.add(userRealm, update: true)
-                }
+//                let realm = try! Realm()
+//                let userRealm = FaeUserRealm()
+//                userRealm.userId = Int(user_id)
+//                var isFirstTimeLogin = false
+//                let messageJSON = JSON(message!)
+//                if let _ = messageJSON["last_login_at"].string {
+//                    userRealm.firstUpdate = true
+//                } else {
+//                    userRealm.firstUpdate = false
+////                    isFirstTimeLogin = true
+//                    print("[loginUser] is first time login!")
+//                }
+//                try! realm.write {
+//                    realm.add(userRealm, update: true)
+//                }
                 self.dismiss(animated: true, completion: {
-                    if isFirstTimeLogin {
-                        firebaseWelcome()
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
-                    }
+//                    if isFirstTimeLogin {
+//                        firebaseWelcome()
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+//                    }
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 })
             }

@@ -34,8 +34,6 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addSubview(imgview)
         //Add the constraints
         
-        
-        
         name = UILabel()
         name.font = UIFont(name: "AvenirNext-Medium",size: 16)
         name.textAlignment = NSTextAlignment.left
@@ -94,7 +92,6 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         
         self.removeConstraints(self.constraints)
         
-        
         self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
         self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
         self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: name)
@@ -108,7 +105,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
         self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
         self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: name)
-        if(memo?.text == ""){
+        if memo?.text == "" {
             self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: address)
         }else{
             self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: address,memo)

@@ -20,8 +20,8 @@ extension FaeMapViewController {
         
         faeMapView.preferredFrameRate = GMSFrameRate.maximum
         faeMapView.isIndoorEnabled = false
-        faeMapView.isBuildingsEnabled = false
-        faeMapView.settings.tiltGestures = false
+//        faeMapView.isBuildingsEnabled = false
+//        faeMapView.settings.tiltGestures = false
         faeMapView.setMinZoom(9, maxZoom: 21)
 
         self.view = faeMapView
@@ -45,57 +45,60 @@ extension FaeMapViewController {
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         // Left window on main map to open account system
-        buttonLeftTop = UIButton()
-        buttonLeftTop.setImage(UIImage(named: "mainScreenMore"), for: .normal)
-        self.view.addSubview(buttonLeftTop)
-        buttonLeftTop.addTarget(self, action: #selector(self.animationMoreShow(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: buttonLeftTop)
-        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonLeftTop)
-        buttonLeftTop.layer.zPosition = 500
+        btnLeftWindow = UIButton()
+        btnLeftWindow.setImage(UIImage(named: "mainScreenMore"), for: .normal)
+        self.view.addSubview(btnLeftWindow)
+        btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
+        self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: btnLeftWindow)
+        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnLeftWindow)
+        btnLeftWindow.layer.zPosition = 500
+        btnLeftWindow.adjustsImageWhenDisabled = false
         
         // Open main map search
-        buttonMainScreenSearch = UIButton()
-        buttonMainScreenSearch.setImage(UIImage(named: "mainScreenFaeLogo"), for: .normal)
-        self.view.addSubview(buttonMainScreenSearch)
-        buttonMainScreenSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(33)]", options: [], views: buttonMainScreenSearch)
-        self.view.addConstraintsWithFormat("V:|-22-[v0(36)]", options: [], views: buttonMainScreenSearch)
-        NSLayoutConstraint(item: buttonMainScreenSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        buttonMainScreenSearch.layer.zPosition = 500
+        btnMainMapSearch = UIButton()
+        btnMainMapSearch.setImage(UIImage(named: "mainScreenFaeLogo"), for: .normal)
+        self.view.addSubview(btnMainMapSearch)
+        btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
+        self.view.addConstraintsWithFormat("H:[v0(33)]", options: [], views: btnMainMapSearch)
+        self.view.addConstraintsWithFormat("V:|-22-[v0(36)]", options: [], views: btnMainMapSearch)
+        NSLayoutConstraint(item: btnMainMapSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        btnMainMapSearch.layer.zPosition = 500
+        btnMainMapSearch.adjustsImageWhenDisabled = false
         
         // Wind bell
-        buttonRightTop = UIButton()
-        buttonRightTop.setImage(UIImage(named: "mainScreenWindBell"), for: .normal)
-        self.view.addSubview(buttonRightTop)
-        self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: buttonRightTop)
-        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: buttonRightTop)
+        btnWindBell = UIButton()
+        btnWindBell.setImage(UIImage(named: "mainScreenWindBell"), for: .normal)
+        self.view.addSubview(btnWindBell)
+        self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: btnWindBell)
+        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnWindBell)
+        btnWindBell.adjustsImageWhenDisabled = false
         
         // Click to back to north
-        buttonToNorth = UIButton()
-        view.addSubview(buttonToNorth)
-        buttonToNorth.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
-        buttonToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: buttonToNorth)
-        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonToNorth)
-        buttonToNorth.layer.zPosition = 500
+        btnToNorth = UIButton(frame: CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59))
+        view.addSubview(btnToNorth)
+        btnToNorth.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
+        btnToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
+//        view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: btnToNorth)
+//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnToNorth)
+        btnToNorth.layer.zPosition = 500
         
         // Click to locate the current location
-        buttonSelfPosition = UIButton()
-        view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "mainScreenSelfPosition"), for: .normal)
-        buttonSelfPosition.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: buttonSelfPosition)
-        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: buttonSelfPosition)
-        buttonSelfPosition.layer.zPosition = 500
+        btnSelfLocation = UIButton(frame: CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59))
+        view.addSubview(btnSelfLocation)
+        btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: .normal)
+        btnSelfLocation.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
+//        view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: btnSelfLocation)
+//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnSelfLocation)
+        btnSelfLocation.layer.zPosition = 500
         
         // Open chat view
-        buttonChatOnMap = UIButton()
-        buttonChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
-        buttonChatOnMap.addTarget(self, action: #selector(self.animationMapChatShow(_:)), for: .touchUpInside)
-        view.addSubview(buttonChatOnMap)
-        view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: buttonChatOnMap)
-        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonChatOnMap)
-        buttonChatOnMap.layer.zPosition = 500
+        btnChatOnMap = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
+        btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
+        btnChatOnMap.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
+        view.addSubview(btnChatOnMap)
+//        view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: btnChatOnMap)
+//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnChatOnMap)
+        btnChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
         labelUnreadMessages = UILabel(frame: CGRect(x: 55, y: 1, width: 25, height: 22))
@@ -107,22 +110,15 @@ extension FaeMapViewController {
         labelUnreadMessages.textAlignment = .center
         labelUnreadMessages.textColor = UIColor.white
         labelUnreadMessages.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
-        buttonChatOnMap.addSubview(labelUnreadMessages)
+        btnChatOnMap.addSubview(labelUnreadMessages)
         
         // Create pin on main map
-        buttonPinOnMap = UIButton(frame: CGRect(x: 323, y: 646, width: 79, height: 79))
-        buttonPinOnMap.setImage(UIImage(named: "mainScreenPinMap"), for: .normal)
-        view.addSubview(buttonPinOnMap)
-        buttonPinOnMap.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: buttonPinOnMap)
-        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: buttonPinOnMap)
-        buttonPinOnMap.layer.zPosition = 500
-    }
-    
-    func actionMainScreenSearch(_ sender: UIButton) {
-        let mainScreenSearchVC = MainScreenSearchViewController()
-        mainScreenSearchVC.modalPresentationStyle = .overCurrentContext
-        mainScreenSearchVC.delegate = self
-        self.present(mainScreenSearchVC, animated: false, completion: nil)
+        btnPinOnMap = UIButton(frame: CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79))
+        btnPinOnMap.setImage(UIImage(named: "mainScreenPinMap"), for: .normal)
+        view.addSubview(btnPinOnMap)
+        btnPinOnMap.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
+//        view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: btnPinOnMap)
+//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnPinOnMap)
+        btnPinOnMap.layer.zPosition = 500
     }
 }

@@ -35,7 +35,7 @@ class SelectLocationViewController: UIViewController {
     var willAppearFirstLoad = false
     
     var buttonCancelSelectLocation: UIButton!
-    var buttonSelfPosition: UIButton!
+    var btnSelfLocation: UIButton!
     var buttonSetLocationOnMap: UIButton!
     
     // MARK: -- Search Bar

@@ -29,20 +29,6 @@ class PDUserInfoCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateAvatarUI(isPinOwner: Bool) {
-        if isPinOwner {
-            imgAvatar.frame = CGRect(x: 13, y: 11, width: 52, height: 52)
-            imgAvatar.layer.cornerRadius = 26
-            imgAvatar.layer.borderWidth = 2
-            imgAvatar.layer.borderColor = UIColor.faeAppRedColor().cgColor
-        } else {
-            imgAvatar.frame = CGRect(x: 15, y: 13, width: 50, height: 50)
-            imgAvatar.layer.cornerRadius = 25
-            imgAvatar.layer.borderWidth = 0
-            imgAvatar.layer.borderColor = nil
-        }
-    }
-    
     func updatePrivacyUI(showGender: Bool, gender: String, showAge: Bool, age: String) {
         if !showGender && !showAge {
             uiviewUserGender.isHidden = true
@@ -89,6 +75,8 @@ class PDUserInfoCell: UITableViewCell {
     fileprivate func loadCellContent() {
         
         imgAvatar = UIImageView()
+        imgAvatar.frame = CGRect(x: 15, y: 13, width: 50, height: 50)
+        imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
         addSubview(imgAvatar)

@@ -12,13 +12,14 @@ import SwiftyJSON
 extension FaeMapViewController {
     
     func loadSelfMarkerSubview() {
-        self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 120, height: 120))
+        self.subviewSelfMarker = UIView(frame: CGRect(x: -200, y: -200, width: 44, height: 44))
         subviewSelfMarker.layer.zPosition = 400
+        subviewSelfMarker.clipsToBounds = false
         self.view.addSubview(self.subviewSelfMarker)
         selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         selfMarkerIcon.adjustsImageWhenHighlighted = false
         selfMarkerIcon.layer.zPosition = 5
-        let point = CGPoint(x: 60, y: 60)
+        let point = CGPoint(x: 22, y: 22)
         selfMarkerIcon.center = point
         selfMarkerIcon.addTarget(self, action: #selector(self.getSelfNameCard(_:)), for: .touchUpInside)
         self.subviewSelfMarker.addSubview(selfMarkerIcon)
@@ -30,7 +31,7 @@ extension FaeMapViewController {
             myPositionCircle_2.removeFromSuperview()
             myPositionCircle_3.removeFromSuperview()
         }
-        let point = CGPoint(x: 60, y: 60)
+        let point = CGPoint(x: 22, y: 22)
         myPositionCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
@@ -40,6 +41,9 @@ extension FaeMapViewController {
         myPositionCircle_1.center = point
         myPositionCircle_2.center = point
         myPositionCircle_3.center = point
+        myPositionCircle_1.isUserInteractionEnabled = false
+        myPositionCircle_2.isUserInteractionEnabled = false
+        myPositionCircle_3.isUserInteractionEnabled = false
         
         self.subviewSelfMarker.addSubview(myPositionCircle_3)
         self.subviewSelfMarker.addSubview(myPositionCircle_2)
@@ -52,21 +56,21 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionCircle_1 != nil {
                 self.myPositionCircle_1.alpha = 0.0
-                self.myPositionCircle_1.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
+                self.myPositionCircle_1.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
             }
         }), completion: nil)
         
         UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionCircle_2 != nil {
                 self.myPositionCircle_2.alpha = 0.0
-                self.myPositionCircle_2.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
+                self.myPositionCircle_2.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
             }
         }), completion: nil)
         
         UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn], animations: ({
             if self.myPositionCircle_3 != nil {
                 self.myPositionCircle_3.alpha = 0.0
-                self.myPositionCircle_3.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
+                self.myPositionCircle_3.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
             }
         }), completion: nil)
     }

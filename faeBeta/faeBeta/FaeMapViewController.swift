@@ -49,22 +49,20 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterTypeAll: MFilterButton! // Filter Item
     var btnMFilterUnread: MFilterButton! // Filter Item
     var btnMapFilter: UIButton! // Filter Button
-    var buttonCancelSelectLocation: UIButton!
-    var buttonChat: UIButton! // Map Namecard
-    var buttonChatOnMap: UIButton!
-    var buttonClosingOptionsInNameCard: UIButton! // Map Namecard
-    var buttonEmoji: UIButton! // Map Namecard
-    var buttonFakeTransparentClosingView: UIButton! // Map Namecard
-    var buttonFavorite: UIButton! // Map Namecard
-    var buttonLeftTop: UIButton!
-    var buttonMainScreenSearch: UIButton!
-    var buttonOptions: UIButton! // Map Namecard
-    var buttonPinOnMap: UIButton!
-    var buttonPinOnMapInside: UIButton!
-    var buttonRightTop: UIButton!
-    var buttonSelfPosition: UIButton!
-    var buttonShowSelfOnMap: UIButton! // Map Namecard
-    var buttonToNorth: UIButton!
+    var btnChat: UIButton! // Map Namecard
+    var btnChatOnMap: UIButton!
+    var btnCloseNameCardOptions: UIButton! // Map Namecard
+    var btnEmoji: UIButton! // Map Namecard
+    var btnTransparentClose: UIButton! // Map Namecard
+    var btnFavorite: UIButton! // Map Namecard
+    var btnLeftWindow: UIButton!
+    var btnMainMapSearch: UIButton!
+    var btnOptions: UIButton! // Map Namecard
+    var btnPinOnMap: UIButton!
+    var btnWindBell: UIButton!
+    var btnSelfLocation: UIButton!
+    var btnShowSelfOnMap: UIButton! // Map Namecard
+    var btnToNorth: UIButton!
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -143,6 +141,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var userPins = [UserPin]()
+    var faeUserPins = [FaeUserPin]()
+    var selectedUserMarker = GMSMarker()
     
     // System Functions
     override func viewDidLoad() {
@@ -151,15 +151,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
+        loadSelfMarkerSubview()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadSelfMarkerSubview()
         reloadSelfMarker()
-        loadButton()
         loadMFilterSlider()
         loadMapFilter()
+        loadButton()
         filterAndYelpSetup()
         didLoadFirstLoad = true
     }
@@ -168,9 +168,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
         checkLocationEnablibity()
-        self.loadTransparentNavBarItems()
-        self.loadMapChat()
-        buttonFakeTransparentClosingView.alpha = 0
+        loadTransparentNavBarItems()
+        loadMapChat()
+        btnTransparentClose.alpha = 0
         reloadSelfPosAnimation()
     }
     
@@ -179,9 +179,43 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.isFirstTimeLogin(_:)), name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+        checkDisplayNameExisitency()
         NotificationCenter.default.addObserver(self, selector: #selector(self.returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-        checkFirstLoginInRealm()
+        updateGenderAge()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isTranslucent = false
+    }
+    
+    func checkDisplayNameExisitency() {
+        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+            if status / 100 == 2 {
+                let rsltJSON = JSON(result!)
+                if let withNickName = rsltJSON["nick_name"].string {
+                    print("[checkDisplayNameExisitency] diplay name: \(withNickName)")
+                } else {
+                    print("[checkDisplayNameExisitency] display name did not setup")
+                    self.loadFirstLoginVC()
+                }
+            }
+        }
+    }
+    
+    func returnFromLoginSignup(_ notification: NSNotification) {
+        print("[returnFromLoginSignup] yes it is")
+        refreshMap(pins: true, users: true, places: true)
+    }
+    
+    func isUserLoggedIn() {
+        let shareAPI = LocalStorageManager()
+        _ = shareAPI.readLogInfo()
+        if is_Login == 0 {
+            self.jumpToWelcomeView(animated: false)
+        }
+    }
+    
+    fileprivate func updateGenderAge() {
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
@@ -191,24 +225,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             } else {
                 print("[showGenderAge] Fail to update namecard")
             }
-        }
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isTranslucent = false
-    }
-    
-    func returnFromLoginSignup(_ notification: NSNotification) {
-        print("[returnFromLoginSignup] yes it is")
-        refreshMap(pins: true, users: true, places: false)
-    }
-    
-    func isUserLoggedIn() {
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
-        if is_Login == 0 {
-            self.jumpToWelcomeView(animated: false)
         }
     }
     
@@ -241,43 +257,43 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
-    func isFirstTimeLogin(_ notification: NSNotification) {
-        print("[isFirstTimeLogin] yes it is")
-        loadFirstLoginVC()
-        if let gender = userUserGender {
-            if gender == "female" {
-                let updateMiniAvatar = FaeUser()
-                self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_19"), for: .normal)
-                updateMiniAvatar.whereKey("mini_avatar", value: "18")
-                updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        print("Successfully update miniavatar")
-                    }
-                    else {
-                        print("Fail to update miniavatar")
-                    }
-                })
-            }
-        }
-    }
+//    func isFirstTimeLogin(_ notification: NSNotification) {
+//        print("[isFirstTimeLogin] yes it is")
+//        loadFirstLoginVC()
+//        if let gender = userUserGender {
+//            if gender == "female" {
+//                let updateMiniAvatar = FaeUser()
+//                self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_19"), for: .normal)
+//                updateMiniAvatar.whereKey("mini_avatar", value: "18")
+//                updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+//                    if status / 100 == 2 {
+//                        print("Successfully update miniavatar")
+//                    }
+//                    else {
+//                        print("Fail to update miniavatar")
+//                    }
+//                })
+//            }
+//        }
+//    }
     
     fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         self.present(firstTimeLoginVC, animated: false, completion: nil)
     }
-    
-    fileprivate func checkFirstLoginInRealm() {
-        if user_id != nil {
-            let realm = try! Realm()
-            if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
-                if !userRealm.firstUpdate {
-                    print("[checkFirstLoginInRealm] yes it is")
-                    loadFirstLoginVC()
-                }
-            }
-        }
-    }
+//    
+//    fileprivate func checkFirstLoginInRealm() {
+//        if user_id != nil {
+//            let realm = try! Realm()
+//            if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
+//                if !userRealm.firstUpdate {
+//                    print("[checkFirstLoginInRealm] yes it is")
+//                    loadFirstLoginVC()
+//                }
+//            }
+//        }
+//    }
     
     // Check if location is enabled
     fileprivate func checkLocationEnablibity() {

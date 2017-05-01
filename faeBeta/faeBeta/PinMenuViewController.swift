@@ -21,7 +21,7 @@ class PinMenuViewController: UIViewController {
     var uiviewPinSelections: UIView!
     var blurViewMap: UIVisualEffectView!
     var buttonMedia: UIButton!
-    var buttonChats: UIButton!
+    var btnChats: UIButton!
     var buttonComment: UIButton!
     var buttonEvent: UIButton!
     var buttonFaevor: UIButton!

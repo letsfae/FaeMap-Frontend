@@ -40,12 +40,12 @@ extension SelectLocationViewController {
         self.view.addConstraintsWithFormat("H:|-18-[v0(59)]", options: [], views: buttonCancelSelectLocation)
         self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonCancelSelectLocation)
         
-        buttonSelfPosition = UIButton()
-        self.view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
-        buttonSelfPosition.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonSelfPosition)
+        btnSelfLocation = UIButton()
+        self.view.addSubview(btnSelfLocation)
+        btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
+        btnSelfLocation.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
+        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: btnSelfLocation)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: btnSelfLocation)
         
         buttonSetLocationOnMap = UIButton()
         buttonSetLocationOnMap.setTitle("Set Location", for: UIControlState())

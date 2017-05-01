@@ -25,13 +25,15 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     
     // PinDetailDelegate
-    func dismissMarkerShadow(_ dismiss: Bool) {
+    func backToMainMap() {
         updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
+        
+        reloadMainScreenButtons()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
@@ -59,11 +61,18 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
     }
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker) {
-        let offset = 0.00148 * pow(2, Double(17 - zoom))
-        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
-                                          longitude: coordinate.longitude, zoom: zoom)
-        faeMapView.camera = camera
+        
+        marker.map = nil
         marker.position = coordinate
+        marker.map = faeMapView
+        
+        let offset = 530*screenHeightFactor - screenHeight/2
+        var curPoint = faeMapView.projection.point(for: coordinate)
+        curPoint.y -= offset
+        let newCoor = faeMapView.projection.coordinate(for: curPoint)
+        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
+        
+        faeMapView.camera = camera
     }
     func goTo(nextPin: Bool) {
         var tmpMarkers = [GMSMarker]()
@@ -97,7 +106,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             guard let placePin = userData.values.first as? PlacePin else {
                 return
             }
-            openPlacePin(marker: tmpMarkers[i], placePin: placePin)
+            openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
         }
     }
 
@@ -157,6 +166,20 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.jumpToMyFaeMainPage()
     }
     func reloadSelfPosition() {
+        self.canOpenAnotherPin = true
+        reloadMainScreenButtons()
         reloadSelfPosAnimation()
+    }
+    
+    fileprivate func reloadMainScreenButtons() {
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.btnMapFilter.frame = CGRect(x: screenWidth/2-22, y: screenHeight-47, width: 44, height: 44)
+            self.btnToNorth.frame = CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnSelfLocation.frame = CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnChatOnMap.frame = CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79)
+            self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
+            self.updateUnreadChatIndicator()
+            self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
+        }, completion: nil)
     }
 }

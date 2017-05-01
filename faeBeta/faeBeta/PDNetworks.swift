@@ -14,7 +14,15 @@ import RealmSwift
 extension PinDetailViewController {
     
     func getPinInfo() {
-        self.btnToPinList.isEnabled = false
+        
+        // Cache the current user's profile pic and use it when current user post a feeling
+        // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
+        if user_id != nil {
+            let stringHeaderURL = "\(baseURL)/files/users/\(Int(user_id))/avatar"
+            imgCurUserAvatar = UIImageView()
+            imgCurUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
+        }
+        
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
@@ -39,19 +47,10 @@ extension PinDetailViewController {
             if self.tableMode == .feelings {
                 self.tableCommentsForPin.reloadData()
             }
-            // Has posted feeling or not
-            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
-                self.chosenFeeling = chosenFeel
-                if chosenFeel < 5 {
-                    let xOffset = Int(chosenFeel * 52 + 12)
-                    self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
-                }
-            } else {
-                self.chosenFeeling = -1
-            }
+            // QuickView is the middle line of pin detail, displayed the chosen feeling the all users have posted
             self.loadFeelingQuickView()
             
-            // Images
+            // Images of story pin
             if PinDetailViewController.pinTypeEnum == .media {
                 self.fileIdArray.removeAll()
                 let fileIDs = pinInfoJSON["file_ids"].arrayValue.map({Int($0.stringValue)})
@@ -60,6 +59,7 @@ extension PinDetailViewController {
                         self.fileIdArray.append(fileID!)
                     }
                 }
+                // Use separate func to load pictures in a scrollView
                 self.loadMedias()
                 self.stringPlainTextViewTxt = pinInfoJSON["description"].stringValue
                 self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
@@ -67,7 +67,6 @@ extension PinDetailViewController {
                 self.stringPlainTextViewTxt = pinInfoJSON["content"].stringValue
                 self.textviewPinDetail.attributedText = self.stringPlainTextViewTxt.convertStringWithEmoji()
             }
-            
             
             // Liked or not
             if !pinInfoJSON["user_pin_operations"]["is_liked"].boolValue {
@@ -118,8 +117,9 @@ extension PinDetailViewController {
             chosenFeeling = -1
             return
         }
-        
+        print("[postFeeling] pre self.chosenFeeling", chosenFeeling)
         chosenFeeling = sender.tag
+        print("[postFeeling] aft self.chosenFeeling", chosenFeeling)
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: "\(sender.tag)")
         postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
@@ -127,16 +127,17 @@ extension PinDetailViewController {
                 return
             }
             
-            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
-            
-            if sender.tag < 5 {
-                let xOffset = Int(sender.tag * 52 + 12)
-                self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
-            }
+            UIView.animate(withDuration: 0.2, animations: {
+                let yAxis = 11 * screenHeightFactor
+                let width = 32 * screenHeightFactor
+                for i in 0..<self.btnFeelingArray.count {
+                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
+                }
+                if sender.tag < 5 {
+                    let xOffset = Int(sender.tag * 52 + 13)
+                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 46, height: 46)
+                }
+            })
             
             let getPinById = FaeMap()
             getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.pinIDPinDetailView) {(status: Int, message: Any?) in
@@ -148,8 +149,10 @@ extension PinDetailViewController {
                         self.feelingArray.append(feeling!)
                     }
                 }
-                if self.tableMode == .feelings {
+                if self.tableMode == .feelings && !self.boolDetailShrinked {
                     self.tableCommentsForPin.reloadData()
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.tableCommentsForPin.scrollToRow(at: indexPath, at: .bottom, animated: false)
                 }
                 self.loadFeelingQuickView()
             }
@@ -157,6 +160,13 @@ extension PinDetailViewController {
     }
     
     func deleteFeeling() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+        })
         let deleteFeeling = FaePinAction()
         deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: self.pinIDPinDetailView) { (status, message) in
             if status / 100 != 2 {
@@ -175,11 +185,6 @@ extension PinDetailViewController {
                 if self.tableMode == .feelings {
                     self.tableCommentsForPin.reloadData()
                 }
-                self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-                self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
                 self.loadFeelingQuickView()
             }
         }
@@ -200,9 +205,9 @@ extension PinDetailViewController {
                 let offset = count * 30
                 let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
                 if i+1 < 10 {
-                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)")
+                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)-1")
                 } else {
-                    feeling.image = UIImage(named: "pdFeeling_\(i+1)")
+                    feeling.image = UIImage(named: "pdFeeling_\(i+1)-1")
                 }
                 uiviewFeeling.addSubview(feeling)
                 count += 1
@@ -299,6 +304,18 @@ extension PinDetailViewController {
 //            return
 //        }
         let indexPath = IndexPath(row: index, section: 0)
+        let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
+        UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+            if let profileImage = image {
+                if isPeople {
+                    self.pinDetailUsers[index].profileImage = profileImage
+                } else {
+                    self.pinComments[index].profileImage = profileImage
+                    self.tableCommentsForPin.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
+            }
+        })
+        return
         let realm = try! Realm()
         if let userRealm = realm.objects(UserAvatar.self).filter("userId == \(userid) AND avatar != nil").first {
             let profileImage = UIImage.sd_image(with: userRealm.avatar as Data!)
