@@ -10,7 +10,6 @@ import UIKit
 
 // An object for faeUser
 class FaeWithUser: NSObject {
-    
     var userName = ""
     var userId = ""
     var userAvatar = ""

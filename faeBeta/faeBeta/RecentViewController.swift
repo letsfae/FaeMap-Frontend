@@ -37,7 +37,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             print(self.recents!)
             self.tableView.reloadData()
         }
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -152,7 +151,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
-            chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserUserId, userAvatar: nil)
+            //Bryan
+            chatVC.realmWithUser = RealmWithUser()
+            chatVC.realmWithUser!.userName = withUserName!
+            chatVC.realmWithUser!.userID = withUserUserId!
+            //EndBryan
         }
     }
     
@@ -182,12 +185,14 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if let cacheRecent = result as? NSArray {
-//                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
-//                    if let cacheRecent2 = result2 as? NSArray {
-//                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
-//                        
-//                    }
-//                }
+                //Bryan
+                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
+                    if let cacheRecent2 = result2 as? NSArray {
+                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
+                        
+                    }
+                }
+                //ENDBryan
 
                 let json = JSON(result!)
                 print(json)
@@ -205,7 +210,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 self.recents = JSON([])
             }
         }
-
     }
     
     func closeAllCell(_ recognizer:UITapGestureRecognizer){

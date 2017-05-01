@@ -9,85 +9,102 @@
 import Foundation
 import RealmSwift
 
+class RealmWithUser: Object{
+    dynamic var userName: String = ""
+    dynamic var userID: String = ""
+    dynamic var userAvatar: String? = nil
+    
+    override static func primaryKey() -> String? {
+        return "userID"
+    }
+}
+
+class RealmMessage: Object {
+    dynamic var withUserID : Int = -1
+    dynamic var senderID : Int = -1
+    dynamic var senderName : String = ""
+    dynamic var date = NSDate()
+    dynamic var message : String = ""
+    dynamic var delivered = false
+    dynamic var hasTimeStamp = false
+    dynamic var data : NSData? = nil
+    dynamic var type : String = ""
+    dynamic var status: String = ""
+    dynamic var snapImage : NSData? = nil
+    dynamic var longitude : String? = ""
+    dynamic var latitude : String? = nil
+    
+    // int cannot be optional
+    let videoDuration = RealmOptional<Int>()
+    
+    dynamic var isHeartSticker : Bool = false
+    
+    override static func indexedProperties() -> [String] {
+        return ["date"].reversed()
+    }
+    
+    //        override static func primaryKey() -> String? {
+    //            return "date"
+    //        }
+}
+
+class RealmRecent: Object {
+    dynamic var withUser: RealmWithUser?
+    dynamic var date = NSDate()
+    dynamic var avatar : NSData? = nil
+    dynamic var message : RealmMessage? = nil
+    dynamic var unread = false
+    
+    override static func indexedProperties() -> [String] {
+        return ["date"].reversed()
+    }
+    
+//    override static func primaryKey() -> String? {
+//        return "withUserID"
+//    }
+}
+
 class RealmChat {
-    
-    
-    class Recent: Object {
-        
-        dynamic var withUserID : Int = -1
-        dynamic var date : String = ""
-        dynamic var avatar : NSData? = nil
-        dynamic var message : Message?
-        dynamic var unread = false
-        
-        override static func indexedProperties() -> [String] {
-            return ["date"].reversed()
-        }
-        
-        override static func primaryKey() -> String? {
-            return "userID"
+    static func sendMessage(message : RealmMessage, completion : () -> ()){
+        let realm = try! Realm()
+        try! realm.write{
+            realm.add(message)
+            print("add message")
         }
     }
     
-    class Message: Object {
-        dynamic var withUserID : Int = -1
-        dynamic var senderID : Int = -1
-        dynamic var date : String = ""
-        dynamic var message : String = ""
-        dynamic var delivered = false
-        dynamic var hasTimeStamp = false
-        dynamic var data : NSData? = nil
-        dynamic var snapImage : NSData? = nil
-        dynamic var longitude : String? = ""
-        dynamic var latitude : String? = nil
-        
-        // int cannot be optional
-        dynamic var videoDuration : String? = nil
-        
-        dynamic var isHeartSticker : Bool = false
-        
-        override static func indexedProperties() -> [String] {
-            return ["date"].reversed()
-        }
-        
-        override static func primaryKey() -> String? {
-            return "date"
-        }
+    static func updateRecent(recent : RealmMessage) {
         
     }
     
-    func sendMessage(message : Message, completion : () -> ()){
+    static func receiveMessage(message : RealmMessage) {
         let realm = try! Realm()
         try! realm.write{
             realm.add(message);
         }
     }
     
-    func updateRecent(recent : Message) {
-        
-    }
-    
-    func receiveMessage(message : Message) {
-        let realm = try! Realm()
-        try! realm.write{
-            realm.add(message);
-        }
-    }
-    
-    func fetchMessageWith(userID: Int, numberOfItem: Int, offset: Int) -> [Message] {
+    static func fetchMessageWith(userID: Int, numberOfItem: Int, offset: Int) -> [RealmMessage] {
         return []
     }
     
-    func removeRecentWith(userID: Int) {
+    static func removeRecentWith(userID: Int) {
         
     }
     
-    func cleanDatabase() {
+    static func cleanDatabase() {
         
     }
     
-    func printDatabase(object : Object, numerOfItem : Int, offset: Int) {
-        
+    static func printDatabase(object : Object, numerOfItem : Int, offset: Int) {
+    }
+    
+    static func addWithUser(withUser : RealmWithUser){
+        let realm  = try! Realm()
+        try! realm.write{
+            realm.add(withUser)
+            print("add user")
+        }
     }
     
 }
