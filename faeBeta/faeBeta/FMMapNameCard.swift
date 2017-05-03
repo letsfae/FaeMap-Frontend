@@ -370,12 +370,14 @@ extension FaeMapViewController {
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
         chatVC.chat_id = chat_id
-        let withUserName = withUserName ?? "Chat"
+        //Bryan
+        let nickName = withNickName ?? "Chat"
+        //ENDBryan
         //chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
         
         //Bryan
         chatVC.realmWithUser = RealmWithUser()
-        chatVC.realmWithUser!.userName = withUserName
+        chatVC.realmWithUser!.userName = nickName
         chatVC.realmWithUser!.userID = withUserId.stringValue
         //chatVC.realmWithUser?.userAvatar =
         

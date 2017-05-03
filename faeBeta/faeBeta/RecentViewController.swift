@@ -192,7 +192,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                         
                     }
                 }
-                //ENDBryan
 
                 let json = JSON(result!)
                 print(json)
