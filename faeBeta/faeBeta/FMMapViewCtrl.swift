@@ -317,7 +317,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             let pinDetailVC = PinDetailViewController()
             pinDetailVC.delegate = self
             pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.pinIDPinDetailView = "\(mapPin.pinId)"
+            pinDetailVC.strPinId = "\(mapPin.pinId)"
             
             self.clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {

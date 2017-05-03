@@ -32,10 +32,9 @@ class PinFullViewController: UIViewController {
 //        checkPinStatus()
 //        addObservers()
 //        
-//        if self.pinIDPinDetailView != "-999" {
+//        if self.strPinId != "-999" {
 //            getSeveralInfo()
 //        }
-//        self.delegate?.disableSelfMarker(yes: true)
     }
     
     func loadPinDetailWindow() {

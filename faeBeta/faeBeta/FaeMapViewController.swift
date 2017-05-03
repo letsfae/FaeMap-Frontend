@@ -23,7 +23,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     let yelpManager = YelpManager() // Yelp API
     let yelpQuery = YelpQuery() // Yelp API
     var avatarBaseView: UIView! // Map Namecard
+    var btnChat: UIButton! // Map Namecard
+    var btnChatOnMap: UIButton!
+    var btnCloseNameCardOptions: UIButton! // Map Namecard
     var btnDraggingMenu: UIButton! // Filter Menu
+    var btnEmoji: UIButton! // Map Namecard
+    var btnFavorite: UIButton! // Map Namecard
+    var btnLeftWindow: UIButton!
     var btnMFilterBeauty: MFilterButton! // Filter Item
     var btnMFilterCafe: MFilterButton! // Filter Item
     var btnMFilterChats: MFilterButton! // Filter Item
@@ -48,21 +54,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterStories: MFilterButton! // Filter Item
     var btnMFilterTypeAll: MFilterButton! // Filter Item
     var btnMFilterUnread: MFilterButton! // Filter Item
-    var btnMapFilter: UIButton! // Filter Button
-    var btnChat: UIButton! // Map Namecard
-    var btnChatOnMap: UIButton!
-    var btnCloseNameCardOptions: UIButton! // Map Namecard
-    var btnEmoji: UIButton! // Map Namecard
-    var btnTransparentClose: UIButton! // Map Namecard
-    var btnFavorite: UIButton! // Map Namecard
-    var btnLeftWindow: UIButton!
     var btnMainMapSearch: UIButton!
+    var btnMapFilter: UIButton! // Filter Button
     var btnOptions: UIButton! // Map Namecard
     var btnPinOnMap: UIButton!
-    var btnWindBell: UIButton!
     var btnSelfLocation: UIButton!
     var btnShowSelfOnMap: UIButton! // Map Namecard
     var btnToNorth: UIButton!
+    var btnTransparentClose: UIButton! // Map Namecard
+    var btnWindBell: UIButton!
     var canDoNextMapPinUpdate = true
     var canDoNextPlacePinUpdate = true
     var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -75,6 +75,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var editNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
     var faeMapView: GMSMapView!
+    var faeUserPins = [FaeUserPin]()
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
@@ -124,6 +125,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var refreshPlaces = true
     var refreshUsers = true
     var reportNameCard: UIButton! // Map Namecard
+    var selectedUserMarker = GMSMarker()
     var selfMarkerIcon: UIButton! // Self Position Marker
     var shareNameCard: UIButton! // Map Namecard
     var sizeFrom: CGFloat = 0 // Pan gesture var
@@ -141,8 +143,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var userPins = [UserPin]()
-    var faeUserPins = [FaeUserPin]()
-    var selectedUserMarker = GMSMarker()
     
     // System Functions
     override func viewDidLoad() {
@@ -257,43 +257,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
-//    func isFirstTimeLogin(_ notification: NSNotification) {
-//        print("[isFirstTimeLogin] yes it is")
-//        loadFirstLoginVC()
-//        if let gender = userUserGender {
-//            if gender == "female" {
-//                let updateMiniAvatar = FaeUser()
-//                self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_19"), for: .normal)
-//                updateMiniAvatar.whereKey("mini_avatar", value: "18")
-//                updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
-//                    if status / 100 == 2 {
-//                        print("Successfully update miniavatar")
-//                    }
-//                    else {
-//                        print("Fail to update miniavatar")
-//                    }
-//                })
-//            }
-//        }
-//    }
-    
     fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         self.present(firstTimeLoginVC, animated: false, completion: nil)
     }
-//    
-//    fileprivate func checkFirstLoginInRealm() {
-//        if user_id != nil {
-//            let realm = try! Realm()
-//            if let userRealm = realm.objects(FaeUserRealm.self).filter("userId == \(Int(user_id))").first {
-//                if !userRealm.firstUpdate {
-//                    print("[checkFirstLoginInRealm] yes it is")
-//                    loadFirstLoginVC()
-//                }
-//            }
-//        }
-//    }
     
     // Check if location is enabled
     fileprivate func checkLocationEnablibity() {

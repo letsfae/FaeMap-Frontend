@@ -129,7 +129,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
             }
             
             if let pinID = arrPinData[indexPath.section]["pin_id"] {
-                pinDetailVC.pinIDPinDetailView = "\(pinID)"
+                pinDetailVC.strPinId = "\(pinID)"
             }
             
             pinDetailVC.enterMode = .collections

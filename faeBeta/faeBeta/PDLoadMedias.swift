@@ -14,39 +14,42 @@ import IDMPhotoBrowser
 
 extension PinDetailViewController {
     func loadMedias() {
-        imageViewMediaArray.removeAll()
+        imgMediaArr.removeAll()
         for subview in scrollViewMedia.subviews {
             subview.removeFromSuperview()
         }
-        for index in 0...fileIdArray.count-1 {
+        for index in 0..<fileIdArray.count {
             var offset = 105
             var width: CGFloat = 95
-            if mediaMode == .large {
+            if enterMode == .collections {
                 offset = 170
                 width = 160
             }
+            
             let imageView = UIImageView(frame: CGRect(x: CGFloat(offset*index), y: 0, width: width, height: width))
-            imageView.contentMode = .scaleAspectFill
-            imageView.layer.cornerRadius = 13.5
             imageView.clipsToBounds = true
-            imageViewMediaArray.append(imageView)
-            scrollViewMedia.addSubview(imageView)
+            imageView.contentMode = .scaleAspectFill
             imageView.isUserInteractionEnabled = true
+            imageView.layer.cornerRadius = 13.5
             let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
             imageView.addGestureRecognizer(tapRecognizer)
+            imgMediaArr.append(imageView)
+            scrollViewMedia.addSubview(imageView)
+            
             let realm = try! Realm()
             if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil").first {
                 imageView.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
             } else {
                 let fileURL = "\(baseURL)/files/\(self.fileIdArray[index])/data"
                 imageView.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image != nil {
-                        let mediaImage = FileObject()
-                        mediaImage.fileId = self.fileIdArray[index]
-                        mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
-                        try! realm.write {
-                            realm.add(mediaImage)
-                        }
+                    if image == nil {
+                        return
+                    }
+                    let mediaImage = FileObject()
+                    mediaImage.fileId = self.fileIdArray[index]
+                    mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
+                    try! realm.write {
+                        realm.add(mediaImage)
                     }
                 })
             }
@@ -74,11 +77,11 @@ extension PinDetailViewController {
         if type == .large {
             width = 160
         }
-        for index in 0...imageViewMediaArray.count-1 {
+        for index in 0...imgMediaArr.count-1 {
             UIView.animate(withDuration: 0.5, animations: {
-                self.imageViewMediaArray[index].frame.origin.x = CGFloat((width+space)*index)
-                self.imageViewMediaArray[index].frame.size.width = CGFloat(width)
-                self.imageViewMediaArray[index].frame.size.height = CGFloat(width)
+                self.imgMediaArr[index].frame.origin.x = CGFloat((width+space)*index)
+                self.imgMediaArr[index].frame.size.width = CGFloat(width)
+                self.imgMediaArr[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
         }

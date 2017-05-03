@@ -28,11 +28,11 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
         print("[sendStickerWithImageName] name: \(name)")
         let stickerMessage = "<faeSticker>\(name)</faeSticker>"
         sendMessage(stickerMessage)
-        buttonSend.isEnabled = false
-        buttonSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
+        btnCommentSend.isEnabled = false
+        btnCommentSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
         UIView.animate(withDuration: 0.3) {
-            self.tableCommentsForPin.frame.size.height = screenHeight - 155
-            self.draggingButtonSubview.frame.origin.y = screenHeight - 90
+            self.tblMain.frame.size.height = screenHeight - 155
+            self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - 90
         }
         
     }
@@ -48,27 +48,27 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     
     // EditPinViewControllerDelegate
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
-        if self.pinIDPinDetailView != "-999" {
+        if self.strPinId != "-1" {
             getSeveralInfo()
-            tableCommentsForPin.contentOffset.y = 0
+            tblMain.contentOffset.y = 0
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = zoom
-        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.pinIDPinDetailView, marker: PinDetailViewController.pinMarker)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.strPinId, marker: PinDetailViewController.pinMarker)
     }
     
     // OpenedPinListViewControllerDelegate
     func animateToCameraFromOpenedPinListView(_ coordinate: CLLocationCoordinate2D, index: Int) {
-        buttonPrevPin.isHidden = false
+        btnPrevPin.isHidden = false
         btnNextPin.isHidden = false
-        pinIcon.isHidden = false
+        imgPinIcon.isHidden = false
         btnGrayBackToMap.isHidden = false
         
         self.backJustOnce = true
-        self.uiviewPlaceDetail.frame.origin.y = 0
-        self.subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
-        self.tableCommentsForPin.center.y += screenHeight
-        self.draggingButtonSubview.center.y += screenHeight
+        self.uiviewMain.frame.origin.y = 0
+        self.uiviewNavBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+        self.tblMain.center.y += screenHeight
+        self.uiviewToFullDragBtnSub.center.y += screenHeight
         
         PinDetailViewController.selectedMarkerPosition = coordinate
         PinDetailViewController.placeType = OpenedPlaces.openedPlaces[index].category
@@ -89,16 +89,16 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     // OpenedPinListViewControllerDelegate
     func backFromOpenedPinList(pinType: String, pinID: String) {
         backJustOnce = true
-        subviewNavigation.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
+        uiviewNavBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 65)
     }
     
     func directReplyFromPinCell(_ username: String, index: IndexPath) {
-        self.replyToUser = "<a>@\(username)</a> "
+        self.strReplyTo = "<a>@\(username)</a> "
         self.lblTxtPlaceholder.text = "@\(username):"
         textViewInput.becomeFirstResponder()
         directReplyFromUser = true
         boolKeyboardShowed = true
-        tableCommentsForPin.scrollToRow(at: index, at: .bottom, animated: true)
+        tblMain.scrollToRow(at: index, at: .bottom, animated: true)
     }
     
     func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath) {
@@ -110,7 +110,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func showActionSheet(name: String, userid: Int, index: IndexPath) {
-        self.replyToUser = "<a>@\(name)</a> "
+        self.strReplyTo = "<a>@\(name)</a> "
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
@@ -118,7 +118,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             self.textViewInput.becomeFirstResponder()
             self.directReplyFromUser = true
             self.boolKeyboardShowed = true
-            self.tableCommentsForPin.scrollToRow(at: index, at: .bottom, animated: true)
+            self.tblMain.scrollToRow(at: index, at: .bottom, animated: true)
         }
         let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
             self.actionReportThisPin()
@@ -132,11 +132,11 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
                 }
             })
             self.pinComments.remove(at: index.row)
-            self.tableCommentsForPin.reloadData()
+            self.tblMain.reloadData()
             
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
-            self.replyToUser = ""
+            self.strReplyTo = ""
             self.lblTxtPlaceholder.text = "Write a Comment..."
         }
         menu.addAction(writeReply)

@@ -40,7 +40,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
             let comment = self.pinComments[indexPath.row]
             cell.delegate = self
-            cell.pinID = self.pinIDPinDetailView
+            cell.pinID = self.strPinId
             cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
             cell.userID = comment.userId
             cell.cellIndex = indexPath
@@ -77,7 +77,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             for i in 0..<11 {
                 cell.imgArray[i].label.text = "\(self.feelingArray[i])"
-                if i == self.chosenFeeling {
+                if i == self.intChosenFeeling {
                     cell.imgArray[i].avatar.isHidden = false
                     cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
                     UIView.animate(withDuration: 0.2, animations: { 

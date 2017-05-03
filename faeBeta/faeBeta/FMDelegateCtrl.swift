@@ -41,7 +41,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
                                               longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
         faeMapView.camera = camera
     }
-    func changeIconImage(marker: GMSMarker, type: String, status: String) {
+    func changeIconImage() {
+        let marker = PinDetailViewController.pinMarker
+        let type = "\(PinDetailViewController.pinTypeEnum)"
+        let status = PinDetailViewController.pinStatus
         guard let userData = marker.userData as? [Int: AnyObject] else {
             return
         }
@@ -52,13 +55,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         mapPin_new.status = status
         marker.userData = [0: mapPin_new]
         marker.icon = pinIconSelector(type: type, status: status)
-    }
-    func disableSelfMarker(yes: Bool) {
-        if yes {
-            self.subviewSelfMarker.isHidden = true
-        } else {
-            reloadSelfPosAnimation()
-        }
     }
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker) {
         
