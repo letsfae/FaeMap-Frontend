@@ -79,12 +79,12 @@ PODS:
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - pop (1.0.9)
-  - Protobuf (3.2.1)
-  - Realm (2.6.0):
-    - Realm/Headers (= 2.6.0)
-  - Realm/Headers (2.6.0)
-  - RealmSwift (2.6.0):
-    - Realm (= 2.6.0)
+  - Protobuf (3.3.0)
+  - Realm (2.6.2):
+    - Realm/Headers (= 2.6.2)
+  - Realm/Headers (2.6.2)
+  - RealmSwift (2.6.2):
+    - Realm (= 2.6.2)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
@@ -127,9 +127,9 @@ SPEC CHECKSUMS:
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
-  Protobuf: 2ccbaf193f6c65adc67745453ca0c13234c32796
-  Realm: 21bab65b8a43fe9f4327b3eec4458dd69bc63e3d
-  RealmSwift: ee7c93b21e115041fa03b08a89be5451b51826ae
+  Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
+  Realm: 29222766425b9f831228f81b63f0e38a97a4d700
+  RealmSwift: d161a80f96cb91ae88391a7d5a9cf08024a7bc8e
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
