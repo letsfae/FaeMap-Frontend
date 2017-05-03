@@ -11,16 +11,16 @@ import UIKit
 extension PinDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == tableCommentsForPin {
+        if scrollView == tblMain {
             print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
 //            let padding = scrollView.contentOffset.y
-//            tableCommentsForPin.setContentOffset(CGPoint(x: 0, y: padding), animated: false)
-            if self.controlBoard != nil {
-                let offset: CGFloat = uiviewPinDetail.frame.size.height - 42
-                self.controlBoard.isHidden = tableCommentsForPin.contentOffset.y < offset
+//            tblMain.setContentOffset(CGPoint(x: 0, y: padding), animated: false)
+            if self.uiviewCtrlBoard != nil {
+                let offset: CGFloat = uiviewTblHeader.frame.size.height - 42
+                self.uiviewCtrlBoard.isHidden = tblMain.contentOffset.y < offset
             }
 //            if scrollView.contentOffset.y > 60 {
-//                tableCommentsForPin.setContentOffset(CGPoint(x: 0, y: uiviewPinDetail.frame.size.height-42), animated: false)
+//                tblMain.setContentOffset(CGPoint(x: 0, y: uiviewTblHeader.frame.size.height-42), animated: false)
 //            }
         }
     }

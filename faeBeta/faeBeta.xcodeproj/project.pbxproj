@@ -167,6 +167,8 @@
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
+		B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81377051EB7C181002BD238 /* FaeNavBar.swift */; };
+		B81377081EB96234002BD238 /* PDAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81377071EB96234002BD238 /* PDAnimations.swift */; };
 		B81563821DDB964300BF85A1 /* PinMenuLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */; };
 		B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563831DDB97E200BF85A1 /* PinMenuActions.swift */; };
 		B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563861DDB98FC00BF85A1 /* CreateCommentPinViewController.swift */; };
@@ -201,7 +203,6 @@
 		B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */; };
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
-		B85609051E99661E00F68DA4 /* Sophie+Chat+Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */; };
 		B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609261E9D411000F68DA4 /* FMDistanceChange.swift */; };
 		B85609291E9F6AD200F68DA4 /* PDCllcViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */; };
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
@@ -485,6 +486,8 @@
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
+		B81377051EB7C181002BD238 /* FaeNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeNavBar.swift; sourceTree = "<group>"; };
+		B81377071EB96234002BD238 /* PDAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDAnimations.swift; sourceTree = "<group>"; };
 		B81563811DDB964300BF85A1 /* PinMenuLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuLoadItems.swift; sourceTree = "<group>"; };
 		B81563831DDB97E200BF85A1 /* PinMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuActions.swift; sourceTree = "<group>"; };
 		B81563861DDB98FC00BF85A1 /* CreateCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCommentPinViewController.swift; sourceTree = "<group>"; };
@@ -519,7 +522,6 @@
 		B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCtrl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
-		B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sophie+Chat+Detail.swift"; sourceTree = "<group>"; };
 		B85609261E9D411000F68DA4 /* FMDistanceChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDistanceChange.swift; sourceTree = "<group>"; };
 		B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDCllcViewCtrl.swift; sourceTree = "<group>"; };
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
@@ -1233,7 +1235,6 @@
 			isa = PBXGroup;
 			children = (
 				B8612E341DF202680092C606 /* PinDetailViewController.swift */,
-				B85609041E99661E00F68DA4 /* Sophie+Chat+Detail.swift */,
 				B8612E331DF201BF0092C606 /* PinExtension */,
 			);
 			name = PinDetail;
@@ -1258,6 +1259,7 @@
 				B823196A1E736EE200189778 /* PDUserInfoCell.swift */,
 				B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */,
 				B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */,
+				B81377071EB96234002BD238 /* PDAnimations.swift */,
 			);
 			name = PinExtension;
 			sourceTree = "<group>";
@@ -1489,6 +1491,7 @@
 				B88905711E36094B00E68D58 /* Reachability.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
 				B84663D81E942E8F0010259B /* DoubleExtension.swift */,
+				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1730,6 +1733,7 @@
 				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				DCEB8C8F1DED7B7700B516E9 /* CreateChatPinViewController.swift in Sources */,
+				B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
@@ -1767,7 +1771,6 @@
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */,
-				B85609051E99661E00F68DA4 /* Sophie+Chat+Detail.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
@@ -1788,6 +1791,7 @@
 				DCEB8C9A1DEE65CA00B516E9 /* CreatePinOptionsTableView.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */,
+				B81377081EB96234002BD238 /* PDAnimations.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
 				B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */,
 				B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */,
