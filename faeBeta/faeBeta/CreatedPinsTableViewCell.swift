@@ -9,7 +9,7 @@ import UIKit
 
 class CreatedPinsTableViewCell: PinsTableViewCell {
     
-    var labelTime : UILabel!
+    var lblTime : UILabel!
     var btnRemove : UIButton!
     var btnLocate : UIButton!
     var btnShare : UIButton!
@@ -61,11 +61,11 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
         btnLocate.addTarget(self, action: #selector(self.actionLocateCurrentCell(_:)), for: .touchUpInside)
 
         //set the time
-        labelTime = UILabel()
-        labelTime.font = UIFont(name: "AvenirNext-Medium",size: 13)
-        labelTime.textAlignment = NSTextAlignment.right
-        labelTime.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        uiviewPinView.addSubview(labelTime)
+        lblTime = UILabel()
+        lblTime.font = UIFont(name: "AvenirNext-Medium",size: 13)
+        lblTime.textAlignment = NSTextAlignment.right
+        lblTime.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        uiviewPinView.addSubview(lblTime)
         
         lblDate.textAlignment = NSTextAlignment.left
         lblDate.textColor = UIColor.faeAppTimeTextBlackColor()
@@ -78,39 +78,39 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     override func setValueForCell(_ pin: [String: AnyObject]) {
         super.setValueForCell(pin)
         if let createat = pin["created_at"]{
-            labelTime.text = ((createat as! String).formatLeftOnMap(DurationOnMap : 3))
+            lblTime.text = ((createat as! String).formatLeftOnMap(DurationOnMap : 3))
         }
         
     //Add the constraints in uiviewPinView
         uiviewPinView.addConstraintsWithFormat("H:|-13-[v0(200)]", options: [], views: lblDate)
-        uiviewPinView.addConstraintsWithFormat("H:[v0(160)]-13-|", options: [], views: labelTime)
-        uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: labelTime)
+        uiviewPinView.addConstraintsWithFormat("H:[v0(160)]-13-|", options: [], views: lblTime)
+        uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: lblTime)
         
     }
     
     // delete current cell
     func actionRemoveCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemRemoved(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemRemoved(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // edit current cell
     func actionEditCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemEdit(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemEdit(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // share current cell
     func actionShareCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemShared(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemShared(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // make current cell visible or invisible
     func actionVisibleCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemVisible(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemVisible(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // locate current cell
     func actionLocateCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemLocated(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemLocated(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
 }

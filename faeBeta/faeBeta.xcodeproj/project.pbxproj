@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
-		372F29CE1EAF0874008113A4 /* PinFullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CD1EAF0874008113A4 /* PinFullViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
@@ -306,7 +305,6 @@
 /* Begin PBXFileReference section */
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
-		372F29CD1EAF0874008113A4 /* PinFullViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinFullViewController.swift; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinsViewController.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -665,7 +663,6 @@
 				B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */,
 				B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */,
 				B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */,
-				372F29CD1EAF0874008113A4 /* PinFullViewController.swift */,
 			);
 			name = PinCollection;
 			sourceTree = "<group>";
@@ -1883,7 +1880,6 @@
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
-				372F29CE1EAF0874008113A4 /* PinFullViewController.swift in Sources */,
 				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
 				B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */,
 				CE97A9C41E399D52005BBF6C /* YelpResult.swift in Sources */,
