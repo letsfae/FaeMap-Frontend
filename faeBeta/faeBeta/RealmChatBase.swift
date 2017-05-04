@@ -13,15 +13,14 @@ class RealmWithUser: Object{
     dynamic var userName: String = ""
     dynamic var userID: String = ""
     dynamic var userAvatar: String? = nil
-    
     override static func primaryKey() -> String? {
         return "userID"
     }
 }
 
 class RealmMessage: Object {
-    dynamic var withUserID : Int = -1
-    dynamic var senderID : Int = -1
+    dynamic var withUserID : String = ""
+    dynamic var senderID : String = ""
     dynamic var senderName : String = ""
     dynamic var date = NSDate()
     dynamic var message : String = ""
@@ -31,14 +30,13 @@ class RealmMessage: Object {
     dynamic var type : String = ""
     dynamic var status: String = ""
     dynamic var snapImage : NSData? = nil
-    dynamic var longitude : String? = ""
-    dynamic var latitude : String? = nil
+    let longitude = RealmOptional<Float>()
+    let latitude = RealmOptional<Float>()
+    //dynamic var latitude : String? = nil
     
     // int cannot be optional
     let videoDuration = RealmOptional<Int>()
-    
     dynamic var isHeartSticker : Bool = false
-    
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()
     }

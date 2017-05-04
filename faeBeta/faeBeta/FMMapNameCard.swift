@@ -381,7 +381,7 @@ extension FaeMapViewController {
         chatVC.realmWithUser!.userID = withUserId.stringValue
         //chatVC.realmWithUser?.userAvatar =
         
-        RealmChat.addWithUser(withUser: chatVC.realmWithUser!)
+        //RealmChat.addWithUser(withUser: chatVC.realmWithUser!)
         
         //EndBryan
         

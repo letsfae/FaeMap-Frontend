@@ -215,7 +215,6 @@
 		B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell.swift */; };
 		B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */; };
 		B85FFE9A1EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */; };
-		B85FFE9B1EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */; };
 		B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */; };
 		B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E341DF202680092C606 /* PinDetailViewController.swift */; };
 		B8612E371DF20B180092C606 /* PDBtnActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E361DF20B180092C606 /* PDBtnActions.swift */; };
@@ -262,6 +261,7 @@
 		B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */; };
 		B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */; };
 		C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */; };
 		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
 		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
@@ -300,7 +300,6 @@
 		DCEB8C9A1DEE65CA00B516E9 /* CreatePinOptionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */; };
 		DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */; };
 		DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */; };
-		DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 /* End PBXBuildFile section */
@@ -582,7 +581,6 @@
 		B8F065451DC70AB70080ADCB /* EditPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChatBase.swift; sourceTree = "<group>"; };
-		CBF013A14D50BD95035175FF /* Pods-faeBetaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBetaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBetaUITests/Pods-faeBetaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
 		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
 		CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseWelcomer.swift; sourceTree = "<group>"; };
@@ -628,7 +626,6 @@
 		DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinOptionsTableView.swift; sourceTree = "<group>"; };
 		DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CreateChatPinViewController+TableViewDelegate.swift"; sourceTree = "<group>"; };
 		DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinTextView.swift; sourceTree = "<group>"; };
-		DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeWithUser.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -882,7 +879,6 @@
 		B0714DAC1D5E46D600356705 /* FireBaseData */ = {
 			isa = PBXGroup;
 			children = (
-				DCF1EBCD1DA2CD870066B3ED /* FaeWithUser.swift */,
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				DC084A901DDCF969007DCC88 /* Recent.swift */,
@@ -1697,6 +1693,7 @@
 				B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
+				C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */,
 				DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */,
 				8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
@@ -1784,7 +1781,6 @@
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B8CBDEF71E4C475700E4BDDB /* PDLoadPlacePin.swift in Sources */,
-				DCF1EBCE1DA2CD870066B3ED /* FaeWithUser.swift in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,
 				B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */,
@@ -1812,7 +1808,6 @@
 				B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController.swift in Sources */,
 				DCEB8C8D1DED633500B516E9 /* CreatePinBaseViewController.swift in Sources */,
-				37897B6D1E90C06B0099DBB0 /* MemoViewController.swift in Sources */,
 				C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */,
 				DC0A443E1E10F59C007E203C /* TagCreator.swift in Sources */,
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */,

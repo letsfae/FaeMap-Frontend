@@ -92,7 +92,7 @@ class OutgoingMessage {
         }
     }
     
-    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: FaeWithUser) {
+    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: RealmWithUser) {
         
         let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()

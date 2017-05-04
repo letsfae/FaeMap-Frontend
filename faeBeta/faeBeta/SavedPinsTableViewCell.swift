@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class SavedPinsTableViewCell: PinsTableViewCell {
     
     var imgAvatar : UIImageView!

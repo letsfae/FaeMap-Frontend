@@ -21,9 +21,16 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         var outgoingMessage: OutgoingMessage? = nil
         //Bryan
-        let realmMessage = RealmMessage()
-        //ENDBryan
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
+        let realmMessage = RealmMessage()
+        realmMessage.withUserID = realmWithUser!.userID
+        realmMessage.senderID = user_id!.stringValue
+        realmMessage.senderName = username!
+        realmMessage.hasTimeStamp = shouldHaveTimeStamp
+        realmMessage.delivered = true
+        realmMessage.date = date as NSDate
+            //ENDBryan
+        
         if let pic = picture {
             // send picture message
             if let imageData = compressImageToData(pic){
@@ -34,12 +41,7 @@ extension ChatViewController: OutgoingMessageProtocol{
                 //realmMessage = RealmChat.Message
                 realmMessage.message = "[Picture]"
                 realmMessage.data = imageData as NSData
-                realmMessage.senderID = user_id as! Int
-                realmMessage.senderName = username!
                 realmMessage.type = "picture"
-                realmMessage.hasTimeStamp = shouldHaveTimeStamp
-                realmMessage.delivered = true
-                realmMessage.date = date as NSDate
                 //ENDBryan
                 isContinuallySending = true
                 Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
@@ -53,7 +55,13 @@ extension ChatViewController: OutgoingMessageProtocol{
             //Bryan
             //Question: NSData and Data
 //            realmMessage = RealmChat.Message(value:["message": isHeartSticker! ? "[Heart]":"[Sticker]", "data": imageData!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "sticker", "hasTimeStamp": shouldHaveTimeStamp, "isHeartSticker": isHeartSticker!])
-//            isContinuallySending = true
+            realmMessage.message = isHeartSticker! ? "[Heart]":"[Sticker]"
+            realmMessage.data = imageData! as NSData
+            realmMessage.type = "sticker"
+            realmMessage.isHeartSticker = isHeartSticker!
+            //ENDBryan
+            
+            isContinuallySending = true
         }
         
         
@@ -63,22 +71,41 @@ extension ChatViewController: OutgoingMessageProtocol{
             let lon : NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
             let comment = text == "" ? "[Location]" : text!
             outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-//            realmMessage = RealmChat.Message(value:["message": comment, "latitude": lat, "longitude": lon, "snapImage": snapImage!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "location", "hasTimeStamp": shouldHaveTimeStamp])
+            //Bryan
+            //realmMessage = RealmChat.Message(value:["message": comment, "latitude": lat, "longitude": lon, "snapImage": snapImage!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "location", "hasTimeStamp": shouldHaveTimeStamp])
+            realmMessage.message = comment
+            realmMessage.latitude.value = lat as? Float
+            realmMessage.longitude.value = lon as? Float
+            realmMessage.snapImage = snapImage! as NSData
+            realmMessage.type = "location"
+            //ENDBryan
+            
         }
         
         else if let audio = audio {
             //create outgoing-message object
             outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
 //            realmMessage = RealmChat.Message(value:["message": "[Voice]", "data": audio, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "audio", "hasTimeStamp": shouldHaveTimeStamp])
+            realmMessage.message = "[Voice]"
+            realmMessage.data = audio as NSData
+            realmMessage.type = "audio"
+            
         }
         
         else if let video = video {
             outgoingMessage = OutgoingMessage(message: "[Video]", video: video,snapImage: snapImage! ,senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
 //            realmMessage = RealmChat.Message(value:["message": "[Video]", "data": video, "snapImage":snapImage!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "video", "hasTimeStamp": shouldHaveTimeStamp, "videoDuration": videoDuration])
+            realmMessage.message = "[Video]"
+            realmMessage.data = video as NSData
+            realmMessage.type = "video"
+            realmMessage.videoDuration.value = videoDuration
         }
         else if let snapImage = snapImage{
             outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "gif" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
 //            realmMessage = RealmChat.Message(value:["message": "[GIF]", "data": snapImage, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "gif", "hasTimeStamp": shouldHaveTimeStamp])
+            realmMessage.message = "[GIF]"
+            realmMessage.data = snapImage as NSData
+            realmMessage.type = "gif"
         }
         //if text message
         else if let text = text {
@@ -87,12 +114,8 @@ extension ChatViewController: OutgoingMessageProtocol{
 //            realmMessage = RealmChat.Message(value:["message": text, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "text", "hasTimeStamp": shouldHaveTimeStamp])
             //Bryan
             realmMessage.message = text
-            realmMessage.senderID = user_id as! Int
-            realmMessage.senderName = username!
             realmMessage.type = "text"
-            realmMessage.hasTimeStamp = shouldHaveTimeStamp
-            realmMessage.delivered = true
-            realmMessage.date = date as NSDate
+            
             //ENDBryan
         }
         
