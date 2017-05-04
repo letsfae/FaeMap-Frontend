@@ -29,24 +29,24 @@ class PinsTableViewCell: UITableViewCell {
     var lblLike : UILabel!
     var lblComment : UILabel!
     var arrImgPinPic = [UIImageView]()
-    var labelPics3Plus : UILabel!
+    var lblPics3Plus : UILabel!
     var imgLike : UIImageView!
     var imgComment : UIImageView!
     var imgPinTab : UIImageView!
     var imgHot : UIImageView!
     var boolIsHot: Bool! = false
-    var originalCenter = CGPoint()
-    var swipedBtnsShowOnDragRelease = false
+    var pointOriginalCenter = CGPoint()
+    var boolShowOnDragRelease = false
     var uiviewPinView : UIView! // this view is for pin
     var uiviewSwipedBtnsView : UIView! // this view is for buttons when swiped
     var uiviewCellView : UIView! // this view contains view for pin and view for buttons when swiped
     
     // The object that acts as delegate for this cell.
     var delegate: PinTableViewCellDelegate?
-    var isCellSWiped = false
+    var boolIsCellSWiped = false
     var indexForCurrentCell = 0
-    var pinId = 0
-    var pinType = ""
+    var intPinId = 0
+    var strPinType = ""
     var finishedPositionX : CGFloat = 0
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,25 +72,25 @@ class PinsTableViewCell: UITableViewCell {
     func handlePan(recognizer: UIPanGestureRecognizer) {
         // when the gesture begins, record the current center location
         if recognizer.state == .began {
-            originalCenter = uiviewCellView.center
+            pointOriginalCenter = uiviewCellView.center
             verticalCenterButtons()
             // if the cell is already swiped or not
             if(uiviewCellView.center.x > 150){
-                isCellSWiped = true
+                boolIsCellSWiped = true
             }else{
-                isCellSWiped = false
+                boolIsCellSWiped = false
             }
         }
         
         // has the user dragged the item far enough?
         if recognizer.state == .changed {
             let translation = recognizer.translation(in: self)
-            swipedBtnsShowOnDragRelease = uiviewCellView.center.x > 70 && !isCellSWiped
+            boolShowOnDragRelease = uiviewCellView.center.x > 70 && !boolIsCellSWiped
             if(uiviewCellView.center.x <= -9){
                 // don't remove when the left side of the cell reaches -8
                 uiviewCellView.center = CGPoint(x: -10, y:uiviewCellView.center.y)
             }else{
-                uiviewCellView.center = CGPoint(x: originalCenter.x + translation.x, y:originalCenter.y)
+                uiviewCellView.center = CGPoint(x: pointOriginalCenter.x + translation.x, y:pointOriginalCenter.y)
             }
         }
         
@@ -106,7 +106,7 @@ class PinsTableViewCell: UITableViewCell {
             // the frame this cell will bounce to after user dragged it from right to left
             let bounceFrame = CGRect(x: -screenWidth + 35, y: cellViewframe.origin.y,
                                      width: cellViewframe.width, height: cellViewframe.height)
-            if !swipedBtnsShowOnDragRelease {
+            if !boolShowOnDragRelease {
                 if uiviewCellView.center.x < 0 {
                     // if the item is being swiped from right to left, bonuce back to the original location
                     UIView.animate(withDuration: 0.3,
@@ -140,7 +140,6 @@ class PinsTableViewCell: UITableViewCell {
         }
         return false
     }
-    
     
     // Setup the cell when creat it
     func setUpUI() {
@@ -209,11 +208,11 @@ class PinsTableViewCell: UITableViewCell {
         imgHot.isHidden = true
         
         // set the "3+" label
-        labelPics3Plus = UILabel()
-        labelPics3Plus.text = "3+"
-        labelPics3Plus.font = UIFont(name: "AvenirNext-Medium",size: 18)
-        labelPics3Plus.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        uiviewPinView.addSubview(labelPics3Plus)
+        lblPics3Plus = UILabel()
+        lblPics3Plus.text = "3+"
+        lblPics3Plus.font = UIFont(name: "AvenirNext-Medium",size: 18)
+        lblPics3Plus.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        uiviewPinView.addSubview(lblPics3Plus)
         
         //Add the constraints of uiviewPinView & uiviewSwipedBtnsView in the uiviewCellView
         uiviewCellView.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]-9-[v1]-9-|", options: [], views: uiviewSwipedBtnsView, uiviewPinView)
@@ -234,16 +233,16 @@ class PinsTableViewCell: UITableViewCell {
         for imgView in arrImgPinPic {
             imgView.removeFromSuperview()
         }
-        labelPics3Plus.isHidden = true
+        lblPics3Plus.isHidden = true
         arrImgPinPic.removeAll()
         boolIsHot = false
         
         // set the value to those data
         if let type = pin["type"]{
-            pinType = type as! String
+            strPinType = type as! String
         }
         if let id = pin["pin_id"]{
-            pinId = id as! Int
+            intPinId = id as! Int
         }
         
         if let createat = pin["created_at"]{
@@ -294,7 +293,7 @@ class PinsTableViewCell: UITableViewCell {
         }
         
         // for media pin
-        if pinType == "media" {
+        if strPinType == "media" {
             if let descContent = pin["description"] as? String{
                 lblDescription.attributedText = descContent.convertStringWithEmoji()
             }
@@ -360,14 +359,14 @@ class PinsTableViewCell: UITableViewCell {
                 }
                 // more than 3 pics
                 if count>3 {
-                    labelPics3Plus.isHidden = false
-                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: lblDescription,labelPics3Plus)
-                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: arrImgPinPic[2],labelPics3Plus)
+                    lblPics3Plus.isHidden = false
+                    uiviewPinView.addConstraintsWithFormat("V:[v0]-47-[v1(25)]", options: [], views: lblDescription,lblPics3Plus)
+                    uiviewPinView.addConstraintsWithFormat("H:[v0]-18-[v1(23)]", options: [], views: arrImgPinPic[2],lblPics3Plus)
                 }
             }
         }
         //For comment pin
-        if pinType == "comment"{
+        if strPinType == "comment"{
             if let descContent = pin["content"] as? String{
                 lblDescription.attributedText = descContent.convertStringWithEmoji()
             }

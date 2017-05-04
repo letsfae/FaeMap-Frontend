@@ -17,13 +17,13 @@ class Pls_LocSearchViewController: CollectionSearchViewController, UITableViewDa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return filteredArray.count
+        return arrFiltered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceAndLocationCell", for: indexPath) as! PlaceAndLocationTableViewCell
-        cell.setValueForCell(_: filteredArray[indexPath.section])
+        cell.setValueForCell(_: arrFiltered[indexPath.section])
         // Hide the separator line
         cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
         cell.selectionStyle = .none

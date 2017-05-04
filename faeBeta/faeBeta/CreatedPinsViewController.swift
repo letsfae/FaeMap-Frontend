@@ -23,7 +23,6 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         getPinsData()
     }
     
-    
     // get the Created Pins
     func getPinsData() {
         let getCreatedPinsData = FaeMap()
@@ -105,7 +104,6 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     func numberOfSections(in tableView: UITableView) -> Int {
         return arrPinData.count
     }
-    
     
     //click cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

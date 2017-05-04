@@ -11,22 +11,24 @@ import SwiftyJSON
 
 class CollectionSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate {
     
-    var willAppearFirstLoad = false
+    var boolWillAppearFirstLoad = false
     
-    var buttonClearSearchBar: UIButton!
+    var btnClearSearchBar: UIButton!
     
     var blurViewMainScreenSearch: UIView!
     
     // MARK: -- Search Bar
 
     var tblSearchResults = UITableView()
-    var dataArray = [[String: AnyObject]]()
-    var filteredArray = [[String: AnyObject]]()
-    var tableTypeName: String = ""
+    var arrData = [[String: AnyObject]]()
+    var arrFiltered = [[String: AnyObject]]()
+    var strTableTypeName: String = ""
     var searchController: UISearchController!
     var faeSearchController: FaeSearchController!
-    var searchBarSubview: UIView!
+    var uiviewSearchBarSubview: UIView!
     var keyboardHeight: CGFloat = 0
+    //Current select row
+    var indexCurrSelectRowAt : IndexPath!
     var resultTableWidth: CGFloat {
         if UIScreen.main.bounds.width == 414 { // 5.5
             return 398
@@ -48,17 +50,14 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         loadFaeSearchController()
         loadNavBarUnderLine()
         
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
-            self.searchBarSubview.frame.origin.y = 0
+            self.uiviewSearchBarSubview.frame.origin.y = 0
         }), completion: { (done: Bool) in
             if done {
                 self.faeSearchController.faeSearchBar.becomeFirstResponder()
@@ -75,7 +74,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         uiviewUnderLine.layer.borderWidth = screenWidth
         uiviewUnderLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
         uiviewUnderLine.layer.zPosition = 5
-        self.searchBarSubview.addSubview(uiviewUnderLine)
+        self.uiviewSearchBarSubview.addSubview(uiviewUnderLine)
     }
     
     func loadBlurView() {
@@ -85,26 +84,26 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
 
     func loadFunctionButtons() {
-        searchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
-        searchBarSubview.layer.zPosition = 1
-        blurViewMainScreenSearch.addSubview(searchBarSubview)
-        self.searchBarSubview.frame.origin.y = -self.searchBarSubview.frame.size.height
+        uiviewSearchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
+        uiviewSearchBarSubview.layer.zPosition = 1
+        blurViewMainScreenSearch.addSubview(uiviewSearchBarSubview)
+        self.uiviewSearchBarSubview.frame.origin.y = -self.uiviewSearchBarSubview.frame.size.height
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.searchBarSubview.addSubview(backSubviewButton)
+        self.uiviewSearchBarSubview.addSubview(backSubviewButton)
         backSubviewButton.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
         backSubviewButton.layer.zPosition = 0
         
         let viewToHideLeftSideSearchBar = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 64))
         viewToHideLeftSideSearchBar.backgroundColor = UIColor.white
-        self.searchBarSubview.addSubview(viewToHideLeftSideSearchBar)
+        self.uiviewSearchBarSubview.addSubview(viewToHideLeftSideSearchBar)
         viewToHideLeftSideSearchBar.layer.zPosition = 2
         
         let viewToHideRightSideSearchBar = UIView()
         viewToHideRightSideSearchBar.backgroundColor = UIColor.white
-        self.searchBarSubview.addSubview(viewToHideRightSideSearchBar)
+        self.uiviewSearchBarSubview.addSubview(viewToHideRightSideSearchBar)
         viewToHideRightSideSearchBar.layer.zPosition = 2
-        self.searchBarSubview.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
-        self.searchBarSubview.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
+        self.uiviewSearchBarSubview.addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: viewToHideRightSideSearchBar)
+        self.uiviewSearchBarSubview.addConstraintsWithFormat("V:|-0-[v0(64)]", options: [], views: viewToHideRightSideSearchBar)
     }
     
     func loadFaeSearchController() {
@@ -119,34 +118,34 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
         faeSearchController.faeSearchBar.tintColor = UIColor.faeAppRedColor()
         
-        searchBarSubview.addSubview(faeSearchController.faeSearchBar)
-        searchBarSubview.backgroundColor = UIColor.white
+        uiviewSearchBarSubview.addSubview(faeSearchController.faeSearchBar)
+        uiviewSearchBarSubview.backgroundColor = UIColor.white
         
-        searchBarSubview.layer.borderColor = UIColor.white.cgColor
-        searchBarSubview.layer.borderWidth = 1.0
+        uiviewSearchBarSubview.layer.borderColor = UIColor.white.cgColor
+        uiviewSearchBarSubview.layer.borderWidth = 1.0
         
         let buttonBackToFaeMap = UIButton(frame: CGRect(x: 15, y: 32, width: 10.5, height: 18))
         buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
-        self.searchBarSubview.addSubview(buttonBackToFaeMap)
+        self.uiviewSearchBarSubview.addSubview(buttonBackToFaeMap)
         buttonBackToFaeMap.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
         buttonBackToFaeMap.layer.zPosition = 3
         
-        buttonClearSearchBar = UIButton()
-        buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())
-        self.searchBarSubview.addSubview(buttonClearSearchBar)
-        buttonClearSearchBar.addTarget(self,
+        btnClearSearchBar = UIButton()
+        btnClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())
+        self.uiviewSearchBarSubview.addSubview(btnClearSearchBar)
+        btnClearSearchBar.addTarget(self,
                                        action: #selector(self.actionClearSearchBar(_:)),
                                        for: .touchUpInside)
-        buttonClearSearchBar.layer.zPosition = 3
-        self.searchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: buttonClearSearchBar)
-        self.searchBarSubview.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: buttonClearSearchBar)
-        buttonClearSearchBar.isHidden = true
+        btnClearSearchBar.layer.zPosition = 3
+        self.uiviewSearchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: btnClearSearchBar)
+        self.uiviewSearchBarSubview.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: btnClearSearchBar)
+        btnClearSearchBar.isHidden = true
         
         let uiviewCommentPinUnderLine = UIView(frame: CGRect(x: 0, y: 63, width: screenWidth, height: 1))
         uiviewCommentPinUnderLine.layer.borderWidth = 1
         uiviewCommentPinUnderLine.layer.borderColor = UIColor(red: 196/255, green: 195/255, blue: 200/255, alpha: 1.0).cgColor
         uiviewCommentPinUnderLine.layer.zPosition = 4
-        self.searchBarSubview.addSubview(uiviewCommentPinUnderLine)
+        self.uiviewSearchBarSubview.addSubview(uiviewCommentPinUnderLine)
     }
     
     func actionDimissSearchBar(_ sender: UIButton) {
@@ -155,20 +154,11 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func actionClearSearchBar(_ sender: UIButton) {
         faeSearchController.faeSearchBar.text = ""
-        filteredArray = []
-        buttonClearSearchBar.isHidden = true
+        arrFiltered = []
+        btnClearSearchBar.isHidden = true
         searchBarTableHideAnimation()
         self.tblSearchResults.reloadData()
-        
     }
-    
-    
-//    func actionResignResponserofSearchbar(_ sender: UIButton){
-//        faeSearchController.faeSearchBar.resignFirstResponder()
-//        
-//    }
-    
-    
     
     // MARK: UISearchResultsUpdating delegate function
     func updateSearchResults(for searchController: UISearchController) {
@@ -182,14 +172,9 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func didTapOnSearchButton() {
-        //        if !shouldShowSearchResults {
-        //            shouldShowSearchResults = true
-        //            tblSearchResults.reloadData()
-        //        }
     }
     
     //resize the height of the view when the keyboard will show
-    
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -205,21 +190,17 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         }
     }
     
-    
-    
-    
     func didTapOnCancelButton() {
-        filteredArray.removeAll()
-        buttonClearSearchBar.isHidden = true
+        arrFiltered.removeAll()
+        btnClearSearchBar.isHidden = true
         searchBarTableHideAnimation()
         self.tblSearchResults.reloadData()
     }
     
-    
     func didChangeSearchText(_ searchText: String) {
         if searchText != "" {
-            buttonClearSearchBar.isHidden = false
-            filteredArray = dataArray.filter { (pinArr:[String: AnyObject]) -> Bool in
+            btnClearSearchBar.isHidden = false
+            arrFiltered = arrData.filter { (pinArr:[String: AnyObject]) -> Bool in
                 if pinArr["type"]?.description == "media" {
                     return (pinArr["description"]?.lowercased.contains(searchText.lowercased()))!
                 }
@@ -228,18 +209,18 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
                 }
                 else{
                     return (pinArr["address"]?.lowercased.contains(searchText.lowercased()))!
-                    
+
                 }
             }
-            if filteredArray.count > 0{
+            if arrFiltered.count > 0{
                 searchBarTableShowAnimation()
             }
             tblSearchResults.reloadData()
             
         }
         else {
-            filteredArray.removeAll()
-            buttonClearSearchBar.isHidden = true
+            arrFiltered.removeAll()
+            btnClearSearchBar.isHidden = true
             searchBarTableHideAnimation()
             self.tblSearchResults.reloadData()
         }
@@ -258,11 +239,8 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         }), completion: nil)
     }
     
-    
     // MARK: TableView Initialize
-    
     func loadTableView() {
-
         tblSearchResults = UITableView(frame: CGRect(x: 0,y: 66,width: screenWidth,height: screenHeight-66))
         tblSearchResults.backgroundColor = .clear
         tblSearchResults.showsVerticalScrollIndicator = false
@@ -279,13 +257,8 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         tblSearchResults.tableFooterView = UIView()
     }
     
-    
     // MARK: UITableView Delegate and Datasource functions
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return 1
     }
-    
 }

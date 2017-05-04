@@ -88,17 +88,17 @@ class SavedPinsTableViewCell: PinsTableViewCell {
     
     // delete current cell
     func actionUnsaveCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemUnsaved(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemUnsaved(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // share current cell
     func actionShareCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemShared(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemShared(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
     // locate current cell
     func actionLocateCurrentCell(_ sender: UIButton) {
-        self.delegate?.toDoItemLocated(indexCell: self.indexForCurrentCell, pinId: self.pinId, pinType: self.pinType)
+        self.delegate?.toDoItemLocated(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
 }

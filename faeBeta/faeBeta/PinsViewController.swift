@@ -19,7 +19,6 @@ class TouchGestureRecognizer : UIGestureRecognizer {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         // This assignment is very importment for custom gesture
         self.state = UIGestureRecognizerState.began
-        
         let frame = cellInGivenId.uiviewCellView.frame
         let originalFrame = CGRect(x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
         UIView.animate(withDuration: 0.3, animations: {self.cellInGivenId.uiviewCellView.frame = originalFrame}, completion: { (finished) -> Void in
@@ -34,9 +33,8 @@ protocol CollectionsBoardDelegate: class {
 }
 
 class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate,PinTableViewCellDelegate, UIGestureRecognizerDelegate{
-
     weak var backBoardDelegate: CollectionsBoardDelegate? // For collectionBoard
-    var isFirstAppear = true
+    var boolIsFirstAppear = true
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
     var gesturerecognizerTouch: TouchGestureRecognizer!
@@ -66,13 +64,11 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         loadtblPinsData()
         loadNavBar()
     }
-    
-    
+
     func handleAfterTouch(recognizer: TouchGestureRecognizer) {
         //remove the gesture after cell backs, or the gesture will always collect touches in the table
         tblPinsData.removeGestureRecognizer(gesturerecognizerTouch)
     }
-    
     
     // only the buttons in the siwped cell don't respond to the gesture
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -82,14 +78,13 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return true
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if isFirstAppear {
+        if boolIsFirstAppear {
             UIView.animate(withDuration: 0.3, animations: ({
                 self.uiviewBackground.frame.origin.x = 0
             }))
-            isFirstAppear = false
+            boolIsFirstAppear = false
         }
     }
     
@@ -152,8 +147,8 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         let searchVC = PinSearchViewController()
         searchVC.modalPresentationStyle = .overCurrentContext
         self.present(searchVC, animated: false, completion: nil)
-        searchVC.tableTypeName = strTableTitle
-        searchVC.dataArray = arrPinData
+        searchVC.strTableTypeName = strTableTitle
+        searchVC.arrData = arrPinData
     }
     
     func loadtblPinsData(){

@@ -197,7 +197,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
         }
     }
     
-    
     override func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){
         
     }

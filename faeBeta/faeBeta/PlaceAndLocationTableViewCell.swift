@@ -11,10 +11,10 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
     
     
     var imgview : UIImageView!
-    var name : UILabel!
-    var address : UILabel!
-    var distance : UILabel!
-    var memo : UILabel!
+    var lblName : UILabel!
+    var lblAddress : UILabel!
+    var lblDistance : UILabel!
+    var lblMemo : UILabel!
     var btnSelected: UIButton!
     //    var sparator: UIView!
     
@@ -30,88 +30,74 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
     func setUpUI() {
         
         imgview = UIImageView()
-        //showImage!.layer.masksToBounds = true
         self.addSubview(imgview)
-        //Add the constraints
         
-        name = UILabel()
-        name.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        name.textAlignment = NSTextAlignment.left
-        name.textColor = UIColor.faeAppInputTextGrayColor()
-        self.addSubview(name)
+        lblName = UILabel()
+        lblName.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        lblName.textAlignment = NSTextAlignment.left
+        lblName.textColor = UIColor.faeAppInputTextGrayColor()
+        self.addSubview(lblName)
         
+        lblDistance = UILabel()
+        lblDistance.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        lblDistance.textAlignment = NSTextAlignment.right
+        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        self.addSubview(lblDistance)
         
-        distance = UILabel()
-        distance.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        distance.textAlignment = NSTextAlignment.right
-        distance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        self.addSubview(distance)
+        lblAddress = UILabel()
+        lblAddress.font = UIFont(name: "AvenirNext-Medium",size: 12)
+        lblAddress.textAlignment = NSTextAlignment.left
+        lblAddress.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAddress.lineBreakMode = NSLineBreakMode.byWordWrapping
+        lblAddress.numberOfLines = 0;
+        self.addSubview(lblAddress)
         
-        
-        address = UILabel()
-        address.font = UIFont(name: "AvenirNext-Medium",size: 12)
-        address.textAlignment = NSTextAlignment.left
-        address.textColor = UIColor.faeAppTimeTextBlackColor()
-        address.lineBreakMode = NSLineBreakMode.byWordWrapping
-        address.numberOfLines = 0;
-        self.addSubview(address)
-        
-        
-        
-        memo = UILabel()
-        memo.font = UIFont(name: "AvenirNext-DemiBoldItalic",size: 12)
-        memo.textAlignment = NSTextAlignment.left
-        memo.textColor = UIColor.faeAppTimeTextBlackColor()
-        memo.lineBreakMode = NSLineBreakMode.byWordWrapping
-        memo.numberOfLines = 0;
-        self.addSubview(memo)
-        
-        
-        
-        
+        lblMemo = UILabel()
+        lblMemo.font = UIFont(name: "AvenirNext-DemiBoldItalic",size: 12)
+        lblMemo.textAlignment = NSTextAlignment.left
+        lblMemo.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMemo.lineBreakMode = NSLineBreakMode.byWordWrapping
+        lblMemo.numberOfLines = 0;
+        self.addSubview(lblMemo)
+
         btnSelected = UIButton()
         btnSelected.layer.cornerRadius = 11
         btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
         btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
         btnSelected.layer.borderWidth = 2
         btnSelected.isHidden = true
-        
         self.addSubview(btnSelected)
-        
     }
     
     func setValueForCell(_ location: [String: AnyObject]) {
         /*API 写完后再写这里*/
-        name?.text = location["name"] as! String?
-        address?.text = location["address"] as! String?
-        distance?.text = location["distance"] as! String?
-        memo?.text = location["memo"] as! String?
+        lblName?.text = location["name"] as! String?
+        lblAddress?.text = location["address"] as! String?
+        lblDistance?.text = location["distance"] as! String?
+        lblMemo?.text = location["memo"] as! String?
         imgview?.image = UIImage(named: "Location")
         /*API 写完后再写这里*/
-        
-        
+
         self.removeConstraints(self.constraints)
-        
         self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
         self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: name)
-        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: distance)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: address)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: lblName)
+        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: lblDistance)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: lblAddress)
         
-        self.addConstraintsWithFormat("H:|-93-[v0]-47-|", options: [], views: memo)
+        self.addConstraintsWithFormat("H:|-93-[v0]-47-|", options: [], views: lblMemo)
         
-        self.addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: distance)
+        self.addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)
         
         self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
         self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
-        self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: name)
-        if memo?.text == "" {
-            self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: address)
+        self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: lblName)
+        if lblMemo?.text == "" {
+            self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: lblAddress)
         }else{
-            self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: address,memo)
+            self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: lblAddress,lblMemo)
         }
-        
-        
+
     }
     
     override func awakeFromNib() {
