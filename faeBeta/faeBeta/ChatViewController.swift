@@ -521,8 +521,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
-    
     //MARK: - move input bars
     func moveUpInputBarContentView(_ animated: Bool)
     {

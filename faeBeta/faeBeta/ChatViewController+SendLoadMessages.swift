@@ -29,16 +29,13 @@ extension ChatViewController: OutgoingMessageProtocol{
         realmMessage.hasTimeStamp = shouldHaveTimeStamp
         realmMessage.delivered = true
         realmMessage.date = date as NSDate
-            //ENDBryan
+        //ENDBryan
         
         if let pic = picture {
             // send picture message
             if let imageData = compressImageToData(pic){
                 outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "picture" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
                 //Bryan
-                //Question: NSData and Data
-//                realmMessage = RealmChat.Message(value:["message": "[Picture]", "data": imageData, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "picture", "hasTimeStamp": shouldHaveTimeStamp])
-                //realmMessage = RealmChat.Message
                 realmMessage.message = "[Picture]"
                 realmMessage.data = imageData as NSData
                 realmMessage.type = "picture"
@@ -53,8 +50,6 @@ extension ChatViewController: OutgoingMessageProtocol{
             let imageData = UIImagePNGRepresentation(sti)
             outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]":"[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker! , senderId: user_id.stringValue, senderName:username!, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             //Bryan
-            //Question: NSData and Data
-//            realmMessage = RealmChat.Message(value:["message": isHeartSticker! ? "[Heart]":"[Sticker]", "data": imageData!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "sticker", "hasTimeStamp": shouldHaveTimeStamp, "isHeartSticker": isHeartSticker!])
             realmMessage.message = isHeartSticker! ? "[Heart]":"[Sticker]"
             realmMessage.data = imageData! as NSData
             realmMessage.type = "sticker"
@@ -72,7 +67,6 @@ extension ChatViewController: OutgoingMessageProtocol{
             let comment = text == "" ? "[Location]" : text!
             outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             //Bryan
-            //realmMessage = RealmChat.Message(value:["message": comment, "latitude": lat, "longitude": lon, "snapImage": snapImage!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "location", "hasTimeStamp": shouldHaveTimeStamp])
             realmMessage.message = comment
             realmMessage.latitude.value = lat as? Float
             realmMessage.longitude.value = lon as? Float
@@ -85,7 +79,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         else if let audio = audio {
             //create outgoing-message object
             outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-//            realmMessage = RealmChat.Message(value:["message": "[Voice]", "data": audio, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "audio", "hasTimeStamp": shouldHaveTimeStamp])
             realmMessage.message = "[Voice]"
             realmMessage.data = audio as NSData
             realmMessage.type = "audio"
@@ -94,7 +87,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         
         else if let video = video {
             outgoingMessage = OutgoingMessage(message: "[Video]", video: video,snapImage: snapImage! ,senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
-//            realmMessage = RealmChat.Message(value:["message": "[Video]", "data": video, "snapImage":snapImage!, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "video", "hasTimeStamp": shouldHaveTimeStamp, "videoDuration": videoDuration])
             realmMessage.message = "[Video]"
             realmMessage.data = video as NSData
             realmMessage.type = "video"
@@ -102,7 +94,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         }
         else if let snapImage = snapImage{
             outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: user_id.stringValue, senderName: username!, date: date, status: "Delivered", type: "gif" , index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-//            realmMessage = RealmChat.Message(value:["message": "[GIF]", "data": snapImage, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "gif", "hasTimeStamp": shouldHaveTimeStamp])
             realmMessage.message = "[GIF]"
             realmMessage.data = snapImage as NSData
             realmMessage.type = "gif"
@@ -111,11 +102,9 @@ extension ChatViewController: OutgoingMessageProtocol{
         else if let text = text {
             // send message
             outgoingMessage = OutgoingMessage(message: text, senderId: user_id.stringValue , senderName: username! , date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
-//            realmMessage = RealmChat.Message(value:["message": text, "senderID": user_id.stringValue, "senderName": username!, date: date, "delivered": true, "type": "text", "hasTimeStamp": shouldHaveTimeStamp])
             //Bryan
             realmMessage.message = text
             realmMessage.type = "text"
-            
             //ENDBryan
         }
         
@@ -159,25 +148,20 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     //MARK: - Load Message
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
+    //TODO: Debug this
     func loadMessages(){
         roomRef = ref.child(chatRoomId)
         roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded) { (snapshot : FIRDataSnapshot) in
             if snapshot.exists() {
-                // becasue the type is ChildAdded so the snapshot is the new message
+                // because the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
                 
-                if self.initialLoadComplete {//message has been downloaded from databse but not load to collectionview yet.
-                    
+                if self.initialLoadComplete {//message has been downloaded from database but not load to collectionview yet.
                     let isIncoming = self.insertMessage(item)
-                    
                     if isIncoming {
-                        
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
-                    
                     self.finishReceivingMessage(animated: true)
-                    
-                    
                 }
                 else {
                     // add each dictionary to loaded array
@@ -222,7 +206,6 @@ extension ChatViewController: OutgoingMessageProtocol{
     
     //parse information for firebase
     func insertMessages() {
-        
         for item in loaded {
             //create message
             _ = insertMessage(item)
@@ -249,10 +232,8 @@ extension ChatViewController: OutgoingMessageProtocol{
             lastMarkerDate = date
         }
         if let message = message{
-            
             objects.append(item)
             messages.append(message)
-            
             return incoming(item)
         }
         return false
@@ -292,7 +273,6 @@ extension ChatViewController: OutgoingMessageProtocol{
         } else {
             return false
         }
-        
     }
     
     /// This method will transfer an UIImage into NSData, and limit the size of the data

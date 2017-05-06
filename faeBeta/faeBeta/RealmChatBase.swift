@@ -49,17 +49,17 @@ class RealmMessage: Object {
 class RealmRecent: Object {
     dynamic var withUser: RealmWithUser?
     dynamic var date = NSDate()
-    dynamic var avatar : NSData? = nil
-    dynamic var message : RealmMessage? = nil
+    //dynamic var avatar : NSData? = nil
+    dynamic var message : String = ""
     dynamic var unread = false
     
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()
     }
     
-//    override static func primaryKey() -> String? {
-//        return "withUserID"
-//    }
+    override static func primaryKey() -> String? {
+        return "withUserID"
+    }
 }
 
 class RealmChat {
@@ -71,7 +71,7 @@ class RealmChat {
         }
     }
     
-    static func updateRecent(recent : RealmMessage) {
+    static func updateRecent(recent : NSArray) {
         
     }
     

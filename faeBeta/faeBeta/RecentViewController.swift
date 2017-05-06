@@ -186,18 +186,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             if let cacheRecent = result as? NSArray {
                 //Bryan
-                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
-                    if let cacheRecent2 = result2 as? NSArray {
-                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
-                        
-                    }
-                }
-
+//                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
+//                    if let cacheRecent2 = result2 as? NSArray {
+//                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
+//                    }
+//                }
+                //ENDBryan
                 let json = JSON(result!)
                 print(json)
                 self.recents = json
-                    UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
-
+                    //Bryan
+                    //UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
+                    RealmChat.updateRecent(recent: cacheRecent)
                 if(animated && indexPathSet != nil){
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 }else{
