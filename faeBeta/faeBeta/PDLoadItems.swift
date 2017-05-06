@@ -197,6 +197,7 @@ extension PinDetailViewController {
         
         // Textview of pin detail
         textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
+        textviewPinDetail.frame.size.height = PinDetailViewController.pinTypeEnum == .media ? 0 : 100
         textviewPinDetail.alpha = PinDetailViewController.pinTypeEnum == .media ? 0 : 1
         textviewPinDetail.center.x = screenWidth / 2
         textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
@@ -204,7 +205,7 @@ extension PinDetailViewController {
         textviewPinDetail.isEditable = false
         textviewPinDetail.isScrollEnabled = true
         textviewPinDetail.isUserInteractionEnabled = true
-        textviewPinDetail.text = strTextViewText
+        textviewPinDetail.attributedText = strTextViewText.convertStringWithEmoji()
         textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textviewPinDetail.textContainerInset = .zero
         uiviewTblHeader.addSubview(textviewPinDetail)

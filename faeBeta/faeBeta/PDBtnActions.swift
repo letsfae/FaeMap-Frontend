@@ -310,7 +310,7 @@ extension PinDetailViewController {
             UIView.animate(withDuration: 0.5, animations: ({
                 self.textviewPinDetail.alpha = 1
                 self.scrollViewMedia.frame.origin.y += textViewHeight
-                self.textviewPinDetail.frame.size.height += 65 + textViewHeight
+                self.textviewPinDetail.frame.size.height = textViewHeight
                 self.uiviewGrayMidBlock.center.y += 65 + textViewHeight
                 self.uiviewInteractBtnSub.center.y += 65 + textViewHeight
                 self.uiviewTblCtrlBtnSub.center.y += 65 + textViewHeight

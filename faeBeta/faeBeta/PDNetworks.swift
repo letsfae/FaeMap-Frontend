@@ -65,7 +65,9 @@ extension PinDetailViewController {
                 // Use separate func to load pictures in a scrollView
                 self.loadMedias()
                 self.strCurrentTxt = pinInfoJSON["description"].stringValue
-                self.textviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
+                if self.enterMode != .collections {
+                    self.textviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
+                }
             } else if PinDetailViewController.pinTypeEnum == .comment {
                 self.strCurrentTxt = pinInfoJSON["content"].stringValue
                 self.textviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
