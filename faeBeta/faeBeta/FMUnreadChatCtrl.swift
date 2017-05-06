@@ -47,7 +47,16 @@ extension FaeMapViewController {
         //            chatVC.recent = recent
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
 //        chatVC.chat_id = recent["chat_id"].number?.stringValue
-        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+//        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        
+        //Bryan
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userID = withUserId.stringValue
+        chatVC.realmWithUser!.userName = withUserName
+        
+        //EndBryan
+        
+        
         
         navigationController?.pushViewController(chatVC, animated: true)
     }

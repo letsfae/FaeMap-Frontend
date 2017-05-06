@@ -20,6 +20,8 @@ func firebaseWelcome() {
     //print("[my user_id] :" + user_id.stringValue)
     //print("[my username] :" + username!)
     
-    message.sendMessageWithWelcomeInformation("1-" + user_id.stringValue , withUser: FaeWithUser(userName: username!, userId: user_id.stringValue, userAvatar: nil))
+    //Bryan
+    //message.sendMessageWithWelcomeInformation("1-" + user_id.stringValue , withUser: RealmWithUser(userName: username!, userId: user_id.stringValue, userAvatar: nil))
+    //ENDBryan
     
 }

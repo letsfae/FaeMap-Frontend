@@ -36,7 +36,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //
     var showAvatar : Bool = true//false not show avatar , true show avatar
     var firstLoad : Bool?// whether it is the first time to load this room.
-    var withUser : FaeWithUser?
+    
+    //Bryan
+    //var withUser : FaeWithUser?
+    var realmWithUser : RealmUser?
+    //ENDBryan
 
     var withUserId : String? // the user id we chat to
     var withUserName : String? // the user name we chat to
@@ -142,7 +146,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = user_id.stringValue
-        self.senderDisplayName = withUser!.userName
+        //Bryan
+        self.senderDisplayName = realmWithUser!.userName
+        //ENDBryan
         self.inputToolbar.contentView.textView.delegate = self
         
         //load firebase messages
@@ -203,7 +209,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationItem.leftBarButtonItem = leftButton
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
-        titleLabel.text = withUser!.userName
+        //Bryan
+        titleLabel.text = realmWithUser!.userName
+        //ENDBryan
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
@@ -513,8 +521,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
-    
     //MARK: - move input bars
     func moveUpInputBarContentView(_ animated: Bool)
     {
@@ -596,8 +602,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private func createAvatars(_ avatars : NSMutableDictionary?) {
         
         let currentUserAvatar = avatarDic[user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[user_id] , highlightedImage: avatarDic[user_id], placeholderImage: avatarDic[user_id]) :JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder") , diameter: 70)
-        let withUserAvatar = avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)], highlightedImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)], placeholderImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = [user_id.stringValue : currentUserAvatar!, withUser!.userId : withUserAvatar!]
+        //Bryan
+        let withUserAvatar = avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)], highlightedImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)], placeholderImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        avatarDictionary = [user_id.stringValue : currentUserAvatar!, realmWithUser!.userID : withUserAvatar!]
+        //ENDBryan
         // need to check if collectionView exist before reload
     }
     

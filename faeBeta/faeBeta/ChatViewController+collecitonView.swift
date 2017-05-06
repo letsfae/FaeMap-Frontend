@@ -108,22 +108,19 @@ extension ChatViewController {
         let object = objects[indexPath.row]
         if object["hasTimeStamp"] as! Bool {
             let message = messages[indexPath.item]
-            
             return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
         }
-        
         return nil
         
     }
     
+    //this is to modify the label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
         let object = objects[indexPath.row]
         if object["hasTimeStamp"] as! Bool  {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
-        
         return 0.0
-        
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAt indexPath: IndexPath!) -> CGFloat {
