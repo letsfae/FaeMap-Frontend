@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSource,SelectLocationViewControllerDelegate {
+extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSource, SelectLocationViewControllerDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreOption", for: indexPath) as! EditOptionTableViewCell
@@ -26,7 +26,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForChat(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Add Tags", trailingText: nil, trailingImagePlus: true)
         case 2:
@@ -47,7 +47,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForComment(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Duration on Map", trailingText: "3HR", trailingImagePlus: nil)
         case 2:
@@ -64,7 +64,7 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
     func loadCellForMedia(cell: EditOptionTableViewCell, indexPath: IndexPath) -> UITableViewCell{
         switch indexPath.row {
         case 0:
-            cell.setup(middleText: "pinLocation", trailingText: nil, trailingImagePlus: false)
+            cell.setup(middleText: "Location", trailingText: nil, trailingImagePlus: false)
         case 1:
             cell.setup(middleText: "Tags", trailingText: nil, trailingImagePlus: true)
         case 2:
@@ -151,8 +151,9 @@ extension EditMoreOptionsViewController: UITableViewDelegate,UITableViewDataSour
         cell.labelMiddle.text = value
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String) {
-        pinGeoLocation.latitude = Double(latitude)!
-        pinGeoLocation.longitude = Double(longitude)!
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
+        self.pinGeoLocation = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
+        zoomLevel = zoom
+        self.delegate?.sendMapCameraInfo(latitude: latitude, longitude: longitude, zoom: zoom)
     }
 }

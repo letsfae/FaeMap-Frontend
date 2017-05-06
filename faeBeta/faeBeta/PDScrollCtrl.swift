@@ -11,15 +11,21 @@ import UIKit
 extension PinDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == tableCommentsForPin {
-            var offset: CGFloat = 321
-            if pinTypeEnum == .comment {
-                offset = 232
+        if scrollView == tblMain {
+            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
+//            let padding = scrollView.contentOffset.y
+//            tblMain.setContentOffset(CGPoint(x: 0, y: padding), animated: false)
+            if self.uiviewCtrlBoard != nil {
+                let offset: CGFloat = uiviewTblHeader.frame.size.height - 42
+                self.uiviewCtrlBoard.isHidden = tblMain.contentOffset.y < offset
             }
-//            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
-            if self.controlBoard != nil {
-                self.controlBoard.isHidden = tableCommentsForPin.contentOffset.y < offset
-            }
+//            if scrollView.contentOffset.y > 60 {
+//                tblMain.setContentOffset(CGPoint(x: 0, y: uiviewTblHeader.frame.size.height-42), animated: false)
+//            }
         }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("[scrollViewDidEndDragging] offset: \(scrollView.contentOffset.y)")
     }
 }

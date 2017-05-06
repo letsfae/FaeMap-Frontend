@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Reachability variables
     var vcPresented = false
-    let reachaVC = DisconnectionViewController()
+    var reachaVCPresented = false
+    var reachaVC = DisconnectionViewController()
     private var reachability: Reachability!
     
     // Q: Firebase? - Yue Shen
@@ -57,9 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
             migrationBlock: { migration, oldSchemaVersion in
-                // The enumerateObjects:block: method iterates
-                // over every 'Person' object stored in the Realm file
-//            
 //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
 //                    if oldSchemaVersion < 3 {
 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
@@ -67,10 +65,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                }
         })
         
+//      This doesn't seem to work
 //        let realm = try! Realm()
 //        try! realm.write {
 //            realm.deleteAll()
 //        }
+        
+        //Bryan
+//        do {
+//            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
+//        } catch {}
+        //ENDBryan
+        
         
         return true
     }
@@ -78,18 +84,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK:- Network Check
     func reachabilityChanged(notification: Notification) {
         let reachability = notification.object as! Reachability
-        if reachability.isReachable {
-            if vcPresented {
-                // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-                reachaVC.dismiss(animated: true, completion: nil)
-            }
-        } else {
+        if reachability.isReachable && reachaVCPresented {
+            // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
+            reachaVC.dismiss(animated: true, completion: nil)
+            reachaVCPresented = false
+        } else if !reachability.isReachable && !reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] Network not reachable")
-            if !vcPresented {
-                vcPresented = true
-                self.window?.makeKeyAndVisible()
-                self.window?.rootViewController!.present(reachaVC, animated: true, completion: nil)
-            }
+            reachaVCPresented = true
+            self.window?.makeKeyAndVisible()
+            self.window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
         }
     }
     
@@ -98,19 +101,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpEnableLocationViewController() {
-        let vc:UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        
+        let vc: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
-        
+        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func popUpWelcomeView() {
         let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController!.present(vc, animated: true, completion: nil)
-        
+        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
@@ -182,16 +182,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("not log in, sync fail")
         } else {
             let push = FaePush()
-            push.getSync({ (status:Int!, message: Any?) in
+            push.getSync({ (status: Int!, message: Any?) in
+                print("[runSync] status", status)
                 if status / 100 == 2 {
+                    self.reachaVCPresented = false
                     //success
                 } else if status == 401 {
+                    self.reachaVCPresented = false
+                    is_Login = 0
                     self.popUpWelcomeView()
-                } else {
-//                     self.popUpWelcomeView()
-                    let vc = DisconnectionViewController()
+                } else if !self.reachaVCPresented {
+                    self.reachaVCPresented = true
                     self.window?.makeKeyAndVisible()
-                    self.window?.rootViewController!.present(vc, animated: true, completion: nil)
+                    self.window?.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
                 }
             })
         }

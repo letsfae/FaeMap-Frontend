@@ -15,25 +15,19 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     private var switchButtonBackgroundImageView: UIImageView!
     private var switchButtonLeft: UIButton!
     private var switchButtonRight: UIButton!
-    
     private var createChatPinImageImageView: UIImageView!
     private var createChatPinImageButton: UIButton!
-    
     private var createChatPinTextField: UITextField!
-    
     private var createChatPinOptionsTableView: CreatePinOptionsTableView!
-    
     private var bubbleTextView: CreatePinTextView!
-    
     var descriptionTextView: CreatePinTextView!
-    
     var addTagsTextView: CreatePinAddTagsTextView!
-    
     private var moreOptionsTableView: CreatePinOptionsTableView!
-    
     var labelSelectLocationContent: String!
-    
     private var submitButtonEnabled: Bool = false
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
+    var zoomLevelCallBack: Float = 13.8
     
     enum OptionViewMode{
         case pin
@@ -68,18 +62,15 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : false)
     }
 
-    private func setupCreateChatPinMainView()
-    {
-        func createMainView()
-        {
+    private func setupCreateChatPinMainView() {
+        func createMainView() {
             createChatPinMainView = UIView(frame: CGRect(x: 0, y: 148, width: screenWidth, height: 225))
             self.view.addSubview(createChatPinMainView)
             self.view.addConstraintsWithFormat("V:[v0]-20-[v1(225)]", options: [], views: titleImageView, createChatPinMainView)
             self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: createChatPinMainView)
         }
         
-        func createSwitchButton()
-        {
+        func createSwitchButton() {
             switchButtonContentView = UIView(frame: CGRect(x: 0, y: 0, width: 158, height: 29))
             createChatPinMainView.addSubview(switchButtonContentView)
             createChatPinMainView.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: switchButtonContentView)
@@ -109,8 +100,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             switchButtonContentView.addConstraintsWithFormat("V:|-0-[v0(29)]-0-|", options: [], views: switchButtonRight)
         }
         
-        func createImagePlaceHolder()
-        {
+        func createImagePlaceHolder() {
             
             createChatPinImageImageView = UIImageView(image: #imageLiteral(resourceName: "createChatPinImagePlaceHolder"))
             createChatPinImageImageView.layer.cornerRadius = 50
@@ -129,8 +119,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             NSLayoutConstraint(item: createChatPinImageButton, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         }
         
-        func createInputTextField()
-        {
+        func createInputTextField() {
             createChatPinTextField = UITextField()
             createChatPinTextField.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
 
@@ -147,8 +136,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             createChatPinTextField.delegate = self
         }
         
-        func createInputTextView()
-        {
+        func createInputTextView() {
             bubbleTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
             bubbleTextView.placeHolder = "Say Something…"
             createChatPinMainView.addSubview(bubbleTextView)
@@ -157,19 +145,13 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         }
         
         createMainView()
-        
         createSwitchButton()
-
         createImagePlaceHolder()
-        
         createInputTextField()
-        
         createInputTextView()
-        
     }
     
-    private func setupcreateChatPinOptionsTableView()
-    {
+    private func setupcreateChatPinOptionsTableView() {
         createChatPinOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
         
         self.view.addSubview(createChatPinOptionsTableView)
@@ -178,9 +160,8 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - button actions
-    override func submitButtonTapped(_ sender: UIButton)
-    {
-        if(optionViewMode == .more){
+    override func submitButtonTapped(_ sender: UIButton) {
+        if optionViewMode == .more {
             switch currentViewingContent! {
             case .description:
                 leaveDescription()
@@ -194,13 +175,12 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
             }
         }
         // create a pin
-        else if (optionViewMode == .pin){
+        else if optionViewMode == .pin {
             createChatPin()
         }
     }
     
-    @objc private func switchButtonLeftTapped(_ sender: UIButton)
-    {
+    @objc private func switchButtonLeftTapped(_ sender: UIButton) {
         self.view.endEditing(true)
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
         optionViewMode = .pin
@@ -213,8 +193,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         self.bubbleTextView.alpha = 0
     }
     
-    @objc private func switchButtonRightTapped(_ sender: UIButton)
-    {
+    @objc private func switchButtonRightTapped(_ sender: UIButton) {
         self.view.endEditing(true)
         self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_bubble")
         optionViewMode = .bubble
@@ -227,8 +206,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         self.bubbleTextView.alpha = 1
     }
     
-    @objc private func createChatPinImageButtonTapped(_ sender: UIButton)
-    {
+    @objc private func createChatPinImageButtonTapped(_ sender: UIButton) {
         let alertC = FAEAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
         var action = UIAlertAction(title: "Camera", style: .default, handler: {
             Action in
@@ -254,12 +232,13 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         self.present(alertC, animated: true, completion: nil)
     }
     
-    func actionSelectLocation()
-    {
+    func actionSelectLocation() {
         let selectLocationVC = SelectLocationViewController()
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.pinType = "chat"
+        selectLocationVC.currentLocation2D = self.currentLocation2D
+        selectLocationVC.zoomLevel = self.zoomLevel
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     
@@ -271,18 +250,25 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         self.present(nav, animated: true, completion: nil)
     }
     
-    func showCamera()
-    {
+    func showCamera() {
         view.endEditing(true)
         let camera = Camera(delegate_: self)
         camera.presentPhotoCamera(self, canEdit: false)
     }
     
     // MARK: - helper
-    func switchToDescription()
-    {
+    
+    func randomLocation() -> CLLocationCoordinate2D {
+        let lat = currentLocation2D.latitude
+        let lon = currentLocation2D.longitude
+        let random_lat = Double.random(min: -0.01, max: 0.01)
+        let random_lon = Double.random(min: -0.01, max: 0.01)
+        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
+    }
+    
+    func switchToDescription() {
         self.currentViewingContent = .description
-        if (descriptionTextView == nil) {
+        if descriptionTextView == nil {
             descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
             descriptionTextView.placeHolder = "Add Description..."
             descriptionTextView.observerDelegate = self
@@ -304,8 +290,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    func leaveDescription()
-    {
+    func leaveDescription() {
         optionViewMode = .pin
 
         if self.descriptionTextView != nil {
@@ -327,8 +312,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    func switchToMoreOptions()
-    {
+    func switchToMoreOptions() {
         self.currentViewingContent = .moreOptionsTable
         optionViewMode = .more
         if moreOptionsTableView == nil {
@@ -350,8 +334,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    func leaveMoreOptions()
-    {
+    func leaveMoreOptions() {
         optionViewMode = .pin
         
         UIView.animate(withDuration: 0.3, animations: {
@@ -371,8 +354,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    func swtichToAddTags()
-    {
+    func swtichToAddTags() {
         self.currentViewingContent = .addTags
         if (addTagsTextView == nil) {
             addTagsTextView = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
@@ -392,8 +374,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    func leaveAddTags()
-    {
+    func leaveAddTags() {
         self.currentViewingContent = .moreOptionsTable
         if addTagsTextView != nil {
             addTagsTextView.resignFirstResponder()
@@ -413,7 +394,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     /// This is a method to set the image for createChatPinImageImageView
     ///
     /// - Parameter image: the image for createChatPinImageImageView, if nil, then use default image(the placeholder)
-    private func setPinImageView(withImage image:UIImage?){
+    private func setPinImageView(withImage image:UIImage?) {
         if let image = image {
             createChatPinImageImageView.image = image
             createChatPinImageImageView.layer.borderWidth = 3
@@ -428,14 +409,12 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         updateSubmitButton()
     }
     
-    func updateSubmitButton()
-    {
+    func updateSubmitButton() {
         submitButtonEnabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
         setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : submitButtonEnabled)
     }
     
-    func createChatPin()
-    {
+    func createChatPin() {
         UIScreenService.showActivityIndicator()
         let postSingleChatPin = FaeMap()
         
@@ -482,7 +461,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                             let long = CLLocationDegrees(longDouble!)
                             UIScreenService.hideActivityIndicator()
                             self.dismiss(animated: false, completion: {
-                                self.delegate.sendChatPinGeoInfo?(chatID: "\(getMessageID)", latitude: lat, longitude: long)
+                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                             })
                         }
                     }
@@ -505,58 +484,51 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     }
     
     //MARK: - SelectLocationViewControllerDelegate
-    func sendAddress(_ value: String)
-    {
+    func sendAddress(_ value: String) {
         labelSelectLocationContent = value
         createChatPinOptionsTableView.reloadData()
     }
     
-    func sendGeoInfo(_ latitude: String, longitude: String)
-    {
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
         selectedLatitude = latitude
         selectedLongitude = longitude
         createChatPinOptionsTableView.reloadData()
+        zoomLevelCallBack = zoom
     }
     
     //MARK: - SendMutipleImagesDelegate
-    func sendImages(_ images: [UIImage])
-    {
+    func sendImages(_ images: [UIImage]) {
         assert(images.count == 1, "The number of image in the array should be exactly one!")
         for image in images {
             setPinImageView(withImage: image)
         }
     }
     
-    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
-    {
+    func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
         print("Debug sendVideo")
     }
     
     //MARK: -  UIImagePickerController
     // handle events after user took a photo/video
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
-    {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
     }
     
     //MARK: - text field delegate
-    override func textFieldDidBeginEditing(_ textField: UITextField)
-    {
+    override func textFieldDidBeginEditing(_ textField: UITextField) {
         super.textFieldDidBeginEditing(textField)
         if textField == createChatPinTextField {
             inputToolbar.countCharsLabelHidden = true
         }
     }
-    func textFieldDidEndEditing(_ textField: UITextField)
-    {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == createChatPinTextField {
             updateSubmitButton()
         }
     }
     
     //MARK: - add tags related
-    
-    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar)
-    {
+    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
         if !(previousFirstResponder is CreatePinAddTagsTextView){
             super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
         }else{

@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol OpenedPinTableCellDelegate: class {
     // Pass CL2D location to OpenedPinTableViewController
-    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    func passCL2DLocationToOpenedPinList(_ coordinate: CLLocationCoordinate2D, index: Int)
     func deleteThisCellCalledFromDelegate(_ indexPath: IndexPath)
 }
 
@@ -42,7 +42,6 @@ class OPLTableViewCell: UITableViewCell {
     
     func loadAvatar() {
         imageViewAvatar = UIImageView(frame: CGRect(x: 14, y: 13, width: 50, height: 50))
-        imageViewAvatar.layer.cornerRadius = 25
         imageViewAvatar.clipsToBounds = true
         self.addSubview(imageViewAvatar)
         imageViewAvatar.layer.masksToBounds = true
@@ -99,7 +98,7 @@ class OPLTableViewCell: UITableViewCell {
     }
     
     func jumpToDetailAndAnimate(_ sender: UIButton) {
-        self.delegate?.passCL2DLocationToOpenedPinList(location, pinID: pinID)
+        self.delegate?.passCL2DLocationToOpenedPinList(location, index: indexPathInCell.row)
     }
     
     func deleteThisCell(_ sender: UIButton) {

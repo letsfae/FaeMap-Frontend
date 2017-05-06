@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PinMenuDelegate: class {
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
     func whenDismissPinMenu()
 }
 
@@ -21,7 +21,7 @@ class PinMenuViewController: UIViewController {
     var uiviewPinSelections: UIView!
     var blurViewMap: UIVisualEffectView!
     var buttonMedia: UIButton!
-    var buttonChats: UIButton!
+    var btnChats: UIButton!
     var buttonComment: UIButton!
     var buttonEvent: UIButton!
     var buttonFaevor: UIButton!
@@ -46,6 +46,8 @@ class PinMenuViewController: UIViewController {
     // MARK: Geo Info pass to create pin view controller
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     
     override func viewDidLoad() {
         super.viewDidLoad()

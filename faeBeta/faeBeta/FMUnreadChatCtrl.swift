@@ -28,21 +28,15 @@ extension FaeMapViewController {
                     }else{
                         self.labelUnreadMessages.frame.size.width = 22
                     }
-                    self.buttonChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
+                    self.btnChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
                     self.labelUnreadMessages.isHidden = totalUnread == 0
                     if totalUnread == 0 {
-                        self.buttonChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
+                        self.btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
                     }
                     UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
                 }
             }
         }
-    }
-    
-    func animationMapChatShow(_ sender: UIButton!) {
-        UINavigationBar.appearance().shadowImage = navBarDefaultShadowImage
-        // check if the user's logged in the backendless
-        self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }
 
     func segueToChat(_ withUserId: NSNumber, withUserName: String ){
@@ -53,15 +47,17 @@ extension FaeMapViewController {
         //            chatVC.recent = recent
         chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
 //        chatVC.chat_id = recent["chat_id"].number?.stringValue
-        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+//        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        
+        //Bryan
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userID = withUserId.stringValue
+        chatVC.realmWithUser!.userName = withUserName
+        
+        //EndBryan
+        
+        
         
         navigationController?.pushViewController(chatVC, animated: true)
-    }
-    
-    func animationMapChatHide(_ sender: UIButton!) {
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.mapChatSubview.alpha = 0.0
-            self.mapChatWindow.alpha = 0.0
-        }))
     }
 }

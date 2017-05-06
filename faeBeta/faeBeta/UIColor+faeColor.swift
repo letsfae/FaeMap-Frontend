@@ -9,18 +9,26 @@
 import Foundation
 import UIKit
 
-extension UIColor
-{
-    convenience init(red: Int, green: Int, blue: Int) {
-        let newRed = CGFloat(red)/255
-        let newGreen = CGFloat(green)/255
-        let newBlue = CGFloat(blue)/255
-        
-        self.init(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+extension UIColor {
+    
+    convenience init(r: Int, g: Int, b: Int, alpha: Int) {
+        let newRed = CGFloat(r)/255
+        let newGreen = CGFloat(g)/255
+        let newBlue = CGFloat(b)/255
+        let newAlpha = CGFloat(alpha)/255
+        self.init(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
     }
     
     class func faeAppRedColor() -> UIColor {
         return UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1)
+    }
+    
+    class func faeAppPurpleColor() -> UIColor {
+        return UIColor(red: 194/255, green: 166/255, blue: 217/255, alpha: 1)
+    }
+    
+    class func faeAppDarkblueColor() -> UIColor {
+        return UIColor(red: 49/255, green: 63/255, blue: 72/255, alpha: 1)
     }
     
     class func faeAppWeakPasswordYellowColor() -> UIColor {

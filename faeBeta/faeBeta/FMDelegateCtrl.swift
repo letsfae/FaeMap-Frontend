@@ -10,12 +10,13 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import RealmSwift
+import SwiftyJSON
 
 extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: faeMapView.camera.zoom)
         self.faeMapView.animate(to: camera)
         updateTimerForUserPin()
         timerSetup()
@@ -24,22 +25,26 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     
     // PinDetailDelegate
-    func dismissMarkerShadow(_ dismiss: Bool) {
-        print("back from comment pin detail")
+    func backToMainMap() {
         updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
+        
+        reloadMainScreenButtons()
     }
-    // PinDetailDelegate
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-        self.faeMapView.animate(to: camera)
+        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
+                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
+        faeMapView.camera = camera
     }
-    // PinDetailDelegate
-    func changeIconImage(marker: GMSMarker, type: String, status: String) {
+    func changeIconImage() {
+        let marker = PinDetailViewController.pinMarker
+        let type = "\(PinDetailViewController.pinTypeEnum)"
+        let status = PinDetailViewController.pinStatus
         guard let userData = marker.userData as? [Int: AnyObject] else {
             return
         }
@@ -51,19 +56,59 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         marker.userData = [0: mapPin_new]
         marker.icon = pinIconSelector(type: type, status: status)
     }
-    // PinDetailDelegate
-    func disableSelfMarker(yes: Bool) {
-        if yes {
-//            self.selfMarker.map = nil
-            self.subviewSelfMarker.isHidden = true
-        } else {
-            reloadSelfPosAnimation()
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker) {
+        
+        marker.map = nil
+        marker.position = coordinate
+        marker.map = faeMapView
+        
+        let offset = 530*screenHeightFactor - screenHeight/2
+        var curPoint = faeMapView.projection.point(for: coordinate)
+        curPoint.y -= offset
+        let newCoor = faeMapView.projection.coordinate(for: curPoint)
+        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
+        
+        faeMapView.camera = camera
+    }
+    func goTo(nextPin: Bool) {
+        var tmpMarkers = [GMSMarker]()
+        for marker in placeMarkers {
+            if marker.map != nil {
+                tmpMarkers.append(marker)
+            }
+        }
+        if let index = tmpMarkers.index(of: PinDetailViewController.pinMarker) {
+            var i = index
+            if nextPin {
+                if index == tmpMarkers.count - 1 {
+                    i = 0
+                } else {
+                    i += 1
+                }
+            } else {
+                if index == 0 {
+                    i = tmpMarkers.count - 1
+                } else {
+                    i -= 1
+                }
+            }
+            PinDetailViewController.pinMarker = tmpMarkers[i]
+            if tmpMarkers[i].userData == nil {
+                return
+            }
+            guard let userData = tmpMarkers[i].userData as? [Int: AnyObject] else {
+                return
+            }
+            guard let placePin = userData.values.first as? PlacePin else {
+                return
+            }
+            openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
         }
     }
 
     // PinMenuDelegate
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 17)
+    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: zoom)
         faeMapView.camera = camera
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()
@@ -72,7 +117,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         filterCircleAnimation()
         reloadSelfPosAnimation()
     }
-    // PinMenuDelegate
     func whenDismissPinMenu() {
         timerSetup()
         renewSelfLocation()
@@ -96,33 +140,17 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.subviewSelfMarker.isHidden = true
         }
     }
-    // LeftSlidingMenuDelegate
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         self.present(moodAvatarVC, animated: true, completion: nil)
     }
-    
-    
-    // LeftSlidingMenuDelegate
     func jumpToCollections() {
         
-        let CollectionsBoardVC = CollectionsBoardViewController()
-        
-        //弹出的动画效果
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
+        let collectionsBoardVC = CollectionsBoardViewController()
  
-        //        CollectionsBoardVC.modalPresentationStyle = .overCurrentContext
-        self.present(CollectionsBoardVC, animated: false, completion: nil)
-        
-
-    
+        collectionsBoardVC.modalPresentationStyle = .overCurrentContext
+        self.present(collectionsBoardVC, animated: false, completion: nil)
     }
-    
-    // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
         let realm = try! Realm()
@@ -130,12 +158,24 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             realm.deleteAll()
         }
     }
-    // LeftSlidingMenuDelegate
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
-    // LeftSlidingMenuDelegate
     func reloadSelfPosition() {
+        self.canOpenAnotherPin = true
+        reloadMainScreenButtons()
         reloadSelfPosAnimation()
+    }
+    
+    fileprivate func reloadMainScreenButtons() {
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.btnMapFilter.frame = CGRect(x: screenWidth/2-22, y: screenHeight-47, width: 44, height: 44)
+            self.btnToNorth.frame = CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnSelfLocation.frame = CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59)
+            self.btnChatOnMap.frame = CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79)
+            self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
+            self.updateUnreadChatIndicator()
+            self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
+        }, completion: nil)
     }
 }

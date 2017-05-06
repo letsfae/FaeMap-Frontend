@@ -14,7 +14,7 @@ import Photos
 // you can check the groups by switching album in choose photo screen
 final class PhotoPicker {
     
-    class var shared:PhotoPicker {
+    class var shared: PhotoPicker {
         struct Singleton {
             static let instance = PhotoPicker()
         }

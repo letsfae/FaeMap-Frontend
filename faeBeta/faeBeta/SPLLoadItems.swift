@@ -12,14 +12,18 @@ import GoogleMaps
 extension SelectLocationViewController {
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: currentLocation2D.latitude, longitude: currentLocation2D.longitude, zoom: zoomLevel)
         self.mapSelectLocation = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapSelectLocation.isMyLocationEnabled = true
         mapSelectLocation.delegate = self
         self.view = mapSelectLocation
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
+        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
+        do {
+            // Set the map style by passing a valid JSON string.
+            mapSelectLocation.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
+        } catch {
+            NSLog("The style definition could not be loaded: \(error)")
+        }
         
         imagePinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
         imagePinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")
@@ -36,12 +40,12 @@ extension SelectLocationViewController {
         self.view.addConstraintsWithFormat("H:|-18-[v0(59)]", options: [], views: buttonCancelSelectLocation)
         self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonCancelSelectLocation)
         
-        buttonSelfPosition = UIButton()
-        self.view.addSubview(buttonSelfPosition)
-        buttonSelfPosition.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
-        buttonSelfPosition.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: buttonSelfPosition)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonSelfPosition)
+        btnSelfLocation = UIButton()
+        self.view.addSubview(btnSelfLocation)
+        btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
+        btnSelfLocation.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
+        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: btnSelfLocation)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: btnSelfLocation)
         
         buttonSetLocationOnMap = UIButton()
         buttonSetLocationOnMap.setTitle("Set Location", for: UIControlState())
@@ -57,10 +61,10 @@ extension SelectLocationViewController {
     }
     
     func loadFaeSearchController() {
-        let searchBarSubview = UIView(frame: CGRect(x: 8, y: 23, width: resultTableWidth, height: 48.0))
+        let searchBarSubview = UIView(frame: CGRect(x: 8, y: 23, width: resultTableWidth, height: 48))
         
-        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5, width: resultTableWidth, height: 38.0), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
-        faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 10, y: 6, width: resultTableWidth-11, height: 38), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+        faeSearchController.faeSearchBar.placeholder = "Search Address or Place                               "
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0
         faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
@@ -68,6 +72,31 @@ extension SelectLocationViewController {
         searchBarSubview.addSubview(faeSearchController.faeSearchBar)
         searchBarSubview.backgroundColor = UIColor.white
         self.view.addSubview(searchBarSubview)
+        
+        let uiviewDeleteSub = UIView()
+        uiviewDeleteSub.backgroundColor = UIColor.white
+        uiviewDeleteSub.layer.cornerRadius = 2
+        searchBarSubview.addSubview(uiviewDeleteSub)
+        searchBarSubview.addConstraintsWithFormat("H:[v0(20)]-10-|", options: [], views: uiviewDeleteSub)
+        searchBarSubview.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: uiviewDeleteSub)
+        let btnDeleteAll = UIButton()
+        btnDeleteAll.setImage(#imageLiteral(resourceName: "locationExtendCancel"), for: .normal)
+        btnDeleteAll.addTarget(self, action: #selector(self.actionClearSearchBar(_:)), for: .touchUpInside)
+        searchBarSubview.addSubview(btnDeleteAll)
+        searchBarSubview.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: btnDeleteAll)
+        searchBarSubview.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: btnDeleteAll)
+        
+        let uiviewMagnifierSub = UIView()
+        uiviewMagnifierSub.backgroundColor = UIColor.white
+        uiviewMagnifierSub.layer.cornerRadius = 2
+        searchBarSubview.addSubview(uiviewMagnifierSub)
+        searchBarSubview.addConstraintsWithFormat("H:|-9-[v0(33)]", options: [], views: uiviewMagnifierSub)
+        searchBarSubview.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: uiviewMagnifierSub)
+        let btnMagnifier = UIButton()
+        btnMagnifier.setImage(#imageLiteral(resourceName: "searchMagnifier"), for: .normal)
+        searchBarSubview.addSubview(btnMagnifier)
+        searchBarSubview.addConstraintsWithFormat("H:|-9-[v0(33)]", options: [], views: btnMagnifier)
+        searchBarSubview.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: btnMagnifier)
         
         searchBarSubview.layer.borderColor = UIColor.white.cgColor
         searchBarSubview.layer.borderWidth = 1.0
@@ -83,7 +112,7 @@ extension SelectLocationViewController {
         tblSearchResults = UITableView(frame: self.uiviewTableSubview.bounds)
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
-        tblSearchResults.register(FaeCellForAddressSearch.self, forCellReuseIdentifier: "faeCellForAddressSearch")
+        tblSearchResults.register(FaeCellForMainScreenSearch.self, forCellReuseIdentifier: "faeCellForAddressSearch")
         tblSearchResults.isScrollEnabled = false
         tblSearchResults.layer.masksToBounds = true
         tblSearchResults.separatorInset = UIEdgeInsets.zero

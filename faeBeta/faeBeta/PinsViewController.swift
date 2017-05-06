@@ -2,315 +2,184 @@
 //  PinsViewController.swift
 //  faeBeta
 //
-//  Created by Shiqi Wei on 1/31/17.
-//  Copyright © 2016 fae. All rights reserved.
+//  Created by Shiqi Wei on 4/20/17.
+//  Copyright © 2017 fae. All rights reserved.
 //
 
 import UIKit
 import SwiftyJSON
+import UIKit.UIGestureRecognizerSubclass
 //import SDWebImage
 //import RealmSwift
 
+class TouchGestureRecognizer : UIGestureRecognizer {
+    // initialize the cellInGivenId
+    var cellInGivenId = PinsTableViewCell()
+    var isCellSwiped = false
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        // This assignment is very importment for custom gesture
+        self.state = UIGestureRecognizerState.began
+        let frame = cellInGivenId.uiviewCellView.frame
+        let originalFrame = CGRect(x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
+        UIView.animate(withDuration: 0.3, animations: {self.cellInGivenId.uiviewCellView.frame = originalFrame}, completion: { (finished) -> Void in
+            self.isCellSwiped = false
+        })
+    }
+}
 
-class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate {
-    
-    
-    // Table bar
-    var viewTable: UIView!
-    var TblResult: UITableView!
-    var viewSearchBarCover: UIView! //Transparent view to cover the searchbar for detect the click event
-    var SearchBar: UISearchBar!
-    var emptyTblImgView: UIImageView!
-    var emptySavedTblImgView: UIImageView!
-    //var arrSelectedItem = [Int]() // Store the id of selected cell when the table is editing
-    
-    
-    //Nagivation Bar Init******
+protocol CollectionsBoardDelegate: class {
+    // Go back to collections
+    func backToBoard(Count: Int)
+}
+
+class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate,PinTableViewCellDelegate, UIGestureRecognizerDelegate{
+    weak var backBoardDelegate: CollectionsBoardDelegate? // For collectionBoard
+    var boolIsFirstAppear = true
+    // initialize the cellInGivenId
+    var cellCurrSwiped = PinsTableViewCell()
+    var gesturerecognizerTouch: TouchGestureRecognizer!
+    //background view
+    var uiviewBackground: UIView!
+    var tblPinsData: UITableView!
+    //Transparent view to cover the searchbar for detect the click event
+    var uiviewSearchBarCover: UIView!
+    var schbarPin: UISearchBar!
+    var imgEmptyTbl: UIImageView!
+    var labelEmptyTbl: UILabel!
+    //Nagivation Bar Init
     var uiviewNavBar: UIView!
-    var tblTitle : String!
-    
+    //Title for current table
+    var strTableTitle: String!
     //The set of pin data
-
-    var pinDataArr = [[String: AnyObject]]()
-
+    var arrPinData = [[String: AnyObject]]()
+    //Current select row
+    var indexCurrSelectRowAt : IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        loadTblResult()
+        // The background of this controller, all subviews are added to this view
+        uiviewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        self.view.addSubview(uiviewBackground)
+        uiviewBackground.frame.origin.x = screenWidth
+        loadtblPinsData()
         loadNavBar()
-        switch tblTitle {
-            
-        case "Created Pins":
-            getCreatedPins()
-            
-        case "Saved Pins":
-            getSavedPins()
-            
-        default: break
-        }
-        
+    }
 
+    func handleAfterTouch(recognizer: TouchGestureRecognizer) {
+        //remove the gesture after cell backs, or the gesture will always collect touches in the table
+        tblPinsData.removeGestureRecognizer(gesturerecognizerTouch)
     }
     
-    // get the Created Pins
-    func getCreatedPins() {
-        let getCreatedPinsData = FaeMap()
-        getCreatedPinsData.getCreatedPins() {(status: Int, message: Any?) in
-            if status == 200 {
-                print("Successfully get Created pins!")
-                self.pinDataArr.removeAll()
-                let PinsOfCreatedPinsJSON = JSON(message!)
-                
-                if PinsOfCreatedPinsJSON.count > 0 {
-                    for i in 0...(PinsOfCreatedPinsJSON.count-1) {
-                        var dicCell = [String: AnyObject]()
-                        
-                        if let time = PinsOfCreatedPinsJSON[i]["created_at"].string {
-                            dicCell["created_at"] = time as AnyObject?
-                        }
-                        
-                        if let type = PinsOfCreatedPinsJSON[i]["type"].string{
-                            dicCell["type"] = type as AnyObject?
-                        }
-                        let pinObject = PinsOfCreatedPinsJSON[i]["pin_object"]
-                        
-                        if  pinObject != JSON.null{
-                            //comment tab里面存的不叫description 叫content
-                            if let content = pinObject["content"].string {
-                                dicCell["content"] = content as AnyObject?
-                            }
-                            //media tab里面存的不叫content 叫description
-                            if let description = pinObject["description"].string {
-                                dicCell["description"] = description as AnyObject?
-                            }
-                            
-                            if let liked_count = pinObject["liked_count"].int {
-                                dicCell["liked_count"] = liked_count as AnyObject?
-                            }
-                            
-                            if let comment_count = pinObject["comment_count"].int {
-                                dicCell["comment_count"] = comment_count as AnyObject?
-                            }
-                            
-                            if let mediaImgArr = pinObject["file_ids"].array {
-                                dicCell["file_ids"] = mediaImgArr as AnyObject?
-                            }
-                        }
-                        
-                        self.pinDataArr.append(dicCell)
-                        
-                    }
-                    
-                    /*有数据代表空表，要显示控件*/
-                    self.emptyTblImgView.isHidden = true
-                    self.emptySavedTblImgView.isHidden = true
-                    self.SearchBar.isHidden = false
-                    self.TblResult.isHidden = false
-                }
-                else{
-                    /*没有数据代表空表，要隐藏控件*/
-                    
-                    self.emptyTblImgView.isHidden = false
-                    self.emptySavedTblImgView.isHidden = true
-                    self.SearchBar.isHidden = true
-                    self.TblResult.isHidden = true
-                }
-                
-                // reload the table when get the data
-                self.TblResult.reloadData()
-            }
-            else {
-                print("Fail to get Created pins!")
-            }
+    // only the buttons in the siwped cell don't respond to the gesture
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if (touch.view?.isDescendant(of: cellCurrSwiped.uiviewSwipedBtnsView))! {
+            return false
+        }
+        return true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if boolIsFirstAppear {
+            UIView.animate(withDuration: 0.3, animations: ({
+                self.uiviewBackground.frame.origin.x = 0
+            }))
+            boolIsFirstAppear = false
         }
     }
     
-    // get the Saved Pins
-    func getSavedPins() {
-        let getSavedPinsData = FaeMap()
-        getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                print("Successfully get saved pins!")
-                self.pinDataArr.removeAll()
-                let PinsOfSavedPinsJSON = JSON(message!)
-                
-                if PinsOfSavedPinsJSON.count > 0 {
-                    for i in 0...(PinsOfSavedPinsJSON.count-1) {
-                        var dicCell = [String: AnyObject]()
-                        
-                        if let time = PinsOfSavedPinsJSON[i]["created_at"].string {
-                            dicCell["created_at"] = time as AnyObject?
-                        }
-
-                        if let type = PinsOfSavedPinsJSON[i]["type"].string {
-                            dicCell["type"] = type as AnyObject?
-                        }
-                        let pinObject = PinsOfSavedPinsJSON[i]["pin_object"]
-                        
-                        if  pinObject != JSON.null {
-                            //comment tab里面存的不叫description 叫content
-                            if let content = pinObject["content"].string {
-                                dicCell["content"] = content as AnyObject?
-                            }
-                            //media tab里面存的不叫content 叫description
-                            if let description = pinObject["description"].string {
-                                dicCell["description"] = description as AnyObject?
-                            }
-                            
-                            if let liked_count = pinObject["liked_count"].int {
-                                dicCell["liked_count"] = liked_count as AnyObject?
-                            }
-                            
-                            if let comment_count = pinObject["comment_count"].int {
-                                dicCell["comment_count"] = comment_count as AnyObject?
-                            }
-                            
-                            if let mediaImgArr = pinObject["file_ids"].array {
-                                dicCell["file_ids"] = mediaImgArr as AnyObject?
-                            }
-                        }
-                        
-                        self.pinDataArr.append(dicCell)
-                        
-                    }
-                    /*有数据代表空表，要显示控件*/
-                    self.emptySavedTblImgView.isHidden = true
-                    self.emptyTblImgView.isHidden = true
-                    self.SearchBar.isHidden = false
-                    self.TblResult.isHidden = false
-                    
-                }else{
-                    /*没有数据代表空表，要隐藏控件*/
-                    
-                    self.emptySavedTblImgView.isHidden = false
-                    self.emptyTblImgView.isHidden = true
-                    self.SearchBar.isHidden = true
-                    self.TblResult.isHidden = true
-                }
-                
-                // reload the table when get the data
-                self.TblResult.reloadData()
+    // Dismiss current View
+    func actionDismissCurrentView(_ sender: UIButton) {
+        self.backBoardDelegate?.backToBoard(Count: arrPinData.count)
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.uiviewBackground.frame.origin.x = screenWidth
+        }), completion: { (done: Bool) in
+            if done {
+                self.dismiss(animated: false, completion: nil)
             }
-            else {
-                print("Fail to get saved pins!")
-            }
-        }
+        })
     }
-    
     
     func loadNavBar() {
-        
-        
         uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
-        uiviewNavBar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
+        uiviewNavBar.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
         uiviewNavBar.layer.borderWidth = 1
         uiviewNavBar.backgroundColor = UIColor.white
-        
-        
-        
-        self.view.addSubview(uiviewNavBar)
-        
-        
-        let btnBack = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
-        
+        uiviewBackground.addSubview(uiviewNavBar)
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
-        
         btnBack.addTarget(self, action: #selector(self.actionDismissCurrentView(_:)), for: .touchUpInside)
-        
         uiviewNavBar.addSubview(btnBack)
-        
-        
-        let navBarTitle = UILabel(frame: CGRect(x: screenWidth/2-100, y: 28, width: 200, height: 27))
-        navBarTitle.font = UIFont(name: "AvenirNext-Medium",size: 20)
-        navBarTitle.textAlignment = NSTextAlignment.center
-        navBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
-        navBarTitle.text = tblTitle
-        uiviewNavBar.addSubview(navBarTitle)
-        
-    }
-    
-    //dismiss current view
-    func actionDismissCurrentView(_ sender: UIButton) {
-        self.dismiss(animated: false, completion: nil)
+        let labelNavBarTitle = UILabel(frame: CGRect(x: screenWidth/2-100, y: 28, width: 200, height: 27))
+        labelNavBarTitle.font = UIFont(name: "AvenirNext-Medium",size: 20)
+        labelNavBarTitle.textAlignment = NSTextAlignment.center
+        labelNavBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
+        labelNavBarTitle.text = strTableTitle
+        uiviewNavBar.addSubview(labelNavBarTitle)
     }
     
     
-    private func loadSearchBar(){
-        
-        SearchBar = UISearchBar()
-        SearchBar.frame = CGRect(x: 0,y: 64,width: screenWidth,height: 50)
-        SearchBar.placeholder = "Search Pins"
-        SearchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        
+    func loadSearchBar(){
+        schbarPin = UISearchBar()
+        schbarPin.frame = CGRect(x: 0,y: 0,width: screenWidth,height: 50)
+        schbarPin.placeholder = "Search Pins"
+        schbarPin.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         // hide cancel button
-        SearchBar.showsCancelButton = false
-        
+        schbarPin.showsCancelButton = false
         // hide bookmark button
-        SearchBar.showsBookmarkButton = false
-        
+        schbarPin.showsBookmarkButton = false
         // set Default bar status.
-        SearchBar.searchBarStyle = UISearchBarStyle.prominent
+        schbarPin.searchBarStyle = UISearchBarStyle.prominent
         // Get rid of the black line
-        SearchBar.isTranslucent = false
-        SearchBar.backgroundImage = UIImage()
-        
+        schbarPin.isTranslucent = false
+        schbarPin.backgroundImage = UIImage()
         // Add a view to cover the searchbar, this view is used for detect the click event
-        viewSearchBarCover = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 50))
-        viewSearchBarCover.backgroundColor = .clear
-        
-        self.view.addSubview(SearchBar)
-        SearchBar.addSubview(viewSearchBarCover)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDown(_:)))
-        
-        viewSearchBarCover.addGestureRecognizer(tap)
-        view.isUserInteractionEnabled = true
-        
-    }
-    
-    
-    private func loadTblResult(){
-        
-        viewTable = UIView(frame: CGRect(x: 0,y: 62,width: screenWidth,height: screenHeight-62))
-        viewTable.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        TblResult = UITableView(frame: CGRect(x: 0,y: 44,width: screenWidth,height: screenHeight-106), style: UITableViewStyle.plain)
-        TblResult.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        TblResult.register(PinTableViewCell.self, forCellReuseIdentifier: "PinCell")
-        TblResult.delegate = self
-        TblResult.dataSource = self
-        TblResult.showsVerticalScrollIndicator = false
-        TblResult.tableFooterView = UIView(frame: CGRect(x: 0,y: screenHeight-10,width: screenWidth,height: 10))
-        
-        //for auto layout
-        TblResult.rowHeight = UITableViewAutomaticDimension
-        TblResult.estimatedRowHeight = 340
-        
-        self.view.addSubview(viewTable)
-        
-        emptyTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptyTblImgView.image = #imageLiteral(resourceName: "empty_table_bg")
-        emptyTblImgView.isHidden = true
-        
-        emptySavedTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedtable_bg")
-        emptySavedTblImgView.isHidden = true
-        
-
-        viewTable.addSubview(emptyTblImgView)
-        viewTable.addSubview(emptySavedTblImgView)
-        viewTable.addSubview(TblResult)
-        loadSearchBar()
+        uiviewSearchBarCover = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 50))
+        uiviewSearchBarCover.backgroundColor = .clear
+        schbarPin.addSubview(uiviewSearchBarCover)
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDown(_:)))
+        uiviewSearchBarCover.addGestureRecognizer(tapRecognizer)
+        uiviewSearchBarCover.isUserInteractionEnabled = true
     }
     
     // Creat the search view when tap the fake searchbar
     func searchBarTapDown(_ sender: UITapGestureRecognizer) {
-        let searchVC = CollectionSearchViewController()
+        let searchVC = PinSearchViewController()
         searchVC.modalPresentationStyle = .overCurrentContext
         self.present(searchVC, animated: false, completion: nil)
-        searchVC.tableTypeName = tblTitle
-        searchVC.dataArray = pinDataArr
+        searchVC.strTableTypeName = strTableTitle
+        searchVC.arrData = arrPinData
+    }
+    
+    func loadtblPinsData(){
+        uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        tblPinsData = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
+        tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        tblPinsData.isHidden = true
+        tblPinsData.showsVerticalScrollIndicator = false
+        
+        //for auto layout
+        tblPinsData.rowHeight = UITableViewAutomaticDimension
+        tblPinsData.estimatedRowHeight = 340
+        
+        imgEmptyTbl = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
+        imgEmptyTbl.image = #imageLiteral(resourceName: "empty_bg")
+        labelEmptyTbl = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
+        labelEmptyTbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        labelEmptyTbl.numberOfLines = 3
+        labelEmptyTbl.font = UIFont(name: "AvenirNext-Medium",size: 18)
+        labelEmptyTbl.textAlignment = NSTextAlignment.left
+        labelEmptyTbl.textColor = UIColor.faeAppInputTextGrayColor()
+        imgEmptyTbl.addSubview(labelEmptyTbl)
+        uiviewBackground.addSubview(imgEmptyTbl)
+        uiviewBackground.addSubview(tblPinsData)
+        
+        // initialize the touch gesture
+        gesturerecognizerTouch = TouchGestureRecognizer(target: self, action: #selector(handleAfterTouch))
+        gesturerecognizerTouch.delegate = self
+        
+        loadSearchBar()
+        tblPinsData.tableHeaderView = schbarPin
     }
     
     override func didReceiveMemoryWarning() {
@@ -318,75 +187,57 @@ class PinsViewController: UIViewController, UISearchBarDelegate,UITableViewDataS
         // Dispose of any resources that can be recreated.
     }
     
-    
-    
     //以下代码是table的构造
-    
-    
     // Make the background color show through
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return pinDataArr.count
-        
-    }
     /* To add the space between the cells, we use indexPath.section to get the current cell index. And there is just one row in every section. When we want to get the index of cell, we use indexPath.section rather than indexPath.row */
     
     // Set the spacing between sections
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 10
-        
     }
     
+    // Only one row for one section in the table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return 1
     }
     
+    // PinTableViewCellDelegate protocol required function
+    func itemSwiped(indexCell: Int){}
     
-    //Customize each cell in the table
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for: indexPath) as! PinTableViewCell
-        cell.setValueForCell(_: pinDataArr[indexPath.section])
-        // Hide the separator line
-        cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-        cell.layer.cornerRadius = 10.0
-        cell.selectionStyle = .none
-        return cell
-        
-    }
+    func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){}
     
+    func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String){}
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        print("Your choice is \(pinDataArr[indexPath.section])")
-        
-    }
+    func toDoItemUnsaved(indexCell: Int, pinId: Int, pinType: String){}
     
+    func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String){}
     
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-//        return UITableViewCellEditingStyle.none
-//    }
-//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-//        return false
-//    }
-//    
-//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-
+    func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){}
     
-    
-    
-    
+    func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String){}
     
 }
 
-
+extension UITableView {
+    /// Perform a series of method calls that insert, delete, or select rows and sections of the table view.
+    /// This is equivalent to a beginUpdates() / endUpdates() sequence,
+    /// with a completion closure when the animation is finished.
+    /// Parameter update: the update operation to perform on the tableView.
+    /// Parameter completion: the completion closure to be executed when the animation is completed.
+    
+    func performUpdate(_ update: ()->Void, completion: (()->Void)?) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completion)
+        // Table View update on row / section
+        beginUpdates()
+        update()
+        endUpdates()
+        CATransaction.commit()
+    }
+}

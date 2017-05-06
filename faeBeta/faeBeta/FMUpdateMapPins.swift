@@ -37,7 +37,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin", animated: true)
+        clearMap(type: "pin", animated: false)
         let coorDistance = cameraDiagonalDistance()
         if self.canDoNextMapPinUpdate {
             self.canDoNextMapPinUpdate = false
@@ -51,7 +51,7 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
-        self.mapPinsArray.removeAll()
+        self.mapPinsMarkers.removeAll()
         self.mapPins.removeAll()
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
@@ -114,7 +114,7 @@ extension FaeMapViewController {
             pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
             pinMap.zIndex = 1
             pinMap.map = self.faeMapView
-            self.mapPinsArray.append(pinMap)
+            self.mapPinsMarkers.append(pinMap)
             let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
                 icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
@@ -184,7 +184,7 @@ extension FaeMapViewController {
             pinMap.zIndex = 1
             pinMap.appearAnimation = GMSMarkerAnimation.none
             pinMap.map = self.faeMapView
-            self.mapPinsArray.append(pinMap)
+            self.mapPinsMarkers.append(pinMap)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                 self.tempMarker.removeFromSuperview()
             })

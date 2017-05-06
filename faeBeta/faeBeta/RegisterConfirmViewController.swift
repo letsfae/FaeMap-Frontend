@@ -14,7 +14,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     // MARK: - Variables
     
     var faeUser: FaeUser!
-    var isFirstTimeLogin = false
+//    var isFirstTimeLogin = false
     
     // MARK: View Lifecycle
     
@@ -151,7 +151,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                         
                     }
                     else {
-                        self.isFirstTimeLogin = true
+//                        self.isFirstTimeLogin = true
                         firebaseWelcome()
                         print("[loginUser] is first time login!")
                     }
@@ -173,9 +173,9 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification",bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController") , animated: true)
             } else {
                 self.dismiss(animated: true, completion: {
-                    if self.isFirstTimeLogin {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
-                    }
+//                    if self.isFirstTimeLogin {
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "isFirstLogin"), object: nil)
+//                    }
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 })
             }

@@ -59,6 +59,14 @@ class FaeMap {
         }
     }
     
+    // Get pin statistics
+    func getPinStatistics(completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("pins/statistics", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     
     func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
         if type != nil && pinId != nil {

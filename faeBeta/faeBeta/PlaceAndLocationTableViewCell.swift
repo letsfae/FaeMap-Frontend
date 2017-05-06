@@ -9,15 +9,14 @@ import UIKit
 
 class PlaceAndLocationTableViewCell: UITableViewCell {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     
     var imgview : UIImageView!
-    var name : UILabel!
-    var address : UILabel!
-    var distance : UILabel!
+    var lblName : UILabel!
+    var lblAddress : UILabel!
+    var lblDistance : UILabel!
+    var lblMemo : UILabel!
     var btnSelected: UIButton!
-//    var sparator: UIView!
+    //    var sparator: UIView!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -31,60 +30,74 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
     func setUpUI() {
         
         imgview = UIImageView()
-        //showImage!.layer.masksToBounds = true
         self.addSubview(imgview)
-        //Add the constraints
-        self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
-        self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
         
+        lblName = UILabel()
+        lblName.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        lblName.textAlignment = NSTextAlignment.left
+        lblName.textColor = UIColor.faeAppInputTextGrayColor()
+        self.addSubview(lblName)
         
-        name = UILabel()
-        name.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        name.textAlignment = NSTextAlignment.left
-        name.textColor = UIColor.faeAppInputTextGrayColor()
-        self.addSubview(name)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: name)
-        self.addConstraintsWithFormat("V:|-18-[v0(20)]", options: [], views: name)
+        lblDistance = UILabel()
+        lblDistance.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        lblDistance.textAlignment = NSTextAlignment.right
+        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        self.addSubview(lblDistance)
         
-        distance = UILabel()
-        distance.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        distance.textAlignment = NSTextAlignment.right
-        distance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        self.addSubview(distance)
-        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: distance)
-        self.addConstraintsWithFormat("V:|-34-[v0(22)]-34-|", options: [], views: distance)
+        lblAddress = UILabel()
+        lblAddress.font = UIFont(name: "AvenirNext-Medium",size: 12)
+        lblAddress.textAlignment = NSTextAlignment.left
+        lblAddress.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAddress.lineBreakMode = NSLineBreakMode.byWordWrapping
+        lblAddress.numberOfLines = 0;
+        self.addSubview(lblAddress)
+        
+        lblMemo = UILabel()
+        lblMemo.font = UIFont(name: "AvenirNext-DemiBoldItalic",size: 12)
+        lblMemo.textAlignment = NSTextAlignment.left
+        lblMemo.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMemo.lineBreakMode = NSLineBreakMode.byWordWrapping
+        lblMemo.numberOfLines = 0;
+        self.addSubview(lblMemo)
 
-        address = UILabel()
-        address.font = UIFont(name: "AvenirNext-Medium",size: 12)
-        address.textAlignment = NSTextAlignment.left
-        address.textColor = UIColor.faeAppTimeTextBlackColor()
-        address.lineBreakMode = NSLineBreakMode.byWordWrapping
-        address.numberOfLines = 0;
-        self.addSubview(address)
-        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: address)
-        self.addConstraintsWithFormat("V:|-40-[v0(38)]", options: [], views: address)
-        
         btnSelected = UIButton()
         btnSelected.layer.cornerRadius = 11
         btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
         btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
         btnSelected.layer.borderWidth = 2
         btnSelected.isHidden = true
-        
         self.addSubview(btnSelected)
-        self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
-        self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
-        
-        
     }
     
     func setValueForCell(_ location: [String: AnyObject]) {
         /*API 写完后再写这里*/
-//        name?.text = location[0]
-//        address?.text = location[1]
-//        distance?.text = location[2]
-        /*API 写完后再写这里*/
+        lblName?.text = location["name"] as! String?
+        lblAddress?.text = location["address"] as! String?
+        lblDistance?.text = location["distance"] as! String?
+        lblMemo?.text = location["memo"] as! String?
         imgview?.image = UIImage(named: "Location")
+        /*API 写完后再写这里*/
+
+        self.removeConstraints(self.constraints)
+        self.addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgview)
+        self.addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgview)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: lblName)
+        self.addConstraintsWithFormat("H:[v0(80)]-11-|", options: [], views: lblDistance)
+        self.addConstraintsWithFormat("H:|-93-[v0(200)]", options: [], views: lblAddress)
+        
+        self.addConstraintsWithFormat("H:|-93-[v0]-47-|", options: [], views: lblMemo)
+        
+        self.addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)
+        
+        self.addConstraintsWithFormat("H:[v0(22)]-15-|", options: [], views: btnSelected)
+        self.addConstraintsWithFormat("V:|-35-[v0(22)]", options: [], views: btnSelected)
+        self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: lblName)
+        if lblMemo?.text == "" {
+            self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: lblAddress)
+        }else{
+            self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: lblAddress,lblMemo)
+        }
+
     }
     
     override func awakeFromNib() {
@@ -92,7 +105,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         //print("啦啦啦啦啦啦啦啦啦啦啦")

@@ -59,8 +59,35 @@ extension String {
         // convert to required string
         return "Invalid Date"
     }
+    
+    func formatLeftOnMap(DurationOnMap : Int) -> String {
+        // convert to NSDate
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        let myDate = dateFormatter.date(from: self)
+        if myDate != nil {
+            let elapsed = Int(Date().timeIntervalSince(myDate!))
+            if elapsed >= DurationOnMap * 3600 {
+                return "Map Time Expired"
+            }
+            else if (DurationOnMap * 3600 - elapsed) >= 3600 {
+                let hoursLeft = Int((DurationOnMap * 3600 - elapsed)/3600)
+                return "\(hoursLeft+1) hours left on Map"
+            }
+            else if (DurationOnMap * 3600 - elapsed) >= 60 {
+                let minsLeft = Int((DurationOnMap * 3600 - elapsed)/60)
+                return "\(minsLeft+1) mins left on Map"
+            }
+            else if (DurationOnMap * 3600 - elapsed) >= 0 {
+                let secsLeft = Int((DurationOnMap * 3600 - elapsed))
+                return "\(secsLeft+1) seconds left on Map"
+            }
+        }
+        return "Map Time Expired"
+    }
+    
     func formatNSDate() -> String {
-        
         // convert to NSDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
@@ -73,9 +100,7 @@ extension String {
         if localTimeZone != nil {
             formatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
         }
-        
         return formatter.string(from: myDate!)
-        
     }
     
     func isNewPin() -> Bool {

@@ -12,6 +12,13 @@ import CoreLocation
 
 extension CreateCommentPinViewController {
     
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func actionAnonymous(_ sender: UIButton) {
         if sender.tag == 0 {
             sender.tag = 1
@@ -30,18 +37,25 @@ extension CreateCommentPinViewController {
         let fromValue = 1.0-toValue
         
         UIView.animate(withDuration: 0.4) {
+            
+        }
+        
+        UIView.animate(withDuration: 0.4, animations: { 
             self.textViewForCommentPin.alpha = fromValue
             self.uiviewSelectLocation.alpha = fromValue
             self.uiviewMoreOptions.alpha = fromValue
             self.labelCreateCommentPinTitle.alpha = fromValue
             self.buttonCommentSubmit.alpha = fromValue
-            self.buttonAnonymous.alpha = fromValue
             
             self.labelCommentPinMoreOptions.alpha = toValue
             self.uiviewDuration.alpha = toValue
             self.uiviewInterRadius.alpha = toValue
             self.uiviewPinPromot.alpha = toValue
             self.buttonBack.alpha = toValue
+        }) { (_) in
+            if toValue == 1.0 {
+                self.showAlert(title: "This feature is coming soon in the next version!", message: "")
+            }
         }
     }
     
@@ -56,7 +70,7 @@ extension CreateCommentPinViewController {
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCCP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
@@ -75,9 +89,10 @@ extension CreateCommentPinViewController {
         
         let commentContent = textViewForCommentPin.text
         
-        if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+        if labelSelectLocationContent.text == "Current Map View" { //Changed by Yao cause the default text is "Current Map View"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         if commentContent == "" {
@@ -103,7 +118,7 @@ extension CreateCommentPinViewController {
                         let lat = CLLocationDegrees(latDouble!)
                         let long = CLLocationDegrees(longDouble!)
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendCommentGeoInfo(pinID: "\(getMessageID)", latitude: lat, longitude: long)
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "comment", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                         })
                     }
                 }

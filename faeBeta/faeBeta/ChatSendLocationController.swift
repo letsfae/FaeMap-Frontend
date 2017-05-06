@@ -143,13 +143,13 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     func configureFaeSearchController() {
         searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
         // quick fix for unwant shadow in search bar
         
         if(UIScreen.main.bounds.height == 736) {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
         } else {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppRedColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
         }
 
         faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
@@ -254,56 +254,39 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView == self.tblSearchResults){
-            return placeholder.count
-        }
-        else{
-            return 0
-        }
+        return placeholder.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if(tableView == self.tblSearchResults){
-            let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForAddressSearch", for: indexPath) as! FaeCellForAddressSearch
-            cell.labelCellContent.text = placeholder[indexPath.row].attributedFullText.string
-            cell.separatorInset = UIEdgeInsets.zero
-            cell.layoutMargins = UIEdgeInsets.zero
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForAddressSearch", for: indexPath) as! FaeCellForMainScreenSearch
+        cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
+        if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
+            cell.labelSubTitle.text = secondaryText.string
         }
-        else{
-            return UITableViewCell()
-        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(tableView == self.tblSearchResults){
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-                (place, error) -> Void in
-                // Get place.coordinate
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animate(to: camera)
-                    }
-                })
+        let placesClient = GMSPlacesClient()
+        placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
+            (place, error) -> Void in
+            // Get place.coordinate
+            GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
+                (response, error) -> Void in
+                if let selectedAddress = place?.coordinate {
+                    let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
+                    self.faeMapView.animate(to: camera)
+                }
             })
-            self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-            self.faeSearchController.faeSearchBar.resignFirstResponder()
-            self.searchBarTableHideAnimation()
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
+        })
+        self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
+        self.faeSearchController.faeSearchBar.resignFirstResponder()
+        self.searchBarTableHideAnimation()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(tableView == self.tblSearchResults){
-            return 48.0
-        }
-            
-        else{
-            return 0
-        }
+        return 61 * screenWidthFactor
     }
     
     func searchBarTableHideAnimation() {

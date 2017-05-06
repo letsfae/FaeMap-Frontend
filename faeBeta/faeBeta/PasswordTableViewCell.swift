@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PasswordCellProtocol {
+protocol PasswordCellProtocol: class {
     func textViewShouldReturn(_ indexPath: IndexPath)
     func textViewDidBeginEditing(_ indexPath: IndexPath)
     func textViewDidChange(_ text: String, indexPath: IndexPath)
@@ -23,7 +23,7 @@ class PasswordTableViewCell: UITableViewCell {
     
     // MARK: - Variables
     
-    var delegate: PasswordCellProtocol?
+    weak var delegate: PasswordCellProtocol?
     var indexPath: IndexPath!
     var isCharacterLimit = true
     var textEntered: String = ""

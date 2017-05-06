@@ -16,7 +16,6 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
      *  2 == tag
      */
     var reportType: Int = 0
-    var isPlacePin = false
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -27,12 +26,19 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     var textViewReportContent: UITextView!
     var buttonSendReport: UIButton!
     var lableTextViewPlaceholder: UILabel!
+    var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         loadBasicItems()
         addObservers()
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        preStatusBarStyle = UIApplication.shared.statusBarStyle
         UIApplication.shared.statusBarStyle = .default
     }
 
@@ -43,9 +49,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if isPlacePin {
-            UIApplication.shared.statusBarStyle = .lightContent
-        }
+        UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
     override func didReceiveMemoryWarning() {

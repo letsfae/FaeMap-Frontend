@@ -165,6 +165,7 @@ class FaeUser : NSObject {
         session_id = -1
         user_id = -1
         is_Login = 0
+        userStatus = 1
         let shareAPI = LocalStorageManager()
         shareAPI.saveInt("is_Login", value: 0)
     }

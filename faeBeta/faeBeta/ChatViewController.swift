@@ -10,9 +10,10 @@ import UIKit
 import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
-//import Photos
+import Photos
 import MobileCoreServices
 import CoreMedia
+import GoogleMaps
 import GooglePlaces
 import AVFoundation
 
@@ -35,7 +36,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //
     var showAvatar : Bool = true//false not show avatar , true show avatar
     var firstLoad : Bool?// whether it is the first time to load this room.
-    var withUser : FaeWithUser?
+    
+    //Bryan
+    //var withUser : FaeWithUser?
+    var realmWithUser : RealmUser?
+    //ENDBryan
 
     var withUserId : String? // the user id we chat to
     var withUserName : String? // the user name we chat to
@@ -103,43 +108,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // locationExtendView
     var locExtendView = LocationExtendView()
     
-    //typing indicator
-    //    var userIsTypingRef = firebase.database.reference().child("typingIndicator")
-    //    var userTypingQuery : FIRDatabaseQuery!
-    //    private var localTyping = false
-    //    var isTyping : Bool {
-    //        get {
-    //            return localTyping
-    //        }
-    //        set {
-    //            localTyping = newValue
-    //            userIsTypingRef.setValue(newValue)
-    //        }
-    //    }
-    
-    
-    fileprivate func observeTyping() {
-        //        print("the senderId is \(self.senderId)")
-        //        userIsTypingRef = userIsTypingRef.child(self.senderId)
-        //        userIsTypingRef.onDisconnectRemoveValue()
-        //        userTypingQuery = firebase.database.reference().child("typingIndicator").queryOrderedByChild(self.senderId)
-        //        userTypingQuery = userIsTypingRef.queryOrderedByKey().queryEqualToValue(withUser?.objectId)
-        //        userTypingQuery.observeEventType(.Value) { (snapshot : FIRDataSnapshot) in
-        //            if snapshot.exists() {
-        //                print("it is exist")
-        //                print(snapshot)
-        //                if snapshot.value as! Bool {
-        //                    self.showTypingIndicator = true
-        //                    self.scrollToBottomAnimated(true)
-        //                } else {
-        //                    self.showTypingIndicator = false
-        //                }
-        //            } else {
-        //                print("it is not exist")
-        //                self.showTypingIndicator = false
-        //            }
-        //        }
-    }
+    fileprivate func observeTyping() {}
     
     // MARK: - view life cycle
     
@@ -150,17 +119,25 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         removeObservers()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        print("view did disappear")
+        self.toolbarContentView.clearToolBarViews()
+//        messages = []
+//        objects = []
+//        loaded = []
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("view did appear")
+        print("set up tool bar views")
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
-        //miniLocation.isHidden = true
-        //view.addSubview(miniLocation)
         self.view.addSubview(locExtendView)
-
     }
     
     override func viewDidLoad() {
+        print("view did load")
         super.viewDidLoad()
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -169,7 +146,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = user_id.stringValue
-        self.senderDisplayName = withUser!.userName
+        //Bryan
+        self.senderDisplayName = realmWithUser!.userName
+        //ENDBryan
         self.inputToolbar.contentView.textView.delegate = self
         
         //load firebase messages
@@ -192,8 +171,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
+        print("view will appear")
         super.viewWillAppear(true)
-        
         addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
@@ -206,6 +185,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             roomRef?.removeAllObservers()
         }
     }
+    
+    func navigationBarPopView() {
+        self.toolbarContentView.clearToolBarViews()
+//        self.navigationController?.popViewController(animated:)
+    }
+    
     // MARK: - setup
     
     private func navigationBarSet() {
@@ -224,7 +209,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationItem.leftBarButtonItem = leftButton
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
-        titleLabel.text = withUser!.userName
+        //Bryan
+        titleLabel.text = realmWithUser!.userName
+        //ENDBryan
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
@@ -331,6 +318,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.actionLeaveLikeButton(_:)), for:  .touchDragOutside)
         
     }
     
@@ -369,7 +357,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             
         }, completion:{ (Bool) -> Void in
         })
-        scrollToBottom(true)
+        //scrollToBottom(true)
         self.inputToolbar.contentView.textView.becomeFirstResponder()
         
     }
@@ -395,6 +383,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func showLibrary() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        if(status != .authorized) {
+            print("not authorized!")
+            showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+            return
+        }
         resetToolbarButtonIcon()
         buttonImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
@@ -413,7 +407,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func sendLocation() {
         resetToolbarButtonIcon()
-        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())//closeToolbarContentView()
+        buttonLocation.setImage(UIImage(named : "locationChosen"), for: UIControlState())
+        //closeToolbarContentView()
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         self.toolbarContentView.showMiniLocation()
         moveUpInputBarContentView(animated)
@@ -526,8 +521,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
-    
     //MARK: - move input bars
     func moveUpInputBarContentView(_ animated: Bool)
     {
@@ -548,7 +541,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.locExtendView.frame.origin.y = screenHeight - 271 - 64 - 76 - 90
             self.collectionView.isScrollEnabled = true
         }
-        scrollToBottom(animated)
+        //scrollToBottom(animated)
     }
     
     func moveUpInputBar() {
@@ -609,8 +602,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private func createAvatars(_ avatars : NSMutableDictionary?) {
         
         let currentUserAvatar = avatarDic[user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[user_id] , highlightedImage: avatarDic[user_id], placeholderImage: avatarDic[user_id]) :JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder") , diameter: 70)
-        let withUserAvatar = avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)], highlightedImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)], placeholderImage: avatarDic[NSNumber(value: Int(withUser!.userId)! as Int)]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = [user_id.stringValue : currentUserAvatar!, withUser!.userId : withUserAvatar!]
+        //Bryan
+        let withUserAvatar = avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)], highlightedImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)], placeholderImage: avatarDic[NSNumber(value: Int(realmWithUser!.userID)! as Int)]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        avatarDictionary = [user_id.stringValue : currentUserAvatar!, realmWithUser!.userID : withUserAvatar!]
+        //ENDBryan
         // need to check if collectionView exist before reload
     }
     
@@ -620,7 +615,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //get the last item index
         if item >= 0 {
             let lastItemIndex = IndexPath(item: item, section: 0)
-            self.collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.top , animated: animated)
+            self.collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.bottom , animated: animated)
         }
     }
     
@@ -675,7 +670,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
         }
-        animateHeart()
+        //animateHeart()
         if !userJustSentHeart{
             sendMessage(sticker : #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true ,date: Date())
             userJustSentHeart = true
@@ -683,13 +678,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc private func actionHoldingLikeButton(_ sender: UIButton) {
-        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
-        
+        if(animatingHeartTimer == nil) {
+            animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
+        }
+    }
+    
+    @objc private func actionLeaveLikeButton(_ sender: UIButton) {
+        if(animatingHeartTimer != nil) {
+            animatingHeartTimer.invalidate()
+            animatingHeartTimer = nil;
+        }
     }
     
     @objc private func animateHeart() {
         animatingHeart = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
         animatingHeart.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+        animatingHeart.layer.opacity = 0
         self.inputToolbar.contentView.addSubview(animatingHeart)
         
         let randomX = CGFloat(arc4random_uniform(150))
@@ -804,7 +808,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func animationDidStart(_ anim: CAAnimation) {
         if anim.duration == 1{
             animHeartDic[anim] = animatingHeart
-            
             let seconds = 0.5
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)

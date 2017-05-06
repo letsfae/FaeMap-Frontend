@@ -19,13 +19,13 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
         "Accept": headerAccept,
     ]
     
-    if authentication != nil{
+    if authentication != nil {
         for(key,value) in authentication! {
             headers[key] = value as? String
         }
     }
     
-    if parameter != nil{
+    if parameter != nil {
         let imageData = parameter!["file"] as! Data
         let mediaType = parameter!["type"] as! String
         Alamofire.upload(
@@ -42,15 +42,15 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
                         print(response.response.debugDescription)
-                        if response.response != nil{
+                        if response.response != nil {
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode, resMess)
                             }
-                            else{
+                            else {
                                 completion(response.response!.statusCode, "no Json body")
                             }
                         }
-                        else{
+                        else {
                             completion(-500, "Internet error")
                         }
                         

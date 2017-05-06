@@ -7,7 +7,22 @@
 //
 
 import RealmSwift
-import SDWebImage
+
+//Bryan
+class RealmUser: Object {
+    dynamic var userName: String = ""
+    dynamic var userNickName: String? = nil
+    dynamic var userID: String = ""
+    //Avatar has not been added to local storage yet
+    dynamic var userSmallAvatar: NSData? = nil
+    dynamic var smallAvatarEtag: String? = nil
+    dynamic var userLargeAvatar: NSData? = nil
+    dynamic var largeAvatarEtag: String? = nil
+    override static func primaryKey() -> String? {
+        return "userID"
+    }
+}
+//ENDBryan
 
 class FileObject: Object {
     dynamic var fileId = -999
@@ -31,6 +46,7 @@ class NewFaePin: Object {
     dynamic var pinId = -999
 }
 
+// ready to be deleted
 class OPinListElem: Object { // Opened Pin List Element
     dynamic var pinTypeId = ""
     dynamic var pinContent = "" // content or place title

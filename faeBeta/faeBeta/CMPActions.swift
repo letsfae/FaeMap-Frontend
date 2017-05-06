@@ -9,8 +9,16 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
+import Photos
 
 extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     func actionAddMedia(_ sender: UIButton) { // Add or Cancel Adding
         if sender.tag == 0 {
@@ -49,9 +57,21 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     
     func actionTakePhoto(_ sender: UIButton) {
         let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
         imagePicker.sourceType = .camera
-        self.present(imagePicker, animated: true, completion: nil)
+        imagePicker.delegate = self
+        var photoStatus = PHPhotoLibrary.authorizationStatus()
+        if photoStatus != .authorized {
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                photoStatus = status
+                if photoStatus != .authorized {
+                    self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                    return
+                }
+                self.present(imagePicker, animated: true, completion: nil)
+            })
+        } else {
+            self.present(imagePicker, animated: true, completion: nil)
+        }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
@@ -87,25 +107,44 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.showAlert(title: "You can only have up to 6 items for your story", message: "please try again")
             return
         }
-        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-        imagePicker.imageDelegate = self
-        imagePicker.isCSP = true
-        imagePicker._maximumSelectedPhotoNum = numMediaLeft
-        self.present(nav, animated: true, completion: {
-            UIApplication.shared.statusBarStyle = .default
-        })
+        var photoStatus = PHPhotoLibrary.authorizationStatus()
+        if photoStatus != .authorized {
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                photoStatus = status
+                if photoStatus != .authorized {
+                    self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                    return
+                }
+                let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                imagePicker.imageDelegate = self
+                imagePicker.isCSP = false
+                imagePicker._maximumSelectedPhotoNum = numMediaLeft
+                self.present(nav, animated: true, completion: {
+                    UIApplication.shared.statusBarStyle = .default
+                })
+            })
+        } else {
+            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            imagePicker.imageDelegate = self
+            imagePicker.isCSP = true
+            imagePicker._maximumSelectedPhotoNum = numMediaLeft
+            self.present(nav, animated: true, completion: {
+                UIApplication.shared.statusBarStyle = .default
+            })
+        }
     }
     
     func actionShowMoreOptions(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.4) {
+        
+        UIView.animate(withDuration: 0.4, animations: { 
             self.uiviewSelectLocation.alpha = 0
             self.uiviewMoreOptions.alpha = 0
             self.uiviewAddDescription.alpha = 0
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -114,6 +153,8 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelMediaPinMoreOptions.alpha = 1
             self.tableMoreOptions.alpha = 1
             self.buttonBack.alpha = 1
+        }) { (_) in
+            self.showAlert(title: "This feature is coming soon in the next version!", message: "")
         }
     }
     
@@ -125,7 +166,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
             self.labelCreateMediaPinTitle.alpha = 0
             self.buttonMediaSubmit.alpha = 0
             self.collectionViewMedia.alpha = 0
-            self.buttonAnonymous.alpha = 0
             if !self.buttonSelectMedia.isHidden {
                 self.buttonSelectMedia.alpha = 0
                 self.buttonTakeMedia.alpha = 0
@@ -148,7 +188,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 self.labelCreateMediaPinTitle.alpha = 1
                 self.buttonMediaSubmit.alpha = 1
                 self.collectionViewMedia.alpha = 1
-                self.buttonAnonymous.alpha = 1
                 if self.selectedMediaArray.count > 0 {
                     self.buttonAddMedia.alpha = 1
                     self.buttonSelectMedia.alpha = 0
@@ -194,14 +233,14 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }), completion: { (done: Bool) in
             if done {
                 self.dismiss(animated: false, completion: nil)
-                self.delegate?.backFromCMP(back: true)
+                self.delegate?.backFromPinCreating(back: true)
             }
         })
     }
     
     func actionCloseSubmitPins(_ sender: UIButton!) {
         self.dismiss(animated: false, completion: {
-            self.delegate?.closePinMenuCMP(close: true)
+            self.delegate?.closePinMenu(close: true)
         })
     }
     
@@ -219,6 +258,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }
         sender.tag = 0
         activityIndicator = UIActivityIndicatorView()
+        activityIndicator.layer.zPosition = 101
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
@@ -286,7 +326,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         }
     }
     
-    private func submitMediaPin(fileIDs: String) {
+    fileprivate func submitMediaPin(fileIDs: String) {
         
         let mediaContent = textViewForMediaPin.text
         
@@ -295,9 +335,10 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         var submitLatitude = selectedLatitude
         var submitLongitude = selectedLongitude
         
-        if labelSelectLocationContent.text == "Choose Location" { //Changed by Yao cause the default text is "Choose Location"
-            submitLatitude = "\(currentLatitude)"
-            submitLongitude = "\(currentLongitude)"
+        if labelSelectLocationContent.text == "Current Map View" { //Changed by Yao cause the default text is "Current Map View"
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         postSingleMedia.whereKey("file_ids", value: fileIDs)
@@ -332,7 +373,7 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                     let long = CLLocationDegrees(longDouble!)
                     self.dismiss(animated: false, completion: {
                         self.activityIndicator.stopAnimating()
-                        self.delegate?.sendMediaGeoInfo(mediaID: "\(mediaID)", latitude: lat, longitude: long)
+                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", type: "media", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
                     })
                 }
             }
@@ -342,12 +383,5 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 print("[submitMediaPin] Cannot get media ID")
             }
         }
-    }
-    
-    private func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }

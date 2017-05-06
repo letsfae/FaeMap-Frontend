@@ -19,7 +19,7 @@ extension PinMenuViewController {
     }
     
     // MARK: -- Pins Creating Selections View
-    private func loadPinSelections() {
+    fileprivate func loadPinSelections() {
         // initial position of buttons for cool animation
         let buttonCenterX_1: CGFloat = 79/414 * screenWidth
         let buttonCenterX_2: CGFloat = 208/414 * screenWidth
@@ -34,7 +34,7 @@ extension PinMenuViewController {
         uiviewPinSelections = UIView(frame: blurViewMap.bounds)
         
         buttonMedia   = createMenuButton(buttonCenterX_1, y: buttonCenterY_1, picName: "submit_media")
-        buttonChats   = createMenuButton(buttonCenterX_2, y: buttonCenterY_1, picName: "submit_chats")
+        btnChats   = createMenuButton(buttonCenterX_2, y: buttonCenterY_1, picName: "submit_chats")
         buttonComment = createMenuButton(buttonCenterX_3, y: buttonCenterY_1, picName: "submit_comment")
         /*
          buttonEvent   = createMenuButton(buttonCenterX_1, y: buttonCenterY_2, picName: "submit_event")
@@ -50,7 +50,7 @@ extension PinMenuViewController {
         buttonComment.addTarget(self,
                                 action: #selector(PinMenuViewController.actionCreateCommentPin(_:)),
                                 for: .touchUpInside)
-        buttonChats.addTarget(self,
+        btnChats.addTarget(self,
                                 action: #selector(PinMenuViewController.actionCreateChatPin(_:)),
                                 for: .touchUpInside)
         

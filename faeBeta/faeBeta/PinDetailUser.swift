@@ -29,7 +29,7 @@ struct PinDetailUser {
     init(json: JSON) {
         self.userId = 0
         self.displayName = json["nick_name"].stringValue
-        self.userName = ""
+        self.userName = json["user_name"].stringValue
         self.showGender = json["show_gender"].boolValue
         self.gender = json["gender"].stringValue
         self.showAge = json["show_age"].boolValue

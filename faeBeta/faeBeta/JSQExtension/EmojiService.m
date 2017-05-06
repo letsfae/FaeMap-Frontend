@@ -7,7 +7,7 @@
 //
 
 #import "EmojiService.h"
-#import "faeBeta-swift.h"
+#import "faeBeta-Swift.h"
 
 @implementation EmojiService
 

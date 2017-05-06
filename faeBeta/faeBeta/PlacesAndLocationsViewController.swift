@@ -8,32 +8,36 @@
 
 import UIKit
 
-class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate {
-    
+class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,MemoDelegate {
+    var boolFirstAppear = true
+    //background view
+    var uiviewBackground: UIView!
     // Table bar
-    var viewTable: UIView!
     var TblResult: UITableView!
-    var viewSearchBarCover: UIView! //Transparent view to cover the searchbar for detect the click event
-    var SearchBar: UISearchBar!
+    var uiviewSearchBarCover: UIView! //Transparent view to cover the searchbar for detect the click event
+    var searchBar: UISearchBar!
     var emptyTblImgView: UIImageView!
     var emptySavedTblImgView: UIImageView!
     var arrSelectedItem = [Int]() // Store the id of selected cell when the table is editing
     
     // Edit bar, show when the table is editable
-    var viewEditbar:UIView!
+    var uiviewEditbar:UIView!
     var btnShare: UIButton!
+    var btnMemo: UIButton!
     var btnRemove: UIButton!
     
+    //searchbar
+    var tap : UITapGestureRecognizer!
+    var tapdisable : UITapGestureRecognizer!
     
     //Nagivation Bar Init******
     var uiviewNavBar: UIView!
-    var tblTitle : String!
+    var strTableTitle : String!
     var btnEdit : UIButton!
     
     //The set of pin data
     
-    var placeAndLocationDataArr = [[String: AnyObject]]()
-    //[["325 W ADAMS BLVD","LOS ANGELES, CA 90007 UNITED STATES","< 0.1 km"],["3335 S Figueroa St","LOS ANGELES, CA 90006 UNITED STATES","1.6 km"],["925 W 34th St","LOS ANGELES, CA 90089 UNITED STATES","2.2 km"],["saved place test","LOS ANGELES, CA 90007 UNITED STATES","> 999 km"],["325 W ADAMS BLVD","LOS ANGELES, CA 90007 UNITED STATES","< 0.1 km"]]
+    var placeAndLocationDataArr = [["name":"325 W ADAMS BLVD","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"< 0.1 km", "memo":"WOWOWOWOWOWOWOWOWOWOWOWOWWOWOWOWOWOWOWOWOWOWOWOWOW"],["name":"3335 S Figueroa St","address":"LOS ANGELES, CA 90006 UNITED STATES","distance":"1.6 km", "memo":""],["name":"925 W 34th St","address":"LOS ANGELES, CA 90089 UNITED STATES","distance":"2.2 km", "memo":""],["name":"saved place test","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"> 999 km", "memo":""],["name":"325 W ADAMS BLVD","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"< 0.1 km", "memo":""],["name":"325 W ADAMS BLVD","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"< 0.1 km", "memo":""],["name":"3335 S Figueroa St","address":"LOS ANGELES, CA 90006 UNITED STATES","distance":"1.6 km", "memo":""],["name":"925 W 34th St","address":"LOS ANGELES, CA 90089 UNITED STATES","distance":"2.2 km", "memo":""],["name":"saved place test saved place test saved place test","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"> 999 km", "memo":""],["name":"325 W ADAMS BLVD","address":"LOS ANGELES, CA 90007 UNITED STATES","distance":"< 0.1 km", "memo":""]]
     
     
     override func viewDidLoad() {
@@ -43,7 +47,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         loadNavBar()
         loadEditBar()
         
-        switch tblTitle {
+        switch strTableTitle {
             
         case "Saved Places":
             getSavedPlaces()
@@ -54,8 +58,38 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         default: break
         }
         
-
+        
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        if(boolFirstAppear){
+            super.viewDidAppear(animated)
+            UIView.animate(withDuration: 0.3, animations: ({
+                self.uiviewBackground.frame.origin.x = 0
+            }))
+            boolFirstAppear = false
+            
+        }
+    }
+    
+    
+    
+    // Dismiss current View
+    func actionDismissCurrentView(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.uiviewBackground.frame.origin.x = screenWidth
+        }), completion: { (done: Bool) in
+            if done {
+                self.dismiss(animated: false, completion: nil)
+            }
+        })
+        
+    }
+    
+    
     
     //注释掉 留着之后改成location 与 place的获取
     // get the Saved Places
@@ -131,19 +165,19 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         //        }
         
         //API 能用后删掉下面的代码
-        if(placeAndLocationDataArr.count != 0){
+        if placeAndLocationDataArr.count != 0 {
             btnEdit.isHidden = false
         }
         
         
-        if(self.placeAndLocationDataArr.count == 0){
+        if self.placeAndLocationDataArr.count == 0 {
             self.emptySavedTblImgView.isHidden = false
-            self.SearchBar.isHidden = true
+            self.searchBar.isHidden = true
             self.TblResult.isHidden = true
         }
         else{
             self.emptySavedTblImgView.isHidden = true
-            self.SearchBar.isHidden = false
+            self.searchBar.isHidden = false
             self.TblResult.isHidden = false
         }
         
@@ -223,52 +257,71 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         
         
         //API 能用后删掉下面的代码
-        if(placeAndLocationDataArr.count != 0){
+        if placeAndLocationDataArr.count != 0 {
             btnEdit.isHidden = false
         }
         
         
-        if(self.placeAndLocationDataArr.count == 0){
+        if self.placeAndLocationDataArr.count == 0 {
             self.emptySavedTblImgView.isHidden = false
-            self.SearchBar.isHidden = true
+            self.searchBar.isHidden = true
             self.TblResult.isHidden = true
         }
         else{
             self.emptySavedTblImgView.isHidden = true
-            self.SearchBar.isHidden = false
+            self.searchBar.isHidden = false
             self.TblResult.isHidden = false
         }
         
-        
-        
     }
     
-    
     func loadEditBar(){
-        viewEditbar = UIView(frame: CGRect(x: 0, y: screenHeight-56, width: screenWidth, height: 56))
-        viewEditbar.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        self.view.addSubview(viewEditbar)
+        uiviewEditbar = UIView(frame: CGRect(x: 0, y: screenHeight-56, width: screenWidth, height: 56))
+        uiviewEditbar.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewBackground.addSubview(uiviewEditbar)
         
-        btnShare = UIButton(frame: CGRect(x: 4, y: 9, width: 201, height: 38))
+        btnShare = UIButton()
         btnShare.setTitle("Share", for: .normal)
         btnShare.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 18)
         btnShare.setTitleColor(UIColor.white, for: .normal)
         btnShare.backgroundColor = UIColor(red:174/255, green:226/255, blue:118/255,alpha:1)
         btnShare.layer.cornerRadius = 8
         
-        btnRemove = UIButton(frame: CGRect(x: screenWidth-4-201, y: 9, width: 201, height: 38))
+        btnRemove = UIButton()
         btnRemove.setTitle("Remove", for: .normal)
         btnRemove.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 18)
         btnRemove.setTitleColor(UIColor.white, for: .normal)
         btnRemove.backgroundColor = UIColor.faeAppRedColor()
         btnRemove.layer.cornerRadius = 8
         
+        btnMemo = UIButton()
+        btnMemo.setTitle("Memo", for: .normal)
+        btnMemo.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 18)
+        btnMemo.setTitleColor(UIColor.white, for: .normal)
+        btnMemo.backgroundColor = UIColor.faeAppPurpleColor()
+        btnMemo.layer.cornerRadius = 8
+        
+        
         btnShare.addTarget(self, action: #selector(self.actionBtnShare(_:)), for: .touchUpInside)
         btnRemove.addTarget(self, action: #selector(self.actionBtnRemove(_:)), for: .touchUpInside)
+        btnMemo.addTarget(self, action: #selector(self.actionBtnMemo(_:)), for: .touchUpInside)
         
-        viewEditbar.addSubview(btnShare)
-        viewEditbar.addSubview(btnRemove)
-        viewEditbar.isHidden = true
+        uiviewEditbar.addSubview(btnShare)
+        uiviewEditbar.addSubview(btnRemove)
+        uiviewEditbar.addSubview(btnMemo)
+        
+        uiviewEditbar.addConstraintsWithFormat("V:[v0(38)]-10-|", options: [], views:btnShare)
+        uiviewEditbar.addConstraintsWithFormat("V:[v0(38)]-10-|", options: [], views:btnMemo)
+        uiviewEditbar.addConstraintsWithFormat("V:[v0(38)]-10-|", options: [], views:btnRemove)
+        uiviewEditbar.addConstraintsWithFormat("H:|-10-[v0(\(screenWidth/3-12))]-[v1(\(screenWidth/3-12))]-[v2(\(screenWidth/3-12))]-10-|", options: [], views:btnShare, btnMemo, btnRemove)
+        
+        btnShare.isEnabled = false
+        btnMemo.isEnabled = false
+        btnRemove.isEnabled = false
+        btnShare.alpha = 0.6
+        btnMemo.alpha = 0.6
+        btnRemove.alpha = 0.6
+        uiviewEditbar.isHidden = true
         
     }
     
@@ -276,18 +329,15 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     
     func loadNavBar() {
         
-        
         uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
         uiviewNavBar.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
         uiviewNavBar.layer.borderWidth = 1
         uiviewNavBar.backgroundColor = UIColor.white
         
+        uiviewBackground.addSubview(uiviewNavBar)
         
         
-        self.view.addSubview(uiviewNavBar)
-        
-        
-        let btnBack = UIButton(frame: CGRect(x: 16, y: 33, width: 10.5, height: 18))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
         
@@ -300,7 +350,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         navBarTitle.font = UIFont(name: "AvenirNext-Medium",size: 20)
         navBarTitle.textAlignment = NSTextAlignment.center
         navBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
-        navBarTitle.text = tblTitle
+        navBarTitle.text = strTableTitle
         uiviewNavBar.addSubview(navBarTitle)
         
         // button for edit, show only for saved locations and places page
@@ -318,12 +368,6 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         
     }
     
-    //dismiss current view
-    func actionDismissCurrentView(_ sender: UIButton) {
-        self.dismiss(animated: false, completion: nil)
-    }
-    
-    
     // Action fuction when the edit button is tapped
     func actionEditCurrentTable(_ sender: UIButton){
         if !TblResult.isEditing {
@@ -331,53 +375,68 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
             //            isbtnEdittaped = true
             TblResult.isEditing = true
             TblResult.reloadData()
-            viewEditbar.isHidden = false
-            TblResult.frame = CGRect(x: 0,y: 44,width: screenWidth,height: screenHeight-106-56)
+            uiviewEditbar.isHidden = false
+            TblResult.frame = CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65-56)
             arrSelectedItem.removeAll()
             
-            
+            uiviewSearchBarCover.removeGestureRecognizer(tap)
+            uiviewSearchBarCover.addGestureRecognizer(tapdisable)
+
         }else{
             btnEdit.setTitle("Edit", for: .normal)
             TblResult.isEditing = false
             TblResult.reloadData()
-            viewEditbar.isHidden = true
-            TblResult.frame = CGRect(x: 0,y: 44,width: screenWidth,height: screenHeight-106)
+            uiviewEditbar.isHidden = true
+            TblResult.frame = CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65)
             arrSelectedItem.removeAll()
+            uiviewSearchBarCover.removeGestureRecognizer(tapdisable)
+            uiviewSearchBarCover.addGestureRecognizer(tap)
+            
         }
         
     }
     
-    
     private func loadSearchBar(){
         
-        SearchBar = UISearchBar()
-        SearchBar.frame = CGRect(x: 0,y: 64,width: screenWidth,height: 50)
-        SearchBar.placeholder = "Search Pins"
-        SearchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        searchBar = UISearchBar()
+        searchBar.frame = CGRect(x: 0,y: 0,width: screenWidth,height: 50)
+        
+        switch strTableTitle {
+            case "Saved Places":
+                searchBar.placeholder = "Search Places"
+            
+            case "Saved Locations":
+                searchBar.placeholder = "Search Locations"
+            
+            default: break
+        }
+        
+        
+        searchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         
         // hide cancel button
-        SearchBar.showsCancelButton = false
+        searchBar.showsCancelButton = false
         
         // hide bookmark button
-        SearchBar.showsBookmarkButton = false
+        searchBar.showsBookmarkButton = false
         
         // set Default bar status.
-        SearchBar.searchBarStyle = UISearchBarStyle.prominent
+        searchBar.searchBarStyle = UISearchBarStyle.prominent
         // Get rid of the black line
-        SearchBar.isTranslucent = false
-        SearchBar.backgroundImage = UIImage()
+        searchBar.isTranslucent = false
+        searchBar.backgroundImage = UIImage()
         
         
         // Add a view to cover the searchbar, this view is used for detect the click event
-        viewSearchBarCover = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 50))
-        viewSearchBarCover.backgroundColor = .clear
+        uiviewSearchBarCover = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 50))
+        uiviewSearchBarCover.backgroundColor = .clear
         
-        self.view.addSubview(SearchBar)
-        SearchBar.addSubview(viewSearchBarCover)
+        searchBar.addSubview(uiviewSearchBarCover)
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDown(_:)))
+        tap = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDown(_:)))
+        tapdisable = UITapGestureRecognizer(target: self, action: #selector(self.searchBarTapDownDisable(_:)))
         
-        viewSearchBarCover.addGestureRecognizer(tap)
+        uiviewSearchBarCover.addGestureRecognizer(tap)
         view.isUserInteractionEnabled = true
         
     }
@@ -385,37 +444,41 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     
     private func loadTblResult(){
         
-        viewTable = UIView(frame: CGRect(x: 0,y: 62,width: screenWidth,height: screenHeight-62))
-        viewTable.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        TblResult = UITableView(frame: CGRect(x: 0,y: 44,width: screenWidth,height: screenHeight-106), style: UITableViewStyle.plain)
+        uiviewBackground = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: screenHeight))
+        uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        
+        uiviewBackground.frame.origin.x = screenWidth
+        TblResult = UITableView(frame: CGRect(x: 0,y: 65,width: screenWidth,height: screenHeight-65), style: UITableViewStyle.plain)
         TblResult.backgroundColor = .white
         TblResult.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")
         TblResult.delegate = self
         TblResult.dataSource = self
         TblResult.showsVerticalScrollIndicator = false
-        TblResult.tableFooterView = UIView(frame: CGRect(x: 0,y: screenHeight-10,width: screenWidth,height: 10))
         
         //for auto layout
         TblResult.rowHeight = UITableViewAutomaticDimension
-        TblResult.estimatedRowHeight = 340
+        TblResult.estimatedRowHeight = 90
         
-        self.view.addSubview(viewTable)
+        self.view.addSubview(uiviewBackground)
         
         emptyTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptyTblImgView.image = #imageLiteral(resourceName: "empty_table_bg")
+        emptyTblImgView.image = #imageLiteral(resourceName: "empty_mypins_bg")
         emptyTblImgView.isHidden = true
         
         emptySavedTblImgView = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
-        emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedtable_bg")
+        emptySavedTblImgView.image = #imageLiteral(resourceName: "empty_savedpins_bg")
         emptySavedTblImgView.isHidden = true
         
         
-        viewTable.addSubview(emptyTblImgView)
-        viewTable.addSubview(emptySavedTblImgView)
-        viewTable.addSubview(TblResult)
-        loadSearchBar()
+        uiviewBackground.addSubview(emptyTblImgView)
+        uiviewBackground.addSubview(emptySavedTblImgView)
+        uiviewBackground.addSubview(TblResult)
         
-
+        //load searchbar at the head of table
+        loadSearchBar()
+        TblResult.tableHeaderView = searchBar
+        
+        
     }
     
     // Creat the search view when tap the fake searchbar
@@ -423,9 +486,13 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         let searchVC = CollectionSearchViewController()
         searchVC.modalPresentationStyle = .overCurrentContext
         self.present(searchVC, animated: false, completion: nil)
-        searchVC.tableTypeName = tblTitle
-        searchVC.dataArray = placeAndLocationDataArr
+        searchVC.strTableTypeName = strTableTitle
+        searchVC.arrData = placeAndLocationDataArr as [[String : AnyObject]]
         
+    }
+    
+    
+    func searchBarTapDownDisable(_ sender: UITapGestureRecognizer) {
     }
     
     
@@ -435,6 +502,117 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     }
     
     
+    // This function is the action function for the select button in the cell when the table is editable
+    func actionSelectBtnInCell(_ sender: UIButton){
+        
+        let sectionId = sender.tag
+        
+        let path : IndexPath = IndexPath(row: 0, section: sectionId)
+        let  cellInGivenId : PlaceAndLocationTableViewCell = TblResult.cellForRow(at: path) as!   PlaceAndLocationTableViewCell
+        
+        if !arrSelectedItem.contains(sectionId) {
+            
+            if arrSelectedItem.count == 0 {
+                btnShare.isEnabled = true
+                btnMemo.isEnabled = true
+                btnRemove.isEnabled = true
+                btnShare.alpha = 1
+                btnMemo.alpha = 1
+                btnRemove.alpha = 1
+            }
+            else{
+                btnShare.isEnabled = false
+                btnMemo.isEnabled = false
+                btnShare.alpha = 0.6
+                btnMemo.alpha = 0.6
+
+            }
+
+            arrSelectedItem.append(sectionId)
+            cellInGivenId.btnSelected.layer.borderColor = UIColor.faeAppRedColor().cgColor
+            cellInGivenId.btnSelected.layer.backgroundColor = UIColor.faeAppRedColor().cgColor
+            
+        }
+        else{
+            arrSelectedItem.remove(at: arrSelectedItem.index(of: sectionId)!)
+            cellInGivenId.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
+            cellInGivenId.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
+            
+            if arrSelectedItem.count == 0 {
+                btnShare.isEnabled = false
+                btnMemo.isEnabled = false
+                btnRemove.isEnabled = false
+                btnShare.alpha = 0.6
+                btnMemo.alpha = 0.6
+                btnRemove.alpha = 0.6
+            }
+            if arrSelectedItem.count == 1 {
+                btnShare.isEnabled = true
+                btnMemo.isEnabled = true
+                btnShare.alpha = 1
+                btnMemo.alpha = 1
+            }
+        }
+        
+    }
+    
+    func actionBtnShare(_ sender: UIButton){
+        // share
+    }
+    
+    
+    func actionBtnMemo(_ sender: UIButton){
+        // memo
+        
+        let memoVC = MemoViewController()
+        memoVC.modalPresentationStyle = .overCurrentContext
+        memoVC.delegate = self
+        self.present(memoVC, animated: false, completion: nil)
+        
+    }
+    // delegate func(transfer the memo data from memoVC to current VC)
+    func memoContent(save: Bool, content: String){
+        if save {
+            for item in arrSelectedItem{
+                
+                placeAndLocationDataArr[item]["memo"] = content
+                
+            }
+            TblResult.reloadData()
+            arrSelectedItem.removeAll()
+            btnShare.isEnabled = false
+            btnMemo.isEnabled = false
+            btnRemove.isEnabled = false
+            btnShare.alpha = 0.6
+            btnMemo.alpha = 0.6
+            btnRemove.alpha = 0.6
+        }
+    }
+    
+    
+    func actionBtnRemove(_ sender: UIButton){
+        //Remove
+        arrSelectedItem.sort {$0 > $1}  //倒序排序，这样保证原数据删除的时候是倒着删 不打乱顺序
+        
+        for item in arrSelectedItem{
+            //            let path : IndexPath = IndexPath(row: 0, section: item)
+            //            let  cellInGivenId : PlaceAndLocationTableViewCell = TblResult.cellForRow(at: path) as!   PlaceAndLocationTableViewCell
+            //
+            //            cellInGivenId.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
+            //            cellInGivenId.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
+            
+            placeAndLocationDataArr.remove(at: item)
+            
+        }
+        TblResult.reloadData()
+        arrSelectedItem.removeAll()
+        btnShare.isEnabled = false
+        btnMemo.isEnabled = false
+        btnRemove.isEnabled = false
+        btnShare.alpha = 0.6
+        btnMemo.alpha = 0.6
+        btnRemove.alpha = 0.6
+    }
     
     
     
@@ -456,22 +634,6 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     /* To add the space between the cells, we use indexPath.section to get the current cell index. And there is just one row in every section. When we want to get the index of cell, we use indexPath.section rather than indexPath.row */
     
     // Set the spacing between sections
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch tblTitle {
-            
-        case "Created Pins":
-            TblResult.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-            return 10
-        case "Saved Pins":
-            TblResult.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-            return 10
-            
-        default:
-            TblResult.backgroundColor = .white
-            return 0
-        }
-        
-    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -485,13 +647,12 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
         
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceAndLocationCell", for: indexPath) as! PlaceAndLocationTableViewCell
-        cell.setValueForCell(_: placeAndLocationDataArr[indexPath.section])
+        cell.setValueForCell(_: placeAndLocationDataArr[indexPath.section] as [String : AnyObject])
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 0, left: 89.5, bottom: 0, right: 0)
         
-        if(tableView.isEditing && self.tableView(tableView, canEditRowAt: indexPath))
-        {
-            cell.distance.isHidden = true
+        if tableView.isEditing && self.tableView(tableView, canEditRowAt: indexPath) {
+            cell.lblDistance.isHidden = true
             cell.btnSelected.isHidden = false
             cell.btnSelected.tag = indexPath.section //因为每个section只有一个row
             cell.btnSelected.addTarget(self, action: #selector(self.actionSelectBtnInCell(_:)), for: .touchUpInside)
@@ -502,53 +663,17 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
             else{
                 cell.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
                 cell.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
-                
             }
             
-        }
-        else
-        {
-            cell.distance.isHidden = false
-            cell.btnSelected.isHidden = true
-        }
-        
-        return cell
-    }
-    
-    
-    // This function is the action function for the select button in the cell when the table is editable
-    func actionSelectBtnInCell(_ sender: UIButton){
-        
-        let sectionId = sender.tag
-        
-        let path : IndexPath = IndexPath(row: 0, section: sectionId)
-        let  cellInGivenId : PlaceAndLocationTableViewCell = TblResult.cellForRow(at: path) as!   PlaceAndLocationTableViewCell
-        
-        if(!arrSelectedItem.contains(sectionId)){
-            arrSelectedItem.append(sectionId)
-            cellInGivenId.btnSelected.layer.borderColor = UIColor.faeAppRedColor().cgColor
-            cellInGivenId.btnSelected.layer.backgroundColor = UIColor.faeAppRedColor().cgColor
+            //每次刷新都把选中的button清空成灰色
+            cell.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
+            cell.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
         }
         else{
-            arrSelectedItem.remove(at: arrSelectedItem.index(of: sectionId)!)
-            cellInGivenId.btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
-            cellInGivenId.btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
-            
+            cell.lblDistance.isHidden = false
+            cell.btnSelected.isHidden = true
         }
-        
-    }
-    func actionBtnShare(_ sender: UIButton){
-        // share
-    }
-    func actionBtnRemove(_ sender: UIButton){
-        //Remove
-        arrSelectedItem.sort {$0 > $1}  //倒序排序，这样保证原数据删除的时候是倒着删 不打乱顺序
-        
-        for item in arrSelectedItem{
-            
-            placeAndLocationDataArr.remove(at: item)
-        }
-        TblResult.reloadData()
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -568,10 +693,6 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate,UI
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-    
-    
-    
 }
 
 

@@ -13,9 +13,11 @@ class DisconnectionViewController: UIViewController {
     var uiviewNavBar: UIView!
     var btnNavBar: UIButton!
     var lblFailMessage: UILabel!
+    var btnReconnect: UIButton!
     private var reachability: Reachability!
     
     var uiviewNavBarMenu: UIView!
+    var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,28 +26,27 @@ class DisconnectionViewController: UIViewController {
             try self.reachability.startNotifier()
         } catch {
         }
-        view.backgroundColor = UIColor.white
-        let img = UIImageView(frame: CGRect(x: -49*screenWidthFactor, y: 157*screenHeightFactor, width: 507*screenWidthFactor, height: 422*screenHeightFactor))
-        img.image = #imageLiteral(resourceName: "disconnectionPic")
+        self.view.backgroundColor = UIColor.white
+        let img = UIImageView(frame: CGRect(x: 0*screenWidthFactor, y: 157*screenHeightFactor, width: screenWidth, height: 498*screenHeightFactor))
+        img.image = #imageLiteral(resourceName: "disconnectionPic-1")
         img.contentMode = .scaleAspectFit
         view.addSubview(img)
-        let btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 605*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
+        btnReconnect = UIButton(frame: CGRect(x: 57*screenWidthFactor, y: 603*screenWidthFactor, width: 300*screenWidthFactor, height: 50*screenWidthFactor))
         btnReconnect.layer.cornerRadius = 25*screenWidthFactor
-        btnReconnect.setTitle("Reconnect", for: .normal)
-        btnReconnect.setTitleColor(UIColor.white, for: .normal)
-        btnReconnect.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20*screenWidthFactor)
-        btnReconnect.backgroundColor = UIColor.faeAppRedColor()
-        view.addSubview(btnReconnect)
+        btnReconnect.setImage(#imageLiteral(resourceName: "btnReconnect"), for: .normal)
+        self.view.addSubview(btnReconnect)
         btnReconnect.addTarget(self, action: #selector(self.actionReconnect(_:)), for: .touchUpInside)
-        
-        lblFailMessage = UILabel(frame: CGRect(x: 70*screenWidthFactor, y: 72*screenHeightFactor, width: 275*screenWidthFactor, height: 60*screenHeightFactor))
-        lblFailMessage.text = "Sorry… Reconnection failed…\nPlease try again!"
-        lblFailMessage.numberOfLines = 2
-        lblFailMessage.textAlignment = .center
-        lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20*screenWidthFactor)
-        lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
-        view.addSubview(lblFailMessage)
-        lblFailMessage.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        preStatusBarStyle = UIApplication.shared.statusBarStyle
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
     func actionReconnect(_ sender: UIButton) {
@@ -54,7 +55,16 @@ class DisconnectionViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         } else {
             print("[reachabilityChanged] Network not reachable")
-            lblFailMessage.isHidden = false
+            if lblFailMessage != nil {
+                lblFailMessage.removeFromSuperview()
+            }
+            lblFailMessage = UILabel(frame: CGRect(x: 70*screenWidthFactor, y: 72*screenHeightFactor, width: 275*screenWidthFactor, height: 60*screenHeightFactor))
+            lblFailMessage.text = "Sorry… Reconnection failed…\nPlease try again!"
+            lblFailMessage.numberOfLines = 2
+            lblFailMessage.textAlignment = .center
+            lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20*screenWidthFactor)
+            lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
+            self.view.addSubview(lblFailMessage)
         }
     }
 }

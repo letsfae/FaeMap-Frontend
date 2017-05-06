@@ -8,13 +8,12 @@
 
 import UIKit
 
-class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeigh = UIScreen.main.bounds.height
+class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
     //7 : 736 5 : 
     var scroll : UIScrollView!
     var imageViewAvatar : UIImageView!
     var imagePicker : UIImagePickerController!
+    var fullAlbumVC : FullAlbumCollectionViewController!
     var buttonImage : UIButton!
     var label1 : UILabel!
     var label2 : UILabel!
@@ -50,8 +49,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll = UIScrollView(frame: CGRect(x: 0,y: 0 - 64,width: screenWidth,height: screenHeight + 64))
         scroll.contentSize = CGSize(width: screenWidth, height: 650)
         scroll.isPagingEnabled = true
-        print(screenHeigh + 64)
-        if 650 > screenHeigh + 64 {
+        print(screenHeight + 64)
+        if 650 > screenHeight + 64 {
             scroll.isScrollEnabled = true
         } else {
             scroll.isScrollEnabled = false
@@ -62,6 +61,10 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         loadAvatar()
         loadName()
         loadBird()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isTranslucent = true
     }
     func loadAvatar() {
         imageViewAvatar = UIImageView(frame: CGRect(x: 0, y: 44, width: 100, height: 100))
@@ -80,23 +83,25 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         self.scroll.addSubview(imageViewAvatar)
         buttonImage = UIButton(frame: CGRect(x: 0,y: 44,width: 100,height: 100))
         buttonImage.center.x = screenWidth / 2
-        buttonImage.addTarget(self, action: #selector(MyFaeMainPageViewController.showPhotoSelected), for: .touchUpInside)
+        buttonImage.addTarget(self, action: #selector(self.showPhotoSelected), for: .touchUpInside)
         self.scroll.addSubview(buttonImage)
     }
     func showPhotoSelected() {
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        menu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
-            self.imagePicker.sourceType = .photoLibrary
+            //self.imagePicker.sourceType = .photoLibrary
             menu.removeFromParentViewController()
-            self.present(self.imagePicker,animated:true,completion:nil)
+            //self.present(self.imagePicker,animated:true,completion:nil)
             // add code here to change imagePickerStyle [mingjie jin]
-            
-            
-            
-            
-            
+            self.fullAlbumVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")
+            as! FullAlbumCollectionViewController
+            self.fullAlbumVC._maximumSelectedPhotoNum = 1
+            self.fullAlbumVC.imageDelegate = self
+            self.navigationController?.pushViewController(self.fullAlbumVC, animated: true)
+            //self.present(self.fullAlbumVC, animated: true, completion: nil)
         }
-        let showCamera = UIAlertAction(title: "Take photoes", style: .default) { (alert: UIAlertAction) in
+        let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
             self.imagePicker.sourceType = .camera
             menu.removeFromParentViewController()
             self.present(self.imagePicker,animated:true,completion:nil)
@@ -241,6 +246,20 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        print("send image for avatar")
+        imageViewAvatar.image = images[0]
+        let avatar = FaeImage()
+        avatar.image = images[0]
+        avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
+            if code / 100 == 2 {
+            } else {
+            }
+        }
+        //self.navigationController?.navigationBar.backgroundColor = UIColor.clear
+        //self.navigationController?.navigationBar.isTranslucent = true
     }
     
 

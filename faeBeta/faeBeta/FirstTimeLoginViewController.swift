@@ -9,8 +9,9 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import Photos
 
-class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
 
     var uiViewSetPicture: UIView!
     var labelTitle: UILabel!
@@ -199,17 +200,50 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func addProfileAvatar(_ sender: UIButton) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
+        imagePicker.sourceType = .camera
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
-            imagePicker.sourceType = .photoLibrary
-            menu.removeFromParentViewController()
-            self.present(imagePicker,animated:true,completion:nil)
+            var photoStatus = PHPhotoLibrary.authorizationStatus()
+            if photoStatus != .authorized {
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    photoStatus = status
+                    if photoStatus != .authorized {
+                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                        return
+                    }
+                    let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                    let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                    imagePicker.imageDelegate = self
+                    imagePicker.isCSP = false
+                    imagePicker._maximumSelectedPhotoNum = 1
+                    self.present(nav, animated: true, completion: nil)
+                })
+            } else {
+                let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                albumPicker.imageDelegate = self
+                albumPicker.isCSP = false
+                albumPicker._maximumSelectedPhotoNum = 1
+                self.present(nav, animated: true, completion: nil)
+            }
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
-            imagePicker.sourceType = .camera
-            menu.removeFromParentViewController()
-            self.present(imagePicker,animated:true,completion:nil)
+            var photoStatus = PHPhotoLibrary.authorizationStatus()
+            if photoStatus != .authorized {
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    photoStatus = status
+                    if photoStatus != .authorized {
+                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                        return
+                    }
+                    menu.removeFromParentViewController()
+                    self.present(imagePicker, animated: true, completion: nil)
+                })
+            } else {
+                menu.removeFromParentViewController()
+                self.present(imagePicker, animated: true, completion: nil)
+            }
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
             
@@ -217,7 +251,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         menu.addAction(showLibrary)
         menu.addAction(showCamera)
         menu.addAction(cancel)
-        self.present(menu,animated:true,completion: nil)
+        self.present(menu, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
@@ -230,6 +264,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func sendImages(_ images: [UIImage]) {
+        print("send image for avatar")
+        imageViewAvatar.image = images[0]
     }
     
 }

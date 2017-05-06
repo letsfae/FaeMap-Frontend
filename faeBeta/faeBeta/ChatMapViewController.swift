@@ -135,7 +135,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         buttonShare.addTarget(self, action: #selector(buttonShareAction(_:)), for: .touchUpInside)
         
         buttonSave = UIButton(frame: CGRect(x:91, y: 30, width: 44, height: 51))
-        buttonSave.setImage(UIImage(named: "chat_map_save"), for: UIControlState())
+        buttonSave.setImage(UIImage(named: "pinDetailSave"), for: UIControlState())
         buttonSave.addTarget(self, action: #selector(buttonSaveAction(_:)), for: .touchUpInside)
         
         viewPopUp.addSubview(buttonShare)
@@ -221,13 +221,9 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        
         if startUpdatingLocation {
             currentLocation = locManager.location
-            self.currentLatitude = currentLocation.coordinate.latitude
-            self.currentLongitude = currentLocation.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(self.currentLatitude, self.currentLongitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
+            let selfPositionToPoint = faeMapView.projection.point(for: currentLocation.coordinate)
             myPositionIcon.center = selfPositionToPoint
         }
     }
@@ -245,10 +241,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         }
         
         if let location = locations.last {
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let position = CLLocationCoordinate2DMake(latitude, longitude)
-            let selfPositionToPoint = faeMapView.projection.point(for: position)
+            let selfPositionToPoint = faeMapView.projection.point(for: location.coordinate)
             myPositionIcon.center = selfPositionToPoint
         }
     }

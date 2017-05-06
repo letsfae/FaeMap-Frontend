@@ -11,17 +11,14 @@ import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
-protocol SelectLocationViewControllerDelegate {
+protocol SelectLocationViewControllerDelegate: class {
     func sendAddress(_ value: String)
-    func sendGeoInfo(_ latitude: String, longitude: String)
+    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float)
 }
 
-class SelectLocationViewController: UIViewController, CLLocationManagerDelegate {
+class SelectLocationViewController: UIViewController {
     
-    var delegate: SelectLocationViewControllerDelegate?
-    
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+    weak var delegate: SelectLocationViewControllerDelegate?
     
     var mapSelectLocation: GMSMapView!
 
@@ -31,12 +28,14 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
+    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
+    var zoomLevel: Float = 13.8
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
     var willAppearFirstLoad = false
     
     var buttonCancelSelectLocation: UIButton!
-    var buttonSelfPosition: UIButton!
+    var btnSelfLocation: UIButton!
     var buttonSetLocationOnMap: UIButton!
     
     // MARK: -- Search Bar
@@ -85,22 +84,8 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        locManager.requestAlwaysAuthorization()        
+    override func viewWillAppear(_ animated: Bool) {   
         willAppearFirstLoad = true
-    }
-    
-    
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if willAppearFirstLoad {
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            mapSelectLocation.camera = camera
-            willAppearFirstLoad = false
-        }
     }
     
     func searchBarTableHideAnimation() {
@@ -112,8 +97,8 @@ class SelectLocationViewController: UIViewController, CLLocationManagerDelegate 
     
     func searchBarTableShowAnimation() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 240)
-            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 240)
+            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 305*screenHeightFactor)
+            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 305*screenHeightFactor)
         }), completion: nil)
     }
 }
