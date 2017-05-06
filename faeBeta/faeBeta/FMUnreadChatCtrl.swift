@@ -50,7 +50,7 @@ extension FaeMapViewController {
 //        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
         
         //Bryan
-        chatVC.realmWithUser = RealmWithUser()
+        chatVC.realmWithUser = RealmUser()
         chatVC.realmWithUser!.userID = withUserId.stringValue
         chatVC.realmWithUser!.userName = withUserName
         

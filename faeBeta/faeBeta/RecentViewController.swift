@@ -11,7 +11,11 @@ import SwiftyJSON
 import RealmSwift
 
 public var isDraggingRecentTableViewCell = false
+
+//Bryan
+//avatarDic was [NSNumber:UIImage] before
 public var avatarDic = [NSNumber:UIImage]() // an dictionary to store avatar, this should be moved to else where later
+//ENDBryan
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
     
@@ -32,6 +36,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         addGestureRecognizer()
         //downloadCurrentUserAvatar()
 
+        //TODO: Delete userDefaults
         if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
             self.recents = JSON(recentData)
             print(self.recents!)
@@ -94,7 +99,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(cellsCurrentlyEditing.count == 0){
             tableView.deselectRow(at: indexPath, animated: true)
-            
             if let recent = recents?[indexPath.row]{
                 if recent["with_user_id"].number != nil{
                     performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
@@ -152,7 +156,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
             //Bryan
-            chatVC.realmWithUser = RealmWithUser()
+            chatVC.realmWithUser = RealmUser()
             chatVC.realmWithUser!.userName = withUserName!
             chatVC.realmWithUser!.userID = withUserUserId!
             //EndBryan
@@ -197,7 +201,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 self.recents = json
                     //Bryan
                     //UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
-                    RealmChat.updateRecent(recent: cacheRecent)
+                    RealmChat.updateRecent(recents: cacheRecent)
                 if(animated && indexPathSet != nil){
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 }else{

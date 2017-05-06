@@ -39,7 +39,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     //Bryan
     //var withUser : FaeWithUser?
-    var realmWithUser : RealmWithUser?
+    var realmWithUser : RealmUser?
     //ENDBryan
 
     var withUserId : String? // the user id we chat to

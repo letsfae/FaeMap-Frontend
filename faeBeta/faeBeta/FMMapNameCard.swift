@@ -377,7 +377,7 @@ extension FaeMapViewController {
         
         //Bryan
         //TODO: Tell nickname and username apart
-        chatVC.realmWithUser = RealmWithUser()
+        chatVC.realmWithUser = RealmUser()
         chatVC.realmWithUser!.userName = nickName
         chatVC.realmWithUser!.userID = withUserId.stringValue
         //chatVC.realmWithUser?.userAvatar =

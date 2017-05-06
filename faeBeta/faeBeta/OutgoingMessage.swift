@@ -62,7 +62,7 @@ class OutgoingMessage {
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "data" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
     //Bryan
-    func sendMessage(_ chatRoomId : String, withUser user: RealmWithUser) {
+    func sendMessage(_ chatRoomId : String, withUser user: RealmUser) {
     //ENDBryan
         
         let item = self.messageDictionary
@@ -92,7 +92,7 @@ class OutgoingMessage {
         }
     }
     
-    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: RealmWithUser) {
+    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: RealmUser) {
         
         let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()

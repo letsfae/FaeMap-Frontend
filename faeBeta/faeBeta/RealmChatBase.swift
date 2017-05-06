@@ -9,14 +9,6 @@
 import Foundation
 import RealmSwift
 
-class RealmWithUser: Object{
-    dynamic var userName: String = ""
-    dynamic var userID: String = ""
-    dynamic var userAvatar: String? = nil
-    override static func primaryKey() -> String? {
-        return "userID"
-    }
-}
 
 class RealmMessage: Object {
     dynamic var withUserID : String = ""
@@ -47,11 +39,12 @@ class RealmMessage: Object {
 }
 
 class RealmRecent: Object {
-    dynamic var withUser: RealmWithUser?
+    dynamic var withUserID : String = ""
+    dynamic var withUserNickName : String = ""
     dynamic var date = NSDate()
     //dynamic var avatar : NSData? = nil
     dynamic var message : String = ""
-    dynamic var unread = false
+    dynamic var unread : Int = 0
     
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()
@@ -71,8 +64,24 @@ class RealmChat {
         }
     }
     
-    static func updateRecent(recent : NSArray) {
-        
+    static func updateRecent(recents : NSArray) {
+        let realm = try! Realm()
+        for message in recents{
+            let recent = RealmRecent()
+            //print(type(of: (message as! NSDictionary)["with_user_id"]!))
+            recent.withUserID =  String((message as! NSDictionary)["with_user_id"]! as! Int)
+            recent.withUserNickName = (message as! NSDictionary)["with_nick_name"]! as? String ?? (message as! NSDictionary)["with_user_name"]! as! String
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            let date = dateFormatter.date(from: (message as! NSDictionary)["last_message_timestamp"]! as! String)
+            recent.date = date! as NSDate
+            recent.message = (message as! NSDictionary)["last_message"]! as! String
+            recent.unread = (message as! NSDictionary)["unread_count"]! as! Int
+            try! realm.write{
+                realm.add(recent, update: true)
+                print("update recent")
+            }
+        }
     }
     
     static func receiveMessage(message : RealmMessage) {
@@ -97,7 +106,7 @@ class RealmChat {
     static func printDatabase(object : Object, numerOfItem : Int, offset: Int) {
     }
     
-    static func addWithUser(withUser : RealmWithUser){
+    static func addWithUser(withUser : RealmUser){
         let realm  = try! Realm()
         try! realm.write{
             realm.add(withUser)
