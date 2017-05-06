@@ -133,51 +133,6 @@ class RecentTableViewCell: UITableViewCell {
             })
         }
     }
-
-    //Bryan
-    //TODO: Implement it
-    
-//    func bindData(_ recent : RealmRecent) {
-//        self.layoutIfNeeded()
-//        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
-//        self.avatarImageView.layer.masksToBounds = true
-//        self.avatarImageView.contentMode = .scaleAspectFill
-//        self.avatarImageView.image = avatarDic[NSNumber(recent.withUserID)] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[recent.withUserID]
-//        
-//        nameLabel.text = recent.withUserName
-//        lastMessageLabel.text = recent.message
-//        counterLabel.text = ""
-//        counterLabel.layer.cornerRadius = 11
-//        counterLabel.layer.masksToBounds = true
-//        counterLabel.backgroundColor = UIColor.faeAppRedColor()
-//        if recent.unread > 0 {
-//            counterLabel.isHidden = false
-//            counterLabel.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
-//            if(counterLabel.text?.characters.count >= 2){
-//                countLabelLength.constant = 28
-//            }else{
-//                countLabelLength.constant = 22
-//            }
-//        }else{
-//            counterLabel.isHidden = true
-//        }
-//        
-//        let date = recent.date
-//        let seconds = Date().timeIntervalSince(date)
-//        dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
-//        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
-//        dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-//        
-//        if avatarDic[Int(recent.withUserID)] == nil{
-//            getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
-//                if status / 100 == 2 {
-//                    avatarDic[recent["with_user_id"].number!] = image as? UIImage
-//                }
-//            })
-//        }
-//    }
-    //ENDBryan
-    
     // MARK: - helper
     private func TimeElipsed(_ seconds : TimeInterval, lastMessageTime:Date) -> String {
         let dayFormatter = dateFormatter()

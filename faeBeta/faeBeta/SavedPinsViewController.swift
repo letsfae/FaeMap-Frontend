@@ -95,9 +95,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     
     override func loadtblPinsData(){
         super.loadtblPinsData()
-        //Bryan
         tblPinsData.register(SavedPinsTableViewCell.self, forCellReuseIdentifier: "SavedPinCell")
-        //ENDBryan
         tblPinsData.delegate = self
         tblPinsData.dataSource = self
         getPinsData()
@@ -142,9 +140,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     
     //Customize each cell in the table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //Bryan
         let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
-        //ENDBryan
         cell.setValueForCell(_: arrPinData[indexPath.section])
         // Hide the separator line
         cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
@@ -158,9 +154,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     //full pin detail delegate
     func backToCollections(likeCount: String, commentCount: String){
         if self.indexCurrSelectRowAt != nil {
-            //Bryan
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
-            //ENDBryan
             cellCurrSelect.lblComment.text = commentCount
             cellCurrSelect.lblLike.text = likeCount
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
@@ -177,7 +171,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     // PinTableViewCellDelegate protocol required function
     override func itemSwiped(indexCell: Int){
         let path : IndexPath = IndexPath(row: 0, section: indexCell)
-        //Bryan
         cellCurrSwiped = tblPinsData.cellForRow(at: path) as! SavedPinsTableViewCell
         tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
         gesturerecognizerTouch.cellInGivenId = cellCurrSwiped

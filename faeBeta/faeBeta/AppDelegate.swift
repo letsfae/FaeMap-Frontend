@@ -65,18 +65,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                }
         })
         
-//      This doesn't seem to work
 //        let realm = try! Realm()
 //        try! realm.write {
 //            realm.deleteAll()
 //        }
-        
-        //Bryan
-//        do {
-//            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-//        } catch {}
-        //ENDBryan
-        
         
         return true
     }
