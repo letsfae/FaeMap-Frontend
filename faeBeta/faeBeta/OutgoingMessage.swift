@@ -61,9 +61,8 @@ class OutgoingMessage {
         let snap = snapImage.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "data" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
-    //Bryan
-    func sendMessage(_ chatRoomId : String, withUser user: RealmUser) {
-    //ENDBryan
+        
+    func sendMessage(_ chatRoomId : String, withUser user: FaeWithUser) {
         
         let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()
@@ -73,9 +72,7 @@ class OutgoingMessage {
         reference.setValue(item) { (error, ref) -> Void in
             
             if error != nil {
-                //Bryan
-                print("Error, couldn't send message: \(error!)")
-                //ENDBryan
+                print("Error, couldn't send message: \(String(describing: error))")
             }else{
                 //WARNING : I changed item["type"] to "text" here to make backend work
                 
@@ -92,7 +89,7 @@ class OutgoingMessage {
         }
     }
     
-    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: RealmUser) {
+    func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: FaeWithUser) {
         
         let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()

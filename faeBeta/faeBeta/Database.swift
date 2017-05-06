@@ -8,22 +8,6 @@
 
 import RealmSwift
 
-//Bryan
-class RealmUser: Object {
-    dynamic var userName: String = ""
-    dynamic var userNickName: String? = nil
-    dynamic var userID: String = ""
-    //Avatar has not been added to local storage yet
-    dynamic var userSmallAvatar: NSData? = nil
-    dynamic var smallAvatarEtag: String? = nil
-    dynamic var userLargeAvatar: NSData? = nil
-    dynamic var largeAvatarEtag: String? = nil
-    override static func primaryKey() -> String? {
-        return "userID"
-    }
-}
-//ENDBryan
-
 class FileObject: Object {
     dynamic var fileId = -999
     dynamic var picture: NSData? = nil
