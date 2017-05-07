@@ -72,9 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         //Bryan
-//        do {
-//            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-//        } catch {}
+        do {
+            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
+        } catch {}
         //ENDBryan
         
         

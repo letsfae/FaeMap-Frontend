@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SDWebImage
+import SwiftyJSON
 
 func postMomentToURL(_ className: String, parameter:[String: Any]?, authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
@@ -228,14 +229,12 @@ func postCoverImageToURL(_ className:String,parameter:[String:AnyObject]? , auth
     
 }
 
-func getImageFromURL(_ className:String, authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
+func getImageFromURL(_ className: String, authentication:[String : Any]?, completion:@escaping (Int,Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
         "Accept": headerAccept,
-        //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil{
         for(key,_) in authentication! { // Ren: change value -> _
@@ -325,11 +324,11 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
     }
     
     // Ren: delete do-catch here because no error thrown in do
-    if parameter == nil{
+    if parameter == nil {
         Alamofire.request(URL, headers: headers)
-            .responseJSON{response in
+            .responseJSON{ response in
                 //print(response.response!.statusCode)
-                if response.response != nil{
+                if response.response != nil {
 //                    if(response.response!.statusCode != 0){
 //                        print("finished")
 //                    }
@@ -337,18 +336,16 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
 //                        print(JSON)
 //                        
 //                    }
-                    completion(response.response!.statusCode,response.result.value)
-                }
-                else{
-                    completion(-500,"Internet error")
+                    completion(response.response!.statusCode, response.result.value)
+                } else {
+                    completion(-500, "Internet error")
                 }
         }
-    }
-    else{
-        Alamofire.request(URL, parameters: parameter!, headers:headers)
-            .responseJSON{response in
+    } else {
+        Alamofire.request(URL, parameters: parameter!, headers: headers)
+            .responseJSON{ response in
                 //print(response.response!.statusCode)
-                if response.response != nil{
+                if response.response != nil {
 //                    if(response.response!.statusCode != 0){
 //                        print("finished")
 //                    }
@@ -356,14 +353,44 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
 //                        print(JSON)
 //                        
 //                    }
-                    completion(response.response!.statusCode,response.result.value)
-                }
-                else{
-                    completion(-500,"Internet error")
+                    completion(response.response!.statusCode, response.result.value)
+                } else{
+                    completion(-500, "Internet error")
                 }
         }
     }
 
+}
+
+func getImage(_ className: String, completion:@escaping (Int, String, Data?) -> Void) {
+    
+    let URL = baseURL + "/" + className
+    let headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Accept": headerAccept,
+        ]
+    
+    Alamofire.request(URL, headers: headers)
+        .responseJSON{ response in
+            if response.response != nil {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-500, "", nil)
+                    return
+                }
+                if let JSON = response.response?.allHeaderFields {
+                    guard let etag = JSON["Etag"] as? String else {
+                        completion(statusCode, "", nil)
+                        return
+                    }
+                    completion(statusCode, etag, response.data)
+                } else {
+                    completion(statusCode, "", nil)
+                }
+            } else {
+                completion(-500, "", nil)
+            }
+    }
 }
 
 func deleteFromURL(_ className:String, parameter: [String: Any] , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){

@@ -304,18 +304,54 @@ extension PinDetailViewController {
     fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
 
         let indexPath = IndexPath(row: index, section: 0)
-        let stringHeaderURL = "\(baseURL)/files/users/\(userid)/avatar"
-        UIImageView().sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-            if let profileImage = image {
+        let avatarURL = "files/users/\(userid)/avatar/2"
+        getImage(avatarURL) { (status, etag, imageRawData) in
+            print("[userAvatarGetter] userid", userid)
+            print("[userAvatarGetter] Etag", etag)
+            let realm = try! Realm()
+            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
+                // 存在User，Etag没变
+                print("存在User，Etag没变")
+                if etag == avatarRealm.smallAvatarEtag {
+                    if isPeople {
+                        self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
+                    } else {
+                        self.pinComments[index].profileImage = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
+                        self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    }
+                }
+                // 存在User，Etag改变
+                else {
+                    print("存在User，Etag改变")
+                    if isPeople {
+                        self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
+                    } else {
+                        self.pinComments[index].profileImage = UIImage.sd_image(with: imageRawData)
+                        self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    }
+                    try! realm.write {
+                        avatarRealm.smallAvatarEtag = etag
+                        avatarRealm.userSmallAvatar = imageRawData as NSData?
+                    }
+                }
+            } else {
+                // 不存在User
+                print("不存在User", userid, index, isPeople)
                 if isPeople {
-                    self.pinDetailUsers[index].profileImage = profileImage
+                    self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
                 } else {
-                    self.pinComments[index].profileImage = profileImage
+                    self.pinComments[index].profileImage = UIImage.sd_image(with: imageRawData)
                     self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                 }
+                let avatarObj = RealmUser()
+                avatarObj.userID = "\(userid)"
+                avatarObj.smallAvatarEtag = etag
+                avatarObj.userSmallAvatar = imageRawData as NSData?
+                try! realm.write {
+                    realm.add(avatarObj)
+                }
             }
-        })
-        
+        }
     }
     
     fileprivate func userNameCard(_ userid: Int, _ index: Int, completion: @escaping (Int, Int)->()) {
