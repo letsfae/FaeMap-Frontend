@@ -18,7 +18,7 @@ class PinCommentsCell: UITableViewCell {
     
     weak var delegate: PinCommentsCellDelegate?
     var uiviewCell: UIButton!
-    var imgAvatar: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var lblUsername: UILabel!
     var lblTime: UILabel!
     var lblVoteCount: UILabel!
@@ -31,7 +31,13 @@ class PinCommentsCell: UITableViewCell {
     var voteType: String = "null"    
     var pinType = ""
     var pinCommentID = ""
-    var userID = -1
+    var userID = -1 {
+        didSet {
+            if userID != -1 {
+                self.imgAvatar.userID = self.userID
+            }
+        }
+    }
     var cellIndex: IndexPath!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -53,7 +59,7 @@ class PinCommentsCell: UITableViewCell {
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewCell)
         uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchUpInside)
         
-        imgAvatar = UIImageView()
+        imgAvatar = FaeAvatarView(frame: CGRect.zero)
         addSubview(imgAvatar)
         imgAvatar.layer.cornerRadius = 19.5
         imgAvatar.clipsToBounds = true

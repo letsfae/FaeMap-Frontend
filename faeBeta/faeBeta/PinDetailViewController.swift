@@ -141,7 +141,7 @@ class PinDetailViewController: UIViewController {
     var imgHotPin: UIImageView!
     var imgMediaArr = [UIImageView]()
     var imgPinIcon: UIImageView! // Icon to indicate pin type
-    var imgPinUserAvatar: UIImageView!
+    var imgPinUserAvatar: FaeAvatarView!
     var imgPlaceQuickView: UIImageView!
     var imgPlaceType: UIImageView!
     var intChosenFeeling: Int = -1

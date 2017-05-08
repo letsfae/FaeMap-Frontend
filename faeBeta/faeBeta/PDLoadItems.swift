@@ -357,7 +357,7 @@ extension PinDetailViewController {
         uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: btnTalkTalk, btnFeelings, btnPeople)
         
         // Comment Pin User Avatar
-        imgPinUserAvatar = UIImageView()
+        imgPinUserAvatar = FaeAvatarView(frame: CGRect.zero)
         imgPinUserAvatar.image = #imageLiteral(resourceName: "defaultMen")
         imgPinUserAvatar.layer.cornerRadius = 25
         imgPinUserAvatar.clipsToBounds = true

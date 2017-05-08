@@ -304,8 +304,7 @@ extension PinDetailViewController {
     fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
 
         let indexPath = IndexPath(row: index, section: 0)
-        let avatarURL = "files/users/\(userid)/avatar/2"
-        getImage(avatarURL) { (status, etag, imageRawData) in
+        getImage(userID: userid, type: 2) { (status, etag, imageRawData) in
             print("[userAvatarGetter] userid", userid)
             print("[userAvatarGetter] Etag", etag)
             let realm = try! Realm()
@@ -332,6 +331,8 @@ extension PinDetailViewController {
                     try! realm.write {
                         avatarRealm.smallAvatarEtag = etag
                         avatarRealm.userSmallAvatar = imageRawData as NSData?
+                        avatarRealm.largeAvatarEtag = nil
+                        avatarRealm.userLargeAvatar = nil
                     }
                 }
             } else {

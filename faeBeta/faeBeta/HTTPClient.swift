@@ -362,9 +362,9 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
 
 }
 
-func getImage(_ className: String, completion:@escaping (Int, String, Data?) -> Void) {
+func getImage(userID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
     
-    let URL = baseURL + "/" + className
+    let URL = "\(baseURL)/files/users/\(userID)/avatar/\(type)"
     let headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
