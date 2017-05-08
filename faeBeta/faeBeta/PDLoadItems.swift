@@ -18,6 +18,7 @@ extension PinDetailViewController {
         
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 320))
         uiviewMain.layer.zPosition = 101
+        uiviewMain.clipsToBounds = true
         self.view.addSubview(uiviewMain)
         uiviewMain.frame.origin.x = enterMode == .collections ? screenWidth : 0
         uiviewMain.frame.origin.y = enterMode == .collections ? 0 : -screenHeight
@@ -427,48 +428,48 @@ extension PinDetailViewController {
         self.uiviewCtrlBoard.addSubview(anotherRedSlidingLine)
         
         // "Talk Talk" of this uiview
-        let labelComments = UILabel()
-        labelComments.text = "Talk Talk"
-        labelComments.textColor = UIColor.faeAppInputTextGrayColor()
-        labelComments.textAlignment = .center
-        labelComments.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(labelComments)
+        lblAnotherTalkTalk = UILabel()
+        lblAnotherTalkTalk.text = "Talk Talk"
+        lblAnotherTalkTalk.textColor = UIColor.faeAppInputTextGrayColor()
+        lblAnotherTalkTalk.textAlignment = .center
+        lblAnotherTalkTalk.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(lblAnotherTalkTalk)
         let comments = UIButton()
         comments.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(comments)
         comments.tag = 1
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelComments)
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherTalkTalk)
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: comments)
         
         // "Feelings" of this uiview
-        let labelFeelings = UILabel()
-        labelFeelings.text = "Feelings"
-        labelFeelings.textColor = UIColor.faeAppInputTextGrayColor()
-        labelFeelings.textAlignment = .center
-        labelFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(labelFeelings)
+        lblAnotherFeelings = UILabel()
+        lblAnotherFeelings.text = "Feelings"
+        lblAnotherFeelings.textColor = UIColor.faeAppInputTextGrayColor()
+        lblAnotherFeelings.textAlignment = .center
+        lblAnotherFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(lblAnotherFeelings)
         let feelings = UIButton()
         feelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(feelings)
         feelings.tag = 3
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelFeelings)
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherFeelings)
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: feelings)
         
         // "People" of this uiview
-        let labelPeople = UILabel()
-        labelPeople.text = "People"
-        labelPeople.textColor = UIColor.faeAppInputTextGrayColor()
-        labelPeople.textAlignment = .center
-        labelPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(labelPeople)
+        lblAnotherPeople = UILabel()
+        lblAnotherPeople.text = "People"
+        lblAnotherPeople.textColor = UIColor.faeAppInputTextGrayColor()
+        lblAnotherPeople.textAlignment = .center
+        lblAnotherPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        threeButtonsContainer.addSubview(lblAnotherPeople)
         let people = UIButton()
         people.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
         threeButtonsContainer.addSubview(people)
         people.tag = 5
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: labelPeople)
+        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherPeople)
         threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: people)
         
-        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: labelComments, labelFeelings, labelPeople)
+        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: lblAnotherTalkTalk, lblAnotherFeelings, lblAnotherPeople)
         threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: comments, feelings, people)
     }
     

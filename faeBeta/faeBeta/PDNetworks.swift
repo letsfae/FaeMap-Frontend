@@ -41,12 +41,27 @@ extension PinDetailViewController {
             }
             // Feelings
             self.feelingArray.removeAll()
+            
+            var feelingCount = 0
             let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
             for feeling in feelings {
                 if feeling != nil {
                     self.feelingArray.append(feeling!)
+                    feelingCount += feeling!
                 }
             }
+            let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                           NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+            let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
+                           NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
+            let attr_0 = NSMutableAttributedString(string: "Feelings  ", attributes: attri_0)
+            let attr_1 = NSMutableAttributedString(string: "\(feelingCount)", attributes: attri_1)
+            let attr = NSMutableAttributedString(string:"")
+            attr.append(attr_0)
+            attr.append(attr_1)
+            self.lblFeelings.attributedText = attr
+            self.lblAnotherFeelings.attributedText = attr
+            
             if self.tableMode == .feelings {
                 self.tblMain.reloadData()
             }
@@ -148,12 +163,27 @@ extension PinDetailViewController {
             getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) {(status: Int, message: Any?) in
                 let pinInfoJSON = JSON(message!)
                 self.feelingArray.removeAll()
+                var feelingCount = 0
                 let feelings = pinInfoJSON["feeling_count"].arrayValue.map({Int($0.stringValue)})
                 for feeling in feelings {
                     if feeling != nil {
                         self.feelingArray.append(feeling!)
+                        feelingCount += feeling!
                     }
                 }
+                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+                let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
+                
+                let attr_0 = NSMutableAttributedString(string: "Feelings  ", attributes: attri_0)
+                let attr_1 = NSMutableAttributedString(string: "\(feelingCount)", attributes: attri_1)
+                let attr = NSMutableAttributedString(string:"")
+                attr.append(attr_0)
+                attr.append(attr_1)
+                self.lblFeelings.attributedText = attr
+                self.lblAnotherFeelings.attributedText = attr
+                
                 if self.tableMode == .feelings && !self.boolDetailShrinked {
                     self.tblMain.reloadData()
                     let indexPath = IndexPath(row: 0, section: 0)
@@ -228,17 +258,28 @@ extension PinDetailViewController {
         }
         let getPinAttr = FaePinAction()
         getPinAttr.getPinAttribute("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) {(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
             let mapInfoJSON = JSON(message!)
-            var likesCount = 0
-            var commentsCount = 0
-            if let likes = mapInfoJSON["likes"].int {
-                self.lblPinLikeCount.text = "\(likes)"
-                likesCount = likes
-            }
-            if let comments = mapInfoJSON["comments"].int {
-                self.lblCommentCount.text = "\(comments)"
-                commentsCount = comments
-            }
+            let likesCount = mapInfoJSON["likes"].intValue
+            self.lblPinLikeCount.text = "\(likesCount)"
+            let commentsCount = mapInfoJSON["comments"].intValue
+            self.lblCommentCount.text = "\(commentsCount)"
+            
+            let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                           NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+            let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
+                           NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
+
+            let attr_0 = NSMutableAttributedString(string: "Talk Talk  ", attributes: attri_0)
+            let attr_1 = NSMutableAttributedString(string: "\(commentsCount)", attributes: attri_1)
+            let attr = NSMutableAttributedString(string:"")
+            attr.append(attr_0)
+            attr.append(attr_1)
+            self.lblTalkTalk.attributedText = attr
+            self.lblAnotherTalkTalk.attributedText = attr
+            
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imgHotPin.isHidden = false
                 if PinDetailViewController.pinStatus == "read" || PinDetailViewController.pinStatus == "hot and read" {
@@ -284,7 +325,7 @@ extension PinDetailViewController {
             })
             
             if self.pinComments.count >= 1 {
-                for i in 0...self.pinComments.count - 1 {
+                for i in 0..<self.pinComments.count {
                     let userid = self.pinComments[i].userId
                     self.userNameCard(userid, i, completion: { (id, index) in
                         if id != 0 {
@@ -380,6 +421,21 @@ extension PinDetailViewController {
                     self.pinDetailUsers.append(userDetail)
                     guard let userIndex = self.pinDetailUsers.index(of: userDetail) else { return }
                     completion(userid, userIndex)
+                }
+                if index == self.pinComments.count - 1 {
+                    let peopleCount = self.pinDetailUsers.count
+                    let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+                    let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
+                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
+                    
+                    let attr_0 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
+                    let attr_1 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
+                    let attr = NSMutableAttributedString(string:"")
+                    attr.append(attr_0)
+                    attr.append(attr_1)
+                    self.lblPeople.attributedText = attr
+                    self.lblAnotherPeople.attributedText = attr
                 }
             }
         })

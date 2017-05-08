@@ -34,13 +34,16 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             tableMode = .talktalk
             tblMain.reloadData()
+            uiviewMain.frame.size.height = screenHeight - uiviewInputToolBarSub.frame.size.height
         } else if sender.tag == 3 {
             tableMode = .feelings
             tblMain.reloadData()
+            uiviewMain.frame.size.height = screenHeight
         } else if sender.tag == 5 {
             tableMode = .people
             tblMain.reloadData()
             tblMain.contentOffset.y = 0
+            uiviewMain.frame.size.height = screenHeight
         }
         endEdit()
         let tag = CGFloat(sender.tag)
@@ -250,15 +253,15 @@ extension PinDetailViewController {
             btnToFullPin.tag = 0
             lblTxtPlaceholder.text = "Write a Comment..."
             strReplyTo = ""
-            tblMain.isScrollEnabled = false
+            
             uiviewNavBar.leftBtn.tag = 1
-            tblMain.scrollToTop(animated: true)
+            tblMain.setContentOffset(CGPoint.zero, animated: true)
             
             UIView.animate(withDuration: 0.5, animations: ({
                 self.btnHalfPinToMap.alpha = 1.0       // nav bar left btn
                 self.uiviewNavBar.leftBtn.alpha = 0.0  // nav bar left btn
                 self.textviewPinDetail.frame.size.height = 100 //back to original text height
-                self.tblMain.frame.size.height = 227
+                
                 self.uiviewInteractBtnSub.frame.origin.y = 185
                 self.uiviewGrayMidBlock.frame.origin.y = 227
                 self.uiviewTableSub.frame.size.height = 255
@@ -269,6 +272,9 @@ extension PinDetailViewController {
                 self.uiviewInputToolBarSub.frame.origin.y = screenHeight
             }), completion: {(_) in
                 self.textviewPinDetail.isScrollEnabled = true
+//                self.tblMain.setContentOffset(CGPoint.zero, animated: true)
+                self.tblMain.isScrollEnabled = false
+                self.tblMain.frame.size.height = 227
             })
             // deal with diff UI according to pinType
             if PinDetailViewController.pinTypeEnum == .media {

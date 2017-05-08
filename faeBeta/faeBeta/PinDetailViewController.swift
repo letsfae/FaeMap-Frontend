@@ -162,6 +162,9 @@ class PinDetailViewController: UIViewController {
     var lblPlaceTitle: UILabel!
     var lblTalkTalk: UILabel!
     var lblTxtPlaceholder: UILabel!
+    var lblAnotherTalkTalk: UILabel!
+    var lblAnotherFeelings: UILabel!
+    var lblAnotherPeople: UILabel!
     var pinComments = [PinComment]()
     var pinDetailUsers = [PinDetailUser]()
     var scrollViewMedia: UIScrollView! // container to display pin's media
