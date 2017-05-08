@@ -59,9 +59,7 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
                     completion(-400, "failure")
                     print(encodingError)
                 }
-        })
-        
-    }
+        })}
 }
 
 func postChatRoomCoverImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
@@ -442,10 +440,9 @@ func putToURL(_ className:String, parameter: [String: Any]? , authentication:[St
                 completion(-500,"Internet error")
             }
     }
-    
 }
 
-//utf-5 encode
+//utf-8 encode
 func utf8Encode(_ inputString:String)->String{
     //MARK: REN tempory change it here, test if anything's wrong
     let encodedString = inputString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)

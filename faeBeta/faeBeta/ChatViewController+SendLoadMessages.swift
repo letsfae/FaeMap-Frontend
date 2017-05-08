@@ -155,7 +155,6 @@ extension ChatViewController: OutgoingMessageProtocol{
             if snapshot.exists() {
                 // because the type is ChildAdded so the snapshot is the new message
                 let item = (snapshot.value as? NSDictionary)!
-                
                 if self.initialLoadComplete {//message has been downloaded from database but not load to collectionview yet.
                     let isIncoming = self.insertMessage(item)
                     if isIncoming {
@@ -314,6 +313,4 @@ extension ChatViewController: OutgoingMessageProtocol{
     func updateChat_Id(_ newId: String) {
         chat_id = newId
     }
-    
-    
 }

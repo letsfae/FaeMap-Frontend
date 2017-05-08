@@ -24,6 +24,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet private weak var tableView: UITableView!
     
     private var recents: JSON? // an array of dic to store recent chatting informations
+    private var realmRecents: Results<RealmRecent>?
     private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
     private var loadingRecentTimer: Timer!
     
@@ -35,13 +36,19 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         navigationBarSet()
         addGestureRecognizer()
         //downloadCurrentUserAvatar()
+        
+        //Bryan
+        let realm = try! Realm()
+        self.realmRecents = realm.objects(RealmRecent.self)
+        self.tableView.reloadData()
 
         //TODO: Delete userDefaults
-        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
-            self.recents = JSON(recentData)
-            print(self.recents!)
-            self.tableView.reloadData()
-        }
+//        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
+//            self.recents = JSON(recentData)
+//            print(self.recents!)
+//            self.tableView.reloadData()
+//        }
+        //ENDBryan
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,7 +72,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func navigationBarSet() {
-        
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.isTranslucent = false
@@ -133,9 +139,14 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
         cell.delegate = self
-        let recent = recents![indexPath.row]
         
-        cell.bindData(recent)
+        //Bryan
+        //let recent = recents![indexPath.row]
+        //cell.bindData(recent)
+        
+        let realmRecent = realmRecents![indexPath.row]
+        cell.bindData(realmRecent)
+        //ENDBryan
 
         if (self.cellsCurrentlyEditing.contains(indexPath)) {
             cell.openCell()
@@ -251,6 +262,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func deleteButtonTapped(_ cell: UITableViewCell) {
         let indexPath = tableView.indexPath(for: cell)!
         let recent = recents![indexPath.row]
+        let realmRecent = realmRecents![indexPath.row]
+        RealmChat.removeRecentWith(recentItem: realmRecent)
         
         //remove recent form the array
         DeleteRecentItem(recent, completion: {(statusCode, result) -> Void in

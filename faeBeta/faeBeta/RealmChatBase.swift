@@ -33,6 +33,8 @@ class RealmMessage: Object {
         return ["date"].reversed()
     }
     
+    //For chat pin we may need some backlink
+    
     //        override static func primaryKey() -> String? {
     //            return "date"
     //        }
@@ -95,8 +97,13 @@ class RealmChat {
         return []
     }
     
-    static func removeRecentWith(userID: Int) {
-        
+    static func removeRecentWith(recentItem: RealmRecent) {
+        let realm = try! Realm()
+        try! realm.write {
+            let withUserID = recentItem.withUserID
+            realm.delete(realm.objects(RealmMessage.self).filter("withUserID = '\(withUserID)'"))
+            realm.delete(recentItem)
+        }
     }
     
     static func cleanDatabase() {

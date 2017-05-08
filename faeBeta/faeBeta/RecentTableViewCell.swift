@@ -79,80 +79,26 @@ class RecentTableViewCell: UITableViewCell {
     
     // MARK: - populate cell
     // set up the cell with a JSON data
-    func bindData(_ recent : JSON) {
-        self.layoutIfNeeded()
-        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
-        self.avatarImageView.layer.masksToBounds = true
-        self.avatarImageView.contentMode = .scaleAspectFill
-        self.avatarImageView.image = avatarDic[recent["with_user_id"].number!] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[recent["with_user_id"].number!]
-
-        if let name = recent["with_user_name"].string{
-            nameLabel.text = name
-        }
-        if let lastMessage = recent["last_message"].string{
-            lastMessageLabel.text = lastMessage
-        }
-        counterLabel.text = ""
-        counterLabel.layer.cornerRadius = 11
-        counterLabel.layer.masksToBounds = true
-        counterLabel.backgroundColor = UIColor.faeAppRedColor()
-        if recent["unread_count"].number != nil && (recent["unread_count"].number)!.int32Value != 0 {
-            counterLabel.isHidden = false
-            counterLabel.text = recent["unread_count"].number!.int32Value > 99 ? "•••" : "\(recent["unread_count"].number!.int32Value)"
-            if(counterLabel.text?.characters.count >= 2){
-                countLabelLength.constant = 28
-            }else{
-                countLabelLength.constant = 22
-            }
-        }else{
-            counterLabel.isHidden = true
-        }
-        
-        if var timeString = recent["last_message_timestamp"].string{
-            var index = 0
-            for c in timeString.characters{
-                if c < "0" || c > "9" {
-                    timeString.remove(at: timeString.characters.index(timeString.characters.startIndex, offsetBy: index))
-                }else{
-                    index += 1
-                }
-            }
-            
-            let date = dateFormatter().date(from: timeString)
-            let seconds = Date().timeIntervalSince(date!)
-            dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
-            dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
-            dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-        }
-        
-        if recent["with_user_id"].number != nil && (avatarDic[recent["with_user_id"].number!] == nil){
-            getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
-                if status / 100 == 2 {
-                    avatarDic[recent["with_user_id"].number!] = image as? UIImage
-                }
-            })
-        }
-    }
-
-    //Bryan
-    //TODO: Implement it
-    
-//    func bindData(_ recent : RealmRecent) {
+//    func bindData(_ recent : JSON) {
 //        self.layoutIfNeeded()
 //        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
 //        self.avatarImageView.layer.masksToBounds = true
 //        self.avatarImageView.contentMode = .scaleAspectFill
-//        self.avatarImageView.image = avatarDic[NSNumber(recent.withUserID)] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[recent.withUserID]
-//        
-//        nameLabel.text = recent.withUserName
-//        lastMessageLabel.text = recent.message
+//        self.avatarImageView.image = avatarDic[recent["with_user_id"].number!] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[recent["with_user_id"].number!]
+//
+//        if let name = recent["with_user_name"].string{
+//            nameLabel.text = name
+//        }
+//        if let lastMessage = recent["last_message"].string{
+//            lastMessageLabel.text = lastMessage
+//        }
 //        counterLabel.text = ""
 //        counterLabel.layer.cornerRadius = 11
 //        counterLabel.layer.masksToBounds = true
 //        counterLabel.backgroundColor = UIColor.faeAppRedColor()
-//        if recent.unread > 0 {
+//        if recent["unread_count"].number != nil && (recent["unread_count"].number)!.int32Value != 0 {
 //            counterLabel.isHidden = false
-//            counterLabel.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
+//            counterLabel.text = recent["unread_count"].number!.int32Value > 99 ? "•••" : "\(recent["unread_count"].number!.int32Value)"
 //            if(counterLabel.text?.characters.count >= 2){
 //                countLabelLength.constant = 28
 //            }else{
@@ -162,13 +108,24 @@ class RecentTableViewCell: UITableViewCell {
 //            counterLabel.isHidden = true
 //        }
 //        
-//        let date = recent.date
-//        let seconds = Date().timeIntervalSince(date)
-//        dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
-//        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
-//        dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
+//        if var timeString = recent["last_message_timestamp"].string{
+//            var index = 0
+//            for c in timeString.characters{
+//                if c < "0" || c > "9" {
+//                    timeString.remove(at: timeString.characters.index(timeString.characters.startIndex, offsetBy: index))
+//                }else{
+//                    index += 1
+//                }
+//            }
+//            
+//            let date = dateFormatter().date(from: timeString)
+//            let seconds = Date().timeIntervalSince(date!)
+//            dateLabel.text = TimeElipsed(seconds,lastMessageTime:date!)
+//            dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+//            dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
+//        }
 //        
-//        if avatarDic[Int(recent.withUserID)] == nil{
+//        if recent["with_user_id"].number != nil && (avatarDic[recent["with_user_id"].number!] == nil){
 //            getImageFromURL(("files/users/" + recent["with_user_id"].number!.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
 //                if status / 100 == 2 {
 //                    avatarDic[recent["with_user_id"].number!] = image as? UIImage
@@ -176,6 +133,57 @@ class RecentTableViewCell: UITableViewCell {
 //            })
 //        }
 //    }
+
+    //Bryan
+    //TODO: Implement it
+    
+    func bindData(_ recent : RealmRecent) {
+        print(recent)
+        self.layoutIfNeeded()
+        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
+        self.avatarImageView.layer.masksToBounds = true
+        self.avatarImageView.contentMode = .scaleAspectFill
+        if let myInteger = Int(recent.withUserID) {
+            let withUserIDNumber = NSNumber(value:myInteger)
+            self.avatarImageView.image = avatarDic[withUserIDNumber] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[withUserIDNumber]
+        }
+        
+        nameLabel.text = recent.withUserNickName
+        lastMessageLabel.text = recent.message
+        counterLabel.text = ""
+        counterLabel.layer.cornerRadius = 11
+        counterLabel.layer.masksToBounds = true
+        counterLabel.backgroundColor = UIColor.faeAppRedColor()
+        if recent.unread > 0 {
+            counterLabel.isHidden = false
+            counterLabel.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
+            if(counterLabel.text?.characters.count >= 2){
+                countLabelLength.constant = 28
+            }else{
+                countLabelLength.constant = 22
+            }
+        }else{
+            counterLabel.isHidden = true
+        }
+        
+        let date = recent.date
+        let seconds = Date().timeIntervalSince(date as Date)
+        dateLabel.text = TimeElipsed(seconds,lastMessageTime:date as Date)
+        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+        dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
+        
+        if let myInteger = Int(recent.withUserID) {
+            let withUserIDNumber = NSNumber(value:myInteger)
+            if avatarDic[withUserIDNumber] == nil{
+                let withUserIDNumber = NSNumber(value:myInteger)
+                getImageFromURL(("files/users/" + recent.withUserID + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
+                    if status / 100 == 2 {
+                        avatarDic[withUserIDNumber] = image as? UIImage
+                    }
+                })
+            }
+        }
+    }
     //ENDBryan
     
     // MARK: - helper
