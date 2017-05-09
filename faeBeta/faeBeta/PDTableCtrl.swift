@@ -45,7 +45,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.userID = comment.userId
             cell.cellIndex = indexPath
             if comment.anonymous {
-                cell.lblUsername.text = "Anonymous"
+                cell.lblUsername.text = self.dictAnonymous[comment.userId]
                 cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
             } else {
                 cell.lblUsername.text = comment.displayName

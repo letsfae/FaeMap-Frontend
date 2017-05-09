@@ -34,7 +34,9 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             tableMode = .talktalk
             tblMain.reloadData()
-            uiviewMain.frame.size.height = screenHeight - uiviewInputToolBarSub.frame.size.height
+            UIView.animate(withDuration: 0.3, animations: { 
+                self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
+            })
         } else if sender.tag == 3 {
             tableMode = .feelings
             tblMain.reloadData()
@@ -211,7 +213,8 @@ extension PinDetailViewController {
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
             UIView.animate(withDuration: 0.5, animations: ({
-                self.uiviewMain.frame.origin.x += screenWidth
+                self.uiviewMain.frame.origin.x = screenWidth
+                self.uiviewInputToolBarSub.frame.origin.x = screenWidth
             }), completion: { (_) in
                 self.dismiss(animated: false, completion: nil)
             })

@@ -111,12 +111,17 @@ extension PinDetailViewController {
                 self.imgCollected.image = #imageLiteral(resourceName: "pinSaved")
             }
             // Get nick name
+            let commentCount = pinInfoJSON["comment_count"].intValue
             let anonymous = pinInfoJSON["anonymous"].boolValue
             if anonymous {
                 self.lblPinDisplayName.text = "Someone"
                 self.isAnonymous = true
-            }
-            else {
+            } else {
+                self.userNameCard(PinDetailViewController.pinUserId, -1, completion: { (id, index) in
+                    if id != 0 {
+                        self.userAvatarGetter(PinDetailViewController.pinUserId, index: index, isPeople: true)
+                    }
+                })
                 self.lblPinDisplayName.text = pinInfoJSON["nick_name"].stringValue
                 // Get avatar
                 if let pinUserId = pinInfoJSON["user_id"].int {
@@ -128,6 +133,14 @@ extension PinDetailViewController {
                     })
                 }
             }
+            let peopleCount = self.isAnonymous ? commentCount : commentCount + 1
+            let attr_2 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
+            let attr_3 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
+            let attributedText = NSMutableAttributedString(string:"")
+            attributedText.append(attr_2)
+            attributedText.append(attr_3)
+            self.lblPeople.attributedText = attributedText
+            self.lblAnotherPeople.attributedText = attributedText
         }
     }
     
@@ -316,16 +329,25 @@ extension PinDetailViewController {
             }
             self.pinComments = pinCommentJsonArray.map{PinComment(json: $0)}
             self.pinComments.reverse()
-            self.tblMain.reloadData()
             
-            self.userNameCard(PinDetailViewController.pinUserId, -1, completion: { (id, index) in
-                if id != 0 {
-                    self.userAvatarGetter(PinDetailViewController.pinUserId, index: index, isPeople: true)
+            // Processing anonymous
+            var anonyCount = 1
+            for i in 0..<self.pinComments.count {
+                let pinComment = self.pinComments[i]
+                if pinComment.anonymous && self.dictAnonymous[pinComment.userId] == nil {
+                    self.dictAnonymous[pinComment.userId] = "Anonymous \(anonyCount)"
+                    anonyCount += 1
                 }
-            })
+            }
+            // End
+            
+            self.tblMain.reloadData()
             
             if self.pinComments.count >= 1 {
                 for i in 0..<self.pinComments.count {
+                    if self.pinComments[i].anonymous {
+                        continue
+                    }
                     let userid = self.pinComments[i].userId
                     self.userNameCard(userid, i, completion: { (id, index) in
                         if id != 0 {
@@ -343,15 +365,17 @@ extension PinDetailViewController {
     }
     
     fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
-
+        
+        // if userid == 0, it is anonymous
+        if userid == 0 {
+            return
+        }
+        
         let indexPath = IndexPath(row: index, section: 0)
         getImage(userID: userid, type: 2) { (status, etag, imageRawData) in
-            print("[userAvatarGetter] userid", userid)
-            print("[userAvatarGetter] Etag", etag)
             let realm = try! Realm()
             if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
                 // 存在User，Etag没变
-                print("存在User，Etag没变")
                 if etag == avatarRealm.smallAvatarEtag {
                     if isPeople {
                         self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
@@ -362,7 +386,6 @@ extension PinDetailViewController {
                 }
                 // 存在User，Etag改变
                 else {
-                    print("存在User，Etag改变")
                     if isPeople {
                         self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
                     } else {
@@ -378,7 +401,6 @@ extension PinDetailViewController {
                 }
             } else {
                 // 不存在User
-                print("不存在User", userid, index, isPeople)
                 if isPeople {
                     self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
                 } else {
@@ -422,21 +444,22 @@ extension PinDetailViewController {
                     guard let userIndex = self.pinDetailUsers.index(of: userDetail) else { return }
                     completion(userid, userIndex)
                 }
-                if index == self.pinComments.count - 1 {
-                    let peopleCount = self.pinDetailUsers.count
-                    let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
-                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
-                    let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
-                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
-                    
-                    let attr_0 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
-                    let attr_1 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
-                    let attr = NSMutableAttributedString(string:"")
-                    attr.append(attr_0)
-                    attr.append(attr_1)
-                    self.lblPeople.attributedText = attr
-                    self.lblAnotherPeople.attributedText = attr
-                }
+            }
+            if index != -1 && index == self.pinComments.count - 1 {
+                print("[index != -1 && index == self.pinComments.count - 1]")
+                let peopleCount = self.pinDetailUsers.count
+                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+                let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
+                
+                let attr_0 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
+                let attr_1 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
+                let attr = NSMutableAttributedString(string:"")
+                attr.append(attr_0)
+                attr.append(attr_1)
+                self.lblPeople.attributedText = attr
+                self.lblAnotherPeople.attributedText = attr
             }
         })
     }

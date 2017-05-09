@@ -223,6 +223,7 @@ class PinDetailViewController: UIViewController {
     var previousIndex: Int = -1
     var boolDetailShrinked = true
     var strTextViewText = ""
+    var dictAnonymous = [Int: String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -263,7 +264,7 @@ class PinDetailViewController: UIViewController {
         uiviewToFullDragBtnSub.isHidden = true
         
         let toolbarHeight = PinDetailViewController.pinTypeEnum == .chat_room ? 0 : uiviewInputToolBarSub.frame.size.height
-        uiviewMain.frame.size.height = screenHeight - 65 - toolbarHeight
+        uiviewMain.frame.size.height = screenHeight - toolbarHeight
         tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
         uiviewInputToolBarSub.frame.origin.x = screenWidth
         uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
