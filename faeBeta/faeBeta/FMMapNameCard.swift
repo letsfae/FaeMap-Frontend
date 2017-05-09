@@ -17,8 +17,8 @@ extension FaeMapViewController {
         btnOptions.tag = Int(user_id)
         btnShowSelfOnMap.isHidden = false
         btnFavorite.isHidden = true
-        if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+        if user_id != -1 {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
             imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
             btnChat.tag = Int(user_id)
         }
@@ -343,7 +343,7 @@ extension FaeMapViewController {
         hideNameCard(btnTransparentClose)
         let withUserId: NSNumber = NSNumber(value: sender.tag)
         //First get chatroom id
-        getFromURL("chats/users/\(user_id.stringValue)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+        getFromURL("chats/users/\(user_id)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             var resultJson1 = JSON([])
             if(status / 100 == 2){
                 resultJson1 = JSON(result!)
@@ -368,7 +368,7 @@ extension FaeMapViewController {
     
     func startChat(_ chat_id: String? ,withUserId: NSNumber, withNickName: String?){
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
-        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
+        chatVC.chatRoomId = user_id < Int(withUserId) ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
         chatVC.chat_id = chat_id
         //Bryan
         let nickName = withNickName ?? "Chat"

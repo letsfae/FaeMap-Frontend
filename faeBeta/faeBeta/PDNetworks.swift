@@ -20,7 +20,7 @@ extension PinDetailViewController {
         
         // Cache the current user's profile pic and use it when current user post a feeling
         // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
-        if user_id != nil {
+        if user_id != -1 {
             let stringHeaderURL = "\(baseURL)/files/users/\(Int(user_id))/avatar"
             imgCurUserAvatar = UIImageView()
             imgCurUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
@@ -452,7 +452,6 @@ extension PinDetailViewController {
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
                 let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
-                
                 let attr_0 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
                 let attr_1 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
                 let attr = NSMutableAttributedString(string:"")

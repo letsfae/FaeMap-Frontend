@@ -38,8 +38,8 @@ var headerUserAgent : String = "iPhone"
 
 var userToken : String!
 var userTokenEncode : String!
-var session_id : NSNumber!
-var user_id : NSNumber!
+var session_id : Int = -1
+var user_id : Int = -1
 var is_Login : Int = 0
 var userEmail : String!
 var userPassword : String!

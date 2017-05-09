@@ -198,8 +198,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
             }
         }
         
-        if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+        if user_id != -1 {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
             imgAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                 if image != nil {
 

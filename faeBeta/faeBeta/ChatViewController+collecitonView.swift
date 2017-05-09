@@ -23,7 +23,7 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == user_id.stringValue {
+        if data.senderId == "\(user_id)" {
             cell.textView?.textColor = UIColor.white
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
@@ -67,7 +67,7 @@ extension ChatViewController {
 
             //Do not allow user to send two heart continously
             let userId = object["senderId"] as? String
-            let isOutGoingMessage = userId! == user_id.stringValue
+            let isOutGoingMessage = userId! == "\(user_id)"
             
 
             if object["type"] as! String == "sticker" && object["isHeartSticker"] != nil && object["isHeartSticker"] as! Bool == true && isOutGoingMessage{
@@ -93,7 +93,7 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == user_id.stringValue {
+        if data.senderId == "\(user_id)" {
             if data.isMediaMessage {
                 outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleRed())
             }

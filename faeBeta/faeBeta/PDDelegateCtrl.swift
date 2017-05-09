@@ -140,12 +140,8 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
             self.lblTxtPlaceholder.text = "Write a Comment..."
         }
         menu.addAction(writeReply)
-        if let currentUserID = user_id as? Int {
-            if currentUserID == userid {
-                menu.addAction(delete)
-            } else {
-                menu.addAction(report)
-            }
+        if user_id == userid {
+            menu.addAction(delete)
         } else {
             menu.addAction(report)
         }

@@ -46,6 +46,18 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.cellIndex = indexPath
             if comment.anonymous {
                 cell.lblUsername.text = self.dictAnonymous[comment.userId]
+                if comment.userId == user_id {
+                    let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+                    let attri_1 = [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100),
+                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!]
+                    let attr_0 = NSMutableAttributedString(string: self.dictAnonymous[comment.userId]!+" ", attributes: attri_0)
+                    let attr_1 = NSMutableAttributedString(string: "(me)", attributes: attri_1)
+                    let attr = NSMutableAttributedString(string:"")
+                    attr.append(attr_0)
+                    attr.append(attr_1)
+                    cell.lblUsername.attributedText = attr
+                }
                 cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
             } else {
                 cell.lblUsername.text = comment.displayName

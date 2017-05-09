@@ -223,7 +223,7 @@ extension NameCardViewController {
         imageViewCover.layer.masksToBounds = true
         imageViewCover.clipsToBounds = true
         imageViewCover.contentMode = .scaleAspectFill
-        if user_id != nil {
+        if user_id != -1 {
             let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/name_card_cover"
             imageViewCover.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
         }
@@ -280,8 +280,8 @@ extension NameCardViewController {
         imageViewDescrProfile.layer.borderColor = UIColor.white.cgColor
         viewNameCardDescr.addSubview(baseView)
         baseView.addSubview(imageViewDescrProfile)
-        if user_id != nil {
-            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+        if user_id != -1 {
+            let stringHeaderURL = baseURL + "/files/users/\(user_id)/avatar"
             print(user_id)
             imageViewTitleProfile.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }

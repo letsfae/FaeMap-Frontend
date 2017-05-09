@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 /*
  // after login all the information will be store in here.
  // UTF 8 str from original
@@ -113,30 +114,54 @@ class FaeUser : NSObject {
     }
     
     // process return information after logging in
-    func processToken(_ message: Any) -> Void{
-        if let message = message as? NSDictionary {
-            let str = message["token"] as! String
-            let session = message["session_id"] as! NSNumber
-            let user = message["user_id"] as! NSNumber
-            let authentication = user.stringValue+":"+str+":"+session.stringValue
-            session_id = session
-            user_id = user
-            
-            let utf8str = authentication.data(using: String.Encoding.utf8)
-            print(authentication)
-            let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-            print("Encoded:  \(base64Encoded)")
-            print("FAE "+base64Encoded)
-            let encode = "FAE "+base64Encoded
-            userToken = str
-            userTokenEncode = encode
-            is_Login = 1
-            userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
-            userPassword = keyValue["password"] as! String
-            
-            let shareAPI = LocalStorageManager()
-            _ = shareAPI.logInStorage()
-        }
+    func processToken(_ message: Any) -> Void {
+        let messageJSON = JSON(message)
+        
+        let str = messageJSON["token"].stringValue
+        let session = messageJSON["session_id"].intValue
+        let user = messageJSON["user_id"].intValue
+        let authentication = "\(user):\(str):\(session)"
+        session_id = session
+        user_id = user
+        
+        let utf8str = authentication.data(using: String.Encoding.utf8)
+        print(authentication)
+        let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        print("Encoded:  \(base64Encoded)")
+        print("FAE "+base64Encoded)
+        let encode = "FAE "+base64Encoded
+        userToken = str
+        userTokenEncode = encode
+        is_Login = 1
+        userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
+        userPassword = keyValue["password"] as! String
+        
+        let shareAPI = LocalStorageManager()
+        _ = shareAPI.logInStorage()
+        
+//        if let message = message as? NSDictionary {
+//            let str = message["token"] as! String
+//            let session = message["session_id"] as! NSNumber
+//            let user = message["user_id"] as! Int
+//            let authentication = user.stringValue+":"+str+":"+session.stringValue
+//            session_id = session
+//            user_id = user
+//            
+//            let utf8str = authentication.data(using: String.Encoding.utf8)
+//            print(authentication)
+//            let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+//            print("Encoded:  \(base64Encoded)")
+//            print("FAE "+base64Encoded)
+//            let encode = "FAE "+base64Encoded
+//            userToken = str
+//            userTokenEncode = encode
+//            is_Login = 1
+//            userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
+//            userPassword = keyValue["password"] as! String
+//            
+//            let shareAPI = LocalStorageManager()
+//            _ = shareAPI.logInStorage()
+//        }
     }
     
     
