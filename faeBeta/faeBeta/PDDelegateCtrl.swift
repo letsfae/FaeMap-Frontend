@@ -94,7 +94,8 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     
     func directReplyFromPinCell(_ username: String, index: IndexPath) {
         self.strReplyTo = "<a>@\(username)</a> "
-        self.lblTxtPlaceholder.text = "@\(username):"
+        self.lblTxtPlaceholder.isHidden = true
+        appendNewTags(tagName: "@\(username)  ")
         textViewInput.becomeFirstResponder()
         directReplyFromUser = true
         boolKeyboardShowed = true

@@ -157,7 +157,6 @@ extension PinDetailViewController {
         }
     }
     
-    // Like comment pin
     func actionLikeThisPin(_ sender: UIButton) {
         endEdit()
         
@@ -215,7 +214,7 @@ extension PinDetailViewController {
         endEdit()
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
-            UIView.animate(withDuration: 0.5, animations: ({
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: ({
                 self.uiviewMain.frame.origin.x = screenWidth
                 self.uiviewInputToolBarSub.frame.origin.x = screenWidth
             }), completion: { (_) in

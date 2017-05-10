@@ -17,6 +17,7 @@ extension PinDetailViewController: UITextViewDelegate {
                 self.lblTxtPlaceholder.isHidden = true
             } else {
                 self.lblTxtPlaceholder.isHidden = false
+                self.strReplyTo = ""
             }
             
             if textView.text.characters.count == 0 {

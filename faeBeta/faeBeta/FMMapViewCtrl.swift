@@ -332,7 +332,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let userPin = userData.values.first as? FaeUserPin else {
                 return false
             }
-            userPin.pause = true
+            pauseAllUserPinTimers()
             selectedUserMarker = marker
             canDoNextUserUpdate = false
             animateToCoordinate(type: type, marker: marker, animated: true)

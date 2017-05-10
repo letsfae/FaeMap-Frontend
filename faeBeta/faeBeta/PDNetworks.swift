@@ -136,7 +136,7 @@ extension PinDetailViewController {
             let peopleCount = self.isAnonymous ? commentCount : commentCount + 1
             let attr_2 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
             let attr_3 = NSMutableAttributedString(string: "\(peopleCount)", attributes: attri_1)
-            let attributedText = NSMutableAttributedString(string:"")
+            let attributedText = NSMutableAttributedString(string: "")
             attributedText.append(attr_2)
             attributedText.append(attr_3)
             self.lblPeople.attributedText = attributedText

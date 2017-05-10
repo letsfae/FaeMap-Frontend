@@ -61,6 +61,7 @@ class PinCommentsCell: UITableViewCell {
         
         imgAvatar = FaeAvatarView(frame: CGRect.zero)
         addSubview(imgAvatar)
+        imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
         imgAvatar.layer.cornerRadius = 19.5
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = .scaleAspectFill
