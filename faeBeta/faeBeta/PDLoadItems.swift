@@ -75,7 +75,6 @@ extension PinDetailViewController {
         uiviewFeelingBar.layer.anchorPoint = feelingBarAnchor
         uiviewFeelingBar.layer.cornerRadius = 26
         uiviewFeelingBar.backgroundColor = UIColor.white
-        uiviewFeelingBar.alpha = 0
         
         let panGesture = UIPanGestureRecognizer()
         panGesture.addTarget(self, action: #selector(self.handleFeelingPanGesture(_:)))

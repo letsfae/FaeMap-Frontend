@@ -150,16 +150,13 @@ extension PinDetailViewController {
             intChosenFeeling = -1
             return
         }
-        print("[postFeeling] pre self.intChosenFeeling", intChosenFeeling)
         intChosenFeeling = sender.tag
-        print("[postFeeling] aft self.intChosenFeeling", intChosenFeeling)
         let postFeeling = FaePinAction()
         postFeeling.whereKey("feeling", value: "\(sender.tag)")
         postFeeling.postFeelingToPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status, message) in
             if status / 100 != 2 {
                 return
             }
-            
             UIView.animate(withDuration: 0.2, animations: {
                 let yAxis = 11 * screenHeightFactor
                 let width = 32 * screenHeightFactor
@@ -540,10 +537,9 @@ extension PinDetailViewController {
         commentThisPin.whereKey("anonymous", value: "\(switchAnony.isOn)")
         if self.strPinId != "-999" {
             commentThisPin.commentThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) {(status: Int, message: Any?) in
-                if status == 201 {
+                if status / 100 == 2 {
                     print("Successfully comment this pin!")
                     self.getPinAttributeNum()
-//                    self.getPinComments(sendMessageFlag: true)
                     self.getLastComment()
                 }
                 else {

@@ -305,12 +305,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
-            if !self.canOpenAnotherPin {
+            if !canOpenAnotherPin {
                 return true
             }
 
-            self.dismissMainBtns()
-            self.canOpenAnotherPin = false
+            pauseAllUserPinTimers()
+            dismissMainBtns()
+            canOpenAnotherPin = false
             invalidateAllTimer()
             openMapPin(marker: marker, mapPin: mapPin, animated: true)
             
@@ -319,7 +320,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             pinDetailVC.strPinId = "\(mapPin.pinId)"
             
-            self.clearMap(type: "user", animated: false)
+            clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
@@ -333,10 +334,11 @@ extension FaeMapViewController: GMSMapViewDelegate {
             }
             userPin.pause = true
             selectedUserMarker = marker
-            self.canDoNextUserUpdate = false
-            self.animateToCoordinate(type: type, marker: marker, animated: true)
-            self.updateNameCard(withUserId: userPin.userId)
-            self.animateNameCard()
+            canDoNextUserUpdate = false
+            animateToCoordinate(type: type, marker: marker, animated: true)
+            updateNameCard(withUserId: userPin.userId)
+            animateNameCard()
+            invalidateAllTimer()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
                 self.btnTransparentClose.alpha = 1
             })
@@ -345,13 +347,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
-            if !self.canOpenAnotherPin {
+            if !canOpenAnotherPin {
                 return true
             }
             
-            self.dismissMainBtns()
-            self.canOpenAnotherPin = false
-            
+            pauseAllUserPinTimers()
+            dismissMainBtns()
+            canOpenAnotherPin = false
             invalidateAllTimer()
             openPlacePin(marker: marker, placePin: placePin, animated: true)
             
@@ -359,7 +361,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             pinDetailVC.modalPresentationStyle = .overCurrentContext
             pinDetailVC.delegate = self
             
-            self.clearMap(type: "user", animated: false)
+            clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                 self.present(pinDetailVC, animated: false, completion: {
                     self.canOpenAnotherPin = true
@@ -368,6 +370,18 @@ extension FaeMapViewController: GMSMapViewDelegate {
             return true
         }
         return true
+    }
+    
+    func pauseAllUserPinTimers() {
+        for user in faeUserPins {
+            user.pause = true
+        }
+    }
+    
+    func resumeAllUserPinTimers() {
+        for user in faeUserPins {
+            user.pause = false
+        }
     }
     
     fileprivate func selectPinState(pinState: String) -> PinDetailViewController.PinState {
