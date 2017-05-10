@@ -51,7 +51,8 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
                     let attri_1 = [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100),
                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!]
-                    let attr_0 = NSMutableAttributedString(string: self.dictAnonymous[comment.userId]!+" ", attributes: attri_0)
+                    let strAnony = self.dictAnonymous[comment.userId] ?? "Anonymous"
+                    let attr_0 = NSMutableAttributedString(string: strAnony + " ", attributes: attri_0)
                     let attr_1 = NSMutableAttributedString(string: "(me)", attributes: attri_1)
                     let attr = NSMutableAttributedString(string:"")
                     attr.append(attr_0)

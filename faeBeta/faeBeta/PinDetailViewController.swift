@@ -224,6 +224,7 @@ class PinDetailViewController: UIViewController {
     var boolDetailShrinked = true
     var strTextViewText = ""
     var dictAnonymous = [Int: String]()
+    var boolTblLoaded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -21,8 +21,9 @@ extension PinDetailViewController {
     // MARK: - send messages
     func sendMessage(_ text : String?) {
         if let realText = text {
-            commentThisPin(text: "\(self.strReplyTo)\(realText)")
+            commentThisPin(text: "\(self.strReplyTo)\(realText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))")
         }
+        
         self.strReplyTo = ""
         self.textViewInput.text = ""
         self.lblTxtPlaceholder.text = "Write a Comment..."

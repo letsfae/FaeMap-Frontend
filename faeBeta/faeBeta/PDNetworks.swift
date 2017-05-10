@@ -364,6 +364,52 @@ extension PinDetailViewController {
         }
     }
     
+    func getLastComment() {
+        if strPinId == "-1" {
+            return
+        }
+        
+        let getPinComments = FaePinAction()
+        getPinComments.getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) {(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                print("[getLastComment] fail to get pin comments")
+                return
+            }
+            let commentsJSON = JSON(message!)
+            guard let pinCommentJsonArray = commentsJSON.array else {
+                print("[getLastComment] fail to parse pin comments - 1")
+                return
+            }
+            guard let lastCommentJSON = pinCommentJsonArray.first else {
+                print("[getLastComment] fail to parse pin comments - 2")
+                return
+            }
+            let lastComment = PinComment(json: lastCommentJSON)
+            self.pinComments.append(lastComment)
+            
+            // Processing anonymous
+            let anonyCount = self.dictAnonymous.count + 1
+            if lastComment.anonymous && self.dictAnonymous[lastComment.userId] == nil {
+                self.dictAnonymous[lastComment.userId] = "Anonymous \(anonyCount)"
+            }
+            
+            self.tblMain.reloadData()
+            
+            if !lastComment.anonymous {
+                let userid = lastComment.userId
+                self.userNameCard(userid, self.pinComments.count - 1, completion: { (id, index) in
+                    if id != 0 {
+                        self.userAvatarGetter(userid, index: index, isPeople: true)
+                    }
+                })
+                self.userAvatarGetter(userid, index: self.pinComments.count - 1, isPeople: false)
+            }
+            
+            let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
+            self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+    
     fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
         
         // if userid == 0, it is anonymous
@@ -497,7 +543,8 @@ extension PinDetailViewController {
                 if status == 201 {
                     print("Successfully comment this pin!")
                     self.getPinAttributeNum()
-                    self.getPinComments(sendMessageFlag: true)
+//                    self.getPinComments(sendMessageFlag: true)
+                    self.getLastComment()
                 }
                 else {
                     print("Fail to comment this pin!")

@@ -10,6 +10,11 @@ import Foundation
 
 extension String {
     
+    // Trim newline in the beginning and ending of string
+    func trim() -> String {
+        return self.trimmingCharacters(in: CharacterSet.newlines)
+    }
+    
     // Calculate text height in all cases
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)

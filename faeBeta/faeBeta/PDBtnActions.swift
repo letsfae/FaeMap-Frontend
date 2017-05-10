@@ -69,24 +69,27 @@ extension PinDetailViewController {
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
                     if self.tableMode == .talktalk {
+                        self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.tblMain.frame.size.height = screenHeight - 65 - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewAnonymous.frame.origin.y = screenHeight - 51
                     } else {
+                        self.uiviewMain.frame.size.height = screenHeight
                         self.tblMain.frame.size.height = screenHeight - 65
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight
                         self.uiviewAnonymous.frame.origin.y = screenHeight
                     }
-                    
                 } else {
                     if self.tableMode == .talktalk {
+                        self.uiviewMain.frame.size.height = screenHeight - 51
                         self.tblMain.frame.size.height = screenHeight - 65 - 51
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - 51
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewAnonymous.frame.origin.y = screenHeight - 51
                     } else {
+                        self.uiviewMain.frame.size.height = screenHeight
                         self.tblMain.frame.size.height = screenHeight - 65
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight
