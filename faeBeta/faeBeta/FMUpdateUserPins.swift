@@ -60,13 +60,12 @@ extension FaeMapViewController {
                 self.canDoNextUserUpdate = true
                 return
             }
-            print("[update user pins] doing an update")
             var count = 0
             for faeUserPin in self.faeUserPins {
                 if count > 5 {
                     break
-                } else if let userID = user_id as? Int {
-                    if faeUserPin.userId == userID {
+                } else {
+                    if faeUserPin.userId == user_id {
                         continue
                     }
                 }

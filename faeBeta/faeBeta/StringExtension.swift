@@ -9,6 +9,20 @@
 import Foundation
 
 extension String {
+    
+    // Trim newline in the beginning and ending of string
+    func trim() -> String {
+        return self.trimmingCharacters(in: CharacterSet.newlines)
+    }
+    
+    // Calculate text height in all cases
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        
+        return boundingBox.height
+    }
+    
     func formatFaeDate() -> String {
         // convert to NSDate
         let dateFormatter = DateFormatter()

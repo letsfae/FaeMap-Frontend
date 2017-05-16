@@ -107,6 +107,9 @@ extension CreateCommentPinViewController {
         postSingleComment.whereKey("anonymous", value: "\(switchAnony.isOn)")
         
         postSingleComment.postPin(type: "comment") {(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
             if let getMessage = message as? NSDictionary{
                 print("Have Post Comment")
                 if let getMessageID = getMessage["comment_id"] {
@@ -130,5 +133,7 @@ extension CreateCommentPinViewController {
                 print("Post Comment Fail")
             }
         }
+        
+        print("sfasd")
     }
 }

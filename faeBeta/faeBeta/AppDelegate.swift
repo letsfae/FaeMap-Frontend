@@ -72,9 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         //Bryan
-//        do {
-//            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-//        } catch {}
+        do {
+            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
+        } catch {}
         //ENDBryan
         
         
@@ -183,7 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             let push = FaePush()
             push.getSync({ (status: Int!, message: Any?) in
-                print("[runSync] status", status)
+//                print("[runSync] status", status)
                 if status / 100 == 2 {
                     self.reachaVCPresented = false
                     //success

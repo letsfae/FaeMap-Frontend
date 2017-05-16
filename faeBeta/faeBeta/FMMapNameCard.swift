@@ -14,13 +14,13 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func getSelfNameCard(_ sender: UIButton) {
-        btnOptions.tag = Int(user_id)
+        btnOptions.tag = user_id
         btnShowSelfOnMap.isHidden = false
         btnFavorite.isHidden = true
-        if user_id != nil {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+        if user_id != -1 {
+            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
             imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
-            btnChat.tag = Int(user_id)
+            btnChat.tag = user_id
         }
         else {
             return
@@ -29,7 +29,7 @@ extension FaeMapViewController {
         let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
                                               longitude: currentLongitude, zoom: zoomLv)
-        faeMapView.animate (to: camera)
+        faeMapView.animate(to: camera)
         animateNameCard()
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
@@ -116,14 +116,7 @@ extension FaeMapViewController {
                 self.lblUserAge.text = nil
                 self.lblUserAge.alpha = 0
                 self.labelDisplayName.alpha = 0
-                
-                guard let userData = self.selectedUserMarker.userData as? [Int: AnyObject] else {
-                    return
-                }
-                guard let userPin = userData.values.first as? FaeUserPin else {
-                    return
-                }
-                userPin.pause = false
+                self.resumeAllUserPinTimers()
             }
         })
     }
@@ -343,7 +336,7 @@ extension FaeMapViewController {
         hideNameCard(btnTransparentClose)
         let withUserId: NSNumber = NSNumber(value: sender.tag)
         //First get chatroom id
-        getFromURL("chats/users/\(user_id.stringValue)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+        getFromURL("chats/users/\(user_id)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { (status, result) in
             var resultJson1 = JSON([])
             if(status / 100 == 2){
                 resultJson1 = JSON(result!)
@@ -368,7 +361,7 @@ extension FaeMapViewController {
     
     func startChat(_ chat_id: String? ,withUserId: NSNumber, withNickName: String?){
         let chatVC = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatViewController")as! ChatViewController
-        chatVC.chatRoomId = user_id.compare(withUserId).rawValue < 0 ? "\(user_id.stringValue)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id.stringValue)"
+        chatVC.chatRoomId = user_id < Int(withUserId) ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
         chatVC.chat_id = chat_id
         //Bryan
         let nickName = withNickName ?? "Chat"

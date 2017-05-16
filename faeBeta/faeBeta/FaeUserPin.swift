@@ -98,9 +98,10 @@ class FaeUserPin: NSObject {
         marker.iconView = icon
         marker.icon = nil
         
-        if index == 5 {
-            index = 0
+        if self.index == 5 {
+            self.index = 0
         }
+        
         UIView.animate(withDuration: 0.3, delay: 0, animations: {
             self.icon.alpha = 0
         }, completion: {(_) in

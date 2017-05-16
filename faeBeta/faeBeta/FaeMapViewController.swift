@@ -143,6 +143,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var userPins = [UserPin]()
+    var prevBearing: Double = 0
     
     // System Functions
     override func viewDidLoad() {
@@ -162,6 +163,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
         didLoadFirstLoad = true
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -240,7 +242,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func timerSetup() {
         invalidateAllTimer()
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
         timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }

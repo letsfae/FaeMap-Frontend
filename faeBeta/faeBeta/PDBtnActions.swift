@@ -34,13 +34,18 @@ extension PinDetailViewController {
         if sender.tag == 1 {
             tableMode = .talktalk
             tblMain.reloadData()
+            UIView.animate(withDuration: 0.3, animations: { 
+                self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
+            })
         } else if sender.tag == 3 {
             tableMode = .feelings
             tblMain.reloadData()
+            uiviewMain.frame.size.height = screenHeight
         } else if sender.tag == 5 {
             tableMode = .people
             tblMain.reloadData()
             tblMain.contentOffset.y = 0
+            uiviewMain.frame.size.height = screenHeight
         }
         endEdit()
         let tag = CGFloat(sender.tag)
@@ -64,24 +69,27 @@ extension PinDetailViewController {
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
                     if self.tableMode == .talktalk {
+                        self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.tblMain.frame.size.height = screenHeight - 65 - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewAnonymous.frame.origin.y = screenHeight - 51
                     } else {
+                        self.uiviewMain.frame.size.height = screenHeight
                         self.tblMain.frame.size.height = screenHeight - 65
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight
                         self.uiviewAnonymous.frame.origin.y = screenHeight
                     }
-                    
                 } else {
                     if self.tableMode == .talktalk {
+                        self.uiviewMain.frame.size.height = screenHeight - 51
                         self.tblMain.frame.size.height = screenHeight - 65 - 51
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - 51
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height
                         self.uiviewAnonymous.frame.origin.y = screenHeight - 51
                     } else {
+                        self.uiviewMain.frame.size.height = screenHeight
                         self.tblMain.frame.size.height = screenHeight - 65
                         self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight
                         self.uiviewInputToolBarSub.frame.origin.y = screenHeight
@@ -149,7 +157,6 @@ extension PinDetailViewController {
         }
     }
     
-    // Like comment pin
     func actionLikeThisPin(_ sender: UIButton) {
         endEdit()
         
@@ -207,8 +214,9 @@ extension PinDetailViewController {
         endEdit()
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
-            UIView.animate(withDuration: 0.5, animations: ({
-                self.uiviewMain.frame.origin.x += screenWidth
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: ({
+                self.uiviewMain.frame.origin.x = screenWidth
+                self.uiviewInputToolBarSub.frame.origin.x = screenWidth
             }), completion: { (_) in
                 self.dismiss(animated: false, completion: nil)
             })
@@ -250,15 +258,15 @@ extension PinDetailViewController {
             btnToFullPin.tag = 0
             lblTxtPlaceholder.text = "Write a Comment..."
             strReplyTo = ""
-            tblMain.isScrollEnabled = false
+            
             uiviewNavBar.leftBtn.tag = 1
-            tblMain.scrollToTop(animated: true)
+            tblMain.setContentOffset(CGPoint.zero, animated: true)
             
             UIView.animate(withDuration: 0.5, animations: ({
                 self.btnHalfPinToMap.alpha = 1.0       // nav bar left btn
                 self.uiviewNavBar.leftBtn.alpha = 0.0  // nav bar left btn
                 self.textviewPinDetail.frame.size.height = 100 //back to original text height
-                self.tblMain.frame.size.height = 227
+                
                 self.uiviewInteractBtnSub.frame.origin.y = 185
                 self.uiviewGrayMidBlock.frame.origin.y = 227
                 self.uiviewTableSub.frame.size.height = 255
@@ -269,6 +277,9 @@ extension PinDetailViewController {
                 self.uiviewInputToolBarSub.frame.origin.y = screenHeight
             }), completion: {(_) in
                 self.textviewPinDetail.isScrollEnabled = true
+//                self.tblMain.setContentOffset(CGPoint.zero, animated: true)
+                self.tblMain.isScrollEnabled = false
+                self.tblMain.frame.size.height = 227
             })
             // deal with diff UI according to pinType
             if PinDetailViewController.pinTypeEnum == .media {
@@ -310,7 +321,7 @@ extension PinDetailViewController {
             UIView.animate(withDuration: 0.5, animations: ({
                 self.textviewPinDetail.alpha = 1
                 self.scrollViewMedia.frame.origin.y += textViewHeight
-                self.textviewPinDetail.frame.size.height += 65 + textViewHeight
+                self.textviewPinDetail.frame.size.height = textViewHeight
                 self.uiviewGrayMidBlock.center.y += 65 + textViewHeight
                 self.uiviewInteractBtnSub.center.y += 65 + textViewHeight
                 self.uiviewTblCtrlBtnSub.center.y += 65 + textViewHeight

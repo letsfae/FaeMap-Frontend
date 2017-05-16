@@ -75,8 +75,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imageViewAvatar.contentMode = UIViewContentMode.scaleAspectFill
 //        imageViewAvatar.layer.borderWidth = 5
 //        imageViewAvatar.layer.borderColor = UIColor.whiteColor().CGColor
-        if user_id != nil {
-            let stringHeaderURL = baseURL + "/files/users/" + user_id.stringValue + "/avatar"
+        if user_id != -1 {
+            let stringHeaderURL = baseURL + "/files/users/" + "\(user_id)" + "/avatar"
             print(stringHeaderURL)
             imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }

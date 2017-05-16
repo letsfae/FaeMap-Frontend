@@ -10,6 +10,48 @@ import UIKit
 
 extension PinDetailViewController {
     
+    func appendReplyDisplayName(displayName: String){
+        let attributedStr = NSMutableAttributedString(string: "")
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
+        label.attributedText = NSAttributedString(string: displayName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        label.numberOfLines = 1
+        
+        //calculate the size of the image
+        label.sizeToFit()
+        var size = label.frame.size
+        label.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        label.textAlignment = .center
+        size = label.frame.size
+        
+//        get a high quality image
+        label.attributedText = NSAttributedString(string: displayName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 54)!])
+        label.sizeToFit()
+        var size2 = label.frame.size
+        label.frame = CGRect(x: 0, y: 0, width: size2.width, height: size2.height)
+        size2 = label.frame.size
+        
+        var image: UIImage? = nil
+        UIGraphicsBeginImageContext(CGSize(width: size2.width, height: size2.height))
+        label.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
+            image = screenShotImage
+        }
+        
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        attachment.bounds = CGRect(x: 0, y: -6.9, width: size.width, height: size.height)
+        
+        let nameStr = NSAttributedString(attachment: attachment)
+        attributedStr.append(nameStr)
+        
+        self.textViewInput.isScrollEnabled = false
+        self.textViewInput.attributedText = attributedStr
+        self.textViewInput.isScrollEnabled = true
+        
+        self.textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        self.textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
+    }
+    
     //MARK: - keyboard input bar tapped event
     func sendMessageButtonTapped() {
         self.animationRedSlidingLine(self.btnTalkTalk)
@@ -21,8 +63,9 @@ extension PinDetailViewController {
     // MARK: - send messages
     func sendMessage(_ text : String?) {
         if let realText = text {
-            commentThisPin(text: "\(self.strReplyTo)\(realText)")
+            commentThisPin(text: "\(self.strReplyTo)\(realText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))")
         }
+        
         self.strReplyTo = ""
         self.textViewInput.text = ""
         self.lblTxtPlaceholder.text = "Write a Comment..."

@@ -37,12 +37,12 @@ extension FaeMapViewController {
             }
         }
         
-        if user_id != nil {
+        if user_id != -1 {
             let realm = try! Realm()
-            let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
+            let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id) AND avatar != nil")
             if selfInfoRealm.count == 0 {
                 let imageViewAvatarMore = UIImageView()
-                let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+                let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
                 imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {
                         let selfInfoRealm = SelfInformation()

@@ -141,7 +141,7 @@ class PinDetailViewController: UIViewController {
     var imgHotPin: UIImageView!
     var imgMediaArr = [UIImageView]()
     var imgPinIcon: UIImageView! // Icon to indicate pin type
-    var imgPinUserAvatar: UIImageView!
+    var imgPinUserAvatar: FaeAvatarView!
     var imgPlaceQuickView: UIImageView!
     var imgPlaceType: UIImageView!
     var intChosenFeeling: Int = -1
@@ -162,6 +162,9 @@ class PinDetailViewController: UIViewController {
     var lblPlaceTitle: UILabel!
     var lblTalkTalk: UILabel!
     var lblTxtPlaceholder: UILabel!
+    var lblAnotherTalkTalk: UILabel!
+    var lblAnotherFeelings: UILabel!
+    var lblAnotherPeople: UILabel!
     var pinComments = [PinComment]()
     var pinDetailUsers = [PinDetailUser]()
     var scrollViewMedia: UIScrollView! // container to display pin's media
@@ -193,6 +196,7 @@ class PinDetailViewController: UIViewController {
     var uiviewMain: UIView!
     var uiviewToFullDragBtnSub: UIView! // Another dragging button for UI effect: shadow
     var zoomLevel: Float = 13.8
+    var anonyUserDict = [Int: Int]()
     
     // Load Chat
     var uiviewChatRoom: UIView!
@@ -219,6 +223,7 @@ class PinDetailViewController: UIViewController {
     var previousIndex: Int = -1
     var boolDetailShrinked = true
     var strTextViewText = ""
+    var dictAnonymous = [Int: String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -244,8 +249,8 @@ class PinDetailViewController: UIViewController {
         if enterMode != .collections {
             return
         }
-        uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         
+        btnHalfPinToMap.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         uiviewFeelingBar.isHidden = true
         btnNextPin.isHidden = true
         btnPrevPin.isHidden = true
@@ -258,17 +263,26 @@ class PinDetailViewController: UIViewController {
         btnToFullPin.isHidden = true
         uiviewToFullDragBtnSub.isHidden = true
         
-        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        let toolbarHeight = PinDetailViewController.pinTypeEnum == .chat_room ? 0 : uiviewInputToolBarSub.frame.size.height
+        uiviewMain.frame.size.height = screenHeight - toolbarHeight
+        tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
+        uiviewInputToolBarSub.frame.origin.x = screenWidth
+        uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
+        uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
+        uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
+        
+        let txtViewWidth = textviewPinDetail.frame.size.width
+        guard let font = textviewPinDetail.font else { return }
+        let textViewHeight: CGFloat = textviewPinDetail.text.height(withConstrainedWidth: txtViewWidth, font: font)
         if PinDetailViewController.pinTypeEnum == .media {
             textviewPinDetail.alpha = 1
+            textviewPinDetail.frame.size.height = textViewHeight
             scrollViewMedia.frame.origin.y += textViewHeight
-            textviewPinDetail.frame.size.height += 65 + textViewHeight
             uiviewGrayMidBlock.center.y += 65 + textViewHeight
             uiviewInteractBtnSub.center.y += 65 + textViewHeight
             uiviewTblCtrlBtnSub.center.y += 65 + textViewHeight
             uiviewTblHeader.frame.size.height += 65 + textViewHeight
-        }
-        else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
+        } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
             let diffHeight: CGFloat = textViewHeight - 100
             textviewPinDetail.frame.size.height += diffHeight
             uiviewGrayMidBlock.center.y += diffHeight
@@ -276,12 +290,6 @@ class PinDetailViewController: UIViewController {
             uiviewTblCtrlBtnSub.center.y += diffHeight
             uiviewTblHeader.frame.size.height += diffHeight
         }
-        let toolbarHeight = PinDetailViewController.pinTypeEnum == .chat_room ? 0 : uiviewInputToolBarSub.frame.size.height
-        tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
-        uiviewInputToolBarSub.frame.origin.x = screenWidth
-        uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
-        uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
-        uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
     }
     
     func selectPinState() {

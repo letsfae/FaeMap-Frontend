@@ -14,7 +14,7 @@ public var isDraggingRecentTableViewCell = false
 
 //Bryan
 //avatarDic was [NSNumber:UIImage] before
-public var avatarDic = [NSNumber:UIImage]() // an dictionary to store avatar, this should be moved to else where later
+public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this should be moved to else where later
 //ENDBryan
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
@@ -162,7 +162,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let chatVC = segue.destination as! ChatViewController
             chatVC.hidesBottomBarWhenPushed = true
             let recent = recents![indexPath.row]
-            chatVC.chatRoomId = user_id.compare(recent["with_user_id"].number!).rawValue < 0 ? "\(user_id.stringValue)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id.stringValue)"
+            chatVC.chatRoomId = user_id < recent["with_user_id"].intValue ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
@@ -182,7 +182,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private func downloadCurrentUserAvatar()
     {
         //if(avatarDic[user_id] == nil){
-            getImageFromURL(("files/users/" + user_id.stringValue + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
+            getImageFromURL(("files/users/\(user_id)/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
                 if status / 100 == 2 {
                     avatarDic[user_id] = image as? UIImage
                 }

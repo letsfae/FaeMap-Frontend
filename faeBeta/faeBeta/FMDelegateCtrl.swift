@@ -26,14 +26,14 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // PinDetailDelegate
     func backToMainMap() {
-        updateTimerForUserPin()
+//        updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
-        
         reloadMainScreenButtons()
+        resumeAllUserPinTimers()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
