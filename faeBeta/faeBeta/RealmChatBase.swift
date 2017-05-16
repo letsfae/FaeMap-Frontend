@@ -11,10 +11,12 @@ import RealmSwift
 
 
 class RealmMessage: Object {
+    //messageID's format: senderID_date
+    dynamic var messageID : String = ""
     dynamic var withUserID : String = ""
     dynamic var senderID : String = ""
     dynamic var senderName : String = ""
-    dynamic var date = NSDate()
+    dynamic var date : String = ""
     dynamic var message : String = ""
     dynamic var delivered = false
     dynamic var hasTimeStamp = false
@@ -34,10 +36,9 @@ class RealmMessage: Object {
     }
     
     //For chat pin we may need some backlink
-    
-    //        override static func primaryKey() -> String? {
-    //            return "date"
-    //        }
+    override static func primaryKey() -> String? {
+        return "messageID"
+    }
 }
 
 class RealmRecent: Object {
@@ -91,6 +92,39 @@ class RealmChat {
         try! realm.write{
             realm.add(message);
         }
+    }
+    
+    static func receiveMessage(message : NSDictionary, withUserID: String) {
+        let realm = try! Realm()
+        let timeStr = message["date"]! as! String
+        if(realm.objects(RealmMessage.self).filter("messageID = '\(withUserID)_\(timeStr)'").first != nil){
+            return
+        }
+        let message = RealmMessage()
+        message.withUserID = withUserID
+        message.date = timeStr
+        message.delivered = true
+        message.senderID = message["senderId"]! as! String
+        message.type = message["type"]! as! String
+        message.senderName = message["senderName"]! as! String
+        message.hasTimeStamp = message["hasTimeStamp"]! as! Bool
+        //message.hasTimeStamp =
+//        realm.objects(RealmMessage.self).filter(
+//        try! realm.write{
+//            realm.add();
+//        }
+    }
+    
+    static func dateConverter(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        return dateFormatter.string(from: date)
+    }
+    
+    static func dateConverter(str: String) -> Date{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        return dateFormatter.date(from: str)!
     }
     
     static func fetchMessageWith(userID: Int, numberOfItem: Int, offset: Int) -> [RealmMessage] {
