@@ -23,7 +23,7 @@ extension ChatViewController: OutgoingMessageProtocol{
         //Bryan
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
         let realmMessage = RealmMessage()
-        realmMessage.messageID = user_id!.stringValue + "_" + RealmChat.dateConverter(date: date)
+        realmMessage.messageID = "\(user_id)_\(RealmChat.dateConverter(date: date)))"
         realmMessage.withUserID = realmWithUser!.userID
         realmMessage.senderID = "\(user_id)"
         realmMessage.senderName = username!

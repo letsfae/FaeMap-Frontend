@@ -144,8 +144,9 @@ class RecentTableViewCell: UITableViewCell {
         self.avatarImageView.layer.masksToBounds = true
         self.avatarImageView.contentMode = .scaleAspectFill
         if let myInteger = Int(recent.withUserID) {
-            let withUserIDNumber = NSNumber(value:myInteger)
-            self.avatarImageView.image = avatarDic[withUserIDNumber] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[withUserIDNumber]
+            //Bryan
+            //let withUserIDNumber = NSNumber(value:myInteger)
+            self.avatarImageView.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
         }
         
         nameLabel.text = recent.withUserNickName
@@ -173,12 +174,12 @@ class RecentTableViewCell: UITableViewCell {
         dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
         if let myInteger = Int(recent.withUserID) {
-            let withUserIDNumber = NSNumber(value:myInteger)
-            if avatarDic[withUserIDNumber] == nil{
+            // let withUserIDNumber = NSNumber(value:myInteger)
+            if avatarDic[myInteger] == nil{
                 let withUserIDNumber = NSNumber(value:myInteger)
                 getImageFromURL(("files/users/" + recent.withUserID + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
                     if status / 100 == 2 {
-                        avatarDic[withUserIDNumber] = image as? UIImage
+                        avatarDic[myInteger] = image as? UIImage
                     }
                 })
             }
