@@ -143,6 +143,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var userPins = [UserPin]()
+    var prevBearing: Double = 0
     
     // System Functions
     override func viewDidLoad() {
@@ -162,6 +163,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
         didLoadFirstLoad = true
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -10,10 +10,10 @@ import UIKit
 
 extension PinDetailViewController {
     
-    func appendNewTags(tagName: String){
+    func appendReplyDisplayName(displayName: String){
         let attributedStr = NSMutableAttributedString(string: "")
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
-        label.attributedText = NSAttributedString(string:tagName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        label.attributedText = NSAttributedString(string: displayName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
         label.numberOfLines = 1
         
         //calculate the size of the image
@@ -24,7 +24,7 @@ extension PinDetailViewController {
         size = label.frame.size
         
 //        get a high quality image
-        label.attributedText = NSAttributedString(string: tagName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 54)!])
+        label.attributedText = NSAttributedString(string: displayName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 54)!])
         label.sizeToFit()
         var size2 = label.frame.size
         label.frame = CGRect(x: 0, y: 0, width: size2.width, height: size2.height)

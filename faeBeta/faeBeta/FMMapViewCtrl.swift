@@ -84,9 +84,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         let directionMap = position.bearing
-        let direction: CGFloat = CGFloat(directionMap)
-        let angle: CGFloat = ((360.0 - direction) * 3.14 / 180.0) as CGFloat
-        btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
+        if directionMap != prevBearing {
+            let direction: CGFloat = CGFloat(directionMap)
+            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
+            btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
+            prevBearing = position.bearing
+            print("1312")
+        }
         
         let points = self.faeMapView.projection.point(for: currentLocation2D)
         self.uiviewDistanceRadius.center = points
@@ -98,6 +102,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         if placeMarkers.count == 0 {
             return
         }
+        
         let currentZoom = mapView.camera.zoom
         let coord_1 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 0))
         let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 50))
@@ -195,14 +200,6 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }, completion: {(done: Bool) in
             marker.map = nil
         })
-    }
-    
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        print(coordinate)
-    }
-    
-    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-
     }
     
     func openMapPin(marker: GMSMarker, mapPin: MapPin, animated: Bool) {

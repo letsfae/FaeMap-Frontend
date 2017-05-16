@@ -95,7 +95,7 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     func directReplyFromPinCell(_ username: String, index: IndexPath) {
         self.strReplyTo = "<a>@\(username)</a> "
         self.lblTxtPlaceholder.isHidden = true
-        appendNewTags(tagName: "@\(username)  ")
+        appendReplyDisplayName(displayName: "@\(username)  ")
         textViewInput.becomeFirstResponder()
         directReplyFromUser = true
         boolKeyboardShowed = true
@@ -111,11 +111,12 @@ extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinComme
     }
     
     func showActionSheet(name: String, userid: Int, index: IndexPath) {
-        self.strReplyTo = "<a>@\(name)</a> "
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
-            self.lblTxtPlaceholder.text = "@\(name)"
+            self.strReplyTo = "<a>@\(name)</a> "
+            self.lblTxtPlaceholder.isHidden = true
+            self.appendReplyDisplayName(displayName: "@\(name)  ")
             self.textViewInput.becomeFirstResponder()
             self.directReplyFromUser = true
             self.boolKeyboardShowed = true

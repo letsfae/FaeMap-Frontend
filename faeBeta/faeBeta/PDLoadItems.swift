@@ -15,6 +15,7 @@ extension PinDetailViewController {
     func loadPinDetailWindow() {
         
         loadTransparentButtonBackToMap()
+        loadFeelingBar()
         
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 320))
         uiviewMain.layer.zPosition = 101
@@ -24,7 +25,6 @@ extension PinDetailViewController {
         uiviewMain.frame.origin.y = enterMode == .collections ? 0 : -screenHeight
         
         loadNavigationBar()
-        loadFeelingBar()
         loadPinCtrlButton()
         loadingOtherParts()
         loadTableHeader()
