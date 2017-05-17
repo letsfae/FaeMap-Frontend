@@ -21,9 +21,9 @@ extension PinDetailViewController {
         // Cache the current user's profile pic and use it when current user post a feeling
         // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
         if user_id != -1 {
-            let stringHeaderURL = "\(baseURL)/files/users/\(Int(user_id))/avatar"
+            let urlStringHeader = "\(baseURL)/files/users/\(Int(user_id))/avatar"
             imgCurUserAvatar = UIImageView()
-            imgCurUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
+            imgCurUserAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
         }
         
         let getPinById = FaeMap()
@@ -125,8 +125,8 @@ extension PinDetailViewController {
                 self.lblPinDisplayName.text = pinInfoJSON["nick_name"].stringValue
                 // Get avatar
                 if let pinUserId = pinInfoJSON["user_id"].int {
-                    let stringHeaderURL = "\(baseURL)/files/users/\(pinUserId)/avatar"
-                    self.imgPinUserAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                    let urlStringHeader = "\(baseURL)/files/users/\(pinUserId)/avatar"
+                    self.imgPinUserAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                         UIView.animate(withDuration: 0.2, animations: {
                             self.imgPinUserAvatar.alpha = 1
                         })

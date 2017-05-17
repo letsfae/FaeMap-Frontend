@@ -3,6 +3,7 @@
 //  faeBeta
 //
 //  Created by Shiqi Wei on 4/22/17.
+//  Edited by Sophie Wang
 //  Copyright © 2017 fae. All rights reserved.
 //
 
@@ -21,12 +22,10 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
 
-        blurViewMainScreenSearch.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewBlurMainScreenSearch.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         // initialize the touch gesture
         gesturerecognizerTouch = TouchGestureRecognizer(target: self, action: #selector(handleAfterTouch))
         gesturerecognizerTouch.delegate = self
-
-        
     }
     
     func handleAfterTouch(recognizer: TouchGestureRecognizer) {
@@ -43,19 +42,21 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     }
     
     //full pin detail delegate
-    func backToCollections(likeCount: String, commentCount: String){
+    func backToCollections(likeCount: String, commentCount: String) {
         if self.indexCurrSelectRowAt != nil {
             var cellCurrSelect : PinsTableViewCell
             if strTableTypeName == "Created Pins" {
                 cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
-            }else{
+            }
+            else {
                 cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
             }
             cellCurrSelect.lblComment.text = commentCount
             cellCurrSelect.lblLike.text = likeCount
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
                 cellCurrSelect.imgHot.isHidden = false
-            }else{
+            }
+            else {
                 cellCurrSelect.imgHot.isHidden = true
             }
             arrFiltered[self.indexCurrSelectRowAt.section]["liked_count"] = Int(likeCount) as AnyObject
@@ -69,36 +70,39 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     
     //click cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(!gesturerecognizerTouch.isCellSwiped){
+        if(!gesturerecognizerTouch.isCellSwiped) {
             tableView.deselectRow(at: indexPath, animated: false)
             
-            let pinDetailVC = PinDetailViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.colDelegate = self
-            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrFiltered[indexPath.section]["latitude"] as! CLLocationDegrees, arrFiltered[indexPath.section]["longitude"] as! CLLocationDegrees)
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.colDelegate = self
+            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(
+                arrFiltered[indexPath.section]["latitude"] as! CLLocationDegrees,
+                arrFiltered[indexPath.section]["longitude"] as! CLLocationDegrees)
             if strTableTypeName == "Created Pins" {
                 PinDetailViewController.pinUserId = user_id as Int
-            }else{
-                if let user_id = arrFiltered[indexPath.section]["user_id"]{
+            }
+            else {
+                if let user_id = arrFiltered[indexPath.section]["user_id"] {
                     PinDetailViewController.pinUserId = user_id as! Int
                 }
             }
             PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrFiltered[indexPath.section]["type"] as! String)!
             
             if let content = arrFiltered[indexPath.section]["content"] {
-                pinDetailVC.strTextViewText = content as! String
+                vcPinDetail.strTextViewText = content as! String
             }
             //media tab里面存的不叫content 叫description
             if let description = arrFiltered[indexPath.section]["description"] {
-                pinDetailVC.strTextViewText = description as! String
+                vcPinDetail.strTextViewText = description as! String
             }
             
             if let pinID = arrFiltered[indexPath.section]["pin_id"] {
-                pinDetailVC.strPinId = "\(pinID)"
+                vcPinDetail.strPinId = "\(pinID)"
             }
             
-            pinDetailVC.enterMode = .collections
-            self.present(pinDetailVC, animated: false, completion: {
+            vcPinDetail.enterMode = .collections
+            self.present(vcPinDetail, animated: false, completion: {
                 self.indexCurrSelectRowAt = indexPath
             })
             
@@ -110,7 +114,8 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
         let cell : PinsTableViewCell
         if strTableTypeName == "Created Pins" {
             cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
-        }else{
+        }
+        else {
             cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
         }
         cell.setValueForCell(_: arrFiltered[indexPath.section])
@@ -142,18 +147,19 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     }
 
     // PinTableViewCellDelegate protocol required function
-    func itemSwiped(indexCell: Int){
+    func itemSwiped(indexCell: Int) {
         let path : IndexPath = IndexPath(row: 0, section: indexCell)
         if strTableTypeName == "Created Pins" {
-        cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! CreatedPinsTableViewCell
-        }else{
+          cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! CreatedPinsTableViewCell
+        }
+        else {
         cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! SavedPinsTableViewCell
         }
         tblSearchResults.addGestureRecognizer(gesturerecognizerTouch)
         gesturerecognizerTouch.cellInGivenId = cellCurrSwiped
     }
     
-    func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String) {
 //        let deleteMyPin = FaeMap()
 //        deleteMyPin.deletePin(type: pinType, pinId: pinId.description) {(status: Int, message: Any?) in
 //            if status / 100 == 2 {
@@ -173,54 +179,54 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
 //        }
     }
     
-    func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String) {
 //        if pinId == -999 {
 //            return
 //        }
-//        let editPinVC = EditPinViewController()
-//        //        editPinVC.zoomLevel = zoomLevel
-//        editPinVC.delegate = self
+//        let vcEditPin = EditPinViewController()
+//        //        vcEditPin.zoomLevel = zoomLevel
+//        vcEditPin.delegate = self
 //        
 //        if(pinType == "comment"){
-//            editPinVC.previousCommentContent = arrPinData[indexCell]["content"] as! String
-//            editPinVC.editPinMode = .comment
+//            vcEditPin.previousCommentContent = arrPinData[indexCell]["content"] as! String
+//            vcEditPin.editPinMode = .comment
 //        }
 //        if(pinType == "media"){
-//            editPinVC.previousCommentContent = arrPinData[indexCell]["description"] as! String
+//            vcEditPin.previousCommentContent = arrPinData[indexCell]["description"] as! String
 //            
 //            var mediaIdArray : [Int] = []
 //            let fileIDs = arrPinData[indexCell]["file_ids"] as! NSArray
 //            for index in 0...fileIDs.count-1 {
 //                mediaIdArray.append(Int(String(describing: fileIDs[index]))!)
 //            }
-//            editPinVC.mediaIdArray = mediaIdArray
+//            vcEditPin.mediaIdArray = mediaIdArray
 //            
-//            editPinVC.editPinMode = .media
+//            vcEditPin.editPinMode = .media
 //        }
-//        editPinVC.pinID = "\(pinId)"
-//        editPinVC.pinType = pinType
-//        editPinVC.pinMediaImageArray = cellCurrSwiped.arrImgPinPic
-//        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
+//        vcEditPin.pinID = "\(pinId)"
+//        vcEditPin.pinType = pinType
+//        vcEditPin.pinMediaImageArray = cellCurrSwiped.arrImgPinPic
+//        vcEditPin.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
 //        
 //        
 //        
-//        self.present(editPinVC, animated: true, completion: {
+//        self.present(vcEditPin, animated: true, completion: {
 //            self.tblPinsData.reloadData()
 //        })
     }
     
-    func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemShared(indexCell: Int, pinId: Int, pinType: String) {
         
     }
     
-    func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String) {
         
     }
     
-    func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String) {
         
     }
-    func toDoItemUnsaved(indexCell: Int, pinId: Int, pinType: String){
+    func toDoItemUnsaved(indexCell: Int, pinId: Int, pinType: String) {
     }
 
     

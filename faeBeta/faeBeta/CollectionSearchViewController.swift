@@ -3,6 +3,7 @@
 //  faeBeta
 //
 //  Created by Shiqi Wei on 02/12/17.
+//  Edited by Sophie Wang
 //  Copyright © 2016 fae. All rights reserved.
 //
 
@@ -15,7 +16,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     var btnClearSearchBar: UIButton!
     
-    var blurViewMainScreenSearch: UIView!
+    var uiviewBlurMainScreenSearch: UIView!
     
     // MARK: -- Search Bar
 
@@ -78,15 +79,15 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func loadBlurView() {
-        blurViewMainScreenSearch = UIView()
-        blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        self.view.addSubview(blurViewMainScreenSearch)
+        uiviewBlurMainScreenSearch = UIView()
+        uiviewBlurMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        self.view.addSubview(uiviewBlurMainScreenSearch)
     }
 
     func loadFunctionButtons() {
         uiviewSearchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
         uiviewSearchBarSubview.layer.zPosition = 1
-        blurViewMainScreenSearch.addSubview(uiviewSearchBarSubview)
+        uiviewBlurMainScreenSearch.addSubview(uiviewSearchBarSubview)
         self.uiviewSearchBarSubview.frame.origin.y = -self.uiviewSearchBarSubview.frame.size.height
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.uiviewSearchBarSubview.addSubview(backSubviewButton)
@@ -108,10 +109,11 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func loadFaeSearchController() {
         faeSearchController = FaeSearchController(searchResultsController: self,
-                                                  searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
-                                                  searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
-                                                  searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
-                                                  searchBarTintColor: UIColor.white)
+           searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
+           searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
+           searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
+           searchBarTintColor: UIColor.white)
+        
         faeSearchController.faeSearchBar.placeholder = "Search Keywords                                       "//blanks for keeping the placeholder not jump during the animation
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0
@@ -124,18 +126,16 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         uiviewSearchBarSubview.layer.borderColor = UIColor.white.cgColor
         uiviewSearchBarSubview.layer.borderWidth = 1.0
         
-        let buttonBackToFaeMap = UIButton(frame: CGRect(x: 15, y: 32, width: 10.5, height: 18))
-        buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
-        self.uiviewSearchBarSubview.addSubview(buttonBackToFaeMap)
-        buttonBackToFaeMap.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
-        buttonBackToFaeMap.layer.zPosition = 3
+        let btnBackToFaeMap = UIButton(frame: CGRect(x: 15, y: 32, width: 10.5, height: 18))
+        btnBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
+        self.uiviewSearchBarSubview.addSubview(btnBackToFaeMap)
+        btnBackToFaeMap.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
+        btnBackToFaeMap.layer.zPosition = 3
         
         btnClearSearchBar = UIButton()
         btnClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())
         self.uiviewSearchBarSubview.addSubview(btnClearSearchBar)
-        btnClearSearchBar.addTarget(self,
-                                       action: #selector(self.actionClearSearchBar(_:)),
-                                       for: .touchUpInside)
+        btnClearSearchBar.addTarget(self, action: #selector(self.actionClearSearchBar(_:)), for: .touchUpInside)
         btnClearSearchBar.layer.zPosition = 3
         self.uiviewSearchBarSubview.addConstraintsWithFormat("H:[v0(17)]-15-|", options: [], views: btnClearSearchBar)
         self.uiviewSearchBarSubview.addConstraintsWithFormat("V:|-33-[v0(17)]", options: [], views: btnClearSearchBar)
@@ -176,7 +176,6 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     //resize the height of the view when the keyboard will show
     func keyboardWillShow(notification: NSNotification) {
-        
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-keyboardHeight-66)
@@ -207,7 +206,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
                 else if pinArr["type"]?.description == "comment" {
                     return (pinArr["content"]?.lowercased.contains(searchText.lowercased()))!
                 }
-                else{
+                else {
                     return (pinArr["address"]?.lowercased.contains(searchText.lowercased()))!
 
                 }
@@ -241,13 +240,13 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     // MARK: TableView Initialize
     func loadTableView() {
-        tblSearchResults = UITableView(frame: CGRect(x: 0,y: 66,width: screenWidth,height: screenHeight-66))
+        tblSearchResults = UITableView(frame: CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-66))
         tblSearchResults.backgroundColor = .clear
         tblSearchResults.showsVerticalScrollIndicator = false
-        let headerView = UIView(frame: CGRect(x: 0,y: 0,width: screenWidth,height: 10))
-        headerView.backgroundColor = UIColor.clear
-        tblSearchResults.tableHeaderView = headerView
-        blurViewMainScreenSearch.addSubview(tblSearchResults)
+        let uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 10))
+        uiviewHeader.backgroundColor = UIColor.clear
+        tblSearchResults.tableHeaderView = uiviewHeader
+        uiviewBlurMainScreenSearch.addSubview(tblSearchResults)
         
         //for auto layout
         tblSearchResults.rowHeight = UITableViewAutomaticDimension

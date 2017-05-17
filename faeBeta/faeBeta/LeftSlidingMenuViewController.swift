@@ -260,8 +260,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func readRealmData() {
         
         if user_id != -1 {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
-            imageAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
+            imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                 
             })
         }
@@ -287,8 +287,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
         else {
             if user_id != nil {
-                let stringHeaderURL = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
-                imageAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                let urlStringHeader = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
+                imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {
                         let selfInfoRealm = SelfInformation()
                         selfInfoRealm.currentUserID = Int(user_id)

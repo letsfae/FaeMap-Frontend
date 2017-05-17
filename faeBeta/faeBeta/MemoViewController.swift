@@ -3,6 +3,7 @@
 //  PinsColSearch
 //
 //  Created by Shiqi Wei on 3/30/17.
+//  Edited by Sophie Wang
 //  Copyright © 2017 Shiqi Wei. All rights reserved.
 //
 
@@ -15,7 +16,7 @@ protocol MemoDelegate: class {
 class MemoViewController: UIViewController, UITextViewDelegate {
 
     weak var delegate: MemoDelegate?
-    var blurViewMemo : UIView!
+    var uiviewBlurMemo : UIView!
     var uiviewMemo : UIView!
     var txtMemo: UITextView!
     var lblPlaceholder : UILabel!
@@ -36,16 +37,15 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         super.viewDidAppear(animated)
         self.txtMemo.becomeFirstResponder()
         UIView.animate(withDuration: 0.3, animations: ({
-            self.blurViewMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0.3)
-
+            self.uiviewBlurMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0.3)
         }))
     }
 
     func loadBlurView() {
-        blurViewMemo = UIView()
-        blurViewMemo.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        blurViewMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0)
-        self.view.addSubview(blurViewMemo)
+        uiviewBlurMemo = UIView()
+        uiviewBlurMemo.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        uiviewBlurMemo.backgroundColor = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 0)
+        self.view.addSubview(uiviewBlurMemo)
     }
     // override textViewDidChange function to limit the length of chars
     func textViewDidChange(_ textView: UITextView) {
@@ -55,16 +55,16 @@ class MemoViewController: UIViewController, UITextViewDelegate {
             lblWordsCount.textColor = UIColor.faeAppRedColor()
             btnSave.isEnabled = false
             btnSave.alpha = 0.6
-        }else{
+        }
+        else {
             lblWordsCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
             btnSave.isEnabled = true
             btnSave.alpha = 1
         }
-        
         lblWordsCount.text = String(leftcharscount)
     }
     
-    func loadMemo(){
+    func loadMemo() {
         uiviewMemo = UIView(frame: CGRect(x: 0, y: screenHeight-keyboardHeight-180, width: screenWidth, height: 180))
         uiviewMemo.backgroundColor = .white
         self.view.addSubview(uiviewMemo)
@@ -72,7 +72,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         txtMemo.delegate = self
         txtMemo.isEditable = true
         txtMemo.tintColor = UIColor.faeAppRedColor()
-        txtMemo.font = UIFont(name: "AvenirNext-Regular",size: 18)
+        txtMemo.font = UIFont(name: "AvenirNext-Regular", size: 18)
         txtMemo.textColor = UIColor.faeAppInputTextGrayColor()
         //placeholder
         lblPlaceholder = UILabel()
@@ -80,30 +80,30 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         lblPlaceholder.font = txtMemo.font
         lblPlaceholder.sizeToFit()
         txtMemo.addSubview(lblPlaceholder)
-        lblPlaceholder.frame.origin = CGPoint(x: 5, y: (txtMemo.font?.pointSize)! / 2)
+        lblPlaceholder.frame.origin = CGPoint(x: 5, y: (txtMemo.font?.pointSize)!/2)
         lblPlaceholder.textColor = UIColor.lightGray
         lblPlaceholder.isHidden = !txtMemo.text.isEmpty
         uiviewMemo.addSubview(txtMemo)
         
-        btnCancel = UIButton(frame:CGRect(x: 15, y: 15, width: 51, height: 22))
-        btnSave = UIButton(frame:CGRect(x: screenWidth-51, y: 15, width: 36, height: 22))
+        btnCancel = UIButton(frame: CGRect(x: 15, y: 15, width: 51, height: 22))
+        btnSave = UIButton(frame: CGRect(x: screenWidth-51, y: 15, width: 36, height: 22))
         btnCancel.setTitle("Cancel", for: .normal)
-        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
         btnCancel.setTitleColor(UIColor.faeAppDarkblueColor(), for: .normal)
         btnCancel.backgroundColor = .clear
         btnCancel.addTarget(self, action: #selector(self.actionDismissCurrentView(_:)), for: .touchUpInside)
         uiviewMemo.addSubview(btnCancel)
         
         btnSave.setTitle("Save", for: .normal)
-        btnSave.titleLabel?.font = UIFont(name: "AvenirNext-Medium",size: 16)
+        btnSave.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
         btnSave.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
         btnSave.backgroundColor = .clear
         btnSave.addTarget(self, action: #selector(self.actionSaveBtn(_:)), for: .touchUpInside)
         uiviewMemo.addSubview(btnSave)
         
         lblWordsCount = UILabel(frame: CGRect(x: screenWidth-54, y: self.uiviewMemo.frame.height-30, width: 40, height: 22))
-        lblWordsCount.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        lblWordsCount.textAlignment = NSTextAlignment.right
+        lblWordsCount.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblWordsCount.textAlignment = .right
         lblWordsCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         lblWordsCount.text = "50"
         uiviewMemo.addSubview(lblWordsCount)
@@ -117,7 +117,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
     }
     
     // save button action
-    func actionSaveBtn(_ sender: UIButton){
+    func actionSaveBtn(_ sender: UIButton) {
         self.delegate?.memoContent(save: true, content: txtMemo.text)
         self.txtMemo.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
@@ -127,9 +127,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     //resize the height of the view when the keyboard will show
-    
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {

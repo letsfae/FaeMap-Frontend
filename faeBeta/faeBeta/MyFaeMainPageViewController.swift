@@ -76,9 +76,9 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
 //        imageViewAvatar.layer.borderWidth = 5
 //        imageViewAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         if user_id != -1 {
-            let stringHeaderURL = baseURL + "/files/users/" + "\(user_id)" + "/avatar"
-            print(stringHeaderURL)
-            imageViewAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            let urlStringHeader = baseURL + "/files/users/" + "\(user_id)" + "/avatar"
+            print(urlStringHeader)
+            imageViewAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
         self.scroll.addSubview(imageViewAvatar)
         buttonImage = UIButton(frame: CGRect(x: 0,y: 44,width: 100,height: 100))

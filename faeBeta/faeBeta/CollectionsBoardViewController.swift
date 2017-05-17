@@ -3,6 +3,7 @@
 //  faeBeta
 //
 //  Created by Shiqi Wei on 3/22/17.
+//  Edited by Sophie Wang
 //  Copyright © 2017 fae. All rights reserved.
 //
 
@@ -10,15 +11,15 @@ import UIKit
 import SwiftyJSON
 
 class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate {
-    var firstAppear = true
+    var boolFirstAppear = true
     //background view
     var uiviewBackground: UIView!
-    var lblSavedPinsCount : UILabel!
-    var lblCreatedPinsCount : UILabel!
-    var lblSavedLocationsCount : UILabel!
-    var lblSavedPlacesCount : UILabel!
+    var lblSavedPinsCount: UILabel!
+    var lblCreatedPinsCount: UILabel!
+    var lblSavedLocationsCount: UILabel!
+    var lblSavedPlacesCount: UILabel!
     
-    func backToBoard(Count: Int){
+    func backToBoard(Count: Int) {
         getPinCounts()
     }
     
@@ -34,13 +35,14 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if firstAppear {
+        if boolFirstAppear {
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
                 self.uiviewBackground.frame.origin.x = 0
             }))
-            firstAppear = false
-        }else{
+            boolFirstAppear = false
+        }
+        else {
             getPinCounts()
         }
     }
@@ -71,8 +73,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         uiviewBackground.addSubview(uiviewNavBar)
     
         let lblTitle = UILabel(frame: CGRect(x: (screenWidth-103)/2, y: 28, width: 103, height: 27))
-        lblTitle.font = UIFont(name: "AvenirNext-Medium",size: 20)
-        lblTitle.textAlignment = NSTextAlignment.center
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblTitle.textAlignment = .center
         lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
         lblTitle.text = "Collections"
         uiviewNavBar.addSubview(lblTitle)
@@ -85,34 +87,34 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     
     // Load the Collection Board
     func loadColBoard() {
-        let uiviewBoard = UIView(frame: CGRect(x: 0,y: 62,width: screenWidth,height: screenHeight-62))
+        let uiviewBoard = UIView(frame: CGRect(x: 0, y: 62, width: screenWidth, height: screenHeight-62))
         uiviewBoard.backgroundColor = UIColor.white
         uiviewBackground.addSubview(uiviewBoard)
         
         let lblMyPins = UILabel()
-        lblMyPins.font = UIFont(name: "AvenirNext-DemiBold",size: 13)
-        lblMyPins.textAlignment = NSTextAlignment.left
+        lblMyPins.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        lblMyPins.textAlignment = .left
         lblMyPins.textColor = UIColor.faeAppTimeTextBlackColor()
         lblMyPins.text = "My Pins"
         uiviewBoard.addSubview(lblMyPins)
         
         let btnCreatedPins = UIButton()
-        btnCreatedPins.setImage( #imageLiteral(resourceName: "createdpinbtnbackground"), for: UIControlState.normal)
+        btnCreatedPins.setImage( #imageLiteral(resourceName: "createdpinbtnbackground"), for: .normal)
         btnCreatedPins.addTarget(self, action: #selector(self.actionCreatedPins(_:)), for: .touchUpInside)
         btnCreatedPins.adjustsImageWhenHighlighted = false
         uiviewBoard.addSubview(btnCreatedPins)
         
-        let createdPinsAvatar = getAvatar()
-        uiviewBoard.addSubview(createdPinsAvatar)
+        let avatarCreatedPinsAvatar = getAvatar()
+        uiviewBoard.addSubview(avatarCreatedPinsAvatar)
         
         let btnSavedPins = UIButton()
-        btnSavedPins.setImage(#imageLiteral(resourceName: "savedpinbtnbackground"), for: UIControlState.normal)
+        btnSavedPins.setImage(#imageLiteral(resourceName: "savedpinbtnbackground"), for: .normal)
         btnSavedPins.addTarget(self, action: #selector(self.actionSavedPins(_:)), for: .touchUpInside)
         btnSavedPins.adjustsImageWhenHighlighted = false
         uiviewBoard.addSubview(btnSavedPins)
         
-        let savedPinsAvatar = getAvatar()
-        uiviewBoard.addSubview(savedPinsAvatar)
+        let avatarSavedPins = getAvatar()
+        uiviewBoard.addSubview(avatarSavedPins)
         
         lblCreatedPinsCount = getitemCount()
         uiviewBoard.addSubview(lblCreatedPinsCount)
@@ -121,8 +123,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         getPinCounts()
         
         let lblMyLists = UILabel()
-        lblMyLists.font = UIFont(name: "AvenirNext-DemiBold",size: 13)
-        lblMyLists.textAlignment = NSTextAlignment.left
+        lblMyLists.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        lblMyLists.textAlignment = .left
         lblMyLists.textColor = UIColor.faeAppTimeTextBlackColor()
         lblMyLists.text = "My Lists"
         uiviewBoard.addSubview(lblMyLists)
@@ -133,8 +135,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         btnSavedLocations.adjustsImageWhenHighlighted = false
         uiviewBoard.addSubview(btnSavedLocations)
         
-        let savedLocationsAvatar = getAvatar()
-        uiviewBoard.addSubview(savedLocationsAvatar)
+        let avatarSavedLocations = getAvatar()
+        uiviewBoard.addSubview(avatarSavedLocations)
         
         lblSavedLocationsCount = getitemCount()
         uiviewBoard.addSubview(lblSavedLocationsCount)
@@ -145,8 +147,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         btnSavedPlaces.adjustsImageWhenHighlighted = false
         uiviewBoard.addSubview(btnSavedPlaces)
         
-        let savedPlacesAvatar = getAvatar()
-        uiviewBoard.addSubview(savedPlacesAvatar)
+        let avatarSavedPlaces = getAvatar()
+        uiviewBoard.addSubview(avatarSavedPlaces)
         
         lblSavedPlacesCount = getitemCount()
         uiviewBoard.addSubview(lblSavedPlacesCount)
@@ -163,16 +165,16 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         uiviewBoard.addConstraintsWithFormat("H:|-15-[v0]", options: [], views: lblMyLists)
         
         // 给头像和itemslabel加Constraints
-        uiviewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views: createdPinsAvatar, lblCreatedPinsCount, savedLocationsAvatar, lblSavedLocationsCount)
-        uiviewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views: savedPinsAvatar, lblSavedPinsCount, savedPlacesAvatar, lblSavedPlacesCount)
-        uiviewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: createdPinsAvatar, savedPinsAvatar)
-        uiviewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: savedLocationsAvatar, savedPlacesAvatar)
+        uiviewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views: avatarCreatedPinsAvatar, lblCreatedPinsCount, avatarSavedLocations, lblSavedLocationsCount)
+        uiviewBoard.addConstraintsWithFormat("V:|-138-[v0(36)]-28-[v1(18)]-145-[v2(36)]-28-[v3(18)]", options: [], views: avatarSavedPins, lblSavedPinsCount, avatarSavedPlaces, lblSavedPlacesCount)
+        uiviewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: avatarCreatedPinsAvatar, avatarSavedPins)
+        uiviewBoard.addConstraintsWithFormat("H:|-27-[v0(36)]-\(screenWidth/2-45)-[v1(36)]", options: [], views: avatarSavedLocations, avatarSavedPlaces)
         uiviewBoard.addConstraintsWithFormat("H:|-30-[v0(100)]-\(screenWidth/2-109)-[v1]", options: [], views: lblCreatedPinsCount, lblSavedPinsCount)
         uiviewBoard.addConstraintsWithFormat("H:|-30-[v0(100)]-\(screenWidth/2-109)-[v1]", options: [], views: lblSavedLocationsCount, lblSavedPlacesCount)
     }
     
     //生成头像对象
-    func getAvatar() -> UIView{
+    func getAvatar() -> UIView {
         let imgAvatar = UIImageView(frame: CGRect(x: 0, y: 0, width: 36*screenWidthFactor, height: 36*screenWidthFactor))
         imgAvatar.layer.cornerRadius = 18*screenWidthFactor
         imgAvatar.contentMode = .scaleAspectFill
@@ -199,8 +201,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         }
         
         if user_id != -1 {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
-            imgAvatar.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
+            imgAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                 if image != nil {
 
                 }
@@ -211,15 +213,15 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     
     //生成itemslabel对象
     func getitemCount() -> UILabel {
-        let labelCount = UILabel()
-        labelCount.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        labelCount.textAlignment = NSTextAlignment.left
-        labelCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
-        labelCount.text = "0 items"
-        return labelCount
+        let lblCount = UILabel()
+        lblCount.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblCount.textAlignment = .left
+        lblCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblCount.text = "0 items"
+        return lblCount
     }
     
-    func getPinCounts(){
+    func getPinCounts() {
         let getPinCounts = FaeMap()
         getPinCounts.getPinStatistics {(status: Int, message: Any?) in
             if status / 100 == 2 {
@@ -244,31 +246,31 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         return count
     }
     
-    func actionCreatedPins(_ sender: UIButton){
-        let createdPinVC = CreatedPinsViewController()
-        createdPinVC.modalPresentationStyle = .overCurrentContext
-        createdPinVC.backBoardDelegate = self
-        self.present(createdPinVC, animated: false, completion: nil)
+    func actionCreatedPins(_ sender: UIButton) {
+        let vcCreatedPin = CreatedPinsViewController()
+        vcCreatedPin.modalPresentationStyle = .overCurrentContext
+        vcCreatedPin.delegateBackBoard = self
+        self.present(vcCreatedPin, animated: false, completion: nil)
     }
     
-    func actionSavedPins(_ sender: UIButton){
-        let savedPinVC = SavedPinsViewController()
-        savedPinVC.modalPresentationStyle = .overCurrentContext
-        savedPinVC.backBoardDelegate = self
-        self.present(savedPinVC, animated: false, completion: nil)
+    func actionSavedPins(_ sender: UIButton) {
+        let vcSavedPin = SavedPinsViewController()
+        vcSavedPin.modalPresentationStyle = .overCurrentContext
+        vcSavedPin.delegateBackBoard = self
+        self.present(vcSavedPin, animated: false, completion: nil)
     }
     
-    func actionSavedPlaces(_ sender: UIButton){
-        let savedPlaceVC = PlacesAndLocationsViewController()
-        savedPlaceVC.strTableTitle = "Saved Places"
-        savedPlaceVC.modalPresentationStyle = .overCurrentContext
-        self.present(savedPlaceVC, animated: false, completion: nil)
+    func actionSavedPlaces(_ sender: UIButton) {
+        let vcSavedPlace = PlacesAndLocationsViewController()
+        vcSavedPlace.strTableTitle = "Saved Places"
+        vcSavedPlace.modalPresentationStyle = .overCurrentContext
+        self.present(vcSavedPlace, animated: false, completion: nil)
     }
     
-    func actionSavedLocations(_ sender: UIButton){
-        let savedLocationsVC = PlacesAndLocationsViewController()
-        savedLocationsVC.strTableTitle = "Saved Locations"
-        savedLocationsVC.modalPresentationStyle = .overCurrentContext
-        self.present(savedLocationsVC, animated: false, completion: nil)
+    func actionSavedLocations(_ sender: UIButton) {
+        let vcSavedLocations = PlacesAndLocationsViewController()
+        vcSavedLocations.strTableTitle = "Saved Locations"
+        vcSavedLocations.modalPresentationStyle = .overCurrentContext
+        self.present(vcSavedLocations, animated: false, completion: nil)
     }
 }

@@ -32,7 +32,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     var buttonClearSearchBar: UIButton!
     
-    var blurViewMainScreenSearch: UIVisualEffectView!
+    var uiviewBlurMainScreenSearch: UIVisualEffectView!
     
     // MARK: -- Search Bar
     var uiviewTableSubview: UIView!
@@ -71,7 +71,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
             self.searchBarSubview.center.y += self.searchBarSubview.frame.size.height
-            self.blurViewMainScreenSearch.effect = UIBlurEffect(style: .light)
+            self.uiviewBlurMainScreenSearch.effect = UIBlurEffect(style: .light)
         }), completion: { (done: Bool) in
             if done {
                 self.faeSearchController.faeSearchBar.becomeFirstResponder()
@@ -92,11 +92,11 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     func loadBlurView() {
-        blurViewMainScreenSearch = UIVisualEffectView()
-        blurViewMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        self.view.addSubview(blurViewMainScreenSearch)
+        uiviewBlurMainScreenSearch = UIVisualEffectView()
+        uiviewBlurMainScreenSearch.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        self.view.addSubview(uiviewBlurMainScreenSearch)
         let buttonBackToMapSubview = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        blurViewMainScreenSearch.addSubview(buttonBackToMapSubview)
+        uiviewBlurMainScreenSearch.addSubview(buttonBackToMapSubview)
         buttonBackToMapSubview.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)
     }
     
@@ -142,11 +142,11 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         searchBarSubview.layer.borderColor = UIColor.white.cgColor
         searchBarSubview.layer.borderWidth = 1.0
         
-        let buttonBackToFaeMap = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
-        buttonBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
-        self.searchBarSubview.addSubview(buttonBackToFaeMap)
-        buttonBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
-        buttonBackToFaeMap.layer.zPosition = 3
+        let btnBackToFaeMap = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
+        btnBackToFaeMap.setImage(UIImage(named: "mainScreenSearchToFaeMap"), for: UIControlState())
+        self.searchBarSubview.addSubview(btnBackToFaeMap)
+        btnBackToFaeMap.addTarget(self, action: #selector(MainScreenSearchViewController.actionDimissSearchBar(_:)), for: .touchUpInside)
+        btnBackToFaeMap.layer.zPosition = 3
         
         buttonClearSearchBar = UIButton()
         buttonClearSearchBar.setImage(UIImage(named: "mainScreenSearchClearSearchBar"), for: UIControlState())

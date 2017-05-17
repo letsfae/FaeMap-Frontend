@@ -13,7 +13,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var tableView: UITableView!
     var currentAvatarIndex = -999
-    var headerView: UIView!
+    var uiviewHeader: UIView!
     var imageCurrentAvatar: UIImageView!
     var labelCurrentAvatar: UILabel!
     var buttonSave: UIButton!
@@ -85,30 +85,30 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func loadAvatarHeader() {
-        headerView = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 141))
-        self.view.addSubview(headerView)
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 141))
+        self.view.addSubview(uiviewHeader)
         
         labelCurrentAvatar = UILabel()
         labelCurrentAvatar.font = UIFont(name: "AvenirNext-Medium", size: 18)
         labelCurrentAvatar.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         labelCurrentAvatar.textAlignment = .center
         labelCurrentAvatar.text = "Current Map Avatar:"
-        self.headerView.addSubview(labelCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("H:[v0(186)]", options: [], views: labelCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("V:|-18-[v0(25)]", options: [], views: labelCurrentAvatar)
-        NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        self.uiviewHeader.addSubview(labelCurrentAvatar)
+        self.uiviewHeader.addConstraintsWithFormat("H:[v0(186)]", options: [], views: labelCurrentAvatar)
+        self.uiviewHeader.addConstraintsWithFormat("V:|-18-[v0(25)]", options: [], views: labelCurrentAvatar)
+        NSLayoutConstraint(item: labelCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.uiviewHeader, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imageCurrentAvatar = UIImageView()
         imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar+1)")
-        self.headerView.addSubview(imageCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
-        self.headerView.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
-        NSLayoutConstraint(item: imageCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.headerView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        self.uiviewHeader.addSubview(imageCurrentAvatar)
+        self.uiviewHeader.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imageCurrentAvatar)
+        self.uiviewHeader.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imageCurrentAvatar)
+        NSLayoutConstraint(item: imageCurrentAvatar, attribute: .centerX, relatedBy: .equal, toItem: self.uiviewHeader, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         // Gray Block
         let uiviewGrayBlock = UIView(frame: CGRect(x: 0, y: 123, width: screenWidth, height: 12))
         uiviewGrayBlock.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
-        self.headerView.addSubview(uiviewGrayBlock)
+        self.uiviewHeader.addSubview(uiviewGrayBlock)
     }
     
     //table view delegate function

@@ -224,8 +224,8 @@ extension NameCardViewController {
         imageViewCover.clipsToBounds = true
         imageViewCover.contentMode = .scaleAspectFill
         if user_id != -1 {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/name_card_cover"
-            imageViewCover.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
+            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/name_card_cover"
+            imageViewCover.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -281,9 +281,9 @@ extension NameCardViewController {
         viewNameCardDescr.addSubview(baseView)
         baseView.addSubview(imageViewDescrProfile)
         if user_id != -1 {
-            let stringHeaderURL = baseURL + "/files/users/\(user_id)/avatar"
+            let urlStringHeader = baseURL + "/files/users/\(user_id)/avatar"
             print(user_id)
-            imageViewTitleProfile.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            imageViewTitleProfile.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         }
         viewGender = UIView(frame: CGRect(x: 90 - 73, y: 139 - 119, width: 50, height: 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)
