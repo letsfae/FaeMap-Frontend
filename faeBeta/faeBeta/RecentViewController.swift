@@ -182,11 +182,40 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private func downloadCurrentUserAvatar()
     {
         //if(avatarDic[user_id] == nil){
-            getImageFromURL(("files/users/\(user_id)/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
-                if status / 100 == 2 {
-                    avatarDic[user_id] = image as? UIImage
+//        getImageFromURL(("files/users/\(user_id)/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
+//            if status / 100 == 2 {
+//                avatarDic[user_id] = image as? UIImage
+//            }
+//        })
+        getImage(userID: user_id, type: 2) { (status, etag, imageRawData) in
+            let realm = try! Realm()
+            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(user_id)'").first {
+                // 存在User，Etag没变
+                if etag == avatarRealm.smallAvatarEtag {
+                    avatarDic[user_id] = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
                 }
-            })
+                // 存在User，Etag改变
+                else {
+                    avatarDic[user_id] = UIImage.sd_image(with: imageRawData)
+                    try! realm.write {
+                        avatarRealm.smallAvatarEtag = etag
+                        avatarRealm.userSmallAvatar = imageRawData as NSData?
+                        avatarRealm.largeAvatarEtag = nil
+                        avatarRealm.userLargeAvatar = nil
+                    }
+                }
+            } else {
+                // 不存在User
+                avatarDic[user_id] = UIImage.sd_image(with: imageRawData)
+                let avatarObj = RealmUser()
+                avatarObj.userID = "\(user_id)"
+                avatarObj.smallAvatarEtag = etag
+                avatarObj.userSmallAvatar = imageRawData as NSData?
+                try! realm.write {
+                    realm.add(avatarObj)
+                }
+            }
+        }
         //}
     }
     

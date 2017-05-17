@@ -132,7 +132,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
         headerDeviceID = token
-//        print("Device ID: ", headerDeviceID)
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {

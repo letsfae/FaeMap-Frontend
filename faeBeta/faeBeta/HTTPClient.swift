@@ -11,34 +11,28 @@ import Alamofire
 import SDWebImage
 import SwiftyJSON
 
-func postMomentToURL(_ className: String, parameter:[String: Any]?, authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+func postImageToURL(_ className: String, parameter: [String: Any]? , authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
-    
     var headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
+        //        "Device-ID" : headerDeviceID,
         "Accept": headerAccept,
+        //        "Content-Type" : "application/form-data"
     ]
-    
-    if authentication != nil {
+    if authentication != nil{
         for(key,value) in authentication! {
             headers[key] = value as? String
         }
     }
     
-    if parameter != nil {
-        let imageData = parameter!["file"] as! Data
-        let mediaType = parameter!["type"] as! String
-        Alamofire.upload(
-            multipartFormData: { (multipartFormData) in
-            multipartFormData.append(imageData, withName: "file", fileName: "momentImage.jpg", mimeType: "image/jpeg")
-            multipartFormData.append((mediaType.data(using: .utf8))!, withName: "type")
-            },
-            usingThreshold: 100,
-            to: URL,
-            method: .post,
-            headers: headers,
-            encodingCompletion: { (encodingResult) in
+    if parameter != nil{
+        let imageData = parameter!["avatar"]as! Data
+
+        Alamofire.upload(multipartFormData: {
+            (MultipartFormData) in
+            MultipartFormData.append(imageData, withName: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
+        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
                 switch encodingResult {
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
@@ -46,12 +40,11 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
                         if response.response != nil {
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode, resMess)
-                            }
-                            else {
+                            } else {
+                                // bug here
                                 completion(response.response!.statusCode, "no Json body")
                             }
-                        }
-                        else {
+                        } else{
                             completion(-500, "Internet error")
                         }
                         
@@ -60,10 +53,13 @@ func postMomentToURL(_ className: String, parameter:[String: Any]?, authenticati
                     completion(-400, "failure")
                     print(encodingError)
                 }
-        })}
+        })
+        
+    }
+
 }
 
-func postChatRoomCoverImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
+func postCoverImageToURL(_ className: String,parameter: [String: AnyObject]? , authentication: [String: AnyObject]?, completion:@escaping (Int, Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -76,115 +72,8 @@ func postChatRoomCoverImageToURL(_ className:String,parameter:[String:Any]? , au
         for(key,value) in authentication! {
             headers[key] = value as? String
         }
-    }
-    // Ren: delete do-catch here because no error thrown in do
-    if parameter != nil{
-        let imageData = parameter!["cover_image"] as! Data
-        let chatRoomId = parameter!["chat_room_id"] as! NSNumber
-        Alamofire.upload(multipartFormData: {
-            (MultipartFormData) in
-            MultipartFormData.append(imageData, withName: "cover_image", fileName: "cover_image.jpg", mimeType: "image/jpeg")
-            MultipartFormData.append(NSKeyedArchiver.archivedData(withRootObject: chatRoomId) , withName: "chat_room_id")
-        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
-            switch encodingResult {
-            case .success(let upload, _, _):
-                upload.responseJSON { response in
-                    print(response.response.debugDescription)
-                    if response.response != nil{
-                        if let resMess = response.result.value {
-                            completion(response.response!.statusCode, resMess)
-                        }
-                        else{
-                            //                            MARK: bug here
-                            completion(response.response!.statusCode, "no Json body")
-                        }
-                    }
-                    else{
-                        completion(-500, "Internet error")
-                    }
-                    
-                }
-            case .failure(let encodingError):
-                completion(-400,"failure")
-                print(encodingError)
-            }
-        })
-        
     }
     
-}
-
-
-func postImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
-    let URL = baseURL + "/" + className
-    var headers = [
-        "User-Agent" : headerUserAgent,
-        "Fae-Client-Version" : headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
-        //        "Content-Type" : "application/form-data"
-    ]
-    if authentication != nil{
-        for(key,value) in authentication! {
-            headers[key] = value as? String
-//            print(value)
-        }
-    }
-    // Ren: delete do-catch here because no error thrown in do
-    if parameter != nil{
-        let imageData = parameter!["avatar"]as! Data
-        
-//        public func upload(multipartFormData: @escaping (Alamofire.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: UInt64 = default, to url: URLConvertible, method: Alamofire.HTTPMethod = default, headers: HTTPHeaders? = default, encodingCompletion: ((Alamofire.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
-
-        Alamofire.upload(multipartFormData: {
-            (MultipartFormData) in
-            //                MultipartFormData.appendBodyPart
-            MultipartFormData.append(imageData, withName: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
-        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
-                switch encodingResult {
-                case .success(let upload, _, _):
-                    upload.responseJSON { response in
-                        print(response.response.debugDescription)
-                        if response.response != nil{
-                            if let resMess = response.result.value {
-                                completion(response.response!.statusCode, resMess)
-                            }
-                            else{
-                                //                            MARK: bug here
-                                completion(response.response!.statusCode, "no Json body")
-                            }
-                        }
-                        else{
-                            completion(-500, "Internet error")
-                        }
-                        
-                    }
-                case .failure(let encodingError):
-                    completion(-400,"failure")
-                    print(encodingError)
-                }
-        })
-        
-    }
-
-}
-
-func postCoverImageToURL(_ className:String,parameter:[String:AnyObject]? , authentication:[String : AnyObject]?, completion:@escaping (Int,Any?)->Void){
-    let URL = baseURL + "/" + className
-    var headers = [
-        "User-Agent" : headerUserAgent,
-        "Fae-Client-Version" : headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
-        //        "Content-Type" : "application/form-data"
-    ]
-    if authentication != nil{
-        for(key,value) in authentication! {
-            headers[key] = value as? String
-            //            print(value)
-        }
-    }
-    // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
         let imageData = parameter!["name_card_cover"]as! Data
 
@@ -195,24 +84,14 @@ func postCoverImageToURL(_ className:String,parameter:[String:AnyObject]? , auth
                 switch encodingResult {
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
-//                        print(response.response)
                         if response.response != nil{
-                            //                            if(response.response!.statusCode != 0){
-                            //                                print("finished")
-                            //                            }
-                            //                            if let JSON = response.response?.allHeaderFields{
-                            //                                print(JSON)
-                            //
-                            //                            }
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode,resMess)
-                            }
-                            else{
-                                //                            MARK: bug here
+                            } else{
+                                // bug here
                                 completion(response.response!.statusCode,"no Json body")
                             }
-                        }
-                        else{
+                        } else {
                             completion(-500,"Internet error")
                         }
 
@@ -222,46 +101,9 @@ func postCoverImageToURL(_ className:String,parameter:[String:AnyObject]? , auth
                     print(encodingError)
                 }
         })
-        
     }
-    
 }
 
-func getImageFromURL(_ className: String, authentication:[String : Any]?, completion:@escaping (Int,Any?) -> Void){
-    let URL = baseURL + "/" + className
-    var headers = [
-        "User-Agent" : headerUserAgent,
-        "Fae-Client-Version" : headerClientVersion,
-        "Accept": headerAccept,
-    ]
-    if authentication != nil{
-        for(key,_) in authentication! { // Ren: change value -> _
-            headers[key] = "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw"
-            //            print(value)
-        }
-    }
-    let manager = SDWebImageManager().imageDownloader
-    //    manager.setValue("User-Agent", forHTTPHeaderField: headerUserAgent)
-    //    manager.setValue("Fae-Client-Version", forHTTPHeaderField: headerClientVersion)
-    //    manager.setValue("Accept", forHTTPHeaderField: headerAccept)
-    manager?.setValue("Authorization", forHTTPHeaderField: "FAE MjM6dkZ5U1QyaWhnOHRRZm9sY013b2JPWlBTYXRiS2RKOjMw")
-    //get function doesn't work
-    _ = manager?.downloadImage(with: Foundation.URL(string: URL), options: .allowInvalidSSLCertificates,
-                                 progress: {( receivedSize: Int, expectedSize: Int) in
-//                                    print(receivedSize)
-        }
-        , completed: { (image:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void in
-            //            print(error)
-            if (image != nil)
-            {
-                completion(201,image)
-                //                completion(201,data)
-            }
-            else {
-                completion(400, error)
-            }
-    })
-}
 func postToURL(_ className:String, parameter:[String:Any]?, authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
@@ -277,12 +119,10 @@ func postToURL(_ className:String, parameter:[String:Any]?, authentication:[Stri
         }
     }
     
-    // Ren: delete do-catch here because no error thrown in do
     if parameter != nil{
         Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
             .responseJSON{response in
-                //print(response.response!.statusCode)
-                //print(response)
+                
                 if response.response != nil{
                     if(response.response!.statusCode != 0) {
                         
@@ -294,7 +134,7 @@ func postToURL(_ className:String, parameter:[String:Any]?, authentication:[Stri
                         completion(response.response!.statusCode, resMess)
                     }
                     else{
-                        //                            MARK: bug here
+                        // MARK: bug here
                         completion(response.response!.statusCode, "no Json body")
                     }
                 }
@@ -306,7 +146,7 @@ func postToURL(_ className:String, parameter:[String:Any]?, authentication:[Stri
 }
 
 func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[String : Any]?, completion:@escaping (Int,Any?)->Void){
-    //print(parameter)
+    
     let URL = baseURL + "/" + className
     var headers = [
         "User-Agent" : headerUserAgent,
@@ -321,19 +161,11 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
         }
     }
     
-    // Ren: delete do-catch here because no error thrown in do
     if parameter == nil {
         Alamofire.request(URL, headers: headers)
             .responseJSON{ response in
                 //print(response.response!.statusCode)
                 if response.response != nil {
-//                    if(response.response!.statusCode != 0){
-//                        print("finished")
-//                    }
-//                    if let JSON = response.response?.allHeaderFields{
-//                        print(JSON)
-//                        
-//                    }
                     completion(response.response!.statusCode, response.result.value)
                 } else {
                     completion(-500, "Internet error")
@@ -342,22 +174,41 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
     } else {
         Alamofire.request(URL, parameters: parameter!, headers: headers)
             .responseJSON{ response in
-                //print(response.response!.statusCode)
                 if response.response != nil {
-//                    if(response.response!.statusCode != 0){
-//                        print("finished")
-//                    }
-//                    if let JSON = response.response?.allHeaderFields{
-//                        print(JSON)
-//                        
-//                    }
                     completion(response.response!.statusCode, response.result.value)
-                } else{
+                } else {
                     completion(-500, "Internet error")
                 }
         }
     }
 
+}
+
+func deleteFromURL(_ className:String, parameter: [String: Any] , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "Accept": headerAccept,
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Device-ID" : headerDeviceID,
+        ]
+    if authentication == nil {
+        completion(500,"we must get the authentication number" as AnyObject?)
+    }
+    if authentication != nil {
+        for(key, value) in authentication! {
+            headers[key] = value as? String
+        }
+    }
+
+    Alamofire.request(URL, method: .delete, headers:headers)
+        .responseJSON{response in
+            if response.response != nil{
+                completion(response.response!.statusCode,"nothing here")
+            } else {
+                completion(-500,"Internet error")
+            }
+    }
 }
 
 func getImage(userID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
@@ -391,82 +242,103 @@ func getImage(userID: Int, type: Int, completion:@escaping (Int, String, Data?) 
     }
 }
 
-func deleteFromURL(_ className:String, parameter: [String: Any] , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
+func postFileToURL(_ className: String, parameter:[String: Any]?, authentication:[String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
+    
     var headers = [
-        "Accept": headerAccept,
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,
-        "Device-ID" : headerDeviceID,
+        "Accept": headerAccept,
         ]
-    if authentication == nil {
-        completion(500,"we must get the authentication number" as AnyObject?)
-    }
+    
     if authentication != nil {
-        for(key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
-//    print(headers)
-    // Ren: delete do-catch here because no error thrown in do
-    Alamofire.request(URL, method: .delete, headers:headers)
-        .responseJSON{response in
-            //print(response.response!.statusCode)
-            if response.response != nil{
-//                if(response.response!.statusCode != 0){
-//                    print("finished")
-//                }
-//                if let JSON = response.response?.allHeaderFields{
-//                    print(JSON)
-//                    
-//                }
-                completion(response.response!.statusCode,"nothing here")
-            }
-            else{
-                completion(-500,"Internet error")
-            }
-    }
-
-}
-
-func putToURL(_ className:String, parameter: [String: Any]? , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void) {
-    let URL = "\(baseURL)/\(className)"
-    var headers = [
-        "User-Agent" : headerUserAgent,
-        "Fae-Client-Version" : headerClientVersion,
-        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
-        "Content-Type" : headerContentType
-    ]
-    if authentication != nil {
-        for(key,value) in authentication!{
+        for(key,value) in authentication! {
             headers[key] = value as? String
         }
     }
     
-    // Ren: delete do-catch here because no error thrown in do
-    Alamofire.request(URL, method: .put, parameters: parameter, headers:headers)
-        .responseJSON{response in
-            //print(response.response!.statusCode)
-            if response.response != nil{
-//                if(response.response!.statusCode != 0){
-//                    print("finished")
-//                }
-//                if let JSON = response.response?.allHeaderFields{
-//                    print(JSON)
-//                }
-                if let resMess = response.result.value {
-                    completion(response.response!.statusCode,resMess)
+    if parameter != nil {
+        let imageData = parameter!["file"] as! Data
+        let mediaType = parameter!["type"] as! String
+        Alamofire.upload(
+            multipartFormData: { (multipartFormData) in
+                multipartFormData.append(imageData, withName: "file", fileName: "momentImage.jpg", mimeType: "image/jpeg")
+                multipartFormData.append((mediaType.data(using: .utf8))!, withName: "type")
+        },
+            usingThreshold: 100,
+            to: URL,
+            method: .post,
+            headers: headers,
+            encodingCompletion: { (encodingResult) in
+                switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseJSON { response in
+                        print(response.response.debugDescription)
+                        if response.response != nil {
+                            if let resMess = response.result.value {
+                                completion(response.response!.statusCode, resMess)
+                            } else {
+                                completion(response.response!.statusCode, "no Json body")
+                            }
+                        } else {
+                            completion(-500, "Internet error")
+                        }
+                    }
+                case .failure(let encodingError):
+                    completion(-400, "failure")
+                    print(encodingError)
                 }
-                else{
-                    //MARK: bug here
-                    completion(response.response!.statusCode,"this filed need to modify")
-                }
-            }
-            else{
-                completion(-500,"Internet error")
-            }
+        })}
+}
+
+func postChatRoomCoverImageToURL(_ className:String,parameter:[String:Any]? , authentication:[String : Any]?, completion: @escaping (Int,Any?)->Void){
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        //        "Device-ID" : headerDeviceID,
+        "Accept": headerAccept,
+        //        "Content-Type" : "application/form-data"
+    ]
+    if authentication != nil{
+        for(key,value) in authentication! {
+            headers[key] = value as? String
+        }
     }
+    
+    if parameter != nil{
+        let imageData = parameter!["cover_image"] as! Data
+        let chatRoomId = parameter!["chat_room_id"] as! NSNumber
+        Alamofire.upload(multipartFormData: {
+            (MultipartFormData) in
+            MultipartFormData.append(imageData, withName: "cover_image", fileName: "cover_image.jpg", mimeType: "image/jpeg")
+            MultipartFormData.append(NSKeyedArchiver.archivedData(withRootObject: chatRoomId) , withName: "chat_room_id")
+        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { (encodingResult) in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseJSON { response in
+                    print(response.response.debugDescription)
+                    if response.response != nil{
+                        if let resMess = response.result.value {
+                            completion(response.response!.statusCode, resMess)
+                        } else {
+                            // Bug here
+                            completion(response.response!.statusCode, "no Json body")
+                        }
+                    }
+                    else{
+                        completion(-500, "Internet error")
+                    }
+                    
+                }
+            case .failure(let encodingError):
+                completion(-400,"failure")
+                print(encodingError)
+            }
+        })
+        
+    }
+    
 }
 
 //utf-8 encode

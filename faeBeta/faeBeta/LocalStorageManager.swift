@@ -96,7 +96,7 @@ class LocalStorageManager: NSObject {
         }
         return true
     }
-    func logInStorage()->Bool{
+    func logInStorage() -> Bool{
         if userToken == nil || userTokenEncode == nil || session_id == -1 || user_id == -1 || userEmail == "" || userPassword == nil || is_Login == 0 {
             return false
         }

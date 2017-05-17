@@ -76,7 +76,7 @@ class FaeUser : NSObject {
     
     
     /* faeuser log in function
-     Required parameters: password, email, user_name
+     Required parameters: password, email or user_name
      Optional parameters: device_id, is_mobile
      */
     
@@ -139,30 +139,6 @@ class FaeUser : NSObject {
         
         let shareAPI = LocalStorageManager()
         _ = shareAPI.logInStorage()
-        
-//        if let message = message as? NSDictionary {
-//            let str = message["token"] as! String
-//            let session = message["session_id"] as! NSNumber
-//            let user = message["user_id"] as! Int
-//            let authentication = user.stringValue+":"+str+":"+session.stringValue
-//            session_id = session
-//            user_id = user
-//            
-//            let utf8str = authentication.data(using: String.Encoding.utf8)
-//            print(authentication)
-//            let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-//            print("Encoded:  \(base64Encoded)")
-//            print("FAE "+base64Encoded)
-//            let encode = "FAE "+base64Encoded
-//            userToken = str
-//            userTokenEncode = encode
-//            is_Login = 1
-//            userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
-//            userPassword = keyValue["password"] as! String
-//            
-//            let shareAPI = LocalStorageManager()
-//            _ = shareAPI.logInStorage()
-//        }
     }
     
     
@@ -195,7 +171,6 @@ class FaeUser : NSObject {
         let shareAPI = LocalStorageManager()
         shareAPI.saveInt("is_Login", value: 0)
     }
-    
     
     /* faeuser check email exist function
      Required parameters: email

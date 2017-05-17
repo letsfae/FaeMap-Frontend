@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -175,13 +177,45 @@ class RecentTableViewCell: UITableViewCell {
         
         if let myInteger = Int(recent.withUserID) {
             // let withUserIDNumber = NSNumber(value:myInteger)
-            if avatarDic[myInteger] == nil{
-                let withUserIDNumber = NSNumber(value:myInteger)
-                getImageFromURL(("files/users/" + recent.withUserID + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
-                    if status / 100 == 2 {
-                        avatarDic[myInteger] = image as? UIImage
+            if avatarDic[myInteger] == nil {
+//                let withUserIDNumber = NSNumber(value:myInteger)
+//                getImageFromURL(("files/users/" + recent.withUserID + "/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
+//                    if status / 100 == 2 {
+//                        avatarDic[myInteger] = image as? UIImage
+//                    }
+//                })
+                guard let userid = Int(recent.withUserID) else {
+                    return
+                }
+                getImage(userID: userid, type: 2) { (status, etag, imageRawData) in
+                    let realm = try! Realm()
+                    if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
+                        // 存在User，Etag没变
+                        if etag == avatarRealm.smallAvatarEtag {
+                            avatarDic[myInteger] = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
+                        }
+                            // 存在User，Etag改变
+                        else {
+                            avatarDic[myInteger] = UIImage.sd_image(with: imageRawData)
+                            try! realm.write {
+                                avatarRealm.smallAvatarEtag = etag
+                                avatarRealm.userSmallAvatar = imageRawData as NSData?
+                                avatarRealm.largeAvatarEtag = nil
+                                avatarRealm.userLargeAvatar = nil
+                            }
+                        }
+                    } else {
+                        // 不存在User
+                        avatarDic[myInteger] = UIImage.sd_image(with: imageRawData)
+                        let avatarObj = RealmUser()
+                        avatarObj.userID = "\(userid)"
+                        avatarObj.smallAvatarEtag = etag
+                        avatarObj.userSmallAvatar = imageRawData as NSData?
+                        try! realm.write {
+                            realm.add(avatarObj)
+                        }
                     }
-                })
+                }
             }
         }
     }

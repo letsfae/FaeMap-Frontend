@@ -50,7 +50,7 @@ class FaeImage : NSObject{ // it is ok to upload
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postMomentToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
+                postFileToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
                     completion(code, message)
                 })
             })
@@ -93,18 +93,3 @@ class FaeImage : NSObject{ // it is ok to upload
         }
     }
 }
-
-extension UIImageView {
-    func faeSetSelfAvatar(_ placeHolder: UIImage) -> Void {
-        self.image = placeHolder
-        getImageFromURL("files/users/21/avatar/", authentication: headerAuthentication(), completion: {(status: Int, image: Any?) in
-            if status / 100 == 2 {
-                self.image = image as? UIImage
-            }
-        })
-    }
-    func faeSetImage(_ url: URL,placeHolder: UIImage) -> Void {
-        
-    }
-}
-
