@@ -23,12 +23,13 @@ extension ChatViewController: OutgoingMessageProtocol{
         //Bryan
         let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
         let realmMessage = RealmMessage()
+        realmMessage.messageID = "\(user_id)_\(RealmChat.dateConverter(date: date)))"
         realmMessage.withUserID = realmWithUser!.userID
         realmMessage.senderID = "\(user_id)"
         realmMessage.senderName = username!
         realmMessage.hasTimeStamp = shouldHaveTimeStamp
         realmMessage.delivered = true
-        realmMessage.date = date as NSDate
+        realmMessage.date = RealmChat.dateConverter(date: date)
         //ENDBryan
         
         if let pic = picture {
@@ -98,6 +99,7 @@ extension ChatViewController: OutgoingMessageProtocol{
             realmMessage.data = snapImage as NSData
             realmMessage.type = "gif"
         }
+            
         //if text message
         else if let text = text {
             // send message
@@ -314,6 +316,4 @@ extension ChatViewController: OutgoingMessageProtocol{
     func updateChat_Id(_ newId: String) {
         chat_id = newId
     }
-    
-    
 }
