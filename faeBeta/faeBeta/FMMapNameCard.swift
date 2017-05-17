@@ -18,8 +18,8 @@ extension FaeMapViewController {
         btnShowSelfOnMap.isHidden = false
         btnFavorite.isHidden = true
         if user_id != -1 {
-            let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
-            imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
+            imageAvatarNameCard.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
             btnChat.tag = user_id
         }
         else {
@@ -272,8 +272,8 @@ extension FaeMapViewController {
         btnOptions.tag = withUserId
         btnShowSelfOnMap.isHidden = true
         btnFavorite.isHidden = false
-        let stringHeaderURL = "\(baseURL)/files/users/\(withUserId)/avatar"
-        imageAvatarNameCard.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+        let urlStringHeader = "\(baseURL)/files/users/\(withUserId)/avatar"
+        imageAvatarNameCard.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
         let userNameCard = FaeUser()
         userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
             if status / 100 == 2 {

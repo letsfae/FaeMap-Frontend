@@ -3,16 +3,15 @@
 //  faeBeta
 //
 //  Created by Shiqi Wei on 4/17/17.
+//  Edited by Sophie Wang
 //  Copyright © 2016 fae. All rights reserved.
 //
 
 import UIKit
 import SwiftyJSON
 import UIKit.UIGestureRecognizerSubclass
-//import SDWebImage
-//import RealmSwift
 
-class CreatedPinsViewController: PinsViewController, UITableViewDataSource, EditPinViewControllerDelegate, PinDetailCollectionsDelegate{
+class CreatedPinsViewController: PinsViewController, UITableViewDataSource, EditPinViewControllerDelegate, PinDetailCollectionsDelegate {
     
     override func viewDidLoad() {
         strTableTitle = "Created Pins"
@@ -37,14 +36,14 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                         if let time = PinsOfCreatedPinsJSON[i]["created_at"].string {
                             dicCell["created_at"] = time as AnyObject
                         }
-                        if let pinId = PinsOfCreatedPinsJSON[i]["pin_id"].int{
+                        if let pinId = PinsOfCreatedPinsJSON[i]["pin_id"].int {
                             dicCell["pin_id"] = pinId as AnyObject
                         }
-                        if let type = PinsOfCreatedPinsJSON[i]["type"].string{
+                        if let type = PinsOfCreatedPinsJSON[i]["type"].string {
                             dicCell["type"] = type as AnyObject
                         }
                         let pinObject = PinsOfCreatedPinsJSON[i]["pin_object"]
-                        if  pinObject != JSON.null{
+                        if  pinObject != JSON.null {
                             //comment tab里面存的不叫description 叫content
                             if let content = pinObject["content"].string {
                                 dicCell["content"] = content as AnyObject
@@ -63,10 +62,8 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                             }
                             
                             if let latitude = pinObject["geolocation"]["latitude"].double, let longitude = pinObject["geolocation"]["longitude"].double {
-                                
                                 dicCell["latitude"] = latitude as AnyObject
                                 dicCell["longitude"] = longitude as AnyObject
-                                
                             }
                             
                             if let mediaImgArr = pinObject["file_ids"].array {
@@ -78,7 +75,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
                     /*有数据代表不是空表，要显示控件*/
                     self.tblPinsData.isHidden = false
                 }
-                else{
+                else {
                     /*没有数据代表空表，要隐藏控件*/
                     self.tblPinsData.isHidden = true
                 }
@@ -91,15 +88,14 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         }
     }
  
-    override func loadtblPinsData(){
+    override func loadtblPinsData() {
         super.loadtblPinsData()
         tblPinsData.register(CreatedPinsTableViewCell.self, forCellReuseIdentifier: "CreatedPinCell")
         tblPinsData.delegate = self
         tblPinsData.dataSource = self
         getPinsData()
-        labelEmptyTbl.text = "You haven’t created any Pins, come again after you create some pins. :)"
+        lblEmptyTbl.text = "You haven’t created any Pins, come again after you create some pins. :)"
     }
-
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return arrPinData.count
@@ -107,31 +103,31 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     
     //click cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(!gesturerecognizerTouch.isCellSwiped){
+        if(!gesturerecognizerTouch.isCellSwiped) {
             tableView.deselectRow(at: indexPath, animated: false)
             
-            let pinDetailVC = PinDetailViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.colDelegate = self
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.colDelegate = self
             PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(arrPinData[indexPath.section]["latitude"] as! CLLocationDegrees, arrPinData[indexPath.section]["longitude"] as! CLLocationDegrees)
             
             PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrPinData[indexPath.section]["type"] as! String)!
             PinDetailViewController.pinUserId = user_id as Int
             
             if let content = arrPinData[indexPath.section]["content"] {
-                pinDetailVC.strTextViewText = content as! String
+                vcPinDetail.strTextViewText = content as! String
             }
             //media tab里面存的不叫content 叫description
             if let description = arrPinData[indexPath.section]["description"] {
-                pinDetailVC.strTextViewText = description as! String
+                vcPinDetail.strTextViewText = description as! String
             }
             
             if let pinID = arrPinData[indexPath.section]["pin_id"] {
-                pinDetailVC.strPinId = "\(pinID)"
+                vcPinDetail.strPinId = "\(pinID)"
             }
             
-            pinDetailVC.enterMode = .collections
-            self.present(pinDetailVC, animated: false, completion: {
+            vcPinDetail.enterMode = .collections
+            self.present(vcPinDetail, animated: false, completion: {
                 self.indexCurrSelectRowAt = indexPath
             })
             
@@ -152,24 +148,24 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     }
     
     //full pin detail delegate
-    func backToCollections(likeCount: String, commentCount: String){
+    func backToCollections(likeCount: String, commentCount: String) {
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
             cellCurrSelect.lblComment.text = commentCount
             cellCurrSelect.lblLike.text = likeCount
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
                 cellCurrSelect.imgHot.isHidden = false
-            }else{
+            }
+            else {
                 cellCurrSelect.imgHot.isHidden = true
             }
             arrPinData[self.indexCurrSelectRowAt.section]["liked_count"] = Int(likeCount) as AnyObject
             arrPinData[self.indexCurrSelectRowAt.section]["comment_count"] = Int(commentCount) as AnyObject
-
         }
     }
     
     // PinTableViewCellDelegate protocol required function
-    override func itemSwiped(indexCell: Int){
+    override func itemSwiped(indexCell: Int) {
         let path : IndexPath = IndexPath(row: 0, section: indexCell)
         cellCurrSwiped = tblPinsData.cellForRow(at: path) as! CreatedPinsTableViewCell
         tblPinsData.addGestureRecognizer(gesturerecognizerTouch)
@@ -177,7 +173,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         gesturerecognizerTouch.isCellSwiped = true
     }
     
-    override func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String){
+    override func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String) {
         let deleteMyPin = FaeMap()
         deleteMyPin.deletePin(type: pinType, pinId: pinId.description) {(status: Int, message: Any?) in
             if status / 100 == 2 {
@@ -187,7 +183,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         self.arrPinData.remove(at: indexCell)
         let indexSet = NSMutableIndexSet()
         indexSet.add(indexCell)
-        self.tblPinsData.performUpdate({
+        self.tblPinsData.performUpdate( {
             self.tblPinsData.deleteSections(indexSet as IndexSet, with: UITableViewRowAnimation.top)
         }, completion: {
             self.tblPinsData.reloadData()
@@ -197,51 +193,48 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         }
     }
     
-    override func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String){
+    override func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String) {
         if pinId == -999 {
             return
         }
-        let editPinVC = EditPinViewController()
-//        editPinVC.zoomLevel = zoomLevel
-        editPinVC.delegate = self
+        let vcEditPin = EditPinViewController()
+        vcEditPin.delegate = self
         
-        if(pinType == "comment"){
-            editPinVC.previousCommentContent = arrPinData[indexCell]["content"] as! String
-            editPinVC.editPinMode = .comment
+        if(pinType == "comment") {
+            vcEditPin.previousCommentContent = arrPinData[indexCell]["content"] as! String
+            vcEditPin.editPinMode = .comment
         }
-        if(pinType == "media"){
-            editPinVC.previousCommentContent = arrPinData[indexCell]["description"] as! String
+        if(pinType == "media") {
+            vcEditPin.previousCommentContent = arrPinData[indexCell]["description"] as! String
             
             var mediaIdArray : [Int] = []
             let fileIDs = arrPinData[indexCell]["file_ids"] as! NSArray
             for index in 0...fileIDs.count-1 {
                     mediaIdArray.append(Int(String(describing: fileIDs[index]))!)
             }
-            editPinVC.mediaIdArray = mediaIdArray
+            vcEditPin.mediaIdArray = mediaIdArray
             
-            editPinVC.editPinMode = .media
+            vcEditPin.editPinMode = .media
         }
-        editPinVC.pinID = "\(pinId)"
-        editPinVC.pinType = pinType
-        editPinVC.pinMediaImageArray = cellCurrSwiped.arrImgPinPic
-        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
+        vcEditPin.pinID = "\(pinId)"
+        vcEditPin.pinType = pinType
+        vcEditPin.pinMediaImageArray = cellCurrSwiped.arrImgPinPic
+        vcEditPin.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
         
-
-        
-        self.present(editPinVC, animated: true, completion: {
+        self.present(vcEditPin, animated: true, completion: {
             self.tblPinsData.reloadData()
             })
     }
     
-    override func toDoItemShared(indexCell: Int, pinId: Int, pinType: String){
+    override func toDoItemShared(indexCell: Int, pinId: Int, pinType: String) {
         
     }
     
-    override func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String){
+    override func toDoItemVisible(indexCell: Int, pinId: Int, pinType: String) {
         
     }
     
-    override func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String){
+    override func toDoItemLocated(indexCell: Int, pinId: Int, pinType: String) {
         
     }
     

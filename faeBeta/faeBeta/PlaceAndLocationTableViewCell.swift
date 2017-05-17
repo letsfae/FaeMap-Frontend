@@ -9,7 +9,6 @@ import UIKit
 
 class PlaceAndLocationTableViewCell: UITableViewCell {
     
-    
     var imgview : UIImageView!
     var lblName : UILabel!
     var lblAddress : UILabel!
@@ -17,7 +16,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
     var lblMemo : UILabel!
     var btnSelected: UIButton!
     //    var sparator: UIView!
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -33,28 +32,28 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addSubview(imgview)
         
         lblName = UILabel()
-        lblName.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        lblName.textAlignment = NSTextAlignment.left
+        lblName.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblName.textAlignment = .left
         lblName.textColor = UIColor.faeAppInputTextGrayColor()
         self.addSubview(lblName)
         
         lblDistance = UILabel()
-        lblDistance.font = UIFont(name: "AvenirNext-Medium",size: 16)
-        lblDistance.textAlignment = NSTextAlignment.right
+        lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblDistance.textAlignment = .right
         lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         self.addSubview(lblDistance)
         
         lblAddress = UILabel()
-        lblAddress.font = UIFont(name: "AvenirNext-Medium",size: 12)
-        lblAddress.textAlignment = NSTextAlignment.left
+        lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        lblAddress.textAlignment = .left
         lblAddress.textColor = UIColor.faeAppTimeTextBlackColor()
         lblAddress.lineBreakMode = NSLineBreakMode.byWordWrapping
         lblAddress.numberOfLines = 0;
         self.addSubview(lblAddress)
         
         lblMemo = UILabel()
-        lblMemo.font = UIFont(name: "AvenirNext-DemiBoldItalic",size: 12)
-        lblMemo.textAlignment = NSTextAlignment.left
+        lblMemo.font = UIFont(name: "AvenirNext-DemiBoldItalic", size: 12)
+        lblMemo.textAlignment = .left
         lblMemo.textColor = UIColor.faeAppTimeTextBlackColor()
         lblMemo.lineBreakMode = NSLineBreakMode.byWordWrapping
         lblMemo.numberOfLines = 0;
@@ -62,8 +61,8 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
 
         btnSelected = UIButton()
         btnSelected.layer.cornerRadius = 11
-        btnSelected.layer.borderColor = UIColor(red:225/255,green:225/255,blue:225/255,alpha: 1).cgColor
-        btnSelected.layer.backgroundColor = UIColor(red:246/255,green:246/255,blue:246/255,alpha: 1).cgColor
+        btnSelected.layer.borderColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1).cgColor
+        btnSelected.layer.backgroundColor = UIColor(red: 246/255, green: 246/255, blue: 246/255, alpha: 1).cgColor
         btnSelected.layer.borderWidth = 2
         btnSelected.isHidden = true
         self.addSubview(btnSelected)
@@ -94,22 +93,20 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         self.addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: lblName)
         if lblMemo?.text == "" {
             self.addConstraintsWithFormat("V:|-40-[v0]-15-|", options: [], views: lblAddress)
-        }else{
+        }
+        else {
             self.addConstraintsWithFormat("V:|-40-[v0]-5-[v1]-15-|", options: [], views: lblAddress,lblMemo)
         }
-
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         //print("啦啦啦啦啦啦啦啦啦啦啦")
         // Configure the view for the selected state
     }
-    
 }

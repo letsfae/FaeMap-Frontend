@@ -42,8 +42,8 @@ extension FaeMapViewController {
             let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id) AND avatar != nil")
             if selfInfoRealm.count == 0 {
                 let imageViewAvatarMore = UIImageView()
-                let stringHeaderURL = "\(baseURL)/files/users/\(user_id)/avatar"
-                imageViewAvatarMore.sd_setImage(with: URL(string: stringHeaderURL), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+                let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
+                imageViewAvatarMore.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
                     if image != nil {
                         let selfInfoRealm = SelfInformation()
                         selfInfoRealm.currentUserID = Int(user_id)

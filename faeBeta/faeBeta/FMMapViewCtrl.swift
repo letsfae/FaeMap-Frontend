@@ -312,14 +312,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
             invalidateAllTimer()
             openMapPin(marker: marker, mapPin: mapPin, animated: true)
             
-            let pinDetailVC = PinDetailViewController()
-            pinDetailVC.delegate = self
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.strPinId = "\(mapPin.pinId)"
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.delegate = self
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.strPinId = "\(mapPin.pinId)"
             
             clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                self.present(pinDetailVC, animated: false, completion: {
+                self.present(vcPinDetail, animated: false, completion: {
                     self.canOpenAnotherPin = true
                 })
             })
@@ -354,13 +354,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             invalidateAllTimer()
             openPlacePin(marker: marker, placePin: placePin, animated: true)
             
-            let pinDetailVC = PinDetailViewController()
-            pinDetailVC.modalPresentationStyle = .overCurrentContext
-            pinDetailVC.delegate = self
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.delegate = self
             
             clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                self.present(pinDetailVC, animated: false, completion: {
+                self.present(vcPinDetail, animated: false, completion: {
                     self.canOpenAnotherPin = true
                 })
             })

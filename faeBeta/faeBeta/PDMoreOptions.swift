@@ -150,17 +150,17 @@ extension PinDetailViewController {
             return
         }
         self.isKeyboardInThisView = false
-        let editPinVC = EditPinViewController()
-        editPinVC.zoomLevel = zoomLevel
-        editPinVC.delegate = self
-        editPinVC.previousCommentContent = self.strCurrentTxt
-        editPinVC.pinID = "\(self.strPinId)"
-        editPinVC.pinMediaImageArray = imgMediaArr
-        editPinVC.pinGeoLocation = CLLocationCoordinate2D(latitude: PinDetailViewController.selectedMarkerPosition.latitude, longitude: PinDetailViewController.selectedMarkerPosition.longitude)
-        editPinVC.editPinMode = PinDetailViewController.pinTypeEnum
-        editPinVC.pinType = "\(PinDetailViewController.pinTypeEnum)"
-        editPinVC.mediaIdArray = fileIdArray
-        self.present(editPinVC, animated: true, completion: nil)
+        let vcEditPin = EditPinViewController()
+        vcEditPin.zoomLevel = zoomLevel
+        vcEditPin.delegate = self
+        vcEditPin.previousCommentContent = self.strCurrentTxt
+        vcEditPin.pinID = "\(self.strPinId)"
+        vcEditPin.pinMediaImageArray = imgMediaArr
+        vcEditPin.pinGeoLocation = CLLocationCoordinate2D(latitude: PinDetailViewController.selectedMarkerPosition.latitude, longitude: PinDetailViewController.selectedMarkerPosition.longitude)
+        vcEditPin.editPinMode = PinDetailViewController.pinTypeEnum
+        vcEditPin.pinType = "\(PinDetailViewController.pinTypeEnum)"
+        vcEditPin.mediaIdArray = fileIdArray
+        self.present(vcEditPin, animated: true, completion: nil)
         actionToCloseOtherViews()
     }
     

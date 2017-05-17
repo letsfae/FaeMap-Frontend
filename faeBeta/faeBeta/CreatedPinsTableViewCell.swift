@@ -2,6 +2,7 @@
 //  CreatedPinsTableViewCell.swift
 //  faeBeta
 //  Created by Shiqi Wei on 4/17/17.
+//  Editted by Sophie Wang
 //  Copyright © 2016 fae. All rights reserved.
 //
 
@@ -17,7 +18,7 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     var btnVisible : UIButton!
     
     // Vertical center the buttons when the cell is created
-    override func verticalCenterButtons(){
+    override func verticalCenterButtons() {
         btnRemove.center.y = uiviewCellView.center.y
         btnLocate.center.y = uiviewCellView.center.y
         btnShare.center.y = uiviewCellView.center.y
@@ -62,12 +63,12 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
 
         //set the time
         lblTime = UILabel()
-        lblTime.font = UIFont(name: "AvenirNext-Medium",size: 13)
+        lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblTime.textAlignment = NSTextAlignment.right
         lblTime.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         uiviewPinView.addSubview(lblTime)
         
-        lblDate.textAlignment = NSTextAlignment.left
+        lblDate.textAlignment = .left
         lblDate.textColor = UIColor.faeAppTimeTextBlackColor()
         
         finishedPositionX = 370.0
@@ -77,7 +78,7 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     // call this fuction when reuse cell, set value to the cell and rebuild the layout
     override func setValueForCell(_ pin: [String: AnyObject]) {
         super.setValueForCell(pin)
-        if let createat = pin["created_at"]{
+        if let createat = pin["created_at"] {
             lblTime.text = ((createat as! String).formatLeftOnMap(DurationOnMap : 3))
         }
         
