@@ -57,10 +57,10 @@ class Key: NSObject {//  singleton class
     var userStatus : Int?
     var userStatusMessage : String?
 
-    var userFirstname : String?
-    var userLastname : String?
-    var userBirthday : String? // yyyy-MM-dd
-    var userGender : Int? // 0 means male 1 means female
+    var userFirstname : String = ""
+    var userLastname : String = ""
+    var userBirthday : String = "" // yyyy-MM-dd
+    var userGender : Int = -1 // 0 means male 1 means female
     var userUserGender : String?
     var userUserName : String?
     var userMiniAvatar : Int?

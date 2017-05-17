@@ -19,16 +19,14 @@ import SwiftyJSON
  // NSString! returned (optional)
  */
 class FaeUser : NSObject {
+    
     var keyValue = [String: AnyObject]()
+    
     override init () {
 
     }
     
     func whereKey(_ key: String, value: String) -> Void{
-        keyValue[key]=value as AnyObject?
-    }
-    
-    func whereKeyInt(_ key: String, value: Int) -> Void{
         keyValue[key] = value as AnyObject?
     }
     
@@ -42,7 +40,7 @@ class FaeUser : NSObject {
      */
     func signUpInBackground(_ completion:@escaping (Int, Any?) -> Void) {
         postToURL("users", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
-            if(status / 100 == 2 ) {
+            if status / 100 == 2 {
                 //success
                 self.saveUserSignUpInfo()
             }
@@ -50,18 +48,19 @@ class FaeUser : NSObject {
                 //fail
             }
             //self.clearKeyValue()
-            completion(status, message);
+            completion(status, message)
         }
     }
     
-    func saveUserSignUpInfo(){
+    fileprivate func saveUserSignUpInfo(){
         let shareAPI = LocalStorageManager()
-        userEmail = keyValue["email"] as! String
-        userPassword = keyValue["password"] as! String
-        userFirstname = keyValue["first_name"] as? String
-        userLastname = keyValue["last_name"] as? String
-        userBirthday = keyValue["birthday"] as? String
-        let gender = keyValue["gender"] as! String
+        let keyValueJSON = JSON(keyValue)
+        userEmail = keyValueJSON["email"].stringValue
+        userPassword = keyValueJSON["password"].stringValue
+        userFirstname = keyValueJSON["first_name"].stringValue
+        userLastname = keyValueJSON["last_name"].stringValue
+        userBirthday = keyValueJSON["birthday"].stringValue
+        let gender = keyValueJSON["gender"].stringValue
         if gender == "male" {
             userGender = 0
         }else {
@@ -69,10 +68,10 @@ class FaeUser : NSObject {
         }
         shareAPI.saveString("userEmail", value: userEmail)
         shareAPI.saveString("userPassword", value: userPassword)
-        shareAPI.saveString("userFirstname", value: userFirstname!)
-        shareAPI.saveString("userLastname", value: userLastname!)
-        shareAPI.saveString("userBirthday", value: userBirthday!)
-        shareAPI.saveInt("userGender", value: userGender!)
+        shareAPI.saveString("userFirstname", value: userFirstname)
+        shareAPI.saveString("userLastname", value: userLastname)
+        shareAPI.saveString("userBirthday", value: userBirthday)
+        shareAPI.saveInt("userGender", value: userGender)
     }
     
     
@@ -83,22 +82,28 @@ class FaeUser : NSObject {
     
     func logInBackground(_ completion:@escaping (Int, Any?)->Void){
         postToURL("authentication", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
-            if(status / 100 == 2 ) {//success
+            if status / 100 == 2  {
                 self.processToken(message!)
                 self.getSelfProfile{(status: Int, message: Any?) in
-                    if let message = (message as? NSDictionary) {
-                        if (message["email"]) != nil{
-                            userEmail = message["email"] as? String
-                            username = message["user_name"] as? String
-                            userFirstname = message["first_name"] as? String
-                            userLastname = message["last_name"] as? String
-                            userGender = message["gender"] as? Int
-                            userBirthday = message["birthday"] as? String
-                            userPhoneNumber = message["phone"] as? String
-                            let shareAPI = LocalStorageManager()
-                            _ = shareAPI.getAccountStorage()
-                        }
+                    guard let userInfo = message else {
+                        print("[logInBackground] get log in info fail")
+                        return
                     }
+                    let userInfoJSON = JSON(userInfo)
+                    userEmail = userInfoJSON["email"].stringValue
+                    username = userInfoJSON["user_name"].stringValue
+                    userFirstname = userInfoJSON["first_name"].stringValue
+                    userLastname = userInfoJSON["last_name"].stringValue
+                    let gender = userInfoJSON["gender"].stringValue
+                    if gender == "male" {
+                        userGender = 0
+                    } else {
+                        userGender = 1
+                    }
+                    userBirthday = userInfoJSON["birthday"].stringValue
+                    userPhoneNumber = userInfoJSON["phone"].stringValue
+                    let shareAPI = LocalStorageManager()
+                    shareAPI.getAccountStorage()
                 }
             }
             else {
@@ -106,10 +111,6 @@ class FaeUser : NSObject {
             }
             self.clearKeyValue()
             completion(status, message)
-            
-            // WARNING: this code should be deleted afterward, it's here just to test chat function
-//            postToURL("chats", parameter: ["receiver_id": "1" as AnyObject, "message": "Hi there, I just registered. Let's chat!" as AnyObject, "type": "text" as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
-//            })
         }
     }
     
@@ -269,41 +270,31 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: nil
      */
-    func getAccountBasicInfo(_ completion:@escaping (Int,Any?)->Void){
-        getFromURL("users/account", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+    func getAccountBasicInfo(_ completion:@escaping (Int, Any?) -> Void){
+        getFromURL("users/account", parameter: keyValue, authentication: headerAuthentication()){ (status: Int, message: Any?) in
             self.clearKeyValue()
-            if(status/100==2){
-                //get successfully
-                if let mess = message as? NSDictionary{
-                    if (mess["email"]) != nil{
-                        if let useremail = mess["email"] as? String{
-                            userEmail = useremail
-                        }
-                        if let emailV = mess["email_verified"] as? Bool{
-                            userEmailVerified = emailV
-                        }
-                        else{
-                            userEmailVerified = false
-                        }
-                        if let userna = mess["user_name"] as? String{
-                            username = userna
-                        }
-                        userFirstname = mess["first_name"] as? String
-                        userLastname = mess["last_name"] as? String
-                        userGender = mess["gender"] as? Int
-                        userBirthday = mess["birthday"] as? String
-                        userPhoneNumber = mess["phone"] as? String
-                        if let phoneV = mess["phone_verified"] as? Bool {
-                            userPhoneVerified = phoneV
-                        }
-                        else{
-                            userPhoneVerified = false
-                        }
-                        let shareAPI = LocalStorageManager()
-                        _ = shareAPI.getAccountStorage()
-                    }
+            if status / 100 == 2 {
+                guard let userInfo = message else {
+                    print("[logInBackground] get log in info fail")
+                    return
                 }
-                
+                let userInfoJSON = JSON(userInfo)
+                userEmail = userInfoJSON["email"].stringValue
+                userEmailVerified = userInfoJSON["email_verified"].boolValue
+                username = userInfoJSON["user_name"].stringValue
+                userFirstname = userInfoJSON["first_name"].stringValue
+                userLastname = userInfoJSON["last_name"].stringValue
+                let gender = userInfoJSON["gender"].stringValue
+                if gender == "male" {
+                    userGender = 0
+                } else {
+                    userGender = 1
+                }
+                userBirthday = userInfoJSON["birthday"].stringValue
+                userPhoneNumber = userInfoJSON["phone"].stringValue
+                userPhoneVerified = userInfoJSON["phone_verified"].boolValue
+                let shareAPI = LocalStorageManager()
+                shareAPI.getAccountStorage()
             }
             completion(status,message);
         }
@@ -313,41 +304,26 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: first_name, last_name, user_name, birthday, gender
      */
-    func updateAccountBasicInfo(_ completion:@escaping (Int,Any?)->Void){// update local storage
-        postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message:Any?) in
-            if(status/100 == 2){
-                if let firstname = self.keyValue["first_name"]{
-                    userFirstname = firstname as? String
-                    //                    print("firstName")
-                    //                    print(userFirstname)
+    func updateAccountBasicInfo(_ completion:@escaping (Int, Any?) -> Void) {// update local storage
+        postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                guard let userInfo = message else {
+                    print("[logInBackground] get log in info fail")
+                    return
                 }
-                if let lastname = self.keyValue["last_name"]{
-                    userLastname = lastname as? String
-                    //                    print("lastName")
-                    //                    print(userLastname)
+                let userInfoJSON = JSON(userInfo)
+                username = userInfoJSON["user_name"].stringValue
+                userFirstname = userInfoJSON["first_name"].stringValue
+                userLastname = userInfoJSON["last_name"].stringValue
+                let gender = userInfoJSON["gender"].stringValue
+                if gender == "male" {
+                    userGender = 0
+                } else {
+                    userGender = 1
                 }
-                if let usernamess = self.keyValue["user_name"]{
-                    username = usernamess as? String
-                    //                    print("username")
-                    //                    print(username)
-                }
-                if let birthday = self.keyValue["birthday"]{
-                    userBirthday = birthday as? String
-                    //                    print("birthday")
-                    //                    print(userBirthday)
-                }
-                if let usergender = self.keyValue["gender"]{
-                    if usergender as! String == "male" {
-                        userGender = 0
-                    } else {
-                        userGender = 1
-                    }
-                    //                    print("gender")
-                    //                    print(userGender)
-                }
+                userBirthday = userInfoJSON["birthday"].stringValue
                 let shareAPI = LocalStorageManager()
-                _ = shareAPI.getAccountStorage()
-                
+                shareAPI.getAccountStorage()
             }
             completion(status,message)
             self.clearKeyValue()
@@ -408,7 +384,7 @@ class FaeUser : NSObject {
                 if let newEmail = self.keyValue["email"]{
                     userEmail = newEmail as! String
                     let shareAPI = LocalStorageManager()
-                    _ = shareAPI.saveEmail()
+                    shareAPI.saveEmail()
                     print("new email")
                     print(userEmail)
                 }

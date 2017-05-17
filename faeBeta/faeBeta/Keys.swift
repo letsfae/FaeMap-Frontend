@@ -41,14 +41,14 @@ var userTokenEncode : String!
 var session_id : Int = -1
 var user_id : Int = -1
 var is_Login : Int = 0
-var userEmail : String!
+var userEmail : String = ""
 var userPassword : String!
 let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
 
-var username : String?
+var username : String = ""
 //new add global var
 var nickname : String?
-var shortIntro : String?
+var shortIntro : String = ""
 var showGender = false
 var showAge = false
 var userAge : Int?
@@ -56,10 +56,10 @@ var userAge : Int?
 var userStatus: Int = -999
 var userStatusMessage : String?
 
-var userFirstname : String?
-var userLastname : String?
-var userBirthday : String? // yyyy-MM-dd
-var userGender : Int? // 0 means male 1 means female
+var userFirstname : String = ""
+var userLastname : String = ""
+var userBirthday : String = "" // yyyy-MM-dd
+var userGender : Int = -1 // 0 means male 1 means female
 var userUserGender : String?
 var userUserName : String = "Fae User"
 var userMiniAvatar : Int = 0

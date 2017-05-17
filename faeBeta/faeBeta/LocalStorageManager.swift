@@ -10,7 +10,7 @@ import UIKit
 
 class LocalStorageManager: NSObject {
     fileprivate let defaults = UserDefaults.standard
-    func saveString(_ key:String,value:String){
+    func saveString(_ key: String, value: String) {
         self.defaults.set(value, forKey: key)
     }
     func saveInt(_ key:String,value:Int){
@@ -27,17 +27,17 @@ class LocalStorageManager: NSObject {
         }
         return nil
     }
-    func saveUsername()->Bool{
-        if username != nil {
-            saveString("username", value: username!)
+    func saveUsername() -> Bool {
+        if username != "" {
+            saveString("username", value: username)
             return true
         }
         return false
     }
-    func readUsername()->Bool{
-        if(username == nil){
+    func readUsername() -> Bool {
+        if username == "" {
             if let usernames = readByKey("username"){
-                username = usernames as? String
+                username = usernames as! String
                 return true
             }
             //should we need to read from internet
@@ -45,15 +45,11 @@ class LocalStorageManager: NSObject {
         }
         return true
     }
-    func saveEmail()->Bool{
-        if userEmail != nil {
-            saveString("userEmail", value: userEmail!)
-            return true
-        }
-        return false
+    func saveEmail() {
+        saveString("userEmail", value: userEmail)
     }
     func readEmail()->Bool{
-        if(userEmail == nil){
+        if userEmail == "" {
             if let useremail = readByKey("userEmail"){
                 userEmail = useremail as! String
                 return true
@@ -101,7 +97,7 @@ class LocalStorageManager: NSObject {
         return true
     }
     func logInStorage()->Bool{
-        if(userToken==nil || userTokenEncode==nil || session_id == -1 || user_id == -1 || userEmail == nil || userPassword == nil || is_Login == 0){
+        if userToken == nil || userTokenEncode == nil || session_id == -1 || user_id == -1 || userEmail == "" || userPassword == nil || is_Login == 0 {
             return false
         }
         saveString("userToken", value: userToken)
@@ -114,49 +110,14 @@ class LocalStorageManager: NSObject {
         return true
     }
     
-    func getAccountStorage() ->Bool{
-        if userEmail != nil{
-            saveString("userEmail", value: userEmail)
-        }
-        else{
-            saveString("userEmail", value: "")
-        }
+    func getAccountStorage() {
         
-        if username != nil{
-            saveString("username", value: username!)
-        }
-        else{
-            saveString("username", value: "")
-        }
-        
-        if userFirstname != nil{
-            saveString("userFirstname", value: userFirstname!)
-        }
-        else{
-            saveString("userFirstname", value: "")
-        }
-        
-        if userLastname != nil{
-            saveString("userLastname", value: userLastname!)
-        }
-        else{
-            saveString("userLastname", value: "")
-        }
-        
-        if userBirthday != nil{
-            saveString("userBirthday", value: userBirthday!)
-        }
-        else{
-            saveString("userBirthday", value: "")
-        }
-        
-        if userGender != nil{
-            saveInt("userGender", value: userGender!)
-        }
-        else{
-            saveInt("userGender", value: 3)
-        }
-        return true
+        saveString("userEmail", value: userEmail)
+        saveString("username", value: username)
+        saveString("userFirstname", value: userFirstname)
+        saveString("userLastname", value: userLastname)
+        saveString("userBirthday", value: userBirthday)
+        saveInt("userGender", value: userGender)
     }
     
     func readLogInfo() -> Bool {
@@ -176,10 +137,10 @@ class LocalStorageManager: NSObject {
                 is_Login = readByKey("is_Login") as! Int
                 userEmail = readByKey("userEmail") as! String
                 userPassword = readByKey("userPassword") as! String
-                userFirstname = readByKey("userFirstname") as? String
-                userLastname = readByKey("userLastname") as? String
-                userBirthday = readByKey("userBirthday") as? String
-                userGender = readByKey("userGender") as? Int
+                userFirstname = readByKey("userFirstname") as! String
+                userLastname = readByKey("userLastname") as! String
+                userBirthday = readByKey("userBirthday") as! String
+                userGender = readByKey("userGender") as! Int
             }
         }
         return false

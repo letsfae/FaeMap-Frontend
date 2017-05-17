@@ -130,7 +130,6 @@ class FaeAccountViewController: UIViewController {
         // Do any additional setup after loading the view.
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
-        print(userFirstname ?? "Failed to load userName")
         
         let user = FaeUser()
         user.getAccountBasicInfo({(status:Int,message: Any?) in
