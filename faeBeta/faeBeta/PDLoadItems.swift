@@ -154,8 +154,8 @@ extension PinDetailViewController {
         tblMain.isScrollEnabled = false
         tblMain.register(PDEmptyCell.self, forCellReuseIdentifier: "pinEmptyCell")
         tblMain.register(PDFeelingCell.self, forCellReuseIdentifier: "pdFeelingCell")
-        tblMain.register(PDUserInfoCell.self, forCellReuseIdentifier: "pdUserInfoCell")
-        tblMain.register(PinCommentsCell.self, forCellReuseIdentifier: "pinCommentsCell")
+        tblMain.register(PDPeopleCell.self, forCellReuseIdentifier: "pdUserInfoCell")
+        tblMain.register(PinTalkTalkCell.self, forCellReuseIdentifier: "pinCommentsCell")
         tblMain.rowHeight = UITableViewAutomaticDimension
         tblMain.showsVerticalScrollIndicator = false
         tblMain.tableFooterView = UIView()

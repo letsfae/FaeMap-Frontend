@@ -77,6 +77,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {}
         //ENDBryan
         
+        headerUserAgent = UIDevice.current.modelName + UIDevice.current.systemVersion
+        print(headerUserAgent)
         
         return true
     }

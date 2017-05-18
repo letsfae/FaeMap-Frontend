@@ -1,5 +1,5 @@
 //
-//  PinCommentsCell.swift
+//  PinTalkTalkCell.swift
 //  faeBeta
 //
 //  Created by Yue Shen on 9/19/16.
@@ -9,14 +9,14 @@
 import UIKit
 import SwiftyJSON
 
-protocol PinCommentsCellDelegate: class {
+protocol PinTalkTalkCellDelegate: class {
     func directReplyFromPinCell(_ username: String, index: IndexPath) // Reply to this user
     func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath)
 }
 
-class PinCommentsCell: UITableViewCell {
+class PinTalkTalkCell: UITableViewCell {
     
-    weak var delegate: PinCommentsCellDelegate?
+    weak var delegate: PinTalkTalkCellDelegate?
     var uiviewCell: UIButton!
     var imgAvatar: FaeAvatarView!
     var lblUsername: UILabel!

@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 
-extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinCommentsCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
+extension PinDetailViewController: OpenedPinListViewControllerDelegate, PinTalkTalkCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // PinFeelingCellDelegate
     func postFeelingFromFeelingCell(_ feeling: Int) {

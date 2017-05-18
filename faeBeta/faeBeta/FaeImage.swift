@@ -13,7 +13,7 @@ typealias ImageView = UIImageView
 
 public typealias IndicatorView = UIActivityIndicatorView
 
-func compressImage(_ image:UIImage, max_image_bytes: Int = 1024)->Data{
+func compressImage(_ image: UIImage, max_image_bytes: Int = 1024) -> Data {
 //    let max_image_bytes = 1024    // 0.1 MB for the image
     let dates = UIImageJPEGRepresentation(image, 1)
     let formatted_datas = Int((dates?.count)!)//4752033
@@ -23,15 +23,12 @@ func compressImage(_ image:UIImage, max_image_bytes: Int = 1024)->Data{
         
         let compressed_img = UIImageJPEGRepresentation(image_before_compression, compress_ratio)
         
-//        print("\(Int(compressed_img.!length))")
-//        print(compressed_img?.count)//245357
         return compressed_img!
-    }
-    else{
+    } else {
         return dates!
     }
 }
-class FaeImage : NSObject{ // it is ok to upload
+class FaeImage: NSObject {
 
     var image: UIImage!
     var type: String!
@@ -39,11 +36,9 @@ class FaeImage : NSObject{ // it is ok to upload
     func faeUploadFile(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
             completion(-400, "Error: Need to save image first" as AnyObject?)
-        }
-        else if type == nil {
+        } else if type == nil {
             completion(-400, "Error: Need to specify file type first" as AnyObject?)
-        }
-        else{
+        } else {
             let file = compressImage(image)
             let seconds = 1.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
@@ -57,37 +52,35 @@ class FaeImage : NSObject{ // it is ok to upload
         }
     }
 
-    func faeUploadImageInBackground(_ completion: @escaping (Int, Any?) -> Void) {
+    func faeUploadProfilePic(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
             completion(-400, "you need to save image first" as AnyObject?)
-        }
-        else {
+        } else {
             let file = compressImage(image)
             let seconds = 1.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postImageToURL("files/users/avatar", parameter: ["avatar": file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
+                postImageToURL("files/users/avatar", parameter: ["avatar": file as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
                     completion(code, message)
                 })
             })
         }
     }
     
-    func faeUploadCoverImageInBackground(_ completion:@escaping (Int,Any?)->Void){
+    func faeUploadCoverImageInBackground(_ completion:@escaping (Int, Any?) -> Void) {
         if image == nil {
             completion(-400,"you need to save image first" as AnyObject?)
-        }
-        else{
+        } else {
             let file = compressImage(image)
             let seconds = 1.0
             let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
 
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover":file as AnyObject], authentication: headerAuthentication(), completion: { (code:Int, message:Any?) in
-                    completion(code,message)
+                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover":file as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
+                    completion(code, message)
                 })
             })
         }

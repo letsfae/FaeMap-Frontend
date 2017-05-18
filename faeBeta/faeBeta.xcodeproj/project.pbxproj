@@ -42,7 +42,6 @@
 		B030CC5D1DC4E0A700C4FBB1 /* NameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */; };
 		B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
-		B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */; };
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
 		B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBA1DCE357700D6745A /* FaePush.swift */; };
 		B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBE1DD24FEE00D6745A /* Key.swift */; };
@@ -157,7 +156,6 @@
 		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0D36BEE1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */; };
 		B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */; };
-		B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */; };
 		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
@@ -184,7 +182,7 @@
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
 		B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */; };
-		B823196B1E736EE200189778 /* PDUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B823196A1E736EE200189778 /* PDUserInfoCell.swift */; };
+		B823196B1E736EE200189778 /* PDPeopleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B823196A1E736EE200189778 /* PDPeopleCell.swift */; };
 		B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
@@ -242,12 +240,12 @@
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
-		B8B2C15E1E66C2BD00F253EA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15D1E66C2BD00F253EA /* UserPin.swift */; };
 		B8B2C1601E680C2200F253EA /* PDTextViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15F1E680C2200F253EA /* PDTextViewCtrl.swift */; };
 		B8B7AF521E728BAF00BE92AB /* FMUpdateUserPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */; };
 		B8B7AF541E728C2300BE92AB /* FMUpdatePlacePins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */; };
 		B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */; };
 		B8B86D691DD66D74001273F6 /* NameCardWithSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */; };
+		B8BAFF1B1ECE3B06003B76F9 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */; };
 		B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C46DBD1E63786B00FD7E27 /* PinComment.swift */; };
 		B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */; };
 		B8C4A9711DB9553800002062 /* PinMenuAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */; };
@@ -278,7 +276,7 @@
 		DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3982091DD2BC88000CB51F /* UIScreenService.swift */; };
 		DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */; };
 		DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
-		DC477A5F1DB2A8EE008A2041 /* PinCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */; };
+		DC477A5F1DB2A8EE008A2041 /* PinTalkTalkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC477A5E1DB2A8EE008A2041 /* PinTalkTalkCell.swift */; };
 		DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */; };
 		DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4EC3671DACA446001D0EA5 /* JSQAudioMediaItemCustom.m */; };
 		DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC74CE171DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m */; };
@@ -347,7 +345,6 @@
 		B030CC5C1DC4E0A700C4FBB1 /* NameSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSettingViewController.swift; sourceTree = "<group>"; };
 		B030CC601DC4E0BA00C4FBB1 /* IntroSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSettingViewController.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
-		B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeObject.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
 		B05E2DBA1DCE357700D6745A /* FaePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePush.swift; sourceTree = "<group>"; };
 		B05E2DBE1DD24FEE00D6745A /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
@@ -475,7 +472,6 @@
 		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
 		B0D36BEC1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeGeneralTableViewCell.swift; sourceTree = "<group>"; };
 		B0D36BED1D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFaeGeneralTableViewCell.xib; sourceTree = "<group>"; };
-		B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMessage.swift; sourceTree = "<group>"; };
 		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardViewController.swift; sourceTree = "<group>"; };
@@ -502,7 +498,7 @@
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
 		B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAvatarView.swift; sourceTree = "<group>"; };
-		B823196A1E736EE200189778 /* PDUserInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDUserInfoCell.swift; sourceTree = "<group>"; };
+		B823196A1E736EE200189778 /* PDPeopleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDPeopleCell.swift; sourceTree = "<group>"; };
 		B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDScrollCtrl.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
@@ -561,12 +557,12 @@
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
-		B8B2C15D1E66C2BD00F253EA /* UserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
 		B8B2C15F1E680C2200F253EA /* PDTextViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDTextViewCtrl.swift; sourceTree = "<group>"; };
 		B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdateUserPins.swift; sourceTree = "<group>"; };
 		B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdatePlacePins.swift; sourceTree = "<group>"; };
 		B8B86D661DD6674D001273F6 /* NameCardFirstFiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardFirstFiveCell.swift; sourceTree = "<group>"; };
 		B8B86D681DD66D74001273F6 /* NameCardWithSwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardWithSwitchCell.swift; sourceTree = "<group>"; };
+		B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		B8C46DBD1E63786B00FD7E27 /* PinComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinComment.swift; sourceTree = "<group>"; };
 		B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailUser.swift; sourceTree = "<group>"; };
 		B8C4A9701DB9553800002062 /* PinMenuAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuAnimation.swift; sourceTree = "<group>"; };
@@ -599,7 +595,7 @@
 		DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEAlertController.swift; sourceTree = "<group>"; };
 		DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQVideoMediaItemCustom.h; sourceTree = "<group>"; };
 		DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQVideoMediaItemCustom.m; sourceTree = "<group>"; };
-		DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinCommentsCell.swift; sourceTree = "<group>"; };
+		DC477A5E1DB2A8EE008A2041 /* PinTalkTalkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTalkTalkCell.swift; sourceTree = "<group>"; };
 		DC4EC3611DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaViewAttributesCustom.h; sourceTree = "<group>"; };
 		DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaViewAttributesCustom.m; sourceTree = "<group>"; };
 		DC4EC3661DACA446001D0EA5 /* JSQAudioMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItemCustom.h; sourceTree = "<group>"; };
@@ -1072,10 +1068,8 @@
 				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
 				B05E2DBA1DCE357700D6745A /* FaePush.swift */,
 				B04BB9E41CEDB796009B9531 /* FaeUser.swift */,
-				B0537B2B1CEF7F0100CDF2B6 /* FaeObject.swift */,
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
-				B0D8CC6F1D3D4CED0030939E /* FaeMessage.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
@@ -1250,8 +1244,8 @@
 				B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */,
 				B8612E3A1DF24CF90092C606 /* PDDelegateCtrl.swift */,
 				B8612E401DF2504E0092C606 /* PDInputToolbar.swift */,
-				DC477A5E1DB2A8EE008A2041 /* PinCommentsCell.swift */,
-				B823196A1E736EE200189778 /* PDUserInfoCell.swift */,
+				DC477A5E1DB2A8EE008A2041 /* PinTalkTalkCell.swift */,
+				B823196A1E736EE200189778 /* PDPeopleCell.swift */,
 				B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */,
 				B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */,
 				B81377071EB96234002BD238 /* PDAnimations.swift */,
@@ -1473,7 +1467,6 @@
 				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
 				B817756F1E69516D001FC073 /* PlacePin.swift */,
 				B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */,
-				B8B2C15D1E66C2BD00F253EA /* UserPin.swift */,
 				B8B2C15B1E65EDFF00F253EA /* MapPin.swift */,
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
@@ -1488,6 +1481,7 @@
 				B84663D81E942E8F0010259B /* DoubleExtension.swift */,
 				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
 				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
+				B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1657,7 +1651,6 @@
 			files = (
 				B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
-				B8B2C15E1E66C2BD00F253EA /* UserPin.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
@@ -1737,7 +1730,7 @@
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B815638B1DDBA25B00BF85A1 /* CCPTextViewControll.swift in Sources */,
 				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
-				DC477A5F1DB2A8EE008A2041 /* PinCommentsCell.swift in Sources */,
+				DC477A5F1DB2A8EE008A2041 /* PinTalkTalkCell.swift in Sources */,
 				B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
@@ -1813,6 +1806,7 @@
 				B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
 				B0BF35871D8DC8D700B0540B /* JSQPhotoMediaItemCustom.m in Sources */,
+				B8BAFF1B1ECE3B06003B76F9 /* UIDeviceExtension.swift in Sources */,
 				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
@@ -1854,7 +1848,6 @@
 				B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
 				B85609291E9F6AD200F68DA4 /* PDCllcViewCtrl.swift in Sources */,
-				B0D8CC701D3D4CED0030939E /* FaeMessage.swift in Sources */,
 				B0714D6D1D5E435200356705 /* FMMapTableDelegate.swift in Sources */,
 				CE97A9C21E399D52005BBF6C /* YelpManager.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
@@ -1885,7 +1878,6 @@
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,
-				B0537B2C1CEF7F0100CDF2B6 /* FaeObject.swift in Sources */,
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
@@ -1908,7 +1900,7 @@
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B8CAA03D1DDD931D00DEC329 /* FMSelfPosition.swift in Sources */,
-				B823196B1E736EE200189778 /* PDUserInfoCell.swift in Sources */,
+				B823196B1E736EE200189778 /* PDPeopleCell.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,

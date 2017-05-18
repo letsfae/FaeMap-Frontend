@@ -134,7 +134,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func uploadProfileAvatar() {
         let avatar = FaeImage()
         avatar.image = imageViewAvatar.image
-        avatar.faeUploadImageInBackground { (code: Int, message: Any?) in
+        avatar.faeUploadProfilePic { (code: Int, message: Any?) in
             if code / 100 == 2 {
                 self.modifyDisplayName()
             }

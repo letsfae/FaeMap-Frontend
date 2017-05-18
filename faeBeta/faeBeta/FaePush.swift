@@ -9,28 +9,24 @@
 import Foundation
 
 class FaePush: NSObject {
-    var keyValue = [String:AnyObject]()
-    override init (){
-        //local storage
-        //        self.isLogin = false
-        //        self.userToken = ""
+    
+    var keyValue = [String: AnyObject]()
+    
+    override init () {
+
     }
-    func whereKey(_ key:String, value:String)->Void{
-        keyValue[key]=value as AnyObject?
+    
+    func whereKey(_ key: String, value: String) -> Void {
+        keyValue[key] = value as AnyObject?
     }
-    func whereKeyInt(_ key:String, value:Int)->Void{
-        keyValue[key]=value as AnyObject?
-    }
-    func clearKeyValue()->Void{
-        self.keyValue = [String:AnyObject]()
+    
+    func clearKeyValue() -> Void {
+        self.keyValue = [String: AnyObject]()
     }
 
-    func getSync(_ completion:@escaping (Int,Any?)->Void){
-//        print(headerAuthentication())
+    func getSync(_ completion:@escaping (Int, Any?) -> Void) {
         getFromURL("sync", parameter: nil, authentication: headerAuthentication()) {(status: Int, message: Any?) in
-//            print(message)
-            //self.clearKeyValue()
-            completion(status, message);
+            completion(status, message)
         }
     }
 }

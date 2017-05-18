@@ -230,9 +230,9 @@ class FaeUser : NSObject {
     func changePassword(_ completion:@escaping (Int,Any?)->Void){
         postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
             
-//            print(message)
-            if let password = self.keyValue["password"]{
-                userPassword = password as? String
+            if let password = self.keyValue["password"]?.string {
+                userPassword = password
+                print("[changePassword]", userPassword)
                 let shareAPI = LocalStorageManager()
                 _ = shareAPI.savePassword()
             }

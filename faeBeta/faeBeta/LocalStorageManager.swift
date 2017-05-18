@@ -78,15 +78,15 @@ class LocalStorageManager: NSObject {
         return true
     }
     
-    func savePassword()->Bool{
-        if userPassword != nil {
-            saveString("userPassword", value: userPassword!)
+    func savePassword() -> Bool{
+        if userPassword != "" {
+            saveString("userPassword", value: userPassword)
             return true
         }
         return false
     }
-    func readPassword()->Bool{
-        if(userPassword == nil){
+    func readPassword() -> Bool{
+        if userPassword == "" {
             if let userpassword = readByKey("userPassword"){
                 userPassword = userpassword as! String
                 return true
@@ -97,7 +97,7 @@ class LocalStorageManager: NSObject {
         return true
     }
     func logInStorage() -> Bool{
-        if userToken == nil || userTokenEncode == nil || session_id == -1 || user_id == -1 || userEmail == "" || userPassword == nil || is_Login == 0 {
+        if userToken == "" || userTokenEncode == "" || session_id == -1 || user_id == -1 || userEmail == "" || userPassword == nil || is_Login == 0 {
             return false
         }
         saveString("userToken", value: userToken)

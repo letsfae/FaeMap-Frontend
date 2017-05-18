@@ -142,7 +142,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewDistanceRadius: UIView!
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
-    var userPins = [UserPin]()
     var prevBearing: Double = 0
     
     // System Functions

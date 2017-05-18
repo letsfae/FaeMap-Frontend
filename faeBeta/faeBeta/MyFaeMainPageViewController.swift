@@ -121,9 +121,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imageViewAvatar.image = image
         let avatar = FaeImage()
         avatar.image = image
-        avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
-//            print(code)
-//            print(message)
+        avatar.faeUploadProfilePic { (code: Int, message: Any?) in
             if code / 100 == 2 {
                 //                self.imageViewAvatarMore.image = image
             } else {
@@ -253,7 +251,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imageViewAvatar.image = images[0]
         let avatar = FaeImage()
         avatar.image = images[0]
-        avatar.faeUploadImageInBackground { (code:Int, message:Any?) in
+        avatar.faeUploadProfilePic { (code:Int, message:Any?) in
             if code / 100 == 2 {
             } else {
             }

@@ -55,7 +55,6 @@ class Key: NSObject {//  singleton class
     var userAge : Int?
 
     var userStatus : Int?
-    var userStatusMessage : String?
 
     var userFirstname : String = ""
     var userLastname : String = ""

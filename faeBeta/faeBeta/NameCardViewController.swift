@@ -358,9 +358,7 @@ extension NameCardViewController {
             self.imageViewTitleProfile.image = image
             let avatar = FaeImage()
             avatar.image = image
-            avatar.faeUploadImageInBackground { (code:Int, message: Any?) in
-//                print(code)
-//                print(message)
+            avatar.faeUploadProfilePic { (code:Int, message: Any?) in
                 if code / 100 == 2 {
                     //                self.imageViewAvatarMore.image = image
                 } else {

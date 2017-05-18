@@ -1,5 +1,5 @@
 //
-//  PDUserInfoCell.swift
+//  PDPeopleCell.swift
 //  faeBeta
 //
 //  Created by Yue on 3/10/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDUserInfoCell: UITableViewCell {
+class PDPeopleCell: UITableViewCell {
     
     var userId = 0
     var imgAvatar: UIImageView!

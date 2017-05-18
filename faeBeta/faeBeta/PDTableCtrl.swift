@@ -37,7 +37,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pinEmptyCell", for: indexPath) as! PDEmptyCell
             return cell
         } else if self.pinComments.count > 0 && tableMode == .talktalk {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinCommentsCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pinCommentsCell", for: indexPath) as! PinTalkTalkCell
             let comment = self.pinComments[indexPath.row]
             cell.delegate = self
             cell.pinID = self.strPinId
@@ -109,7 +109,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         } else if tableMode == .people {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDUserInfoCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDPeopleCell
             let userInfo = self.pinDetailUsers[indexPath.row]
             cell.lblDisplayName.text = userInfo.displayName
             cell.lblUserName.text = "@"+userInfo.userName
