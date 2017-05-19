@@ -3,47 +3,39 @@
 //  faeBeta
 //
 //  Created by Yash on 28/08/16.
+//  Edited by Sophie Wang
 //  Copyright © 2016 fae. All rights reserved.
 //
 
 import UIKit
 
 class RegisterBaseViewController: UIViewController {
-    
-    // MARK: - Variables
-    
+
     var tableView: UITableView!
-    var continueButton: UIButton!
-    var bottomView: UIView!
+    var btnContinue: UIButton!
+    var uiviewBottom: UIView!
     var activeIndexPath: IndexPath?
     var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
         self.navigationController?.isNavigationBarHidden = true
-        
         addTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         registerForNotifications()
         createActivityIndicator()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
         deRegisterForNotification()
     }
     
     // MARK: - Functions
-    
     func addTapGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tap)
@@ -54,75 +46,59 @@ class RegisterBaseViewController: UIViewController {
     }
     
     // MARK: - Memory Management
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 }
 
 extension RegisterBaseViewController {
     
     func createTopView(_ imageNamed: String) {
-        let topView = UIView(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 50))
-        topView.backgroundColor = UIColor.white
+        let uiviewTop = UIView(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 50))
+        uiviewTop.backgroundColor = UIColor.white
+        let btnBack = UIButton(frame: CGRect(x: 10, y: 5, width: 40, height: 40))
+        btnBack.setImage(UIImage(named: "Fill 1"), for: UIControlState())
+        btnBack.setTitleColor(UIColor.blue, for: UIControlState())
+        btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let backButton = UIButton(frame: CGRect(x: 10, y: 5, width: 40, height: 40))
-        backButton.setImage(UIImage(named: "Fill 1"), for: UIControlState())
-        backButton.setTitleColor(UIColor.blue, for: UIControlState())
-        backButton.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
-        
-        let progressImageView = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
-        
-        progressImageView.image = UIImage(named: imageNamed)
-        
-        
-        topView.addSubview(backButton)
-        topView.addSubview(progressImageView)
-        
-        view.addSubview(topView)
+        let imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
+        imgProgress.image = UIImage(named: imageNamed)
+    
+        uiviewTop.addSubview(btnBack)
+        uiviewTop.addSubview(imgProgress)
+        view.addSubview(uiviewTop)
     }
     
-    func backButtonPressed() {
-        
-    }
+    func backButtonPressed() {}
     
     func createBottomView(_ subview: UIView) {
+        uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
+        btnContinue = UIButton(frame: CGRect(x: 0, y: subview.frame.size.height + 18, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnContinue.center.x = screenWidth / 2
+        btnContinue.layer.cornerRadius = 25 * screenHeightFactor
+        btnContinue.layer.masksToBounds = true
+        btnContinue.setTitle("Continue", for: UIControlState())
+        btnContinue.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        btnContinue.backgroundColor = UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 1.0)
         
-        bottomView = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
+        btnContinue.isEnabled = false
+        btnContinue.addTarget(self, action: #selector(self.continueButtonPressed), for: .touchUpInside)
         
-        continueButton = UIButton(frame: CGRect(x: 0, y: subview.frame.size.height + 18, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
-        continueButton.center.x = screenWidth / 2
-        continueButton.layer.cornerRadius = 25 * screenHeightFactor
-        continueButton.layer.masksToBounds = true
+        uiviewBottom.addSubview(subview)
+        uiviewBottom.addSubview(btnContinue)
         
-        continueButton.setTitle("Continue", for: UIControlState())
-        continueButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold",size: 20)
-        
-        continueButton.backgroundColor = UIColor(red: 255/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1.0)
-        
-        
-        continueButton.isEnabled = false
-        continueButton.addTarget(self, action: #selector(self.continueButtonPressed), for: .touchUpInside)
-        
-        bottomView.addSubview(subview)
-        bottomView.addSubview(continueButton)
-        
-        view.addSubview(bottomView)
+        view.addSubview(uiviewBottom)
     }
     
-    func continueButtonPressed() {
-        
-    }
+    func continueButtonPressed() {}
     
     func enableContinueButton(_ enable: Bool) {
-        continueButton.isEnabled = enable
-        
+        btnContinue.isEnabled = enable
         if enable {
-            continueButton.backgroundColor = UIColor.faeAppRedColor()
+            btnContinue.backgroundColor = UIColor.faeAppRedColor()
         } else {
-            continueButton.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnContinue.backgroundColor = UIColor.faeAppDisabledRedColor()
         }
     }
     
@@ -136,7 +112,6 @@ extension RegisterBaseViewController {
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.isScrollEnabled = false
-        
     }
     
     func createActivityIndicator() {
@@ -144,7 +119,7 @@ extension RegisterBaseViewController {
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        activityIndicator.color = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
         
         view.addSubview(activityIndicator)
         view.bringSubview(toFront: activityIndicator)
@@ -159,25 +134,20 @@ extension RegisterBaseViewController {
     }
     
     func shouldShowActivityIndicator(_ show: Bool) {
-        
         if show {
             activityIndicator.startAnimating()
         } else {
             activityIndicator.stopAnimating()
         }
-        
         view.isUserInteractionEnabled = !show
     }
-    
 }
 
 extension RegisterBaseViewController {
     
     func registerForNotifications() {
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
     }
     
     func deRegisterForNotification() {
@@ -188,44 +158,38 @@ extension RegisterBaseViewController {
     func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        var frameBottom = uiviewBottom.frame
+        frameBottom.origin.y = view.frame.height - keyboardFrame.size.height - frameBottom.size.height + 15
         
-        
-        var bottomViewFrame = bottomView.frame
-        bottomViewFrame.origin.y = view.frame.height - keyboardFrame.size.height - bottomViewFrame.size.height + 15
-        
-        var tableViewFrame: CGRect?
-        
+        var frameTable: CGRect?
         if tableView != nil {
-            tableViewFrame = tableView.frame
-            tableViewFrame!.origin.y = min(screenHeight - keyboardFrame.size.height - bottomViewFrame.size.height - tableViewFrame!.size.height, 70)
+            frameTable = tableView.frame
+            frameTable!.origin.y = min(screenHeight - keyboardFrame.size.height - frameBottom.size.height - frameTable!.size.height, 70)
         }
         
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.bottomView.frame = bottomViewFrame
+        UIView.animate(withDuration: 0.3, animations: {() -> Void in
+            self.uiviewBottom.frame = frameBottom
             if self.tableView != nil {
-                self.tableView.frame = tableViewFrame!
+                self.tableView.frame = frameTable!
             }
-            
         })
     }
     
     func keyboardWillHide(_ notification: Notification) {
+        var frameBottom = uiviewBottom.frame
+        frameBottom.origin.y = view.frame.height - frameBottom.size.height
         
-        var bottomViewFrame = bottomView.frame
-        bottomViewFrame.origin.y = view.frame.height - bottomViewFrame.size.height
-        
-        var tableViewFrame: CGRect?
-        
+        var frameTable: CGRect?
         if tableView != nil {
-            tableViewFrame = tableView.frame
-            tableViewFrame!.origin.y = 70
+            frameTable = tableView.frame
+            frameTable!.origin.y = 70
             tableView.isScrollEnabled = false
         }
         
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.bottomView.frame = bottomViewFrame
+        UIView.animate(withDuration: 0.3, animations: {() -> Void in
+            self.uiviewBottom.frame = frameBottom
             if self.tableView != nil {
-                self.tableView.frame = tableViewFrame!
+                self.tableView.frame = frameTable!
             }
         })
     }

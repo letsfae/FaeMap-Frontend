@@ -157,18 +157,18 @@ extension SignInSupportCodeViewController {
         UIView .animate(withDuration: 0.3, animations: {
             var frame = self.numKeyPad!.frame
             
-            self.bottomView.frame.origin.y = self.view.frame.height - 244 - self.bottomView.frame.size.height
+            self.uiviewBottom.frame.origin.y = self.view.frame.height - 244 - self.uiviewBottom.frame.size.height
             frame.origin.y = self.view.frame.size.height - 244
             self.numKeyPad.frame = frame
         }) 
     }
     
     func hideNumKeyboard() {
-        var bottomViewFrame = bottomView.frame
+        var bottomViewFrame = uiviewBottom.frame
         bottomViewFrame.origin.y = view.frame.height - bottomViewFrame.size.height
         
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.bottomView.frame = bottomViewFrame
+            self.uiviewBottom.frame = bottomViewFrame
         })
         
     }

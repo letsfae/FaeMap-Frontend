@@ -44,7 +44,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         // Do any additional setup after loading the view.
         createBottomView(getInfoView())
         createTableView(59 + 135 * screenHeightFactor)
-        continueButton.setTitle("Update", for: UIControlState())
+        btnContinue.setTitle("Update", for: UIControlState())
         registerCell()
         
         tableView.delegate = self
