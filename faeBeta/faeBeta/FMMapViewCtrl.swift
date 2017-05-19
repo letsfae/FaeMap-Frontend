@@ -89,7 +89,6 @@ extension FaeMapViewController: GMSMapViewDelegate {
             let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
             btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
             prevBearing = position.bearing
-            print("1312")
         }
         
         let points = self.faeMapView.projection.point(for: currentLocation2D)
@@ -139,8 +138,12 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if placeMarkers[j].map == nil {
                         continue
                     }
+                    if placeMarkers[j] == markerFakeUser {
+                        print("[didChange] can find markerFakeUser")
+                    }
                     let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
                     // Collision occurs
+                    
                     if distance <= absDistance {
                         placeMarkers[j].map = nil
                     }

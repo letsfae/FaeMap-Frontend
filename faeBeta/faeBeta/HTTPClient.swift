@@ -184,7 +184,7 @@ func getFromURL(_ className:String,parameter:[String:Any]?, authentication:[Stri
 
 }
 
-func deleteFromURL(_ className:String, parameter: [String: Any] , authentication:[String: Any]?, completion:@escaping (Int, Any?) -> Void){
+func deleteFromURL(_ className: String, parameter: [String: Any] , authentication: [String: Any]?, completion:@escaping (Int, Any?) -> Void){
     let URL = baseURL + "/" + className
     var headers = [
         "Accept": headerAccept,

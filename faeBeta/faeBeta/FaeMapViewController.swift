@@ -143,6 +143,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var uiviewUserGender: UIView! // Map Namecard
     var prevBearing: Double = 0
+    var markerFakeUser = GMSMarker()
     
     // System Functions
     override func viewDidLoad() {
@@ -162,7 +163,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
         didLoadFirstLoad = true
-        
+        markerFakeUser.map = faeMapView
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -347,13 +348,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if didLoadFirstLoad {
-            self.didLoadFirstLoad = false
-            self.currentLocation = locManager.location
-            self.currentLatitude = currentLocation.coordinate.latitude
-            self.currentLongitude = currentLocation.coordinate.longitude
-            self.currentLocation2D = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
+            didLoadFirstLoad = false
+            currentLocation = locManager.location
+            currentLatitude = currentLocation.coordinate.latitude
+            currentLongitude = currentLocation.coordinate.longitude
+            currentLocation2D = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
             let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
-            self.faeMapView.camera = camera
+            faeMapView.camera = camera
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true)
@@ -361,13 +362,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         
         if let location = locations.last {
-            let points = self.faeMapView.projection.point(for: location.coordinate)
-            self.subviewSelfMarker.center = points
-            self.uiviewDistanceRadius.center = points
-            self.currentLocation = location
-            self.currentLocation2D = location.coordinate
-            self.currentLatitude = location.coordinate.latitude
-            self.currentLongitude = location.coordinate.longitude
+            let points = faeMapView.projection.point(for: location.coordinate)
+            subviewSelfMarker.center = points
+            uiviewDistanceRadius.center = points
+            currentLocation = location
+            currentLocation2D = location.coordinate
+            currentLatitude = location.coordinate.latitude
+            currentLongitude = location.coordinate.longitude
+            markerFakeUser.position = location.coordinate
         }
     }
 }

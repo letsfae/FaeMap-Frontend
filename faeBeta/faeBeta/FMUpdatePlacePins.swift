@@ -86,6 +86,9 @@ extension FaeMapViewController {
         placeMarkers.removeAll()
         placePins.removeAll()
         placeNames.removeAll()
+        
+        placeMarkers.append(markerFakeUser)
+        
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
         yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))

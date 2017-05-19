@@ -69,8 +69,7 @@ var userPhoneVerified: Bool = false
 
 var userAvatarMap = "miniAvatar_1" // new var by Yue Shen
 
-var arrayNameCard = [Int:UIImage]()
-//var arrayNameCard : [Int: UIImage]!
+var arrayNameCard = [Int: UIImage]()
 
 func headerAuthentication() -> [String: AnyObject] {
     if userTokenEncode != "" {
