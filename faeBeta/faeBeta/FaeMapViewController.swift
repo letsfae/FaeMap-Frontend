@@ -164,6 +164,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         filterAndYelpSetup()
         didLoadFirstLoad = true
         markerFakeUser.map = faeMapView
+        markerFakeUser.zIndex = 7
     }
 
     override func viewWillAppear(_ animated: Bool) {

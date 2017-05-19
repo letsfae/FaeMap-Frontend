@@ -138,7 +138,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if placeMarkers[j].map == nil {
                         continue
                     }
-                    if placeMarkers[j] == markerFakeUser {
+                    if placeMarkers[j].zIndex == 7 {
                         print("[didChange] can find markerFakeUser")
                     }
                     let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
