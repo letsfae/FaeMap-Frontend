@@ -224,6 +224,7 @@
 		B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86849781DE0E3BB0016FC6E /* Register.storyboard */; };
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B868497F1DE0E4FF0016FC6E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497D1DE0E4FF0016FC6E /* Login.storyboard */; };
+		B86AE0501ED4FC4400D1357D /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86AE04F1ED4FC4400D1357D /* General.swift */; };
 		B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B87F9C811DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */; };
@@ -541,6 +542,7 @@
 		B86849791DE0E3BB0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Register.storyboard; sourceTree = "<group>"; };
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B868497E1DE0E4FF0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
+		B86AE04F1ED4FC4400D1357D /* General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFeelingCell.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B87F9C801DE81C0A00BC5CBE /* CMPImageDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPImageDelegateCtrl.swift; sourceTree = "<group>"; };
@@ -1482,6 +1484,7 @@
 				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
 				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
 				B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */,
+				B86AE04F1ED4FC4400D1357D /* General.swift */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1752,6 +1755,7 @@
 				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B86AE0501ED4FC4400D1357D /* General.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,

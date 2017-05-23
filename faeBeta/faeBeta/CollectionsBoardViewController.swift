@@ -47,19 +47,12 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: ({
             self.uiviewBackground.frame.origin.x = screenWidth
-        }), completion: { (done: Bool) in
-            if done {
-                self.dismiss(animated: false, completion: nil)
-            }
+        }), completion: { (_) in
+            self.dismiss(animated: false, completion: nil)
         })
         
     }
@@ -201,11 +194,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         }
         
         if user_id != -1 {
-            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
-            imgAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                if image != nil {
-
-                }
+            General.shared.avatar(userid: user_id, completion: { (image) in
+                imgAvatar.image = image
             })
         }
         return imgShadow
