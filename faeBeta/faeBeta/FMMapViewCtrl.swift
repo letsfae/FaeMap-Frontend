@@ -103,8 +103,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         
         let currentZoom = mapView.camera.zoom
-        let coord_1 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 0))
-        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: 50))
+        let coord_1 = mapView.projection.coordinate(for: CGPoint.zero)
+        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: intPinDistance))
         let absDistance = GMSGeometryDistance(coord_1, coord_2)
         
         if currentZoom == previousZoom {
@@ -138,12 +138,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if placeMarkers[j].map == nil {
                         continue
                     }
-                    if placeMarkers[j].zIndex == 7 {
-                        print("[didChange] can find markerFakeUser")
+                    if placeMarkers[j] == markerFakeUser {
+                        continue
                     }
-                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
-                    // Collision occurs
                     
+                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
+                    
+                    // Collision occurs
                     if distance <= absDistance {
                         placeMarkers[j].map = nil
                     }

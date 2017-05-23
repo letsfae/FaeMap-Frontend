@@ -168,6 +168,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     
     fileprivate func reloadMainScreenButtons() {
+        
+        btnToNorth.transform = CGAffineTransform.identity
+        
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.btnMapFilter.frame = CGRect(x: screenWidth/2-22, y: screenHeight-47, width: 44, height: 44)
             self.btnToNorth.frame = CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59)
@@ -176,6 +179,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
             self.updateUnreadChatIndicator()
             self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
-        }, completion: nil)
+            let direction: CGFloat = CGFloat(self.prevBearing)
+            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
+            self.btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
+        }, completion: {(_) in
+            
+        })
     }
 }

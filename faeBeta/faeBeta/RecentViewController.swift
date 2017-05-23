@@ -77,7 +77,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.navigationController?.navigationBar.isTranslucent = false
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
-        titleLabel.text = "Social"
+        titleLabel.text = "Chats"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)

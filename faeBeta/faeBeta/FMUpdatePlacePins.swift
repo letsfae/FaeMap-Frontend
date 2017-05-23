@@ -35,8 +35,8 @@ extension FaeMapViewController {
     }
     
     fileprivate func pinPlacesOnMap(results: [PlacePin]) {
-        let coord_1 = faeMapView.projection.coordinate(for: CGPoint(x: 0, y: 0))
-        let coord_2 = faeMapView.projection.coordinate(for: CGPoint(x: 0, y: 50))
+        let coord_1 = faeMapView.projection.coordinate(for: CGPoint.zero)
+        let coord_2 = faeMapView.projection.coordinate(for: CGPoint(x: 0, y: intPinDistance))
         let absDistance = GMSGeometryDistance(coord_1, coord_2)
         for result in results {
             let categoryList = result.category

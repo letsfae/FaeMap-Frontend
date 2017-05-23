@@ -146,7 +146,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Map Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatar", "Activity Log", "Log Out"]
+        let array = ["Map Boards", "Go Invisible", "Contacts", "Collections", "Activities", "Mood Avatar", "Log Out"]
         cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
         if indexPath.row < 2 {
@@ -182,7 +182,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             self.actionCloseMenu(self.buttonBackground)
         }
         // Mood Avatar
-        else if indexPath.row == 4 {
+        else if indexPath.row == 5 {
             self.tableSelections = .moodAvatar
             self.actionCloseMenu(self.buttonBackground)
         }
@@ -275,32 +275,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 }
             }
         }
-        
-        /* Disable realm usage for avatar until backend provide interface
-        let realm = try! Realm()
-        let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id.stringValue) AND avatar != nil")
-        if selfInfoRealm.count >= 1 {
-            if let selfAvatar = selfInfoRealm.first {
-                let picture = UIImage.sd_image(with: selfAvatar.avatar as Data!)
-                imageAvatar.image = picture
-            }
-        }
-        else {
-            if user_id != nil {
-                let urlStringHeader = "\(baseURL)/files/users/\(user_id.stringValue)/avatar"
-                imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image != nil {
-                        let selfInfoRealm = SelfInformation()
-                        selfInfoRealm.currentUserID = Int(user_id)
-                        selfInfoRealm.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
-                        try! realm.write {
-                            realm.add(selfInfoRealm)
-                        }
-                    }
-                })
-            }
-        }
-         */
     }
     
     func switchToInvisibleOrOnline(_ sender: UISwitch) {
@@ -346,7 +320,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             self.tableLeftSlideWindow.center.x -= 290
             self.backgroundColorViewTop.center.x -= 290
             self.backgroundColorViewDown.center.x -= 290
-        }) { (done: Bool) in
+        }) { (_) in
             self.dismiss(animated: false, completion: {
                 self.delegate?.reloadSelfPosition()
                 switch self.tableSelections {

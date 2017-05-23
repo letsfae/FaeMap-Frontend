@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 
 extension SelectLocationViewController: GMSMapViewDelegate {
+    
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.projection.coordinate(for: mapCenter)

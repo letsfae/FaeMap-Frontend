@@ -105,6 +105,9 @@ class FaeUserPin: NSObject {
         UIView.animate(withDuration: 0.3, delay: 0, animations: {
             self.icon.alpha = 0
         }, completion: {(_) in
+            if self.index >= self.positions.count {
+                return
+            }
             self.marker.position = self.positions[self.index]
             self.marker.map = nil
             if self.valid {

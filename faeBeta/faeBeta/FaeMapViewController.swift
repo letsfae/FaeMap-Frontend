@@ -144,6 +144,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewUserGender: UIView! // Map Namecard
     var prevBearing: Double = 0
     var markerFakeUser = GMSMarker()
+    var intPinDistance: Int = 65
     
     // System Functions
     override func viewDidLoad() {
@@ -164,7 +165,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         filterAndYelpSetup()
         didLoadFirstLoad = true
         markerFakeUser.map = faeMapView
-        markerFakeUser.zIndex = 7
+        markerFakeUser.icon = UIImage()
     }
 
     override func viewWillAppear(_ animated: Bool) {
