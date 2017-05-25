@@ -17,11 +17,9 @@ protocol RegisterTextfieldProtocol: class {
 class RegisterTextfieldTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlets
-    
     var textfield: FAETextField!
     
     // MARK: - Variables
-    
     weak var delegate: RegisterTextfieldProtocol?
     var indexPath: IndexPath!
     var isUsernameField = false
@@ -31,22 +29,18 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        textfield = FAETextField(frame: CGRect(x: 15, y: self.contentView.frame.height / 2 - 17 ,width: self.contentView.frame.width - 30, height: 34))
+        textfield = FAETextField(frame: CGRect(x: 15, y: self.contentView.frame.height / 2 - 17, width: self.contentView.frame.width - 30, height: 34))
         self.contentView.addSubview(textfield)
         textfield.delegate = self
-        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for:.editingChanged )
-
-        // Initialization code
+        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged )
     }
 
-    override func layoutSubviews(){
+    override func layoutSubviews() {
         super.layoutSubviews()
-        textfield.frame =  CGRect(x: 15, y: self.contentView.frame.height / 2 - 17 ,width: self.contentView.frame.width - 30, height: 34)
-
+        textfield.frame =  CGRect(x: 15, y: self.contentView.frame.height / 2 - 17, width: self.contentView.frame.width - 30, height: 34)
     }
     
     // MARK: - Functions
-    
     func setPlaceholderLabelText(_ text: String, indexPath: IndexPath)  {
         textfield.placeholder = text
         self.indexPath = indexPath
@@ -65,23 +59,22 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         isUsernameField = true
     }
     
-    func setLeftPlaceHolderDisplay(_ bool:Bool){
+    func setLeftPlaceHolderDisplay(_ bool:Bool) {
         textfield.isUsernameTextField = bool
         self.setNeedsDisplay()
     }
     
-    func setRightPlaceHolderDisplay(_ bool:Bool){
+    func setRightPlaceHolderDisplay(_ bool:Bool) {
         textfield.isSecureTextEntry = bool
         self.setNeedsDisplay()
     }
     
-    func updateTextColorAccordingToPassword(_ text:String){
-        if(!textfield.isSecureTextEntry){
+    func updateTextColorAccordingToPassword(_ text:String) {
+        if !textfield.isSecureTextEntry {
             return;
         }
-        
         var count = 0
-        for c in text.characters{
+        for c in text.characters {
             if c < "a" || c > "z" {
                 count += 1
             }
@@ -98,7 +91,6 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
             textfield.defaultTextColor = UIColor.faeAppRedColor()
             break
         }
-        
     }
     
     func makeFirstResponder() {
@@ -110,23 +102,14 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     }
     
     // MARK: - Selection Function
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
-    
 }
 
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
-    
     func textFieldDidChange(_ textField: UITextField) {
-//        if isUsernameField {
-//            if textfield.text != nil {
-//                textfield.text = textField.text!.lowercased()
-//            }
-//        }
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
     }
     
@@ -138,8 +121,7 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
         delegate?.textFieldShouldReturn(indexPath)
         return true
     }
-    
-    
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if isUsernameField {
             let set = NSCharacterSet(charactersIn: "ABCDEFGHIJKLMONPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-.").inverted
@@ -149,12 +131,10 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
             }
         }
         let currentCharacterCount = textField.text?.characters.count ?? 0
-        if (range.length + range.location > currentCharacterCount) {
+        if range.length + range.location > currentCharacterCount {
             return false
         }
         let newLength = currentCharacterCount + string.characters.count - range.length
         return (newLength <= limitNumber) || (!isCharacterLimit)
     }
 }
-
-

@@ -125,11 +125,11 @@ class NameSettingViewController: UIViewController {
     }
     /*func textfieldDidChange(textfield: UITextField){
         if(usernameTextField.text!.characters.count > 0 && passwordTextField.text?.characters.count >= 8){
-            loginButton.backgroundColor = UIColor.faeAppRedColor()
-            loginButton.enabled = true
+            btnLogin.backgroundColor = UIColor.faeAppRedColor()
+            btnLogin.enabled = true
         }else{
-            loginButton.backgroundColor = UIColor.faeAppDisabledRedColor()
-            loginButton.enabled = false
+            btnLogin.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnLogin.enabled = false
         }
     }*/
 

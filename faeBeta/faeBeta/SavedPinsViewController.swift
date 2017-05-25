@@ -109,7 +109,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     
     //click cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(!gesturerecognizerTouch.isCellSwiped) {
+        if !gesturerecognizerTouch.isCellSwiped {
             tableView.deselectRow(at: indexPath, animated: false)
             
             let vcPinDetail = PinDetailViewController()
