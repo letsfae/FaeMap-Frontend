@@ -11,23 +11,16 @@ import UIKit
 class SignInSupportCodeViewController: RegisterBaseViewController {
     
     // MARK: - Variables
-    
-    var enterCodeTableViewCell: EnterCodeTableViewCell!
+    var cellEnterCode: EnterCodeTableViewCell!
     var code = ""
     var numKeyPad: FAENumberKeyboard!
 
-    
     // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        // Do any additional setup after loading the view.
         createTopView("")
         createTableView(view.frame.size.height - 175)
         createBottomView(resendCodeView())
-        
         registerCell()
         
         tableView.delegate = self
@@ -36,28 +29,22 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        enterCodeTableViewCell.makeFirstResponder()
+        cellEnterCode.makeFirstResponder()
     }
     
     // MARK: - Functions
-    
     func resendCodeView() -> UIView {
-        let resendCodeView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
-        
+        let uiviewResend = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
         let label = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 125, y: 0, width: 250, height: 25))
         label.textAlignment = .center
         label.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        label.textColor = UIColor.init(red: 249/255.0, green: 90/255.0, blue: 90/255.0, alpha: 1.0)
+        label.textColor = UIColor.init(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
         label.text = "Resend Code."
-        
-        resendCodeView.addSubview(label)
-        
-        return resendCodeView
+        uiviewResend.addSubview(label)
+        return uiviewResend
     }
     
-    func loginButtonPressed() {
-        
-    }
+    func loginButtonPressed() {}
     
     override func backButtonPressed() {
         view.endEditing(true)
@@ -70,33 +57,27 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterUsername() {
-        let vc:UIViewController = UIStoryboard(name: "Registration", bundle: nil) .instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
+        let vc: UIViewController = UIStoryboard(name: "Registration", bundle: nil).instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func validation() {
         var isValid = false
-        
         isValid = code.characters.count == 6
-        
         enableContinueButton(isValid)
     }
     
     func registerCell() {
-        
         tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
         tableView.register(UINib(nibName: "SpacerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpacerTableViewCellIdentifier")
         tableView.register(UINib(nibName: "EnterCodeTableViewCell", bundle: nil), forCellReuseIdentifier: "EnterCodeTableViewCellIdentifier")
-        
     }
     
     // MARK: - Memory Management
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 }
 
 extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -116,14 +97,13 @@ extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataS
             let cell = tableView.dequeueReusableCell(withIdentifier: "SpacerTableViewCellIdentifier") as! SpacerTableViewCell
             return cell
         case 2:
-            if enterCodeTableViewCell == nil {
-                enterCodeTableViewCell = tableView.dequeueReusableCell(withIdentifier: "EnterCodeTableViewCellIdentifier") as! EnterCodeTableViewCell
+            if cellEnterCode == nil {
+                cellEnterCode = tableView.dequeueReusableCell(withIdentifier: "EnterCodeTableViewCellIdentifier") as! EnterCodeTableViewCell
             }
-            return enterCodeTableViewCell
+            return cellEnterCode
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             return cell
-            
         }
     }
 }
@@ -139,24 +119,22 @@ extension SignInSupportCodeViewController: FAENumberKeyboardDelegate {
                 code = String(code.characters.dropLast())
             }
         }
-        enterCodeTableViewCell.showText(code)
+        cellEnterCode.showText(code)
         validation()
     }
 }
 
 extension SignInSupportCodeViewController {
-    
     override func keyboardWillShow(_ notification: Notification) {
         view.endEditing(true)
         if numKeyPad == nil {
-            numKeyPad = FAENumberKeyboard(frame:CGRect(x: 57,y: view.frame.size.height, width: 300, height: 244))
+            numKeyPad = FAENumberKeyboard(frame: CGRect(x: 57, y: view.frame.size.height, width: 300, height: 244))
             self.view.addSubview(numKeyPad)
             numKeyPad.delegate = self
         }
         
-        UIView .animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             var frame = self.numKeyPad!.frame
-            
             self.uiviewBottom.frame.origin.y = self.view.frame.height - 244 - self.uiviewBottom.frame.size.height
             frame.origin.y = self.view.frame.size.height - 244
             self.numKeyPad.frame = frame
@@ -166,11 +144,8 @@ extension SignInSupportCodeViewController {
     func hideNumKeyboard() {
         var bottomViewFrame = uiviewBottom.frame
         bottomViewFrame.origin.y = view.frame.height - bottomViewFrame.size.height
-        
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.uiviewBottom.frame = bottomViewFrame
         })
-        
     }
-    
 }

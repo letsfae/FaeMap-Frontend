@@ -11,29 +11,27 @@ import UIKit
 
 class FAETextField: UITextField {
     //MARK: - Interface
-    fileprivate var contentInset : CGFloat! = 30
-    fileprivate var leftButton : UILabel!
-    fileprivate var rightButton : UIButton!
-    var rightPlaceHolderView: UIView!
-    var leftPlaceHolderView:UIView!
+    fileprivate var contentInset: CGFloat! = 30
+    fileprivate var lblLeft: UILabel!
+    fileprivate var btnRight: UIButton!
+    var uiviewRightPlaceHolder: UIView!
+    var uiviewLeftPlaceHolderView: UIView!
     
     fileprivate var _defaultTextColor = UIColor.faeAppRedColor()
-    var defaultTextColor: UIColor
-    {
-        get{
+    var defaultTextColor: UIColor {
+        get {
             return _defaultTextColor
         }
-        set{
+        set {
             _defaultTextColor = newValue
             self.textColor = newValue
         }
     }
     
-    override var isSecureTextEntry: Bool
-    {
+    override var isSecureTextEntry: Bool {
         set {
             super.isSecureTextEntry = newValue
-            if newValue && rightButton == nil {
+            if newValue && btnRight == nil {
                 setupPasswordTextField()
             }
         }
@@ -42,9 +40,9 @@ class FAETextField: UITextField {
         }
     }
     
-    var isUsernameTextField: Bool{
-        set{
-            if newValue && leftButton == nil{
+    var isUsernameTextField: Bool {
+        set {
+            if newValue && lblLeft == nil {
                 setupUsernameTextField()
             }
         }
@@ -54,14 +52,13 @@ class FAETextField: UITextField {
     }
     
     fileprivate var _placeholder:String = ""
-    override var placeholder: String?
-    {
-        set{
+    override var placeholder: String? {
+        set {
             _placeholder = newValue!
             let font = UIFont(name: "AvenirNext-Regular", size: 22)
             self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
         }
-        get{
+        get {
             return _placeholder
         }
     }
@@ -81,8 +78,7 @@ class FAETextField: UITextField {
         setup()
     }
     
-    fileprivate func setup()
-    {
+    fileprivate func setup() {
         self.autocorrectionType = .no
         self.textColor = UIColor.faeAppInputTextGrayColor()
         self.font = UIFont(name: "AvenirNext-Regular", size: 22.0)
@@ -91,45 +87,39 @@ class FAETextField: UITextField {
         self.textAlignment = .center
         self.tintColor = UIColor.faeAppRedColor()
         self.autocapitalizationType = .none
-        rightPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
-        leftPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
-        self.rightView = rightPlaceHolderView
+        uiviewRightPlaceHolder = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
+        uiviewLeftPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
+        self.rightView = uiviewRightPlaceHolder
         self.rightViewMode = .whileEditing
-        self.leftView = leftPlaceHolderView
+        self.leftView = uiviewLeftPlaceHolderView
         self.leftViewMode = .always
         self.clipsToBounds = true
         self.minimumFontSize = 18
     }
     
-    fileprivate func setupPasswordTextField()
-    {
+    fileprivate func setupPasswordTextField() {
         self.textColor = UIColor.faeAppRedColor()
-        rightButton = UIButton(frame: CGRect(x: contentInset - 25, y: 0, width: 30, height: 30))
-        rightButton.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
-        rightPlaceHolderView.addSubview(rightButton)
-
-        rightButton.addTarget(self, action: #selector(FAETextField.rightButtonTapped), for: UIControlEvents.touchUpInside)
-
+        btnRight = UIButton(frame: CGRect(x: contentInset - 25, y: 0, width: 30, height: 30))
+        btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
+        uiviewRightPlaceHolder.addSubview(btnRight)
+        btnRight.addTarget(self, action: #selector(FAETextField.rightButtonTapped), for: UIControlEvents.touchUpInside)
     }
     
-    fileprivate func setupUsernameTextField()
-    {
-        leftButton = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
-        leftButton.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
-        leftPlaceHolderView.addSubview(leftButton)
+    fileprivate func setupUsernameTextField() {
+        lblLeft = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
+        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
+        uiviewLeftPlaceHolderView.addSubview(lblLeft)
     }
     
-    func rightButtonTapped()
-    {
+    func rightButtonTapped() {
         isSecureTextEntry = !isSecureTextEntry
         if isSecureTextEntry {
-            rightButton.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
+            btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
             self.textColor = defaultTextColor
-        }else{
-            rightButton.setImage(UIImage(named: "check_eye_open_red_new")!, for: UIControlState())
+        } else {
+            btnRight.setImage(UIImage(named: "check_eye_open_red_new")!, for: UIControlState())
             self.textColor = UIColor.faeAppInputTextGrayColor()
         }
-        
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {

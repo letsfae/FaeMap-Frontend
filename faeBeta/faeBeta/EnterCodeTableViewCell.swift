@@ -11,18 +11,14 @@ import UIKit
 class EnterCodeTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlets
-    
     @IBOutlet weak var textfield: UITextField!
-    
     // MARK: - Awake Function
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
     // MARK: - Functions
-    
     func makeFirstResponder() {
         textfield.becomeFirstResponder()
     }
@@ -36,11 +32,8 @@ class EnterCodeTableViewCell: UITableViewCell {
     }
     
     // MARK: - Selection Function
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
-    
 }

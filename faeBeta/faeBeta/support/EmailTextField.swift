@@ -9,23 +9,18 @@
 import Foundation
 import UIKit
 
-class EmailTextField : UITextField {
+class EmailTextField: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
-        clearButton.setImage(UIImage(named: "check_cross_red")!, for: UIControlState())
-        
-        self.rightView = clearButton
+        let btnClear = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        btnClear.setImage(UIImage(named: "check_cross_red")!, for: UIControlState())
+        self.rightView = btnClear
         self.keyboardType = .emailAddress
-        clearButton.addTarget(self, action: #selector(EmailTextField.clearClicked), for: UIControlEvents.touchUpInside)
-        
+        btnClear.addTarget(self, action: #selector(EmailTextField.clearClicked), for: UIControlEvents.touchUpInside)
         self.clearButtonMode = UITextFieldViewMode.never
-//        self.rightViewMode = UITextFieldViewMode.WhileEditing
     }
     
-    func clearClicked(_ sender:UIButton)
-    {
+    func clearClicked(_ sender:UIButton) {
         self.text = ""
     }
     

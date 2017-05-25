@@ -72,9 +72,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
         uiviewEmailAlready.addSubview(lblAlreadyRegister)
         
         let btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 0, width: 45, height: 25))
-        let titleString = "Log In!"
+        let astrTitle = "Log In!"
         let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
-        let attrLogin = NSMutableAttributedString(string: titleString, attributes: attribute)
+        let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
         btnLogin.setAttributedTitle(attrLogin, for: UIControlState())
         btnLogin.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
         

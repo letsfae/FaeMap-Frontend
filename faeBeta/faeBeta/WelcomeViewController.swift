@@ -2,35 +2,34 @@
 //  WelcomeViewController.swift
 //  faeBeta
 //  write by wenye yu
+//  Edited by Sophie
 //  Created by blesssecret on 5/12/16.
 //  Copyright © 2016 fae. All rights reserved.
 //
 
 import UIKit
 
-public var navBarDefaultShadowImage: UIImage?
+public var imgNavBarDefaultShadow: UIImage?
 
 class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+    
     // MARK: - Interface
-
-    var imageContainerPageViewController: UIPageViewController!
+    var uipageImgContainer: UIPageViewController!
     var pageControl: WelcomePageControl!
-    var lookAroundButton: UIButton!
-    var loginButton: UIButton!
-    var createAccountButton: UIButton!
-    var rightLabel: UILabel!
+    var btnLookAround: UIButton!
+    var btnLogin: UIButton!
+    var btnCreateAccount: UIButton!
+    var lblRight: UILabel!
     // MARK: - View did/will
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        navBarDefaultShadowImage = UINavigationBar.appearance().shadowImage
+        imgNavBarDefaultShadow = UINavigationBar.appearance().shadowImage
         UINavigationBar.appearance().shadowImage = UIImage()
         setupViewFrame()
         setupImageContainerPageViewController()
         setupBottomPart()
         addObservers()
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,97 +37,87 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     // MARK: - Setup
-    fileprivate func addObservers()
-    {
+    fileprivate func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: NSNotification.Name(rawValue: "resetPasswordSucceed"), object: nil)
-
     }
     
-    fileprivate func setupNavigationBar()
-    {
+    fileprivate func setupNavigationBar() {
         self.navigationController?.isNavigationBarHidden = true
     }
     
-    fileprivate func setupViewFrame()
-    {
+    fileprivate func setupViewFrame() {
         self.view.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         self.view.backgroundColor = UIColor.white
     }
     
-    fileprivate func setupImageContainerPageViewController()
-    {
+    fileprivate func setupImageContainerPageViewController() {
         pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56, width: 66, height: 10))
         pageControl.center.x = screenWidth / 2
         pageControl.numberOfPages = 4 //  hide trade was 5
         self.view.insertSubview(pageControl, at: 0)
         
-        self.imageContainerPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation:.horizontal, options: [UIPageViewControllerOptionSpineLocationKey:NSNumber(value: 4 as Float)]) //  hide trade was 5
+        self.uipageImgContainer = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey: NSNumber(value: 4 as Float)]) //  hide trade was 5
         
-        self.imageContainerPageViewController.delegate = self
-        self.imageContainerPageViewController.dataSource = self
-        let viewControllers = NSArray(object: viewControllerAtIndex(0))
-        self.imageContainerPageViewController.setViewControllers((viewControllers as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.forward, animated: true, completion: nil)
+        self.uipageImgContainer.delegate = self
+        self.uipageImgContainer.dataSource = self
+        let arrVC = NSArray(object: viewControllerAtIndex(0))
+        self.uipageImgContainer.setViewControllers((arrVC as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.forward, animated: true, completion: nil)
         
-        self.addChildViewController(self.imageContainerPageViewController)
-        self.view.addSubview(self.imageContainerPageViewController.view)
-        self.imageContainerPageViewController.didMove(toParentViewController: self)
-        self.imageContainerPageViewController.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor);
-        self.imageContainerPageViewController.view.layoutIfNeeded()
-        for view in self.imageContainerPageViewController.view.subviews {
+        self.addChildViewController(self.uipageImgContainer)
+        self.view.addSubview(self.uipageImgContainer.view)
+        self.uipageImgContainer.didMove(toParentViewController: self)
+        self.uipageImgContainer.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor);
+        self.uipageImgContainer.view.layoutIfNeeded()
+        for view in self.uipageImgContainer.view.subviews {
             if let scrollView = view as? UIScrollView {
                 scrollView.delegate = self
             }
         }
     }
     
-    fileprivate func setupBottomPart()
-    {
+    fileprivate func setupBottomPart() {
         // look around label
-        lookAroundButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 216 * screenHeightFactor, width: 125, height: 22))
-        lookAroundButton.center.x = screenWidth / 2
-        lookAroundButton.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
-        self.view.insertSubview(lookAroundButton, at: 0)
+        btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 216 * screenHeightFactor, width: 125, height: 22))
+        btnLookAround.center.x = screenWidth / 2
+        btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
+        self.view.insertSubview(btnLookAround, at: 0)
         
         // log in button
         var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        
-        loginButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
-        loginButton.center.x = screenWidth / 2
-        loginButton.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
-        loginButton.layer.cornerRadius = 25*screenHeightFactor
-        loginButton.backgroundColor = UIColor.faeAppRedColor()
-        loginButton.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
-        self.view.insertSubview(loginButton, at: 0)
-        self.view.bringSubview(toFront: loginButton)
+        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnLogin.center.x = screenWidth / 2
+        btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
+        btnLogin.layer.cornerRadius = 25 * screenHeightFactor
+        btnLogin.backgroundColor = UIColor.faeAppRedColor()
+        btnLogin.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
+        self.view.insertSubview(btnLogin, at: 0)
+        self.view.bringSubview(toFront: btnLogin)
         
         // create account button
-        createAccountButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 106 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
-        createAccountButton.center.x = screenWidth / 2
-        createAccountButton.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
-        createAccountButton.backgroundColor = UIColor.white
-        createAccountButton.layer.borderColor = UIColor.faeAppRedColor().cgColor
-        createAccountButton.layer.borderWidth = 3
-        createAccountButton.layer.cornerRadius = 25*screenHeightFactor
-        createAccountButton.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
-        self.view.insertSubview(createAccountButton, at: 0)
-        self.view.bringSubview(toFront: createAccountButton)
+        btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 106 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnCreateAccount.center.x = screenWidth / 2
+        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
+        btnCreateAccount.backgroundColor = UIColor.white
+        btnCreateAccount.layer.borderColor = UIColor.faeAppRedColor().cgColor
+        btnCreateAccount.layer.borderWidth = 3
+        btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
+        btnCreateAccount.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
+        self.view.insertSubview(btnCreateAccount, at: 0)
+        self.view.bringSubview(toFront: btnCreateAccount)
 
         // create copyright label
         font = UIFont(name: "AvenirNext-Regular", size: 10)
-        
-        rightLabel = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
-        rightLabel.numberOfLines = 2
-        rightLabel.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
-        rightLabel.textAlignment = .center
-        rightLabel.sizeToFit()
-        rightLabel.center.x = screenWidth / 2
-        self.view.insertSubview(rightLabel, at: 0)
-        
+        lblRight = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
+        lblRight.numberOfLines = 2
+        lblRight.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
+        lblRight.textAlignment = .center
+        lblRight.sizeToFit()
+        lblRight.center.x = screenWidth / 2
+        self.view.insertSubview(lblRight, at: 0)
     }
     
     // MARK: imageContainerGenerator
-    fileprivate func viewControllerAtIndex(_ index: Int) -> WelcomeImageContainerViewController
-    {
+    fileprivate func viewControllerAtIndex(_ index: Int) -> WelcomeImageContainerViewController {
         let vc = WelcomeImageContainerViewController()
         vc.index = index
         return vc
@@ -136,51 +125,44 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     // MARK: UIPageViewController delegate & dataSource
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if(completed){
-            let currentViewController = pageViewController.viewControllers?.last as! WelcomeImageContainerViewController
-            pageControl.currentPage = currentViewController.index
-        }
-        
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
-    {
-        let currentViewController = viewController as! WelcomeImageContainerViewController
-        if(currentViewController.index == 0){
-            return nil
-        }
-        else{
-            return viewControllerAtIndex(currentViewController.index - 1)
+        if completed {
+            let vcCurrent = pageViewController.viewControllers?.last as! WelcomeImageContainerViewController
+            pageControl.currentPage = vcCurrent.index
         }
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
-    {
-        let currentViewController = viewController as! WelcomeImageContainerViewController
-        if(currentViewController.index == 3){ // was 4, hide trade -- Yue Shen
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        let vcCurrent = viewController as! WelcomeImageContainerViewController
+        if(vcCurrent.index == 0){
             return nil
+        } else {
+            return viewControllerAtIndex(vcCurrent.index - 1)
         }
-        else{
-            return viewControllerAtIndex(currentViewController.index + 1)
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        let vcCurrent = viewController as! WelcomeImageContainerViewController
+        if vcCurrent.index == 3 { // was 4, hide trade -- Yue Shen
+            return nil
+        } else {
+            return viewControllerAtIndex(vcCurrent.index + 1)
         }
     }
     
     //MARK: UIScrollView delegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView)
-    {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let point = scrollView.contentOffset;
         let percentComplete = (point.x - screenWidth) / screenWidth
         self.pageControl.setscrollPercent(percentComplete);
     }
     
     //MARK: helper
-    func loginButtonTapped()
-    {
-        let controller = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
-        self.navigationController?.pushViewController(controller, animated: true)
+    func loginButtonTapped() {
+        let boardLogin = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
+        self.navigationController?.pushViewController(boardLogin, animated: true)
     }
     func jumpToSignUp() {
-        let controller = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
-        self.navigationController?.pushViewController(controller, animated: true)
+        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
+        self.navigationController?.pushViewController(boardRegister, animated: true)
     }
 }

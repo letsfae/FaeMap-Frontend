@@ -78,7 +78,7 @@ extension FaeMapViewController {
     
     func actionChatWindowShow(_ sender: UIButton) {
         hideNameCard(btnTransparentClose)
-        UINavigationBar.appearance().shadowImage = navBarDefaultShadowImage
+        UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }

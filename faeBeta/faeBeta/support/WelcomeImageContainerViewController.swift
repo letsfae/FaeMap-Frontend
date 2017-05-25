@@ -17,7 +17,6 @@ class WelcomeImageContainerViewController: UIViewController {
         self.containerView = WelcomeContentContainerFace()
         self.view.insertSubview(containerView, at: 0)
         self.containerView.frame = self.view.bounds
-        
         // Do any additional setup after loading the view.
     }
     
@@ -29,17 +28,16 @@ class WelcomeImageContainerViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         self.containerView.frame = self.view.bounds
-
     }
     
-    func setupContentContainer()
-    {
+    func setupContentContainer() {
         let imageName = "Welcome_" + "\(index+1)"
         var title: String = ""
-        var description : String = ""
+        var description: String = ""
         switch index {
         case 0:
             title = " "
@@ -50,10 +48,6 @@ class WelcomeImageContainerViewController: UIViewController {
             title = "Chat"
             description = "Chat & Interact with people\nin any area near or far!"
             break
-        //case 2:
-        //    title = "Trade"
-        //    description = "Fastest Way to Buy/Sell in\nthe most diverse Marketplace!"
-        //    break
         case 2:
             title = "Discover"
             description = "Explore any City in the World\nand instantly get involved!"
@@ -67,5 +61,4 @@ class WelcomeImageContainerViewController: UIViewController {
         }
         self.containerView.populateContentContainer(imageName, title: title, description: description)
     }
-
 }
