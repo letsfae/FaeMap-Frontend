@@ -11,18 +11,18 @@ import UIKit
 import SwiftyJSON
 import UIKit.UIGestureRecognizerSubclass
 
-class TouchGestureRecognizer : UIGestureRecognizer {
+class TouchGestureRecognizer: UIGestureRecognizer {
     // initialize the cellInGivenId
     var cellInGivenId = PinsTableViewCell()
     var isCellSwiped = false
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         // This assignment is very importment for custom gesture
-        self.state = UIGestureRecognizerState.began
+        state = UIGestureRecognizerState.began
         let frame = cellInGivenId.uiviewCellView.frame
-        let frameOriginal = CGRect( x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
-        UIView.animate( withDuration: 0.3, animations: {
+        let frameOriginal = CGRect(x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
+        UIView.animate(withDuration: 0.3, animations: {
             self.cellInGivenId.uiviewCellView.frame = frameOriginal
-        }, completion: { (_) in
+        }, completion: { _ in
             self.isCellSwiped = false
         })
     }
@@ -34,42 +34,43 @@ protocol CollectionsBoardDelegate: class {
 }
 
 class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, PinTableViewCellDelegate, UIGestureRecognizerDelegate {
+    
     weak var delegateBackBoard: CollectionsBoardDelegate? // For collectionBoard
     
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
     var boolIsFirstAppear = true
     var gesturerecognizerTouch: TouchGestureRecognizer!
-    //background view
+    // background view
     var uiviewBackground: UIView!
     var tblPinsData: UITableView!
-    //Transparent view to cover the searchbar for detect the click event
+    // Transparent view to cover the searchbar for detect the click event
     var uiviewSearchBarCover: UIView!
     var schbarPin: UISearchBar!
     var imgEmptyTbl: UIImageView!
     var lblEmptyTbl: UILabel!
-    //Nagivation Bar Init
+    // Nagivation Bar Init
     var uiviewNavBar: UIView!
-    //Title for current table
+    // Title for current table
     var strTableTitle: String!
-    //The set of pin data
+    // The set of pin data
     var arrPinData = [[String: AnyObject]]()
     var arrMapPin = [MapPinCollections]()
-    //Current select row
-    var indexCurrSelectRowAt : IndexPath!
+    // Current select row
+    var indexCurrSelectRowAt: IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // The background of this controller, all subviews are added to this view
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.view.addSubview(uiviewBackground)
+        view.addSubview(uiviewBackground)
         uiviewBackground.frame.origin.x = screenWidth
         loadTblPinsData()
         loadNavBar()
     }
-
+    
     func handleAfterTouch(recognizer: TouchGestureRecognizer) {
-        //remove the gesture after cell backs, or the gesture will always collect touches in the table
+        // remove the gesture after cell backs, or the gesture will always collect touches in the table
         tblPinsData.removeGestureRecognizer(gesturerecognizerTouch)
     }
     
@@ -93,33 +94,33 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        self.delegateBackBoard?.backToBoard(count: arrPinData.count)
+        delegateBackBoard?.backToBoard(count: arrPinData.count)
         UIView.animate(withDuration: 0.3, animations: ({
             self.uiviewBackground.frame.origin.x = screenWidth
-        }), completion: { (_) in
+        }), completion: { _ in
             self.dismiss(animated: false, completion: nil)
         })
     }
     
     fileprivate func loadNavBar() {
-        uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
+        uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth + 2, height: 66))
         uiviewNavBar.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
         uiviewNavBar.layer.borderWidth = 1
         uiviewNavBar.backgroundColor = UIColor.white
         uiviewBackground.addSubview(uiviewNavBar)
         let btnBack = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
-        btnBack.addTarget(self, action: #selector(self.actionDismissCurrentView(_:)), for: .touchUpInside)
+        btnBack.addTarget(self, action: #selector(actionDismissCurrentView(_:)), for: .touchUpInside)
         uiviewNavBar.addSubview(btnBack)
-        let lblNavBarTitle = UILabel(frame: CGRect(x: screenWidth/2-100, y: 28, width: 200, height: 27))
-        lblNavBarTitle.font = UIFont(name: "AvenirNext-Medium",size: 20)
+        let lblNavBarTitle = UILabel(frame: CGRect(x: screenWidth / 2 - 100, y: 28, width: 200, height: 27))
+        lblNavBarTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblNavBarTitle.textAlignment = .center
         lblNavBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
         lblNavBarTitle.text = strTableTitle
         uiviewNavBar.addSubview(lblNavBarTitle)
     }
     
-    fileprivate func loadSearchBar(){
+    fileprivate func loadSearchBar() {
         schbarPin = UISearchBar()
         schbarPin.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 50)
         schbarPin.placeholder = "Search Pins"
@@ -146,23 +147,24 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     func searchBarTapDown(_ sender: UITapGestureRecognizer) {
         let vcSearch = PinSearchViewController()
         vcSearch.modalPresentationStyle = .overCurrentContext
-        self.present(vcSearch, animated: false, completion: nil)
+        present(vcSearch, animated: false, completion: nil)
         vcSearch.strTableTypeName = strTableTitle
         vcSearch.arrData = arrPinData
+        vcSearch.arrMapPin = arrMapPin
     }
     
-    func loadTblPinsData(){
+    func loadTblPinsData() {
         uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
-        tblPinsData = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight-65), style: UITableViewStyle.plain)
+        tblPinsData = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65), style: UITableViewStyle.plain)
         tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         tblPinsData.isHidden = true
         tblPinsData.showsVerticalScrollIndicator = false
         
-        //for auto layout
+        // for auto layout
         tblPinsData.rowHeight = UITableViewAutomaticDimension
         tblPinsData.estimatedRowHeight = 340
         
-        imgEmptyTbl = UIImageView(frame: CGRect(x: (screenWidth - 252)/2, y: (screenHeight - 209)/2-106, width: 252, height: 209))
+        imgEmptyTbl = UIImageView(frame: CGRect(x: (screenWidth - 252) / 2, y: (screenHeight - 209) / 2 - 106, width: 252, height: 209))
         imgEmptyTbl.image = #imageLiteral(resourceName: "empty_bg")
         lblEmptyTbl = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
         lblEmptyTbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
@@ -182,12 +184,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         tblPinsData.tableHeaderView = schbarPin
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    //以下代码是table的构造
+    // 以下代码是table的构造
     // Make the background color show through
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let uiviewHeaderView = UIView()
@@ -231,7 +228,7 @@ extension UITableView {
     /// Parameter update: the update operation to perform on the tableView.
     /// Parameter completion: the completion closure to be executed when the animation is completed.
     
-    func performUpdate(_ update: ()->Void, completion: (()->Void)?) {
+    func performUpdate(_ update: () -> Void, completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
         // Table View update on row / section

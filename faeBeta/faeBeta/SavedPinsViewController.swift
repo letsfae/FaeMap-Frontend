@@ -20,7 +20,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     
     override func loadTblPinsData() {
         super.loadTblPinsData()
-        tblPinsData.register(SavedPinsTableViewCell.self, forCellReuseIdentifier: "SavedPinCell")
+        tblPinsData.register(SavedPinsTableViewCell.self, forCellReuseIdentifier: "savedPinCell")
         tblPinsData.delegate = self
         tblPinsData.dataSource = self
         getPinsData()
@@ -41,7 +41,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
                 }
                 self.arrMapPin = arrSavedPins.map{MapPinCollections(json: $0)}
                 self.tblPinsData.isHidden = !(self.arrMapPin.count > 0)
-                // reload the table when get the data
                 self.tblPinsData.reloadData()
             }
             else {
@@ -74,19 +73,18 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
-        cell.setValueForCell(arrMapPin[indexPath.section])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "savedPinCell", for: indexPath) as! SavedPinsTableViewCell
         cell.delegate = self
         cell.indexForCurrentCell = indexPath.section
+        cell.setValueForCell(arrMapPin[indexPath.section])
+        cell.setImageConstraint()
         return cell
     }
     
     //full pin detail delegate
     func backToCollections(likeCount: String, commentCount: String) {
         if self.indexCurrSelectRowAt != nil {
-            //Bryan
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
-            //ENDBryan
             cellCurrSelect.lblCommentCount.text = commentCount
             cellCurrSelect.lblLikeCount.text = likeCount
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
@@ -97,7 +95,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             }
             arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
             arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
-            
         }
     }
     

@@ -76,32 +76,18 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
             let vcPinDetail = PinDetailViewController()
             vcPinDetail.modalPresentationStyle = .overCurrentContext
             vcPinDetail.colDelegate = self
-            PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2DMake(
-                arrFiltered[indexPath.section]["latitude"] as! CLLocationDegrees,
-                arrFiltered[indexPath.section]["longitude"] as! CLLocationDegrees)
+            PinDetailViewController.selectedMarkerPosition = arrMapPinFiltered[indexPath.section].position
             if strTableTypeName == "Created Pins" {
-                PinDetailViewController.pinUserId = user_id as Int
+                PinDetailViewController.pinUserId = user_id
             }
             else {
-                if let user_id = arrFiltered[indexPath.section]["user_id"] {
-                    PinDetailViewController.pinUserId = user_id as! Int
-                }
+                PinDetailViewController.pinUserId = arrMapPinFiltered[indexPath.section].userId
             }
-            PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrFiltered[indexPath.section]["type"] as! String)!
-            
-            if let content = arrFiltered[indexPath.section]["content"] {
-                vcPinDetail.strTextViewText = content as! String
-            }
-            //media tab里面存的不叫content 叫description
-            if let description = arrFiltered[indexPath.section]["description"] {
-                vcPinDetail.strTextViewText = description as! String
-            }
-            
-            if let pinID = arrFiltered[indexPath.section]["pin_id"] {
-                vcPinDetail.strPinId = "\(pinID)"
-            }
-            
+            PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrMapPinFiltered[indexPath.section].type)!
+            vcPinDetail.strTextViewText = arrMapPinFiltered[indexPath.section].content
+            vcPinDetail.strPinId = "\(arrMapPinFiltered[indexPath.section].pinId)"
             vcPinDetail.enterMode = .collections
+            
             self.present(vcPinDetail, animated: false, completion: {
                 self.indexCurrSelectRowAt = indexPath
             })
@@ -113,28 +99,24 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
         
         if strTableTypeName == "Created Pins" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
-            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-            cell.backgroundColor = .clear
-            cell.selectionStyle = .none
             cell.delegate = self
             cell.indexForCurrentCell = indexPath.section
+            cell.setValueForCell(arrMapPinFiltered[indexPath.section])
+            cell.setImageConstraint()
             return cell
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
-            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-            cell.backgroundColor = .clear
-            cell.selectionStyle = .none
             cell.delegate = self
             cell.indexForCurrentCell = indexPath.section
+            cell.setValueForCell(arrMapPinFiltered[indexPath.section])
+            cell.setImageConstraint()
             return cell
-
         }
-//        cell.setValueForCell(_: arrFiltered[indexPath.section])
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return arrFiltered.count
+        return arrMapPinFiltered.count
     }
     
 

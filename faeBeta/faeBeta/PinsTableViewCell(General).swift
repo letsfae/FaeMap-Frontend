@@ -133,7 +133,7 @@ class PinsTableViewCell: UITableViewCell {
         lblDate.textAlignment = .left
         lblDate.textColor = UIColor.faeAppTimeTextBlackColor()
         uiviewPinView.addSubview(lblDate)
-        uiviewPinView.addConstraintsWithFormat("H:|-13-[v0(200)]", options: [], views: lblDate)
+        // lblDate's horizontal constraint will be set in each child class
         uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: lblDate)
         
         lblContent = UILabel()
@@ -239,7 +239,7 @@ class PinsTableViewCell: UITableViewCell {
         boolIsHot = false
         strPinType = pin.type
         intPinId = pin.pinId
-        lblDate.text = pin.date
+        lblDate.text = pin.date.formatFaeDate()
         lblLikeCount.text = "\(pin.likeCount)"
         lblCommentCount.text = "\(pin.commentCount)"
         lblContent.attributedText = pin.content.convertStringWithEmoji()

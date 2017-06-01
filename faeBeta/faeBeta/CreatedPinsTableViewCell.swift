@@ -27,6 +27,9 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     override func setUpUI() {
         super.setUpUI()
         
+        // lblDate's horizontal constraint is set
+        uiviewPinView.addConstraintsWithFormat("H:|-13-[v0(200)]", options: [], views: lblDate)
+        
         lblTime = UILabel()
         lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblTime.textAlignment = .right
