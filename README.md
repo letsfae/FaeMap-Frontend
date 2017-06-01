@@ -4,8 +4,8 @@
 * [Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
 * [Use of Delegate](#use-of-delegate-in-swift)
 * [Parameter for Chat](#parameter-for-chat)
-* [Code Style & Basic Rules (English)](#parameter-for-chat)
-* [Code Style & Basic Rules (中文/Chinese)](#parameter-for-chat)
+* [Code Style & Basic Rules (English)](#coding-style--basic-rules-english)
+* [Code Style & Basic Rules (中文/Chinese)](#coding-style--basic-rules-中文chinese)
 
 ## Use of SwiftyJSON
 [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) is a public framework, aims to deal with the JSON data from Backend. 
