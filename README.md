@@ -169,6 +169,7 @@ Yes
 |UIView|uiviewName|
 
 |Array|arrName|
+|--------|:------|
 |Attribute for NSAttributedString|attrName|
 |Boolean|boolName|
 |CGPoint|pointName|
