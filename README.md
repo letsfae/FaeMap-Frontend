@@ -150,7 +150,8 @@ Yes
 
 **General Rules:**
 * Name is created based on the actual needs
-* Name is camelized (驼峰化)    
+* Name is camelized (驼峰化)
+
 Example: 
 ```
 boolIsFirstAppear
