@@ -74,7 +74,7 @@ extension String {
         return "Invalid Date"
     }
     
-    func formatLeftOnMap(DurationOnMap : Int) -> String {
+    func formatLeftOnMap(durationOnMap : Int) -> String {
         // convert to NSDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
@@ -82,19 +82,19 @@ extension String {
         let myDate = dateFormatter.date(from: self)
         if myDate != nil {
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            if elapsed >= DurationOnMap * 3600 {
+            if elapsed >= durationOnMap * 3600 {
                 return "Map Time Expired"
             }
-            else if (DurationOnMap * 3600 - elapsed) >= 3600 {
-                let hoursLeft = Int((DurationOnMap * 3600 - elapsed)/3600)
+            else if (durationOnMap * 3600 - elapsed) >= 3600 {
+                let hoursLeft = Int((durationOnMap * 3600 - elapsed)/3600)
                 return "\(hoursLeft+1) hours left on Map"
             }
-            else if (DurationOnMap * 3600 - elapsed) >= 60 {
-                let minsLeft = Int((DurationOnMap * 3600 - elapsed)/60)
+            else if (durationOnMap * 3600 - elapsed) >= 60 {
+                let minsLeft = Int((durationOnMap * 3600 - elapsed)/60)
                 return "\(minsLeft+1) mins left on Map"
             }
-            else if (DurationOnMap * 3600 - elapsed) >= 0 {
-                let secsLeft = Int((DurationOnMap * 3600 - elapsed))
+            else if (durationOnMap * 3600 - elapsed) >= 0 {
+                let secsLeft = Int((durationOnMap * 3600 - elapsed))
                 return "\(secsLeft+1) seconds left on Map"
             }
         }

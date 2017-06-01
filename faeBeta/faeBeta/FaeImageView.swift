@@ -1,8 +1,8 @@
 //
-//  FaeUserAvatar.swift
+//  FaeImageView.swift
 //  faeBeta
 //
-//  Created by Yue on 5/6/17.
+//  Created by Yue on 5/30/17.
 //  Copyright © 2017 fae. All rights reserved.
 //
 
@@ -10,11 +10,11 @@ import UIKit
 import RealmSwift
 import IDMPhotoBrowser
 
-let faeAvatarCache = NSCache<AnyObject, AnyObject>()
+let faeImageCache = NSCache<AnyObject, AnyObject>()
 
-class FaeAvatarView: UIImageView {
-
-    var userID = -1
+class FaeImageView: UIImageView {
+    
+    var fileID = -1
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,7 +27,7 @@ class FaeAvatarView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadAvatar(id: Int) {
+    func loadImage(id: Int) {
         
         self.image = nil
         
@@ -36,24 +36,24 @@ class FaeAvatarView: UIImageView {
             return
         }
         
-        getAvatar(userID: self.userID, type: 2) { (status, etag, imageRawData) in
+        getImage(fileID: fileID, type: 2) { (status, etag, imageRawData) in
             DispatchQueue.main.async(execute: {
                 let imageToCache = UIImage.sd_image(with: imageRawData)
-                if self.userID == id {
+                if self.fileID == id {
                     self.image = imageToCache
                 }
                 faeImageCache.setObject(imageToCache!, forKey: id as AnyObject)
             })
         }
     }
-
+    
     func openThisMedia(_ sender: UIGestureRecognizer) {
         let realm = try! Realm()
         // If previous avatar does exist in realm
-        if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(self.userID)'").first {
+        if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(self.fileID)'").first {
             if avatarRealm.largeAvatarEtag == nil {
                 // Get full size avatar if there is none of it, type => 0
-                getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
+                getImage(fileID: self.fileID, type: 0) { (status, etag, imageRawData) in
                     if status / 100 == 2 {
                         print("[FaeAvatarView] largeAvatarEtag == nil")
                         // Update realm with the same object

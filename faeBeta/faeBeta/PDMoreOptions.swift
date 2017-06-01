@@ -40,7 +40,7 @@ extension PinDetailViewController {
             let thirdButtonX: CGFloat = 332 * screenWidthFactor
             
             uiviewOptionsSub = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
-            uiviewOptionsSub.image = #imageLiteral(resourceName: "uiviewOptionsSub")
+            uiviewOptionsSub.image = #imageLiteral(resourceName: "moreButtonDetailSubview")
             uiviewOptionsSub.layer.zPosition = 111
             view.addSubview(uiviewOptionsSub)
             

@@ -13,13 +13,10 @@ import SwiftyJSON
 class CollectionSearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate, UITableViewDelegate {
     
     var boolWillAppearFirstLoad = false
-    
     var btnClearSearchBar: UIButton!
-    
     var uiviewBlurMainScreenSearch: UIView!
     
     // MARK: -- Search Bar
-
     var tblSearchResults = UITableView()
     var arrData = [[String: AnyObject]]()
     var arrFiltered = [[String: AnyObject]]()
@@ -59,15 +56,9 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.5, animations: ({
             self.uiviewSearchBarSubview.frame.origin.y = 0
-        }), completion: { (done: Bool) in
-            if done {
-                self.faeSearchController.faeSearchBar.becomeFirstResponder()
-            }
+        }), completion: { (_) in
+            self.faeSearchController.faeSearchBar.becomeFirstResponder()
         })
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     func loadNavBarUnderLine() {
@@ -114,7 +105,8 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
            searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
            searchBarTintColor: UIColor.white)
         
-        faeSearchController.faeSearchBar.placeholder = "Search Keywords                                       "//blanks for keeping the placeholder not jump during the animation
+        //blanks for keeping the placeholder not jump during the animation
+        faeSearchController.faeSearchBar.placeholder = "Search Keywords                                       "
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0
         faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
@@ -211,7 +203,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
 
                 }
             }
-            if arrFiltered.count > 0{
+            if arrFiltered.count > 0 {
                 searchBarTableShowAnimation()
             }
             tblSearchResults.reloadData()
@@ -233,8 +225,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     func searchBarTableShowAnimation() {
         UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height:screenHeight-66-self.keyboardHeight)
-            
+            self.tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight-66-self.keyboardHeight)
         }), completion: nil)
     }
     

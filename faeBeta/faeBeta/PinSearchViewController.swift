@@ -43,25 +43,25 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     
     //full pin detail delegate
     func backToCollections(likeCount: String, commentCount: String) {
-        if self.indexCurrSelectRowAt != nil {
-            var cellCurrSelect : PinsTableViewCell
-            if strTableTypeName == "Created Pins" {
-                cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
-            }
-            else {
-                cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
-            }
-            cellCurrSelect.lblComment.text = commentCount
-            cellCurrSelect.lblLike.text = likeCount
-            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
-                cellCurrSelect.imgHot.isHidden = false
-            }
-            else {
-                cellCurrSelect.imgHot.isHidden = true
-            }
-            arrFiltered[self.indexCurrSelectRowAt.section]["liked_count"] = Int(likeCount) as AnyObject
-            arrFiltered[self.indexCurrSelectRowAt.section]["comment_count"] = Int(commentCount) as AnyObject
-        }
+//        if self.indexCurrSelectRowAt != nil {
+//            var cellCurrSelect : PinsTableViewCell
+//            if strTableTypeName == "Created Pins" {
+//                cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
+//            }
+//            else {
+//                cellCurrSelect = tblSearchResults.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
+//            }
+//            cellCurrSelect.lblComment.text = commentCount
+//            cellCurrSelect.lblLike.text = likeCount
+//            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+//                cellCurrSelect.imgHot.isHidden = false
+//            }
+//            else {
+//                cellCurrSelect.imgHot.isHidden = true
+//            }
+//            arrFiltered[self.indexCurrSelectRowAt.section]["liked_count"] = Int(likeCount) as AnyObject
+//            arrFiltered[self.indexCurrSelectRowAt.section]["comment_count"] = Int(commentCount) as AnyObject
+//        }
     }
     
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
@@ -111,21 +111,26 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell : PinsTableViewCell
         if strTableTypeName == "Created Pins" {
-            cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CreatedPinCell", for: indexPath) as! CreatedPinsTableViewCell
+            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+            cell.backgroundColor = .clear
+            cell.selectionStyle = .none
+            cell.delegate = self
+            cell.indexForCurrentCell = indexPath.section
+            return cell
         }
         else {
-            cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SavedPinCell", for: indexPath) as! SavedPinsTableViewCell
+            cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+            cell.backgroundColor = .clear
+            cell.selectionStyle = .none
+            cell.delegate = self
+            cell.indexForCurrentCell = indexPath.section
+            return cell
+
         }
-        cell.setValueForCell(_: arrFiltered[indexPath.section])
-        // Hide the separator line
-        cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
-        cell.delegate = self
-        cell.indexForCurrentCell = indexPath.section
-        return cell
+//        cell.setValueForCell(_: arrFiltered[indexPath.section])
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -150,10 +155,10 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     func itemSwiped(indexCell: Int) {
         let path : IndexPath = IndexPath(row: 0, section: indexCell)
         if strTableTypeName == "Created Pins" {
-          cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! CreatedPinsTableViewCell
+//          cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! CreatedPinsTableViewCell
         }
         else {
-        cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! SavedPinsTableViewCell
+            cellCurrSwiped = tblSearchResults.cellForRow(at: path) as! SavedPinsTableViewCell
         }
         tblSearchResults.addGestureRecognizer(gesturerecognizerTouch)
         gesturerecognizerTouch.cellInGivenId = cellCurrSwiped

@@ -179,15 +179,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     /// download current user's avatar from server
-    private func downloadCurrentUserAvatar()
-    {
-        //if(avatarDic[user_id] == nil){
-//        getImageFromURL(("files/users/\(user_id)/avatar/"), authentication: headerAuthentication(), completion: {(status:Int, image:Any?) in
-//            if status / 100 == 2 {
-//                avatarDic[user_id] = image as? UIImage
-//            }
-//        })
-        getImage(userID: user_id, type: 2) { (status, etag, imageRawData) in
+    private func downloadCurrentUserAvatar() {
+
+        getAvatar(userID: user_id, type: 2) { (status, etag, imageRawData) in
             let realm = try! Realm()
             if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(user_id)'").first {
                 // 存在User，Etag没变

@@ -138,7 +138,7 @@ class FaeUser : NSObject {
         userPassword = keyValue["password"] as! String
         
         let shareAPI = LocalStorageManager()
-        _ = shareAPI.logInStorage()
+        shareAPI.logInStorage()
     }
     
     

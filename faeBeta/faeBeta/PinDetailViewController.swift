@@ -44,15 +44,15 @@ class PinDetailViewController: UIViewController {
         case large
     }
     enum PinType: String {
-        case comment = "comment"
-        case media = "media"
-        case chat_room = "chat_room"
-        case place = "place"
+        case comment
+        case media
+        case chat_room
+        case place
     }
     enum PinState: String {
-        case normal = "normal"
-        case read = "read"
-        case hot = "hot"
+        case normal
+        case read
+        case hot
         case hotRead = "hot and read"
     }
     enum TableMode: Int {
@@ -105,8 +105,8 @@ class PinDetailViewController: UIViewController {
     var boolOptionsExpanded = false
     var boolPinLiked = false
     var btnCollect: UIButton! // Pin options
-    var btnCommentOption: UIButton! //Custom toolBar the bottom toolbar button
-    var btnCommentSend : UIButton! //Custom toolBar the bottom toolbar button
+    var btnCommentOption: UIButton! // Custom toolBar the bottom toolbar button
+    var btnCommentSend: UIButton! // Custom toolBar the bottom toolbar button
     var btnDoAnony: UIButton!
     var btnFeelingArray = [UIButton]()
     var btnFeelingBar_01: UIButton!
@@ -129,7 +129,7 @@ class PinDetailViewController: UIViewController {
     var btnPrevPin: UIButton!
     var btnReport: UIButton! // Pin options
     var btnShare: UIButton! // Pin options
-    var btnShowSticker : UIButton! //Custom toolBar the bottom toolbar button
+    var btnShowSticker: UIButton! // Custom toolBar the bottom toolbar button
     var btnTalkTalk: UIButton!
     var btnToFullPin: UIButton!
     var btnTransparentClose: UIButton! // Fake Transparent View For Closing
@@ -139,7 +139,7 @@ class PinDetailViewController: UIViewController {
     var fileIdArray = [Int]()
     var imgCollected: UIImageView!
     var imgHotPin: UIImageView!
-    var imgMediaArr = [UIImageView]()
+    var imgMediaArr = [FaeImageView]()
     var imgPinIcon: UIImageView! // Icon to indicate pin type
     var imgPinUserAvatar: FaeAvatarView!
     var imgPlaceQuickView: UIImageView!
@@ -335,6 +335,6 @@ class PinDetailViewController: UIViewController {
         }
         selectPinState()
         checkPinStatus() // check pin status is for social pin
-        addObservers()   // add input toolbar keyboard observers
+        addObservers() // add input toolbar keyboard observers
     }
 }

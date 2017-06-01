@@ -211,9 +211,40 @@ func deleteFromURL(_ className: String, parameter: [String: Any] , authenticatio
     }
 }
 
-func getImage(userID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
+func getAvatar(userID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
     
     let URL = "\(baseURL)/files/users/\(userID)/avatar/\(type)"
+    let headers = [
+        "User-Agent" : headerUserAgent,
+        "Fae-Client-Version" : headerClientVersion,
+        "Accept": headerAccept,
+        ]
+    
+    Alamofire.request(URL, headers: headers)
+        .responseJSON{ response in
+            if response.response != nil {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-500, "", nil)
+                    return
+                }
+                if let JSON = response.response?.allHeaderFields {
+                    guard let etag = JSON["Etag"] as? String else {
+                        completion(statusCode, "", nil)
+                        return
+                    }
+                    completion(statusCode, etag, response.data)
+                } else {
+                    completion(statusCode, "", nil)
+                }
+            } else {
+                completion(-500, "", nil)
+            }
+    }
+}
+
+func getImage(fileID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
+    
+    let URL = "\(baseURL)/files/\(fileID)/data"
     let headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,

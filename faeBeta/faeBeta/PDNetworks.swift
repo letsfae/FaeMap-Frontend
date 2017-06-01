@@ -415,7 +415,7 @@ extension PinDetailViewController {
         }
         
         let indexPath = IndexPath(row: index, section: 0)
-        getImage(userID: userid, type: 2) { (status, etag, imageRawData) in
+        getAvatar(userID: userid, type: 2) { (status, etag, imageRawData) in
             let realm = try! Realm()
             if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
                 // 存在User，Etag没变

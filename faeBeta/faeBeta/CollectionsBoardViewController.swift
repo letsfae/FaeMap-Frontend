@@ -19,7 +19,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     var lblSavedLocationsCount: UILabel!
     var lblSavedPlacesCount: UILabel!
     
-    func backToBoard(Count: Int) {
+    func backToBoard(count: Int) {
         getPinCounts()
     }
     

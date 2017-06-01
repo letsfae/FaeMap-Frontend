@@ -96,10 +96,7 @@ class LocalStorageManager: NSObject {
         }
         return true
     }
-    func logInStorage() -> Bool{
-        if userToken == "" || userTokenEncode == "" || session_id == -1 || user_id == -1 || userEmail == "" || userPassword == nil || is_Login == 0 {
-            return false
-        }
+    func logInStorage(){
         saveString("userToken", value: userToken)
         saveString("userTokenEncode", value: userTokenEncode)
         saveInt("session_id", value: session_id)
@@ -107,7 +104,6 @@ class LocalStorageManager: NSObject {
         saveInt("is_Login", value: is_Login)
         saveString("userEmail", value: userEmail)
         saveString("userPassword", value: userPassword)
-        return true
     }
     
     func getAccountStorage() {
@@ -128,8 +124,7 @@ class LocalStorageManager: NSObject {
         if let login = readByKey("is_Login") as? Int {
             if login == 0 {
                 return false
-            }
-            else{
+            } else {
                 userToken = readByKey("userToken") as! String
                 userTokenEncode = readByKey("userTokenEncode") as! String
                 session_id = readByKey("session_id") as! Int
@@ -148,7 +143,7 @@ class LocalStorageManager: NSObject {
     func isFirstPushLaunch() -> Bool {
         let firstLaunchFlag = "FirstPushLaunchFlag"
         let isFirstLaunch = UserDefaults.standard.string(forKey: firstLaunchFlag) == nil
-        if (isFirstLaunch) {
+        if isFirstLaunch {
             UserDefaults.standard.set("false", forKey: firstLaunchFlag)
             UserDefaults.standard.synchronize()
         }

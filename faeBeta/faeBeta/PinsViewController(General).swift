@@ -20,7 +20,9 @@ class TouchGestureRecognizer : UIGestureRecognizer {
         self.state = UIGestureRecognizerState.began
         let frame = cellInGivenId.uiviewCellView.frame
         let frameOriginal = CGRect( x: -screenWidth, y: frame.origin.y, width: frame.width, height: frame.height)
-        UIView.animate( withDuration: 0.3, animations: {self.cellInGivenId.uiviewCellView.frame = frameOriginal}, completion: { (finished) -> Void in
+        UIView.animate( withDuration: 0.3, animations: {
+            self.cellInGivenId.uiviewCellView.frame = frameOriginal
+        }, completion: { (_) in
             self.isCellSwiped = false
         })
     }
@@ -28,14 +30,15 @@ class TouchGestureRecognizer : UIGestureRecognizer {
 
 protocol CollectionsBoardDelegate: class {
     // Go back to collections
-    func backToBoard(Count: Int)
+    func backToBoard(count: Int)
 }
 
 class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, PinTableViewCellDelegate, UIGestureRecognizerDelegate {
     weak var delegateBackBoard: CollectionsBoardDelegate? // For collectionBoard
-    var boolIsFirstAppear = true
+    
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
+    var boolIsFirstAppear = true
     var gesturerecognizerTouch: TouchGestureRecognizer!
     //background view
     var uiviewBackground: UIView!
@@ -51,6 +54,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     var strTableTitle: String!
     //The set of pin data
     var arrPinData = [[String: AnyObject]]()
+    var arrMapPin = [MapPinCollections]()
     //Current select row
     var indexCurrSelectRowAt : IndexPath!
     
@@ -60,7 +64,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(uiviewBackground)
         uiviewBackground.frame.origin.x = screenWidth
-        loadtblPinsData()
+        loadTblPinsData()
         loadNavBar()
     }
 
@@ -71,7 +75,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // only the buttons in the siwped cell don't respond to the gesture
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if (touch.view?.isDescendant( of: cellCurrSwiped.uiviewSwipedBtnsView))! {
+        if (touch.view?.isDescendant(of: cellCurrSwiped.uiviewSwipedBtnsView))! {
             return false
         }
         return true
@@ -89,17 +93,15 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        self.delegateBackBoard?.backToBoard(Count: arrPinData.count)
+        self.delegateBackBoard?.backToBoard(count: arrPinData.count)
         UIView.animate(withDuration: 0.3, animations: ({
             self.uiviewBackground.frame.origin.x = screenWidth
-        }), completion: { (done: Bool) in
-            if done {
-                self.dismiss(animated: false, completion: nil)
-            }
+        }), completion: { (_) in
+            self.dismiss(animated: false, completion: nil)
         })
     }
     
-    func loadNavBar() {
+    fileprivate func loadNavBar() {
         uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
         uiviewNavBar.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
         uiviewNavBar.layer.borderWidth = 1
@@ -117,7 +119,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         uiviewNavBar.addSubview(lblNavBarTitle)
     }
     
-    func loadSearchBar(){
+    fileprivate func loadSearchBar(){
         schbarPin = UISearchBar()
         schbarPin.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 50)
         schbarPin.placeholder = "Search Pins"
@@ -149,7 +151,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         vcSearch.arrData = arrPinData
     }
     
-    func loadtblPinsData(){
+    func loadTblPinsData(){
         uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         tblPinsData = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight-65), style: UITableViewStyle.plain)
         tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()

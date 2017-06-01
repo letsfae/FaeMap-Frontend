@@ -168,7 +168,9 @@ extension FaeMapViewController {
                 return
             }
             let mapPinJson = JSON(mapInfo)
+            // Just init an empty MapPin class instance, GET /map isn't used here.
             var mapPin = MapPin(json: mapPinJson)
+            // Add the info manually here
             mapPin.pinId = Int(pinID)!
             mapPin.type = type
             mapPin.userId = mapPinJson["user_id"].intValue

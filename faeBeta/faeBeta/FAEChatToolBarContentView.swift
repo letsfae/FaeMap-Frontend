@@ -441,13 +441,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     // remove all selected photos, clean up the select frames
-    func cleanUpSelectedPhotos(){
+    func cleanUpSelectedPhotos() {
         if let photoPicker = photoPicker{
             photoPicker.cleanup()
             // use main queue to reload data to avoid problem
             DispatchQueue.main.async(execute: {
                 self.photoQuickCollectionView.reloadData()
-            });
+            })
         }
     }
 

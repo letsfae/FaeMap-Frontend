@@ -26,33 +26,14 @@ extension PinDetailViewController {
                 width = 160
             }
             
-            let imageView = UIImageView(frame: CGRect(x: CGFloat(offset*index), y: 0, width: width, height: width))
+            let imageView = FaeImageView(frame: CGRect(x: CGFloat(offset*index), y: 0, width: width, height: width))
             imageView.clipsToBounds = true
             imageView.contentMode = .scaleAspectFill
-            imageView.isUserInteractionEnabled = true
             imageView.layer.cornerRadius = 13.5
-            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
-            imageView.addGestureRecognizer(tapRecognizer)
+            imageView.fileID = fileIdArray[index]
+            imageView.loadImage(id: fileIdArray[index])
             imgMediaArr.append(imageView)
             scrollViewMedia.addSubview(imageView)
-            
-            let realm = try! Realm()
-            if let mediaRealm = realm.objects(FileObject.self).filter("fileId == \(self.fileIdArray[index]) AND picture != nil").first {
-                imageView.image = UIImage.sd_image(with: mediaRealm.picture as Data!)
-            } else {
-                let fileURL = "\(baseURL)/files/\(self.fileIdArray[index])/data"
-                imageView.sd_setImage(with: URL(string: fileURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image == nil {
-                        return
-                    }
-                    let mediaImage = FileObject()
-                    mediaImage.fileId = self.fileIdArray[index]
-                    mediaImage.picture = UIImageJPEGRepresentation(image!, 0.5) as NSData?
-                    try! realm.write {
-                        realm.add(mediaImage)
-                    }
-                })
-            }
         }
         if self.enterMode == .collections {
             self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 160 - 10, height: 160)

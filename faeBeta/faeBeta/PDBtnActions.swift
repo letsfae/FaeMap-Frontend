@@ -214,7 +214,7 @@ extension PinDetailViewController {
         endEdit()
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: ({
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: ({
                 self.uiviewMain.frame.origin.x = screenWidth
                 self.uiviewInputToolBarSub.frame.origin.x = screenWidth
             }), completion: { (_) in

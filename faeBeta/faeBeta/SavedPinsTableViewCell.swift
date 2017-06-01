@@ -10,18 +10,11 @@ import UIKit
 
 class SavedPinsTableViewCell: PinsTableViewCell {
     
-    var imgAvatar : UIImageView!
+    var imgAvatar : FaeAvatarView!
     var lblUserName : UILabel!
     var btnUnSave : UIButton!
 //    var btnLocate : UIButton!
     var btnShare : UIButton!
-    
-    // Vertical center the buttons when the cell is created
-    override func verticalCenterButtons() {
-        btnUnSave.center.y = uiviewCellView.center.y
-//        btnLocate.center.y = uiviewCellView.center.y
-        btnShare.center.y = uiviewCellView.center.y
-    }
     
     // Setup the cell when creat it
     override func setUpUI() {
@@ -46,8 +39,7 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         btnShare.addTarget(self, action: #selector(self.actionShareCurrentCell(_:)), for: .touchUpInside)
 //        btnLocate.addTarget(self, action: #selector(self.actionLocateCurrentCell(_:)), for: .touchUpInside)
         
-        imgAvatar = UIImageView()
-        imgAvatar.frame = CGRect(x: 13, y: 11, width: 20, height: 20)
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 13, y: 11, width: 20, height: 20))
         imgAvatar.layer.cornerRadius = 10
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.layer.masksToBounds = true
@@ -58,31 +50,17 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblUserName.textAlignment = .left
         lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
-        lblDate.textAlignment = .right
-        lblDate.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         uiviewPinView.addSubview(lblUserName)
         
-        finishedPositionX = 161.0 //231.0
+        finishedPositionX = 161.0 // 231.0
     }
     
     // call this fuction when reuse cell, set value to the cell and rebuild the layout
-    override func setValueForCell(_ pin: [String: AnyObject]) {
+    override func setValueForCell(_ pin: MapPinCollections) {
         super.setValueForCell(pin)
-        uiviewPinView.addConstraintsWithFormat("H:[v0(200)]-13-|", options: [], views: lblDate)
-        if (pin["anonymous"] as? Bool)! {
-            lblUserName.text = "Anonymous"
-            self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
-        } else {
-            lblUserName.text = pin["nick_name"]as? String
-            if let pinUserId = pin["user_id"] as? Int {
-                let urlStringHeader = "\(baseURL)/files/users/\(pinUserId)/avatar"
-                self.imgAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image == nil {
-                        //RealmSwift
-                    }
-                })
-            }
-        }
+        
+        imgAvatar.userID = pin.userId
+        imgAvatar.loadAvatar(id: pin.userId)
     }
     
     // delete current cell
@@ -100,4 +78,10 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         self.delegate?.toDoItemLocated(indexCell: self.indexForCurrentCell, pinId: self.intPinId, pinType: self.strPinType)
     }
     
+    // Vertical center the buttons when the cell is created
+    override func verticalCenterButtons() {
+        btnUnSave.center.y = uiviewCellView.center.y
+        //        btnLocate.center.y = uiviewCellView.center.y
+        btnShare.center.y = uiviewCellView.center.y
+    }
 }

@@ -18,8 +18,6 @@ struct PinComment {
     let date: String
     let numVoteCount: Int
     let voteType: String
-    let isSticker: Bool
-    let isImage: Bool
     let attributedText: NSAttributedString?
     var profileImage: UIImage
     let anonymous: Bool
@@ -33,22 +31,7 @@ struct PinComment {
         self.voteType = json["pin_comment_operations"]["vote"].stringValue
         self.profileImage = UIImage()
         self.anonymous = json["anonymous"].boolValue
-        let contentJson = json["content"].stringValue
-        if let stickerName = contentJson.getFaeStickerName() {
-            self.content = stickerName
-            self.isSticker = true
-            self.isImage = false
-            self.attributedText = nil
-        } else if let imageName = contentJson.getFaeImageName() {
-            self.attributedText = nil
-            self.content = imageName
-            self.isImage = true
-            self.isSticker = false
-        } else {
-            self.attributedText = contentJson.formatPinCommentsContent()
-            self.content = ""
-            self.isSticker = false
-            self.isImage = false
-        }
+        self.content = json["content"].stringValue
+        self.attributedText = json["content"].stringValue.formatPinCommentsContent()
     }
 }
