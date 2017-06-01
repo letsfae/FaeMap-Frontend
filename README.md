@@ -183,7 +183,7 @@ Yes
 
 ### Conciseness
 |Original|Concise|
-|--------|------:|
+|--------|:------|
 |NSTextAlignment.center|.center|
 |UIControlState.normal|.normal|
 |UIControlState.touchUpInside|.touchUpInside|
