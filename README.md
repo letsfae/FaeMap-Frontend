@@ -146,15 +146,17 @@ Yes
 
 ## Coding Style & Basic Rules (English)
 
-### Name the Variables
+### Rule of Variables Naming
 
 **General Rules:**
-* Name is customized name
-* Name is capitalized    
-```swift
-	EX: boolIsFirstAppear
+* Name is created based on the actual needs
+* Name is camelized (驼峰化)    
+Example: 
 ```
-   
+boolIsFirstAppear
+```
+* #### Component Name
+
 | Variable Type | Name Rule |
 |---------------|:----------|
 |UIButton|btnName|
@@ -168,8 +170,10 @@ Yes
 |UITapGestureRecognizer|tapName|
 |UIView|uiviewName|
 
+* #### Non-component Name
+| Variable Type | Name Rule |
+|---------------|:----------|
 |Array|arrName|
-|--------|:------|
 |Attribute for NSAttributedString|attrName|
 |Boolean|boolName|
 |CGPoint|pointName|
@@ -181,38 +185,46 @@ Yes
 |SearchController|searchControllerName|
 |ViewController|vcName|
 
-### Conciseness
+### 2. Conciseness
 |Original|Concise|
 |--------|:------|
 |NSTextAlignment.center|.center|
 |UIControlState.normal|.normal|
 |UIControlState.touchUpInside|.touchUpInside|
 
-### Other Rules
-**Punctuation**
+### 3. Other Rules
+**(1) Punctuation**
 * Please have a space after punctuation
+
+Example:
 ```swift
-EX: UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
+UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
 ```
 * But do not have a space after left parenthesis
 * Not have space inside computation expression
+
+Example:
 ```swift
-EX: height: screenWidth-65
+height: screenWidth-65
 ```
-**If else statement**
+**(2) If else statement**
 * Not have parenthesis for condition
 * Left bracket is in same line as “if”
 * “Else” is in same line as right bracket for “if”
 * Space between “else” and its following left bracket
+	
+Example:
 ```swift
-EX:  if condition {
-        } else {
-        }
+if condition {
+
+} else {
+
+}
 ```
-**Blank  lines**
+**(3) Blank  lines**
 * No more two blank lines in code
 
-### Steps to pull and create new branch
+### 4. Steps to pull and create new branch
 * cd to project folder
 * Close xcode (no need to fully quit)
 * git branch
@@ -222,12 +234,13 @@ EX:  if condition {
 * Create new branch in xcode
 	* Source Control -> new branch -> name_DD/MM
 	
+	Example:
     ```
-    EX: sophie_0526
+    sophie_0526
     ```
-## Coding Style & Basic Rules (中文/Chinese)
 
-### 组件名称缩写
+### 1. 变量名
+* #### 组件名称缩写
    
 | Variable Type | Name Rule |
 |---------------|:----------|
@@ -243,7 +256,7 @@ EX:  if condition {
 |UIView|uiviewName|
 注意： 在缩写后要加上具体的用途名。btnSend
 
-### 非组件名称缩写
+* #### 非组件名称缩写
 | Variable Type | Name Rule |
 |---------------|:----------|
 |Array|arrName|
@@ -258,7 +271,7 @@ EX:  if condition {
 |SearchController|searchControllerName|
 |ViewController|vcName|
 
-### 代码规范
+### 2. 代码规范
 (1) 简写
 |全称|简写|
 |--------|------|
@@ -269,29 +282,35 @@ EX:  if condition {
 * 符号后面留有一个空格
 * 左括号右边不要有空格
 * 复合表达式中不要有空格
+
+Example:
 ```swift
- Ex: height: screenWidth-65
+height: screenWidth-65
 ```
 (3) if-else
 * if 的条件不用小括号
 * “{” 要与 if 在同一行
 * else 要与 “}” 在同一行
 * “{”、”}”与 else 之间的空格
+
+Example:
 ```swift
-EX:  if condition {
-        } else {
-        }
+if condition {
+
+} else {
+
+}
 ```
 (4) 空行
 
 任何地方不能超过两行的空行
 
-### 资源命名缩写
+### 3. 资源命名缩写
 * 前缀
 
 前缀缩写 | 说明 
 ---- | --- 
-Icon->ice | 用于图标
+Icon->ic | 用于图标
 background->bg |  用于背景图
 button->btn |  用于按钮图样
 * 后缀
@@ -303,3 +322,4 @@ hi |  高亮
 press |  按下
 select |  选中
 unselect |  未选中
+
