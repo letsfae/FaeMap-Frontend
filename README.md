@@ -151,7 +151,7 @@ Yes
 **General Rules:**
 * Name is customized name
 * Name is capitalized    
-```
+```swift
 	EX: boolIsFirstAppear
 ```
    
@@ -167,7 +167,7 @@ Yes
 |UITextView|txtName|
 |UITapGestureRecognizer|tapName|
 |UIView|uiviewName|
-|
+
 |Array|arrName|
 |Attribute for NSAttributedString|attrName|
 |Boolean|boolName|
@@ -190,12 +190,12 @@ Yes
 ### Other Rules
 **Punctuation**
 * Please have a space after punctuation
-```
+```swift
 EX: UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
 ```
 * But do not have a space after left parenthesis
 * Not have space inside computation expression
-```
+```swift
 EX: height: screenWidth-65
 ```
 **If else statement**
@@ -203,7 +203,7 @@ EX: height: screenWidth-65
 * Left bracket is in same line as “if”
 * “Else” is in same line as right bracket for “if”
 * Space between “else” and its following left bracket
-```
+```swift
 EX:  if condition {
         } else {
         }
@@ -268,7 +268,7 @@ EX:  if condition {
 * 符号后面留有一个空格
 * 左括号右边不要有空格
 * 复合表达式中不要有空格
-```
+```swift
  Ex: height: screenWidth-65
 ```
 (3) if-else
@@ -276,7 +276,7 @@ EX:  if condition {
 * “{” 要与 if 在同一行
 * else 要与 “}” 在同一行
 * “{”、”}”与 else 之间的空格
-```
+```swift
 EX:  if condition {
         } else {
         }
