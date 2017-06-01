@@ -4,6 +4,8 @@
 * [Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
 * [Use of Delegate](#use-of-delegate-in-swift)
 * [Parameter for Chat](#parameter-for-chat)
+* [Code Style & Basic Rules (English)](#parameter-for-chat)
+* [Code Style & Basic Rules (中文/Chinese)](#parameter-for-chat)
 
 ## Use of SwiftyJSON
 [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) is a public framework, aims to deal with the JSON data from Backend. 
@@ -142,7 +144,7 @@ Yes
 | videoDuration(optional) | int() | 只有video需要 |
 | isHeartSticker(opt) | boolean() | 只有sticker需要 |
 
-
+## Coding Style & Basic Rules (English)
 
 ### Name the Variables
 
@@ -222,7 +224,7 @@ EX:  if condition {
     ```
     EX: sophie_0526
     ```
-
+## Coding Style & Basic Rules (中文/Chinese)
 
 ### 组件名称缩写
    
