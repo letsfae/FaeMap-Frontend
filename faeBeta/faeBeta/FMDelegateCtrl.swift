@@ -26,18 +26,18 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // PinDetailDelegate
     func backToMainMap() {
-//        updateTimerForUserPin()
+        //        updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
-        reloadMainScreenButtons()
+        self.reloadMainScreenButtons()
         resumeAllUserPinTimers()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
         let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude+offset,
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude + offset,
                                               longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
         faeMapView.camera = camera
     }
@@ -62,7 +62,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         marker.position = coordinate
         marker.map = faeMapView
         
-        let offset = 530*screenHeightFactor - screenHeight/2
+        let offset = 530 * screenHeightFactor - screenHeight / 2
         var curPoint = faeMapView.projection.point(for: coordinate)
         curPoint.y -= offset
         let newCoor = faeMapView.projection.coordinate(for: curPoint)
@@ -105,7 +105,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
         }
     }
-
+    
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: zoom)
@@ -142,14 +142,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
-        self.present(moodAvatarVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
     func jumpToCollections() {
-        
-        let collectionsBoardVC = CollectionsBoardViewController()
- 
-        collectionsBoardVC.modalPresentationStyle = .overCurrentContext
-        self.present(collectionsBoardVC, animated: false, completion: nil)
+        let vcCollections = CollectionsBoardViewController()
+        self.navigationController?.pushViewController(vcCollections, animated: true)
     }
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
@@ -163,7 +160,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     func reloadSelfPosition() {
         self.canOpenAnotherPin = true
-        reloadMainScreenButtons()
+        self.reloadMainScreenButtons()
         reloadSelfPosAnimation()
     }
     
@@ -172,17 +169,17 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         btnToNorth.transform = CGAffineTransform.identity
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.btnMapFilter.frame = CGRect(x: screenWidth/2-22, y: screenHeight-47, width: 44, height: 44)
-            self.btnToNorth.frame = CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59)
-            self.btnSelfLocation.frame = CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59)
-            self.btnChatOnMap.frame = CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79)
+            self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+            self.btnToNorth.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
+            self.btnSelfLocation.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
+            self.btnChatOnMap.frame = CGRect(x: 12, y: 646 * screenWidthFactor, width: 79, height: 79)
             self.labelUnreadMessages.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
             self.updateUnreadChatIndicator()
-            self.btnPinOnMap.frame = CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79)
+            self.btnPinOnMap.frame = CGRect(x: 323 * screenWidthFactor, y: 646 * screenWidthFactor, width: 79, height: 79)
             let direction: CGFloat = CGFloat(self.prevBearing)
             let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
             self.btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
-        }, completion: {(_) in
+        }, completion: { _ in
             
         })
     }

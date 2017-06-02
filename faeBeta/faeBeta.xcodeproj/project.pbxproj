@@ -209,7 +209,7 @@
 		B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */; };
 		B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */; };
 		B85FFE931EA84CEB0079D1A7 /* CollectionsBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */; };
-		B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */; };
+		B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift */; };
 		B85FFE951EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */; };
 		B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */; };
 		B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */; };
@@ -529,7 +529,7 @@
 		B85FE6CF1DB8786C00BB8F6A /* CCPSelectLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCPSelectLocation.swift; sourceTree = "<group>"; };
 		B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsBoardViewController.swift; sourceTree = "<group>"; };
-		B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSearchViewController.swift; sourceTree = "<group>"; };
+		B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionSearchViewController(General).swift"; sourceTree = "<group>"; };
 		B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedPinsTableViewCell.swift; sourceTree = "<group>"; };
 		B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedPinsViewController.swift; sourceTree = "<group>"; };
 		B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
@@ -665,7 +665,7 @@
 				B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell(General).swift */,
 				B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */,
 				B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */,
-				B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController.swift */,
+				B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift */,
 				372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */,
 				372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */,
 				B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */,
@@ -1899,7 +1899,7 @@
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
-				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController.swift in Sources */,
+				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,

@@ -39,7 +39,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
-    var boolIsFirstAppear = true
     var gesturerecognizerTouch: TouchGestureRecognizer!
     // background view
     var uiviewBackground: UIView!
@@ -64,7 +63,6 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         // The background of this controller, all subviews are added to this view
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         view.addSubview(uiviewBackground)
-        uiviewBackground.frame.origin.x = screenWidth
         loadTblPinsData()
         loadNavBar()
     }
@@ -84,22 +82,12 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if boolIsFirstAppear {
-            UIView.animate(withDuration: 0.3, animations: ({
-                self.uiviewBackground.frame.origin.x = 0
-            }))
-            boolIsFirstAppear = false
-        }
     }
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         delegateBackBoard?.backToBoard(count: arrPinData.count)
-        UIView.animate(withDuration: 0.3, animations: ({
-            self.uiviewBackground.frame.origin.x = screenWidth
-        }), completion: { _ in
-            self.dismiss(animated: false, completion: nil)
-        })
+        self.navigationController?.popViewController(animated: true)
     }
     
     fileprivate func loadNavBar() {

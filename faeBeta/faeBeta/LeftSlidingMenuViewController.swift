@@ -61,7 +61,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         loadLeftWindow()
         readRealmData()
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
-        self.view.addGestureRecognizer(draggingGesture)
+        view.addGestureRecognizer(draggingGesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,20 +76,20 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func loadLeftWindow() {
         buttonBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        buttonBackground.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.7)
-        buttonBackground.addTarget(self, action: #selector(self.actionCloseMenu(_:)), for: .touchUpInside)
-        self.view.addSubview(buttonBackground)
+        buttonBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.7)
+        buttonBackground.addTarget(self, action: #selector(actionCloseMenu(_:)), for: .touchUpInside)
+        view.addSubview(buttonBackground)
         buttonBackground.alpha = 0
         
-        backgroundColorViewTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight/2))
+        backgroundColorViewTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight / 2))
         backgroundColorViewTop.backgroundColor = UIColor.faeAppRedColor()
-        self.view.addSubview(backgroundColorViewTop)
-        self.backgroundColorViewTop.center.x -= 290
+        view.addSubview(backgroundColorViewTop)
+        backgroundColorViewTop.center.x -= 290
         
-        backgroundColorViewDown = UIView(frame: CGRect(x: 0, y: screenHeight/2, width: 290, height: screenHeight/2))
+        backgroundColorViewDown = UIView(frame: CGRect(x: 0, y: screenHeight / 2, width: 290, height: screenHeight / 2))
         backgroundColorViewDown.backgroundColor = UIColor.white
-        self.view.addSubview(backgroundColorViewDown)
-        self.backgroundColorViewDown.center.x -= 290
+        view.addSubview(backgroundColorViewDown)
+        backgroundColorViewDown.center.x -= 290
         
         uiViewLeftWindow = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: 241.5))
         uiViewLeftWindow.backgroundColor = UIColor.white
@@ -101,14 +101,13 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
         uiViewLeftWindow.addSubview(imageAvatar)
         imageAvatar.center.x = 145
-        imageAvatar.layer.cornerRadius = 45.5*screenWidthFactor
+        imageAvatar.layer.cornerRadius = 45.5 * screenWidthFactor
         imageAvatar.layer.borderColor = UIColor.white.cgColor
         imageAvatar.layer.borderWidth = 5
         if let gender = userUserGender {
             if gender == "male" {
                 imageAvatar.image = #imageLiteral(resourceName: "defaultMen")
-            }
-            else {
+            } else {
                 imageAvatar.image = #imageLiteral(resourceName: "defaultWomen")
             }
         }
@@ -117,8 +116,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         buttonImageOverlay = UIButton(frame: CGRect(x: 100, y: 40, width: 91, height: 91))
         uiViewLeftWindow.addSubview(buttonImageOverlay)
         buttonImageOverlay.center.x = 145
-        buttonImageOverlay.layer.cornerRadius = 45.5*screenWidthFactor
-        buttonImageOverlay.addTarget(self, action: #selector(self.actionJumpToMainPage(_:)), for: .touchUpInside)
+        buttonImageOverlay.layer.cornerRadius = 45.5 * screenWidthFactor
+        buttonImageOverlay.addTarget(self, action: #selector(actionJumpToMainPage(_:)), for: .touchUpInside)
         
         label = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
         label.text = displayName
@@ -138,7 +137,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         tableLeftSlideWindow.register(LeftSlideWindowCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
         tableLeftSlideWindow.separatorStyle = .none
         tableLeftSlideWindow.tableHeaderView = uiViewLeftWindow
-        self.view.addSubview(tableLeftSlideWindow)
+        view.addSubview(tableLeftSlideWindow)
         tableLeftSlideWindow.center.x -= 290
         tableLeftSlideWindow.backgroundColor = UIColor.clear
     }
@@ -157,7 +156,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     cell.switchRight.isOn = true
                 }
             }
-            cell.switchRight.addTarget(self, action: #selector(self.switchToInvisibleOrOnline(_:)), for: .valueChanged)
+            cell.switchRight.addTarget(self, action: #selector(switchToInvisibleOrOnline(_:)), for: .valueChanged)
         }
         cell.selectionStyle = .none
         return cell
@@ -170,32 +169,23 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         // Go Invisible
         if indexPath.row == 1 {
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
-            self.switchToInvisibleOrOnline(cell.switchRight)
-        }
-        // Map Board
-        else if indexPath.row == 0 {
+            switchToInvisibleOrOnline(cell.switchRight)
+        } else if indexPath.row == 0 {
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
-        }
-        // Collections
-        else if indexPath.row == 3 {
-            self.tableSelections = .collections
-            self.actionCloseMenu(self.buttonBackground)
-        }
-        // Mood Avatar
-        else if indexPath.row == 5 {
-            self.tableSelections = .moodAvatar
-            self.actionCloseMenu(self.buttonBackground)
-        }
-        // Setting, currently is logging out
-        else if indexPath.row == 6 {
+        } else if indexPath.row == 3 {
+            tableSelections = .collections
+            actionCloseMenu(buttonBackground)
+        } else if indexPath.row == 5 {
+            tableSelections = .moodAvatar
+            actionCloseMenu(buttonBackground)
+        } else if indexPath.row == 6 {
             let logOut = FaeUser()
-            logOut.logOut {(status: Int?, message: Any?) in
+            logOut.logOut { (status: Int?, _: Any?) in
                 if status! / 100 == 2 {
                     print("[LeftMenu-LogOut] Success")
                     self.tableSelections = .logOut
                     self.actionCloseMenu(self.buttonBackground)
-                }
-                else{
+                } else {
                     print("[LeftMenu-LogOut] Failure")
                     self.tableSelections = .logOut
                     self.actionCloseMenu(self.buttonBackground)
@@ -230,13 +220,12 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.backgroundColorViewTop.frame.origin.x = self.sizeTo
                     self.backgroundColorViewDown.frame.origin.x = self.sizeTo
                     self.buttonBackground.alpha = 0
-                }, completion: {(done: Bool) in
+                }, completion: { (_: Bool) in
                     self.dismiss(animated: false, completion: {
                         self.delegate?.reloadSelfPosition()
                     })
                 })
-            }
-            else {
+            } else {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.tableLeftSlideWindow.frame.origin.x = self.sizeFrom
                     self.backgroundColorViewTop.frame.origin.x = self.sizeFrom
@@ -247,10 +236,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         } else {
             let location = pan.location(in: view)
             if location.x <= end {
-                self.tableLeftSlideWindow.frame.origin.x = location.x - (290 + space)
-                self.backgroundColorViewTop.frame.origin.x = location.x - (290 + space)
-                self.backgroundColorViewDown.frame.origin.x = location.x - (290 + space)
-                self.buttonBackground.alpha = (location.x - space) / 290
+                tableLeftSlideWindow.frame.origin.x = location.x - (290 + space)
+                backgroundColorViewTop.frame.origin.x = location.x - (290 + space)
+                backgroundColorViewDown.frame.origin.x = location.x - (290 + space)
+                buttonBackground.alpha = (location.x - space) / 290
                 percent = Double((end - location.x) / 290)
             }
             
@@ -261,16 +250,16 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         
         if user_id != -1 {
             let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
-            imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+            imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { _, _, _, _ in
                 
             })
         }
         
         let updateNickName = FaeUser()
-        updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
-            if(status / 100 == 2){
+        updateNickName.getSelfNamecard { (status: Int, message: Any?) in
+            if status / 100 == 2 {
                 let nickNameInfo = JSON(message!)
-                if let str = nickNameInfo["nick_name"].string{
+                if let str = nickNameInfo["nick_name"].string {
                     self.label.text = str
                 }
             }
@@ -279,10 +268,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func switchToInvisibleOrOnline(_ sender: UISwitch) {
         let switchToInvisible = FaeUser()
-        if (sender.isOn == true){
+        if sender.isOn == true {
             print("sender.on")
             switchToInvisible.whereKey("status", value: "5")
-            switchToInvisible.setSelfStatus({ (status, message) in
+            switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
                     userStatus = 5
                     let storageForUserStatus = UserDefaults.standard
@@ -290,24 +279,21 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     print("Successfully switch to invisible")
                     self.tableSelections = .goInvisible
                     self.actionCloseMenu(self.buttonBackground)
-                }
-                else {
+                } else {
                     print("Fail to switch to invisible")
                 }
             })
-        }
-        else{
+        } else {
             print("sender.off")
             switchToInvisible.whereKey("status", value: "1")
-            switchToInvisible.setSelfStatus({ (status, message) in
+            switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
                     userStatus = 1
                     self.delegate?.userInvisible(isOn: false)
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to online")
-                }
-                else {
+                } else {
                     print("Fail to switch to online")
                 }
             })
@@ -320,7 +306,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             self.tableLeftSlideWindow.center.x -= 290
             self.backgroundColorViewTop.center.x -= 290
             self.backgroundColorViewDown.center.x -= 290
-        }) { (_) in
+        }) { _ in
             self.dismiss(animated: false, completion: {
                 self.delegate?.reloadSelfPosition()
                 switch self.tableSelections {
@@ -363,7 +349,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func actionJumpToMainPage(_ sender: UIButton) {
-        self.tableSelections = .myFaeMainPage
-        self.actionCloseMenu(self.buttonBackground)
+        tableSelections = .myFaeMainPage
+        actionCloseMenu(buttonBackground)
     }
 }

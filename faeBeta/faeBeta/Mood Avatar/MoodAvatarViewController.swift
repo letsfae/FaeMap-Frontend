@@ -151,7 +151,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func actionCancel(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func actionSave(_ sender: UIButton) {
@@ -161,7 +161,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
-                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.popViewController(animated: true)
             }
             else {
                 print("Fail to update miniavatar")

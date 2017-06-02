@@ -10,6 +10,8 @@ import UIKit
 
 extension PinDetailViewController {
     func loadEdgeGesture() {
-        
+        let gesture = UIScreenEdgePanGestureRecognizer()
+        gesture.edges = .left
+        view.addGestureRecognizer(gesture)
     }
 }

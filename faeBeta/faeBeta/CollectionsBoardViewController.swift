@@ -27,7 +27,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         super.viewDidLoad()
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.view.addSubview(uiviewBackground)
-        uiviewBackground.frame.origin.x = screenWidth
+        uiviewBackground.frame.origin.x = 0//screenWidth
         // Do any additional setup after loading the view.
         loadColBoard()
         loadNavBar()
@@ -38,7 +38,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         if boolFirstAppear {
             super.viewDidAppear(animated)
             UIView.animate(withDuration: 0.3, animations: ({
-                self.uiviewBackground.frame.origin.x = 0
+//                self.uiviewBackground.frame.origin.x = 0
             }))
             boolFirstAppear = false
         }
@@ -49,12 +49,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     
     // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: ({
-            self.uiviewBackground.frame.origin.x = screenWidth
-        }), completion: { (_) in
-            self.dismiss(animated: false, completion: nil)
-        })
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     // Load the Navigation Bar
@@ -238,29 +233,25 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     
     func actionCreatedPins(_ sender: UIButton) {
         let vcCreatedPin = CreatedPinsViewController()
-        vcCreatedPin.modalPresentationStyle = .overCurrentContext
         vcCreatedPin.delegateBackBoard = self
-        self.present(vcCreatedPin, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vcCreatedPin, animated: true)
     }
     
     func actionSavedPins(_ sender: UIButton) {
         let vcSavedPin = SavedPinsViewController()
-        vcSavedPin.modalPresentationStyle = .overCurrentContext
         vcSavedPin.delegateBackBoard = self
-        self.present(vcSavedPin, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vcSavedPin, animated: true)
     }
     
     func actionSavedPlaces(_ sender: UIButton) {
         let vcSavedPlace = PlacesAndLocationsViewController()
         vcSavedPlace.strTableTitle = "Saved Places"
-        vcSavedPlace.modalPresentationStyle = .overCurrentContext
-        self.present(vcSavedPlace, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vcSavedPlace, animated: true)
     }
     
     func actionSavedLocations(_ sender: UIButton) {
         let vcSavedLocations = PlacesAndLocationsViewController()
         vcSavedLocations.strTableTitle = "Saved Locations"
-        vcSavedLocations.modalPresentationStyle = .overCurrentContext
-        self.present(vcSavedLocations, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vcSavedLocations, animated: true)
     }
 }
