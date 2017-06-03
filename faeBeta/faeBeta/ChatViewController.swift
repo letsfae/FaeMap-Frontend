@@ -25,8 +25,8 @@ public var headerDeviceToken: Data!
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate, CAAnimationDelegate
 {
     //MARK: - properties
-    var ref = FIRDatabase.database().reference().child(fireBaseRef)// reference to all chat room
-    var roomRef : FIRDatabaseReference?
+    var ref = Database.database().reference().child(fireBaseRef)// reference to all chat room
+    var roomRef : DatabaseReference?
     var messages : [JSQMessage] = []
     var objects : [NSDictionary] = []//
     var loaded : [NSDictionary] = []// load dict from firebase that this chat room all message

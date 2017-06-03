@@ -214,15 +214,16 @@ extension PinDetailViewController {
         endEdit()
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
-            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: ({
-                self.uiviewMain.frame.origin.x = screenWidth
-                self.uiviewInputToolBarSub.frame.origin.x = screenWidth
-            }), completion: { (_) in
-                self.dismiss(animated: false, completion: nil)
-            })
+//            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: ({
+//                self.uiviewMain.frame.origin.x = screenWidth
+//                self.uiviewInputToolBarSub.frame.origin.x = screenWidth
+//            }), completion: { (_) in
+//                self.dismiss(animated: false, completion: nil)
+//            })
             guard let likes = lblPinLikeCount.text else { return }
             guard let comments = lblCommentCount.text else { return }
             self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments)
+            self.navigationController?.popViewController(animated: true)
             return
         }
         self.delegate?.backToMainMap()

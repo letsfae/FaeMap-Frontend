@@ -50,8 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
         
-        FIRApp.configure()        
-        FIRDatabase.database().persistenceEnabled = true
+        FirebaseApp.configure()        
+        Database.database().isPersistenceEnabled = true
         
         // Config Realm Database
         
@@ -71,14 +71,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            realm.deleteAll()
 //        }
         
-        //Bryan
+        // Delete all realm swift database data
         do {
             try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
         } catch {}
-        //ENDBryan
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
-        print(headerUserAgent)
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let nav1 = UINavigationController()
+        let mainView = FaeMapViewController()
+        nav1.viewControllers = [mainView]
+        self.window!.rootViewController = nav1
+        self.window?.makeKeyAndVisible()
         
         return true
     }
@@ -109,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpWelcomeView() {
-        let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
 
         self.window?.makeKeyAndVisible()
         self.window?.visibleViewController?.present(vc, animated: true, completion: nil)

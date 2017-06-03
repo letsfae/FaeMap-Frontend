@@ -69,9 +69,9 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
             PinDetailViewController.selectedMarkerPosition = arrMapPin[indexPath.section].position
             PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrMapPin[indexPath.section].type)!
             PinDetailViewController.pinUserId = arrMapPin[indexPath.section].userId
-            self.present(vcPinDetail, animated: false, completion: {
-                self.indexCurrSelectRowAt = indexPath
-            })
+            self.indexCurrSelectRowAt = indexPath
+            
+            self.navigationController?.pushViewController(vcPinDetail, animated: true)
         }
     }
     

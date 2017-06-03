@@ -266,7 +266,7 @@ class PinDetailViewController: UIViewController {
         let toolbarHeight = PinDetailViewController.pinTypeEnum == .chat_room ? 0 : uiviewInputToolBarSub.frame.size.height
         uiviewMain.frame.size.height = screenHeight - toolbarHeight
         tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
-        uiviewInputToolBarSub.frame.origin.x = screenWidth
+        uiviewInputToolBarSub.frame.origin.x = 0
         uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
         uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
         uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight

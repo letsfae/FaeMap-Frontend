@@ -26,7 +26,6 @@ extension FaeMapViewController {
         view.addSubview(filterSlider)
         filterSlider.isHidden = true
         filterSlider.layer.zPosition = 600
-        
     }
     
     fileprivate func loadDistanceLabel() {

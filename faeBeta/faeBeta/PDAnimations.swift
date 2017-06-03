@@ -55,7 +55,6 @@ extension PinDetailViewController {
             self.btnPrevPin.alpha = 1
             self.imgPinIcon.alpha = 1
             
-            self.uiviewMain.frame.origin.x = 0
             self.uiviewMain.frame.origin.y = 0
             
             self.uiviewInputToolBarSub.frame.origin.x = 0

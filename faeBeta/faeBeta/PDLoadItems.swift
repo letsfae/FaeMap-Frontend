@@ -21,7 +21,6 @@ extension PinDetailViewController {
         uiviewMain.layer.zPosition = 101
         uiviewMain.clipsToBounds = true
         self.view.addSubview(uiviewMain)
-        uiviewMain.frame.origin.x = enterMode == .collections ? screenWidth : 0
         uiviewMain.frame.origin.y = enterMode == .collections ? 0 : -screenHeight
         
         loadNavigationBar()

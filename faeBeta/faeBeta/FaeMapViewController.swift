@@ -19,7 +19,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451) // Map Namecard
     let navigationBarHeight: CGFloat = 20
     let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0) // Map Namecard
-    let storageForOpenedPinList = UserDefaults.standard// Local Storage for storing opened pin id, for opened pin list use
+    let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     let yelpManager = YelpManager() // Yelp API
     let yelpQuery = YelpQuery() // Yelp API
     var avatarBaseView: UIView! // Map Namecard
@@ -168,7 +168,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         markerFakeUser.map = faeMapView
         markerFakeUser.icon = UIImage()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
@@ -185,16 +185,16 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         animateMapFilterArrow()
         filterCircleAnimation()
         checkDisplayNameExisitency()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
         updateGenderAge()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.isTranslucent = false
     }
     
     func checkDisplayNameExisitency() {
-        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
             if status / 100 == 2 {
                 let rsltJSON = JSON(result!)
                 if let withNickName = rsltJSON["nick_name"].string {
@@ -216,7 +216,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
         if is_Login == 0 {
-            self.jumpToWelcomeView(animated: false)
+            jumpToWelcomeView(animated: false)
         }
     }
     
@@ -224,7 +224,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
-        updateGenderAge.updateNameCard { (status, message) in
+        updateGenderAge.updateNameCard { status, _ in
             if status / 100 == 2 {
                 print("[showGenderAge] Successfully update namecard")
             } else {
@@ -235,7 +235,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     fileprivate func openedPinListSetup() {
         let emptyArrayList = [String]()
-        self.storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
+        storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
     }
     
     fileprivate func filterAndYelpSetup() {
@@ -245,9 +245,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func timerSetup() {
         invalidateAllTimer()
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
+        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPins), userInfo: nil, repeats: true)
+        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
@@ -265,25 +265,23 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
-        self.present(firstTimeLoginVC, animated: false, completion: nil)
+        present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
     // Check if location is enabled
     fileprivate func checkLocationEnablibity() {
         if CLLocationManager.authorizationStatus() == .notDetermined {
             print("Not Authorised")
-            self.locManager.requestAlwaysAuthorization()
-        }
-        
-        else if CLLocationManager.authorizationStatus() == .denied {
+            locManager.requestAlwaysAuthorization()
+        } else if CLLocationManager.authorizationStatus() == .denied {
             jumpToLocationEnable()
         }
     }
     
     func updateTimerForAllPins() {
-        self.updateTimerForLoadRegionPin()
-        self.updateTimerForUserPin()
-        self.updateTimerForLoadRegionPlacePin()
+        updateTimerForLoadRegionPin()
+        updateTimerForUserPin()
+        updateTimerForLoadRegionPlacePin()
     }
     
     // Testing back from background
@@ -297,7 +295,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func reloadSelfPosAnimation() {
-        if userStatus != 5  {
+        if userStatus != 5 {
             subviewSelfMarker.isHidden = false
             reloadSelfMarker()
             getSelfAccountInfo()
@@ -308,13 +306,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func jumpToLocationEnable() {
-        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil) .instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        self.present(locEnableVC, animated: true, completion: nil)
+        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+        present(locEnableVC, animated: true, completion: nil)
     }
     
     func jumpToWelcomeView(animated: Bool) {
-        let welcomeVC = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
-        self.present(welcomeVC, animated: animated, completion: nil)
+//        let welcomeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
+        let welcomeVC = WelcomeViewController()
+        present(welcomeVC, animated: animated, completion: nil)
     }
     
     // To get opened pin list, but it is a general func
@@ -327,24 +326,24 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Load Navigation Items
     fileprivate func loadTransparentNavBarItems() {
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249/255, green: 90/255, blue: 90/255, alpha: 1)
-        self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        self.navigationController?.navigationBar.isTranslucent = true
+        tabBarController?.tabBar.isHidden = true
+        navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
+        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        navigationController?.navigationBar.isTranslucent = true
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
         if users {
-            self.updateTimerForUserPin()
+            updateTimerForUserPin()
         }
         if pins {
-            self.updateTimerForLoadRegionPin()
+            updateTimerForLoadRegionPin()
         }
         if places {
-            self.updateTimerForLoadRegionPlacePin()
+            updateTimerForLoadRegionPlacePin()
         }
     }
     
