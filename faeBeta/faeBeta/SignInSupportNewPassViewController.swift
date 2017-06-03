@@ -69,7 +69,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterInfo() {
-        let boardLogin = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
+        let boardLogin = RegisterInfoViewController()
         boardLogin.faeUser = faeUser
         self.navigationController?.pushViewController(boardLogin, animated: false)
     }

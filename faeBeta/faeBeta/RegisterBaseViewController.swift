@@ -22,6 +22,7 @@ class RegisterBaseViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         addTapGesture()
+        self.view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -162,7 +162,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         navigationController?.pushViewController(boardLogin, animated: true)
     }
     func jumpToSignUp() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController") as! RegisterNameViewController
+        let boardRegister = RegisterNameViewController()
         navigationController?.pushViewController(boardRegister, animated: true)
     }
 }

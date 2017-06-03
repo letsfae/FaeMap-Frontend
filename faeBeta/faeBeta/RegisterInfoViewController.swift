@@ -10,26 +10,26 @@
 import UIKit
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l >= r
-  default:
-    return !(lhs < rhs)
-  }
+fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l >= r
+    default:
+        return !(lhs < rhs)
+    }
 }
 
 class RegisterInfoViewController: RegisterBaseViewController {
@@ -41,8 +41,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
     var btnMale: UIButton!
     var btnFemale: UIButton!
     var faeUser: FaeUser!
-    var imgExclamationMark : UIImageView!
-   
+    var imgExclamationMark: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -56,15 +56,15 @@ class RegisterInfoViewController: RegisterBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         numKeyPad = FAENumberKeyboard(frame: CGRect(x: 0, y: view.frame.size.height - 244 * screenHeightFactor, width: view.frame.size.width, height: 244 * screenHeightFactor))
-        self.view.addSubview(numKeyPad)
+        view.addSubview(numKeyPad)
         numKeyPad.delegate = self
-        self.uiviewBottom.frame.origin.y = self.view.frame.height - 244 * screenHeightFactor - self.uiviewBottom.frame.size.height + 15
+        uiviewBottom.frame.origin.y = view.frame.height - 244 * screenHeightFactor - uiviewBottom.frame.size.height + 15
     }
     
     // MARK: - Functions
     override func backButtonPressed() {
         view.endEditing(true)
-        _ =  navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
@@ -73,15 +73,15 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterConfirm() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterConfirmViewController") as! RegisterConfirmViewController
+        let boardRegister = RegisterConfirmViewController()
         boardRegister.faeUser = faeUser
-        self.navigationController?.pushViewController(boardRegister, animated: true)
+        navigationController?.pushViewController(boardRegister, animated: true)
     }
     
     func createDateOfBirthView() {
         let uiviewDoB = UIView(frame: CGRect(x: 0, y: 90 * screenHeightFactor, width: view.frame.size.width, height: 120 * screenHeightFactor))
         let lblTitle = UILabel(frame: CGRect(x: 0, y: 10, width: uiviewDoB.frame.size.width, height: 26))
-        lblTitle.textColor = UIColor.init(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        lblTitle.textColor = UIColor.init(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textAlignment = .center
         lblTitle.text = "Birthday"
@@ -105,17 +105,17 @@ class RegisterInfoViewController: RegisterBaseViewController {
         let uiviewGender = UIView(frame: CGRect(x: 0, y: 240 * screenHeightFactor, width: view.frame.size.width, height: 130 * screenHeightFactor))
         
         let lblTitle = UILabel(frame: CGRect(x: 0, y: 10, width: uiviewGender.frame.size.width, height: 26))
-        lblTitle.textColor = UIColor.init(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        lblTitle.textColor = UIColor.init(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textAlignment = .center
         lblTitle.text = "Gender"
         
-        btnMale = UIButton(frame: CGRect(x: uiviewGender.frame.size.width/3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
+        btnMale = UIButton(frame: CGRect(x: uiviewGender.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
         btnMale.setImage(UIImage(named: "male_unselected"), for: UIControlState())
         btnMale.setImage(UIImage(named: "male_selected"), for: .selected)
         btnMale.addTarget(self, action: #selector(self.maleButtonTapped), for: .touchUpInside)
         
-        btnFemale = UIButton(frame: CGRect(x: 2 * uiviewGender.frame.size.width/3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
+        btnFemale = UIButton(frame: CGRect(x: 2 * uiviewGender.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
         btnFemale.setImage(UIImage(named: "female_unselected"), for: UIControlState())
         btnFemale.setImage(UIImage(named: "female_selected"), for: .selected)
         btnFemale.addTarget(self, action: #selector(self.femaleButtonTapped), for: .touchUpInside)
@@ -151,14 +151,14 @@ class RegisterInfoViewController: RegisterBaseViewController {
         let date = dateFormatter.date(from: dateOfBirth!)
         boolIsValid = date != nil && dateOfBirth!.characters.count == 10
         
-        if (date == nil && dateOfBirth!.characters.count == 10) {
+        if date == nil && dateOfBirth!.characters.count == 10 {
             imgExclamationMark.isHidden = false
         }
         
         if boolIsValid {
             let calendar = Calendar.init(identifier: Calendar.Identifier.gregorian)
             let currentYearInt = ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: date!))!
-        
+            
             boolIsValid = boolIsValid && currentYearInt > ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))! - 99 && currentYearInt < ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))!
             imgExclamationMark.isHidden = boolIsValid
         }
@@ -166,7 +166,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         if boolIsValid {
             boolIsValid = (date! as NSDate).earlierDate(Date()) == date!
         }
-
+        
         boolIsValid = boolIsValid && gender != nil
         enableContinueButton(boolIsValid)
     }
@@ -198,14 +198,14 @@ extension RegisterInfoViewController: FAENumberKeyboardDelegate {
             }
             
             let numOfCharacters = dateOfBirth?.characters.count
-            if  numOfCharacters == 2 || numOfCharacters == 5 {
+            if numOfCharacters == 2 || numOfCharacters == 5 {
                 dateOfBirth = "\(dateOfBirth!)/"
             }
         } else {
             if dateOfBirth?.characters.count >= 0 {
                 dateOfBirth = String(dateOfBirth!.characters.dropLast())
                 let numOfCharacters = dateOfBirth?.characters.count
-                if  numOfCharacters == 2 || numOfCharacters == 5 {
+                if numOfCharacters == 2 || numOfCharacters == 5 {
                     dateOfBirth = String(dateOfBirth!.characters.dropLast())
                 }
             }

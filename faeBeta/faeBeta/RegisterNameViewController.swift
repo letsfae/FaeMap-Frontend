@@ -93,7 +93,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterEmail() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil) .instantiateViewController(withIdentifier: "RegisterEmailViewController")as! RegisterEmailViewController
+        let boardRegister = RegisterEmailViewController()
         boardRegister.faeUser = faeUser
         self.navigationController?.pushViewController(boardRegister, animated: false)
     }
@@ -105,7 +105,7 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func loginButtonTapped() {
-        let boardLoginController = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
+        let boardLoginController = LogInViewController()
         self.navigationController?.pushViewController(boardLoginController, animated: true)
     }
     
@@ -146,6 +146,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
                 cellTxtFirstName.setPlaceholderLabelText("First Name", indexPath: indexPath)
                 cellTxtFirstName.textfield.autocapitalizationType = .words
                 cellTxtFirstName.delegate = self
+                cellTxtFirstName.makeFirstResponder()
             }
             return cellTxtFirstName
         case 3:

@@ -56,7 +56,6 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        cellUsername.makeFirstResponder()
     }
     
     // MARK: - Functions
@@ -70,7 +69,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterPassword() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterPasswordViewController") as! RegisterPasswordViewController
+        let boardRegister = RegisterPasswordViewController()
         boardRegister.faeUser = faeUser
         self.navigationController?.pushViewController(boardRegister, animated: false)
     }
@@ -157,6 +156,7 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
                 cellUsername.setLeftPlaceHolderDisplay(true)
                 cellUsername.delegate = self
                 cellUsername.textfield.keyboardType = .asciiCapable
+                cellUsername.makeFirstResponder()
             }
             return cellUsername
         default:

@@ -53,13 +53,12 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        cellPassword.makeFirstResponder()
     }
     
     // MARK: - Functions
     override func backButtonPressed() {
         view.endEditing(true)
-        _ = navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
@@ -69,7 +68,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterInfo() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterInfoViewController") as! RegisterInfoViewController
+        let boardRegister = RegisterInfoViewController()
         boardRegister.faeUser = faeUser
         self.navigationController?.pushViewController(boardRegister, animated: false)
     }
@@ -129,6 +128,7 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
                 cellPassword.setRightPlaceHolderDisplay(true)
                 cellPassword.delegate = self
                 cellPassword.setCharacterLimit(16)
+                cellPassword.makeFirstResponder()
             }
             return cellPassword
         default:

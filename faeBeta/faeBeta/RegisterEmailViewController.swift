@@ -59,7 +59,6 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        cellTxtEmail.makeFirstResponder()
     }
     
     // MARK: - Functions
@@ -84,7 +83,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     func loginButtonTapped() {
-        let boardLoginController = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
+        let boardLoginController = LogInViewController()
         self.navigationController?.pushViewController(boardLoginController, animated: true)
     }
     
@@ -98,7 +97,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     func jumpToRegisterUsername() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil) .instantiateViewController(withIdentifier: "RegisterUsernameViewController")as! RegisterUsernameViewController
+        let boardRegister = RegisterUsernameViewController()
         boardRegister.faeUser = faeUser!
         self.navigationController?.pushViewController(boardRegister, animated: false)
     }
@@ -192,6 +191,7 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 imgError.image = UIImage(named:"exclamation_red_new")
                 imgError.isHidden = true
                 cellTxtEmail.contentView.addSubview(imgError)
+                cellTxtEmail.makeFirstResponder()
             }
             return cellTxtEmail
         default:
