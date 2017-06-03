@@ -42,33 +42,33 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     fileprivate func setupNavigationBar() {
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
     }
     
     fileprivate func setupViewFrame() {
-        self.view.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        self.view.backgroundColor = UIColor.white
+        view.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        view.backgroundColor = UIColor.white
     }
     
     fileprivate func setupImageContainerPageViewController() {
         pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56, width: 66, height: 10))
         pageControl.center.x = screenWidth / 2
         pageControl.numberOfPages = 4 //  hide trade was 5
-        self.view.insertSubview(pageControl, at: 0)
+        view.insertSubview(pageControl, at: 0)
         
-        self.uipageImgContainer = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey: NSNumber(value: 4 as Float)]) //  hide trade was 5
+        uipageImgContainer = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey: NSNumber(value: 4 as Float)]) //  hide trade was 5
         
-        self.uipageImgContainer.delegate = self
-        self.uipageImgContainer.dataSource = self
+        uipageImgContainer.delegate = self
+        uipageImgContainer.dataSource = self
         let arrVC = NSArray(object: viewControllerAtIndex(0))
-        self.uipageImgContainer.setViewControllers((arrVC as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.forward, animated: true, completion: nil)
+        uipageImgContainer.setViewControllers((arrVC as! [UIViewController]), direction: UIPageViewControllerNavigationDirection.forward, animated: true, completion: nil)
         
-        self.addChildViewController(self.uipageImgContainer)
-        self.view.addSubview(self.uipageImgContainer.view)
-        self.uipageImgContainer.didMove(toParentViewController: self)
-        self.uipageImgContainer.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor);
-        self.uipageImgContainer.view.layoutIfNeeded()
-        for view in self.uipageImgContainer.view.subviews {
+        addChildViewController(uipageImgContainer)
+        view.addSubview(uipageImgContainer.view)
+        uipageImgContainer.didMove(toParentViewController: self)
+        uipageImgContainer.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor)
+        uipageImgContainer.view.layoutIfNeeded()
+        for view in uipageImgContainer.view.subviews {
             if let scrollView = view as? UIScrollView {
                 scrollView.delegate = self
             }
@@ -80,40 +80,40 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 216 * screenHeightFactor, width: 125, height: 22))
         btnLookAround.center.x = screenWidth / 2
         btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
-        self.view.insertSubview(btnLookAround, at: 0)
+        view.insertSubview(btnLookAround, at: 0)
         
         // log in button
         var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
-        btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
+        btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor.faeAppRedColor()
         btnLogin.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
-        self.view.insertSubview(btnLogin, at: 0)
-        self.view.bringSubview(toFront: btnLogin)
+        view.insertSubview(btnLogin, at: 0)
+        view.bringSubview(toFront: btnLogin)
         
         // create account button
         btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 106 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
-        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ]), for: UIControlState())
+        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!]), for: UIControlState())
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor.faeAppRedColor().cgColor
         btnCreateAccount.layer.borderWidth = 3
         btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
         btnCreateAccount.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
-        self.view.insertSubview(btnCreateAccount, at: 0)
-        self.view.bringSubview(toFront: btnCreateAccount)
-
+        view.insertSubview(btnCreateAccount, at: 0)
+        view.bringSubview(toFront: btnCreateAccount)
+        
         // create copyright label
         font = UIFont(name: "AvenirNext-Regular", size: 10)
         lblRight = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
         lblRight.numberOfLines = 2
-        lblRight.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font! ])
+        lblRight.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!])
         lblRight.textAlignment = .center
         lblRight.sizeToFit()
         lblRight.center.x = screenWidth / 2
-        self.view.insertSubview(lblRight, at: 0)
+        view.insertSubview(lblRight, at: 0)
     }
     
     // MARK: imageContainerGenerator
@@ -133,7 +133,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let vcCurrent = viewController as! WelcomeImageContainerViewController
-        if(vcCurrent.index == 0){
+        if vcCurrent.index == 0 {
             return nil
         } else {
             return viewControllerAtIndex(vcCurrent.index - 1)
@@ -149,20 +149,20 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         }
     }
     
-    //MARK: UIScrollView delegate
+    // MARK: UIScrollView delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let point = scrollView.contentOffset;
+        let point = scrollView.contentOffset
         let percentComplete = (point.x - screenWidth) / screenWidth
-        self.pageControl.setscrollPercent(percentComplete);
+        pageControl.setscrollPercent(percentComplete)
     }
     
-    //MARK: helper
+    // MARK: helper
     func loginButtonTapped() {
-        let boardLogin = UIStoryboard(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController")as! LogInViewController
-        self.navigationController?.pushViewController(boardLogin, animated: true)
+        let boardLogin = LogInViewController()
+        navigationController?.pushViewController(boardLogin, animated: true)
     }
     func jumpToSignUp() {
-        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController")as! RegisterNameViewController
-        self.navigationController?.pushViewController(boardRegister, animated: true)
+        let boardRegister = UIStoryboard(name: "Register", bundle: nil).instantiateViewController(withIdentifier: "RegisterNameViewController") as! RegisterNameViewController
+        navigationController?.pushViewController(boardRegister, animated: true)
     }
 }

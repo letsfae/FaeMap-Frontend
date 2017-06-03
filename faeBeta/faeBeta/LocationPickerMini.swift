@@ -12,12 +12,12 @@ import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
-class LocationPickerMini : UIView, GMSMapViewDelegate {
+class LocationPickerMini: UIView, GMSMapViewDelegate {
     
-    let widthFactor : CGFloat = screenWidth / 414
-    let heightFactor : CGFloat = screenHeight / 736
+    let widthFactor: CGFloat = screenWidth / 414
+    let heightFactor: CGFloat = screenHeight / 736
     
-    weak var locationDelegate : LocationSendDelegate!
+    weak var locationDelegate: LocationSendDelegate!
     
     // MARK: -- Location
     var currentLatitude: CLLocationDegrees = 34.0205378
@@ -25,20 +25,20 @@ class LocationPickerMini : UIView, GMSMapViewDelegate {
     var currentLocation: CLLocation!
     let locManager = CLLocationManager()
     var willAppearFirstLoad = false
-
+    
     // MARK: -- Map main screen Objects
-    var mapView : GMSMapView!
+    var mapView: GMSMapView!
     var buttonSearch: UIButton!
     var buttonShareLocation: UIButton!
     var buttonSend: UIButton!
     
-    //MARK: -- Coordinates to send
+    // MARK: -- Coordinates to send
     var latitudeForPin: CLLocationDegrees = 0.0
     var longitudeForPin: CLLocationDegrees = 0.0
     
     init() {
-        //super.init(frame : CGRect(x: 0, y: screenHeight - 271 - 64, width: screenWidth, height: 271))
-        super.init(frame : CGRect(x: 0, y: 0, width: screenWidth, height: 271))
+        // super.init(frame : CGRect(x: 0, y: screenHeight - 271 - 64, width: screenWidth, height: 271))
+        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
         loadMapView()
         prepareLocationManager()
         loadButton()
@@ -51,12 +51,12 @@ class LocationPickerMini : UIView, GMSMapViewDelegate {
     
     func prepareLocationManager() {
         locManager.requestAlwaysAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined){
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined {
             print("Not Authorised")
-            self.locManager.requestAlwaysAuthorization()
-        } else if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
+            locManager.requestAlwaysAuthorization()
+        } else if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied {
             jumpToLocationEnable()
-        } else if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways) {
+        } else if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
             currentLocation = locManager.location
         }
         willAppearFirstLoad = true
@@ -68,7 +68,7 @@ class LocationPickerMini : UIView, GMSMapViewDelegate {
         mapView.isMyLocationEnabled = true
         mapView.delegate = self
         mapView.layer.zPosition = 100
-        self.addSubview(mapView)
+        addSubview(mapView)
     }
     
     func loadPin() {
@@ -80,26 +80,26 @@ class LocationPickerMini : UIView, GMSMapViewDelegate {
     
     func loadButton() {
         buttonSearch = UIButton(frame: CGRect(x: 20, y: 204, width: 51, height: 51))
-        buttonSearch.setImage(UIImage(named : "locationSearch"), for: .normal)
+        buttonSearch.setImage(UIImage(named: "locationSearch"), for: .normal)
         buttonSearch.layer.zPosition = 101
-        self.addSubview(buttonSearch)
+        addSubview(buttonSearch)
         buttonShareLocation = UIButton(frame: CGRect(x: 81, y: 204, width: 51, height: 51))
         buttonShareLocation.setImage(UIImage(named: "locationShare"), for: .normal)
         buttonShareLocation.layer.zPosition = 101
-        self.addSubview(buttonShareLocation)
+        addSubview(buttonShareLocation)
         buttonSend = UIButton(frame: CGRect(x: screenWidth - 71, y: 204, width: 51, height: 51))
-        buttonSend.setImage(UIImage(named : "locationSend"), for: .normal)
+        buttonSend.setImage(UIImage(named: "locationSend"), for: .normal)
         buttonSend.layer.zPosition = 101
-        self.addSubview(buttonSend)
+        addSubview(buttonSend)
     }
     
-    func jumpToLocationEnable(){
-        //        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
-        //        self.presentViewController(vc, animated: true, completion: nil)
+    func jumpToLocationEnable() {
+        let vc = LocationEnableViewController()
+        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func actionSelfPosition(_ sender: UIButton!) {
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
             currentLocation = locManager.location
         }
         if currentLocation != nil {
@@ -109,5 +109,5 @@ class LocationPickerMini : UIView, GMSMapViewDelegate {
             mapView.animate(to: camera)
         }
     }
-
+    
 }

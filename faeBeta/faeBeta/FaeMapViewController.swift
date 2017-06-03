@@ -311,9 +311,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     func jumpToWelcomeView(animated: Bool) {
-//        let welcomeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
         let welcomeVC = WelcomeViewController()
-        present(welcomeVC, animated: animated, completion: nil)
+        self.navigationController?.pushViewController(welcomeVC, animated: true)
     }
     
     // To get opened pin list, but it is a general func

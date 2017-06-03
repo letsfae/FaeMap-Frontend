@@ -122,7 +122,6 @@
 		B09E49E11D96F77F0075EE45 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B09E49DC1D96F77F0075EE45 /* LICENSE */; };
 		B09E49E81D97038A0075EE45 /* TagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */; };
 		B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */; };
-		B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */; };
 		B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC9F1CE3A3C7002E0C9D /* faeBeta.xcdatamodeld */; };
 		B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */; };
 		B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
@@ -160,7 +159,6 @@
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0D8CF1F1D3D52650030939E /* NameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */; };
 		B0D95C2E1CFE8163002CFD1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */; };
-		B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
@@ -431,7 +429,6 @@
 		B09E49E71D97038A0075EE45 /* TagsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsCollectionViewCell.swift; sourceTree = "<group>"; };
 		B0A2AC951CE3A3C6002E0C9D /* faeBeta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = faeBeta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B0A2AC9D1CE3A3C7002E0C9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B0A2ACA01CE3A3C7002E0C9D /* faeBeta.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = faeBeta.xcdatamodel; sourceTree = "<group>"; };
 		B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0A2ACA51CE3A3C7002E0C9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -480,7 +477,6 @@
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0D8CF1E1D3D52650030939E /* NameCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCardViewController.swift; sourceTree = "<group>"; };
 		B0D95C2D1CFE8163002CFD1D /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationWelcomeViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
@@ -987,7 +983,6 @@
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
-				B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */,
 				B868497D1DE0E4FF0016FC6E /* Login.storyboard */,
 				B86849781DE0E3BB0016FC6E /* Register.storyboard */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
@@ -1397,7 +1392,6 @@
 			isa = PBXGroup;
 			children = (
 				B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */,
-				B0D95C311CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift */,
 				B064EF221D7207DB00C078F5 /* FinishViewController.swift */,
 			);
 			name = Unused;
@@ -1594,7 +1588,6 @@
 				DCEB8C971DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib in Resources */,
 				B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
 				B0D36BF11D1C11A3002FC047 /* MyFaeGeneralTableViewCell.xib in Resources */,
-				B0A2AC9E1CE3A3C7002E0C9D /* Main.storyboard in Resources */,
 				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
 				B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
 				B064EF521D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
@@ -1911,7 +1904,6 @@
 				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
 				B89A8A4C1EB41AE000AE626F /* FaeUserPin.swift in Sources */,
 				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
-				B0D95C321CFEA1B2002CFD1D /* NavigationWelcomeViewController.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
@@ -1927,14 +1919,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		B0A2AC9C1CE3A3C7002E0C9D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B0A2AC9D1CE3A3C7002E0C9D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

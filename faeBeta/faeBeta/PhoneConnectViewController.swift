@@ -118,7 +118,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     
     func buttonCountrySetDidClick() {
         print("clicked button for country set")
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "CountryCodePickerViewController")as! CountryCodePickerViewController
+        let vc = CountryCodePickerViewController()
         vc.countryCodeDelegate = self
         self.present(vc, animated: true, completion: nil)
     }
@@ -136,7 +136,7 @@ class PhoneConnectViewController: UIViewController, UITextFieldDelegate, SetCoun
     }
     
     func jumpToVerification(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "VerificationPhoneViewController")as! VerificationPhoneViewController
+        let vc = VerificationPhoneViewController()
         vc.countryCode = defaultCode
         vc.phoneNumber = textPhoneNumber.text!
         vc.delegate = self

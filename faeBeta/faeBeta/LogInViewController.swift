@@ -49,6 +49,7 @@ class LogInViewController: UIViewController {
     // Mark: - View did/will ..
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
         setupNavigationBar()
         setupInterface()
         addObservers()
@@ -61,16 +62,16 @@ class LogInViewController: UIViewController {
         txtUsername.becomeFirstResponder()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     fileprivate func setupNavigationBar() {
         self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(LogInViewController.navBarLeftButtonTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.navBarLeftButtonTapped))
         self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.isHidden = true
+        let btnBackToPrevious = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
+        self.view.addSubview(btnBackToPrevious)
+        btnBackToPrevious.setImage(UIImage(named: "NavigationBackNew"), for: .normal)
+        btnBackToPrevious.addTarget(self, action: #selector(self.navBarLeftButtonTapped), for: .touchUpInside)
     }
     
     fileprivate func setupInterface() {
@@ -161,10 +162,8 @@ class LogInViewController: UIViewController {
         user.whereKey("is_mobile", value: "true")
         user.logInBackground {(status: Int?, message: Any?) in
             if status! / 100 == 2 {
-                //success
-                self.dismiss(animated: true, completion: {
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-                })
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
+                self.navigationController?.popToRootViewController(animated: true)
             }
             else {
                 let loginJSONInfo = JSON(message!)
@@ -196,7 +195,7 @@ class LogInViewController: UIViewController {
     
     // MARK: - Navigation
     func navBarLeftButtonTapped() {
-        _ = self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - keyboard

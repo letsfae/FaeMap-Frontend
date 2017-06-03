@@ -114,8 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpWelcomeView() {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationWelcomeViewController") as! NavigationWelcomeViewController
-
+        let vc = WelcomeViewController()
         self.window?.makeKeyAndVisible()
         self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }

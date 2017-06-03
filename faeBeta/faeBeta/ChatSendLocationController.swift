@@ -84,8 +84,8 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     }
     
     func jumpToLocationEnable(){
-//        let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("LocationEnableViewController")as! LocationEnableViewController
-//        self.presentViewController(vc, animated: true, completion: nil)
+        let vc = LocationEnableViewController()
+        self.present(vc, animated: true, completion: nil)
     }
     
     func loadMapView() {

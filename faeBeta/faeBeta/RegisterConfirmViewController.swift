@@ -12,11 +12,11 @@ import SwiftyJSON
 
 class RegisterConfirmViewController: RegisterBaseViewController {
     var faeUser: FaeUser!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        createView()
+        self.createView()
     }
     
     // MARK: Functions
@@ -29,15 +29,15 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnBack.setTitleColor(UIColor.blue, for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let lblTitle = UILabel(frame: CGRect(x: 0, y: viewHeight * 95/736.0, width: viewWidth, height: 35))
-        lblTitle.textColor = UIColor.init(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        let lblTitle = UILabel(frame: CGRect(x: 0, y: viewHeight * 95 / 736.0, width: viewWidth, height: 35))
+        lblTitle.textColor = UIColor.init(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 25)
         lblTitle.textAlignment = .center
         lblTitle.text = "Welcome to Fae!"
         
-        let imgFaePic = UIImageView(frame: CGRect(x: 30, y: viewHeight * 185/736.0, width: viewWidth - 60, height: (viewWidth - 60) * 300/351.0))
+        let imgFaePic = UIImageView(frame: CGRect(x: 30, y: viewHeight * 185 / 736.0, width: viewWidth - 60, height: (viewWidth - 60) * 300 / 351.0))
         imgFaePic.image = UIImage(named: "FaePic")
-
+        
         let btnFinish = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnFinish.layer.cornerRadius = 25 * screenHeightFactor
         btnFinish.layer.masksToBounds = true
@@ -46,7 +46,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnFinish.setTitle("Finish!", for: UIControlState())
         btnFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
-        btnFinish.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
+        btnFinish.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         btnFinish.addTarget(self, action: #selector(self.finishButtonPressed), for: .touchUpInside)
         
         let lblTermsOfService = UILabel(frame: CGRect(x: 0, y: 514 * screenHeightFactor, width: screenWidth, height: 50))
@@ -56,13 +56,13 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let strTermofService = "I agree to Fae's Terms of Service\nand Privacy Policy."
         let attrTermofService = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         let attrAgreeString = NSMutableAttributedString(string: strTermofService, attributes: attrTermofService)
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138/255, green: 138/255, blue: 138/255, alpha: 1.0), range: NSRange(location: 0, length: strTermofService.characters.count))
+        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1.0), range: NSRange(location: 0, length: strTermofService.characters.count))
         
         let rangeAttr1 = NSRange(location: 17, length: 16)
         let rangeAttr2 = NSRange(location: 38, length: 14)
         
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253/255, green: 114/255, blue: 109/255, alpha: 1.0), range: rangeAttr1)
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253/255, green: 114/255, blue: 109/255, alpha: 1.0), range: rangeAttr2)
+        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253 / 255, green: 114 / 255, blue: 109 / 255, alpha: 1.0), range: rangeAttr1)
+        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 253 / 255, green: 114 / 255, blue: 109 / 255, alpha: 1.0), range: rangeAttr2)
         
         attrAgreeString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 16)!, range: rangeAttr1)
         attrAgreeString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 16)!, range: rangeAttr2)
@@ -91,15 +91,14 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     func termOfServiceButtonTapped(_ sender: UIButton) {
         let vcTermsofService = TermsOfServiceViewController()
         self.present(vcTermsofService, animated: true, completion: {
-            completed in
+            _ in
         })
     }
     
-    func privacyPolicyButtonTapped(_ sender: UIButton)
-    {
+    func privacyPolicyButtonTapped(_ sender: UIButton) {
         let vcPrivacy = PrivacyPolicyViewController()
         self.present(vcPrivacy, animated: true, completion: {
-            completed in
+            _ in
         })
     }
     
@@ -108,16 +107,16 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     }
     
     func finishButtonPressed() {
-        signUpUser()
+        self.signUpUser()
     }
     
     func signUpUser() {
         showActivityIndicator()
-        print(faeUser.keyValue)
-        faeUser.signUpInBackground { (status, message) in
+        print(self.faeUser.keyValue)
+        self.faeUser.signUpInBackground { status, _ in
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
-                if status/100 == 2 {
+                if status / 100 == 2 {
                     self.loginUser()
                 }
             })
@@ -126,7 +125,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func loginUser() {
         showActivityIndicator()
-        faeUser.logInBackground({ (status: Int, message: Any?) in
+        self.faeUser.logInBackground({ (status: Int, message: Any?) in
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
@@ -147,23 +146,16 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let statusAuth = CLLocationManager.authorizationStatus()
         
         if statusAuth != CLAuthorizationStatus.authorizedAlways {
-            let uivcNoti: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController")as! EnableLocationViewController
+            let uivcNoti: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
             self.navigationController?.pushViewController(uivcNoti, animated: true)
         } else {
             let notificationType = UIApplication.shared.currentUserNotificationSettings
             if notificationType?.types == UIUserNotificationType() {
                 self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController"), animated: true)
             } else {
-                self.dismiss(animated: true, completion: {
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-                })
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
-    }
-    
-    // MARK: Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }

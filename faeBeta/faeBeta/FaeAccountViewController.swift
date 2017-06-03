@@ -157,17 +157,17 @@ class FaeAccountViewController: UIViewController {
         myTableView.separatorColor = UIColor.clear
     }
     func jumpToAccountEmail(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "AccountEmailViewController")as! AccountEmailViewController
+        let vc = AccountEmailViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToPhone(){
         let phoneNumber = alreadyBindWithPhoneNumber()
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhoneConnectViewController") as! PhoneConnectViewController
+        let vc = PhoneConnectViewController()
         vc.phoneString = phoneNumber
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func jumpToUsername(){
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "FaeAccountUsernameViewController")as! FaeAccountUsernameViewController
+        let vc = FaeAccountUsernameViewController()
         self.navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -805,10 +805,10 @@ extension FaeAccountViewController : UITextFieldDelegate{
     }
     // MARK:RetriveByEmailViewController is deleted
     func jumpToforgetPassword() {
-        /*
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RetriveByEmailViewController") as! RetriveByEmailViewController
-        self.navigationController?.pushViewController(vc, animated: true)
- */
+        
+//        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("RetriveByEmailViewController") as! RetriveByEmailViewController
+//        self.navigationController?.pushViewController(vc, animated: true)
+ 
     }
     
     func compareCode() -> Bool {
@@ -828,9 +828,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
     }
     
     func jumpTowelcomeVC() {
-//        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewControllerWithIdentifier("WelcomeViewController") as! WelcomeViewController
-//        self.presentViewController(vc, animated: true, completion: nil)
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "NavigationWelcomeViewController")as! NavigationWelcomeViewController
+        let vc = WelcomeViewController()
         self.present(vc, animated: true, completion: nil)
     }
     

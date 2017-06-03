@@ -15,7 +15,7 @@ import RealmSwift
 extension FaeMapViewController {
     
     func jumpToMyFaeMainPage() {
-        let vc = UIStoryboard(name: "Main", bundle: nil) .instantiateViewController(withIdentifier: "MyFaeMainPageViewController") as! MyFaeMainPageViewController
+        let vc = MyFaeMainPageViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
