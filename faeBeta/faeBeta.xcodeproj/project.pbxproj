@@ -1325,6 +1325,48 @@
 			name = ReportPin;
 			sourceTree = "<group>";
 		};
+		B8FBD48A1EE382140002955C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B064EF2B1D74ECDF00C078F5 /* UIColor+faeColor.swift */,
+				B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */,
+				B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */,
+				B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */,
+				B84663D81E942E8F0010259B /* DoubleExtension.swift */,
+				B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		B8FBD48B1EE382350002955C /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */,
+				B88905711E36094B00E68D58 /* Reachability.swift */,
+				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
+				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
+				B85A38651EDE39EC00241781 /* FaeImageView.swift */,
+				B86AE04F1ED4FC4400D1357D /* General.swift */,
+				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+			);
+			name = Basics;
+			sourceTree = "<group>";
+		};
+		B8FBD48C1EE3825D0002955C /* Classes+Structs */ = {
+			isa = PBXGroup;
+			children = (
+				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
+				B817756F1E69516D001FC073 /* PlacePin.swift */,
+				B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */,
+				B8B2C15B1E65EDFF00F253EA /* MapPin.swift */,
+				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
+				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
+				DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */,
+				B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */,
+			);
+			name = "Classes+Structs";
+			sourceTree = "<group>";
+		};
 		C1DE0DE71E9F00C6003188BE /* Realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -1464,27 +1506,9 @@
 		DCEB8CA01DEFBE5A00B516E9 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
-				B817756F1E69516D001FC073 /* PlacePin.swift */,
-				B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */,
-				B8B2C15B1E65EDFF00F253EA /* MapPin.swift */,
-				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
-				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
-				B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */,
-				B064EF2B1D74ECDF00C078F5 /* UIColor+faeColor.swift */,
-				B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */,
-				B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */,
-				B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */,
-				DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */,
-				B88905711E36094B00E68D58 /* Reachability.swift */,
-				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
-				B84663D81E942E8F0010259B /* DoubleExtension.swift */,
-				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
-				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
-				B85A38651EDE39EC00241781 /* FaeImageView.swift */,
-				B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */,
-				B86AE04F1ED4FC4400D1357D /* General.swift */,
-				B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */,
+				B8FBD48B1EE382350002955C /* Basics */,
+				B8FBD48C1EE3825D0002955C /* Classes+Structs */,
+				B8FBD48A1EE382140002955C /* Extensions */,
 			);
 			name = Support;
 			sourceTree = "<group>";

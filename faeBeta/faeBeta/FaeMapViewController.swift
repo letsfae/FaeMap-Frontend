@@ -149,7 +149,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         isUserLoggedIn()
         getUserStatus()
         loadMapView()

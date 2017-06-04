@@ -27,7 +27,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
         lblEmptyTbl.text = "There are no Pins saved. Explore some more and save the Pins you like. :)"
     }
     
-    // get the Saved Pins
     func getPinsData() {
         let getSavedPinsData = FaeMap()
         getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
@@ -81,7 +80,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
         return cell
     }
     
-    //full pin detail delegate
+    // PinDetailCollectionsDelegate
     func backToCollections(likeCount: String, commentCount: String) {
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell

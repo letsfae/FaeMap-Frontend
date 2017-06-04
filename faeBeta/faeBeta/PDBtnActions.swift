@@ -364,8 +364,6 @@ extension PinDetailViewController {
     func handleFeelingPanGesture(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: uiviewFeelingBar)
         
-        print(location.y)
-        
         if location.y < 0 || location.y > 52 {
             if btnSelectedFeeling != nil {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {

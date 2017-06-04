@@ -54,11 +54,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.5, animations: ({
-            self.uiviewSearchBarSubview.frame.origin.y = 0
-        }), completion: { _ in
-            self.faeSearchController.faeSearchBar.becomeFirstResponder()
-        })
+        self.faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     
     func loadNavBarUnderLine() {
@@ -79,7 +75,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         uiviewSearchBarSubview = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 64))
         uiviewSearchBarSubview.layer.zPosition = 1
         uiviewBlurMainScreenSearch.addSubview(uiviewSearchBarSubview)
-        uiviewSearchBarSubview.frame.origin.y = -uiviewSearchBarSubview.frame.size.height
+        
         let backSubviewButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewSearchBarSubview.addSubview(backSubviewButton)
         backSubviewButton.addTarget(self, action: #selector(self.actionDimissSearchBar(_:)), for: .touchUpInside)

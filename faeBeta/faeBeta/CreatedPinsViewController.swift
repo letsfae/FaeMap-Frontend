@@ -84,7 +84,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         return cell
     }
     
-    //full pin detail delegate
+    // PinDetailCollectionsDelegate
     func backToCollections(likeCount: String, commentCount: String) {
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell

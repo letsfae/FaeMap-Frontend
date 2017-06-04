@@ -237,7 +237,9 @@ class PinDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animatePinCtrlBtnsAndFeeling()
+        if enterMode != .collections {
+            animatePinCtrlBtnsAndFeeling()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -250,7 +252,6 @@ class PinDetailViewController: UIViewController {
             return
         }
         
-        btnHalfPinToMap.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         uiviewFeelingBar.isHidden = true
         btnNextPin.isHidden = true
         btnPrevPin.isHidden = true

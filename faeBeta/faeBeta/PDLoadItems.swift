@@ -47,16 +47,25 @@ extension PinDetailViewController {
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         uiviewMain.addSubview(uiviewNavBar)
         
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
-        uiviewNavBar.leftBtn.alpha = 0.0
-        uiviewNavBar.leftBtn.tag = 1
-        
         btnHalfPinToMap = UIButton()
-        btnHalfPinToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
-        btnHalfPinToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
-        uiviewNavBar.addSubview(btnHalfPinToMap)
-        uiviewNavBar.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnHalfPinToMap)
-        uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnHalfPinToMap)
+        
+        if enterMode != .collections {
+            uiviewNavBar.leftBtnWidth = 24
+            uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "pinDetailFullToHalf"), for: .normal)
+            uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+            uiviewNavBar.leftBtn.alpha = 0.0
+            uiviewNavBar.leftBtn.tag = 1
+            
+            btnHalfPinToMap.setImage(#imageLiteral(resourceName: "pinDetailHalfPinBack"), for: .normal)
+            btnHalfPinToMap.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+            uiviewNavBar.addSubview(btnHalfPinToMap)
+            uiviewNavBar.addConstraintsWithFormat("H:|-(-24)-[v0(101)]", options: [], views: btnHalfPinToMap)
+            uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: btnHalfPinToMap)
+        } else {
+            uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBackToMap(_:)), for: .touchUpInside)
+        }
+        
+        uiviewNavBar.loadBtnConstraints()
         
         // Comment Pin Option
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)

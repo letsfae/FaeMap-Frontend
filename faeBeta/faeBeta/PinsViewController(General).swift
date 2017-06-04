@@ -12,9 +12,11 @@ import SwiftyJSON
 import UIKit.UIGestureRecognizerSubclass
 
 class TouchGestureRecognizer: UIGestureRecognizer {
+    
     // initialize the cellInGivenId
     var cellInGivenId = PinsTableViewCell()
     var isCellSwiped = false
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         // This assignment is very importment for custom gesture
         state = UIGestureRecognizerState.began
@@ -40,29 +42,31 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
     var gesturerecognizerTouch: TouchGestureRecognizer!
-    // background view
-    var uiviewBackground: UIView!
+    
+    // Main table
     var tblPinsData: UITableView!
+    
     // Transparent view to cover the searchbar for detect the click event
     var uiviewSearchBarCover: UIView!
     var schbarPin: UISearchBar!
     var imgEmptyTbl: UIImageView!
     var lblEmptyTbl: UILabel!
+    
     // Nagivation Bar Init
-    var uiviewNavBar: UIView!
+    var uiviewNavBar: FaeNavBar!
+    
     // Title for current table
     var strTableTitle: String!
+    
     // The set of pin data
     var arrPinData = [[String: AnyObject]]()
     var arrMapPin = [MapPinCollections]()
+    
     // Current select row
     var indexCurrSelectRowAt: IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // The background of this controller, all subviews are added to this view
-        uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        view.addSubview(uiviewBackground)
         loadTblPinsData()
         loadNavBar()
     }
@@ -80,32 +84,20 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    // Dismiss current View
     func actionDismissCurrentView(_ sender: UIButton) {
         delegateBackBoard?.backToBoard(count: arrPinData.count)
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     fileprivate func loadNavBar() {
-        uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth + 2, height: 66))
-        uiviewNavBar.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
-        uiviewNavBar.layer.borderWidth = 1
-        uiviewNavBar.backgroundColor = UIColor.white
-        uiviewBackground.addSubview(uiviewNavBar)
-        let btnBack = UIButton(frame: CGRect(x: 0, y: 32, width: 40.5, height: 18))
-        btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: UIControlState.normal)
-        btnBack.addTarget(self, action: #selector(actionDismissCurrentView(_:)), for: .touchUpInside)
-        uiviewNavBar.addSubview(btnBack)
-        let lblNavBarTitle = UILabel(frame: CGRect(x: screenWidth / 2 - 100, y: 28, width: 200, height: 27))
-        lblNavBarTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblNavBarTitle.textAlignment = .center
-        lblNavBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblNavBarTitle.text = strTableTitle
-        uiviewNavBar.addSubview(lblNavBarTitle)
+        uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionDismissCurrentView(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.isHidden = true
+        
+        uiviewNavBar.lblTitle.text = strTableTitle
     }
     
     fileprivate func loadSearchBar() {
@@ -142,7 +134,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     }
     
     func loadTblPinsData() {
-        uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        view.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         tblPinsData = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65), style: UITableViewStyle.plain)
         tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
         tblPinsData.isHidden = true
@@ -161,8 +153,8 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         lblEmptyTbl.textAlignment = .left
         lblEmptyTbl.textColor = UIColor.faeAppInputTextGrayColor()
         imgEmptyTbl.addSubview(lblEmptyTbl)
-        uiviewBackground.addSubview(imgEmptyTbl)
-        uiviewBackground.addSubview(tblPinsData)
+        view.addSubview(imgEmptyTbl)
+        view.addSubview(tblPinsData)
         
         // initialize the touch gesture
         gesturerecognizerTouch = TouchGestureRecognizer(target: self, action: #selector(handleAfterTouch))

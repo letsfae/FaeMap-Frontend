@@ -30,7 +30,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     var tap: UITapGestureRecognizer!
     var tapdisable: UITapGestureRecognizer!
     
-    // Nagivation Bar Init******
+    // Nagivation Bar Init
     var uiviewNavBar: UIView!
     var strTableTitle: String!
     var btnEdit: UIButton!
