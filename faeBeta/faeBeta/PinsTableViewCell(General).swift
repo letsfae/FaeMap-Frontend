@@ -262,14 +262,17 @@ class PinsTableViewCell: UITableViewCell {
             imgPinTab.image = UIImage(named: "tab_story")
             uiviewStoryImages.isHidden = false
             if pin.fileIds.indices.contains(0) {
+                arrImages[0].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
                 arrImages[0].fileID = pin.fileIds[0]
                 arrImages[0].loadImage(id: pin.fileIds[0])
             }
             if pin.fileIds.indices.contains(1) {
+                arrImages[1].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
                 arrImages[1].fileID = pin.fileIds[1]
                 arrImages[1].loadImage(id: pin.fileIds[1])
             }
             if pin.fileIds.indices.contains(2) {
+                arrImages[2].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
                 arrImages[2].fileID = pin.fileIds[2]
                 arrImages[2].loadImage(id: pin.fileIds[2])
             }

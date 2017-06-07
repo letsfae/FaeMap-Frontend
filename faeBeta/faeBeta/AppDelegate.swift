@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func popUpWelcomeView() {
         let vc = WelcomeViewController()
         self.window?.makeKeyAndVisible()
-        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
+        self.window?.visibleViewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {

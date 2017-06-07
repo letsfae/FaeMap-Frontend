@@ -829,7 +829,7 @@ extension FaeAccountViewController : UITextFieldDelegate{
     
     func jumpTowelcomeVC() {
         let vc = WelcomeViewController()
-        self.present(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }

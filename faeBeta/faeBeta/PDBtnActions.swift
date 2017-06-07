@@ -28,13 +28,13 @@ extension PinDetailViewController {
     func actionDoAnony() {
         switchAnony.setOn(!switchAnony.isOn, animated: true)
     }
-
+    
     // Animation of the red sliding line (Talk Talk, Feelings, People)
     func animationRedSlidingLine(_ sender: UIButton) {
         if sender.tag == 1 {
             tableMode = .talktalk
             tblMain.reloadData()
-            UIView.animate(withDuration: 0.3, animations: { 
+            UIView.animate(withDuration: 0.3, animations: {
                 self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
             })
         } else if sender.tag == 3 {
@@ -51,10 +51,10 @@ extension PinDetailViewController {
         let tag = CGFloat(sender.tag)
         let centerAtOneSix = screenWidth / 6
         let targetCenter = CGFloat(tag * centerAtOneSix)
-        UIView.animate(withDuration: 0.25, animations:({
+        UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewRedSlidingLine.center.x = targetCenter
             self.anotherRedSlidingLine.center.x = targetCenter
-        }), completion: { (_) in
+        }), completion: { _ in
             
         })
     }
@@ -65,7 +65,7 @@ extension PinDetailViewController {
         boolKeyboardShowed = false
         self.emojiView.tag = 0
         if btnPinComment.tag == 1 || btnToFullPin.tag == 1 {
-            UIView.animate(withDuration: 0.3, animations:({
+            UIView.animate(withDuration: 0.3, animations: ({
                 self.emojiView.frame.origin.y = screenHeight
                 if self.uiviewAnonymous.isHidden {
                     if self.tableMode == .talktalk {
@@ -96,7 +96,7 @@ extension PinDetailViewController {
                         self.uiviewAnonymous.frame.origin.y = screenHeight
                     }
                 }
-            }), completion: { (_) in
+            }), completion: { _ in
                 if self.tableMode == .feelings {
                     let indexPath = IndexPath(row: 0, section: 0)
                     self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: true)
@@ -106,7 +106,7 @@ extension PinDetailViewController {
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        endEdit()
+        self.endEdit()
     }
     
     func actionShowHideAnony(_ sender: UIButton) {
@@ -128,11 +128,11 @@ extension PinDetailViewController {
             textViewInput.becomeFirstResponder()
             directReplyFromUser = false
             boolKeyboardShowed = true
-            actionHideEmojiView()
+            self.actionHideEmojiView()
         } else {
             textViewInput.resignFirstResponder()
             boolKeyboardShowed = false
-            actionShowEmojiView()
+            self.actionShowEmojiView()
         }
     }
     
@@ -140,7 +140,7 @@ extension PinDetailViewController {
         boolStickerShowed = true
         btnShowSticker.setImage(#imageLiteral(resourceName: "stickerChosen"), for: .normal)
         self.emojiView.tag = 1
-        UIView.animate(withDuration: 0.3) { 
+        UIView.animate(withDuration: 0.3) {
             self.emojiView.frame.origin.y = screenHeight - 271
             self.tblMain.frame.size.height = screenHeight - 65 - self.uiviewInputToolBarSub.frame.size.height - 271
             self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height - 271
@@ -158,7 +158,7 @@ extension PinDetailViewController {
     }
     
     func actionLikeThisPin(_ sender: UIButton) {
-        endEdit()
+        self.endEdit()
         
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
@@ -187,14 +187,14 @@ extension PinDetailViewController {
     }
     
     func actionHoldingLikeButton(_ sender: UIButton) {
-        endEdit()
+        self.endEdit()
         btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
         animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
     }
     
     // Back to pin list window when in detail window
     func actionGoToList(_ sender: UIButton!) {
-        endEdit()
+        self.endEdit()
         if backJustOnce == true {
             backJustOnce = false
             let openedPinListVC = OpenedPinListViewController()
@@ -211,15 +211,9 @@ extension PinDetailViewController {
     }
     
     func actionBackToMap(_ sender: UIButton) {
-        endEdit()
+        self.endEdit()
         uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
-//            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: ({
-//                self.uiviewMain.frame.origin.x = screenWidth
-//                self.uiviewInputToolBarSub.frame.origin.x = screenWidth
-//            }), completion: { (_) in
-//                self.dismiss(animated: false, completion: nil)
-//            })
             guard let likes = lblPinLikeCount.text else { return }
             guard let comments = lblCommentCount.text else { return }
             self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments)
@@ -229,12 +223,12 @@ extension PinDetailViewController {
         self.delegate?.backToMainMap()
         if PinDetailViewController.pinTypeEnum != .place {
             UIView.animate(withDuration: 0.2) {
-                self.uiviewFeelingBar.frame = CGRect(x: screenWidth/2, y: 451*screenHeightFactor, width: 0, height: 0)
+                self.uiviewFeelingBar.frame = CGRect(x: screenWidth / 2, y: 451 * screenHeightFactor, width: 0, height: 0)
                 for btn in self.btnFeelingArray {
                     btn.frame = CGRect.zero
                 }
-                self.btnPrevPin.frame = CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
-                self.btnNextPin.frame = CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0)
+                self.btnPrevPin.frame = CGRect(x: 41 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0)
+                self.btnNextPin.frame = CGRect(x: 373 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0)
             }
         }
         UIView.animate(withDuration: 0.5, animations: ({
@@ -243,7 +237,7 @@ extension PinDetailViewController {
             self.imgPinIcon.alpha = 0
             self.btnPrevPin.alpha = 0
             self.btnNextPin.alpha = 0
-        }), completion: { (_) in
+        }), completion: { _ in
             self.dismiss(animated: false, completion: nil)
         })
     }
@@ -253,7 +247,7 @@ extension PinDetailViewController {
         
         // Back to half pin view
         if sender.tag == 1 && sender != btnPinComment {
-            endEdit()
+            self.endEdit()
             boolDetailShrinked = true
             btnPinComment.tag = 0
             btnToFullPin.tag = 0
@@ -264,9 +258,9 @@ extension PinDetailViewController {
             tblMain.setContentOffset(CGPoint.zero, animated: true)
             
             UIView.animate(withDuration: 0.5, animations: ({
-                self.btnHalfPinToMap.alpha = 1.0       // nav bar left btn
-                self.uiviewNavBar.leftBtn.alpha = 0.0  // nav bar left btn
-                self.textviewPinDetail.frame.size.height = 100 //back to original text height
+                self.btnHalfPinToMap.alpha = 1.0 // nav bar left btn
+                self.uiviewNavBar.leftBtn.alpha = 0.0 // nav bar left btn
+                self.textviewPinDetail.frame.size.height = 100 // back to original text height
                 
                 self.uiviewInteractBtnSub.frame.origin.y = 185
                 self.uiviewGrayMidBlock.frame.origin.y = 227
@@ -276,9 +270,9 @@ extension PinDetailViewController {
                 self.uiviewToFullDragBtnSub.frame.origin.y = 292
                 self.uiviewMain.frame.size.height = 320
                 self.uiviewInputToolBarSub.frame.origin.y = screenHeight
-            }), completion: {(_) in
+            }), completion: { _ in
                 self.textviewPinDetail.isScrollEnabled = true
-//                self.tblMain.setContentOffset(CGPoint.zero, animated: true)
+                //                self.tblMain.setContentOffset(CGPoint.zero, animated: true)
                 self.tblMain.isScrollEnabled = false
                 self.tblMain.frame.size.height = 227
             })
@@ -293,8 +287,8 @@ extension PinDetailViewController {
             return
         }
         /*
-        -------------------- Below is to Full Pin View --------------------
-        */
+         -------------------- Below is to Full Pin View --------------------
+         */
         self.boolDetailShrinked = false
         if sender.tag == 1 && sender == btnPinComment {
             self.boolKeyboardShowed = true
@@ -329,8 +323,7 @@ extension PinDetailViewController {
                 self.uiviewTblHeader.frame.size.height += 65 + textViewHeight
             }), completion: nil)
             self.scrollViewMedia.scrollToLeft(animated: true)
-        }
-        else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
+        } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
             let diffHeight: CGFloat = textViewHeight - 100
             UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewTblHeader.frame.size.height += diffHeight
@@ -349,7 +342,7 @@ extension PinDetailViewController {
             self.uiviewMain.frame.size.height = screenHeight - toolbarHeight
             self.uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
             self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
-        }), completion: { (_) in
+        }), completion: { _ in
             if PinDetailViewController.pinTypeEnum != .chat_room {
                 self.tblMain.reloadData()
                 if sender == self.btnPinComment {
@@ -369,19 +362,19 @@ extension PinDetailViewController {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                     let yAxis = 11 * screenHeightFactor
                     let width = 32 * screenHeightFactor
-                    self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+                    self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
                 }, completion: nil)
             }
             return
         }
         
-        let index = Int((location.x - 20)/52)
+        let index = Int((location.x - 20) / 52)
         
         if index > 4 || index < 0 {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 let yAxis = 11 * screenHeightFactor
                 let width = 32 * screenHeightFactor
-                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
             }, completion: nil)
             return
         }
@@ -392,7 +385,7 @@ extension PinDetailViewController {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 let yAxis = 11 * screenHeightFactor
                 let width = 32 * screenHeightFactor
-                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20+52*self.previousIndex), y: yAxis, width: width, height: width)
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
             }, completion: nil)
         }
         
@@ -404,7 +397,7 @@ extension PinDetailViewController {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             let yAxis = -19 * screenHeightFactor
             let width = 46 * screenHeightFactor
-            button.frame = CGRect(x: CGFloat(13+52*index), y: yAxis, width: width, height: width)
+            button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, width: width, height: width)
         }, completion: nil)
         
         if gesture.state == .ended {
@@ -412,7 +405,7 @@ extension PinDetailViewController {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                     let yAxis = 3 * screenHeightFactor
                     let width = 46 * screenHeightFactor
-                    button.frame = CGRect(x: CGFloat(13+52*index), y: yAxis, width: width, height: width)
+                    button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, width: width, height: width)
                 }, completion: nil)
                 return
             }

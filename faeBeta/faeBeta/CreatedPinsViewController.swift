@@ -86,6 +86,9 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     
     // PinDetailCollectionsDelegate
     func backToCollections(likeCount: String, commentCount: String) {
+        if likeCount == "" || commentCount == "" {
+            return
+        }
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
             cellCurrSelect.lblCommentCount.text = commentCount
