@@ -18,7 +18,7 @@ extension FaeMapViewController {
             selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-//                    print("Successfully renew self position")
+                    // print("Successfully renew self position")
                 }
                 else {
                     print("[renewSelfLocation] fail")

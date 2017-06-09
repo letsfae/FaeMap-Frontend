@@ -83,6 +83,8 @@ extension FaeMapViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        
+        // Change ToNorth button direction according to the bearing of map
         let directionMap = position.bearing
         if directionMap != prevBearing {
             let direction: CGFloat = CGFloat(directionMap)
@@ -91,6 +93,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             prevBearing = position.bearing
         }
         
+        // Map Filter Distance Change
         let points = self.faeMapView.projection.point(for: currentLocation2D)
         self.uiviewDistanceRadius.center = points
         
@@ -98,13 +101,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
             self.subviewSelfMarker.center = points
         }
         
+        // Places Marker anti-collision
         if placeMarkers.count == 0 {
             return
         }
         
         let currentZoom = mapView.camera.zoom
-        let coord_1 = mapView.projection.coordinate(for: CGPoint.zero)
-        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: intPinDistance))
+        let coord_1 = mapView.projection.coordinate(for: CGPoint.zero)                      // (x = 0, y = 0)
+        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: intPinDistance))  // (x = 0, y = 65)
         let absDistance = GMSGeometryDistance(coord_1, coord_2)
         
         if currentZoom == previousZoom {
@@ -138,6 +142,9 @@ extension FaeMapViewController: GMSMapViewDelegate {
                     if placeMarkers[j].map == nil {
                         continue
                     }
+                    
+                    // markerFakeUser is a fake marker standing for current user avatar
+                    // should not be set to nil forever
                     if placeMarkers[j] == markerFakeUser {
                         continue
                     }
@@ -302,7 +309,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             return false
         }
 
-        if type == 0 { // fae map pin
+        if type == 0 { // fae social pin
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }

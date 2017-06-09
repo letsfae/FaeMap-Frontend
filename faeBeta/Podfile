@@ -17,6 +17,7 @@ target 'faeBeta' do
 	pod 'JSQMessagesViewController'
 	pod 'IDMPhotoBrowser'
 	pod 'RealmSwift'
+    pod 'TTRangeSlider'
 end
 
 post_install do |installer|
