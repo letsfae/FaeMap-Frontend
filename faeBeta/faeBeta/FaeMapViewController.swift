@@ -12,7 +12,7 @@ import CoreLocation
 import SwiftyJSON
 import RealmSwift
 
-class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
+class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
     let filterMenuHeight = 542 * screenHeightFactor // Map Filter height
     let locManager = CLLocationManager() // location manage
@@ -178,7 +178,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapChat()
         btnTransparentClose.alpha = 0
         reloadSelfPosAnimation()
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        print("[FaeMapViewController - viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -189,10 +189,21 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         checkDisplayNameExisitency()
         NotificationCenter.default.addObserver(self, selector: #selector(returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
         updateGenderAge()
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("[FaeMapViewController - viewWillDisappear]")
         navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
+    // UIGestureRecognizerDelegate
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
     
     func checkDisplayNameExisitency() {

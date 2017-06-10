@@ -11,7 +11,7 @@ import CoreLocation
 import SwiftyJSON
 import TTRangeSlider
 
-class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate {
+class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate {
     
     var window: UIWindow?
     var uiviewNavBar: UIView!
@@ -192,15 +192,23 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate {
 //        self.getMBSocialInfo(socialType: "comment")
 //        self.getMBSocialInfo(socialType: "media")
         print("viewDidAppear")
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         print("[viewWillDisappear]")
-//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
+    // UIGestureRecognizerDelegate
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
     
     fileprivate func loadNavBar() {

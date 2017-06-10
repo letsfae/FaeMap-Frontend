@@ -36,7 +36,7 @@ extension PinDetailViewController {
             scrollViewMedia.addSubview(imageView)
         }
         if self.enterMode == .collections {
-            self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 160 - 10, height: 160)
+            self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 170 - 10, height: 160)
         } else {
             self.scrollViewMedia.contentSize = CGSize(width: fileIdArray.count * 105 - 10, height: 95)
         }

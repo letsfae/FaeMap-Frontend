@@ -15,6 +15,8 @@ protocol SwitchMapModeDelegate: class {
 
 class EmptyRootViewController: UIViewController, SwitchMapModeDelegate {
 
+    var tabBarViewRoot: UITabBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
