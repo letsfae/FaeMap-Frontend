@@ -17,6 +17,7 @@ protocol LeftSlidingMenuDelegate: class {
     func jumpToFaeUserMainPage()
     func jumpToCollections()
     func reloadSelfPosition()
+    func switchMapMode()
 }
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -42,6 +43,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     var percent: Double = 0
     var displayName = ""
     // End of pan gesture var
+    
+    static var boolMapBoardIsOn = false
     
     enum TableSelctions {
         case none
@@ -140,25 +143,28 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         view.addSubview(tableLeftSlideWindow)
         tableLeftSlideWindow.center.x -= 290
         tableLeftSlideWindow.backgroundColor = UIColor.clear
+        tableLeftSlideWindow.delaysContentTouches = false
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Map Boards", "Go Invisible", "Contacts", "Collections", "Activities", "Mood Avatar", "Log Out"]
+        let array = ["Board Mode", "Go Invisible", "Contacts", "Collections", "Activities", "Mood Avatar", "Log Out"]
         cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.labelMiddle.text = array[indexPath.row]
+        cell.switchRight.tag = indexPath.row
         if indexPath.row < 2 {
             cell.switchRight.isHidden = false
-            cell.switchRight.tag = indexPath.row
-            if indexPath.row == 1 {
-                if userStatus == 5 {
-                    cell.switchRight.isOn = true
-                }
-            }
-            cell.switchRight.addTarget(self, action: #selector(switchToInvisibleOrOnline(_:)), for: .valueChanged)
+        } else {
+            cell.switchRight.isHidden = true
         }
-        cell.selectionStyle = .none
+        if indexPath.row == 0 {
+            cell.switchRight.addTarget(self, action: #selector(self.mapBoardSwitch(_:)), for: .valueChanged)
+            cell.switchRight.setOn(LeftSlidingMenuViewController.boolMapBoardIsOn, animated: false)
+        } else if indexPath.row == 1 {
+            cell.switchRight.setOn(userStatus == 5, animated: false)
+            cell.switchRight.addTarget(self, action: #selector(self.invisibleSwitch(_:)), for: .valueChanged)
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -167,11 +173,14 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableLeftSlideWindow.cellForRow(at: indexPath) as! LeftSlideWindowCell
         // Go Invisible
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
+            tableSelections = .mapBoard
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
-            switchToInvisibleOrOnline(cell.switchRight)
-        } else if indexPath.row == 0 {
+            actionCloseMenu(buttonBackground)
+        } else if indexPath.row == 1 {
+            tableSelections = .goInvisible
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
+            invisibleSwitch(cell.switchRight)
         } else if indexPath.row == 3 {
             tableSelections = .collections
             actionCloseMenu(buttonBackground)
@@ -266,40 +275,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func switchToInvisibleOrOnline(_ sender: UISwitch) {
-        let switchToInvisible = FaeUser()
-        if sender.isOn == true {
-            print("sender.on")
-            switchToInvisible.whereKey("status", value: "5")
-            switchToInvisible.setSelfStatus({ status, _ in
-                if status / 100 == 2 {
-                    userStatus = 5
-                    let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(userStatus, forKey: "userStatus")
-                    print("Successfully switch to invisible")
-                    self.tableSelections = .goInvisible
-                    self.actionCloseMenu(self.buttonBackground)
-                } else {
-                    print("Fail to switch to invisible")
-                }
-            })
-        } else {
-            print("sender.off")
-            switchToInvisible.whereKey("status", value: "1")
-            switchToInvisible.setSelfStatus({ status, _ in
-                if status / 100 == 2 {
-                    userStatus = 1
-                    self.delegate?.userInvisible(isOn: false)
-                    let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(userStatus, forKey: "userStatus")
-                    print("Successfully switch to online")
-                } else {
-                    print("Fail to switch to online")
-                }
-            })
-        }
-    }
-    
     func actionCloseMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.buttonBackground.alpha = 0
@@ -312,6 +287,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 switch self.tableSelections {
                 case .mapBoard:
                     self.tableSelections = .none
+                    self.delegate?.switchMapMode()
                     break
                 case .goInvisible:
                     if userStatus == 5 {
@@ -351,5 +327,42 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func actionJumpToMainPage(_ sender: UIButton) {
         tableSelections = .myFaeMainPage
         actionCloseMenu(buttonBackground)
+    }
+    
+    func mapBoardSwitch(_ sender: UISwitch) {
+        tableSelections = .mapBoard
+        actionCloseMenu(buttonBackground)
+    }
+    func invisibleSwitch(_ sender: UISwitch) {
+        let switchToInvisible = FaeUser()
+        if sender.isOn {
+            print("sender.on")
+            switchToInvisible.whereKey("status", value: "5")
+            switchToInvisible.setSelfStatus({ status, _ in
+                if status / 100 == 2 {
+                    userStatus = 5
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(userStatus, forKey: "userStatus")
+                    print("Successfully switch to invisible")
+                    self.actionCloseMenu(self.buttonBackground)
+                } else {
+                    print("Fail to switch to invisible")
+                }
+            })
+        } else {
+            print("sender.off")
+            switchToInvisible.whereKey("status", value: "1")
+            switchToInvisible.setSelfStatus({ status, _ in
+                if status / 100 == 2 {
+                    userStatus = 1
+                    self.delegate?.userInvisible(isOn: false)
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(userStatus, forKey: "userStatus")
+                    print("Successfully switch to online")
+                } else {
+                    print("Fail to switch to online")
+                }
+            })
+        }
     }
 }

@@ -19,6 +19,8 @@ import RealmSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    var navRealMap = UINavigationController()
+    var navMapBoard = UINavigationController()
     
     // Reachability variables
     var vcPresented = false
@@ -34,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
         
         self.reachability = Reachability.init()
         do {
@@ -45,31 +47,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(GoogleMapKey)
         GMSPlacesClient.provideAPIKey(GoogleMapKey)
         
-        let notificationType: UIUserNotificationType = [.alert , .badge , .sound]
+        let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
         
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
         
-        FirebaseApp.configure()        
+        FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
         
         // Config Realm Database
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
-            migrationBlock: { migration, oldSchemaVersion in
-//                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
-//                    if oldSchemaVersion < 3 {
-//                        newObject!["pinType"] = "\(oldObject?["pinType"])"
-//                    }
-//                }
-        })
-        
-//      This doesn't seem to work
-//        let realm = try! Realm()
-//        try! realm.write {
-//            realm.deleteAll()
-//        }
+            migrationBlock: { _, _ in
+                //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
+                //                    if oldSchemaVersion < 3 {
+                //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
+                //                    }
+                //                }
+            }
+        )
         
         // Delete all realm swift database data
         do {
@@ -78,28 +75,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
+        let vcEmptyRoot = EmptyRootViewController()
+        let vcRealMap = FaeMapViewController()
+        let vcMapBoard = MapBoardViewController()
+        navRealMap.viewControllers = [vcEmptyRoot]
+        navMapBoard.viewControllers = [vcMapBoard]
+        navMapBoard.navigationBar.isHidden = true
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let nav1 = UINavigationController()
-        let mainView = FaeMapViewController()
-        nav1.viewControllers = [mainView]
-        self.window!.rootViewController = nav1
+        self.window?.rootViewController = navRealMap
         self.window?.makeKeyAndVisible()
         
         return true
     }
     
-    //MARK:- Network Check
+    // MARK: - Network Check
     func reachabilityChanged(notification: Notification) {
         let reachability = notification.object as! Reachability
-        if reachability.isReachable && reachaVCPresented {
+        if reachability.isReachable && self.reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-            reachaVC.dismiss(animated: true, completion: nil)
-            reachaVCPresented = false
-        } else if !reachability.isReachable && !reachaVCPresented {
+            self.reachaVC.dismiss(animated: true, completion: nil)
+            self.reachaVCPresented = false
+        } else if !reachability.isReachable && !self.reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] Network not reachable")
-            reachaVCPresented = true
+            self.reachaVCPresented = true
             self.window?.makeKeyAndVisible()
-            self.window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
+            self.window?.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
         }
     }
     
@@ -143,8 +144,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
         if identifier == "answerAction" {
             
-        }else if identifier == "declineAction"{
-        
+        } else if identifier == "declineAction" {
+            
         }
     }
     
@@ -154,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
-        if error._code == 3010 {//work at simulate do nothing here
+        if error._code == 3010 { // work at simulate do nothing here
             print("simulator doesn't have token id")
         }
         //        self.openSettings()
@@ -187,11 +188,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("not log in, sync fail")
         } else {
             let push = FaePush()
-            push.getSync({ (status: Int!, message: Any?) in
-//                print("[runSync] status", status)
+            push.getSync({ (status: Int!, _: Any?) in
+                //                print("[runSync] status", status)
                 if status / 100 == 2 {
                     self.reachaVCPresented = false
-                    //success
+                    // success
                 } else if status == 401 {
                     self.reachaVCPresented = false
                     is_Login = 0
@@ -210,22 +211,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
         
-        Timer.scheduledTimer(timeInterval: 10, target:self, selector: #selector(AppDelegate.runSync), userInfo:nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(AppDelegate.runSync), userInfo: nil, repeats: true)
         
         self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()
         //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
         //        print(notificationType?.types)
         if isFirstLaunch == true {
-            //waiting
-        }
-        else {
-            /*while (true) {
+            // waiting
+        } else {
+            /* while (true) {
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
              print(notificationType?.types)
-             }*/
+             } */
             let seconds = 30.0
-            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
             
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
@@ -246,15 +246,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if let vc = self.window?.visibleViewController {
             if vc is FaeMapViewController {
-//                print("is FaeMap")
+                //                print("is FaeMap")
                 if let faeMapVC = vc as? FaeMapViewController {
                     faeMapVC.appBackFromBackground()
                     faeMapVC.animateMapFilterArrow()
                     faeMapVC.filterCircleAnimation()
                 }
-            }
-            else if vc is PinDetailViewController {
-//                print("is PinDetail")
+            } else if vc is PinDetailViewController {
+                //                print("is PinDetail")
             }
         }
     }
@@ -270,7 +269,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "fae.faeBeta" in the application's documents Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return urls[urls.count-1]
+        return urls[urls.count - 1]
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -314,10 +313,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Core Data Saving support
     
-    func saveContext () {
-        if managedObjectContext.hasChanges {
+    func saveContext() {
+        if self.managedObjectContext.hasChanges {
             do {
-                try managedObjectContext.save()
+                try self.managedObjectContext.save()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

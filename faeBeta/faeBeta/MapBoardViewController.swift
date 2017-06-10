@@ -11,7 +11,7 @@ import CoreLocation
 import SwiftyJSON
 import TTRangeSlider
 
-class MapBoardViewController: UIViewController {
+class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate {
     
     var window: UIWindow?
     var uiviewNavBar: UIView!
@@ -60,7 +60,7 @@ class MapBoardViewController: UIViewController {
     var mbPeople = [MBPeopleStruct]()
     
     // data for social table
-    let imgIconArr: Array = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
+    let imgIconArr: [UIImage] = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
     let lblContTxt: Array = ["70K Interactions Today", "180K Interactions Today", "3200 Interactions Today"]
     // data for people table
@@ -114,6 +114,9 @@ class MapBoardViewController: UIViewController {
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
     var currentLocation: CLLocation! // location manage
     var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
+    var btnLeftWindow: UIButton!
+    
+    weak var delegate: SwitchMapModeDelegate?
 
     enum MapBoardTableMode: Int {
         case social = 0
@@ -191,6 +194,15 @@ class MapBoardViewController: UIViewController {
         print("viewDidAppear")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        print("[viewWillDisappear]")
+//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     fileprivate func loadNavBar() {
         loadDropDownMenu()
         
@@ -212,11 +224,30 @@ class MapBoardViewController: UIViewController {
         uiviewNavLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
         uiviewNavLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
         uiviewNavBar.addSubview(uiviewNavLine)
+        
+        btnLeftWindow = UIButton(frame: CGRect(x: 0, y: 18,width: 40.5, height: 46))
+        btnLeftWindow.setImage(#imageLiteral(resourceName: "mb_leftWindow"), for: .normal)
+        btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
+        self.uiviewNavBar.addSubview(btnLeftWindow)
+    }
+    
+    func actionLeftWindowShow(_ sender: UIButton) {
+        let leftMenuVC = LeftSlidingMenuViewController()
+        if let displayName = nickname {
+            leftMenuVC.displayName = displayName
+        }
+        else {
+            leftMenuVC.displayName = "someone"
+        }
+        leftMenuVC.delegate = self
+        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        self.present(leftMenuVC, animated: false, completion: nil)
     }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20), NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor()]
+        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
+        
         let downAttachment = InlineTextAttachment()
         downAttachment.fontDescender = 1
         downAttachment.image = #imageLiteral(resourceName: "mb_btnDropDown")
@@ -596,6 +627,35 @@ class MapBoardViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    // LeftSlidingMenuDelegate
+    func userInvisible(isOn: Bool) {
+        
+    }
+    func jumpToMoodAvatar() {
+        let moodAvatarVC = MoodAvatarViewController()
+        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
+    }
+    func jumpToCollections() {
+        let vcCollections = CollectionsBoardViewController()
+        self.navigationController?.pushViewController(vcCollections, animated: true)
+    }
+    func logOutInLeftMenu() {
+        let welcomeVC = WelcomeViewController()
+        self.navigationController?.pushViewController(welcomeVC, animated: true)
+    }
+    func jumpToFaeUserMainPage() {
+        let vc = MyFaeMainPageViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func reloadSelfPosition() {
+        
+    }
+    func switchMapMode() {
+        self.navigationController?.popViewController(animated: true)
+        self.delegate?.pushRealMap()
+        LeftSlidingMenuViewController.boolMapBoardIsOn = false
     }
 }
 

@@ -146,6 +146,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var markerFakeUser = GMSMarker()
     var intPinDistance: Int = 65
     
+    weak var delegate: SwitchMapModeDelegate?
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,6 +178,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapChat()
         btnTransparentClose.alpha = 0
         reloadSelfPosAnimation()
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     override func viewDidAppear(_ animated: Bool) {

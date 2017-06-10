@@ -249,6 +249,7 @@
 		B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */; };
 		B8849EC21EEB147A00D4588D /* MBTalkCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */; };
 		B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC31EEB161900D4588D /* MBNetwork.swift */; };
+		B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */; };
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
@@ -587,6 +588,7 @@
 		B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkMytalksCell.swift; sourceTree = "<group>"; };
 		B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkCommentsCell.swift; sourceTree = "<group>"; };
 		B8849EC31EEB161900D4588D /* MBNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBNetwork.swift; sourceTree = "<group>"; };
+		B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRootViewController.swift; sourceTree = "<group>"; };
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
@@ -1122,6 +1124,7 @@
 				B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */,
 				B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */,
 				B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */,
+				B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */,
 			);
 			name = SmallViewControllers;
 			sourceTree = "<group>";
@@ -1952,6 +1955,7 @@
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
+				B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,
