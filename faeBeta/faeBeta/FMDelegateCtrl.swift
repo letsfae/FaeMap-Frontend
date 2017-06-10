@@ -164,7 +164,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         reloadSelfPosAnimation()
     }
     func switchMapMode() {
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         self.delegate?.pushMapBoard()
         LeftSlidingMenuViewController.boolMapBoardIsOn = true

@@ -653,7 +653,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate {
         
     }
     func switchMapMode() {
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
         self.delegate?.pushRealMap()
         LeftSlidingMenuViewController.boolMapBoardIsOn = false
     }

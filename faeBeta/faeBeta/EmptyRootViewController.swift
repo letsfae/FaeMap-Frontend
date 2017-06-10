@@ -35,12 +35,12 @@ class EmptyRootViewController: UIViewController, SwitchMapModeDelegate {
     func pushRealMap() {
         let vcRealMap = FaeMapViewController()
         vcRealMap.delegate = self
-        self.navigationController?.pushViewController(vcRealMap, animated: true)
+        self.navigationController?.pushViewController(vcRealMap, animated: false)
     }
     
     func pushMapBoard() {
         let vcMapBoard = MapBoardViewController()
         vcMapBoard.delegate = self
-        self.navigationController?.pushViewController(vcMapBoard, animated: true)
+        self.navigationController?.pushViewController(vcMapBoard, animated: false)
     }
 }
