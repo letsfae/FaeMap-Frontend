@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMaps
 
 class MBCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var tableComments: UITableView!
@@ -14,9 +15,42 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         loadNavBar()
         loadTable()
+        if mbComments.count <= 0 {
+            return
+        }
+        for i in 0..<self.mbComments.count {
+            let pos = self.mbComments[i].position
+            self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
+        }
+    }
+    
+    fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
+        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
+            (response, _) -> Void in
+            
+            if let fullAddress = response?.firstResult()?.lines {
+                var address: String = ""
+                for line in fullAddress {
+                    if line == "" {
+                        continue
+                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
+                        address += line + ""
+                    } else {
+                        address += line + ", "
+                    }
+                }
+                
+                if socialType == "comment" {
+                    self.mbComments[index].address = address
+                    let indexPath = IndexPath(row: index, section: 0)
+                    self.tableComments.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                } else if socialType == "media" {
+//                    self.mbStories[index].address = address
+                }
+            }
+        })
     }
     
     fileprivate func loadNavBar() {
@@ -77,6 +111,7 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         return self.mbComments.count
     }
     
+    // Yue 06/11/17
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mbCommentsCell", for: indexPath) as! MBCommentsCell
         
@@ -88,13 +123,11 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
             cell.imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
         } else {
             cell.lblUsrName.text = comment.displayName
-            General.shared.avatar(userid: comment.userId, completion: { (image) in
-                cell.imgAvatar.image = image
-            })
+            cell.setValueForCell(userId: comment.userId)
         }
         
-        cell.imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
-        cell.imgHotPin.isHidden = true
+        cell.setAddressForCell(position: comment.position, id: comment.pinId, type: comment.type)
+        
         if comment.status == "hot" {
             cell.imgHotPin.isHidden = false
         }
@@ -103,9 +136,7 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         cell.lblFavCount.text = String(comment.likeCount)
         cell.lblReplyCount.text = String(comment.commentCount)
         
-        cell.btnComLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
-        cell.btnFav.setImage(#imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
-        cell.btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
         return cell
     }
+    // Yue 06/11/17 End
 }

@@ -10,18 +10,18 @@ import UIKit
 
 class MBCommentsCell: UITableViewCell {
     
-    var imgAvatar: UIImageView!
-    var lblUsrName: UILabel!
-    var lblTime: UILabel!
-    var lblContent: UILabel!
     var btnComLoc: UIButton!
-    var lblComLoc: UILabel!
-    var lblFavCount: UILabel!
-    var lblReplyCount: UILabel!
     var btnFav: UIButton!
     var btnReply: UIButton!
-    var uiviewCellFooter: UIView!
+    var imgAvatar: FaeAvatarView!
     var imgHotPin: UIImageView!
+    var lblComLoc: MBAddressLabel!
+    var lblContent: UILabel!
+    var lblFavCount: UILabel!
+    var lblReplyCount: UILabel!
+    var lblTime: UILabel!
+    var lblUsrName: UILabel!
+    var uiviewCellFooter: UIView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,8 +38,21 @@ class MBCommentsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // Yue 06/11/17
+    func setValueForCell(userId: Int) {
+        imgAvatar.userID = userId
+        imgAvatar.loadAvatar(id: userId)
+    }
+    
+    func setAddressForCell(position: CLLocationCoordinate2D, id: Int, type: String) {
+        lblComLoc.pinId = id
+        lblComLoc.pinType = type
+        lblComLoc.loadAddress(position: position, id: id, type: type)
+    }
+    // Yue 06/11/17 End
+    
     fileprivate func loadCellContent() {
-        imgAvatar = UIImageView()
+        imgAvatar = FaeAvatarView(frame: CGRect.zero)
         addSubview(imgAvatar)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.clipsToBounds = true
@@ -67,10 +80,11 @@ class MBCommentsCell: UITableViewCell {
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
         
         btnComLoc = UIButton()
+        btnComLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
         addSubview(btnComLoc)
         addConstraintsWithFormat("H:|-19-[v0]-19-|", options: [], views: btnComLoc)
         
-        lblComLoc = UILabel()
+        lblComLoc = MBAddressLabel(frame: CGRect.zero)
         btnComLoc.addSubview(lblComLoc)
         lblComLoc.font = UIFont(name: "AvenirNext-Medium", size: 15)
         lblComLoc.textColor = UIColor.faeAppInputTextGrayColor()
@@ -84,10 +98,12 @@ class MBCommentsCell: UITableViewCell {
         addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
         
         btnFav = UIButton()
+        btnFav.setImage(#imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
         uiviewCellFooter.addSubview(btnFav)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
         btnReply = UIButton()
+        btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
         
@@ -113,6 +129,8 @@ class MBCommentsCell: UITableViewCell {
         addSubview(imgHotPin)
         imgHotPin.clipsToBounds = true
         imgHotPin.contentMode = .scaleAspectFill
+        imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
+        imgHotPin.isHidden = true
         addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imgHotPin)
         addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)
     }

@@ -13,31 +13,29 @@ import GooglePlaces
 
 extension MapBoardViewController {
     
-    //    fileprivate func getMBSocialInfo(radius: Int, completion: @escaping ([MBSocialStruct]) -> ()) {
     func getMBSocialInfo(socialType: String) {
         let mbSocialList = FaeMap()
         mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
         mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
         mbSocialList.whereKey("radius", value: "9999999")
         mbSocialList.whereKey("type", value: "\(socialType)")
-        // loadPinsByZoomLevel.whereKey("type", value: stringFilterValue) var stringFilterValue = "comment,chat_room,media"
         mbSocialList.whereKey("in_duration", value: "false")
         mbSocialList.whereKey("max_count", value: "100")
         mbSocialList.getMapInformation { (status: Int, message: Any?) in
-            //            print("status\(status)")
+            
             if status / 100 != 2 || message == nil {
                 print("[loadMBSocialInfo] status/100 != 2")
-                //                completion(self.mbSocial)
+                
                 return
             }
             let socialInfoJSON = JSON(message!)
             guard let socialInfoJsonArray = socialInfoJSON.array else {
                 print("[loadMBSocialInfo] fail to parse mapboard social info")
-                //                completion(self.mbSocial)
+                
                 return
             }
             if socialInfoJsonArray.count <= 0 {
-                //                completion(self.mbSocial)
+                
                 print("[loadMBSocialInfo] array is nil")
                 return
             }
@@ -46,8 +44,6 @@ extension MapBoardViewController {
             
             self.mbComments.sort { $0.pinId > $1.pinId }
             self.mbStories.sort { $0.pinId > $1.pinId }
-//            self.mbComments = self.mbComments.sorted(by: { $0.pinId > $1.pinId })
-//            self.mbStories = self.mbStories.sorted(by: { $0.pinId > $1.pinId })
             
             // if mbComments > 0  =>  恒成立？
             for i in 0..<self.mbComments.count {
@@ -194,8 +190,8 @@ extension MapBoardViewController {
             
             self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
             
-            self.mbPlaces.sort{ $0.dis < $1.dis }
-//            self.mbPlaces = self.mbPlaces.sorted(by: { $0.dis < $1.dis })
+            self.mbPlaces.sort { $0.dis < $1.dis }
+            //            self.mbPlaces = self.mbPlaces.sorted(by: { $0.dis < $1.dis })
         }
     }
     

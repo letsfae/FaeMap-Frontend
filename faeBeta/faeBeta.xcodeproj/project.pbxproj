@@ -250,6 +250,7 @@
 		B8849EC21EEB147A00D4588D /* MBTalkCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */; };
 		B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC31EEB161900D4588D /* MBNetwork.swift */; };
 		B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */; };
+		B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */; };
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
@@ -589,6 +590,7 @@
 		B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkCommentsCell.swift; sourceTree = "<group>"; };
 		B8849EC31EEB161900D4588D /* MBNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBNetwork.swift; sourceTree = "<group>"; };
 		B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRootViewController.swift; sourceTree = "<group>"; };
+		B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBAddressLabel.swift; sourceTree = "<group>"; };
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
@@ -1424,6 +1426,7 @@
 				B85A38651EDE39EC00241781 /* FaeImageView.swift */,
 				B86AE04F1ED4FC4400D1357D /* General.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+				B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
@@ -1986,6 +1989,7 @@
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
+				B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */,
 				B84C90C71DE7DBF6005B6F38 /* CMPLoadItems.swift in Sources */,
 				B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */,
 				B8849EA51EEB143800D4588D /* LoadChooseNearbyPeoplePage.swift in Sources */,
