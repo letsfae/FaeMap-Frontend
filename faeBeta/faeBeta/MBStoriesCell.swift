@@ -61,8 +61,6 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
         addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblTime)
         
-        
-        
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)

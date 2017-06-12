@@ -128,9 +128,7 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         
         cell.setAddressForCell(position: comment.position, id: comment.pinId, type: comment.type)
         
-        if comment.status == "hot" {
-            cell.imgHotPin.isHidden = false
-        }
+        cell.imgHotPin.isHidden = comment.status != "hot"
  
         cell.lblComLoc.text = comment.address
         cell.lblFavCount.text = String(comment.likeCount)

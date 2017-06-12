@@ -39,27 +39,28 @@ class MBAddressLabel: UILabel {
     func getSocialPinAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
         GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
             (response, _) -> Void in
-            
-            guard let fullAddress = response?.firstResult()?.lines else {
-                print("[]")
-                return
-            }
-            
-            var addressToCache = ""
-            for line in fullAddress {
-                if line == "" {
-                    continue
-                } else if fullAddress.index(of: line) == fullAddress.count - 1 {
-                    addressToCache += line + ""
-                } else {
-                    addressToCache += line + ", "
+            DispatchQueue.main.async(execute: {
+                guard let fullAddress = response?.firstResult()?.lines else {
+                    print("[getSocialPinAddress] fail")
+                    return
                 }
-            }
-            
-            if "\(self.pinId)" + self.pinType == "\(id)" + type {
-                self.text = addressToCache
-            }
-            mbAddressCache.setObject(addressToCache as AnyObject, forKey: "\(id)" + type as AnyObject)
+                
+                var addressToCache = ""
+                for line in fullAddress {
+                    if line == "" {
+                        continue
+                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
+                        addressToCache += line + ""
+                    } else {
+                        addressToCache += line + ", "
+                    }
+                }
+                
+                if "\(self.pinId)" + self.pinType == "\(id)" + type {
+                    self.text = addressToCache
+                }
+                mbAddressCache.setObject(addressToCache as AnyObject, forKey: "\(id)" + type as AnyObject)
+            })
         })
     }
 }
