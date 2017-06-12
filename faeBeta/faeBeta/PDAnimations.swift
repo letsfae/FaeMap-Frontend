@@ -50,6 +50,7 @@ extension PinDetailViewController {
     
     func animatePinCtrlBtnsAndFeeling() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            
             self.btnGrayBackToMap.alpha = 1
             self.btnNextPin.alpha = 1
             self.btnPrevPin.alpha = 1
@@ -58,7 +59,7 @@ extension PinDetailViewController {
             self.uiviewMain.frame.origin.y = 0
             
             self.uiviewInputToolBarSub.frame.origin.x = 0
-        }, completion: { (_) in
+        }, completion: { _ in
             if PinDetailViewController.pinTypeEnum != .place {
                 self.delegate?.changeIconImage()
             }

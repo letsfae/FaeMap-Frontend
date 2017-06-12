@@ -17,40 +17,6 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         super.viewDidLoad()
         loadNavBar()
         loadTable()
-        if mbComments.count <= 0 {
-            return
-        }
-        for i in 0..<self.mbComments.count {
-            let pos = self.mbComments[i].position
-            self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
-        }
-    }
-    
-    fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
-        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
-            (response, _) -> Void in
-            
-            if let fullAddress = response?.firstResult()?.lines {
-                var address: String = ""
-                for line in fullAddress {
-                    if line == "" {
-                        continue
-                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
-                        address += line + ""
-                    } else {
-                        address += line + ", "
-                    }
-                }
-                
-                if socialType == "comment" {
-                    self.mbComments[index].address = address
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.tableComments.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                } else if socialType == "media" {
-//                    self.mbStories[index].address = address
-                }
-            }
-        })
     }
     
     fileprivate func loadNavBar() {

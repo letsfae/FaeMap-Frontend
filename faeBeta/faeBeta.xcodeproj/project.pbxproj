@@ -221,7 +221,6 @@
 		B8612E3D1DF24E3D0092C606 /* PDNetworks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E3C1DF24E3D0092C606 /* PDNetworks.swift */; };
 		B8612E3F1DF24FB90092C606 /* PDTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E3E1DF24FB90092C606 /* PDTableCtrl.swift */; };
 		B8612E411DF2504E0092C606 /* PDInputToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E401DF2504E0092C606 /* PDInputToolbar.swift */; };
-		B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86849781DE0E3BB0016FC6E /* Register.storyboard */; };
 		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B86AE0501ED4FC4400D1357D /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86AE04F1ED4FC4400D1357D /* General.swift */; };
 		B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */; };
@@ -561,7 +560,6 @@
 		B8612E3C1DF24E3D0092C606 /* PDNetworks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDNetworks.swift; sourceTree = "<group>"; };
 		B8612E3E1DF24FB90092C606 /* PDTableCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDTableCtrl.swift; sourceTree = "<group>"; };
 		B8612E401DF2504E0092C606 /* PDInputToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDInputToolbar.swift; sourceTree = "<group>"; };
-		B86849791DE0E3BB0016FC6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Register.storyboard; sourceTree = "<group>"; };
 		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B86AE04F1ED4FC4400D1357D /* General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFeelingCell.swift; sourceTree = "<group>"; };
@@ -1024,7 +1022,6 @@
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B09E49D91D96F77F0075EE45 /* KTCenterFlowLayout */,
-				B86849781DE0E3BB0016FC6E /* Register.storyboard */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
@@ -1682,7 +1679,6 @@
 				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
 				B0714D641D5E435200356705 /* MoreVisibleTableViewCell.xib in Resources */,
 				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
-				B868497A1DE0E3BB0016FC6E /* Register.storyboard in Resources */,
 				B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
@@ -2049,14 +2045,6 @@
 				B0A2ACA51CE3A3C7002E0C9D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		B86849781DE0E3BB0016FC6E /* Register.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B86849791DE0E3BB0016FC6E /* Base */,
-			);
-			name = Register.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
