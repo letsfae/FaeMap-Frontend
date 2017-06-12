@@ -101,6 +101,7 @@ extension MapBoardViewController {
         }
     }
     
+
     fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
         GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
             (response, _) -> Void in
@@ -126,7 +127,7 @@ extension MapBoardViewController {
                 }
             }
         })
-        
+    
         /*
         CLGeocoder().reverseGeocodeLocation(position, completionHandler: {
             (placemarks, error) -> Void in
@@ -165,6 +166,7 @@ extension MapBoardViewController {
         })
         */
     }
+ 
     
     func getMBPlaceInfo() {
         let mbPlacesList = FaeMap()

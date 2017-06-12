@@ -31,6 +31,7 @@ struct MBSocialStruct {
     let anonymous: Bool
     var status: String
     var fileIdArray = [Int]()
+    var isLiked: Bool
     
     init(json: JSON) {
         self.pinId = json["pin_id"].intValue
@@ -64,6 +65,7 @@ struct MBSocialStruct {
         self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
                                                longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
         self.address = ""
+        self.isLiked = json["user_pin_operations"]["is_liked"].boolValue
         self.status = "normal"
         if commentCount >= 10 || likeCount >= 15 {
             self.status = "hot"

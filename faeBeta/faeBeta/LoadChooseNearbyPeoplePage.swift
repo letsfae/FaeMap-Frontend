@@ -27,6 +27,13 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             self.uiviewPeopleLocDetail.frame.origin.y = -301
         }, completion: nil)
         btnNavBarMenu.isUserInteractionEnabled = true
+        
+        if boolNoMatch {   // self.mbPeople.count == 0
+            self.tableMapBoard.isHidden = true
+            self.uiviewBubbleHint.isHidden = false
+            strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
+            lblBubbleHint.text = strBubbleHint
+        }
     }
     
     func loadChooseNearbyPeopleView() {

@@ -20,8 +20,7 @@ class MBSocialCell: UITableViewCell {
         let separatorView = UIView(frame: CGRect(x: 80, y: 77, width: screenWidth - 80, height: 1))
         separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
         addSubview(separatorView)
-//        selectionStyle = .none
-//        contentView.backgroundColor = .white
+        selectionStyle = .none
         loadCellContent()
     }
     
