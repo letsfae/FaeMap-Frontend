@@ -252,6 +252,7 @@ class PinDetailViewController: UIViewController {
             return
         }
         
+        boolDetailShrinked = false
         uiviewFeelingBar.isHidden = true
         btnNextPin.isHidden = true
         btnPrevPin.isHidden = true
