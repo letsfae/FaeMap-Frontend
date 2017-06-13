@@ -130,7 +130,6 @@ class MBCommentsCell: UITableViewCell {
         imgHotPin.clipsToBounds = true
         imgHotPin.contentMode = .scaleAspectFill
         imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
-        imgHotPin.isHidden = true
         addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imgHotPin)
         addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)
     }

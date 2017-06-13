@@ -15,15 +15,17 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     var window: UIWindow?
     var uiviewNavBar: UIView!
-    var blurViewDropDownMenu: UIVisualEffectView!
+    var uiviewDropDownMenu: UIView!
     var uiviewAllCom: UIView!
     var tableMapBoard: UITableView!
     var curtTitle: String = "Social"
-    var titleArray: [String] = ["People", "Places", "Talk Talk"]
+    var titleArray: [String] = ["Places", "People", "Social", "Talk Talk"]
     var btnNavBarMenu: UIButton!
-    var btnTop: UIButton!
-    var btnMiddle: UIButton!
-    var btnBottom: UIButton!
+    var btnPlaces: UIButton!
+    var btnPeople: UIButton!
+    var btnSocial: UIButton!
+    var btnTalk: UIButton!
+    var imgTick: UIImageView!
     var navBarMenuBtnClicked = false
     var imgIconBeforeAllCom: UIImageView!
     var lblAllCom: UILabel!
@@ -53,6 +55,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var sliderAgeFilter: TTRangeSlider!
     var seletedGender: String = "Both"
     var uiviewNavLine: UIView!
+    var boolUsrVisibleIsOn: Bool!
+    var uiviewBubbleHint: UIView!
+    var imgBubbleHint: UIImageView!
+    var lblBubbleHint: UILabel!
+    var strBubbleHint: String = ""
+    var boolNoMatch: Bool = false
+    var boolIsLoaded: Bool = false
     
     var mbComments = [MBSocialStruct]()
     var mbStories = [MBSocialStruct]()
@@ -161,9 +170,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         // loading order
         loadTable()
+        loadCannotFindPeople()
         loadMidViewContent()
         loadNavBar()
         loadTalkTabView()
+        uiviewBubbleHint.isHidden = true
         uiviewTalkTab.isHidden = true
 //        self.renewSelfLocation()
         // 这两个方法中已经进行了renewSelfLocation的操作
@@ -173,9 +184,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
 
         self.tableMapBoard.addGestureRecognizer(setGestureRecognizer())
         self.uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
+        self.uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
         
         // 使用navigationController之后，存在space between navigation bar and first cell，加上这句话后可解决这个问题
         self.automaticallyAdjustsScrollViewInsets = false
+        self.getUsrInvisibleStatus()
     }
     
     func setGestureRecognizer() -> UITapGestureRecognizer {
@@ -204,6 +217,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         print("[viewWillDisappear]")
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        self.boolIsLoaded = false
     }
     
     // UIGestureRecognizerDelegate
@@ -266,46 +280,62 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func loadDropDownMenu() {
-        blurViewDropDownMenu = UIVisualEffectView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 157))
-        blurViewDropDownMenu.effect = UIBlurEffect(style: .light)
-        self.view.addSubview(blurViewDropDownMenu)
-        blurViewDropDownMenu.frame.origin.y = -92   // 65 - 157
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 201))
+        uiviewDropDownMenu.backgroundColor = .white
+        self.view.addSubview(uiviewDropDownMenu)
+        uiviewDropDownMenu.frame.origin.y = -136   // 65 - 201
         
-        let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 156, width: screenWidth, height: 1))
-        blurViewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
+        let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
         uiviewDropMenuBottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
         
-        btnTop = UIButton(frame: CGRect(x: (screenWidth-200)/2, y:3, width: 200, height: 45))
-        blurViewDropDownMenu.addSubview(btnTop)
-        btnTop.tag = 0
-        btnTop.setTitle(titleArray[0], for: .normal)
-        btnTop.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
-        btnTop.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnPlaces = UIButton(frame: CGRect(x: 56, y:9, width: 240 * screenWidthFactor, height: 38))
+        uiviewDropDownMenu.addSubview(btnPlaces)
+        btnPlaces.tag = 0
+        //        btnPlaces.setTitle(titleArray[0], for: .normal)
+        //        btnPlaces.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
+        //        btnPlaces.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        btnPlaces.contentHorizontalAlignment = .left
+        btnPlaces.setImage(#imageLiteral(resourceName: "mb_places"), for: .normal)
+        btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnMiddle = UIButton(frame: CGRect(x: (screenWidth-200)/2, y: 55, width: 200, height: 45))
-        blurViewDropDownMenu.addSubview(btnMiddle)
-        btnMiddle.tag = 1
-        btnMiddle.setTitle(titleArray[1], for: .normal)
-        btnMiddle.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
-        btnMiddle.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnMiddle.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnPeople = UIButton(frame: CGRect(x: 56, y: 59, width: 240 * screenWidthFactor, height: 38))
+        uiviewDropDownMenu.addSubview(btnPeople)
+        btnPeople.tag = 1
+        btnPeople.contentHorizontalAlignment = .left
+        btnPeople.setImage(#imageLiteral(resourceName: "mb_people"), for: .normal)
+        btnPeople.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnBottom = UIButton(frame: CGRect(x: (screenWidth-200)/2, y: 106, width: 200, height: 45))
-        blurViewDropDownMenu.addSubview(btnBottom)
-        btnBottom.tag = 2
-        btnBottom.setTitle(titleArray[2], for: .normal)
-        btnBottom.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
-        btnBottom.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnSocial = UIButton(frame: CGRect(x: 56, y: 109, width: 240 * screenWidthFactor, height: 38))
+        uiviewDropDownMenu.addSubview(btnSocial)
+        btnSocial.tag = 2
+        btnSocial.contentHorizontalAlignment = .left
+        btnSocial.setImage(#imageLiteral(resourceName: "mb_social"), for: .normal)
+        btnSocial.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: (screenWidth-280)/2, y: 51, width: 280, height: 1))
-        blurViewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
+        btnTalk = UIButton(frame: CGRect(x: 56, y: 157, width: 240 * screenWidthFactor, height: 38))
+        uiviewDropDownMenu.addSubview(btnTalk)
+        btnTalk.tag = 3
+        btnTalk.contentHorizontalAlignment = .left
+        btnTalk.setImage(#imageLiteral(resourceName: "mb_talk"), for: .normal)
+        btnTalk.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        
+        // imgTick.frame.origin.y = 20, 70, 120, 168
+        imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 120, width: 16, height: 16))
+        imgTick.image = #imageLiteral(resourceName: "mb_tick")
+        uiviewDropDownMenu.addSubview(imgTick)
+        
+        let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 54, width: screenWidth - 82, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
         uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
         
-        let uiviewDropMenuSecLine = UIView(frame: CGRect(x: (screenWidth-280)/2, y: 103, width: 280, height: 1))
-        blurViewDropDownMenu.addSubview(uiviewDropMenuSecLine)
+        let uiviewDropMenuSecLine = UIView(frame: CGRect(x: 41, y: 103, width: screenWidth - 82, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuSecLine)
         uiviewDropMenuSecLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
+        
+        let uiviewDropMenuThirdLine = UIView(frame: CGRect(x: 41, y: 152, width: screenWidth - 82, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuThirdLine)
+        uiviewDropMenuThirdLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
     }
     
     fileprivate func loadMidViewContent() {
@@ -430,11 +460,15 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     fileprivate func loadTalkTabView() {
         uiviewTalkTab = UIView()
         uiviewTalkTab.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1)
-        uiviewTalkTab.layer.borderColor = UIColor.faeAppNavBarBorderColor().cgColor
-        uiviewTalkTab.layer.borderWidth = 1
         self.view.addSubview(uiviewTalkTab)
         self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewTalkTab)
-        self.view.addConstraintsWithFormat("V:[v0(50)]-0-|", options: [], views: uiviewTalkTab)
+        self.view.addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: uiviewTalkTab)
+        
+        let tabLine = UIView()
+        tabLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        uiviewTalkTab.addSubview(tabLine)
+        uiviewTalkTab.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tabLine)
+        uiviewTalkTab.addConstraintsWithFormat("V:|-0-[v0(1)]", options: [], views: tabLine)
         
         // add three buttons
         btnTalkFeed = UIButton()
@@ -468,7 +502,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2,animations: {
-                self.blurViewDropDownMenu.frame.origin.y = 65
+                self.uiviewDropDownMenu.frame.origin.y = 65
             })
             navBarMenuBtnClicked = true
             if talkTableMode == .post {
@@ -486,35 +520,40 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     // function for buttons in drop down menu
     func dropDownMenuAct(_ sender: UIButton) {
-        if sender.tag == 0 {
-            let temp = titleArray[0]
-            titleArray[0] = curtTitle
-            curtTitle = temp
-        } else if sender.tag == 1 {
-            let temp = titleArray[1]
-            titleArray[1] = curtTitle
-            curtTitle = temp
-        } else if sender.tag == 2 {
-            let temp = titleArray[2]
-            titleArray[2] = curtTitle
-            curtTitle = temp
+        switch sender.tag {
+        case 0:
+            curtTitle = titleArray[0]
+            imgTick.frame.origin.y = 20
+            break
+        case 1:
+            curtTitle = titleArray[1]
+            imgTick.frame.origin.y = 70
+            break
+        case 2:
+            curtTitle = titleArray[2]
+            imgTick.frame.origin.y = 120
+            break
+        case 3:
+            curtTitle = titleArray[3]
+            imgTick.frame.origin.y = 168
+            break
+        default:
+            return
         }
-        titleArray.sort{$0.characters.count < $1.characters.count}
-        btnTop.setTitle(titleArray[0], for: .normal)
-        btnMiddle.setTitle(titleArray[1], for: .normal)
-        btnBottom.setTitle(titleArray[2], for: .normal)
+        
         btnNavBarSetTitle()
+        getUsrInvisibleStatus()
         getCurtTableMode()
         hideDropDownMenu()
         setViewContent()
-//        print(tableMode)
+        //        print(tableMode)
         
         reloadTableMapBoard()
     }
     
     fileprivate func hideDropDownMenu() {
         UIView.animate(withDuration: 0.2,animations: {
-            self.blurViewDropDownMenu.frame.origin.y = -92
+            self.uiviewDropDownMenu.frame.origin.y = -136
         })
         navBarMenuBtnClicked = false
         if tableMode == .talk && talkTableMode == .post {
@@ -533,6 +572,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         } else if curtTitle == "Talk Talk" {
             tableMode = .talk
         }
+        self.getPeoplePage()
     }
     
     func getTalkTableMode(_ sender: UIButton) {
@@ -637,9 +677,51 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         }
     }
     
+    fileprivate func loadCannotFindPeople() {
+        uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
+        uiviewBubbleHint.backgroundColor = .white
+        self.view.addSubview(uiviewBubbleHint)
+        
+        imgBubbleHint = UIImageView(frame: CGRect(x: 82 * screenWidthFactor, y: 142 * screenHeightFactor, width: 252, height: 209))
+        imgBubbleHint.image = #imageLiteral(resourceName: "mb_bubbleHint")
+        uiviewBubbleHint.addSubview(imgBubbleHint)
+        
+        lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
+        lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblBubbleHint.textColor = UIColor.faeAppInputTextGrayColor()
+        lblBubbleHint.lineBreakMode = .byWordWrapping
+        lblBubbleHint.numberOfLines = 0
+        imgBubbleHint.addSubview(lblBubbleHint)
+        lblBubbleHint.text = strBubbleHint
+    }
+    
+    fileprivate func getUsrInvisibleStatus() {
+        if userStatus == 5 {  // invisible
+            boolUsrVisibleIsOn = false
+        }
+        if userStatus == 1 {  // visible
+            boolUsrVisibleIsOn = true
+        }
+    }
+
+    fileprivate func getPeoplePage() {
+        if curtTitle == "People" && !boolUsrVisibleIsOn {
+            self.tableMapBoard.isHidden = true
+            self.uiviewBubbleHint.isHidden = false
+            strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
+            lblBubbleHint.text = strBubbleHint
+            btnPeopleLocDetail.isUserInteractionEnabled = false
+        } else {
+            self.tableMapBoard.isHidden = false
+            self.uiviewBubbleHint.isHidden = true
+            btnPeopleLocDetail.isUserInteractionEnabled = true
+        }
+    }
+    
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
-        
+        self.getUsrInvisibleStatus()
+        self.getPeoplePage()
     }
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()

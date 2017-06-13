@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 
-class MBCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MBCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate {
     var tableComments: UITableView!
     var mbComments = [MBSocialStruct]()
     
@@ -93,14 +93,50 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         }
         
         cell.setAddressForCell(position: comment.position, id: comment.pinId, type: comment.type)
-        
-        cell.imgHotPin.isHidden = comment.status != "hot"
- 
         cell.lblComLoc.text = comment.address
+        cell.imgHotPin.isHidden = comment.status != "hot"
         cell.lblFavCount.text = String(comment.likeCount)
+        cell.btnFav.setImage(comment.isLiked ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
         cell.lblReplyCount.text = String(comment.commentCount)
         
         return cell
     }
     // Yue 06/11/17 End
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        
+        let vcPinDetail = PinDetailViewController()
+        let comment = self.mbComments[indexPath.row]
+        vcPinDetail.modalPresentationStyle = .overCurrentContext
+        vcPinDetail.colDelegate = self
+        vcPinDetail.enterMode = .collections
+        vcPinDetail.strPinId = String(comment.pinId)
+        vcPinDetail.strTextViewText = ""
+        PinDetailViewController.selectedMarkerPosition = comment.position
+        PinDetailViewController.pinTypeEnum = .comment
+        PinDetailViewController.pinUserId = comment.userId
+        
+        self.navigationController?.pushViewController(vcPinDetail, animated: true)
+    }
+    
+    // PinDetailCollectionsDelegate
+    func backToCollections(likeCount: String, commentCount: String) {
+//        if likeCount == "" || commentCount == "" {
+//            return
+//        }
+//        if self.indexCurrSelectRowAt != nil {
+//            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
+//            cellCurrSelect.lblCommentCount.text = commentCount
+//            cellCurrSelect.lblLikeCount.text = likeCount
+//            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+//                cellCurrSelect.imgHot.isHidden = false
+//            }
+//            else {
+//                cellCurrSelect.imgHot.isHidden = true
+//            }
+//            arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
+//            arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
+//        }
+    }
 }

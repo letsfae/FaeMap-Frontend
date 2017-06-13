@@ -10,12 +10,12 @@ import UIKit
 
 class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
 
-    var imgAvatar: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var lblUsrName: UILabel!
     var lblTime: UILabel!
     var lblContent: UILabel!
     var btnStoryLoc: UIButton!
-    var lblStoryLoc: UILabel!
+    var lblStoryLoc: MBAddressLabel!
     var lblFavCount: UILabel!
     var lblReplyCount: UILabel!
     var btnFav: UIButton!
@@ -41,8 +41,19 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setValueForCell(userId: Int) {
+        imgAvatar.userID = userId
+        imgAvatar.loadAvatar(id: userId)
+    }
+    
+    func setAddressForCell(position: CLLocationCoordinate2D, id: Int, type: String) {
+        lblStoryLoc.pinId = id
+        lblStoryLoc.pinType = type
+        lblStoryLoc.loadAddress(position: position, id: id, type: type)
+    }
+    
     fileprivate func loadCellContent() {
-        imgAvatar = UIImageView()
+        imgAvatar = FaeAvatarView(frame: CGRect.zero)
         addSubview(imgAvatar)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.clipsToBounds = true
@@ -73,8 +84,9 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         addSubview(btnStoryLoc)
         addConstraintsWithFormat("H:|-19-[v0]-19-|", options: [], views: btnStoryLoc)
         
-        lblStoryLoc = UILabel()
+        lblStoryLoc = MBAddressLabel(frame: CGRect.zero)
         btnStoryLoc.addSubview(lblStoryLoc)
+        btnStoryLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
         lblStoryLoc.font = UIFont(name: "AvenirNext-Medium", size: 15)
         lblStoryLoc.textColor = UIColor.faeAppInputTextGrayColor()
         lblStoryLoc.lineBreakMode = .byTruncatingTail
@@ -87,10 +99,12 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
         
         btnFav = UIButton()
+        btnFav.setImage(#imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
         uiviewCellFooter.addSubview(btnFav)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
         btnReply = UIButton()
+        btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
         
@@ -112,6 +126,7 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         addConstraintsWithFormat("V:|-19-[v0(25)]-1-[v1(18)]", options: [], views: lblUsrName, lblTime)
         
         imgHotPin = UIImageView()
+        imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
         addSubview(imgHotPin)
         imgHotPin.clipsToBounds = true
         imgHotPin.contentMode = .scaleAspectFill

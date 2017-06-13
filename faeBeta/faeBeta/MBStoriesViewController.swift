@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PinDetailCollectionsDelegate {
     var uiviewNaviBar: UIView!
     var tableStories: UITableView!
     
@@ -89,24 +89,17 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
         } else {
             cell.lblUsrName.text = story.displayName
-            General.shared.avatar(userid: story.userId, completion: { image in
-                cell.imgAvatar.image = image
-            })
+            cell.setValueForCell(userId: story.userId)
         }
         
-        cell.imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
-        cell.imgHotPin.isHidden = true
-        if story.status == "hot" {
-            cell.imgHotPin.isHidden = false
-        }
-        
+        cell.setAddressForCell(position: story.position, id: story.pinId, type: story.type)
         cell.lblStoryLoc.text = story.address
+        cell.imgHotPin.isHidden = story.status != "hot"
+
         cell.lblFavCount.text = String(story.likeCount)
         cell.lblReplyCount.text = String(story.commentCount)
         
-        cell.btnStoryLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
-        cell.btnFav.setImage(#imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
-        cell.btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
+        cell.btnFav.setImage(story.isLiked ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
         
         cell.imgMediaArr.removeAll()
         for subview in cell.scrollViewMedia.subviews {
@@ -128,5 +121,26 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.scrollViewMedia.contentSize = CGSize(width: story.fileIdArray.count * 105 - 10, height: 90)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        
+        let vcPinDetail = PinDetailViewController()
+        let story = self.mbStories[indexPath.row]
+        vcPinDetail.modalPresentationStyle = .overCurrentContext
+        vcPinDetail.colDelegate = self
+        vcPinDetail.enterMode = .collections
+        vcPinDetail.strPinId = String(story.pinId)
+        vcPinDetail.strTextViewText = ""
+        PinDetailViewController.selectedMarkerPosition = story.position
+        PinDetailViewController.pinTypeEnum = .media
+        PinDetailViewController.pinUserId = story.userId
+        
+        self.navigationController?.pushViewController(vcPinDetail, animated: true)
+    }
+    
+    // PinDetailCollectionsDelegate
+    func backToCollections(likeCount: String, commentCount: String) {
     }
 }

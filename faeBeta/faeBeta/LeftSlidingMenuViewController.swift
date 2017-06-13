@@ -341,6 +341,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
                     userStatus = 5
+                    self.tableSelections = .goInvisible
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to invisible")
