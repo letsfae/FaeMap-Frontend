@@ -85,22 +85,25 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     }
     
     // PinDetailCollectionsDelegate
-    func backToCollections(likeCount: String, commentCount: String) {
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
         if likeCount == "" || commentCount == "" {
             return
         }
+        
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
             cellCurrSelect.lblCommentCount.text = commentCount
             cellCurrSelect.lblLikeCount.text = likeCount
+            cellCurrSelect.imgLike.image = pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+        
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
                 cellCurrSelect.imgHot.isHidden = false
-            }
-            else {
+            } else {
                 cellCurrSelect.imgHot.isHidden = true
             }
             arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
             arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
+            arrMapPin[self.indexCurrSelectRowAt.section].isLiked = pinLikeStatus
         }
     }
     

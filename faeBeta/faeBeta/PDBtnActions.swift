@@ -216,7 +216,11 @@ extension PinDetailViewController {
         if enterMode == .collections {
             guard let likes = lblPinLikeCount.text else { return }
             guard let comments = lblCommentCount.text else { return }
-            self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments)
+            // Vicky 06/13/17
+            self.boolPinLiked = btnPinLike.currentImage == #imageLiteral(resourceName: "pinDetailLikeHeartFull")
+            let isLiked = self.boolPinLiked
+            self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments, pinLikeStatus: isLiked)
+            // Vicky 06/13/17 End
             self.navigationController?.popViewController(animated: true)
             return
         }

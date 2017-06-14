@@ -14,6 +14,7 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var mbStories = [MBSocialStruct]()
     var scrollViewMedia: UIScrollView!
+    var cellCurtIndex: IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,11 +137,29 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         PinDetailViewController.selectedMarkerPosition = story.position
         PinDetailViewController.pinTypeEnum = .media
         PinDetailViewController.pinUserId = story.userId
+        self.cellCurtIndex = indexPath
         
         self.navigationController?.pushViewController(vcPinDetail, animated: true)
     }
     
     // PinDetailCollectionsDelegate
-    func backToCollections(likeCount: String, commentCount: String) {
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
+        if likeCount == "" || commentCount == "" || self.cellCurtIndex == nil {
+            return
+        }
+        
+        let cellCurtSelect = tableStories.cellForRow(at: self.cellCurtIndex) as! MBStoriesCell
+        cellCurtSelect.lblReplyCount.text = commentCount
+        cellCurtSelect.lblFavCount.text = likeCount
+        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        
+        if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+            cellCurtSelect.imgHotPin.isHidden = false
+        } else {
+            cellCurtSelect.imgHotPin.isHidden = true
+        }
+        self.mbStories[cellCurtIndex.row].likeCount = Int(likeCount)!
+        self.mbStories[cellCurtIndex.row].commentCount = Int(commentCount)!
+        self.mbStories[cellCurtIndex.row].isLiked = pinLikeStatus
     }
 }
