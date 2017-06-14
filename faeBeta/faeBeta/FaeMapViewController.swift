@@ -75,7 +75,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var editNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
     var faeMapView: GMSMapView!
-    var faeUserPins = [FaeUserPin]()
+    var faeUserPins = [FaeUserPin?]()
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
@@ -211,7 +211,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             if status / 100 == 2 {
                 let rsltJSON = JSON(result!)
                 if let withNickName = rsltJSON["nick_name"].string {
-                    print("[checkDisplayNameExisitency] diplay name: \(withNickName)")
+                    print("[checkDisplayNameExisitency] display name: \(withNickName)")
                 } else {
                     print("[checkDisplayNameExisitency] display name did not setup")
                     self.loadFirstLoginVC()

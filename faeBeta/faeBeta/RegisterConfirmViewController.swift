@@ -131,8 +131,8 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 if status / 100 == 2 {
                     print("login success")
                     let messageJSON = JSON(message!)
-                    if let _ = messageJSON["last_login_at"].string {}
-                    else {
+                    if let _ = messageJSON["last_login_at"].string {
+                    } else {
                         firebaseWelcome()
                         print("[loginUser] is first time login!")
                     }
@@ -154,7 +154,14 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController"), animated: true)
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-                self.navigationController?.popToRootViewController(animated: true)
+                self.navigationController?.popToRootViewController(animated: false)
+                if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
+                    if vcRoot is EmptyRootViewController {
+                        if let vc = vcRoot as? EmptyRootViewController {
+                            vc.pushRealMap()
+                        }
+                    }
+                }
             }
         }
     }

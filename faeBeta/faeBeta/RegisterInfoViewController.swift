@@ -102,29 +102,30 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func createGenderView() {
-        let uiviewGender = UIView(frame: CGRect(x: 0, y: 240 * screenHeightFactor, width: view.frame.size.width, height: 130 * screenHeightFactor))
+        let genderView = UIView(frame: CGRect(x: 0, y: 240 * screenHeightFactor, width: view.frame.size.width, height: 150 * screenHeightFactor))
         
-        let lblTitle = UILabel(frame: CGRect(x: 0, y: 10, width: uiviewGender.frame.size.width, height: 26))
-        lblTitle.textColor = UIColor.init(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textAlignment = .center
-        lblTitle.text = "Gender"
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 10, width: genderView.frame.size.width, height: 26))
+        titleLabel.textColor = UIColor.init(red: 89 / 255.0, green: 89 / 255.0, blue: 89 / 255.0, alpha: 1.0)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        titleLabel.textAlignment = .center
+        titleLabel.text = "Gender"
         
-        btnMale = UIButton(frame: CGRect(x: uiviewGender.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
-        btnMale.setImage(UIImage(named: "male_unselected"), for: UIControlState())
+        btnMale = UIButton(frame: CGRect(x: genderView.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 80, height: 80))
+        btnMale.setImage(UIImage(named: "male_unselected"), for: .normal)
         btnMale.setImage(UIImage(named: "male_selected"), for: .selected)
         btnMale.addTarget(self, action: #selector(self.maleButtonTapped), for: .touchUpInside)
         
-        btnFemale = UIButton(frame: CGRect(x: 2 * uiviewGender.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 60, height: 60))
-        btnFemale.setImage(UIImage(named: "female_unselected"), for: UIControlState())
+        btnFemale = UIButton(frame: CGRect(x: 2 * genderView.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 80, height: 80))
+        btnFemale.setImage(UIImage(named: "female_unselected"), for: .normal)
         btnFemale.setImage(UIImage(named: "female_selected"), for: .selected)
         btnFemale.addTarget(self, action: #selector(self.femaleButtonTapped), for: .touchUpInside)
         
-        uiviewGender.addSubview(lblTitle)
-        uiviewGender.addSubview(btnMale)
-        uiviewGender.addSubview(btnFemale)
+        genderView.addSubview(titleLabel)
+        genderView.addSubview(btnMale)
+        genderView.addSubview(btnFemale)
         
-        view.addSubview(uiviewGender)
+        view.addSubview(genderView)
+        
     }
     
     func maleButtonTapped() {

@@ -34,6 +34,9 @@ class FaeSearchBar: UISearchBar {
             
             // Set the background color of the search field.
             searchField.backgroundColor = barTintColor
+            
+            searchField.textAlignment = .left
+            searchField.leftViewMode = .always
         }
         
         super.draw(rect)
@@ -50,6 +53,7 @@ class FaeSearchBar: UISearchBar {
         
         searchBarStyle = UISearchBarStyle.prominent
         isTranslucent = false
+        
     }
     
     

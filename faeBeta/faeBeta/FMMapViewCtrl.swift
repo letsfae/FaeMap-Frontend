@@ -382,13 +382,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
     
     func pauseAllUserPinTimers() {
         for user in faeUserPins {
-            user.pause = true
+            user?.pause = true
         }
     }
     
     func resumeAllUserPinTimers() {
         for user in faeUserPins {
-            user.pause = false
+            user?.pause = false
         }
     }
     

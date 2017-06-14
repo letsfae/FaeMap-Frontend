@@ -163,7 +163,14 @@ class LogInViewController: UIViewController {
         user.logInBackground {(status: Int?, message: Any?) in
             if status! / 100 == 2 {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
-                self.navigationController?.popToRootViewController(animated: true)
+                self.navigationController?.popToRootViewController(animated: false)
+                if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
+                    if vcRoot is EmptyRootViewController {
+                        if let vc = vcRoot as? EmptyRootViewController {
+                            vc.pushRealMap()
+                        }
+                    }
+                }
             }
             else {
                 let loginJSONInfo = JSON(message!)

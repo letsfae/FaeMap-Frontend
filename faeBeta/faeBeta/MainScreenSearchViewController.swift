@@ -130,7 +130,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
                                                         searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
                                                         searchBarTintColor: UIColor.white)
 //        faeSearchController.faeSearchBar.placeholder = "Search Fae Map                                         "
-        faeSearchController.faeSearchBar.placeholder = "Fly to Somewhere                                     "
+        faeSearchController.faeSearchBar.placeholder = "Fly to Somewhere"
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0
         faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor

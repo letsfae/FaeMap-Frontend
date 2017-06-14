@@ -83,6 +83,9 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool) {
+        
+        return
+            
         placeMarkers.removeAll()
         placePins.removeAll()
         placeNames.removeAll()
