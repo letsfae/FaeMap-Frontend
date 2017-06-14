@@ -29,7 +29,7 @@ protocol PinDetailDelegate: class {
 
 protocol PinDetailCollectionsDelegate: class {
     // Go back to collections
-    func backToCollections(likeCount: String, commentCount: String)
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool)
 }
 
 class PinDetailViewController: UIViewController {

@@ -12,6 +12,7 @@ import GoogleMaps
 class MBCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate {
     var tableComments: UITableView!
     var mbComments = [MBSocialStruct]()
+    var cellCurtIndex: IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,27 +52,27 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         tableComments.separatorStyle = .none
         tableComments.rowHeight = UITableViewAutomaticDimension
         tableComments.estimatedRowHeight = 200
-//        tableComments.allowsSelection = false
+        //        tableComments.allowsSelection = false
         
         self.view.addSubview(tableComments)
     }
-
+    
     func backToMapBoard(_ sender: UIButton) {
-//        self.dismiss(animated: false, completion: nil)
+        //        self.dismiss(animated: false, completion: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
-//    let imgAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar"]
-//    let lblUsrNameTxt: Array = ["Holly Laura", "Anonymous", "Peach"]
-//    let lblTimeTxt: Array = ["Just Now", "Yesterday", "December 29, 2016"]
-//    let lblContTxt: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people!", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "Wuts up?"]
-//    let lblComLocTxt: Array = ["Los Angeles CA, 2714 S. Hoover St.", "Los Angeles CA, 2714 S. Hooooooooooooooooooover St.", "Los Angeles CA, 2714 S. Hoover St."]
-//    let lblFavCountTxt: Array = [8, 7, 5]
-//    let lblReplyCountTxt: Array = [12, 5, 4]
+    
+    //    let imgAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar"]
+    //    let lblUsrNameTxt: Array = ["Holly Laura", "Anonymous", "Peach"]
+    //    let lblTimeTxt: Array = ["Just Now", "Yesterday", "December 29, 2016"]
+    //    let lblContTxt: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people!", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "Wuts up?"]
+    //    let lblComLocTxt: Array = ["Los Angeles CA, 2714 S. Hoover St.", "Los Angeles CA, 2714 S. Hooooooooooooooooooover St.", "Los Angeles CA, 2714 S. Hoover St."]
+    //    let lblFavCountTxt: Array = [8, 7, 5]
+    //    let lblReplyCountTxt: Array = [12, 5, 4]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.mbComments.count
@@ -112,31 +113,33 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         vcPinDetail.colDelegate = self
         vcPinDetail.enterMode = .collections
         vcPinDetail.strPinId = String(comment.pinId)
-        vcPinDetail.strTextViewText = ""
+        vcPinDetail.strTextViewText = comment.contentJson
         PinDetailViewController.selectedMarkerPosition = comment.position
         PinDetailViewController.pinTypeEnum = .comment
         PinDetailViewController.pinUserId = comment.userId
+        self.cellCurtIndex = indexPath
         
         self.navigationController?.pushViewController(vcPinDetail, animated: true)
     }
     
     // PinDetailCollectionsDelegate
-    func backToCollections(likeCount: String, commentCount: String) {
-//        if likeCount == "" || commentCount == "" {
-//            return
-//        }
-//        if self.indexCurrSelectRowAt != nil {
-//            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! CreatedPinsTableViewCell
-//            cellCurrSelect.lblCommentCount.text = commentCount
-//            cellCurrSelect.lblLikeCount.text = likeCount
-//            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
-//                cellCurrSelect.imgHot.isHidden = false
-//            }
-//            else {
-//                cellCurrSelect.imgHot.isHidden = true
-//            }
-//            arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
-//            arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
-//        }
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
+        if likeCount == "" || commentCount == "" || self.cellCurtIndex == nil {
+            return
+        }
+        
+        let cellCurtSelect = tableComments.cellForRow(at: self.cellCurtIndex) as! MBCommentsCell
+        cellCurtSelect.lblReplyCount.text = commentCount
+        cellCurtSelect.lblFavCount.text = likeCount
+        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        
+        if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+            cellCurtSelect.imgHotPin.isHidden = false
+        } else {
+            cellCurtSelect.imgHotPin.isHidden = true
+        }
+        self.mbComments[cellCurtIndex.row].likeCount = Int(likeCount)!
+        self.mbComments[cellCurtIndex.row].commentCount = Int(commentCount)!
+        self.mbComments[cellCurtIndex.row].isLiked = pinLikeStatus
     }
 }

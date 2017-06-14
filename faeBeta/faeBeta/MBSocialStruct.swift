@@ -24,8 +24,8 @@ struct MBSocialStruct {
     var contentJson: String
     let attributedText: NSAttributedString?
     let date: String
-    let likeCount: Int
-    let commentCount: Int
+    var likeCount: Int
+    var commentCount: Int
     let position: CLLocationCoordinate2D
     var address: String
     let anonymous: Bool
@@ -65,7 +65,7 @@ struct MBSocialStruct {
         self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
                                                longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
         self.address = ""
-        self.isLiked = json["user_pin_operations"]["is_liked"].boolValue
+        self.isLiked = json["pin_object"]["user_pin_operations"]["is_liked"].boolValue
         self.status = "normal"
         if commentCount >= 10 || likeCount >= 15 {
             self.status = "hot"

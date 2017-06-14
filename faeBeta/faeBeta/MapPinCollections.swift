@@ -28,6 +28,7 @@ struct MapPinCollections {
     var nickName: String
     var likeCount: Int
     var commentCount: Int
+    var isLiked: Bool
     var fileIds = [Int]()
     var avatar = UIImage()
     var images = [UIImage]()
@@ -48,6 +49,7 @@ struct MapPinCollections {
         self.nickName = json["pin_object"]["nick_name"].stringValue
         self.likeCount = json["pin_object"]["liked_count"].intValue
         self.commentCount = json["pin_object"]["comment_count"].intValue
+        self.isLiked = json["pin_object"]["user_pin_operations"]["is_liked"].boolValue
         let fileIDsRaw = json["pin_object"]["file_ids"].arrayValue.map({Int($0.stringValue)})
         for id in fileIDsRaw {
             if id != nil {

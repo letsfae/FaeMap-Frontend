@@ -65,9 +65,9 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             PinDetailViewController.selectedMarkerPosition = arrMapPin[indexPath.section].position
             PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: arrMapPin[indexPath.section].type)!
             PinDetailViewController.pinUserId = arrMapPin[indexPath.section].userId
-            self.present(vcPinDetail, animated: false, completion: {
-                self.indexCurrSelectRowAt = indexPath
-            })
+            
+            self.indexCurrSelectRowAt = indexPath
+            self.navigationController?.pushViewController(vcPinDetail, animated: true)
         }
     }
     
@@ -81,11 +81,12 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     }
     
     // PinDetailCollectionsDelegate
-    func backToCollections(likeCount: String, commentCount: String) {
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
         if self.indexCurrSelectRowAt != nil {
             let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
             cellCurrSelect.lblCommentCount.text = commentCount
             cellCurrSelect.lblLikeCount.text = likeCount
+            cellCurrSelect.imgLike.image = pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
             if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
                 cellCurrSelect.imgHot.isHidden = false
             }
@@ -94,6 +95,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             }
             arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
             arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
+            arrMapPin[self.indexCurrSelectRowAt.section].isLiked = pinLikeStatus
         }
     }
     

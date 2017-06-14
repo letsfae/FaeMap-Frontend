@@ -243,12 +243,9 @@ class PinsTableViewCell: UITableViewCell {
         lblLikeCount.text = "\(pin.likeCount)"
         lblCommentCount.text = "\(pin.commentCount)"
         lblContent.attributedText = pin.content.convertStringWithEmoji()
+        imgLike.image = pin.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         
-        if pin.likeCount >= 15 {
-            boolIsHot = true
-        }
-        
-        if pin.commentCount >= 10 {
+        if pin.likeCount >= 15 || pin.commentCount >= 10 {
             boolIsHot = true
         }
         
