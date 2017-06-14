@@ -154,7 +154,8 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: lblLikeCount)
         
         imgLike = UIImageView()
-        imgLike.image = #imageLiteral(resourceName: "like")
+        imgLike.image = #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+        imgLike.contentMode = .scaleAspectFit
         uiviewPinView.addSubview(imgLike)
         uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-73-|", options: [], views: imgLike)
         uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: imgLike)

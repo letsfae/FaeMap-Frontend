@@ -253,7 +253,7 @@ extension PinDetailViewController {
         
         // Pin Like
         btnPinLike = UIButton()
-        btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
+        btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
         btnPinLike.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
         btnPinLike.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
         uiviewInteractBtnSub.addSubview(btnPinLike)

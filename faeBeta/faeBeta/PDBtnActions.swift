@@ -165,7 +165,7 @@ extension PinDetailViewController {
         }
         
         if sender.tag == 1 && self.strPinId != "-999" {
-            btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollowNew"), for: UIControlState())
+            btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }

@@ -97,7 +97,7 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         cell.lblComLoc.text = comment.address
         cell.imgHotPin.isHidden = comment.status != "hot"
         cell.lblFavCount.text = String(comment.likeCount)
-        cell.btnFav.setImage(comment.isLiked ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        cell.btnFav.setImage(comment.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         cell.lblReplyCount.text = String(comment.commentCount)
         
         return cell
@@ -131,7 +131,7 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         let cellCurtSelect = tableComments.cellForRow(at: self.cellCurtIndex) as! MBCommentsCell
         cellCurtSelect.lblReplyCount.text = commentCount
         cellCurtSelect.lblFavCount.text = likeCount
-        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         
         if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
             cellCurtSelect.imgHotPin.isHidden = false

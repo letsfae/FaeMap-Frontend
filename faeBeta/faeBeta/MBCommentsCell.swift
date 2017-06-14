@@ -98,7 +98,7 @@ class MBCommentsCell: UITableViewCell {
         addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
         
         btnFav = UIButton()
-        btnFav.setImage(#imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnFav)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
@@ -130,6 +130,7 @@ class MBCommentsCell: UITableViewCell {
         imgHotPin.clipsToBounds = true
         imgHotPin.contentMode = .scaleAspectFill
         imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
+        imgHotPin.isHidden = true
         addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imgHotPin)
         addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)
     }

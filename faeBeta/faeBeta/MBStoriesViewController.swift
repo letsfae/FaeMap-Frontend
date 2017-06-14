@@ -100,7 +100,7 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.lblFavCount.text = String(story.likeCount)
         cell.lblReplyCount.text = String(story.commentCount)
         
-        cell.btnFav.setImage(story.isLiked ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        cell.btnFav.setImage(story.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         
         cell.imgMediaArr.removeAll()
         for subview in cell.scrollViewMedia.subviews {
@@ -151,7 +151,7 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         let cellCurtSelect = tableStories.cellForRow(at: self.cellCurtIndex) as! MBStoriesCell
         cellCurtSelect.lblReplyCount.text = commentCount
         cellCurtSelect.lblFavCount.text = likeCount
-        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "mb_comment_heart_full") : #imageLiteral(resourceName: "mb_comment_heart_empty"), for: .normal)
+        cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         
         if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
             cellCurtSelect.imgHotPin.isHidden = false

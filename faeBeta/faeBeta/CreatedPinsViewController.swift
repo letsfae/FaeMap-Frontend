@@ -86,7 +86,8 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     
     // PinDetailCollectionsDelegate
     func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
-        if likeCount == "" || commentCount == "" {
+        
+        if likeCount == "" || commentCount == "" || self.indexCurrSelectRowAt == nil {
             return
         }
         
