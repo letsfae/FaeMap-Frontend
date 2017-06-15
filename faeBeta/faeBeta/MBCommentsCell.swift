@@ -11,8 +11,8 @@ import UIKit
 class MBCommentsCell: UITableViewCell {
     
     var btnComLoc: UIButton!
-    var btnFav: UIButton!
-    var btnReply: UIButton!
+    var btnFav: FavReplyButton!
+    var btnReply: FavReplyButton!
     var imgAvatar: FaeAvatarView!
     var imgHotPin: UIImageView!
     var lblComLoc: MBAddressLabel!
@@ -97,12 +97,12 @@ class MBCommentsCell: UITableViewCell {
         uiviewCellFooter.backgroundColor = .clear
         addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
         
-        btnFav = UIButton()
+        btnFav = FavReplyButton(frame: CGRect.zero)
         btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnFav)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
-        btnReply = UIButton()
+        btnReply = FavReplyButton(frame: CGRect.zero)
         btnReply.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)

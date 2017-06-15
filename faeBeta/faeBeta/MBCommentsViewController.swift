@@ -8,64 +8,33 @@
 
 import UIKit
 import GoogleMaps
+import SwiftyJSON
 
-class MBCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate {
-    var tableComments: UITableView!
-    var mbComments = [MBSocialStruct]()
-    var cellCurtIndex: IndexPath!
+class MBCommentsViewController: MBComtsStoriesViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate {
     
     override func viewDidLoad() {
+        strNavBarTitle = "Comments"
+        getMBSocialInfo(socialType: "comment")
         super.viewDidLoad()
-        loadNavBar()
-        loadTable()
     }
     
-    fileprivate func loadNavBar() {
-        let uiviewNavBar = FaeNavBar(frame: CGRect.zero)
-        self.view.addSubview(uiviewNavBar)
-        uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMapBoard(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.isHidden = true
+    override func loadTable() {
+        super.loadTable()
+        tblCommentStory.register(MBCommentsCell.self, forCellReuseIdentifier: "mbCommentsCell")
+        tblCommentStory.delegate = self
+        tblCommentStory.dataSource = self
         
-        uiviewNavBar.lblTitle.text = "Comments"
-    }
-    
-    fileprivate func loadTable() {
-        tableComments = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
-        tableComments.backgroundColor = .white
-        tableComments.register(MBCommentsCell.self, forCellReuseIdentifier: "mbCommentsCell")
-        tableComments.delegate = self
-        tableComments.dataSource = self
-        tableComments.separatorStyle = .none
-        tableComments.rowHeight = UITableViewAutomaticDimension
-        tableComments.estimatedRowHeight = 200
-        //        tableComments.allowsSelection = false
-        
-        self.view.addSubview(tableComments)
-    }
-    
-    func backToMapBoard(_ sender: UIButton) {
-        //        self.dismiss(animated: false, completion: nil)
-        self.navigationController?.popViewController(animated: true)
+        tblCommentStory.estimatedRowHeight = 200
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    //    let imgAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar"]
-    //    let lblUsrNameTxt: Array = ["Holly Laura", "Anonymous", "Peach"]
-    //    let lblTimeTxt: Array = ["Just Now", "Yesterday", "December 29, 2016"]
-    //    let lblContTxt: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people!", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "Wuts up?"]
-    //    let lblComLocTxt: Array = ["Los Angeles CA, 2714 S. Hoover St.", "Los Angeles CA, 2714 S. Hooooooooooooooooooover St.", "Los Angeles CA, 2714 S. Hoover St."]
-    //    let lblFavCountTxt: Array = [8, 7, 5]
-    //    let lblReplyCountTxt: Array = [12, 5, 4]
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.mbComments.count
+        return mbComments.count
     }
     
-    // Yue 06/11/17
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mbCommentsCell", for: indexPath) as! MBCommentsCell
         
@@ -87,9 +56,19 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         cell.btnFav.setImage(comment.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         cell.lblReplyCount.text = String(comment.commentCount)
         
+        cell.btnFav.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
+//        cell.btnFav.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        cell.btnReply.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+        cell.btnFav.tag = 0
+        
+//        cell.btnReply.accessibilityHint = String(indexPath.row)
+        
+        cell.btnFav.accessibilityHint = String(comment.pinId)
+        cell.btnFav.indexPath = indexPath
+        cell.btnReply.indexPath = indexPath
+        
         return cell
     }
-    // Yue 06/11/17 End
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
@@ -105,8 +84,9 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
         PinDetailViewController.pinTypeEnum = .comment
         PinDetailViewController.pinUserId = comment.userId
         self.cellCurtIndex = indexPath
-        
+
         self.navigationController?.pushViewController(vcPinDetail, animated: true)
+        
     }
     
     // PinDetailCollectionsDelegate
@@ -115,18 +95,40 @@ class MBCommentsViewController: UIViewController, UITableViewDataSource, UITable
             return
         }
         
-        let cellCurtSelect = tableComments.cellForRow(at: self.cellCurtIndex) as! MBCommentsCell
+        let cellCurtSelect = tblCommentStory.cellForRow(at: self.cellCurtIndex) as! MBCommentsCell
         cellCurtSelect.lblReplyCount.text = commentCount
         cellCurtSelect.lblFavCount.text = likeCount
         cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         
         if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
             cellCurtSelect.imgHotPin.isHidden = false
+            self.mbComments[cellCurtIndex.row].status = "hot"
         } else {
             cellCurtSelect.imgHotPin.isHidden = true
         }
         self.mbComments[cellCurtIndex.row].likeCount = Int(likeCount)!
         self.mbComments[cellCurtIndex.row].commentCount = Int(commentCount)!
         self.mbComments[cellCurtIndex.row].isLiked = pinLikeStatus
+    }
+
+    func actionReplyToThisPin(_ sender: FavReplyButton) {
+//        let row = Int(sender.accessibilityHint!)!
+        
+        let indexPath: IndexPath = sender.indexPath
+        
+        let vcPinDetail = PinDetailViewController()
+        let comment = self.mbComments[indexPath.row]
+        vcPinDetail.modalPresentationStyle = .overCurrentContext
+        vcPinDetail.colDelegate = self
+        vcPinDetail.enterMode = .collections
+        vcPinDetail.strPinId = String(comment.pinId)
+        vcPinDetail.strTextViewText = comment.contentJson
+        PinDetailViewController.selectedMarkerPosition = comment.position
+        PinDetailViewController.pinTypeEnum = .comment
+        PinDetailViewController.pinUserId = comment.userId
+        self.cellCurtIndex = indexPath//IndexPath(row: row, section: 0)
+
+        self.navigationController?.pushViewController(vcPinDetail, animated: true)
+        vcPinDetail.boolFromMapBoard = true
     }
 }

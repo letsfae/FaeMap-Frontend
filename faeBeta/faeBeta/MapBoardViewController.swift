@@ -178,8 +178,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewTalkTab.isHidden = true
 //        self.renewSelfLocation()
         // 这两个方法中已经进行了renewSelfLocation的操作
-        self.getMBSocialInfo(socialType: "comment")
-        self.getMBSocialInfo(socialType: "media")
+//        self.getMBSocialInfo(socialType: "comment")
+//        self.getMBSocialInfo(socialType: "media")
         self.getMBPlaceInfo()
 
         self.tableMapBoard.addGestureRecognizer(setGestureRecognizer())
@@ -385,11 +385,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnMyTalks.tag = 0
         btnMyTalks.addTarget(self, action: #selector(self.switchBetweenTalkAndComment(_:)), for: .touchUpInside)
-        uiviewTalkPostHead.bringSubview(toFront: btnMyTalks)
         
-        uiviewRedUnderLine = UIView(frame: CGRect(x: 0, y: uiviewTalkPostHead.frame.height - 2, width: 130, height: 2))
+        uiviewRedUnderLine = UIView(frame: CGRect(x: 40, y: uiviewTalkPostHead.frame.height - 2, width: 130, height: 2))
         uiviewRedUnderLine.backgroundColor = UIColor.faeAppRedColor()
-        btnMyTalks.addSubview(uiviewRedUnderLine)
+        uiviewTalkPostHead.addSubview(uiviewRedUnderLine)
         
         btnComments = UIButton()
         uiviewTalkPostHead.addSubview(btnComments)
@@ -628,21 +627,28 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     func switchBetweenTalkAndComment(_ sender: UIButton) {
+        var targetCenter: CGFloat!
         if sender.tag == 0 {
             talkPostTableMode = .talk
             btnMyTalks.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
             btnComments.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnComments.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnMyTalks.addSubview(uiviewRedUnderLine)
+            targetCenter = btnMyTalks.center.x
         } else if sender.tag == 1 {
             talkPostTableMode = .comment
             btnComments.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
             btnMyTalks.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnComments.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnComments.addSubview(uiviewRedUnderLine)
+            targetCenter = btnComments.center.x
         }
+        
+        // Animation of the red sliding line (My Talks, Comments)
+        UIView.animate(withDuration: 0.25, animations: ({
+            self.uiviewRedUnderLine.center.x = targetCenter
+        }), completion: { _ in
+        })
 
         reloadTableMapBoard()
     }

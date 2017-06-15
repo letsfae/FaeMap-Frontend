@@ -18,8 +18,8 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
     var lblStoryLoc: MBAddressLabel!
     var lblFavCount: UILabel!
     var lblReplyCount: UILabel!
-    var btnFav: UIButton!
-    var btnReply: UIButton!
+    var btnFav: FavReplyButton!
+    var btnReply: FavReplyButton!
     var uiviewCellFooter: UIView!
     var scrollViewMedia: UIScrollView!
     var imgMediaArr = [UIImageView]()
@@ -98,12 +98,12 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         uiviewCellFooter.backgroundColor = .clear
         addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
         
-        btnFav = UIButton()
+        btnFav = FavReplyButton(frame: CGRect.zero)
         btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnFav)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
-        btnReply = UIButton()
+        btnReply = FavReplyButton(frame: CGRect.zero)
         btnReply.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
@@ -147,6 +147,7 @@ class MBStoriesCell: UITableViewCell, UIScrollViewDelegate {
         insets.right = 15
         scrollViewMedia.contentInset = insets
         scrollViewMedia.scrollToLeft(animated: false)
+//        scrollViewMedia.backgroundColor = UIColor.blue
 
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: scrollViewMedia)
         addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-12-[v2(95)]-12-[v3(32)]-17-[v4(27)]-10-|", options: [], views: imgAvatar, lblContent, scrollViewMedia, btnStoryLoc, uiviewCellFooter)
