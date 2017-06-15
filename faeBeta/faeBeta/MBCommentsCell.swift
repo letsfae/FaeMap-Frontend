@@ -103,7 +103,7 @@ class MBCommentsCell: UITableViewCell {
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
         
         btnReply = UIButton()
-        btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
+        btnReply.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
         
@@ -129,7 +129,7 @@ class MBCommentsCell: UITableViewCell {
         addSubview(imgHotPin)
         imgHotPin.clipsToBounds = true
         imgHotPin.contentMode = .scaleAspectFill
-        imgHotPin.image = #imageLiteral(resourceName: "mb_hotPin")
+        imgHotPin.image = #imageLiteral(resourceName: "pinDetailHotPin")
         imgHotPin.isHidden = true
         addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imgHotPin)
         addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)

@@ -498,7 +498,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnTalkMypost.addTarget(self, action: #selector(self.getTalkTableMode(_:)), for: .touchUpInside)
     }
     
-    // function for drop down menu button, to show / hide the drop down menu (UIVisualView)
+    // function for drop down menu button, to show / hide the drop down menu
     func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2,animations: {

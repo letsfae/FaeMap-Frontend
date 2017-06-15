@@ -23,25 +23,13 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadNavBar() {
-        let uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
-        uiviewNavBar.backgroundColor = .white
-        view.addSubview(uiviewNavBar)
+        let uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        self.view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMapBoard(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.isHidden = true
         
-        let uiviewLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
-        uiviewLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
-        uiviewNavBar.addSubview(uiviewLine)
-        
-        let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 63) / 2, y: 28, width: 63, height: 27))
-        lblTitle.text = "Stories"
-        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
-        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textAlignment = NSTextAlignment.center
-        uiviewNavBar.addSubview(lblTitle)
-        
-        let btnBackNavBar = UIButton(frame: CGRect(x: 0, y: 20, width: 40.5, height: 42))
-        btnBackNavBar.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
-        btnBackNavBar.addTarget(self, action: #selector(self.backToMapBoard(_:)), for: .touchUpInside)
-        uiviewNavBar.addSubview(btnBackNavBar)
+        uiviewNavBar.lblTitle.text = "Stories"
     }
     
     fileprivate func loadTable() {
