@@ -12,11 +12,15 @@ import SwiftyJSON
 
 class FaeUserPin: NSObject {
     
+    static var arrAntiColliCoor = [CLLocationCoordinate2D](repeating: CLLocationCoordinate2DMake(0, 0), count: 5)
+    
+    var userIndex = -1
+    
     var userId: Int = -1 // an unique user id
     var type: String = "" // type is "user"
     var miniAvatar: Int = -1 // an intValue indicates the map avatar showed on map
     var positions = [CLLocationCoordinate2D]() // five random coordinates from back-end, so the posArr should be an length of 5 array
-    weak var marker: GMSMarker? // from GoogleMaps framework, a marker set on map
+    var marker: GMSMarker? // from GoogleMaps framework, a marker set on map
     var timer: Timer! // timer to change the marker location within the five markers
     let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44.7)) // user's map avatar view
     var iconImage = UIImage() // user's map avatar icon image
@@ -86,14 +90,14 @@ class FaeUserPin: NSObject {
     // func will be called when init it outside not in this class
     func firstLoading() {
         self.marker?.userData = [1: self] // warning: if dealloc is not done properly, circular reference will occur. right way: using "weak"
-        self.marker?.map = self.mapView
-        self.marker?.position = self.positions[self.index]
         
-//        self.marker?.icon = self.iconImage
+        self.marker?.position = self.positions[self.index]
+        self.marker?.map = self.mapView
         
         self.icon.alpha = 0
         self.marker?.iconView = icon
         self.marker?.icon = nil
+        
         let delay = Double.random(min: 0, max: 1)
         UIView.animate(withDuration: 1, delay: delay, animations: {
             self.icon.alpha = 1
@@ -146,5 +150,15 @@ class FaeUserPin: NSObject {
         
         let time = Double.random(min: 5, max: 20)
         self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+    }
+    
+    func antiCollisionTest() -> Bool {
+        for pos in self.positions {
+            
+        }
+        
+        
+        
+        return false
     }
 }

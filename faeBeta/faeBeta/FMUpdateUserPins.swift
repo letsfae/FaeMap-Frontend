@@ -70,6 +70,7 @@ extension FaeMapViewController {
                         continue
                     }
                 }
+                faeUserPin?.userIndex = count
                 count += 1
                 faeUserPin?.mapView = self.faeMapView
                 faeUserPin?.firstLoading()
