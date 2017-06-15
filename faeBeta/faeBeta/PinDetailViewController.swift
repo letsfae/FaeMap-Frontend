@@ -104,6 +104,7 @@ class PinDetailViewController: UIViewController {
     var boolMyPin = false // Check if this pin belongs to current user
     var boolOptionsExpanded = false
     var boolPinLiked = false
+    var boolFromMapBoard = false
     var btnCollect: UIButton! // Pin options
     var btnCommentOption: UIButton! // Custom toolBar the bottom toolbar button
     var btnCommentSend: UIButton! // Custom toolBar the bottom toolbar button
@@ -239,6 +240,11 @@ class PinDetailViewController: UIViewController {
         super.viewDidAppear(animated)
         if enterMode != .collections {
             animatePinCtrlBtnsAndFeeling()
+        }
+        
+        print(boolFromMapBoard)
+        if boolFromMapBoard {
+            btnPinComment.sendActions(for: .touchUpInside)
         }
     }
     

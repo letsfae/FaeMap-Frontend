@@ -8,61 +8,27 @@
 
 import UIKit
 
-class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PinDetailCollectionsDelegate {
-    var uiviewNaviBar: UIView!
-    var tableStories: UITableView!
-    
-    var mbStories = [MBSocialStruct]()
+class MBStoriesViewController: MBComtsStoriesViewController, UITableViewDelegate, UITableViewDataSource, PinDetailCollectionsDelegate {
     var scrollViewMedia: UIScrollView!
-    var cellCurtIndex: IndexPath!
     
     override func viewDidLoad() {
+        strNavBarTitle = "Stories"
+        getMBSocialInfo(socialType: "media")
         super.viewDidLoad()
-        loadNavBar()
-        loadTable()
     }
     
-    fileprivate func loadNavBar() {
-        let uiviewNavBar = FaeNavBar(frame: CGRect.zero)
-        self.view.addSubview(uiviewNavBar)
-        uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMapBoard(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.isHidden = true
+    override func loadTable() {
+        super.loadTable()
+        tblCommentStory.register(MBStoriesCell.self, forCellReuseIdentifier: "mbStoriesCell")
+        tblCommentStory.delegate = self
+        tblCommentStory.dataSource = self
         
-        uiviewNavBar.lblTitle.text = "Stories"
-    }
-    
-    fileprivate func loadTable() {
-        tableStories = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
-        tableStories.backgroundColor = .white
-        tableStories.register(MBStoriesCell.self, forCellReuseIdentifier: "mbStoriesCell")
-        tableStories.delegate = self
-        tableStories.dataSource = self
-        tableStories.separatorStyle = .none
-        tableStories.rowHeight = UITableViewAutomaticDimension
-        tableStories.estimatedRowHeight = 400
-//        tableStories.allowsSelection = false
-        
-        view.addSubview(tableStories)
-    }
-    
-    func backToMapBoard(_ sender: UIButton) {
-        //        self.dismiss(animated: false, completion: nil)
-        navigationController?.popViewController(animated: true)
+        tblCommentStory.estimatedRowHeight = 400
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
-    //    let imgAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar"]
-    //    let lblUsrNameTxt: Array = ["Yuukipuasighastast", "Yuukipuasighastast", "Yuukipuasighastast"]
-    //    let lblTimeTxt: Array = ["Just Now", "Yesterday", "December 29, 2016"]
-    //    let lblContTxt: Array = ["Look at these cute puppies I saw at the park today! Too cute I want one!!!", "PLSPLSPLSPLS", "Wuts up?"]
-    //    let imgMediaArray: Array = [["default_Pic", "default_Pic", "default_Pic", "default_Pic", "default_Pic"], ["default_Pic"], ["default_Pic"]]
-    //    let lblStoryLocTxt: Array = ["Los Angeles CA, 2714 S. Hoover St.", "Los Angeles CA, 2714 S. Hooooooooooooooooooover St.", "Los Angeles CA, 2714 S. Hoover St."]
-    //    let lblFavCountTxt: Array = [8, 7, 5]
-    //    let lblReplyCountTxt: Array = [12, 5, 4]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mbStories.count
@@ -89,11 +55,22 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.lblReplyCount.text = String(story.commentCount)
         
         cell.btnFav.setImage(story.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
+        cell.btnFav.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
+        //        cell.btnFav.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        cell.btnReply.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+        cell.btnFav.tag = 1
+        cell.btnFav.accessibilityHint = String(story.pinId)
+        cell.btnFav.indexPath = indexPath
+        cell.btnReply.indexPath = indexPath
+
         
         cell.imgMediaArr.removeAll()
         for subview in cell.scrollViewMedia.subviews {
             subview.removeFromSuperview()
         }
+        
+//        cell.scrollViewMedia.frame = CGRect(x: 0, y: 0, width: 105 * story.fileIdArray.count, height: 95)
+//        cell.scrollViewMedia.frame.size = CGSize(width: 105 * story.fileIdArray.count, height: 95)
         
         for index in 0..<story.fileIdArray.count {
             let imageView = FaeImageView(frame: CGRect(x: 105 * index, y: 0, width: 95, height: 95))
@@ -121,7 +98,7 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         vcPinDetail.colDelegate = self
         vcPinDetail.enterMode = .collections
         vcPinDetail.strPinId = String(story.pinId)
-        vcPinDetail.strTextViewText = ""
+        vcPinDetail.strTextViewText = story.contentJson
         PinDetailViewController.selectedMarkerPosition = story.position
         PinDetailViewController.pinTypeEnum = .media
         PinDetailViewController.pinUserId = story.userId
@@ -136,7 +113,7 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
             return
         }
         
-        let cellCurtSelect = tableStories.cellForRow(at: self.cellCurtIndex) as! MBStoriesCell
+        let cellCurtSelect = tblCommentStory.cellForRow(at: self.cellCurtIndex) as! MBStoriesCell
         cellCurtSelect.lblReplyCount.text = commentCount
         cellCurtSelect.lblFavCount.text = likeCount
         cellCurtSelect.btnFav.setImage(pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
@@ -150,4 +127,24 @@ class MBStoriesViewController: UIViewController, UITableViewDelegate, UITableVie
         self.mbStories[cellCurtIndex.row].commentCount = Int(commentCount)!
         self.mbStories[cellCurtIndex.row].isLiked = pinLikeStatus
     }
+    
+    func actionReplyToThisPin(_ sender: FavReplyButton) {
+        let indexPath: IndexPath = sender.indexPath
+        
+        let vcPinDetail = PinDetailViewController()
+        let story = self.mbStories[indexPath.row]
+        vcPinDetail.modalPresentationStyle = .overCurrentContext
+        vcPinDetail.colDelegate = self
+        vcPinDetail.enterMode = .collections
+        vcPinDetail.strPinId = String(story.pinId)
+        vcPinDetail.strTextViewText = story.contentJson
+        PinDetailViewController.selectedMarkerPosition = story.position
+        PinDetailViewController.pinTypeEnum = .media
+        PinDetailViewController.pinUserId = story.userId
+        self.cellCurtIndex = indexPath
+        
+        self.navigationController?.pushViewController(vcPinDetail, animated: true)
+        vcPinDetail.boolFromMapBoard = true
+    }
+
 }
