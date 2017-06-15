@@ -10,6 +10,8 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
+
+
 class FaeUserPin: NSObject {
     
     static var arrAntiColliCoor = [CLLocationCoordinate2D](repeating: CLLocationCoordinate2DMake(0, 0), count: 5)
@@ -51,7 +53,6 @@ class FaeUserPin: NSObject {
                     self.timer.invalidate()
                 }
                 marker?.iconView = icon
-                marker?.icon = nil
                 UIView.animate(withDuration: 0.3, delay: 0, animations: {
                     self.icon.alpha = 0
                 }, completion: { _ in
@@ -85,6 +86,7 @@ class FaeUserPin: NSObject {
         
         self.marker = GMSMarker()
         self.marker?.zIndex = 1 // map markers' overlapping level
+        
     }
     
     // func will be called when init it outside not in this class
@@ -96,14 +98,16 @@ class FaeUserPin: NSObject {
         
         self.icon.alpha = 0
         self.marker?.iconView = icon
-        self.marker?.icon = nil
         
         let delay = Double.random(min: 0, max: 1)
+        
+        self.marker?.tracksViewChanges = true
         UIView.animate(withDuration: 1, delay: delay, animations: {
             self.icon.alpha = 1
         }, completion: { _ in
             self.marker?.iconView = nil
             self.marker?.icon = self.iconImage
+            self.marker?.tracksViewChanges = false
         })
         
         let time = Double.random(min: 5, max: 20)
@@ -115,15 +119,18 @@ class FaeUserPin: NSObject {
     func updatePositionAndTimer() {
 
         self.marker?.iconView = icon
-        self.marker?.icon = nil
         
         if self.index == 5 {
             self.index = 0
         }
         
+        self.marker?.tracksViewChanges = true
+        
         UIView.animate(withDuration: 0.3, delay: 0, animations: {
             self.icon.alpha = 0
         }, completion: { _ in
+            self.marker?.tracksViewChanges = false
+            
             if self.index >= self.positions.count {
                 return
             }
@@ -153,7 +160,7 @@ class FaeUserPin: NSObject {
     }
     
     func antiCollisionTest() -> Bool {
-        for pos in self.positions {
+        for _ in self.positions {
             
         }
         
