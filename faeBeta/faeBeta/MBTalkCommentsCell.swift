@@ -70,7 +70,7 @@ class MBTalkCommentsCell: UITableViewCell {
         btnDown = UIButton()
         btnDown.tag = 0
         uiviewFav.addSubview(btnDown)
-        btnDown.setImage(#imageLiteral(resourceName: "mb_inactiveDownArrow"), for: .normal)
+        btnDown.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         uiviewFav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnDown)
         
         lblVoteCount = UILabel()
@@ -83,7 +83,7 @@ class MBTalkCommentsCell: UITableViewCell {
         btnUp = UIButton()
         btnUp.tag = 1
         uiviewFav.addSubview(btnUp)
-        btnUp.setImage(#imageLiteral(resourceName: "mb_inactiveUpArrow"), for: .normal)
+        btnUp.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         uiviewFav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnUp)
         uiviewFav.addConstraintsWithFormat("H:|-0-[v0(33)]-0-[v1(58)]-0-[v2(33)]", options: [], views: btnDown, lblVoteCount, btnUp)
         

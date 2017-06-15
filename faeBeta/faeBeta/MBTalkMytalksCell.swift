@@ -71,7 +71,7 @@ class MBTalkMytalksCell: UITableViewCell {
         
         btnReply = UIButton()
         addSubview(btnReply)
-        btnReply.setImage(#imageLiteral(resourceName: "mb_comment_reply"), for: .normal)
+        btnReply.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
         addConstraintsWithFormat("V:|-11-[v0(32)]", options: [], views: btnReply)
         addConstraintsWithFormat("H:[v0(60)]-2-[v1(36)]-9-|", options: [], views: lblReplyCount, btnReply)
         
@@ -100,7 +100,7 @@ class MBTalkMytalksCell: UITableViewCell {
         btnDown = UIButton()
         btnDown.tag = 0
         uiviewFav.addSubview(btnDown)
-        btnDown.setImage(#imageLiteral(resourceName: "mb_inactiveDownArrow"), for: .normal)
+        btnDown.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         uiviewFav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnDown)
         
         lblVoteCount = UILabel()
@@ -113,7 +113,7 @@ class MBTalkMytalksCell: UITableViewCell {
         btnUp = UIButton()
         btnUp.tag = 1
         uiviewFav.addSubview(btnUp)
-        btnUp.setImage(#imageLiteral(resourceName: "mb_inactiveUpArrow"), for: .normal)
+        btnUp.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         uiviewFav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnUp)
         uiviewFav.addConstraintsWithFormat("H:[v0(33)]-0-[v1(58)]-0-[v2(33)]-0-|", options: [], views: btnDown, lblVoteCount, btnUp)
         
