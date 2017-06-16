@@ -29,12 +29,6 @@ class MBSocialCell: UITableViewCell {
     }
     
     fileprivate func loadCellContent() {
-//        uiviewCell = UIButton()
-//        addSubview(uiviewCell)
-//        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewCell)
-//        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewCell)
-//        uiviewCell.addTarget(self, action: #selector(self.showActionSheet(_:)), for: .touchDown)
-//        uiviewCell.addTarget(self, action: #selector(self.cancelActionSheet(_:)), for: [.touchUpInside, .touchUpOutside])
         
         imgIcon = UIImageView(frame: CGRect(x: 14, y: 14, width: 50, height: 50))
         addSubview(imgIcon)

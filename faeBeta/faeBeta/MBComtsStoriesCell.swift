@@ -1,0 +1,227 @@
+//
+//  MBComtsStoriesCell.swift
+//  faeBeta
+//
+//  Created by vicky on 2017/6/16.
+//  Copyright © 2017年 fae. All rights reserved.
+//
+
+import UIKit
+
+// A protocol that the TableViewCell uses to inform its delegate of state change
+protocol MBComtsStoriesCellDelegate: class {
+    
+    func replyToThisPin(indexPath: IndexPath)
+    func likeThisPin(indexPath: IndexPath, strPinId: String)
+    // func actionHoldingLikeButton(indexPath: IndexPath, strPinId: strPinId)
+}
+
+class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
+    var btnLoc: UIButton!
+    var btnFav: UIButton!
+    var btnReply: UIButton!
+    var imgAvatar: FaeAvatarView!
+    var imgHotPin: UIImageView!
+    var lblLoc: MBAddressLabel!
+    var lblContent: UILabel!
+    var lblFavCount: UILabel!
+    var lblReplyCount: UILabel!
+    var lblTime: UILabel!
+    var lblUsrName: UILabel!
+    var uiviewCellFooter: UIView!
+    
+    var indexForCurtCell: IndexPath!
+    var strPinId: String!
+    static var strPinType = ""
+    
+    var scrollViewMedia: UIScrollView!
+    var imgMediaArr = [UIImageView]()
+    
+    weak var delegate: MBComtsStoriesCellDelegate?
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        let separatorView = UIView()
+        separatorView.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        addSubview(separatorView)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: separatorView)
+        addConstraintsWithFormat("V:[v0(5)]-0-|", options: [], views: separatorView)
+        selectionStyle = .none
+        loadCellContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setAddressForCell(position: CLLocationCoordinate2D, id: Int, type: String) {
+        lblLoc.pinId = id
+        lblLoc.pinType = type
+        lblLoc.loadAddress(position: position, id: id, type: type)
+    }
+    
+    func loadCellContent() {
+        imgAvatar = FaeAvatarView(frame: CGRect.zero)
+        addSubview(imgAvatar)
+        imgAvatar.layer.cornerRadius = 25
+        imgAvatar.clipsToBounds = true
+        imgAvatar.contentMode = .scaleAspectFill
+        addConstraintsWithFormat("H:|-15-[v0(50)]", options: [], views: imgAvatar)
+        
+        lblUsrName = UILabel()
+        addSubview(lblUsrName)
+        lblUsrName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblUsrName.textColor = UIColor.faeAppInputTextGrayColor()
+        addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblUsrName)
+        
+        lblTime = UILabel()
+        addSubview(lblTime)
+        lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblTime)
+        
+        lblContent = UILabel()
+        addSubview(lblContent)
+        lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblContent.lineBreakMode = .byWordWrapping
+        lblContent.numberOfLines = 0
+        addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
+        
+        btnLoc = UIButton()
+        btnLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
+        addSubview(btnLoc)
+        addConstraintsWithFormat("H:|-19-[v0]-19-|", options: [], views: btnLoc)
+        
+        lblLoc = MBAddressLabel(frame: CGRect.zero)
+        btnLoc.addSubview(lblLoc)
+        lblLoc.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblLoc.textColor = UIColor.faeAppInputTextGrayColor()
+        lblLoc.lineBreakMode = .byTruncatingTail
+        btnLoc.addConstraintsWithFormat("H:|-42-[v0]-2-|", options: [], views: lblLoc)
+        btnLoc.addConstraintsWithFormat("V:|-6-[v0(20)]", options: [], views: lblLoc)
+        
+        uiviewCellFooter = UIView()
+        addSubview(uiviewCellFooter)
+        uiviewCellFooter.backgroundColor = .clear
+        addConstraintsWithFormat("H:|-14-[v0]-14-|", options: [], views: uiviewCellFooter)
+        
+        btnFav = UIButton()
+        btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
+        uiviewCellFooter.addSubview(btnFav)
+        addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnFav)
+        
+        btnReply = UIButton()
+        btnReply.setImage(#imageLiteral(resourceName: "pinDetailShowCommentsHollow"), for: .normal)
+        uiviewCellFooter.addSubview(btnReply)
+        addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
+        
+        lblFavCount = UILabel()
+        uiviewCellFooter.addSubview(lblFavCount)
+        lblFavCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblFavCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblFavCount.textAlignment = .right
+        addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblFavCount)
+        
+        lblReplyCount = UILabel()
+        uiviewCellFooter.addSubview(lblReplyCount)
+        lblReplyCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblReplyCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblReplyCount.textAlignment = .right
+        addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblReplyCount)
+        
+        addConstraintsWithFormat("H:[v0(41)]-8-[v1(26)]-17-[v2(41)]-8-[v3(26)]-0-|", options: [], views: lblFavCount, btnFav, lblReplyCount, btnReply)
+        addConstraintsWithFormat("V:|-19-[v0(25)]-1-[v1(18)]", options: [], views: lblUsrName, lblTime)
+        
+        switch MBComtsStoriesCell.strPinType {
+        case "comment":
+            addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-10-[v2(32)]-17-[v3(27)]-10-|", options: [], views: imgAvatar, lblContent, btnLoc, uiviewCellFooter)
+            break
+        case "media":
+            scrollViewMedia = UIScrollView()
+            scrollViewMedia.delegate = self
+            scrollViewMedia.isScrollEnabled = true
+            scrollViewMedia.backgroundColor = .clear
+            scrollViewMedia.showsHorizontalScrollIndicator = false
+            addSubview(scrollViewMedia)
+            var insets = scrollViewMedia.contentInset
+            insets.left = 15
+            insets.right = 15
+            scrollViewMedia.contentInset = insets
+            scrollViewMedia.scrollToLeft(animated: false)
+            
+            addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: scrollViewMedia)
+            addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-12-[v2(95)]-12-[v3(32)]-17-[v4(27)]-10-|", options: [], views: imgAvatar, lblContent, scrollViewMedia, btnLoc, uiviewCellFooter)
+            break
+        default:
+            break
+        }
+        
+        imgHotPin = UIImageView()
+        imgHotPin.image = #imageLiteral(resourceName: "pinDetailHotPin")
+        addSubview(imgHotPin)
+        imgHotPin.clipsToBounds = true
+        imgHotPin.contentMode = .scaleAspectFill
+        imgHotPin.isHidden = true
+        addConstraintsWithFormat("H:[v0(18)]-15-|", options: [], views: imgHotPin)
+        addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)
+    }
+
+    func setValueForCell(social: MBSocialStruct) {
+        self.strPinId = String(social.pinId)
+        
+        if social.anonymous || social.displayName == "" {
+            lblUsrName.text = "Someone"
+            imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
+        } else {
+            lblUsrName.text = social.displayName
+            imgAvatar.userID = social.userId
+            imgAvatar.loadAvatar(id: social.userId)
+        }
+        lblTime.text = social.date
+        lblContent.attributedText = social.attributedText
+        
+        setAddressForCell(position: social.position, id: social.pinId, type: social.type)
+        lblLoc.text = social.address
+        imgHotPin.isHidden = social.status != "hot"
+        lblFavCount.text = String(social.likeCount)
+        btnFav.setImage(social.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
+        lblReplyCount.text = String(social.commentCount)
+        
+        btnFav.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
+        //        btnFav.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        btnReply.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+        
+        if MBComtsStoriesCell.strPinType == "media" {
+            imgMediaArr.removeAll()
+            for subview in scrollViewMedia.subviews {
+                subview.removeFromSuperview()
+            }
+    
+            //        cell.scrollViewMedia.frame = CGRect(x: 0, y: 0, width: 105 * story.fileIdArray.count, height: 95)
+            //        cell.scrollViewMedia.frame.size = CGSize(width: 105 * story.fileIdArray.count, height: 95)
+            
+            for index in 0..<social.fileIdArray.count {
+                let imageView = FaeImageView(frame: CGRect(x: 105 * index, y: 0, width: 95, height: 95))
+                imageView.clipsToBounds = true
+                imageView.contentMode = .scaleAspectFill
+                imageView.layer.cornerRadius = 13.5
+                imageView.fileID = social.fileIdArray[index]
+                imageView.loadImage(id: social.fileIdArray[index])
+                imgMediaArr.append(imageView)
+                scrollViewMedia.addSubview(imageView)
+            }
+            // the tableView can't scroll up/down when finger is touched on the scrollView when height is 95
+            // Finally, I set the scrollView's height smaller than the height in storyboard => height: 90 instead of 95
+            scrollViewMedia.contentSize = CGSize(width: social.fileIdArray.count * 105 - 10, height: 90)
+        }
+    }
+    
+    func actionReplyToThisPin(_ sender: UIButton) {
+        delegate?.replyToThisPin(indexPath: indexForCurtCell)
+    }
+    
+    func actionLikeThisPin(_ sender: UIButton) {
+        delegate?.likeThisPin(indexPath: indexForCurtCell, strPinId: strPinId)
+    }
+}
