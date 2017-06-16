@@ -250,6 +250,7 @@
 		B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC31EEB161900D4588D /* MBNetwork.swift */; };
 		B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */; };
 		B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */; };
+		B8849F571EF355E500D4588D /* MBComtsStoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */; };
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
@@ -589,6 +590,7 @@
 		B8849EC31EEB161900D4588D /* MBNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBNetwork.swift; sourceTree = "<group>"; };
 		B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRootViewController.swift; sourceTree = "<group>"; };
 		B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBAddressLabel.swift; sourceTree = "<group>"; };
+		B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesViewController.swift; sourceTree = "<group>"; };
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
@@ -1336,6 +1338,7 @@
 				B8849EB21EEB147A00D4588D /* MBTalkTopicCell.swift */,
 				B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */,
 				B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */,
+				B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */,
 			);
 			name = MapBoardExtensions;
 			sourceTree = "<group>";
@@ -1812,6 +1815,7 @@
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
+				B8849F571EF355E500D4588D /* MBComtsStoriesViewController.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
