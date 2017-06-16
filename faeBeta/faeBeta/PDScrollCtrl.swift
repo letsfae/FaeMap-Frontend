@@ -13,10 +13,10 @@ extension PinDetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == tblMain {
 //            print("[scrollViewDidScroll] offset: \(scrollView.contentOffset.y)")
-            if self.uiviewCtrlBoard != nil {
-                let offset: CGFloat = uiviewTblHeader.frame.size.height - 42
-                self.uiviewCtrlBoard.isHidden = tblMain.contentOffset.y < offset
-            }
+//            if self.uiviewCtrlBoard != nil {
+//                let offset: CGFloat = uiviewTblHeader.frame.size.height - 42
+//                self.uiviewCtrlBoard.isHidden = tblMain.contentOffset.y < offset
+//            }
         }
     }
 }

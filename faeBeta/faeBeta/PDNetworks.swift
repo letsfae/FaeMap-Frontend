@@ -60,7 +60,6 @@ extension PinDetailViewController {
             attr.append(attr_0)
             attr.append(attr_1)
             self.lblFeelings.attributedText = attr
-            self.lblAnotherFeelings.attributedText = attr
             
             if self.tableMode == .feelings {
                 self.tblMain.reloadData()
@@ -140,7 +139,6 @@ extension PinDetailViewController {
             attributedText.append(attr_2)
             attributedText.append(attr_3)
             self.lblPeople.attributedText = attributedText
-            self.lblAnotherPeople.attributedText = attributedText
         }
     }
     
@@ -192,7 +190,6 @@ extension PinDetailViewController {
                 attr.append(attr_0)
                 attr.append(attr_1)
                 self.lblFeelings.attributedText = attr
-                self.lblAnotherFeelings.attributedText = attr
                 
                 if self.tableMode == .feelings && !self.boolDetailShrinked {
                     self.tblMain.reloadData()
@@ -288,7 +285,6 @@ extension PinDetailViewController {
             attr.append(attr_0)
             attr.append(attr_1)
             self.lblTalkTalk.attributedText = attr
-            self.lblAnotherTalkTalk.attributedText = attr
             
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imgHotPin.isHidden = false
@@ -501,7 +497,6 @@ extension PinDetailViewController {
                 attr.append(attr_0)
                 attr.append(attr_1)
                 self.lblPeople.attributedText = attr
-                self.lblAnotherPeople.attributedText = attr
             }
         })
     }

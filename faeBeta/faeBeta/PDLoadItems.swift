@@ -14,8 +14,8 @@ extension PinDetailViewController {
     // Load pin detail window
     func loadPinDetailWindow() {
         
-        loadTransparentButtonBackToMap()
-        loadFeelingBar()
+        self.loadTransparentButtonBackToMap()
+        self.loadFeelingBar()
         
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 320))
         uiviewMain.layer.zPosition = 101
@@ -23,20 +23,20 @@ extension PinDetailViewController {
         self.view.addSubview(uiviewMain)
         uiviewMain.frame.origin.y = enterMode == .collections ? 0 : -screenHeight
         
-        loadNavigationBar()
-        loadPinCtrlButton()
-        loadingOtherParts()
-        loadTableHeader()
-        loadAnotherToolbar()
-        loadInputToolBar()
-        loadChatView()
+        self.loadNavigationBar()
+        self.loadPinCtrlButton()
+        self.loadingOtherParts()
+        self.loadTableHeader()
+        self.loadToolBar()
+        self.loadInputToolBar()
+        self.loadChatView()
         
         tblMain.tableHeaderView = PinDetailViewController.pinTypeEnum == .chat_room ? uiviewChatRoom : uiviewTblHeader
     }
     
     fileprivate func loadTransparentButtonBackToMap() {
         btnGrayBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        btnGrayBackToMap.backgroundColor = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 0.5)
+        btnGrayBackToMap.backgroundColor = UIColor(red: 115 / 255, green: 115 / 255, blue: 115 / 255, alpha: 0.5)
         btnGrayBackToMap.alpha = 0
         view.addSubview(btnGrayBackToMap)
         view.sendSubview(toBack: btnGrayBackToMap)
@@ -76,9 +76,9 @@ extension PinDetailViewController {
             return
         }
         
-        let feelingBarAnchor = CGPoint(x: screenWidth/2, y: 461*screenHeightFactor)
+        let feelingBarAnchor = CGPoint(x: screenWidth / 2, y: 461 * screenHeightFactor)
         
-        uiviewFeelingBar = UIView(frame: CGRect(x: screenWidth/2, y: 451*screenHeightFactor, width: 0, height: 0))
+        uiviewFeelingBar = UIView(frame: CGRect(x: screenWidth / 2, y: 451 * screenHeightFactor, width: 0, height: 0))
         view.addSubview(uiviewFeelingBar)
         uiviewFeelingBar.layer.anchorPoint = feelingBarAnchor
         uiviewFeelingBar.layer.cornerRadius = 26
@@ -103,7 +103,7 @@ extension PinDetailViewController {
         for i in 0..<btnFeelingArray.count {
             btnFeelingArray[i].frame = CGRect.zero
             uiviewFeelingBar.addSubview(btnFeelingArray[i])
-            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i+1)-1"), for: .normal)
+            btnFeelingArray[i].setImage(UIImage(named: "pdFeeling_0\(i + 1)-1"), for: .normal)
             btnFeelingArray[i].adjustsImageWhenHighlighted = false
             btnFeelingArray[i].tag = i
             btnFeelingArray[i].layer.anchorPoint = feelingBarAnchor
@@ -121,10 +121,10 @@ extension PinDetailViewController {
         imgPinIcon.alpha = 0
         view.addSubview(imgPinIcon)
         
-        btnPrevPin = UIButton(frame: CGRect(x: 41*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
+        btnPrevPin = UIButton(frame: CGRect(x: 41 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0))
         btnPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         btnPrevPin.layer.zPosition = 60
-        btnPrevPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        btnPrevPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
         btnPrevPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         btnPrevPin.layer.shadowOpacity = 0.6
         btnPrevPin.layer.shadowRadius = 3.0
@@ -132,10 +132,10 @@ extension PinDetailViewController {
         btnPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnPrevPin)
         
-        btnNextPin = UIButton(frame: CGRect(x: 373*screenHeightFactor, y: 503*screenHeightFactor, width: 0, height: 0))
+        btnNextPin = UIButton(frame: CGRect(x: 373 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0))
         btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         btnNextPin.layer.zPosition = 60
-        btnNextPin.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        btnNextPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
         btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         btnNextPin.layer.shadowOpacity = 0.6
         btnNextPin.layer.shadowRadius = 3.0
@@ -148,7 +148,7 @@ extension PinDetailViewController {
         uiviewTableSub = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         uiviewTableSub.backgroundColor = UIColor.white
         uiviewMain.addSubview(uiviewTableSub)
-        uiviewTableSub.layer.shadowColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0).cgColor
+        uiviewTableSub.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
         uiviewTableSub.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         uiviewTableSub.layer.shadowOpacity = 0.3
         uiviewTableSub.layer.shadowRadius = 10.0
@@ -176,7 +176,7 @@ extension PinDetailViewController {
         uiviewMain.addSubview(uiviewToFullDragBtnSub)
         
         uiviewLineInDragBtn = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        uiviewLineInDragBtn.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0)
+        uiviewLineInDragBtn.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0)
         uiviewToFullDragBtnSub.addSubview(uiviewLineInDragBtn)
         
         btnToFullPin = UIButton(frame: CGRect(x: 0, y: 1, width: screenWidth, height: 27))
@@ -184,13 +184,13 @@ extension PinDetailViewController {
         btnToFullPin.setImage(#imageLiteral(resourceName: "pinDetailDraggingButton"), for: UIControlState())
         btnToFullPin.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
         uiviewToFullDragBtnSub.addSubview(btnToFullPin)
-        btnToFullPin.center.x = screenWidth/2
+        btnToFullPin.center.x = screenWidth / 2
         btnToFullPin.tag = 0
     }
     
     fileprivate func loadTableHeader() {
         
-        uiviewTblHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 274))
+        uiviewTblHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 232))
         uiviewTblHeader.backgroundColor = UIColor.white
         
         // Textview width based on different resolutions
@@ -214,14 +214,14 @@ extension PinDetailViewController {
         textviewPinDetail.isScrollEnabled = true
         textviewPinDetail.isUserInteractionEnabled = true
         textviewPinDetail.attributedText = strTextViewText.convertStringWithEmoji()
-        textviewPinDetail.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        textviewPinDetail.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         textviewPinDetail.textContainerInset = .zero
         uiviewTblHeader.addSubview(textviewPinDetail)
         
         scrollViewMedia = UIScrollView(frame: CGRect(x: 0, y: 80, width: screenWidth, height: 0))
         scrollViewMedia.frame.size.height = enterMode == .collections ? 160 : 95
         scrollViewMedia.delegate = self
-        scrollViewMedia.contentSize = CGSize(width: screenWidth-15, height: 95)
+        scrollViewMedia.contentSize = CGSize(width: screenWidth - 15, height: 95)
         scrollViewMedia.isScrollEnabled = true
         scrollViewMedia.backgroundColor = UIColor.clear
         scrollViewMedia.showsHorizontalScrollIndicator = false
@@ -275,7 +275,7 @@ extension PinDetailViewController {
         lblPinLikeCount = UILabel()
         lblPinLikeCount.text = ""
         lblPinLikeCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        lblPinLikeCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        lblPinLikeCount.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0)
         lblPinLikeCount.textAlignment = .right
         uiviewInteractBtnSub.addSubview(lblPinLikeCount)
         uiviewInteractBtnSub.addConstraintsWithFormat("H:[v0(41)]-141-|", options: [], views: lblPinLikeCount)
@@ -285,7 +285,7 @@ extension PinDetailViewController {
         lblCommentCount = UILabel()
         lblCommentCount.text = ""
         lblCommentCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        lblCommentCount.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        lblCommentCount.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0)
         lblCommentCount.textAlignment = .right
         uiviewInteractBtnSub.addSubview(lblCommentCount)
         uiviewInteractBtnSub.addConstraintsWithFormat("H:[v0(41)]-49-|", options: [], views: lblCommentCount)
@@ -293,76 +293,8 @@ extension PinDetailViewController {
         
         // Gray Block
         uiviewGrayMidBlock = UIView(frame: CGRect(x: 0, y: 227, width: screenWidth, height: 5))
-        uiviewGrayMidBlock.backgroundColor = UIColor(red: 244/255, green: 244/255, blue: 244/255, alpha: 1.0)
+        uiviewGrayMidBlock.backgroundColor = UIColor(red: 244 / 255, green: 244 / 255, blue: 244 / 255, alpha: 1.0)
         uiviewTblHeader.addSubview(uiviewGrayMidBlock)
-        
-        // ----
-        // View to hold three buttons
-        uiviewTblCtrlBtnSub = UIView(frame: CGRect(x: 0, y: 232, width: screenWidth, height: 42))
-        uiviewTblHeader.addSubview(uiviewTblCtrlBtnSub)
-        
-        // Three buttons bottom gray line
-        uiviewGrayMidLine = UIView()
-        uiviewGrayMidLine.layer.borderWidth = 1.0
-        uiviewGrayMidLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-        uiviewTblCtrlBtnSub.addSubview(uiviewGrayMidLine)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: uiviewGrayMidLine)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: uiviewGrayMidLine)
-        
-        let widthOfThreeButtons = screenWidth / 3
-        
-        // Three buttons bottom sliding red line
-        uiviewRedSlidingLine = UIView(frame: CGRect(x: 0, y: 40, width: widthOfThreeButtons, height: 2))
-        uiviewRedSlidingLine.layer.borderWidth = 1.0
-        uiviewRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).cgColor
-        uiviewTblCtrlBtnSub.addSubview(uiviewRedSlidingLine)
-        
-        // "Talk Talk" of this uiview
-        lblTalkTalk = UILabel()
-        lblTalkTalk.text = "Talk Talk"
-        lblTalkTalk.textColor = UIColor.faeAppInputTextGrayColor()
-        lblTalkTalk.textAlignment = .center
-        lblTalkTalk.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        uiviewTblCtrlBtnSub.addSubview(lblTalkTalk)
-        
-        btnTalkTalk = UIButton()
-        btnTalkTalk.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        uiviewTblCtrlBtnSub.addSubview(btnTalkTalk)
-        btnTalkTalk.tag = 1
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblTalkTalk)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnTalkTalk)
-        
-        // "Feelings" of this uiview
-        lblFeelings = UILabel()
-        lblFeelings.text = "Feelings"
-        lblFeelings.textColor = UIColor.faeAppInputTextGrayColor()
-        lblFeelings.textAlignment = .center
-        lblFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        uiviewTblCtrlBtnSub.addSubview(lblFeelings)
-        
-        btnFeelings = UIButton()
-        btnFeelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        uiviewTblCtrlBtnSub.addSubview(btnFeelings)
-        btnFeelings.tag = 3
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblFeelings)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnFeelings)
-        
-        // "People" of this uiview
-        lblPeople = UILabel()
-        lblPeople.text = "People"
-        lblPeople.textColor = UIColor.faeAppInputTextGrayColor()
-        lblPeople.textAlignment = .center
-        lblPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        uiviewTblCtrlBtnSub.addSubview(lblPeople)
-        btnPeople = UIButton()
-        btnPeople.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        uiviewTblCtrlBtnSub.addSubview(btnPeople)
-        btnPeople.tag = 5
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblPeople)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnPeople)
-        
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: lblTalkTalk, lblFeelings, lblPeople)
-        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: btnTalkTalk, btnFeelings, btnPeople)
         
         // Comment Pin User Avatar
         imgPinUserAvatar = FaeAvatarView(frame: CGRect.zero)
@@ -379,7 +311,7 @@ extension PinDetailViewController {
         lblPinDisplayName = UILabel()
         lblPinDisplayName.text = ""
         lblPinDisplayName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblPinDisplayName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        lblPinDisplayName.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         lblPinDisplayName.textAlignment = .left
         uiviewTblHeader.addSubview(lblPinDisplayName)
         uiviewTblHeader.addConstraintsWithFormat("H:|-80-[v0(250)]", options: [], views: lblPinDisplayName)
@@ -389,7 +321,7 @@ extension PinDetailViewController {
         lblPinDate = UILabel()
         lblPinDate.text = ""
         lblPinDate.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblPinDate.textColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 1.0)
+        lblPinDate.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0)
         lblPinDate.textAlignment = .left
         uiviewTblHeader.addSubview(lblPinDate)
         uiviewTblHeader.addConstraintsWithFormat("H:|-80-[v0(200)]", options: [], views: lblPinDate)
@@ -406,78 +338,69 @@ extension PinDetailViewController {
         imgCollected.alpha = 0.0
     }
     
-    fileprivate func loadAnotherToolbar() {
-        // Gray Block
-        uiviewCtrlBoard = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 42))
-        uiviewCtrlBoard.backgroundColor = UIColor.white
-        view.addSubview(uiviewCtrlBoard)
-        uiviewCtrlBoard.isHidden = true
-        uiviewCtrlBoard.layer.zPosition = 110
+    fileprivate func loadToolBar() {
+        // View to hold three buttons
+        uiviewTblCtrlBtnSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 42))
         
         // Three buttons bottom gray line
-        let grayBaseLine = UIView()
-        grayBaseLine.layer.borderWidth = 1.0
-        grayBaseLine.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
-        uiviewCtrlBoard.addSubview(grayBaseLine)
-        uiviewCtrlBoard.addConstraintsWithFormat("H:|-0-[v0(\(screenWidth))]", options: [], views: grayBaseLine)
-        uiviewCtrlBoard.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: grayBaseLine)
-        
-        // View to hold three buttons
-        let threeButtonsContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 42))
-        uiviewCtrlBoard.addSubview(threeButtonsContainer)
+        uiviewGrayMidLine = UIView()
+        uiviewGrayMidLine.layer.borderWidth = 1.0
+        uiviewGrayMidLine.layer.borderColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0).cgColor
+        uiviewTblCtrlBtnSub.addSubview(uiviewGrayMidLine)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewGrayMidLine)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: uiviewGrayMidLine)
         
         let widthOfThreeButtons = screenWidth / 3
         
         // Three buttons bottom sliding red line
-        anotherRedSlidingLine = UIView(frame: CGRect(x: 0, y: 40, width: widthOfThreeButtons, height: 2))
-        anotherRedSlidingLine.layer.borderWidth = 1.0
-        anotherRedSlidingLine.layer.borderColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0).cgColor
-        self.uiviewCtrlBoard.addSubview(anotherRedSlidingLine)
+        uiviewRedSlidingLine = UIView(frame: CGRect(x: 0, y: 40, width: widthOfThreeButtons, height: 2))
+        uiviewRedSlidingLine.layer.borderWidth = 1.0
+        uiviewRedSlidingLine.layer.borderColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0).cgColor
+        uiviewTblCtrlBtnSub.addSubview(uiviewRedSlidingLine)
         
         // "Talk Talk" of this uiview
-        lblAnotherTalkTalk = UILabel()
-        lblAnotherTalkTalk.text = "Talk Talk"
-        lblAnotherTalkTalk.textColor = UIColor.faeAppInputTextGrayColor()
-        lblAnotherTalkTalk.textAlignment = .center
-        lblAnotherTalkTalk.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(lblAnotherTalkTalk)
-        let comments = UIButton()
-        comments.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        threeButtonsContainer.addSubview(comments)
-        comments.tag = 1
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherTalkTalk)
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: comments)
+        lblTalkTalk = UILabel()
+        lblTalkTalk.text = "Talk Talk"
+        lblTalkTalk.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTalkTalk.textAlignment = .center
+        lblTalkTalk.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewTblCtrlBtnSub.addSubview(lblTalkTalk)
+        
+        btnTalkTalk = UIButton()
+        btnTalkTalk.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewTblCtrlBtnSub.addSubview(btnTalkTalk)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblTalkTalk)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnTalkTalk)
         
         // "Feelings" of this uiview
-        lblAnotherFeelings = UILabel()
-        lblAnotherFeelings.text = "Feelings"
-        lblAnotherFeelings.textColor = UIColor.faeAppInputTextGrayColor()
-        lblAnotherFeelings.textAlignment = .center
-        lblAnotherFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(lblAnotherFeelings)
-        let feelings = UIButton()
-        feelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        threeButtonsContainer.addSubview(feelings)
-        feelings.tag = 3
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherFeelings)
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: feelings)
+        lblFeelings = UILabel()
+        lblFeelings.text = "Feelings"
+        lblFeelings.textColor = UIColor.faeAppInputTextGrayColor()
+        lblFeelings.textAlignment = .center
+        lblFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewTblCtrlBtnSub.addSubview(lblFeelings)
+        
+        btnFeelings = UIButton()
+        btnFeelings.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewTblCtrlBtnSub.addSubview(btnFeelings)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblFeelings)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnFeelings)
         
         // "People" of this uiview
-        lblAnotherPeople = UILabel()
-        lblAnotherPeople.text = "People"
-        lblAnotherPeople.textColor = UIColor.faeAppInputTextGrayColor()
-        lblAnotherPeople.textAlignment = .center
-        lblAnotherPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        threeButtonsContainer.addSubview(lblAnotherPeople)
-        let people = UIButton()
-        people.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
-        threeButtonsContainer.addSubview(people)
-        people.tag = 5
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblAnotherPeople)
-        threeButtonsContainer.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: people)
+        lblPeople = UILabel()
+        lblPeople.text = "People"
+        lblPeople.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPeople.textAlignment = .center
+        lblPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        uiviewTblCtrlBtnSub.addSubview(lblPeople)
+        btnPeople = UIButton()
+        btnPeople.addTarget(self, action: #selector(self.animationRedSlidingLine(_:)), for: .touchUpInside)
+        uiviewTblCtrlBtnSub.addSubview(btnPeople)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: lblPeople)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("V:|-0-[v0(42)]", options: [], views: btnPeople)
         
-        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: lblAnotherTalkTalk, lblAnotherFeelings, lblAnotherPeople)
-        threeButtonsContainer.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: comments, feelings, people)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: lblTalkTalk, lblFeelings, lblPeople)
+        uiviewTblCtrlBtnSub.addConstraintsWithFormat("H:|-0-[v0(\(widthOfThreeButtons))]-0-[v1(\(widthOfThreeButtons))]-0-[v2(\(widthOfThreeButtons))]", options: [], views: btnTalkTalk, btnFeelings, btnPeople)
     }
     
     fileprivate func loadInputToolBar() {
@@ -487,10 +410,10 @@ extension PinDetailViewController {
         
         let line_0 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         line_0.layer.borderWidth = 1
-        line_0.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        line_0.layer.borderColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0).cgColor
         uiviewInputToolBarSub.addSubview(line_0)
         
-        textViewInput = UITextView(frame: CGRect(x: 28, y: 14.5, width: screenWidth-142, height: 25))
+        textViewInput = UITextView(frame: CGRect(x: 28, y: 14.5, width: screenWidth - 142, height: 25))
         textViewInput.delegate = self
         textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
         textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
@@ -537,7 +460,7 @@ extension PinDetailViewController {
         loadEmojiView()
         loadAnonymous()
     }
-
+    
     fileprivate func loadAnonymous() {
         uiviewAnonymous = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 51))
         uiviewAnonymous.backgroundColor = UIColor.white
@@ -547,7 +470,7 @@ extension PinDetailViewController {
         
         let line_0 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         line_0.layer.borderWidth = 1
-        line_0.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1.0).cgColor
+        line_0.layer.borderColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0).cgColor
         uiviewAnonymous.addSubview(line_0)
         
         btnHideAnony = UIButton()
@@ -559,7 +482,7 @@ extension PinDetailViewController {
         
         switchAnony = UISwitch(frame: CGRect(x: 0, y: 0, width: 39, height: 23))
         switchAnony.onTintColor = UIColor.faeAppRedColor()
-        switchAnony.transform = CGAffineTransform(scaleX: 35/51, y: 21/31)
+        switchAnony.transform = CGAffineTransform(scaleX: 35 / 51, y: 21 / 31)
         uiviewAnonymous.addSubview(switchAnony)
         uiviewAnonymous.addConstraintsWithFormat("H:[v0(35)]-130-|", options: [], views: switchAnony)
         uiviewAnonymous.addConstraintsWithFormat("V:|-14-[v0(21)]", options: [], views: switchAnony)
@@ -574,7 +497,7 @@ extension PinDetailViewController {
         btnDoAnony.addTarget(self, action: #selector(self.actionDoAnony), for: .touchUpInside)
     }
     
-    fileprivate func loadEmojiView(){
+    fileprivate func loadEmojiView() {
         emojiView = StickerPickView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 271), emojiOnly: true)
         emojiView.sendStickerDelegate = self
         emojiView.layer.zPosition = 130
@@ -586,12 +509,12 @@ extension PinDetailViewController {
             return
         }
         
-        uiviewChatRoom = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight-65))
+        uiviewChatRoom = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 65))
         
         uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 227))
         uiviewChatSpotBar.backgroundColor = UIColor.white
         
-        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth/2)-40, y: 15, width: 80, height: 80))
+        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth / 2) - 40, y: 15, width: 80, height: 80))
         imgChatSpot.layer.cornerRadius = 40
         imgChatSpot.clipsToBounds = true
         imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
@@ -612,18 +535,18 @@ extension PinDetailViewController {
         
         uiviewChatSpotBar.addSubview(lblChatMemberNum)
         
-        btnChatEnter = UIButton(frame: CGRect(x: 0, y: 173, width: 210 , height: 40))
-        btnChatEnter.center.x = screenWidth/2
+        btnChatEnter = UIButton(frame: CGRect(x: 0, y: 173, width: 210, height: 40))
+        btnChatEnter.center.x = screenWidth / 2
         btnChatEnter.setTitle("Enter Chat", for: .normal)
         btnChatEnter.setTitleColor(UIColor.white, for: .normal)
         btnChatEnter.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnChatEnter.titleLabel?.textAlignment = .center
-        btnChatEnter.backgroundColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 100)
+        btnChatEnter.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 100)
         btnChatEnter.layer.cornerRadius = 20
         uiviewChatSpotBar.addSubview(btnChatEnter)
         
         uiviewChatSpotLineFirstBottom = UIView(frame: CGRect(x: 0, y: 227, width: screenWidth, height: 5))
-        uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 100)
+        uiviewChatSpotLineFirstBottom.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 100)
         uiviewChatSpotBar.addSubview(uiviewChatSpotLineFirstBottom)
         
         self.uiviewChatRoom.addSubview(uiviewChatSpotBar)
@@ -636,16 +559,16 @@ extension PinDetailViewController {
         let attriMemberNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
         
-        let attriMemberTotal = [ NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(),NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)! ]
-        //set attributes
+        let attriMemberTotal = [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        // set attributes
         
         let mutableAttrStringPeople = NSMutableAttributedString(string: "People  ", attributes: attriMemberStrPeople)
         mutableAttrStringMemberNum = NSMutableAttributedString(string: "39", attributes: attriMemberNum)
         let mutableAttrStringSlash = NSMutableAttributedString(string: "/", attributes: attriMemberTotal)
         mutableAttrStringMemberTotal = NSMutableAttributedString(string: "50", attributes: attriMemberTotal)
-        //set attributed parts
+        // set attributed parts
         
-        let mutableStrIniTitle = NSMutableAttributedString(string:"")
+        let mutableStrIniTitle = NSMutableAttributedString(string: "")
         mutableStrIniTitle.append(mutableAttrStringPeople)
         mutableStrIniTitle.append(mutableAttrStringMemberNum)
         mutableStrIniTitle.append(mutableAttrStringSlash)
@@ -666,12 +589,12 @@ extension PinDetailViewController {
         self.uiviewChatRoom.addSubview(cllcviewChatMember)
         
         uiviewChatSpotLine = UIView(frame: CGRect(x: 0, y: 351, width: screenWidth, height: 1))
-        uiviewChatSpotLine.backgroundColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 100)
+        uiviewChatSpotLine.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 100)
         self.uiviewChatRoom.addSubview(uiviewChatSpotLine)
         
         let lblDesTitle = UILabel(frame: CGRect(x: 15, y: 363, width: screenWidth, height: 22))
         lblDesTitle.text = "Description"
-        lblDesTitle.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        lblDesTitle.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
         lblDesTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.uiviewChatRoom.addSubview(lblDesTitle)
         
@@ -679,7 +602,7 @@ extension PinDetailViewController {
         lblDescriptionText.lineBreakMode = .byTruncatingTail
         lblDescriptionText.numberOfLines = 0
         lblDescriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
-        lblDescriptionText.textColor = UIColor(red: 146/255, green: 146/255, blue: 146/255, alpha: 100)
+        lblDescriptionText.textColor = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 100)
         lblDescriptionText.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.uiviewChatRoom.addSubview(lblDescriptionText)
         uiviewChatRoom.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)

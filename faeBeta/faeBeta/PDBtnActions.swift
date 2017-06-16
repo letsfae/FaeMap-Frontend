@@ -31,32 +31,26 @@ extension PinDetailViewController {
     
     // Animation of the red sliding line (Talk Talk, Feelings, People)
     func animationRedSlidingLine(_ sender: UIButton) {
-        if sender.tag == 1 {
+        if sender == btnTalkTalk {
             tableMode = .talktalk
             tblMain.reloadData()
             UIView.animate(withDuration: 0.3, animations: {
                 self.uiviewMain.frame.size.height = screenHeight - self.uiviewInputToolBarSub.frame.size.height
             })
-        } else if sender.tag == 3 {
+        } else if sender == btnFeelings {
             tableMode = .feelings
             tblMain.reloadData()
             uiviewMain.frame.size.height = screenHeight
-        } else if sender.tag == 5 {
+        } else if sender == btnPeople {
             tableMode = .people
             tblMain.reloadData()
             tblMain.contentOffset.y = 0
             uiviewMain.frame.size.height = screenHeight
         }
         endEdit()
-        let tag = CGFloat(sender.tag)
-        let centerAtOneSix = screenWidth / 6
-        let targetCenter = CGFloat(tag * centerAtOneSix)
         UIView.animate(withDuration: 0.25, animations: ({
-            self.uiviewRedSlidingLine.center.x = targetCenter
-            self.anotherRedSlidingLine.center.x = targetCenter
-        }), completion: { _ in
-            
-        })
+            self.uiviewRedSlidingLine.center.x = sender.center.x
+        }), completion: nil)
     }
     
     func endEdit() {
@@ -212,7 +206,6 @@ extension PinDetailViewController {
     
     func actionBackToMap(_ sender: UIButton) {
         self.endEdit()
-        uiviewCtrlBoard.removeFromSuperview()
         if enterMode == .collections {
             guard let likes = lblPinLikeCount.text else { return }
             guard let comments = lblCommentCount.text else { return }
@@ -269,14 +262,12 @@ extension PinDetailViewController {
                 self.uiviewInteractBtnSub.frame.origin.y = 185
                 self.uiviewGrayMidBlock.frame.origin.y = 227
                 self.uiviewTableSub.frame.size.height = 255
-                self.uiviewTblCtrlBtnSub.frame.origin.y = 232
-                self.uiviewTblHeader.frame.size.height = 281
+                self.uiviewTblHeader.frame.size.height = 239
                 self.uiviewToFullDragBtnSub.frame.origin.y = 292
                 self.uiviewMain.frame.size.height = 320
                 self.uiviewInputToolBarSub.frame.origin.y = screenHeight
             }), completion: { _ in
                 self.textviewPinDetail.isScrollEnabled = true
-                //                self.tblMain.setContentOffset(CGPoint.zero, animated: true)
                 self.tblMain.isScrollEnabled = false
                 self.tblMain.frame.size.height = 227
             })
@@ -323,7 +314,6 @@ extension PinDetailViewController {
                 self.textviewPinDetail.frame.size.height = textViewHeight
                 self.uiviewGrayMidBlock.center.y += 65 + textViewHeight
                 self.uiviewInteractBtnSub.center.y += 65 + textViewHeight
-                self.uiviewTblCtrlBtnSub.center.y += 65 + textViewHeight
                 self.uiviewTblHeader.frame.size.height += 65 + textViewHeight
             }), completion: nil)
             self.scrollViewMedia.scrollToLeft(animated: true)
@@ -332,7 +322,6 @@ extension PinDetailViewController {
             UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewTblHeader.frame.size.height += diffHeight
                 self.textviewPinDetail.frame.size.height += diffHeight
-                self.uiviewTblCtrlBtnSub.center.y += diffHeight
                 self.uiviewGrayMidBlock.center.y += diffHeight
                 self.uiviewInteractBtnSub.center.y += diffHeight
             }), completion: nil)

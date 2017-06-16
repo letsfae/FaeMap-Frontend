@@ -99,7 +99,6 @@ class PinDetailViewController: UIViewController {
     static var strPlaceTitle = ""
     var animatingHeart: UIImageView!
     var animatingHeartTimer: Timer! // Timer for animating heart
-    var anotherRedSlidingLine: UIView!
     var backJustOnce = true // Control the back to pin detail button, prevent the more than once action
     var boolMyPin = false // Check if this pin belongs to current user
     var boolOptionsExpanded = false
@@ -163,9 +162,6 @@ class PinDetailViewController: UIViewController {
     var lblPlaceTitle: UILabel!
     var lblTalkTalk: UILabel!
     var lblTxtPlaceholder: UILabel!
-    var lblAnotherTalkTalk: UILabel!
-    var lblAnotherFeelings: UILabel!
-    var lblAnotherPeople: UILabel!
     var pinComments = [PinComment]()
     var pinDetailUsers = [PinDetailUser]()
     var scrollViewMedia: UIScrollView! // container to display pin's media
@@ -178,7 +174,6 @@ class PinDetailViewController: UIViewController {
     var textViewInput: UITextView! // Input tool bar
     var textviewPinDetail: UITextView!
     var uiviewAnonymous: UIView!
-    var uiviewCtrlBoard: UIView! // A duplicate ControlBoard to hold
     var uiviewFeelingBar: UIView!
     var uiviewFeelingQuick: UIView!
     var uiviewGrayMidBlock: UIView!
@@ -288,14 +283,12 @@ class PinDetailViewController: UIViewController {
             scrollViewMedia.frame.origin.y += textViewHeight
             uiviewGrayMidBlock.center.y += 65 + textViewHeight
             uiviewInteractBtnSub.center.y += 65 + textViewHeight
-            uiviewTblCtrlBtnSub.center.y += 65 + textViewHeight
             uiviewTblHeader.frame.size.height += 65 + textViewHeight
         } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
             let diffHeight: CGFloat = textViewHeight - 100
             textviewPinDetail.frame.size.height += diffHeight
             uiviewGrayMidBlock.center.y += diffHeight
             uiviewInteractBtnSub.center.y += diffHeight
-            uiviewTblCtrlBtnSub.center.y += diffHeight
             uiviewTblHeader.frame.size.height += diffHeight
         }
     }

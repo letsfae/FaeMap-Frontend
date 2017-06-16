@@ -14,6 +14,19 @@ import IDMPhotoBrowser
 extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: UITableView Delegate and Datasource functions
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 42
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let uiview = UIView()
+        uiview.backgroundColor = .white
+        uiview.addSubview(uiviewTblCtrlBtnSub)
+        
+        return uiview
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -68,6 +81,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.lblTime.text = comment.date
             cell.lblVoteCount.text = "\(comment.numVoteCount)"
             cell.voteType = comment.voteType
+            
             switch comment.voteType {
             case "up":
                 cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
@@ -83,7 +97,6 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 break
             }
             cell.lblContent.attributedText = comment.attributedText
-            
             return cell
         } else if tableMode == .feelings {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdFeelingCell", for: indexPath) as! PDFeelingCell

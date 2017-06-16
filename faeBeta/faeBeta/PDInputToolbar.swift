@@ -109,7 +109,7 @@ extension PinDetailViewController {
             
         })
         if !directReplyFromUser {
-            tblMain.setContentOffset(CGPoint(x: 0, y: uiviewTblHeader.frame.size.height - 42), animated: false)
+            tblMain.setContentOffset(CGPoint(x: 0, y: uiviewTblHeader.frame.size.height), animated: false)
         }
     }
     

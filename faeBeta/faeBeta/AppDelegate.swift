@@ -76,11 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
         let vcEmptyRoot = EmptyRootViewController()
-//        let vcRealMap = FaeMapViewController()
-//        let vcMapBoard = MapBoardViewController()
         navRealMap.viewControllers = [vcEmptyRoot]
-//        navMapBoard.viewControllers = [vcMapBoard]
-        navMapBoard.navigationBar.isHidden = true
+        navRealMap.navigationBar.isHidden = true
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = navRealMap
