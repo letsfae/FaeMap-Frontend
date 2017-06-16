@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
@@ -326,6 +327,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesCell.swift; sourceTree = "<group>"; };
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
@@ -1325,20 +1327,21 @@
 				B8849EA31EEB143800D4588D /* LoadChooseNearbyPeoplePage.swift */,
 				B8849EA41EEB143800D4588D /* MapBoardTableView.swift */,
 				B8849EA71EEB147A00D4588D /* MBSocialCell.swift */,
+				B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */,
 				B8849EA81EEB147A00D4588D /* MBCommentsViewController.swift */,
+				B8849EAD1EEB147A00D4588D /* MBStoriesViewController.swift */,
+				189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */,
 				B8849EA91EEB147A00D4588D /* MBCommentsCell.swift */,
+				B8849EAE1EEB147A00D4588D /* MBStoriesCell.swift */,
 				B8849EAA1EEB147A00D4588D /* MBChatsViewController.swift */,
 				B8849EAB1EEB147A00D4588D /* MBChatSpotsCell.swift */,
 				B8849EAC1EEB147A00D4588D /* MBChatBubblesCell.swift */,
-				B8849EAD1EEB147A00D4588D /* MBStoriesViewController.swift */,
-				B8849EAE1EEB147A00D4588D /* MBStoriesCell.swift */,
 				B8849EAF1EEB147A00D4588D /* MBPeopleCell.swift */,
 				B8849EB01EEB147A00D4588D /* MBPlacesCell.swift */,
 				B8849EB11EEB147A00D4588D /* MBTalkFeedCell.swift */,
 				B8849EB21EEB147A00D4588D /* MBTalkTopicCell.swift */,
 				B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */,
 				B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */,
-				B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */,
 			);
 			name = MapBoardExtensions;
 			sourceTree = "<group>";
@@ -1821,6 +1824,7 @@
 				B09E49C01D96D7330075EE45 /* NameCardTagsViewController.swift in Sources */,
 				B84C90C41DE7DB01005B6F38 /* CreateMomentPinViewController.swift in Sources */,
 				B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */,
+				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				CE97A9C31E399D52005BBF6C /* YelpQuery.swift in Sources */,

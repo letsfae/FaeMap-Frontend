@@ -147,19 +147,16 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
         
         if tableMode == .social {
             if (indexPath.row == 0) {  // comments
-                let mbCommentsVC = MBCommentsViewController()
-                
-//                mbCommentsVC.mbComments = self.mbComments
+                let mbCommentsVC = MBComtsStoriesViewController()
+                mbCommentsVC.enterMode = .comment
                 
                 self.navigationController?.pushViewController(mbCommentsVC, animated: true)
-//                self.present(mbCommentsVC, animated: false, completion: nil)
             } else if (indexPath.row == 1) {  // chats
                 let mbChatsVC = MBChatsViewController()
                 self.navigationController?.pushViewController(mbChatsVC, animated: true)
             } else {  // stories
-                let mbStoriesVC = MBStoriesViewController()
-
-//                mbStoriesVC.mbStories = self.mbStories
+                let mbStoriesVC = MBComtsStoriesViewController()
+                mbStoriesVC.enterMode = .media
 
                 self.navigationController?.pushViewController(mbStoriesVC, animated: true)
             }

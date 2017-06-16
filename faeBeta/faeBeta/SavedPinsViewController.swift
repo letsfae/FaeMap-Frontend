@@ -87,21 +87,19 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             return
         }
         
-        if self.indexCurrSelectRowAt != nil {
-            let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
-            cellCurrSelect.lblCommentCount.text = commentCount
-            cellCurrSelect.lblLikeCount.text = likeCount
-            cellCurrSelect.imgLike.image = pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
-            if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
-                cellCurrSelect.imgHot.isHidden = false
-            }
-            else {
-                cellCurrSelect.imgHot.isHidden = true
-            }
-            arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
-            arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
-            arrMapPin[self.indexCurrSelectRowAt.section].isLiked = pinLikeStatus
+        let cellCurrSelect = tblPinsData.cellForRow(at: self.indexCurrSelectRowAt) as! SavedPinsTableViewCell
+        cellCurrSelect.lblCommentCount.text = commentCount
+        cellCurrSelect.lblLikeCount.text = likeCount
+        cellCurrSelect.imgLike.image = pinLikeStatus ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+        if Int(likeCount)! >= 15 || Int(commentCount)! >= 10 {
+            cellCurrSelect.imgHot.isHidden = false
         }
+        else {
+            cellCurrSelect.imgHot.isHidden = true
+        }
+        arrMapPin[self.indexCurrSelectRowAt.section].likeCount = Int(likeCount)!
+        arrMapPin[self.indexCurrSelectRowAt.section].commentCount = Int(commentCount)!
+        arrMapPin[self.indexCurrSelectRowAt.section].isLiked = pinLikeStatus
     }
     
     // PinTableViewCellDelegate protocol required function
