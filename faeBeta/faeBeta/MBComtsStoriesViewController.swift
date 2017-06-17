@@ -261,6 +261,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         } else {
             cellCurtSelect.imgHotPin.isHidden = true
         }
+        
         self.mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
         self.mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
         self.mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
