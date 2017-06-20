@@ -160,7 +160,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         sliderDisFilter.maximumValue = 100
         sliderDisFilter.addTarget(self, action: #selector(self.changeDisRange(_:)), for: .valueChanged)
         
-        sliderAgeFilter = TTRangeSlider(frame: CGRect(x: 28, y: 310, width: screenWidth - 56, height: 28))
+        sliderAgeFilter = TTRangeSlider(frame: CGRect(x: 28, y: 296, width: screenWidth - 56, height: 28))
         sliderAgeFilter.delegate = self
         sliderAgeFilter.tintColor = UIColor.faeAppNavBarBorderColor()
         sliderAgeFilter.tintColorBetweenHandles = UIColor.faeAppRedColor()

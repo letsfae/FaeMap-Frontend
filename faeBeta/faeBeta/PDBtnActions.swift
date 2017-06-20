@@ -209,11 +209,17 @@ extension PinDetailViewController {
         if enterMode == .collections {
             guard let likes = lblPinLikeCount.text else { return }
             guard let comments = lblCommentCount.text else { return }
-            // Vicky 06/13/17
             self.boolPinLiked = btnPinLike.currentImage == #imageLiteral(resourceName: "pinDetailLikeHeartFull")
             let isLiked = self.boolPinLiked
-            self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments, pinLikeStatus: isLiked)
-            // Vicky 06/13/17 End
+            // Vicky 06/20/17
+            var feelings = [Int]()
+            for i in 0..<feelingArray.count {
+                if feelingArray[i] != 0 {
+                    feelings.append(i)
+                }
+            }
+            self.colDelegate?.backToCollections(likeCount: likes, commentCount: comments, pinLikeStatus: isLiked, feelingArray: feelings)
+            // Vicky 06/20/17 End
             self.navigationController?.popViewController(animated: true)
             return
         }

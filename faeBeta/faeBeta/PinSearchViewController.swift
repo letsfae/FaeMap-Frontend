@@ -42,7 +42,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     }
     
     //full pin detail delegate
-    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool, feelingArray: [Int]) {
 //        if self.indexCurrSelectRowAt != nil {
 //            var cellCurrSelect : PinsTableViewCell
 //            if strTableTypeName == "Created Pins" {

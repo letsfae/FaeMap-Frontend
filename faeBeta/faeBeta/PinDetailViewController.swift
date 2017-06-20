@@ -29,7 +29,7 @@ protocol PinDetailDelegate: class {
 
 protocol PinDetailCollectionsDelegate: class {
     // Go back to collections
-    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool)
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool, feelingArray: [Int])
 }
 
 class PinDetailViewController: UIViewController {
@@ -138,6 +138,7 @@ class PinDetailViewController: UIViewController {
     var feelingArray = [Int]()
     var fileIdArray = [Int]()
     var imgCollected: UIImageView!
+    var imgFeelings = [UIImageView]()
     var imgHotPin: UIImageView!
     var imgMediaArr = [FaeImageView]()
     var imgPinIcon: UIImageView! // Icon to indicate pin type
