@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import PullToRefreshSwift
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate {
     
@@ -37,6 +38,28 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         getType()
         MBComtsStoriesCell.strPinType = type
         getMBSocialInfo(socialType: type)
+        
+        pullDownToRefresh()
+    }
+    
+    func pullDownToRefresh() {
+        var pullOptions = PullToRefreshOption()
+        pullOptions.backgroundColor = .blue
+        pullOptions.indicatorColor = .red
+        
+        self.tblCommentStory.addPullRefresh(options: pullOptions) { [unowned self] in
+            self.getMBSocialInfo(socialType: self.type)
+            self.tblCommentStory.stopPullRefreshEver()
+        }
+        
+        var pushOptions = PullToRefreshOption()
+        pushOptions.indicatorColor = .blue
+        self.tblCommentStory.addPushRefresh(options: pushOptions) { [weak self] in
+            // some code
+            sleep(1)
+//            self?.tblCommentStory.reloadData()
+            self?.tblCommentStory.stopPushRefreshEver(true)
+        }
     }
     
     func getType() {
@@ -161,7 +184,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             
             self.processMBInfo(results: socialInfoJsonArray, socialType: socialType)
             self.mbSocial.sort { $0.pinId > $1.pinId }
-            
+//            print(self.mbSocial)
             self.tblCommentStory.reloadData()
         }
     }
@@ -170,6 +193,23 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         for result in results {
             let mbSocialData = MBSocialStruct(json: result)
             if self.mbSocial.contains(mbSocialData) {
+                if let idx = self.mbSocial.index(of: mbSocialData) {
+                    if mbSocial[idx].likeCount != mbSocialData.likeCount {
+                        mbSocial[idx].likeCount = mbSocialData.likeCount
+                    }
+                    if mbSocial[idx].commentCount != mbSocialData.commentCount {
+                        mbSocial[idx].commentCount = mbSocialData.commentCount
+                    }
+                    if mbSocial[idx].feelingArray != mbSocialData.feelingArray {
+                        mbSocial[idx].feelingArray = mbSocialData.feelingArray
+                    }
+                    if mbSocial[idx].attributedText != mbSocialData.attributedText {
+                        mbSocial[idx].attributedText = mbSocialData.attributedText
+                    }
+                    if mbSocial[idx].fileIdArray != mbSocialData.fileIdArray {
+                        mbSocial[idx].fileIdArray = mbSocialData.fileIdArray
+                    }
+                }
                 continue
             } else {
                 self.mbSocial.append(mbSocialData)
@@ -245,7 +285,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     // PinDetailCollectionsDelegate
-    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool) {
+    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool, feelingArray: [Int]) {
         if likeCount == "" || commentCount == "" || self.cellCurtIndex == nil {
             return
         }
@@ -262,13 +302,25 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             cellCurtSelect.imgHotPin.isHidden = true
         }
         
+        let count = feelingArray.count <= 5 ? feelingArray.count : 5;
+        for i in 0..<count {
+            cellCurtSelect.imgFeelings[i].image = feelingArray[i] >= 9 ?
+                UIImage(named: "pdFeeling_\(feelingArray[i] + 1)-1") :
+                UIImage(named: "pdFeeling_0\(feelingArray[i] + 1)-1")
+        }
+        for i in count..<5 {
+            cellCurtSelect.imgFeelings[i].image = nil
+        }
+        
         self.mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
         self.mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
         self.mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
+        self.mbSocial[cellCurtIndex.row].feelingArray = feelingArray
+        print(feelingArray)
     }
     
     // MBComtsStoriesCellDelegate
-    func replyToThisPin(indexPath: IndexPath) {
+    func replyToThisPin(indexPath: IndexPath, boolReply: Bool) {
         let vcPinDetail = PinDetailViewController()
         let social = self.mbSocial[indexPath.row]
         vcPinDetail.modalPresentationStyle = .overCurrentContext
@@ -282,7 +334,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         self.cellCurtIndex = indexPath
         
         self.navigationController?.pushViewController(vcPinDetail, animated: true)
-        vcPinDetail.boolFromMapBoard = true
+        
+        vcPinDetail.boolFromMapBoard = boolReply
     }
     
     // MBComtsStoriesCellDelegate

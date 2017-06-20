@@ -325,15 +325,15 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
         uiviewDropDownMenu.addSubview(imgTick)
         
-        let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 54, width: screenWidth - 82, height: 1))
+        let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
         uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
         
-        let uiviewDropMenuSecLine = UIView(frame: CGRect(x: 41, y: 103, width: screenWidth - 82, height: 1))
+        let uiviewDropMenuSecLine = UIView(frame: CGRect(x: 41, y: 100, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuSecLine)
         uiviewDropMenuSecLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
         
-        let uiviewDropMenuThirdLine = UIView(frame: CGRect(x: 41, y: 152, width: screenWidth - 82, height: 1))
+        let uiviewDropMenuThirdLine = UIView(frame: CGRect(x: 41, y: 150, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuThirdLine)
         uiviewDropMenuThirdLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
     }

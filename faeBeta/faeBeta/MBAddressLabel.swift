@@ -40,6 +40,8 @@ class MBAddressLabel: UILabel {
         GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
             (response, _) -> Void in
             DispatchQueue.main.async(execute: {
+//                print("administrativeArea: \(response?.firstResult()?.administrativeArea), locality: \(response?.firstResult()?.locality), subLocality: \(response?.firstResult()?.subLocality), thoroughfare: \(response?.firstResult()?.thoroughfare)")
+                
                 guard let fullAddress = response?.firstResult()?.lines else {
                     print("[getSocialPinAddress] fail")
                     return

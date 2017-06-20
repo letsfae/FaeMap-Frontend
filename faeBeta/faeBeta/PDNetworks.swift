@@ -233,24 +233,46 @@ extension PinDetailViewController {
     }
     
     func loadFeelingQuickView() {
-        uiviewFeelingQuick.removeFromSuperview()
-        uiviewFeelingQuick = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
-        uiviewInteractBtnSub.addSubview(uiviewFeelingQuick)
-        uiviewFeelingQuick.layer.zPosition = 109
-        var count = 0
+//        uiviewFeelingQuick.removeFromSuperview()
+//        uiviewFeelingQuick = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
+//        uiviewInteractBtnSub.addSubview(uiviewFeelingQuick)
+//        uiviewFeelingQuick.layer.zPosition = 109
+//        var count = 0
+//        print(feelingArray)
+//        for i in 0..<feelingArray.count {
+//            if feelingArray[i] != 0 {
+//                let offset = count * 30
+//                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
+//                if i+1 < 10 {
+//                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)-1")
+//                } else {
+//                    feeling.image = UIImage(named: "pdFeeling_\(i+1)-1")
+//                }
+//                uiviewFeelingQuick.addSubview(feeling)
+//                count += 1
+//            }
+//        }
+        
+        // 6/20/17 Vicky
+        var feelings = [Int]()
         for i in 0..<feelingArray.count {
             if feelingArray[i] != 0 {
-                let offset = count * 30
-                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
-                if i+1 < 10 {
-                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)-1")
-                } else {
-                    feeling.image = UIImage(named: "pdFeeling_\(i+1)-1")
-                }
-                uiviewFeelingQuick.addSubview(feeling)
-                count += 1
+                feelings.append(i)
             }
         }
+        
+        let feelingCount = feelings.count <= 5 ? feelings.count : 5;
+        
+        for i in 0..<feelingCount {
+            imgFeelings[i].image = feelings[i] >= 9 ?
+                UIImage(named: "pdFeeling_\(feelings[i] + 1)-1") :
+                UIImage(named: "pdFeeling_0\(feelings[i] + 1)-1")
+        }
+        
+        for i in feelingCount..<5 {
+            imgFeelings[i].image = nil
+        }
+        // 6/20/17 Vicky End
     }
     
     func getSeveralInfo() {

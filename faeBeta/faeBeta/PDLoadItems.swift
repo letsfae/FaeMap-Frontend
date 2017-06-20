@@ -251,6 +251,14 @@ extension PinDetailViewController {
         uiviewInteractBtnSub.addSubview(uiviewFeelingQuick)
         uiviewFeelingQuick.layer.zPosition = 109
         
+        // 6/20/17 Vicky
+        for i in 0..<5{
+            let imgFeeling = UIImageView(frame: CGRect(x: i * 30, y: 0, width: 27, height: 27))
+            imgFeelings.append(imgFeeling)
+            uiviewFeelingQuick.addSubview(imgFeelings[i])
+        }
+        // 6/20/17 Vicky End
+        
         // Pin Like
         btnPinLike = UIButton()
         btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: UIControlState())

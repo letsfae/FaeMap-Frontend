@@ -22,7 +22,7 @@ struct MBSocialStruct {
     var userId: Int
     let displayName: String
     var contentJson: String
-    let attributedText: NSAttributedString?
+    var attributedText: NSAttributedString?
     let date: String
     var likeCount: Int
     var commentCount: Int
@@ -32,6 +32,7 @@ struct MBSocialStruct {
     var status: String
     var fileIdArray = [Int]()
     var isLiked: Bool
+    var feelingArray = [Int]()
     
     init(json: JSON) {
         self.pinId = json["pin_id"].intValue
@@ -52,6 +53,14 @@ struct MBSocialStruct {
                 if fileID != nil {
                     self.fileIdArray.append(fileID!)
                 }
+            }
+        }
+        
+        self.feelingArray.removeAll()
+        let feelings = json["pin_object"]["feeling_count"].arrayValue.map({Int($0.stringValue)})
+        for idx in 0..<feelings.count {
+            if feelings[idx] != nil && feelings[idx] != 0 {
+                self.feelingArray.append(idx)
             }
         }
 

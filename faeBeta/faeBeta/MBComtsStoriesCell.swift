@@ -11,7 +11,7 @@ import UIKit
 // A protocol that the TableViewCell uses to inform its delegate of state change
 protocol MBComtsStoriesCellDelegate: class {
     
-    func replyToThisPin(indexPath: IndexPath)
+    func replyToThisPin(indexPath: IndexPath, boolReply: Bool)
     func likeThisPin(indexPath: IndexPath, strPinId: String)
     // func actionHoldingLikeButton(indexPath: IndexPath, strPinId: strPinId)
 }
@@ -29,6 +29,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
     var lblTime: UILabel!
     var lblUsrName: UILabel!
     var uiviewCellFooter: UIView!
+    var imgFeelings = [UIImageView]()
     
     var indexForCurtCell: IndexPath!
     var strPinId: String!
@@ -89,7 +90,9 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
         
         btnLoc = UIButton()
-        btnLoc.setImage(#imageLiteral(resourceName: "mb_comment_location"), for: .normal)
+        btnLoc.setImage(#imageLiteral(resourceName: "mb_loc"), for: .normal)
+        btnLoc.backgroundColor = UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1)
+        btnLoc.contentHorizontalAlignment = .left
         addSubview(btnLoc)
         addConstraintsWithFormat("H:|-19-[v0]-19-|", options: [], views: btnLoc)
         
@@ -116,6 +119,11 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         uiviewCellFooter.addSubview(btnReply)
         addConstraintsWithFormat("V:|-2-[v0(22)]", options: [], views: btnReply)
         
+        btnFav.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
+        //        btnFav.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
+        btnReply.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+        btnReply.tag = 0
+        
         lblFavCount = UILabel()
         uiviewCellFooter.addSubview(lblFavCount)
         lblFavCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
@@ -132,6 +140,12 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         
         addConstraintsWithFormat("H:[v0(41)]-8-[v1(26)]-17-[v2(41)]-8-[v3(26)]-0-|", options: [], views: lblFavCount, btnFav, lblReplyCount, btnReply)
         addConstraintsWithFormat("V:|-19-[v0(25)]-1-[v1(18)]", options: [], views: lblUsrName, lblTime)
+        
+        for index in 0..<5 {
+            let imgFeeling = UIImageView(frame: CGRect(x: 30 * index, y: 0, width: 27, height: 27))
+            imgFeelings.append(imgFeeling)
+            uiviewCellFooter.addSubview(imgFeelings[index])
+        }
         
         switch MBComtsStoriesCell.strPinType {
         case "comment":
@@ -152,6 +166,9 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
             
             addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: scrollViewMedia)
             addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-12-[v2(95)]-12-[v3(32)]-17-[v4(27)]-10-|", options: [], views: imgAvatar, lblContent, scrollViewMedia, btnLoc, uiviewCellFooter)
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionReplyToThisPin(_:)))
+            scrollViewMedia.addGestureRecognizer(tapGesture)
             break
         default:
             break
@@ -188,18 +205,21 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         btnFav.setImage(social.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
         lblReplyCount.text = String(social.commentCount)
         
-        btnFav.addTarget(self, action: #selector(self.actionLikeThisPin(_:)), for: [.touchUpInside, .touchUpOutside])
-        //        btnFav.addTarget(self, action: #selector(self.actionHoldingLikeButton(_:)), for: .touchDown)
-        btnReply.addTarget(self, action: #selector(self.actionReplyToThisPin(_:)), for: .touchUpInside)
+        let count = social.feelingArray.count <= 5 ? social.feelingArray.count : 5;
+        for index in 0..<count {
+            imgFeelings[index].image = social.feelingArray[index] >= 9 ?
+                UIImage(named: "pdFeeling_\(social.feelingArray[index] + 1)-1") :
+                UIImage(named: "pdFeeling_0\(social.feelingArray[index] + 1)-1")
+        }
+        for index in count..<5 {
+            imgFeelings[index].image = nil
+        }
         
         if MBComtsStoriesCell.strPinType == "media" {
             imgMediaArr.removeAll()
             for subview in scrollViewMedia.subviews {
                 subview.removeFromSuperview()
             }
-    
-            //        cell.scrollViewMedia.frame = CGRect(x: 0, y: 0, width: 105 * story.fileIdArray.count, height: 95)
-            //        cell.scrollViewMedia.frame.size = CGSize(width: 105 * story.fileIdArray.count, height: 95)
             
             for index in 0..<social.fileIdArray.count {
                 let imageView = FaeImageView(frame: CGRect(x: 105 * index, y: 0, width: 95, height: 95))
@@ -217,8 +237,9 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         }
     }
     
-    func actionReplyToThisPin(_ sender: UIButton) {
-        delegate?.replyToThisPin(indexPath: indexForCurtCell)
+    func actionReplyToThisPin(_ sender: AnyObject) {
+        let boolReply = sender.tag != nil
+        delegate?.replyToThisPin(indexPath: indexForCurtCell, boolReply: boolReply)
     }
     
     func actionLikeThisPin(_ sender: UIButton) {

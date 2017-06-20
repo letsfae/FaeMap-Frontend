@@ -11,7 +11,7 @@ import UIKit
 class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var uiviewNavBar: UIView!
     var uiviewAllCom: UIView!
-    var tableChatsForMB: UITableView!
+    var tableChats: UITableView!
     var btnChatSpots: UIButton!
     var btnBubbles: UIButton!
     var uiviewRedUnderLine: UIView!
@@ -39,7 +39,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         btnChatSpots = UIButton()
         uiviewNavBar.addSubview(btnChatSpots)
         uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0]-0-|", options: [], views: btnChatSpots)
-        uiviewNavBar.addConstraintsWithFormat("H:|-74-[v0(130)]", options: [], views: btnChatSpots)
+        uiviewNavBar.addConstraintsWithFormat("H:|-65-[v0(\(130 * screenWidthFactor))]", options: [], views: btnChatSpots)
         
         let uiviewGrayUnderLine = UIView(frame: CGRect(x: 0, y: uiviewNavBar.frame.height - 1, width: screenWidth, height: 1))
         uiviewGrayUnderLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
@@ -51,22 +51,20 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         btnChatSpots.tag = 0
         btnChatSpots.addTarget(self, action: #selector(self.switchBetweenChatSpotsAndBubbles(_:)), for: .touchUpInside)
         
-        uiviewRedUnderLine = UIView(frame: CGRect(x: 0, y: 41, width: 130, height: 2))
-        uiviewRedUnderLine.backgroundColor = UIColor.faeAppRedColor()
-        btnChatSpots.addSubview(uiviewRedUnderLine)
-        self.view.bringSubview(toFront: uiviewNavBar)
-        uiviewNavBar.bringSubview(toFront: btnChatSpots)
-        
         btnBubbles = UIButton()
         uiviewNavBar.addSubview(btnBubbles)
         uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0]-0-|", options: [], views: btnBubbles)
-        uiviewNavBar.addConstraintsWithFormat("H:[v0(130)]-57-|", options: [], views: btnBubbles)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(\(130 * screenWidthFactor))]-65-|", options: [], views: btnBubbles)
         
         btnBubbles.setTitle("Bubbles", for: .normal)
         btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
         btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
         btnBubbles.tag = 1
         btnBubbles.addTarget(self, action: #selector(self.switchBetweenChatSpotsAndBubbles(_:)), for: .touchUpInside)
+        
+        uiviewRedUnderLine = UIView(frame: CGRect(x: 60, y: uiviewNavBar.frame.height - 2, width: 130 * screenWidthFactor, height: 2))
+        uiviewRedUnderLine.backgroundColor = UIColor.faeAppRedColor()
+        uiviewNavBar.addSubview(uiviewRedUnderLine)
         
         let btnBackNavBar = UIButton(frame: CGRect(x: 0, y: 20, width: 40.5, height: 42))
         btnBackNavBar.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
@@ -75,22 +73,29 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func switchBetweenChatSpotsAndBubbles(_ sender: UIButton) {
+        var targetCenter: CGFloat!
         if sender.tag == 0 {
             tableMode = .chatSpots
             btnChatSpots.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
             btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnChatSpots.addSubview(uiviewRedUnderLine)
+            targetCenter = btnChatSpots.center.x
         } else if sender.tag == 1 {
             tableMode = .bubbles
             btnBubbles.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
             btnChatSpots.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnBubbles.addSubview(uiviewRedUnderLine)
+            targetCenter = btnBubbles.center.x
         }
-        tableChatsForMB.reloadData()
+        
+        // Animation of the red sliding line (Chat Spots, Bubbles)
+        UIView.animate(withDuration: 0.25, animations: ({
+            self.uiviewRedUnderLine.center.x = targetCenter
+        }), completion: { _ in
+        })
+        tableChats.reloadData()
     }
     
     fileprivate func loadViewContent() {
@@ -116,16 +121,16 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     fileprivate func loadTable() {
-        tableChatsForMB = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
-        tableChatsForMB.backgroundColor = .white
-        tableChatsForMB.register(MBChatSpotsCell.self, forCellReuseIdentifier: "mbChatSpotsCell")
-        tableChatsForMB.register(MBChatBubblesCell.self, forCellReuseIdentifier: "mbChatBubblesCell")
-        tableChatsForMB.delegate = self
-        tableChatsForMB.dataSource = self
+        tableChats = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
+        tableChats.backgroundColor = .white
+        tableChats.register(MBChatSpotsCell.self, forCellReuseIdentifier: "mbChatSpotsCell")
+        tableChats.register(MBChatBubblesCell.self, forCellReuseIdentifier: "mbChatBubblesCell")
+        tableChats.delegate = self
+        tableChats.dataSource = self
         
-        tableChatsForMB.separatorStyle = .none
+        tableChats.separatorStyle = .none
 
-        self.view.addSubview(tableChatsForMB)
+        self.view.addSubview(tableChats)
     }
     
     func backToMapBoard(_ sender: UIButton) {
