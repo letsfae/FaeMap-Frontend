@@ -42,6 +42,7 @@ extension PinDetailViewController {
         orbit.duration = 1
         orbit.path = path
         orbit.calculationMode = kCAAnimationPaced
+
         animatingHeart.layer.add(orbit, forKey:"Move")
         animatingHeart.layer.add(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.add(scaleAnimation, forKey: "Scale")

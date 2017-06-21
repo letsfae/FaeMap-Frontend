@@ -16,8 +16,8 @@ struct PinComment {
     var displayName: String
     let content: String
     let date: String
-    let numVoteCount: Int
-    let voteType: String
+    var numVoteCount: Int
+    var voteType: String
     let attributedText: NSAttributedString?
     var profileImage: UIImage
     let anonymous: Bool
