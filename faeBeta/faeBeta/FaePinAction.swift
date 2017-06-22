@@ -51,7 +51,7 @@ class FaePinAction : NSObject {
     // uncomment this pin
     func uncommentThisPin(pinCommentID: String?, completion: @escaping (Int, Any?) -> Void) {
         if pinCommentID != nil {
-            deleteFromURL("pins/comments"+pinCommentID!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            deleteFromURL("pins/comments/"+pinCommentID!, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }

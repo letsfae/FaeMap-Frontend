@@ -12,6 +12,12 @@ import SwiftyJSON
 protocol PinTalkTalkCellDelegate: class {
     func directReplyFromPinCell(_ username: String, index: IndexPath) // Reply to this user
     func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath)
+    // Vicky 06/21/17
+    func upVoteComment(index: IndexPath)
+    func downVoteComment(index: IndexPath)
+//    func cancelCommentVote(index: IndexPath)
+//    func updateCommentVoteCount(index: IndexPath)
+    // Vicky 06/21/17
 }
 
 class PinTalkTalkCell: UITableViewCell {
@@ -139,116 +145,121 @@ class PinTalkTalkCell: UITableViewCell {
     }
     
     func upVoteThisComment(_ sender: UIButton) {
-        if voteType == "up" || pinCommentID == "" {
-            cancelVote()
-            return
-        }
-        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-        let upVote = FaePinAction()
-        upVote.whereKey("vote", value: "up")
-        upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
-            print("[upVoteThisComment] pinID: \(self.pinCommentID)")
-            if status / 100 == 2 {
-                self.voteType = "up"
-                self.updateVoteCount()
-                print("[upVoteThisComment] Successfully upvote this pin comment")
-            }
-            else if status == 400 {
-                print("[upVoteThisComment] Already upvote this pin comment")
-            }
-            else {
-                if self.voteType == "down" {
-                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
-                }
-                else if self.voteType == "" {
-                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-                }
-                print("[upVoteThisComment] Fail to upvote this pin comment")
-            }
-        }
+        delegate?.upVoteComment(index: cellIndex)
+        
+//        if voteType == "up" || pinCommentID == "" {
+//            cancelVote()
+//            return
+//        }
+//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//        let upVote = FaePinAction()
+//        upVote.whereKey("vote", value: "up")
+//        upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
+//            print("[upVoteThisComment] pinID: \(self.pinCommentID)")
+//            if status / 100 == 2 {
+//                self.voteType = "up"
+//                self.updateVoteCount()
+//                print("[upVoteThisComment] Successfully upvote this pin comment")
+//            }
+//            else if status == 400 {
+//                print("[upVoteThisComment] Already upvote this pin comment")
+//            }
+//            else {
+//                if self.voteType == "down" {
+//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+//                }
+//                else if self.voteType == "" {
+//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//                }
+//                print("[upVoteThisComment] Fail to upvote this pin comment")
+//            }
+//        }
     }
     
     func downVoteThisComment(_ sender: UIButton) {
-        if voteType == "down" || pinCommentID == "" {
-            cancelVote()
-            return
-        }
-        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
-        let downVote = FaePinAction()
-        downVote.whereKey("vote", value: "down")
-        downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                self.voteType = "down"
-                self.updateVoteCount()
-                print("[upVoteThisComment] Successfully downvote this pin comment")
-            }
-            else if status == 400 {
-                print("[upVoteThisComment] Already downvote this pin comment")
-            }
-            else {
-                if self.voteType == "up" {
-                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-                }
-                else if self.voteType == "" {
-                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-                }
-                print("[upVoteThisComment] Fail to downvote this pin comment")
-            }
-        }
+        delegate?.downVoteComment(index: cellIndex)
+        
+//        if voteType == "down" || pinCommentID == "" {
+//            cancelVote()
+//            return
+//        }
+//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
+//        let downVote = FaePinAction()
+//        downVote.whereKey("vote", value: "down")
+//        downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
+//            if status / 100 == 2 {
+//                self.voteType = "down"
+//                self.updateVoteCount()
+//                print("[upVoteThisComment] Successfully downvote this pin comment")
+//            }
+//            else if status == 400 {
+//                print("[upVoteThisComment] Already downvote this pin comment")
+//            }
+//            else {
+//                if self.voteType == "up" {
+//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
+//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//                }
+//                else if self.voteType == "" {
+//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//                }
+//                print("[upVoteThisComment] Fail to downvote this pin comment")
+//            }
+//        }
     }
-    
-    func cancelVote() {
-        let cancelVote = FaePinAction()
-        cancelVote.cancelVotePinComments(pinId: "\(pinCommentID)") { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                self.voteType = ""
-                self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-                self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-                self.updateVoteCount()
-                print("[upVoteThisComment] Successfully cancel vote this pin comment")
-            }
-            else if status == 400 {
-                print("[upVoteThisComment] Already cancel vote this pin comment")
-            }
-            
-        }
-    }
-    
-    func updateVoteCount() {
-        let getPinCommentsDetail = FaePinAction()
-        getPinCommentsDetail.getPinComments(pinType, pinID: pinID) {(status: Int, message: Any?) in
-            let commentsOfCommentJSON = JSON(message!)
-            if commentsOfCommentJSON.count > 0 {
-                for i in 0...(commentsOfCommentJSON.count-1) {
-                    var upVote = -999
-                    var downVote = -999
-                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
-                        if self.pinCommentID != "\(pin_comment_id)" {
-                            continue
-                        }
-                    }
-                    if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
-                        print("[getPinComments] upVoteCount: \(vote_up_count)")
-                        upVote = vote_up_count
-                    }
-                    if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
-                        print("[getPinComments] downVoteCount: \(vote_down_count)")
-                        downVote = vote_down_count
-                    }
-                    if let _ = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
-                        
-                    }
-                    if upVote != -999 && downVote != -999 {
-                        self.lblVoteCount.text = "\(upVote - downVote)"
-                    }
-                }
-            }
-        }
-    }
+//    
+//    func cancelVote() {
+//        let cancelVote = FaePinAction()
+//        cancelVote.cancelVotePinComments(pinId: "\(pinCommentID)") { (status: Int, message: Any?) in
+//            if status / 100 == 2 {
+//                self.voteType = ""
+//                self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
+//                self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
+//                self.updateVoteCount()
+//                print("[upVoteThisComment] Successfully cancel vote this pin comment")
+//            }
+//            else if status == 400 {
+//                print("[upVoteThisComment] Already cancel vote this pin comment")
+//            }
+//            
+//        }
+//    }
+//    
+//    func updateVoteCount() {
+//        let getPinCommentsDetail = FaePinAction()
+//        getPinCommentsDetail.getPinComments(pinType, pinID: pinID) {(status: Int, message: Any?) in
+//            let commentsOfCommentJSON = JSON(message!)
+//            if commentsOfCommentJSON.count > 0 {
+//                for i in 0...(commentsOfCommentJSON.count-1) {
+//                    var upVote = -999
+//                    var downVote = -999
+//                    if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
+//                        if self.pinCommentID != "\(pin_comment_id)" {
+//                            continue
+//                        }
+//                    }
+//                    if let vote_up_count = commentsOfCommentJSON[i]["vote_up_count"].int {
+//                        print("[getPinComments] upVoteCount: \(vote_up_count)")
+//                        upVote = vote_up_count
+//                    }
+//                    if let vote_down_count = commentsOfCommentJSON[i]["vote_down_count"].int {
+//                        print("[getPinComments] downVoteCount: \(vote_down_count)")
+//                        downVote = vote_down_count
+//                    }
+//                    if let _ = commentsOfCommentJSON[i]["pin_comment_operations"]["vote"].string {
+//                        
+//                    }
+//                    if upVote != -999 && downVote != -999 {
+//                        self.lblVoteCount.text = "\(upVote - downVote)"
+//                    }
+//                }
+//            }
+//        }
+//    }
+
 }
