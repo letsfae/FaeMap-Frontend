@@ -200,6 +200,10 @@
 		B84E1A5E1DCBE279000E29B9 /* OPLTableViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */; };
 		B84E1A621DCBE322000E29B9 /* OPLActionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */; };
 		B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */; };
+		B85474E91EFB553700D40E2E /* PullToRefreshOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85474E61EFB553700D40E2E /* PullToRefreshOption.swift */; };
+		B85474EA1EFB553700D40E2E /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85474E71EFB553700D40E2E /* PullToRefreshView.swift */; };
+		B85474EB1EFB553700D40E2E /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85474E81EFB553700D40E2E /* UIScrollViewExtension.swift */; };
+		B85474ED1EFB556900D40E2E /* GIF_alpha.gif in Resources */ = {isa = PBXBuildFile; fileRef = B85474EC1EFB556900D40E2E /* GIF_alpha.gif */; };
 		B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609261E9D411000F68DA4 /* FMDistanceChange.swift */; };
 		B85609291E9F6AD200F68DA4 /* PDCllcViewCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */; };
 		B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85A38651EDE39EC00241781 /* FaeImageView.swift */; };
@@ -540,6 +544,10 @@
 		B84E1A5D1DCBE279000E29B9 /* OPLTableViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCtrl.swift; sourceTree = "<group>"; };
 		B84E1A611DCBE322000E29B9 /* OPLActionControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLActionControl.swift; sourceTree = "<group>"; };
 		B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPinCollections.swift; sourceTree = "<group>"; };
+		B85474E61EFB553700D40E2E /* PullToRefreshOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshOption.swift; sourceTree = "<group>"; };
+		B85474E71EFB553700D40E2E /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
+		B85474E81EFB553700D40E2E /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
+		B85474EC1EFB556900D40E2E /* GIF_alpha.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = GIF_alpha.gif; sourceTree = "<group>"; };
 		B85609261E9D411000F68DA4 /* FMDistanceChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDistanceChange.swift; sourceTree = "<group>"; };
 		B85609281E9F6AD200F68DA4 /* PDCllcViewCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDCllcViewCtrl.swift; sourceTree = "<group>"; };
 		B85A38651EDE39EC00241781 /* FaeImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImageView.swift; sourceTree = "<group>"; };
@@ -1164,6 +1172,10 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				B85474EC1EFB556900D40E2E /* GIF_alpha.gif */,
+				B85474E61EFB553700D40E2E /* PullToRefreshOption.swift */,
+				B85474E71EFB553700D40E2E /* PullToRefreshView.swift */,
+				B85474E81EFB553700D40E2E /* UIScrollViewExtension.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
@@ -1682,6 +1694,7 @@
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
+				B85474ED1EFB556900D40E2E /* GIF_alpha.gif in Resources */,
 				B09E49BC1D9630E20075EE45 /* NameCardShowTableViewCell.xib in Resources */,
 				B09E49E11D96F77F0075EE45 /* LICENSE in Resources */,
 				B064EEC21D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.xib in Resources */,
@@ -2018,9 +2031,11 @@
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
+				B85474EB1EFB553700D40E2E /* UIScrollViewExtension.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */,
+				B85474E91EFB553700D40E2E /* PullToRefreshOption.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
@@ -2029,6 +2044,7 @@
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */,
 				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
+				B85474EA1EFB553700D40E2E /* PullToRefreshView.swift in Sources */,
 				B8DDC6401E00A23B00BBB7F1 /* PDLoadMedias.swift in Sources */,
 				CE97A9C41E399D52005BBF6C /* YelpResult.swift in Sources */,
 				853F276F1E21655500DD80DF /* EditPinCollectionViewCell.swift in Sources */,

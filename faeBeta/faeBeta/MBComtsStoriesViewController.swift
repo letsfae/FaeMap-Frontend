@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import PullToRefreshSwift
+//import PullToRefreshSwift
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate {
     
@@ -52,14 +52,14 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             self.tblCommentStory.stopPullRefreshEver()
         }
         
-        var pushOptions = PullToRefreshOption()
-        pushOptions.indicatorColor = .blue
-        self.tblCommentStory.addPushRefresh(options: pushOptions) { [weak self] in
-            // some code
-            sleep(1)
-//            self?.tblCommentStory.reloadData()
-            self?.tblCommentStory.stopPushRefreshEver(true)
-        }
+//        var pushOptions = PullToRefreshOption()
+//        pushOptions.indicatorColor = .blue
+//        self.tblCommentStory.addPushRefresh(options: pushOptions) { [weak self] in
+//            // some code
+//            sleep(1)
+////            self?.tblCommentStory.reloadData()
+//            self?.tblCommentStory.stopPushRefreshEver(true)
+//        }
     }
     
     func getType() {
