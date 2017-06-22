@@ -75,11 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-        let mbCommentsVC = MBComtsStoriesViewController()
-        mbCommentsVC.enterMode = .comment
-        
-//        let vcEmptyRoot = EmptyRootViewController()
-        navRealMap.viewControllers = [mbCommentsVC]
+        let vcEmptyRoot = EmptyRootViewController()
+        navRealMap.viewControllers = [vcEmptyRoot]
         navRealMap.navigationBar.isHidden = true
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
