@@ -75,7 +75,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-        let vcEmptyRoot = EmptyRootViewController()
+//        let vcEmptyRoot = EmptyRootViewController()
+        let vcEmptyRoot = MBComtsStoriesViewController()
+        vcEmptyRoot.enterMode = .comment
         navRealMap.viewControllers = [vcEmptyRoot]
         navRealMap.navigationBar.isHidden = true
         

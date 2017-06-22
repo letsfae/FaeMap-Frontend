@@ -230,6 +230,7 @@ class PinDetailViewController: UIViewController {
         initPinBasicInfo()
         getSeveralInfo()
         loadFromCollections()
+        pullDownToRefresh()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -247,6 +248,17 @@ class PinDetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+    }
+    
+    fileprivate func pullDownToRefresh() {
+        var pullOptions = PullToRefreshOption()
+        pullOptions.backgroundColor = .blue
+        pullOptions.indicatorColor = .red
+        
+        self.tblMain.addPullRefresh(options: pullOptions) { [unowned self] in
+            self.getSeveralInfo()
+            self.tblMain.stopPullRefreshEver()
+        }
     }
     
     fileprivate func loadFromCollections() {

@@ -1172,10 +1172,7 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				B85474EC1EFB556900D40E2E /* GIF_alpha.gif */,
-				B85474E61EFB553700D40E2E /* PullToRefreshOption.swift */,
-				B85474E71EFB553700D40E2E /* PullToRefreshView.swift */,
-				B85474E81EFB553700D40E2E /* UIScrollViewExtension.swift */,
+				B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
@@ -1268,6 +1265,17 @@
 				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
 			name = OpenedPinListExtension;
+			sourceTree = "<group>";
+		};
+		B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				B85474EC1EFB556900D40E2E /* GIF_alpha.gif */,
+				B85474E61EFB553700D40E2E /* PullToRefreshOption.swift */,
+				B85474E71EFB553700D40E2E /* PullToRefreshView.swift */,
+				B85474E81EFB553700D40E2E /* UIScrollViewExtension.swift */,
+			);
+			name = PullDownToRefresh;
 			sourceTree = "<group>";
 		};
 		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {

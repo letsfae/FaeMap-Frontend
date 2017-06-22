@@ -13,6 +13,12 @@ import RealmSwift
 
 extension PinDetailViewController {
     
+    func getSeveralInfo() {
+        getPinAttributeNum()
+        getPinInfo()
+        getPinComments(sendMessageFlag: false)
+    }
+    
     func getPinInfo() {
         if strPinId == "-1" {
             return
@@ -273,12 +279,6 @@ extension PinDetailViewController {
             imgFeelings[i].image = nil
         }
         // 6/20/17 Vicky End
-    }
-    
-    func getSeveralInfo() {
-        getPinAttributeNum()
-        getPinInfo()
-        getPinComments(sendMessageFlag: false)
     }
     
     func getPinAttributeNum() {

@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 //import PullToRefreshSwift
 
-class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate {
+class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate, UIScrollViewDelegate {
     
     var strNavBarTitle: String!
     var tblCommentStory: UITableView!
@@ -40,6 +40,10 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         getMBSocialInfo(socialType: type)
         
         pullDownToRefresh()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        tblCommentStory.fixedPullToRefreshViewForDidScroll()
     }
     
     func pullDownToRefresh() {
