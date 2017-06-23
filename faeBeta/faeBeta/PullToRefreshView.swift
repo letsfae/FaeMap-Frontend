@@ -49,7 +49,6 @@ class PullToRefreshView: UIView {
             if self.state == oldValue {
                 return
             }
-            print(self.state)
             switch self.state {
             case .pulling: // starting point
                 arrowRotationBack() // dummy now

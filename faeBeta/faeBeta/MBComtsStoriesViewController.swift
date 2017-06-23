@@ -51,7 +51,6 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             let timeNow = DispatchTime.now()
             self.getMBSocialInfo(socialType: self.type, time: timeNow, completion: { (timeDiff) in
                 let delay = DispatchTime.now() + abs(Double(NSEC_PER_SEC) - timeDiff) / Double(NSEC_PER_SEC)
-                print(abs(Double(NSEC_PER_SEC) - timeDiff) / Double(NSEC_PER_SEC))
                 DispatchQueue.main.asyncAfter(deadline: delay) {
                     self.tblCommentStory.stopPullRefreshEver()
                 }
