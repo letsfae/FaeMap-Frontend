@@ -92,6 +92,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     }
     
     var isCSP = false // is creating story pin
+    var isSelectAvatar = false  // is selecting avatar
     
     
     //MARK: - life cycle
@@ -169,6 +170,9 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         var strSendBtn = "Send"
         if isCSP {
             strSendBtn = "Select"
+        }
+        if isSelectAvatar {
+            strSendBtn = "Done"
         }
         sendButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
         let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
@@ -320,6 +324,9 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if isCSP {
             strSendBtn = "Select"
         }
+        if isSelectAvatar {
+            strSendBtn = "Done"
+        }
         sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
         let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
@@ -370,19 +377,19 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                         })
                     }
 //                        else{
-                        photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
-                        photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
-                        let count = self.photoPicker.indexImageDict.count
+                    photoPicker.assetIndexDict[asset] = photoPicker.indexImageDict.count
+                    photoPicker.indexAssetDict[photoPicker.indexImageDict.count] = asset
+                    let count = self.photoPicker.indexImageDict.count
                         
-                        let highQRequestOption = PHImageRequestOptions()
-                        highQRequestOption.resizeMode = .none
-                        highQRequestOption.deliveryMode = .highQualityFormat //high pixel
-                        highQRequestOption.isSynchronous = true
-                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
-                            self.photoPicker.indexImageDict[count] = result
-                        }
+                    let highQRequestOption = PHImageRequestOptions()
+                    highQRequestOption.resizeMode = .none
+                    highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                    highQRequestOption.isSynchronous = true
+                    PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500,height: 1500), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
+                        self.photoPicker.indexImageDict[count] = result
+                    }
 //                    }
-                }else{
+                } else{
                     if(self.photoPicker.indexImageDict.count != 0 || photoPicker.gifAssetDict.count != 0){
                         showAlertView(withWarning: "Sorry Videos must be sent alone!")
                         return

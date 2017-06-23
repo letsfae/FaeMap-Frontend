@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
                 //                    }
                 //                }
-            }
+        }
         )
         
         // Delete all realm swift database data
@@ -75,9 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-//        let vcEmptyRoot = EmptyRootViewController()
-        let vcEmptyRoot = MBComtsStoriesViewController()
-        vcEmptyRoot.enterMode = .comment
+        let vcEmptyRoot = EmptyRootViewController()
         navRealMap.viewControllers = [vcEmptyRoot]
         navRealMap.navigationBar.isHidden = true
         

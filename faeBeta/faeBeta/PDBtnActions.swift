@@ -40,11 +40,17 @@ extension PinDetailViewController {
         } else if sender == btnFeelings {
             tableMode = .feelings
             tblMain.reloadData()
+            tblMain.layoutIfNeeded()
+            tblMain.setContentOffset(CGPoint.zero, animated: false)
             uiviewMain.frame.size.height = screenHeight
         } else if sender == btnPeople {
             tableMode = .people
             tblMain.reloadData()
-            tblMain.contentOffset.y = 0
+            // Vicky 06/22/17
+            tblMain.layoutIfNeeded()
+            tblMain.setContentOffset(CGPoint.zero, animated: false)
+//            tblMain.contentOffset.y = 0
+            // Vicky 06/22/17 End
             uiviewMain.frame.size.height = screenHeight
         }
         endEdit()

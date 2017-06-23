@@ -73,7 +73,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func switchBetweenChatSpotsAndBubbles(_ sender: UIButton) {
-        var targetCenter: CGFloat!
+        var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             tableMode = .chatSpots
             btnChatSpots.setTitleColor(UIColor.faeAppRedColor(), for: .normal)

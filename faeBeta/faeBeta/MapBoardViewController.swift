@@ -627,7 +627,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     func switchBetweenTalkAndComment(_ sender: UIButton) {
-        var targetCenter: CGFloat!
+        var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             talkPostTableMode = .talk
             btnMyTalks.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
@@ -711,6 +711,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
 
     fileprivate func getPeoplePage() {
+        print("userStatus \(userStatus)")
+        print(boolUsrVisibleIsOn)
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             self.tableMapBoard.isHidden = true
             self.uiviewBubbleHint.isHidden = false

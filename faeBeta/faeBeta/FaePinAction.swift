@@ -109,7 +109,7 @@ class FaePinAction : NSObject {
     // Get pin's attribute
     func getPinAttribute(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && pinID != nil {
-            getFromURL("pins/"+type!+"/"+pinID!+"/attribute", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            getFromURL("pins/\(type!)/"+pinID!+"/attribute", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -119,7 +119,7 @@ class FaePinAction : NSObject {
     // Get pin's comments
     func getPinComments(_ type: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && pinID != nil {
-            getFromURL("pins/"+type!+"/"+pinID!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
+            getFromURL("pins/\(type!)/"+pinID!+"/comments", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
