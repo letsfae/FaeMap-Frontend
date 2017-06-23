@@ -29,7 +29,7 @@ open class PullToRefreshView: UIView {
     fileprivate var scrollViewInsets: UIEdgeInsets = UIEdgeInsets.zero
     fileprivate var refreshCompletion: (() -> Void)?
     fileprivate var pull: Bool = true
-    fileprivate var gifUnicorn: GIFImageView
+    var gifUnicorn: GIFImageView
     
     fileprivate var positionY: CGFloat = 0 {
         didSet {
@@ -47,9 +47,27 @@ open class PullToRefreshView: UIView {
             if self.state == oldValue {
                 return
             }
+            print(self.state)
             switch self.state {
+            case .pulling: // starting point
+                arrowRotationBack() // dummy now
+                break
+            case .triggered:
+                arrowRotation() // dummy now
+                self.gifUnicorn.frame.origin.x = -130
+                break
+            case .refreshing:
+                UIView.animate(withDuration: 1.5, animations: {
+                    self.gifUnicorn.center.x = screenWidth / 2
+                }, completion: nil)
+                startAnimating()
+                break
             case .stop:
+                UIView.animate(withDuration: 1.5, animations: {
+                    self.gifUnicorn.frame.origin.x = screenWidth
+                }, completion: nil)
                 stopAnimating()
+                break
             case .finish:
                 var duration = PullToRefreshConst.animationDuration
                 var time = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
@@ -61,13 +79,7 @@ open class PullToRefreshView: UIView {
                 DispatchQueue.main.asyncAfter(deadline: time) {
                     self.removeFromSuperview()
                 }
-            case .refreshing:
-                startAnimating()
-            case .pulling: // starting point
-                arrowRotationBack()
-                self.gifUnicorn.startAnimatingGIF()
-            case .triggered:
-                arrowRotation()
+                break
             }
         }
     }
@@ -121,7 +133,7 @@ open class PullToRefreshView: UIView {
         imgBackground.clipsToBounds = true
         
         imgBackground.addSubview(self.gifUnicorn)
-        self.gifUnicorn.center.x = imgBackground.center.x
+        self.gifUnicorn.frame.origin.x = -130
         self.addSubview(imgBackground)
     }
     
@@ -190,7 +202,6 @@ open class PullToRefreshView: UIView {
             if !self.pull {
                 return
             }
-            
             if offsetY < -self.frame.size.height {
                 // pulling or refreshing
                 if scrollView.isDragging == false && self.state != .refreshing { // release the finger
@@ -260,7 +271,6 @@ open class PullToRefreshView: UIView {
     }
     
     fileprivate func stopAnimating() {
-        self.gifUnicorn.stopAnimatingGIF()
         self.indicator.stopAnimating()
         self.arrow.isHidden = false
         guard let scrollView = superview as? UIScrollView else {
@@ -268,12 +278,13 @@ open class PullToRefreshView: UIView {
         }
         scrollView.bounces = true
         let duration = PullToRefreshConst.animationDuration
-        UIView.animate(withDuration: duration, delay: 1.5, options: [],
+        UIView.animate(withDuration: duration, delay: 1.2, options: [],
             animations: {
                 scrollView.contentInset = self.scrollViewInsets
                 self.arrow.transform = CGAffineTransform.identity
             }, completion: { _ in
                 self.state = .pulling
+                self.gifUnicorn.stopAnimatingGIF()
             }
         )
     }
