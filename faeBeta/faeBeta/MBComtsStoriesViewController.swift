@@ -47,11 +47,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func pullDownToRefresh() {
-        var pullOptions = PullToRefreshOption()
-        pullOptions.backgroundColor = .blue
-        pullOptions.indicatorColor = .red
-        
-        tblCommentStory.addPullRefresh(options: pullOptions) { [unowned self] in
+        tblCommentStory.addPullRefresh() { [unowned self] in
             let timeNow = DispatchTime.now()
             self.getMBSocialInfo(socialType: self.type, time: timeNow, completion: { (timeDiff) in
                 let delay = DispatchTime.now() + abs(Double(NSEC_PER_SEC) - timeDiff) / Double(NSEC_PER_SEC)

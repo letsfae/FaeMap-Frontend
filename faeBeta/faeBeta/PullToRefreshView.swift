@@ -8,7 +8,7 @@
 import UIKit
 import Gifu
 
-open class PullToRefreshView: UIView {
+class PullToRefreshView: UIView {
     enum PullToRefreshState {
         case pulling
         case triggered
@@ -29,7 +29,9 @@ open class PullToRefreshView: UIView {
     fileprivate var scrollViewInsets: UIEdgeInsets = UIEdgeInsets.zero
     fileprivate var refreshCompletion: (() -> Void)?
     fileprivate var pull: Bool = true
-    var gifUnicorn: GIFImageView
+    fileprivate var gifUnicorn: GIFImageView
+    fileprivate var imgBackground_01: UIImageView!
+    fileprivate var imgBackground_02: UIImageView!
     
     fileprivate var positionY: CGFloat = 0 {
         didSet {
@@ -57,7 +59,11 @@ open class PullToRefreshView: UIView {
                 self.gifUnicorn.frame.origin.x = -130
                 break
             case .refreshing:
-                UIView.animate(withDuration: 1.5, animations: {
+                UIView.animate(withDuration: 3.2, delay: 0, options: [.repeat, .curveLinear], animations: {
+                    self.imgBackground_01.frame.origin.x = -screenWidth
+                    self.imgBackground_02.frame.origin.x = 0
+                }, completion: nil)
+                UIView.animate(withDuration: 1.7, animations: {
                     self.gifUnicorn.center.x = screenWidth / 2
                 }, completion: nil)
                 startAnimating()
@@ -85,15 +91,15 @@ open class PullToRefreshView: UIView {
     }
     
     // MARK: UIView
-    public convenience override init(frame: CGRect) {
+    convenience override init(frame: CGRect) {
         self.init(options: PullToRefreshOption(), frame: frame, refreshCompletion: nil)
     }
     
-    public required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public init(options: PullToRefreshOption, frame: CGRect, refreshCompletion: (() -> Void)?, down: Bool = true) {
+    init(options: PullToRefreshOption, frame: CGRect, refreshCompletion: (() -> Void)?, down: Bool = true) {
         self.options = options
         self.refreshCompletion = refreshCompletion
         
@@ -115,6 +121,7 @@ open class PullToRefreshView: UIView {
         
         self.gifUnicorn = GIFImageView(frame: CGRect(x: 0, y: -20, width: 200, height: 140))
         self.gifUnicorn.contentMode = .scaleAspectFit
+        self.gifUnicorn.layer.zPosition = 1
         
         super.init(frame: frame)
         self.addSubview(self.indicator)
@@ -127,24 +134,43 @@ open class PullToRefreshView: UIView {
             self.gifUnicorn.stopAnimatingGIF()
         }
         
-        let imgBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 85))
-        imgBackground.image = #imageLiteral(resourceName: "pullToRefreshBackground")
-        imgBackground.contentMode = .top
-        imgBackground.clipsToBounds = true
-        
-        imgBackground.addSubview(self.gifUnicorn)
+        self.addSubview(self.gifUnicorn)
         self.gifUnicorn.frame.origin.x = -130
-        self.addSubview(imgBackground)
+        
+        self.loadBackgrounds()
     }
     
-    open override func layoutSubviews() {
+    fileprivate func loadBackgrounds() {
+        if imgBackground_01 != nil {
+            imgBackground_01.removeFromSuperview()
+        }
+        if imgBackground_02 != nil {
+            imgBackground_02.removeFromSuperview()
+        }
+        
+        imgBackground_01 = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 85))
+        imgBackground_01.image = #imageLiteral(resourceName: "pullToRefreshBackground")
+        imgBackground_01.contentMode = .top
+        imgBackground_01.clipsToBounds = true
+        imgBackground_01.layer.zPosition = 0
+        self.addSubview(imgBackground_01)
+        
+        imgBackground_02 = UIImageView(frame: CGRect(x: screenWidth, y: 0, width: screenWidth, height: 85))
+        imgBackground_02.image = #imageLiteral(resourceName: "pullToRefreshBackground")
+        imgBackground_02.contentMode = .top
+        imgBackground_02.clipsToBounds = true
+        imgBackground_02.layer.zPosition = 0
+        self.addSubview(imgBackground_02)
+    }
+    
+    override func layoutSubviews() {
         super.layoutSubviews()
         self.arrow.center = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
         self.arrow.frame = self.arrow.frame.offsetBy(dx: 0, dy: 0)
         self.indicator.center = self.arrow.center
     }
     
-    open override func willMove(toSuperview superView: UIView!) {
+    override func willMove(toSuperview superView: UIView!) {
         // superview NOT superView, DO NEED to call the following method
         // superview dealloc will call into this when my own dealloc run later!!
         self.removeRegister()
@@ -172,7 +198,7 @@ open class PullToRefreshView: UIView {
     
     // MARK: KVO
     
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let scrollView = object as? UIScrollView else {
             return
         }
@@ -285,6 +311,7 @@ open class PullToRefreshView: UIView {
             }, completion: { _ in
                 self.state = .pulling
                 self.gifUnicorn.stopAnimatingGIF()
+                self.loadBackgrounds()
             }
         )
     }
