@@ -237,6 +237,8 @@ class PinDetailViewController: UIViewController {
         super.viewDidAppear(animated)
         if enterMode != .collections {
             animatePinCtrlBtnsAndFeeling()
+        } else {
+            self.checkCurUserFeeling()
         }
         
         print(boolFromMapBoard)

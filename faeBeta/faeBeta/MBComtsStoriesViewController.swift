@@ -228,6 +228,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+<<<<<<< HEAD
     func likeThisPin() {
         if strPinId == "-1" {
             return
@@ -263,6 +264,45 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             }
         }
     }
+=======
+//    func likeThisPin() {
+//        if strPinId == "-1" {
+//            return
+//        }
+//        let likeThisPin = FaePinAction()
+//        likeThisPin.whereKey("", value: "")
+//        if self.strPinId != "-999" {
+//            likeThisPin.likeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
+//                if status == 201 {
+//                    print("[likeThisPin] Successfully like this pin!")
+//                    self.updateLikeCount()
+//                    self.mbSocial[self.cellCurtIndex.row].isLiked = true
+//                }
+//                else {
+//                    print("Fail to like this pin!")
+//                }
+//            }
+//        }
+//    }
+//    
+//    func unlikeThisPin() {
+//        if self.strPinId == "-1" {
+//            return
+//        }
+//        let unlikeThisPin = FaePinAction()
+//        unlikeThisPin.whereKey("", value: "")
+//        unlikeThisPin.unlikeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
+//            if status/100 == 2 {
+//                print("Successfully unlike this pin!")
+//                self.updateLikeCount()
+//                self.mbSocial[self.cellCurtIndex.row].isLiked = false
+//            }
+//            else {
+//                print("Fail to unlike this pin!")
+//            }
+//        }
+//    }
+>>>>>>> vicky_0622v2
     
     func updateLikeCount() {
         if strPinId == "-1" {
@@ -320,11 +360,18 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             cellCurtSelect.imgFeelings[i].image = nil
         }
         
+<<<<<<< HEAD
         mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
         mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
         mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
         mbSocial[cellCurtIndex.row].feelingArray = feelingArray
         print(feelingArray)
+=======
+        self.mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
+        self.mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
+        self.mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
+        self.mbSocial[cellCurtIndex.row].feelingArray = feelingArray
+>>>>>>> vicky_0622v2
     }
     
     // MBComtsStoriesCellDelegate
@@ -351,24 +398,50 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         let cell = tblCommentStory.cellForRow(at: indexPath) as! MBComtsStoriesCell
         
         if cell.btnFav.currentImage == #imageLiteral(resourceName: "pinDetailLikeHeartFull") {
-            cell.btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
             self.strPinId = strPinId
-            
-            unlikeThisPin()
+
+            if self.strPinId == "-1" {
+                return
+            }
+            let unlikeThisPin = FaePinAction()
+            unlikeThisPin.whereKey("", value: "")
+            unlikeThisPin.unlikeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
+                if status/100 == 2 {
+                    print("Successfully unlike this pin!")
+                    cell.btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)
+                    self.updateLikeCount()
+                    self.mbSocial[self.cellCurtIndex.row].isLiked = false
+                }
+                else {
+                    print("Fail to unlike this pin!")
+                }
+            }
         } else {
-            cell.btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: .normal)
             self.strPinId = strPinId
             
-            likeThisPin()
+            if strPinId == "-1" {
+                return
+            }
+            let likeThisPin = FaePinAction()
+            likeThisPin.whereKey("", value: "")
+            if self.strPinId != "-999" {
+                likeThisPin.likeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
+                    if status == 201 {
+                        print("[likeThisPin] Successfully like this pin!")
+                        cell.btnFav.transform = CGAffineTransform(scaleX: 0, y: 0)
+                        cell.btnFav.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: .normal)
+                        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                            cell.btnFav.transform = CGAffineTransform.identity
+                        }, completion: nil)
+                        self.updateLikeCount()
+                        self.mbSocial[self.cellCurtIndex.row].isLiked = true
+                    }
+                    else {
+                        print("Fail to like this pin!")
+                    }
+                }
+            }
         }
         cellCurtIndex = indexPath
-    }
-    
-    //    func actionHoldingLikeButton(_ sender: UIButton) {
-    //        sender.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
-    //        animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(self.animateHeart), userInfo: nil, repeats: true)
-    //    }
-    
-    func animateHeart() {
     }
 }

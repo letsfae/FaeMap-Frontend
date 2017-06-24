@@ -81,7 +81,7 @@ extension PinDetailViewController {
         })
     }
     
-    fileprivate func checkCurUserFeeling() {
+    func checkCurUserFeeling() {
         if PinDetailViewController.pinTypeEnum != .comment && PinDetailViewController.pinTypeEnum != .media {
             return
         }

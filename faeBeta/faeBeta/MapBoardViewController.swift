@@ -691,6 +691,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func getPeoplePage() {
+        print("userStatus \(userStatus)")
+        print(boolUsrVisibleIsOn)
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             tblMapBoard.isHidden = true
             uiviewBubbleHint.isHidden = false
