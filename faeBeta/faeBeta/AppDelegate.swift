@@ -19,8 +19,6 @@ import RealmSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var navRealMap = UINavigationController()
-    var navMapBoard = UINavigationController()
     
     // Reachability variables
     var vcPresented = false
@@ -75,14 +73,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-        let vcEmptyRoot = EmptyRootViewController()
+        let vcEmptyRoot = InitialPageController()
 //        let vcEmptyRoot = MBComtsStoriesViewController()
 //        vcEmptyRoot.enterMode = .comment
-        navRealMap.viewControllers = [vcEmptyRoot]
-        navRealMap.navigationBar.isHidden = true
+        let navMain = UINavigationController()
+        navMain.viewControllers = [vcEmptyRoot]
+        navMain.navigationBar.isHidden = true
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navRealMap
+        self.window?.rootViewController = navMain
         self.window?.makeKeyAndVisible()
         
         return true

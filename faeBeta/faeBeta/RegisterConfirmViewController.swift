@@ -156,9 +156,9 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 self.navigationController?.popToRootViewController(animated: false)
                 if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
-                    if vcRoot is EmptyRootViewController {
-                        if let vc = vcRoot as? EmptyRootViewController {
-                            vc.pushRealMap()
+                    if vcRoot is InitialPageController {
+                        if let vc = vcRoot as? InitialPageController {
+                            vc.goToFaeMap()
                         }
                     }
                 }

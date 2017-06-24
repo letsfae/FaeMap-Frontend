@@ -13,82 +13,79 @@ import TTRangeSlider
 
 class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate {
     
-    var window: UIWindow?
-    var uiviewNavBar: UIView!
-    var uiviewDropDownMenu: UIView!
-    var uiviewAllCom: UIView!
-    var tableMapBoard: UITableView!
-    var curtTitle: String = "Social"
-    var titleArray: [String] = ["Places", "People", "Social", "Talk Talk"]
-    var btnNavBarMenu: UIButton!
-    var btnPlaces: UIButton!
-    var btnPeople: UIButton!
-    var btnSocial: UIButton!
-    var btnTalk: UIButton!
-    var imgTick: UIImageView!
-    var navBarMenuBtnClicked = false
-    var imgIconBeforeAllCom: UIImageView!
-    var lblAllCom: UILabel!
-    var btnPeopleLocDetail: UIButton!
-    var uiviewPeopleLocDetail: UIView!
+    // data for people table
+    // data for social table
+    let age: Array = ["", "21", "5"]
+    let gender: Array = ["F", "M", "F"]
+    let imgAvatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
+    let imgIconArr: [UIImage] = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
+    let lblContTxt: Array = ["70K Interactions Today", "180K Interactions Today", "3200 Interactions Today"]
+    let lblIntroTxt: Array = ["@alexis_boa", "I was there", "tontatasagsakeiahgkdalkkjgeiajijgasgehuihagejiuahgkdajhue"]
+    let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
+    let lblUsrNameTxt: Array = ["Alexis", "Shirohige", "nekoneko"]
+    let peopleDis: Array = ["< 0.1km", "1.1km", "1.5km"]
+    var ageLBVal: Int = 16
+    var ageUBVal: Int = 21
+    var boolIsLoaded: Bool = false
+    var boolNoMatch: Bool = false
+    var boolUsrVisibleIsOn: Bool!
+    var btnChangeAgeLB: UIButton!
+    var btnChangeAgeUB: UIButton!
+    var btnChangeDis: UIButton!
+    var btnComments: UIButton!
     var btnGenderBoth: UIButton!
     var btnGenderFemale: UIButton!
     var btnGenderMale: UIButton!
-    var btnChangeDis: UIButton!
-    var btnChangeAgeLB: UIButton!
-    var btnChangeAgeUB: UIButton!
-    var uiviewDisRedLine: UIView!
-    var uiviewAgeRedLine: UIView!
-    var lblDisVal: UILabel!
-    var lblAgeVal: UILabel!
-    var btnTalkPlus: UIButton!
-    var loadedTalkPage = false
-    var uiviewTalkTab: UIView!
-    var btnTalkFeed: UIButton!
-    var btnTalkTopic: UIButton!
-    var btnTalkMypost: UIButton!
-    var uiviewTalkPostHead: UIView!
     var btnMyTalks: UIButton!
-    var btnComments: UIButton!
-    var uiviewRedUnderLine: UIView!
-    var sliderDisFilter: UISlider!
-    var sliderAgeFilter: TTRangeSlider!
-    var seletedGender: String = "Both"
-    var uiviewNavLine: UIView!
-    var boolUsrVisibleIsOn: Bool!
-    var uiviewBubbleHint: UIView!
-    var imgBubbleHint: UIImageView!
-    var lblBubbleHint: UILabel!
-    var strBubbleHint: String = ""
-    var boolNoMatch: Bool = false
-    var boolIsLoaded: Bool = false
-    
-    var mbComments = [MBSocialStruct]()
-    var mbStories = [MBSocialStruct]()
-    var mbPlaces = [MBPlacesStruct]()
-    var mbPeople = [MBPeopleStruct]()
-    
-    // data for social table
-    let imgIconArr: [UIImage] = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
-    let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
-    let lblContTxt: Array = ["70K Interactions Today", "180K Interactions Today", "3200 Interactions Today"]
-    // data for people table
-    let imgAvatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
-    let lblUsrNameTxt: Array = ["Alexis", "Shirohige", "nekoneko"]
-    let gender: Array = ["F", "M", "F"]
-    let age: Array = ["", "21", "5"]
-    let peopleDis: Array = ["< 0.1km", "1.1km", "1.5km"]
-    let lblIntroTxt: Array = ["@alexis_boa", "I was there", "tontatasagsakeiahgkdalkkjgeiajijgasgehuihagejiuahgkdajhue"]
-    
+    var btnNavBarMenu: UIButton!
+    var btnPeople: UIButton!
+    var btnPeopleLocDetail: UIButton!
+    var btnPlaces: UIButton!
+    var btnSocial: UIButton!
+    var btnTalk: UIButton!
+    var btnTalkFeed: UIButton!
+    var btnTalkMypost: UIButton!
+    var btnTalkPlus: UIButton!
+    var btnTalkTopic: UIButton!
+    var curtTitle: String = "Social"
     var disVal: String = "23.0"
-    var ageLBVal: Int = 16
-    var ageUBVal: Int = 21
+    var imgBubbleHint: UIImageView!
+    var imgIconBeforeAllCom: UIImageView!
+    var imgTick: UIImageView!
+    var lblAgeVal: UILabel!
+    var lblAllCom: UILabel!
+    var lblBubbleHint: UILabel!
+    var lblDisVal: UILabel!
+    var loadedTalkPage = false
+    var mbComments = [MBSocialStruct]()
+    var mbPeople = [MBPeopleStruct]()
+    var mbPlaces = [MBPlacesStruct]()
+    var mbStories = [MBSocialStruct]()
+    var navBarMenuBtnClicked = false
+    var seletedGender: String = "Both"
+    var sliderAgeFilter: TTRangeSlider!
+    var sliderDisFilter: UISlider!
+    var strBubbleHint: String = ""
+    var tblMapBoard: UITableView!
+    var titleArray: [String] = ["Places", "People", "Social", "Talk Talk"]
+    var uiviewAgeRedLine: UIView!
+    var uiviewAllCom: UIView!
+    var uiviewBubbleHint: UIView!
+    var uiviewDisRedLine: UIView!
+    var uiviewDropDownMenu: UIView!
+    var uiviewNavBar: UIView!
+    var uiviewNavLine: UIView!
+    var uiviewPeopleLocDetail: UIView!
+    var uiviewRedUnderLine: UIView!
+    var uiviewTalkPostHead: UIView!
+    var uiviewTalkTab: UIView!
+    var window: UIWindow?
     
     // data for places table
-//    let placeIcon: Array = [#imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace")]
-//    let placeName: Array = ["USC Roski", "Starbuckle Coffeeeez", "PollyWood", "PollyWoodddddddddddddddddd", "PollyWood"]
-//    let placeAddr: Array = ["888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, California"]
-//    let distance: Array = ["< 0.1km", "1.6km", "2.2km", "3.0km", "5.0km"]
+    //    let placeIcon: Array = [#imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace"), #imageLiteral(resourceName: "mb_defaultPlace")]
+    //    let placeName: Array = ["USC Roski", "Starbuckle Coffeeeez", "PollyWood", "PollyWoodddddddddddddddddd", "PollyWood"]
+    //    let placeAddr: Array = ["888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, CA", "888 University Park, Los Angeles, California"]
+    //    let distance: Array = ["< 0.1km", "1.6km", "2.2km", "3.0km", "5.0km"]
     
     // data for talk feed table
     let avatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
@@ -125,8 +122,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
     var btnLeftWindow: UIButton!
     
-    weak var delegate: SwitchMapModeDelegate?
-
     enum MapBoardTableMode: Int {
         case social = 0
         case people = 1
@@ -151,22 +146,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
-        /*
-        let user = FaeUser()
-        user.whereKey("email", value: "test123@fae.com")//"12345678@qq.com")
-        user.whereKey("password", value: "A1234567")//"Vickyvj5")
-        user.whereKey("device_id", value: headerDeviceID)
-        user.whereKey("is_mobile", value: "true")
-        user.logInBackground { (status, message) in
-            guard let loginInfo = message else {
-                print("[logInBackground] log in fail")
-                return
-            }
-            let loginInfoJSON = JSON(loginInfo)
-            print(loginInfoJSON)
-        }
-        */
+        view.backgroundColor = .white
         
         // loading order
         loadTable()
@@ -176,24 +156,22 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadTalkTabView()
         uiviewBubbleHint.isHidden = true
         uiviewTalkTab.isHidden = true
-//        self.renewSelfLocation()
+        //        self.renewSelfLocation()
         // 这两个方法中已经进行了renewSelfLocation的操作
-//        self.getMBSocialInfo(socialType: "comment")
-//        self.getMBSocialInfo(socialType: "media")
-        self.getMBPlaceInfo()
-
-        self.tableMapBoard.addGestureRecognizer(setGestureRecognizer())
-        self.uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
-        self.uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
+        //        self.getMBSocialInfo(socialType: "comment")
+        //        self.getMBSocialInfo(socialType: "media")
+        getMBPlaceInfo()
         
-        // 使用navigationController之后，存在space between navigation bar and first cell，加上这句话后可解决这个问题
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.getUsrInvisibleStatus()
+        tblMapBoard.addGestureRecognizer(setGestureRecognizer())
+        uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
+        uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
+        
+        getUsrInvisibleStatus()
     }
     
     func setGestureRecognizer() -> UITapGestureRecognizer {
         var tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.rollUpDropDownMenu(_:)))
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         return tapRecognizer
@@ -201,12 +179,16 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     override func viewDidAppear(_ animated: Bool) {
         // 如果写在这里，每次回到MapBoard主页时CPU消耗太大。目前获取的comments/stories半径很大
-//        self.renewSelfLocation()
-//        self.getMBSocialInfo(socialType: "comment")
-//        self.getMBSocialInfo(socialType: "media")
+        //        self.renewSelfLocation()
+        //        self.getMBSocialInfo(socialType: "comment")
+        //        self.getMBSocialInfo(socialType: "media")
         print("viewDidAppear")
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
+        // 使用navigationController之后，存在space between navigation bar and first cell，加上这句话后可解决这个问题
+        automaticallyAdjustsScrollViewInsets = false
+        tblMapBoard.contentInset = .zero
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -215,9 +197,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     override func viewWillDisappear(_ animated: Bool) {
         print("[viewWillDisappear]")
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        self.boolIsLoaded = false
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        boolIsLoaded = false
     }
     
     // UIGestureRecognizerDelegate
@@ -230,40 +212,39 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
         uiviewNavBar.backgroundColor = .white
-        self.view.addSubview(uiviewNavBar)
+        view.addSubview(uiviewNavBar)
         
-        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth-140)/2, y: 24, width: 140, height: 42))
+        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 140) / 2, y: 24, width: 140, height: 42))
         uiviewNavBar.addSubview(btnNavBarMenu)
         btnNavBarSetTitle()
         
-        btnNavBarMenu.addTarget(self, action: #selector(self.navBarMenuAct(_:)), for: .touchUpInside)
+        btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         
-        btnTalkPlus = UIButton(frame: CGRect(x: screenWidth-34-7, y: 25, width: 34, height: 34))
+        btnTalkPlus = UIButton(frame: CGRect(x: screenWidth - 34 - 7, y: 25, width: 34, height: 34))
         uiviewNavBar.addSubview(btnTalkPlus)
-        btnTalkPlus.addTarget(self, action: #selector(self.addTalkFeed(_:)), for: .touchUpInside)
+        btnTalkPlus.addTarget(self, action: #selector(addTalkFeed(_:)), for: .touchUpInside)
         loadedTalkPage = true
         
         uiviewNavLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
         uiviewNavLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
         uiviewNavBar.addSubview(uiviewNavLine)
         
-        btnLeftWindow = UIButton(frame: CGRect(x: 0, y: 18,width: 40.5, height: 46))
+        btnLeftWindow = UIButton(frame: CGRect(x: 0, y: 18, width: 40.5, height: 46))
         btnLeftWindow.setImage(#imageLiteral(resourceName: "mb_leftWindow"), for: .normal)
-        btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
-        self.uiviewNavBar.addSubview(btnLeftWindow)
+        btnLeftWindow.addTarget(self, action: #selector(actionLeftWindowShow(_:)), for: .touchUpInside)
+        uiviewNavBar.addSubview(btnLeftWindow)
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
         let leftMenuVC = LeftSlidingMenuViewController()
         if let displayName = nickname {
             leftMenuVC.displayName = displayName
-        }
-        else {
+        } else {
             leftMenuVC.displayName = "someone"
         }
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
-        self.present(leftMenuVC, animated: false, completion: nil)
+        present(leftMenuVC, animated: false, completion: nil)
     }
     
     fileprivate func btnNavBarSetTitle() {
@@ -282,14 +263,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     fileprivate func loadDropDownMenu() {
         uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 201))
         uiviewDropDownMenu.backgroundColor = .white
-        self.view.addSubview(uiviewDropDownMenu)
-        uiviewDropDownMenu.frame.origin.y = -136   // 65 - 201
+        view.addSubview(uiviewDropDownMenu)
+        uiviewDropDownMenu.frame.origin.y = -136 // 65 - 201
         
         let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
         uiviewDropMenuBottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
         
-        btnPlaces = UIButton(frame: CGRect(x: 56, y:9, width: 240 * screenWidthFactor, height: 38))
+        btnPlaces = UIButton(frame: CGRect(x: 56, y: 9, width: 240 * screenWidthFactor, height: 38))
         uiviewDropDownMenu.addSubview(btnPlaces)
         btnPlaces.tag = 0
         //        btnPlaces.setTitle(titleArray[0], for: .normal)
@@ -327,29 +308,29 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
-        uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
+        uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
         
         let uiviewDropMenuSecLine = UIView(frame: CGRect(x: 41, y: 100, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuSecLine)
-        uiviewDropMenuSecLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
+        uiviewDropMenuSecLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
         
         let uiviewDropMenuThirdLine = UIView(frame: CGRect(x: 41, y: 150, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuThirdLine)
-        uiviewDropMenuThirdLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
+        uiviewDropMenuThirdLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
     }
     
     fileprivate func loadMidViewContent() {
         uiviewAllCom = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
         uiviewAllCom.backgroundColor = .white
-        self.view.addSubview(uiviewAllCom)
-
+        view.addSubview(uiviewAllCom)
+        
         imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
         lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
         btnPeopleLocDetail = UIButton()
         uiviewAllCom.addSubview(btnPeopleLocDetail)
         uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: btnPeopleLocDetail)
         uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: btnPeopleLocDetail)
-        btnPeopleLocDetail.addTarget(self, action: #selector(self.chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
+        btnPeopleLocDetail.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
         
         setViewContent()
         
@@ -367,7 +348,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     // function for loading talk post uiview and switch buttons
     fileprivate func loadTalkPostHead() {
         uiviewTalkPostHead = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 31))
-        self.view.addSubview(uiviewTalkPostHead)
+        view.addSubview(uiviewTalkPostHead)
         uiviewTalkPostHead.backgroundColor = .white
         uiviewTalkPostHead.isHidden = true
         
@@ -423,7 +404,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             btnPeopleLocDetail.setImage(nil, for: .normal)
             btnPeopleLocDetail.isEnabled = false
         }
-
+        
         if tableMode == .talk {
             uiviewTalkTab.isHidden = false
             switchTalkTabPage()
@@ -435,33 +416,33 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
                 uiviewTalkPostHead.isHidden = true
                 uiviewAllCom.isHidden = false
                 uiviewNavLine.isHidden = false
-                tableMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
+                tblMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
             }
         }
     }
     
     fileprivate func loadTable() {
-        tableMapBoard = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
-        self.view.addSubview(tableMapBoard)
-        tableMapBoard.backgroundColor = .white
-        tableMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
-        tableMapBoard.register(MBPeopleCell.self, forCellReuseIdentifier: "mbPeopleCell")
-        tableMapBoard.register(MBPlacesCell.self, forCellReuseIdentifier: "mbPlacesCell")
-        tableMapBoard.register(MBTalkFeedCell.self, forCellReuseIdentifier: "mbTalkFeedCell")
-        tableMapBoard.register(MBTalkTopicCell.self, forCellReuseIdentifier: "mbTalkTopicCell")
-        tableMapBoard.register(MBTalkMytalksCell.self, forCellReuseIdentifier: "mbTalkMytalksCell")
-        tableMapBoard.register(MBTalkCommentsCell.self, forCellReuseIdentifier: "mbTalkCommentsCell")
-        tableMapBoard.delegate = self
-        tableMapBoard.dataSource = self
-        tableMapBoard.separatorStyle = .none
+        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
+        view.addSubview(tblMapBoard)
+        tblMapBoard.backgroundColor = .white
+        tblMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
+        tblMapBoard.register(MBPeopleCell.self, forCellReuseIdentifier: "mbPeopleCell")
+        tblMapBoard.register(MBPlacesCell.self, forCellReuseIdentifier: "mbPlacesCell")
+        tblMapBoard.register(MBTalkFeedCell.self, forCellReuseIdentifier: "mbTalkFeedCell")
+        tblMapBoard.register(MBTalkTopicCell.self, forCellReuseIdentifier: "mbTalkTopicCell")
+        tblMapBoard.register(MBTalkMytalksCell.self, forCellReuseIdentifier: "mbTalkMytalksCell")
+        tblMapBoard.register(MBTalkCommentsCell.self, forCellReuseIdentifier: "mbTalkCommentsCell")
+        tblMapBoard.delegate = self
+        tblMapBoard.dataSource = self
+        tblMapBoard.separatorStyle = .none
     }
     
     fileprivate func loadTalkTabView() {
         uiviewTalkTab = UIView()
-        uiviewTalkTab.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1)
-        self.view.addSubview(uiviewTalkTab)
-        self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewTalkTab)
-        self.view.addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: uiviewTalkTab)
+        uiviewTalkTab.backgroundColor = UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1)
+        view.addSubview(uiviewTalkTab)
+        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewTalkTab)
+        view.addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: uiviewTalkTab)
         
         let tabLine = UIView()
         tabLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
@@ -500,7 +481,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     // function for drop down menu button, to show / hide the drop down menu
     func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
-            UIView.animate(withDuration: 0.2,animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 65
             })
             navBarMenuBtnClicked = true
@@ -551,7 +532,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func hideDropDownMenu() {
-        UIView.animate(withDuration: 0.2,animations: {
+        UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -136
         })
         navBarMenuBtnClicked = false
@@ -571,7 +552,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         } else if curtTitle == "Talk Talk" {
             tableMode = .talk
         }
-        self.getPeoplePage()
+        getPeoplePage()
     }
     
     func getTalkTableMode(_ sender: UIButton) {
@@ -609,12 +590,12 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         }
         
         if talkTableMode == .post {
-            tableMapBoard.frame = CGRect(x: 0, y: 95, width: screenWidth, height: screenHeight - 145)
+            tblMapBoard.frame = CGRect(x: 0, y: 95, width: screenWidth, height: screenHeight - 145)
             uiviewAllCom.isHidden = true
             uiviewNavLine.isHidden = true
             uiviewTalkPostHead.isHidden = false
         } else {
-            tableMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 164)
+            tblMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 164)
             uiviewAllCom.isHidden = false
             uiviewNavLine.isHidden = false
             uiviewTalkPostHead.isHidden = true
@@ -627,7 +608,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     func switchBetweenTalkAndComment(_ sender: UIButton) {
-        var targetCenter: CGFloat!
+        var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             talkPostTableMode = .talk
             btnMyTalks.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
@@ -649,7 +630,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             self.uiviewRedUnderLine.center.x = targetCenter
         }), completion: { _ in
         })
-
+        
         reloadTableMapBoard()
     }
     
@@ -662,9 +643,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func reloadTableMapBoard() {
-        self.tableMapBoard.reloadData()
-        self.tableMapBoard.layoutIfNeeded()
-        self.tableMapBoard.setContentOffset(CGPoint.zero, animated: false)
+        tblMapBoard.reloadData()
+        tblMapBoard.layoutIfNeeded()
+        tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
     }
     
     func renewSelfLocation() {
@@ -672,11 +653,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
             selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
-            selfLocation.renewCoordinate {(status: Int, message: Any?) in
+            selfLocation.renewCoordinate { (status: Int, _: Any?) in
                 if status / 100 == 2 {
-                // print("Successfully renew self position")
-                }
-                else {
+                    // print("Successfully renew self position")
+                } else {
                     print("[renewSelfLocation] fail")
                 }
             }
@@ -686,7 +666,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     fileprivate func loadCannotFindPeople() {
         uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
         uiviewBubbleHint.backgroundColor = .white
-        self.view.addSubview(uiviewBubbleHint)
+        view.addSubview(uiviewBubbleHint)
         
         imgBubbleHint = UIImageView(frame: CGRect(x: 82 * screenWidthFactor, y: 142 * screenHeightFactor, width: 252, height: 209))
         imgBubbleHint.image = #imageLiteral(resourceName: "mb_bubbleHint")
@@ -702,56 +682,60 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func getUsrInvisibleStatus() {
-        if userStatus == 5 {  // invisible
+        if userStatus == 5 { // invisible
             boolUsrVisibleIsOn = false
         }
-        if userStatus == 1 {  // visible
+        if userStatus == 1 { // visible
             boolUsrVisibleIsOn = true
         }
     }
-
+    
     fileprivate func getPeoplePage() {
         if curtTitle == "People" && !boolUsrVisibleIsOn {
-            self.tableMapBoard.isHidden = true
-            self.uiviewBubbleHint.isHidden = false
+            tblMapBoard.isHidden = true
+            uiviewBubbleHint.isHidden = false
             strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
             lblBubbleHint.text = strBubbleHint
             btnPeopleLocDetail.isUserInteractionEnabled = false
         } else {
-            self.tableMapBoard.isHidden = false
-            self.uiviewBubbleHint.isHidden = true
+            tblMapBoard.isHidden = false
+            uiviewBubbleHint.isHidden = true
             btnPeopleLocDetail.isUserInteractionEnabled = true
         }
     }
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
-        self.getUsrInvisibleStatus()
-        self.getPeoplePage()
+        getUsrInvisibleStatus()
+        getPeoplePage()
     }
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
-        self.navigationController?.pushViewController(moodAvatarVC, animated: true)
+        navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
     func jumpToCollections() {
         let vcCollections = CollectionsBoardViewController()
-        self.navigationController?.pushViewController(vcCollections, animated: true)
+        navigationController?.pushViewController(vcCollections, animated: true)
     }
     func logOutInLeftMenu() {
         let welcomeVC = WelcomeViewController()
-        self.navigationController?.pushViewController(welcomeVC, animated: true)
+        navigationController?.pushViewController(welcomeVC, animated: true)
     }
     func jumpToFaeUserMainPage() {
         let vc = MyFaeMainPageViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func reloadSelfPosition() {
         
     }
     func switchMapMode() {
-        self.navigationController?.popViewController(animated: false)
-        self.delegate?.pushRealMap()
-        LeftSlidingMenuViewController.boolMapBoardIsOn = false
+        if let vc = self.navigationController?.viewControllers.first {
+            if vc is InitialPageController {
+                if let vcRoot = vc as? InitialPageController {
+                    vcRoot.goToFaeMap()
+                    LeftSlidingMenuViewController.boolMapBoardIsOn = false
+                }
+            }
+        }
     }
 }
-

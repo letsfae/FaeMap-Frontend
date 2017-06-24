@@ -164,9 +164,14 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         reloadSelfPosAnimation()
     }
     func switchMapMode() {
-        self.navigationController?.popViewController(animated: false)
-        self.delegate?.pushMapBoard()
-        LeftSlidingMenuViewController.boolMapBoardIsOn = true
+        if let vc = self.navigationController?.viewControllers.first {
+            if vc is InitialPageController {
+                if let vcRoot = vc as? InitialPageController {
+                    vcRoot.goToMapBoard()
+                    LeftSlidingMenuViewController.boolMapBoardIsOn = true
+                }
+            }
+        }
     }
     
     fileprivate func reloadMainScreenButtons() {

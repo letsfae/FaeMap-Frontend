@@ -14,7 +14,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             self.uiviewPeopleLocDetail.frame.origin.y = 65
         }, completion: nil)
         btnNavBarMenu.isUserInteractionEnabled = false
-        self.tableMapBoard.delaysContentTouches = false
+        self.tblMapBoard.delaysContentTouches = false
         sliderDisFilter.setValue(Float(disVal)!, animated: false)
         
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.rollUpPeopleLocPage(_:)))
@@ -29,7 +29,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         btnNavBarMenu.isUserInteractionEnabled = true
         
         if boolNoMatch {   // self.mbPeople.count == 0
-            self.tableMapBoard.isHidden = true
+            self.tblMapBoard.isHidden = true
             self.uiviewBubbleHint.isHidden = false
             strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
             lblBubbleHint.text = strBubbleHint

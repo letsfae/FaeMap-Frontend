@@ -248,7 +248,6 @@
 		B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */; };
 		B8849EC21EEB147A00D4588D /* MBTalkCommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */; };
 		B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC31EEB161900D4588D /* MBNetwork.swift */; };
-		B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */; };
 		B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */; };
 		B8849F571EF355E500D4588D /* MBComtsStoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */; };
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
@@ -282,6 +281,7 @@
 		B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */; };
 		B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F065451DC70AB70080ADCB /* EditPinViewController.swift */; };
 		B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */; };
+		B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */; };
 		C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */; };
 		C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */; };
 		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
@@ -588,7 +588,6 @@
 		B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkMytalksCell.swift; sourceTree = "<group>"; };
 		B8849EB41EEB147A00D4588D /* MBTalkCommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkCommentsCell.swift; sourceTree = "<group>"; };
 		B8849EC31EEB161900D4588D /* MBNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBNetwork.swift; sourceTree = "<group>"; };
-		B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyRootViewController.swift; sourceTree = "<group>"; };
 		B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBAddressLabel.swift; sourceTree = "<group>"; };
 		B8849F561EF355E500D4588D /* MBComtsStoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesViewController.swift; sourceTree = "<group>"; };
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
@@ -622,6 +621,7 @@
 		B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPlaces.swift; sourceTree = "<group>"; };
 		B8F065451DC70AB70080ADCB /* EditPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPinViewController.swift; sourceTree = "<group>"; };
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialPageController.swift; sourceTree = "<group>"; };
 		C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChatBase.swift; sourceTree = "<group>"; };
 		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
 		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
@@ -1113,7 +1113,6 @@
 				B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */,
 				B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */,
 				B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */,
-				B8849EC51EEB593000D4588D /* EmptyRootViewController.swift */,
 			);
 			name = SmallViewControllers;
 			sourceTree = "<group>";
@@ -1150,6 +1149,7 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */,
@@ -1886,6 +1886,7 @@
 				DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */,
 				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
+				B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				B030CC611DC4E0BA00C4FBB1 /* IntroSettingViewController.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
@@ -1962,7 +1963,6 @@
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
-				B8849EC61EEB593000D4588D /* EmptyRootViewController.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,
@@ -2102,7 +2102,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -2135,6 +2135,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -2144,7 +2145,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

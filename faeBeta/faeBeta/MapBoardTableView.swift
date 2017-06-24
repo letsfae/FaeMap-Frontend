@@ -11,22 +11,22 @@ import UIKit
 extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tableMapBoard.rowHeight = UITableViewAutomaticDimension
-        tableMapBoard.estimatedRowHeight = 200
+        tblMapBoard.rowHeight = UITableViewAutomaticDimension
+        tblMapBoard.estimatedRowHeight = 200
         
         if tableMode == .social {
-            tableMapBoard.estimatedRowHeight = 78
+            tblMapBoard.estimatedRowHeight = 78
             return 78
         } else if tableMode == .people || tableMode == .places {
-            tableMapBoard.estimatedRowHeight = 90
+            tblMapBoard.estimatedRowHeight = 90
             return 90
         } else if tableMode == .talk {
             if talkTableMode == .topic {
-                tableMapBoard.estimatedRowHeight = 66
+                tblMapBoard.estimatedRowHeight = 66
                 return 66
             }
         }
-        return tableMapBoard.rowHeight
+        return tblMapBoard.rowHeight
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -143,7 +143,7 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        self.tableMapBoard.backgroundColor = .clear
+        self.tblMapBoard.backgroundColor = .clear
         
         if tableMode == .social {
             if (indexPath.row == 0) {  // comments

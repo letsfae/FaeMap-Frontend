@@ -146,8 +146,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var markerFakeUser = GMSMarker()
     var intPinDistance: Int = 65
     
-    weak var delegate: SwitchMapModeDelegate?
-    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
