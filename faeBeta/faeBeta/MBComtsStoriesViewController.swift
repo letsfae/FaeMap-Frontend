@@ -228,20 +228,20 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-<<<<<<< HEAD
     func likeThisPin() {
         if strPinId == "-1" {
             return
         }
         let likeThisPin = FaePinAction()
         likeThisPin.whereKey("", value: "")
-        if strPinId != "-999" {
-            likeThisPin.likeThisPin(type, pinID: strPinId) { (status: Int, _: Any?) in
+        if self.strPinId != "-999" {
+            likeThisPin.likeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
                 if status == 201 {
                     print("[likeThisPin] Successfully like this pin!")
                     self.updateLikeCount()
                     self.mbSocial[self.cellCurtIndex.row].isLiked = true
-                } else {
+                }
+                else {
                     print("Fail to like this pin!")
                 }
             }
@@ -249,60 +249,22 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func unlikeThisPin() {
-        if strPinId == "-1" {
+        if self.strPinId == "-1" {
             return
         }
         let unlikeThisPin = FaePinAction()
         unlikeThisPin.whereKey("", value: "")
-        unlikeThisPin.unlikeThisPin(type, pinID: strPinId) { (status: Int, _: Any?) in
-            if status / 100 == 2 {
+        unlikeThisPin.unlikeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
+            if status/100 == 2 {
                 print("Successfully unlike this pin!")
                 self.updateLikeCount()
                 self.mbSocial[self.cellCurtIndex.row].isLiked = false
-            } else {
+            }
+            else {
                 print("Fail to unlike this pin!")
             }
         }
     }
-=======
-//    func likeThisPin() {
-//        if strPinId == "-1" {
-//            return
-//        }
-//        let likeThisPin = FaePinAction()
-//        likeThisPin.whereKey("", value: "")
-//        if self.strPinId != "-999" {
-//            likeThisPin.likeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
-//                if status == 201 {
-//                    print("[likeThisPin] Successfully like this pin!")
-//                    self.updateLikeCount()
-//                    self.mbSocial[self.cellCurtIndex.row].isLiked = true
-//                }
-//                else {
-//                    print("Fail to like this pin!")
-//                }
-//            }
-//        }
-//    }
-//    
-//    func unlikeThisPin() {
-//        if self.strPinId == "-1" {
-//            return
-//        }
-//        let unlikeThisPin = FaePinAction()
-//        unlikeThisPin.whereKey("", value: "")
-//        unlikeThisPin.unlikeThisPin(self.type, pinID: self.strPinId) {(status: Int, message: Any?) in
-//            if status/100 == 2 {
-//                print("Successfully unlike this pin!")
-//                self.updateLikeCount()
-//                self.mbSocial[self.cellCurtIndex.row].isLiked = false
-//            }
-//            else {
-//                print("Fail to unlike this pin!")
-//            }
-//        }
-//    }
->>>>>>> vicky_0622v2
     
     func updateLikeCount() {
         if strPinId == "-1" {
@@ -360,18 +322,10 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             cellCurtSelect.imgFeelings[i].image = nil
         }
         
-<<<<<<< HEAD
-        mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
-        mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
-        mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
-        mbSocial[cellCurtIndex.row].feelingArray = feelingArray
-        print(feelingArray)
-=======
         self.mbSocial[cellCurtIndex.row].likeCount = Int(likeCount)!
         self.mbSocial[cellCurtIndex.row].commentCount = Int(commentCount)!
         self.mbSocial[cellCurtIndex.row].isLiked = pinLikeStatus
         self.mbSocial[cellCurtIndex.row].feelingArray = feelingArray
->>>>>>> vicky_0622v2
     }
     
     // MBComtsStoriesCellDelegate
