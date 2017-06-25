@@ -14,15 +14,14 @@ import RealmSwift
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
-    let filterMenuHeight = 542 * screenHeightFactor // Map Filter height
+    let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
     let locManager = CLLocationManager() // location manage
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451) // Map Namecard
-    let navigationBarHeight: CGFloat = 20
     let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     let yelpManager = YelpManager() // Yelp API
     let yelpQuery = YelpQuery() // Yelp API
-    var avatarBaseView: UIView! // Map Namecard
+    var uiviewCardAvatarSub: UIView! // Map Namecard
     var btnChat: UIButton! // Map Namecard
     var btnChatOnMap: UIButton!
     var btnCloseNameCardOptions: UIButton! // Map Namecard
@@ -63,14 +62,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnToNorth: UIButton!
     var btnTransparentClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
-    var canDoNextMapPinUpdate = true
-    var canDoNextPlacePinUpdate = true
-    var canDoNextUserUpdate = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
-    var canOpenAnotherPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
-    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-    var currentLocation: CLLocation! // location manage
-    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
+    var boolCanUpdateSocialPin = true
+    var boolCanUpdatePlacePin = true
+    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
+    var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    var curLat: CLLocationDegrees = 34.0205378 // location manage
+    var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
+    var curLoc: CLLocation! // location manage
+    var curLon: CLLocationDegrees = -118.2854081 // location manage
     var didLoadFirstLoad = false // location manage
     var editNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
@@ -361,11 +360,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if didLoadFirstLoad {
             didLoadFirstLoad = false
-            currentLocation = locManager.location
-            currentLatitude = currentLocation.coordinate.latitude
-            currentLongitude = currentLocation.coordinate.longitude
-            currentLocation2D = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
+            curLoc = locManager.location
+            curLat = curLoc.coordinate.latitude
+            curLon = curLoc.coordinate.longitude
+            curLoc2D = CLLocationCoordinate2DMake(curLat, curLon)
+            let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: 13.8)
             faeMapView.camera = camera
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
@@ -377,10 +376,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             let points = faeMapView.projection.point(for: location.coordinate)
             subviewSelfMarker.center = points
             uiviewDistanceRadius.center = points
-            currentLocation = location
-            currentLocation2D = location.coordinate
-            currentLatitude = location.coordinate.latitude
-            currentLongitude = location.coordinate.longitude
+            curLoc = location
+            curLoc2D = location.coordinate
+            curLat = location.coordinate.latitude
+            curLon = location.coordinate.longitude
             markerFakeUser.position = location.coordinate
         }
     }

@@ -21,7 +21,7 @@ extension FaeMapViewController {
     }
 
     func updateSelfLocation() {
-        if didLoadFirstLoad || !canDoNextUserUpdate {
+        if didLoadFirstLoad || !boolCanUpdateUserPin {
             return
         }
         let coorDistance = cameraDiagonalDistance()
@@ -29,7 +29,7 @@ extension FaeMapViewController {
             faeUserPins[i]?.valid = false
             faeUserPins[i] = nil
         }
-        canDoNextUserUpdate = false
+        boolCanUpdateUserPin = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
@@ -43,22 +43,22 @@ extension FaeMapViewController {
         getMapUserInfo.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
-                self.canDoNextUserUpdate = true
+                self.boolCanUpdateUserPin = true
                 return
             }
             let mapUserJSON = JSON(message!)
             guard let mapUserJsonArray = mapUserJSON.array else {
                 print("[getMapUserInfo] fail to parse pin comments")
-                self.canDoNextUserUpdate = true
+                self.boolCanUpdateUserPin = true
                 return
             }
             if mapUserJsonArray.count <= 0 {
-                self.canDoNextUserUpdate = true
+                self.boolCanUpdateUserPin = true
                 return
             }
             self.faeUserPins = mapUserJsonArray.map { FaeUserPin(json: $0) }
             if mapUserJSON.count <= 0 {
-                self.canDoNextUserUpdate = true
+                self.boolCanUpdateUserPin = true
                 return
             }
             var count = 0
@@ -75,7 +75,7 @@ extension FaeMapViewController {
                 faeUserPin?.mapView = self.faeMapView
                 faeUserPin?.firstLoading()
             }
-            self.canDoNextUserUpdate = true
+            self.boolCanUpdateUserPin = true
         }
     }
 }

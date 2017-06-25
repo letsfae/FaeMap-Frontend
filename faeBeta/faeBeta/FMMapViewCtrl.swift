@@ -94,7 +94,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         
         // Map Filter Distance Change
-        let points = self.faeMapView.projection.point(for: currentLocation2D)
+        let points = self.faeMapView.projection.point(for: curLoc2D)
         self.uiviewDistanceRadius.center = points
         
         if !didLoadFirstLoad && self.subviewSelfMarker != nil {
@@ -313,13 +313,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let mapPin = userData.values.first as? MapPin else {
                 return false
             }
-            if !canOpenAnotherPin {
+            if !boolCanOpenPin {
                 return true
             }
 
             pauseAllUserPinTimers()
             dismissMainBtns()
-            canOpenAnotherPin = false
+            boolCanOpenPin = false
             invalidateAllTimer()
             openMapPin(marker: marker, mapPin: mapPin, animated: true)
             
@@ -331,7 +331,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                 self.present(vcPinDetail, animated: false, completion: {
-                    self.canOpenAnotherPin = true
+                    self.boolCanOpenPin = true
                 })
             })
             
@@ -342,7 +342,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             }
             pauseAllUserPinTimers()
             selectedUserMarker = marker
-            canDoNextUserUpdate = false
+            boolCanUpdateUserPin = false
             animateToCoordinate(type: type, marker: marker, animated: true)
             updateNameCard(withUserId: userPin.userId)
             animateNameCard()
@@ -355,13 +355,13 @@ extension FaeMapViewController: GMSMapViewDelegate {
             guard let placePin = userData.values.first as? PlacePin else {
                 return false
             }
-            if !canOpenAnotherPin {
+            if !boolCanOpenPin {
                 return true
             }
             
             pauseAllUserPinTimers()
             dismissMainBtns()
-            canOpenAnotherPin = false
+            boolCanOpenPin = false
             invalidateAllTimer()
             openPlacePin(marker: marker, placePin: placePin, animated: true)
             
@@ -372,7 +372,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             clearMap(type: "user", animated: false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                 self.present(vcPinDetail, animated: false, completion: {
-                    self.canOpenAnotherPin = true
+                    self.boolCanOpenPin = true
                 })
             })
             return true

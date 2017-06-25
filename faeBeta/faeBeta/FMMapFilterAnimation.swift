@@ -80,16 +80,16 @@ extension FaeMapViewController {
             let location = pan.location(in: view)
             if uiviewFilterMenu.frame.origin.y == screenHeight {
                 sizeFrom = screenHeight
-                sizeTo = screenHeight - filterMenuHeight
+                sizeTo = screenHeight - floatFilterHeight
                 spaceFilter = location.y - screenHeight + 52
                 spaceMenu = screenHeight - location.y
                 end = location.y
             }
             else {
-                sizeFrom = screenHeight - filterMenuHeight
+                sizeFrom = screenHeight - floatFilterHeight
                 sizeTo = screenHeight
-                spaceFilter = location.y - screenHeight + filterMenuHeight + 52
-                spaceMenu = screenHeight - filterMenuHeight - location.y
+                spaceFilter = location.y - screenHeight + floatFilterHeight + 52
+                spaceMenu = screenHeight - floatFilterHeight - location.y
                 end = location.y
             }
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
@@ -112,11 +112,11 @@ extension FaeMapViewController {
                 })
             }
         } else {
-            if self.uiviewFilterMenu.frame.origin.y >= screenHeight - filterMenuHeight {
+            if self.uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight {
                 let location = pan.location(in: view)
                 self.btnMapFilter.frame.origin.y = location.y - spaceFilter
                 self.uiviewFilterMenu.frame.origin.y = location.y + spaceMenu
-                percent = abs(Double(CGFloat(end - location.y) / filterMenuHeight))
+                percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
             }
         }
     }
@@ -151,7 +151,7 @@ extension FaeMapViewController {
             return
         }
         
-        canDoNextUserUpdate = true
+        boolCanUpdateUserPin = true
         btnMapFilter.isEnabled = false
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {

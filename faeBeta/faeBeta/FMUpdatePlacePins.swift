@@ -25,11 +25,11 @@ extension FaeMapViewController {
         clearMap(type: "place", animated: true)
         let coorDistance = cameraDiagonalDistance()
         let placeAllType = allTypePlacesPin()
-        if self.canDoNextPlacePinUpdate {
-            self.canDoNextPlacePinUpdate = false
+        if self.boolCanUpdatePlacePin {
+            self.boolCanUpdatePlacePin = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
                 self.refreshPlacePins(radius: coorDistance, all: placeAllType)
-                self.canDoNextPlacePinUpdate = true
+                self.boolCanUpdatePlacePin = true
             })
         }
     }

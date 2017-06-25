@@ -14,7 +14,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 13.8)
+        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: 13.8)
         self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         faeMapView.delegate = self
         

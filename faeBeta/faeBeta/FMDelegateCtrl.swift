@@ -159,7 +159,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         self.jumpToMyFaeMainPage()
     }
     func reloadSelfPosition() {
-        self.canOpenAnotherPin = true
+        self.boolCanOpenPin = true
         self.reloadMainScreenButtons()
         reloadSelfPosAnimation()
     }

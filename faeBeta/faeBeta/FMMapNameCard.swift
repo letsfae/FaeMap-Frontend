@@ -18,8 +18,9 @@ extension FaeMapViewController {
         btnShowSelfOnMap.isHidden = false
         btnFavorite.isHidden = true
         if user_id != -1 {
-            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
-            imageAvatarNameCard.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            General.shared.avatar(userid: user_id, completion: { (image) in
+                self.imageAvatarNameCard.image = image
+            })
             btnChat.tag = user_id
         }
         else {
@@ -27,8 +28,8 @@ extension FaeMapViewController {
         }
         let zoomLv = faeMapView.camera.zoom
         let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude+offset,
-                                              longitude: currentLongitude, zoom: zoomLv)
+        let camera = GMSCameraPosition.camera(withLatitude: curLat+offset,
+                                              longitude: curLon, zoom: zoomLv)
         faeMapView.animate(to: camera)
         animateNameCard()
         let userNameCard = FaeUser()
@@ -53,7 +54,7 @@ extension FaeMapViewController {
             self.btnTransparentClose.alpha = 1
             self.imageBackground.frame = targetFrame
             self.imageCover.frame = CGRect(x: 73, y: 158, w: 268, h: 125)
-            self.avatarBaseView.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
+            self.uiviewCardAvatarSub.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
             self.imageAvatarNameCard.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
             self.btnChat.frame = CGRect(x: 193.5, y: 393, w: 27, h: 27)
             self.labelDisplayName.frame = CGRect(x: 114, y: 323, w: 186, h: 25)
@@ -78,7 +79,7 @@ extension FaeMapViewController {
                 self.btnTransparentClose.alpha = 0
                 self.imageBackground.frame = CGRect(x: screenWidth/2, y: 451, w: 0, h: 0)
                 self.imageCover.frame = self.startFrame
-                self.avatarBaseView.frame = self.startFrame
+                self.uiviewCardAvatarSub.frame = self.startFrame
                 self.imageAvatarNameCard.frame = self.startFrame
                 self.btnChat.frame = self.startFrame
                 self.labelDisplayName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
@@ -110,7 +111,7 @@ extension FaeMapViewController {
             }
         }), completion: {(done: Bool) in
             if sender == self.btnTransparentClose {
-                self.canDoNextUserUpdate = true
+                self.boolCanUpdateUserPin = true
                 self.uiviewUserGender.isHidden = true
                 self.imageUserGender.image = nil
                 self.lblUserAge.text = nil
@@ -153,19 +154,19 @@ extension FaeMapViewController {
         imageCover.layer.zPosition = 903
         self.view.addSubview(imageCover)
         
-        avatarBaseView = UIView(frame: startFrame)
-        avatarBaseView.layer.anchorPoint = nameCardAnchor
-        avatarBaseView.backgroundColor = UIColor.white
-        avatarBaseView.layer.cornerRadius = 37
-        avatarBaseView.layer.borderColor = UIColor.white.cgColor
-        avatarBaseView.layer.borderWidth = 6
-        avatarBaseView.layer.shadowColor = UIColor.gray.cgColor
-        avatarBaseView.layer.shadowOffset = CGSize.zero
-        avatarBaseView.layer.shadowOpacity = 0.5
-        avatarBaseView.layer.shadowRadius = 6
-        avatarBaseView.layer.zPosition = 904
+        uiviewCardAvatarSub = UIView(frame: startFrame)
+        uiviewCardAvatarSub.layer.anchorPoint = nameCardAnchor
+        uiviewCardAvatarSub.backgroundColor = UIColor.white
+        uiviewCardAvatarSub.layer.cornerRadius = 37
+        uiviewCardAvatarSub.layer.borderColor = UIColor.white.cgColor
+        uiviewCardAvatarSub.layer.borderWidth = 6
+        uiviewCardAvatarSub.layer.shadowColor = UIColor.gray.cgColor
+        uiviewCardAvatarSub.layer.shadowOffset = CGSize.zero
+        uiviewCardAvatarSub.layer.shadowOpacity = 0.5
+        uiviewCardAvatarSub.layer.shadowRadius = 6
+        uiviewCardAvatarSub.layer.zPosition = 904
         
-        self.view.addSubview(avatarBaseView)
+        self.view.addSubview(uiviewCardAvatarSub)
         
         imageAvatarNameCard = UIImageView(frame: startFrame)
         imageAvatarNameCard.layer.anchorPoint = nameCardAnchor

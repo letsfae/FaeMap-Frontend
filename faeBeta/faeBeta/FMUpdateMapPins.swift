@@ -39,12 +39,12 @@ extension FaeMapViewController {
     func loadCurrentRegionPins() {
         clearMap(type: "pin", animated: false)
         let coorDistance = cameraDiagonalDistance()
-        if self.canDoNextMapPinUpdate {
-            self.canDoNextMapPinUpdate = false
+        if self.boolCanUpdateSocialPin {
+            self.boolCanUpdateSocialPin = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
                 self.refreshMapPins(radius: coorDistance, completion: { results in
                     self.pinMapPinsOnMap(results: results)
-                    self.canDoNextMapPinUpdate = true
+                    self.boolCanUpdateSocialPin = true
                 })
             })
         }

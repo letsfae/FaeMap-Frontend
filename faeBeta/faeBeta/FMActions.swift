@@ -12,10 +12,10 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        if currentLocation != nil {
+        if curLoc != nil {
             let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(currentLatitude)")
-            selfLocation.whereKey("geo_longitude", value: "\(currentLongitude)")
+            selfLocation.whereKey("geo_latitude", value: "\(curLat)")
+            selfLocation.whereKey("geo_longitude", value: "\(curLon)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
@@ -40,8 +40,8 @@ extension FaeMapViewController {
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
-        pinMenuVC.currentLatitude = self.currentLatitude
-        pinMenuVC.currentLongitude = self.currentLongitude
+        pinMenuVC.currentLatitude = self.curLat
+        pinMenuVC.currentLongitude = self.curLon
         pinMenuVC.currentLocation = mapCenter_coor
         pinMenuVC.zoomLevel = faeMapView.camera.zoom
         pinMenuVC.delegate = self
@@ -50,7 +50,7 @@ extension FaeMapViewController {
     
     func actionSelfPosition(_ sender: UIButton) {
         hideNameCard(btnTransparentClose)
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: faeMapView.camera.zoom)
+        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: faeMapView.camera.zoom)
         faeMapView.camera = camera
     }
     
