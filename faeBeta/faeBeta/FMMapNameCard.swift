@@ -34,7 +34,7 @@ extension FaeMapViewController {
         let userNameCard = FaeUser()
         userNameCard.getSelfNamecard(){(status:Int, message: Any?) in
             if status / 100 == 2 {
-                print("[updateNameCard] \(message!)")
+                // print("[updateNameCard] \(message!)")
                 let profileInfo = JSON(message!)
                 let canShowGender = profileInfo["show_gender"].boolValue
                 let gender = profileInfo["gender"].stringValue
@@ -48,26 +48,26 @@ extension FaeMapViewController {
     }
     
     func animateNameCard() {
-        let targetFrame = CGRect(x: 73, y: 158, width: 268, height: 293)
+        let targetFrame = CGRect(x: 73, y: 158, w: 268, h: 293)
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.btnTransparentClose.alpha = 1
             self.imageBackground.frame = targetFrame
-            self.imageCover.frame = CGRect(x: 73, y: 158, width: 268, height: 125)
-            self.avatarBaseView.frame = CGRect(x: 170, y: 240, width: 74, height: 74)
-            self.imageAvatarNameCard.frame = CGRect(x: 170, y: 240, width: 74, height: 74)
-            self.btnChat.frame = CGRect(x: 193.5, y: 393, width: 27, height: 27)
-            self.labelDisplayName.frame = CGRect(x: 114, y: 323, width: 186, height: 25)
+            self.imageCover.frame = CGRect(x: 73, y: 158, w: 268, h: 125)
+            self.avatarBaseView.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
+            self.imageAvatarNameCard.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
+            self.btnChat.frame = CGRect(x: 193.5, y: 393, w: 27, h: 27)
+            self.labelDisplayName.frame = CGRect(x: 114, y: 323, w: 186, h: 25)
             self.labelDisplayName.alpha = 1
-            self.labelShortIntro.frame = CGRect(x: 122, y: 349, width: 171, height: 18)
-            self.imageOneLine.frame = CGRect(x: 73, y: 380.5, width: 268, height: 1)
-            self.btnFavorite.frame = CGRect(x: 116, y: 393, width: 27, height: 27)
-            self.btnShowSelfOnMap.frame = CGRect(x: 116, y: 393, width: 27, height: 27)
-            self.btnOptions.frame = CGRect(x: 294, y: 292, width: 32, height: 18)
-            self.btnEmoji.frame = CGRect(x: 271, y: 393, width: 27, height: 27)
-            self.uiViewNameCard.frame = CGRect(x: 73, y: 158, width: 268, height: 275)
-            self.uiviewUserGender.frame = CGRect(x: 88, y: 292, width: 46, height: 18)
-            self.imageUserGender.frame = CGRect(x: 97, y: 295, width: 10, height: 12)
-            self.lblUserAge.frame = CGRect(x: 113, y: 293, width: 16, height: 14)
+            self.labelShortIntro.frame = CGRect(x: 122, y: 349, w: 171, h: 18)
+            self.imageOneLine.frame = CGRect(x: 73, y: 380.5, w: 268, h: 1)
+            self.btnFavorite.frame = CGRect(x: 116, y: 393, w: 27, h: 27)
+            self.btnShowSelfOnMap.frame = CGRect(x: 116, y: 393, w: 27, h: 27)
+            self.btnOptions.frame = CGRect(x: 294, y: 292, w: 32, h: 18)
+            self.btnEmoji.frame = CGRect(x: 271, y: 393, w: 27, h: 27)
+            self.uiViewNameCard.frame = CGRect(x: 73, y: 158, w: 268, h: 275)
+            self.uiviewUserGender.frame = CGRect(x: 88, y: 292, w: 46, h: 18)
+            self.imageUserGender.frame = CGRect(x: 97, y: 295, w: 10, h: 12)
+            self.lblUserAge.frame = CGRect(x: 113, y: 293, w: 16, h: 14)
             self.lblUserAge.alpha = 1
         }, completion: nil)
     }
@@ -76,12 +76,12 @@ extension FaeMapViewController {
         UIView.animate(withDuration: 0.3, animations: ({
             if sender == self.btnTransparentClose {
                 self.btnTransparentClose.alpha = 0
-                self.imageBackground.frame = CGRect(x: screenWidth/2, y: 451, width: 0, height: 0)
+                self.imageBackground.frame = CGRect(x: screenWidth/2, y: 451, w: 0, h: 0)
                 self.imageCover.frame = self.startFrame
                 self.avatarBaseView.frame = self.startFrame
                 self.imageAvatarNameCard.frame = self.startFrame
                 self.btnChat.frame = self.startFrame
-                self.labelDisplayName.frame = CGRect(x: 114, y: 451, width: 0, height: 0)
+                self.labelDisplayName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
                 self.labelShortIntro.frame = self.startFrame
                 self.imageOneLine.frame = self.startFrame
                 self.btnFavorite.frame = self.startFrame
@@ -99,10 +99,10 @@ extension FaeMapViewController {
                 let subviewXBefore: CGFloat = 243 * screenWidthFactor
                 let subviewYBefore: CGFloat = 151 * screenWidthFactor
                 let buttonY: CGFloat = 191 * screenWidthFactor
-                self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-                self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
-                self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
-                self.reportNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, width: 0, height: 0)
+                self.nameCardMoreOptions.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+                self.shareNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, w: 0, h: 0)
+                self.editNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, w: 0, h: 0)
+                self.reportNameCard.frame = CGRect(x: subviewXBefore, y: buttonY, w: 0, h: 0)
                 self.shareNameCard.alpha = 0
                 self.editNameCard.alpha = 0
                 self.reportNameCard.alpha = 0
@@ -122,7 +122,7 @@ extension FaeMapViewController {
     }
     
     func loadNameCard() {
-        btnTransparentClose = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        btnTransparentClose = UIButton(frame: CGRect(x: 0, y: 0, w: screenWidth, h: screenHeight))
         self.view.addSubview(btnTransparentClose)
         btnTransparentClose.layer.zPosition = 900
         btnTransparentClose.alpha = 0
@@ -185,7 +185,7 @@ extension FaeMapViewController {
         self.view.addSubview(btnChat)
         btnChat.addTarget(self, action: #selector(self.btnChatAction(_:)), for: .touchUpInside)
         
-        labelDisplayName = UILabel(frame: CGRect(x: 114, y: 451, width: 0, height: 0))
+        labelDisplayName = UILabel(frame: CGRect(x: 114, y: 451, w: 0, h: 0))
         labelDisplayName.layer.anchorPoint = nameCardAnchor
         labelDisplayName.text = nil
         labelDisplayName.textAlignment = .center
@@ -238,7 +238,7 @@ extension FaeMapViewController {
         
         loadGenderAge()
         
-        btnCloseNameCardOptions = UIButton(frame: CGRect(x: 73, y: 158, width: 268, height: 293))
+        btnCloseNameCardOptions = UIButton(frame: CGRect(x: 73, y: 158, w: 268, h: 293))
         btnCloseNameCardOptions.layer.zPosition = 920
         self.view.addSubview(btnCloseNameCardOptions)
         btnCloseNameCardOptions.alpha = 0
@@ -277,7 +277,7 @@ extension FaeMapViewController {
         let userNameCard = FaeUser()
         userNameCard.getNamecardOfSpecificUser("\(withUserId)"){(status:Int, message: Any?) in
             if status / 100 == 2 {
-                print("[updateNameCard] \(message!)")
+                // print("[updateNameCard] \(message!)")
                 let profileInfo = JSON(message!)
                 let canShowGender = profileInfo["show_gender"].boolValue
                 let gender = profileInfo["gender"].stringValue
@@ -390,39 +390,39 @@ extension FaeMapViewController {
             print("[showNameCardOptions] this is me")
             thisIsMe = true
         }
-        let subviewXBefore: CGFloat = 243 / 414 * screenWidth
-        let subviewYBefore: CGFloat = 151 / 414 * screenWidth
-        let subviewXAfter: CGFloat = 79 / 414 * screenWidth
+        let subviewXBefore: CGFloat = 243
+        let subviewYBefore: CGFloat = 151
+        let subviewXAfter: CGFloat = 79
         let subviewYAfter: CGFloat = subviewYBefore
-        let subviewWidthAfter: CGFloat = 164 / 414 * screenWidth
-        let subviewHeightAfter: CGFloat = 110 / 414 * screenWidth
-        let firstButtonX: CGFloat = 103 / 414 * screenWidth
-        let secondButtonX: CGFloat = 172 / 414 * screenWidth
-        let buttonY: CGFloat = 191 / 414 * screenWidth
-        let buttonWidth: CGFloat = 50 / 414 * screenWidth
-        let buttonHeight: CGFloat = 51 / 414 * screenWidth
+        let subviewWidthAfter: CGFloat = 164
+        let subviewHeightAfter: CGFloat = 110
+        let firstButtonX: CGFloat = 103
+        let secondButtonX: CGFloat = 172
+        let buttonY: CGFloat = 191
+        let buttonWidth: CGFloat = 50
+        let buttonHeight: CGFloat = 51
         
         btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
         
-        nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         nameCardMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
         self.btnCloseNameCardOptions.addSubview(nameCardMoreOptions)
         
-        shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         shareNameCard.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(shareNameCard)
         shareNameCard.clipsToBounds = true
         shareNameCard.alpha = 0.0
 //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
         
-        editNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        editNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         editNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(editNameCard)
         editNameCard.clipsToBounds = true
         editNameCard.alpha = 0.0
 //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
         
-        reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+        reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         reportNameCard.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
         self.btnCloseNameCardOptions.addSubview(reportNameCard)
         reportNameCard.clipsToBounds = true
@@ -430,16 +430,16 @@ extension FaeMapViewController {
         reportNameCard.addTarget(self, action: #selector(self.actionReportThisPin(_:)), for: .touchUpInside)
         
         UIView.animate(withDuration: 0.3, animations: ({
-            self.nameCardMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, width: subviewWidthAfter, height: subviewHeightAfter)
-            self.shareNameCard.frame = CGRect(x: firstButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+            self.nameCardMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, w: subviewWidthAfter, h: subviewHeightAfter)
+            self.shareNameCard.frame = CGRect(x: firstButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
             self.shareNameCard.alpha = 1.0
             if thisIsMe {
                 self.editNameCard.alpha = 1.0
-                self.editNameCard.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+                self.editNameCard.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
             }
             else {
                 self.reportNameCard.alpha = 1.0
-                self.reportNameCard.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+                self.reportNameCard.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
             }
         }))
     }

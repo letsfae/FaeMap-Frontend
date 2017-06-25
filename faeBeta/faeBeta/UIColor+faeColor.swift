@@ -6,7 +6,6 @@
 //  Copyright © 2016年 fae. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 extension UIColor {

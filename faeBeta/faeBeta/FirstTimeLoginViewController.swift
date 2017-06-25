@@ -41,7 +41,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         updateGenderAge.whereKey("show_age", value: "true")
         updateGenderAge.updateNameCard { (status, message) in
             if status / 100 == 2 {
-                print("[showGenderAge] Successfully update namecard")
+                // print("[showGenderAge] Successfully update namecard")
             } else {
                 print("[showGenderAge] Fail to update namecard")
             }

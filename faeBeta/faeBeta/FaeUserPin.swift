@@ -10,8 +10,6 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-
-
 class FaeUserPin: NSObject {
     
     static var arrAntiColliCoor = [CLLocationCoordinate2D](repeating: CLLocationCoordinate2DMake(0, 0), count: 5)
@@ -23,7 +21,7 @@ class FaeUserPin: NSObject {
     var miniAvatar: Int = -1 // an intValue indicates the map avatar showed on map
     var positions = [CLLocationCoordinate2D]() // five random coordinates from back-end, so the posArr should be an length of 5 array
     var marker: GMSMarker? // from GoogleMaps framework, a marker set on map
-    var timer: Timer! // timer to change the marker location within the five markers
+    var timer: Timer? // timer to change the marker location within the five markers
     let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44.7)) // user's map avatar view
     var iconImage = UIImage() // user's map avatar icon image
     var mapView: GMSMapView! // mapView assgined to user pin. marker.map, can be set to nil
@@ -33,7 +31,8 @@ class FaeUserPin: NSObject {
             // invalidate the timer when need to stop updating the random locations of user pin
             if pause {
                 if self.timer != nil {
-                    self.timer.invalidate()
+                    self.timer?.invalidate()
+                    self.timer = nil
                 }
             } else {
                 // timer interval is between 5s to 20s
@@ -50,7 +49,8 @@ class FaeUserPin: NSObject {
             } else {
                 self.marker?.map = nil
                 if self.timer != nil {
-                    self.timer.invalidate()
+                    self.timer?.invalidate()
+                    self.timer = nil
                 }
                 marker?.iconView = icon
                 UIView.animate(withDuration: 0.3, delay: 0, animations: {
@@ -58,7 +58,8 @@ class FaeUserPin: NSObject {
                 }, completion: { _ in
                     self.marker?.map = nil
                     if self.timer != nil {
-                        self.timer.invalidate()
+                        self.timer?.invalidate()
+                        self.timer = nil
                     }
                 })
             }
@@ -117,7 +118,7 @@ class FaeUserPin: NSObject {
     }
     
     func updatePositionAndTimer() {
-
+        
         self.marker?.iconView = icon
         
         if self.index == 5 {
@@ -137,6 +138,7 @@ class FaeUserPin: NSObject {
             self.marker?.map = nil
             self.marker = nil
             self.marker = GMSMarker(position: self.positions[self.index])
+            self.marker?.userData = [1: self]
             self.marker?.iconView = self.icon
             if self.valid {
                 self.marker?.map = self.mapView
@@ -148,23 +150,24 @@ class FaeUserPin: NSObject {
                 })
             } else {
                 if self.timer != nil {
-                    self.timer.invalidate()
+                    self.timer?.invalidate()
+                    self.timer = nil
                 }
                 return
             }
             self.index += 1
         })
         
-        let time = Double.random(min: 5, max: 20)
-        self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+        if !pause || valid {
+            let time = Double.random(min: 5, max: 20)
+            self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+        }
     }
     
     func antiCollisionTest() -> Bool {
         for _ in self.positions {
             
         }
-        
-        
         
         return false
     }

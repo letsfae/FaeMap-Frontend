@@ -19,6 +19,7 @@ extension UIScrollView {
         let refreshView = PullToRefreshView(options: options, frame: refreshViewFrame, refreshCompletion: refreshCompletion)
         refreshView.tag = PullToRefreshConst.pullTag
         addSubview(refreshView)
+        
     }
     
     func addPushRefresh(options: PullToRefreshOption = PullToRefreshOption(), refreshCompletion: (() -> Void)?) {

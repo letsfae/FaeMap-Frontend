@@ -19,7 +19,7 @@ class InitialPageController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let faeMap = arrViewCtrl.first {
-            self.setViewControllers([faeMap], direction: .forward, animated: true, completion: nil)
+            self.setViewControllers([faeMap], direction: .forward, animated: false, completion: nil)
         }
     }
     

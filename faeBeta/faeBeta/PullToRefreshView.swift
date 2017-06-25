@@ -118,7 +118,7 @@ class PullToRefreshView: UIView {
         self.indicator.color = options.indicatorColor
         self.pull = down
         
-        self.gifUnicorn = GIFImageView(frame: CGRect(x: 0, y: -20, width: 200, height: 140))
+        self.gifUnicorn = GIFImageView(frame: CGRect(x: 0, y: -20, w: 200, h: 140))
         self.gifUnicorn.contentMode = .scaleAspectFit
         self.gifUnicorn.layer.zPosition = 1
         
@@ -147,16 +147,16 @@ class PullToRefreshView: UIView {
             imgBackground_02.removeFromSuperview()
         }
         
-        imgBackground_01 = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 85))
+        imgBackground_01 = UIImageView(frame: CGRect(x: 0, y: 0, w: 414, h: 85))
         imgBackground_01.image = #imageLiteral(resourceName: "pullToRefreshBackground")
-        imgBackground_01.contentMode = .top
+        imgBackground_01.contentMode = .scaleAspectFit
         imgBackground_01.clipsToBounds = true
         imgBackground_01.layer.zPosition = 0
         self.addSubview(imgBackground_01)
         
-        imgBackground_02 = UIImageView(frame: CGRect(x: screenWidth, y: 0, width: screenWidth, height: 85))
+        imgBackground_02 = UIImageView(frame: CGRect(x: 414, y: 0, w: 414, h: 85))
         imgBackground_02.image = #imageLiteral(resourceName: "pullToRefreshBackground")
-        imgBackground_02.contentMode = .top
+        imgBackground_02.contentMode = .scaleAspectFit
         imgBackground_02.clipsToBounds = true
         imgBackground_02.layer.zPosition = 0
         self.addSubview(imgBackground_02)

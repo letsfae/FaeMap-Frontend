@@ -176,7 +176,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapChat()
         btnTransparentClose.alpha = 0
         reloadSelfPosAnimation()
-        print("[FaeMapViewController - viewWillAppear]")
+        // print("[FaeMapViewController - viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -237,7 +237,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         updateGenderAge.whereKey("show_age", value: "true")
         updateGenderAge.updateNameCard { status, _ in
             if status / 100 == 2 {
-                print("[showGenderAge] Successfully update namecard")
+                // print("[showGenderAge] Successfully update namecard")
             } else {
                 print("[showGenderAge] Fail to update namecard")
             }

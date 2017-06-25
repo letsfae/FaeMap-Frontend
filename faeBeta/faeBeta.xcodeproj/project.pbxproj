@@ -174,6 +174,7 @@
 		B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */; };
 		B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */; };
 		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
+		B8158C5D1EFF977200218890 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8158C5C1EFF977200218890 /* CGRectExtension.swift */; };
 		B81775701E69516D001FC073 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B817756F1E69516D001FC073 /* PlacePin.swift */; };
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
@@ -513,6 +514,7 @@
 		B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLMapMethods.swift; sourceTree = "<group>"; };
 		B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLSearchBarMethods.swift; sourceTree = "<group>"; };
 		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
+		B8158C5C1EFF977200218890 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		B817756F1E69516D001FC073 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1412,6 +1414,7 @@
 				B064EF2B1D74ECDF00C078F5 /* UIColor+faeColor.swift */,
 				B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */,
 				B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */,
+				B8158C5C1EFF977200218890 /* CGRectExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1914,6 +1917,7 @@
 				B8F065461DC70AB70080ADCB /* EditPinViewController.swift in Sources */,
 				B8612E391DF249DC0092C606 /* PDLoadItems.swift in Sources */,
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
+				B8158C5D1EFF977200218890 /* CGRectExtension.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
 				B883AE5B1E0DDD9C00D2E3CE /* PDMoreOptions.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
@@ -2179,7 +2183,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SUPPRESS_WARNINGS = NO;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
