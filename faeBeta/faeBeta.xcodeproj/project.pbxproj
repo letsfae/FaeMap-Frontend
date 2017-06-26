@@ -181,6 +181,7 @@
 		B823196B1E736EE200189778 /* PDPeopleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B823196A1E736EE200189778 /* PDPeopleCell.swift */; };
 		B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
+		B8283A121F01BBF900FC3011 /* PDChatUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8283A111F01BBF900FC3011 /* PDChatUserCell.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
@@ -520,6 +521,7 @@
 		B823196A1E736EE200189778 /* PDPeopleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDPeopleCell.swift; sourceTree = "<group>"; };
 		B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDScrollCtrl.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		B8283A111F01BBF900FC3011 /* PDChatUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDChatUserCell.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
@@ -1290,6 +1292,7 @@
 				B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */,
 				B81377071EB96234002BD238 /* PDAnimations.swift */,
 				B85A38671EE0DE5500241781 /* PDEdgeGesture.swift */,
+				B8283A111F01BBF900FC3011 /* PDChatUserCell.swift */,
 			);
 			name = PinExtension;
 			sourceTree = "<group>";
@@ -1763,6 +1766,7 @@
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B8849EB61EEB147A00D4588D /* MBCommentsViewController.swift in Sources */,
+				B8283A121F01BBF900FC3011 /* PDChatUserCell.swift in Sources */,
 				B0301B131D4A886700A05996 /* FaeAccountViewController.swift in Sources */,
 				B00EC3E11D2C485000AD9673 /* CountryCodePickerViewController.swift in Sources */,
 				B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */,
@@ -2077,11 +2081,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Faevorite Inc. (J9H8DRZ5QS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Faevorite Inc. (J9H8DRZ5QS)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = V9GDX67TF4;
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2126,11 +2130,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: i@gameburning.com (6PL9J8A7RA)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Faevorite Inc. (J9H8DRZ5QS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Faevorite Inc. (J9H8DRZ5QS)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = V9GDX67TF4;
+				DEVELOPMENT_TEAM = J9H8DRZ5QS;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

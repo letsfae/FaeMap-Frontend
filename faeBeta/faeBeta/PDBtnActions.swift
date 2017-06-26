@@ -106,6 +106,9 @@ extension PinDetailViewController {
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+        if PinDetailViewController.pinTypeEnum == .chat_room {
+            return
+        }
         self.endEdit()
     }
     

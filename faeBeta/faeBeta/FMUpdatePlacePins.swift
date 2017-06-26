@@ -83,149 +83,147 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool) {
-        
-        return
             
-        placeMarkers.removeAll()
-        placePins.removeAll()
-        placeNames.removeAll()
-        
-        placeMarkers.append(markerFakeUser)
-        
-        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
-        yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
-        yelpQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
-        yelpQuery.setRadius(radius: Int(Double(radius)))
-        yelpQuery.setSortRule(sort: "best_match")
-        
-        func checkPlaceExist(_ result: PlacePin) -> Bool {
-            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-            if placeNames.contains(latPlusLon) {
-                return true
-            }
-            return false
-        }
-        
-        if !all {
-            yelpQuery.setResultLimit(count: 10)
-            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                self.placePins = results
-                for result in results {
-                    if checkPlaceExist(result) {
-                        continue
-                    }
-                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                    self.placeNames.append(latPlusLon)
-                }
-                self.pinPlacesOnMap(results: self.placePins)
-            })
-        } else {
-            
-            let count = 16
-            let count_1 = count/2
-            
-            yelpQuery.setResultLimit(count: count)
-            yelpQuery.setCatagoryToRestaurant()
-            yelpManager.query(request: yelpQuery, completion: { (results) in
-                for result in results {
-                    if checkPlaceExist(result) {
-                        continue
-                    }
-                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                    self.placeNames.append(latPlusLon)
-                    self.placePins.append(result)
-//                    self.pinPlacesOnMap(results: [result])
-                }
-                
-                self.yelpQuery.setResultLimit(count: count_1)
-                self.yelpQuery.setCatagoryToDessert()
-                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                    for result in results {
-                        if checkPlaceExist(result) {
-                            continue
-                        }
-                        let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                        self.placeNames.append(latPlusLon)
-                        self.placePins.append(result)
-//                        self.pinPlacesOnMap(results: [result])
-                    }
-                    self.yelpQuery.setCatagoryToCafe()
-                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                        for result in results {
-                            if checkPlaceExist(result) {
-                                continue
-                            }
-                            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                            self.placeNames.append(latPlusLon)
-                            self.placePins.append(result)
-//                            self.pinPlacesOnMap(results: [result])
-                        }
-                        self.yelpQuery.setCatagoryToCinema()
-                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                            for result in results {
-                                if checkPlaceExist(result) {
-                                    continue
-                                }
-                                let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                                self.placeNames.append(latPlusLon)
-                                self.placePins.append(result)
-//                                self.pinPlacesOnMap(results: [result])
-                            }
-                            self.yelpQuery.setCatagoryToSport()
-                            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                for result in results {
-                                    if checkPlaceExist(result) {
-                                        continue
-                                    }
-                                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                                    self.placeNames.append(latPlusLon)
-                                    self.placePins.append(result)
-//                                    self.pinPlacesOnMap(results: [result])
-                                }
-                                self.yelpQuery.setCatagoryToBeauty()
-                                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                    for result in results {
-                                        if checkPlaceExist(result) {
-                                            continue
-                                        }
-                                        let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                                        self.placeNames.append(latPlusLon)
-                                        self.placePins.append(result)
-//                                        self.pinPlacesOnMap(results: [result])
-                                    }
-                                    self.yelpQuery.setCatagoryToArt()
-                                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                        for result in results {
-                                            if checkPlaceExist(result) {
-                                                continue
-                                            }
-                                            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                                            self.placeNames.append(latPlusLon)
-                                            self.placePins.append(result)
-//                                            self.pinPlacesOnMap(results: [result])
-                                        }
-                                        self.yelpQuery.setCatagoryToJuice()
-                                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
-                                            for result in results {
-                                                if checkPlaceExist(result) {
-                                                    continue
-                                                }
-                                                let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
-                                                self.placeNames.append(latPlusLon)
-                                                self.placePins.append(result)
-                                                self.pinPlacesOnMap(results: [result])
-                                            }
-                                            self.pinPlacesOnMap(results: self.placePins)
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        }
+//        placeMarkers.removeAll()
+//        placePins.removeAll()
+//        placeNames.removeAll()
+//
+//        placeMarkers.append(markerFakeUser)
+//
+//        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+//        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+//        yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
+//        yelpQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
+//        yelpQuery.setRadius(radius: Int(Double(radius)))
+//        yelpQuery.setSortRule(sort: "best_match")
+//
+//        func checkPlaceExist(_ result: PlacePin) -> Bool {
+//            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//            if placeNames.contains(latPlusLon) {
+//                return true
+//            }
+//            return false
+//        }
+//
+//        if !all {
+//            yelpQuery.setResultLimit(count: 10)
+//            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                self.placePins = results
+//                for result in results {
+//                    if checkPlaceExist(result) {
+//                        continue
+//                    }
+//                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                    self.placeNames.append(latPlusLon)
+//                }
+//                self.pinPlacesOnMap(results: self.placePins)
+//            })
+//        } else {
+//
+//            let count = 16
+//            let count_1 = count/2
+//
+//            yelpQuery.setResultLimit(count: count)
+//            yelpQuery.setCatagoryToRestaurant()
+//            yelpManager.query(request: yelpQuery, completion: { (results) in
+//                for result in results {
+//                    if checkPlaceExist(result) {
+//                        continue
+//                    }
+//                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                    self.placeNames.append(latPlusLon)
+//                    self.placePins.append(result)
+////                    self.pinPlacesOnMap(results: [result])
+//                }
+//
+//                self.yelpQuery.setResultLimit(count: count_1)
+//                self.yelpQuery.setCatagoryToDessert()
+//                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                    for result in results {
+//                        if checkPlaceExist(result) {
+//                            continue
+//                        }
+//                        let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                        self.placeNames.append(latPlusLon)
+//                        self.placePins.append(result)
+////                        self.pinPlacesOnMap(results: [result])
+//                    }
+//                    self.yelpQuery.setCatagoryToCafe()
+//                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                        for result in results {
+//                            if checkPlaceExist(result) {
+//                                continue
+//                            }
+//                            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                            self.placeNames.append(latPlusLon)
+//                            self.placePins.append(result)
+////                            self.pinPlacesOnMap(results: [result])
+//                        }
+//                        self.yelpQuery.setCatagoryToCinema()
+//                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                            for result in results {
+//                                if checkPlaceExist(result) {
+//                                    continue
+//                                }
+//                                let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                                self.placeNames.append(latPlusLon)
+//                                self.placePins.append(result)
+////                                self.pinPlacesOnMap(results: [result])
+//                            }
+//                            self.yelpQuery.setCatagoryToSport()
+//                            self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                for result in results {
+//                                    if checkPlaceExist(result) {
+//                                        continue
+//                                    }
+//                                    let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                                    self.placeNames.append(latPlusLon)
+//                                    self.placePins.append(result)
+////                                    self.pinPlacesOnMap(results: [result])
+//                                }
+//                                self.yelpQuery.setCatagoryToBeauty()
+//                                self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                    for result in results {
+//                                        if checkPlaceExist(result) {
+//                                            continue
+//                                        }
+//                                        let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                                        self.placeNames.append(latPlusLon)
+//                                        self.placePins.append(result)
+////                                        self.pinPlacesOnMap(results: [result])
+//                                    }
+//                                    self.yelpQuery.setCatagoryToArt()
+//                                    self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                        for result in results {
+//                                            if checkPlaceExist(result) {
+//                                                continue
+//                                            }
+//                                            let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                                            self.placeNames.append(latPlusLon)
+//                                            self.placePins.append(result)
+////                                            self.pinPlacesOnMap(results: [result])
+//                                        }
+//                                        self.yelpQuery.setCatagoryToJuice()
+//                                        self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
+//                                            for result in results {
+//                                                if checkPlaceExist(result) {
+//                                                    continue
+//                                                }
+//                                                let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
+//                                                self.placeNames.append(latPlusLon)
+//                                                self.placePins.append(result)
+//                                                self.pinPlacesOnMap(results: [result])
+//                                            }
+//                                            self.pinPlacesOnMap(results: self.placePins)
+//                                        })
+//                                    })
+//                                })
+//                            })
+//                        })
+//                    })
+//                })
+//            })
+//        }
     }
     
     fileprivate func calculateZoomLevel(results: [PlacePin]) {

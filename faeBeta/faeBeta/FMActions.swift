@@ -28,13 +28,13 @@ extension FaeMapViewController {
     }
     
     func actionTrueNorth(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         self.faeMapView.animate(toBearing: 0)
     }
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         let mapCenter_point = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenter_coor = faeMapView.projection.coordinate(for: mapCenter_point)
         invalidateAllTimer()
@@ -49,13 +49,13 @@ extension FaeMapViewController {
     }
     
     func actionSelfPosition(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: faeMapView.camera.zoom)
         faeMapView.camera = camera
     }
     
     func actionMainScreenSearch(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         let mainScreenSearchVC = MainScreenSearchViewController()
         mainScreenSearchVC.modalPresentationStyle = .overCurrentContext
         mainScreenSearchVC.delegate = self
@@ -63,7 +63,7 @@ extension FaeMapViewController {
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         let leftMenuVC = LeftSlidingMenuViewController()
         if let displayName = nickname {
             leftMenuVC.displayName = displayName
@@ -77,14 +77,14 @@ extension FaeMapViewController {
     }
     
     func actionChatWindowShow(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
     }
     
     func actionReportThisPin(_ sender: UIButton) {
-        hideNameCard(btnTransparentClose)
+        hideNameCard(btnCardClose)
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
         self.present(reportPinVC, animated: true, completion: nil)

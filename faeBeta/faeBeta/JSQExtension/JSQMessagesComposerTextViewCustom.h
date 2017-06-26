@@ -56,7 +56,7 @@
 /**
  *  The object that acts as the paste delegate of the text view.
  */
-@property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegateCustom> pasteDelegate;
+@property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegateCustom> pasteDelegateNew;
 
 @property (nonatomic) BOOL sizeChanged;
 

@@ -10,24 +10,23 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import SwiftyJSON
-import RealmSwift
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
     let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
     let locManager = CLLocationManager() // location manage
-    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451) // Map Namecard
-    let startFrame = CGRect(x: screenWidth / 2, y: 451, width: 0, height: 0) // Map Namecard
+    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
+    let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     let yelpManager = YelpManager() // Yelp API
     let yelpQuery = YelpQuery() // Yelp API
-    var uiviewCardAvatarSub: UIView! // Map Namecard
-    var btnChat: UIButton! // Map Namecard
+    var uiviewAvatarShadow: UIView! // Map Namecard
+    var btnCardChat: UIButton! // Map Namecard
     var btnChatOnMap: UIButton!
-    var btnCloseNameCardOptions: UIButton! // Map Namecard
+    var btnCardCloseOptions: UIButton! // Map Namecard
     var btnDraggingMenu: UIButton! // Filter Menu
-    var btnEmoji: UIButton! // Map Namecard
-    var btnFavorite: UIButton! // Map Namecard
+    var btnCardProfile: UIButton! // Map Namecard
+    var btnCardFav: UIButton! // Map Namecard
     var btnLeftWindow: UIButton!
     var btnMFilterBeauty: MFilterButton! // Filter Item
     var btnMFilterCafe: MFilterButton! // Filter Item
@@ -55,12 +54,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterUnread: MFilterButton! // Filter Item
     var btnMainMapSearch: UIButton!
     var btnMapFilter: UIButton! // Filter Button
-    var btnOptions: UIButton! // Map Namecard
+    var btnCardOptions: UIButton! // Map Namecard
     var btnPinOnMap: UIButton!
     var btnSelfLocation: UIButton!
-    var btnShowSelfOnMap: UIButton! // Map Namecard
+    var btnCardShowSelf: UIButton! // Map Namecard
     var btnToNorth: UIButton!
-    var btnTransparentClose: UIButton! // Map Namecard
+    var btnCardClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
     var boolCanUpdatePlacePin = true
@@ -70,8 +69,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
     var curLoc: CLLocation! // location manage
     var curLon: CLLocationDegrees = -118.2854081 // location manage
-    var didLoadFirstLoad = false // location manage
-    var editNameCard: UIButton! // Map Namecard
+    var boolIsFirstLoad = false // location manage
+    var btnEditNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
     var faeMapView: GMSMapView!
     var faeUserPins = [FaeUserPin?]()
@@ -83,17 +82,17 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var filterPinTypeDic = [String: MFilterButton]() // Filter data processing
     var filterPlaceDic = [String: MFilterButton]() // Filter data processing
     var filterSlider: UISlider! // Filter Slider
-    var imageAvatarNameCard: UIImageView! // Map Namecard
-    var imageBackground: UIImageView! // Map Namecard
-    var imageCover: UIImageView! // Map Namecard
-    var imageOneLine: UIImageView! // Map Namecard
-    var imageUserGender: UIImageView! // Map Namecard
-    var labelDisplayName: UILabel! // Map Namecard
-    var labelShortIntro: UILabel! // Map Namecard
+    var imgCardAvatar: UIImageView! // Map Namecard
+    var imgCardBack: UIImageView! // Map Namecard
+    var imgCardCover: UIImageView! // Map Namecard
+    var imgCardLine: UIImageView! // Map Namecard
+    var imgCardGender: UIImageView! // Map Namecard
+    var lblNickName: UILabel! // Map Namecard
+    var lblShortIntro: UILabel! // Map Namecard
     var labelUnreadMessages: UILabel! // Unread Messages Label
     var lblDistanceDisplay: UILabel!
     var lblFilterDist: UILabel! // Filter Slider
-    var lblUserAge: UILabel! // Map Namecard
+    var lblCardAge: UILabel! // Map Namecard
     var mapFilterArrow: UIImageView! // Filter Button
     var mapPins = [MapPin]()
     var mapPinsMarkers = [GMSMarker]() // Map Pin Array
@@ -137,10 +136,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
     var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var uiViewNameCard: UIView! // Map Namecard
+    var uiviewCardShadow: UIView! // Map Namecard
     var uiviewDistanceRadius: UIView!
     var uiviewFilterMenu: UIView! // Filter Menu
-    var uiviewUserGender: UIView! // Map Namecard
+    var uiviewCardGender: UIView! // Map Namecard
     var prevBearing: Double = 0
     var markerFakeUser = GMSMarker()
     var intPinDistance: Int = 65
@@ -162,7 +161,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapFilter()
         loadButton()
         filterAndYelpSetup()
-        didLoadFirstLoad = true
+        boolIsFirstLoad = true
         markerFakeUser.map = faeMapView
         markerFakeUser.icon = UIImage()
     }
@@ -173,7 +172,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         checkLocationEnablibity()
         loadTransparentNavBarItems()
         loadMapChat()
-        btnTransparentClose.alpha = 0
+        btnCardClose.alpha = 0
         reloadSelfPosAnimation()
         // print("[FaeMapViewController - viewWillAppear]")
     }
@@ -358,8 +357,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if didLoadFirstLoad {
-            didLoadFirstLoad = false
+        if boolIsFirstLoad {
+            boolIsFirstLoad = false
             curLoc = locManager.location
             curLat = curLoc.coordinate.latitude
             curLon = curLoc.coordinate.longitude

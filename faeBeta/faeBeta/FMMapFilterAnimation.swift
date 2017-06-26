@@ -73,7 +73,7 @@ extension FaeMapViewController {
     func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
-            self.hideNameCard(btnTransparentClose)
+            self.hideNameCard(btnCardClose)
             if self.mapFilterArrow != nil {
                 self.mapFilterArrow.removeFromSuperview()
             }
@@ -190,7 +190,7 @@ extension FaeMapViewController {
         if polygonInside != nil {
             polygonInside.layer.removeAllAnimations()
         }
-        if !didLoadFirstLoad {
+        if !boolIsFirstLoad {
             self.filterCircleAnimation()
         }
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {

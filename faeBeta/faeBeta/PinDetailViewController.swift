@@ -205,7 +205,7 @@ class PinDetailViewController: UIViewController {
     var cllcviewChatMember: UICollectionView!
     var imgChatSpot: UIImageView!
     var lblChatMemberNum: UILabel!
-    var lblDescriptionText: UILabel!
+    var lblChatDesc: UILabel!
     var mutableAttrStringMemberNum: NSMutableAttributedString!
     var mutableAttrStringMemberTotal: NSMutableAttributedString!
     var uiviewChatSpotBar: UIView!
@@ -221,6 +221,8 @@ class PinDetailViewController: UIViewController {
     var boolDetailShrinked = true
     var strTextViewText = ""
     var dictAnonymous = [Int: String]()
+    var lblChatRoomTitle: UILabel!
+    var chatRoomUserIds = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -228,7 +230,7 @@ class PinDetailViewController: UIViewController {
         modalPresentationStyle = .overCurrentContext
         loadPinDetailWindow()
         initPinBasicInfo()
-        getSeveralInfo()
+        PinDetailViewController.pinTypeEnum == .chat_room ? getChatRoomInfo() : getSeveralInfo()
         loadFromCollections()
         pullDownToRefresh()
     }
@@ -241,7 +243,6 @@ class PinDetailViewController: UIViewController {
             self.checkCurUserFeeling()
         }
         
-        print(boolFromMapBoard)
         if boolFromMapBoard {
             btnPinComment.sendActions(for: .touchUpInside)
         }
@@ -253,12 +254,8 @@ class PinDetailViewController: UIViewController {
     }
     
     fileprivate func pullDownToRefresh() {
-        var pullOptions = PullToRefreshOption()
-        pullOptions.backgroundColor = .blue
-        pullOptions.indicatorColor = .red
-        
-        self.tblMain.addPullRefresh(options: pullOptions) { [unowned self] in
-            self.getSeveralInfo()
+        tblMain.addPullRefresh() { [unowned self] in
+            PinDetailViewController.pinTypeEnum == .chat_room ? self.getChatRoomInfo() : self.getSeveralInfo()
             self.tblMain.stopPullRefreshEver()
         }
     }

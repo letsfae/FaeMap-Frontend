@@ -421,7 +421,7 @@ class FaeUser : NSObject {
         }
     }
     
-    func getNamecardOfSpecificUser(_ otherUser: String, completion:@escaping (Int, Any?) -> Void){
+    func getUserCard(_ otherUser: String, completion:@escaping (Int, Any?) -> Void){
         getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
             completion(status, message)
         }

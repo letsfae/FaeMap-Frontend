@@ -21,7 +21,7 @@ extension FaeMapViewController {
     }
 
     func updateSelfLocation() {
-        if didLoadFirstLoad || !boolCanUpdateUserPin {
+        if boolIsFirstLoad || !boolCanUpdateUserPin {
             return
         }
         let coorDistance = cameraDiagonalDistance()

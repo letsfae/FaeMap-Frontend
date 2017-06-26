@@ -97,7 +97,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
         let points = self.faeMapView.projection.point(for: curLoc2D)
         self.uiviewDistanceRadius.center = points
         
-        if !didLoadFirstLoad && self.subviewSelfMarker != nil {
+        if !boolIsFirstLoad && self.subviewSelfMarker != nil {
             self.subviewSelfMarker.center = points
         }
         
@@ -348,7 +348,7 @@ extension FaeMapViewController: GMSMapViewDelegate {
             animateNameCard()
             invalidateAllTimer()
             UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
-                self.btnTransparentClose.alpha = 1
+                self.btnCardClose.alpha = 1
             })
             return true
         } else if type == 2 { // place pin

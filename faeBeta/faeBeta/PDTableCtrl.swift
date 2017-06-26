@@ -20,6 +20,10 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
+        if PinDetailViewController.pinTypeEnum == .chat_room {
+            return nil
+        }
+        
         let uiview = UIView()
         uiview.backgroundColor = .white
         uiview.addSubview(uiviewTblCtrlBtnSub)
@@ -28,7 +32,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return PinDetailViewController.pinTypeEnum == .chat_room ? 0 : 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

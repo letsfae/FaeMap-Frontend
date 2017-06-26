@@ -19,17 +19,63 @@ extension PinDetailViewController {
         self.getPinComments(sendMessageFlag: false)
     }
     
-    func getPinInfo() {
-        if strPinId == "-1" {
-            return
+    func getChatRoomInfo() {
+        guard strPinId != "-1" else { return }
+        
+        let getChat = FaeMap()
+        getChat.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) { (status: Int, message: Any?) in
+            
+            guard status / 100 == 2 else {
+                print("[getChat] fail")
+                return
+            }
+            guard let unwrapMessage = message else { return }
+            let chatJSON = JSON(unwrapMessage)
+            print(chatJSON["user_id"].intValue)
+            self.lblChatRoomTitle.text = chatJSON["title"].stringValue
+            let memberCount = chatJSON["members"].arrayValue.count
+            let capacity = chatJSON["capacity"].intValue
+            self.lblChatMemberNum.text = memberCount == 1 ? "1 Member" : "\(memberCount) Members"
+            self.lblChatDesc.text = chatJSON["description"].stringValue
+            
+            self.chatRoomUserIds.removeAll()
+            let userIds = chatJSON["members"].arrayValue.map({ $0.intValue })
+            for userId in userIds {
+                self.chatRoomUserIds.append(userId)
+            }
+            
+            let stylePeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                                        NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+            
+            let styleMemNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+                                  NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+            let styleMemTotal = [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+            
+            let attrStrPeople = NSMutableAttributedString(string: "People  ", attributes: stylePeople)
+            let attrStrMemCount = NSMutableAttributedString(string: "\(memberCount)", attributes: styleMemNum)
+            let attrStrSlash = NSMutableAttributedString(string: "/", attributes: styleMemTotal)
+            let attrStrMemTotal = NSMutableAttributedString(string: "\(capacity)", attributes: styleMemTotal)
+            
+            let attrStr = NSMutableAttributedString(string: "")
+            attrStr.append(attrStrPeople)
+            attrStr.append(attrStrMemCount)
+            attrStr.append(attrStrSlash)
+            attrStr.append(attrStrMemTotal)
+            self.lblPeopleCount.attributedText = attrStr
+            
+            self.cllcviewChatMember.reloadData()
         }
+    }
+    
+    func getPinInfo() {
+        guard strPinId != "-1" else { return }
         
         // Cache the current user's profile pic and use it when current user post a feeling
         // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
         if user_id != -1 {
-            let urlStringHeader = "\(baseURL)/files/users/\(Int(user_id))/avatar"
-            imgCurUserAvatar = UIImageView()
-            imgCurUserAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: UIImage(), options: [.retryFailed, .refreshCached], completed: nil)
+            General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+                self.imgCurUserAvatar.image = avatarImage
+            })
         }
         
         let getPinById = FaeMap()
@@ -478,7 +524,7 @@ extension PinDetailViewController {
     
     fileprivate func userNameCard(_ userid: Int, _ index: Int, completion: @escaping (Int, Int) -> ()) {
         let getUser = FaeUser()
-        getUser.getNamecardOfSpecificUser("\(userid)", completion: { status, message in
+        getUser.getUserCard("\(userid)", completion: { status, message in
             if status / 100 != 2 {
                 print("[userNameCard] fail to get user")
             } else {
@@ -581,27 +627,23 @@ extension PinDetailViewController {
     }
     
     func saveThisPin() {
-        if self.strPinId == "-1" {
-            return
-        }
+        guard self.strPinId != "-1" else { return }
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
-        if self.strPinId != "-999" {
-            saveThisPin.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status: Int, _: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully save this pin!")
-                    self.getPinSavedState()
-                    self.getPinAttributeNum()
-                    UIView.animate(withDuration: 0.5, animations: ({
-                        self.imgCollected.alpha = 1.0
-                    }), completion: { _ in
-                        UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
-                            self.imgCollected.alpha = 0.0
-                        }, completion: nil)
-                    })
-                } else {
-                    print("Fail to save this pin!")
-                }
+        saveThisPin.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("Successfully save this pin!")
+                self.getPinSavedState()
+                self.getPinAttributeNum()
+                UIView.animate(withDuration: 0.5, animations: ({
+                    self.imgCollected.alpha = 1.0
+                }), completion: { _ in
+                    UIView.animate(withDuration: 0.5, delay: 1.0, options: [], animations: {
+                        self.imgCollected.alpha = 0.0
+                    }, completion: nil)
+                })
+            } else {
+                print("Fail to save this pin!")
             }
         }
     }

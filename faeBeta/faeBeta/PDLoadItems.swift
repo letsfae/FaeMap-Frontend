@@ -252,7 +252,7 @@ extension PinDetailViewController {
         uiviewFeelingQuick.layer.zPosition = 109
         
         // 6/20/17 Vicky
-        for i in 0..<5{
+        for i in 0..<5 {
             let imgFeeling = UIImageView(frame: CGRect(x: i * 30, y: 0, width: 27, height: 27))
             imgFeelings.append(imgFeeling)
             uiviewFeelingQuick.addSubview(imgFeelings[i])
@@ -513,31 +513,28 @@ extension PinDetailViewController {
     }
     
     fileprivate func loadChatView() {
-        if PinDetailViewController.pinTypeEnum != .chat_room {
-            return
-        }
+        guard PinDetailViewController.pinTypeEnum == .chat_room else { return }
         
         uiviewChatRoom = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 65))
         
         uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 227))
         uiviewChatSpotBar.backgroundColor = UIColor.white
         
-        imgChatSpot = UIImageView(frame: CGRect(x: (screenWidth / 2) - 40, y: 15, width: 80, height: 80))
+        imgChatSpot = UIImageView(frame: CGRect(x: 0, y: 15, width: 80, height: 80))
+        imgChatSpot.center.x = screenWidth / 2
         imgChatSpot.layer.cornerRadius = 40
         imgChatSpot.clipsToBounds = true
         imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
         uiviewChatSpotBar.addSubview(imgChatSpot)
         
-        let lblChatGroupName = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
-        lblChatGroupName.textAlignment = NSTextAlignment.center
-        lblChatGroupName.text = "California Chat"
-        lblChatGroupName.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblChatGroupName.textColor = UIColor.faeAppInputTextGrayColor()
-        uiviewChatSpotBar.addSubview(lblChatGroupName)
+        lblChatRoomTitle = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
+        lblChatRoomTitle.textAlignment = .center
+        lblChatRoomTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblChatRoomTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        uiviewChatSpotBar.addSubview(lblChatRoomTitle)
         
         lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 139, width: screenWidth, height: 30))
-        lblChatMemberNum.textAlignment = NSTextAlignment.center
-        lblChatMemberNum.text = "39 Members"
+        lblChatMemberNum.textAlignment = .center
         lblChatMemberNum.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblChatMemberNum.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         
@@ -560,28 +557,6 @@ extension PinDetailViewController {
         self.uiviewChatRoom.addSubview(uiviewChatSpotBar)
         
         lblPeopleCount = UILabel(frame: CGRect(x: 15, y: 247, width: 200, height: 22))
-        
-        let attriMemberStrPeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
-                                    NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        
-        let attriMemberNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
-                              NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        
-        let attriMemberTotal = [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        // set attributes
-        
-        let mutableAttrStringPeople = NSMutableAttributedString(string: "People  ", attributes: attriMemberStrPeople)
-        mutableAttrStringMemberNum = NSMutableAttributedString(string: "39", attributes: attriMemberNum)
-        let mutableAttrStringSlash = NSMutableAttributedString(string: "/", attributes: attriMemberTotal)
-        mutableAttrStringMemberTotal = NSMutableAttributedString(string: "50", attributes: attriMemberTotal)
-        // set attributed parts
-        
-        let mutableStrIniTitle = NSMutableAttributedString(string: "")
-        mutableStrIniTitle.append(mutableAttrStringPeople)
-        mutableStrIniTitle.append(mutableAttrStringMemberNum)
-        mutableStrIniTitle.append(mutableAttrStringSlash)
-        mutableStrIniTitle.append(mutableAttrStringMemberTotal)
-        lblPeopleCount.attributedText = mutableStrIniTitle
         uiviewChatRoom.addSubview(lblPeopleCount)
         
         let layout = UICollectionViewFlowLayout()
@@ -591,7 +566,7 @@ extension PinDetailViewController {
         cllcviewChatMember = UICollectionView(frame: CGRect(x: 0, y: 282, width: screenWidth, height: 50), collectionViewLayout: layout)
         cllcviewChatMember.dataSource = self
         cllcviewChatMember.delegate = self
-        cllcviewChatMember.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MemberCell")
+        cllcviewChatMember.register(PDChatUserCell.self, forCellWithReuseIdentifier: "pdChatUserCell")
         cllcviewChatMember.backgroundColor = UIColor.white
         cllcviewChatMember.showsHorizontalScrollIndicator = false
         self.uiviewChatRoom.addSubview(cllcviewChatMember)
@@ -606,14 +581,13 @@ extension PinDetailViewController {
         lblDesTitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
         self.uiviewChatRoom.addSubview(lblDesTitle)
         
-        lblDescriptionText = UILabel()
-        lblDescriptionText.lineBreakMode = .byTruncatingTail
-        lblDescriptionText.numberOfLines = 0
-        lblDescriptionText.text = "Once upon a time there was a ninja fruit, inside the ninja fruit there was a ninja.One day someone ate the fruit and also ate the ninja.The person therefore was never seen again."
-        lblDescriptionText.textColor = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 100)
-        lblDescriptionText.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        self.uiviewChatRoom.addSubview(lblDescriptionText)
-        uiviewChatRoom.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDescriptionText)
-        uiviewChatRoom.addConstraintsWithFormat("V:|-391-[v0]", options: [], views: lblDescriptionText)
+        lblChatDesc = UILabel()
+        lblChatDesc.lineBreakMode = .byTruncatingTail
+        lblChatDesc.numberOfLines = 0
+        lblChatDesc.textColor = UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 100)
+        lblChatDesc.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        self.uiviewChatRoom.addSubview(lblChatDesc)
+        uiviewChatRoom.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblChatDesc)
+        uiviewChatRoom.addConstraintsWithFormat("V:|-391-[v0]", options: [], views: lblChatDesc)
     }
 }
