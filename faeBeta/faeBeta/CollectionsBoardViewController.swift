@@ -160,24 +160,19 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         imgShadow.addSubview(imgAvatar)
         
         if let gender = userUserGender {
-            if gender == "male" {
-                imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
-            } else {
-                imgAvatar.image = #imageLiteral(resourceName: "defaultWomen")
-            }
+            imgAvatar.image = gender == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
         }
         
         return imgShadow
     }
     
     func getAvatar() {
-        if user_id != -1 {
-            General.shared.avatar(userid: user_id, completion: { image in
-                for imgView in self.arrImgView {
-                    imgView.image = image
-                }
-            })
-        }
+        guard user_id != -1 else { return }
+        General.shared.avatar(userid: user_id, completion: { image in
+            for imgView in self.arrImgView {
+                imgView.image = image
+            }
+        })
     }
     
     // 生成itemslabel对象
@@ -193,14 +188,13 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     func getPinCounts() {
         let getPinCounts = FaeMap()
         getPinCounts.getPinStatistics { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let pinCountsJSON = JSON(message!)
-                if let createdComment = pinCountsJSON["count"]["created_comment_pin"].int, let createdmedia = pinCountsJSON["count"]["created_media_pin"].int {
-                    self.lblCreatedPinsCount.text = String(createdComment + createdmedia) + " items"
-                }
-                if let savedComment = pinCountsJSON["count"]["saved_comment_pin"].int, let savedmedia = pinCountsJSON["count"]["saved_media_pin"].int {
-                    self.lblSavedPinsCount.text = String(savedComment + savedmedia) + " items"
-                }
+            guard status / 100 == 2 else { return }
+            let pinCountsJSON = JSON(message!)
+            if let createdComment = pinCountsJSON["count"]["created_comment_pin"].int, let createdmedia = pinCountsJSON["count"]["created_media_pin"].int {
+                self.lblCreatedPinsCount.text = String(createdComment + createdmedia) + " items"
+            }
+            if let savedComment = pinCountsJSON["count"]["saved_comment_pin"].int, let savedmedia = pinCountsJSON["count"]["saved_media_pin"].int {
+                self.lblSavedPinsCount.text = String(savedComment + savedmedia) + " items"
             }
         }
     }

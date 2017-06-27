@@ -70,6 +70,17 @@ class PinsTableViewCell: UITableViewCell {
         }
     }
     
+    internal var hotContraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                uiviewPinView.removeConstraints(oldValue)
+            }
+            if hotContraint.count != 0 {
+                uiviewPinView.addConstraints(hotContraint)
+            }
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -165,8 +176,7 @@ class PinsTableViewCell: UITableViewCell {
         imgHot = UIImageView()
         imgHot.image = #imageLiteral(resourceName: "pinDetailHotPin")
         uiviewPinView.addSubview(imgHot)
-        imgHot.isHidden = true
-        uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-134-|", options: [], views: imgHot)
+        imgHot.isHidden = false
         uiviewPinView.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: imgHot)
         
         loadStoryItems()
@@ -185,58 +195,57 @@ class PinsTableViewCell: UITableViewCell {
         lblChatTitle.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lblChatTitle.textAlignment = .left
         lblChatTitle.numberOfLines = 1
-        lblChatTitle.backgroundColor = .red
         lblChatTitle.textColor = UIColor.faeAppTimeTextBlackColor()
         uiviewPinView.addSubview(lblChatTitle)
         uiviewPinView.addConstraintsWithFormat("H:|-96-[v0]-40-|", options: [], views: lblChatTitle)
         uiviewPinView.addConstraintsWithFormat("V:|-44-[v0(25)]", options: [], views: lblChatTitle)
         
-        lblChatDesc = UILabel()
+        // reason to use CGRect to layout lblChatDesc is content of lblChatDesc should be sizeToFit() for better display
+        lblChatDesc = UILabel(frame: CGRect(x: 96, y: 70, width: screenWidth - 145, height: 36))
         lblChatDesc.font = UIFont(name: "AvenirNext-Regular", size: 13)
         lblChatDesc.textAlignment = .left
-        lblChatDesc.backgroundColor = .red
         lblChatDesc.textColor = UIColor(r: 115, g: 115, b: 115, alpha: 100)
         uiviewPinView.addSubview(lblChatDesc)
         lblChatDesc.numberOfLines = 2
-        uiviewPinView.addConstraintsWithFormat("H:|-96-[v0]-40-|", options: [], views: lblChatDesc)
-        uiviewPinView.addConstraintsWithFormat("V:|-70-[v0(36)]", options: [], views: lblChatDesc)
     }
     
     func setImageConstraint() {
         if strPinType == "comment" {
             imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: lblContent)
+            hotContraint = returnConstraintsWithFormat("H:[v0(18)]-134-|", options: [], views: imgHot)
         } else if strPinType == "media" {
             imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: lblContent, uiviewStoryImages)
+            hotContraint = returnConstraintsWithFormat("H:[v0(18)]-134-|", options: [], views: imgHot)
         } else if strPinType == "chat_room" {
             imageContraint = returnConstraintsWithFormat("V:|-44-[v0(62)]-39-|", options: [], views: imgChatRoom)
+            hotContraint = returnConstraintsWithFormat("H:[v0(18)]-13-|", options: [], views: imgHot)
         }
     }
     
     // call this fuction when reuse cell, set value to the cell and rebuild the layout
     func setValueForCell(_ pin: MapPinCollections) {
-        boolIsHot = false
+        
         strPinType = pin.type
         intPinId = pin.pinId
         lblDate.text = pin.date.formatFaeDate()
         lblLikeCount.text = "\(pin.likeCount)"
         lblCommentCount.text = "\(pin.commentCount)"
+        lblChatTitle.text = pin.chatTitle
+        lblChatDesc.text = pin.content
         lblContent.attributedText = pin.content.convertStringWithEmoji()
         imgLike.image = pin.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
         
-        if pin.likeCount >= 15 || pin.commentCount >= 10 {
-            boolIsHot = true
-        }
-        
-        if boolIsHot == true {
-            imgHot.isHidden = false
-        } else {
-            imgHot.isHidden = true
-        }
-        lblContent.isHidden = strPinType == "chat_room"
+        imgHot.isHidden = pin.likeCount >= 15 || pin.commentCount >= 10
         imgChatRoom.isHidden = strPinType != "chat_room"
-        lblChatTitle.isHidden = strPinType != "chat_room"
+        imgComment.isHidden = strPinType == "chat_room"
+        imgLike.isHidden = strPinType == "chat_room"
+        lblLikeCount.isHidden = strPinType == "chat_room"
+        lblCommentCount.isHidden = strPinType == "chat_room"
         lblChatDesc.isHidden = strPinType != "chat_room"
+        lblChatTitle.isHidden = strPinType != "chat_room"
+        lblContent.isHidden = strPinType == "chat_room"
         uiviewStoryImages.isHidden = strPinType != "media"
+        
         imgPinTab.image = UIImage(named: "tab_\(strPinType)")
         if strPinType == "media" {
             if pin.fileIds.indices.contains(0) {

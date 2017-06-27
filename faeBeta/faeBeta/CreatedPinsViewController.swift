@@ -81,6 +81,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         cell.indexForCurrentCell = indexPath.section
         cell.setValueForCell(arrMapPin[indexPath.section])
         cell.setImageConstraint()
+        cell.lblChatDesc.sizeToFit()
         return cell
     }
     
