@@ -271,7 +271,7 @@ extension FaeMapViewController {
 //            self.lblNickName.text = profileInfo["nick_name"].stringValue
 //            self.lblShortIntro.text = profileInfo["short_intro"].stringValue
 //        }
-    }
+    } 
     
     func btnChatAction(_ sender: UIButton) {
         self.hideNameCard(btnCardClose)
