@@ -113,7 +113,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
                     UIView.animate(withDuration: 0.2, animations: { 
                         cell.imgArray[i].avatar.frame = CGRect(x: 27, y: 25, width: 20, height: 20)
                     })
-                    cell.imgArray[i].avatar.image = self.imgCurUserAvatar.image
+                    cell.imgArray[i].avatar.image = self.imgCurUserAvatar
                 } else {
                     if !cell.imgArray[i].avatar.isHidden {
                         UIView.animate(withDuration: 0.2, animations: {

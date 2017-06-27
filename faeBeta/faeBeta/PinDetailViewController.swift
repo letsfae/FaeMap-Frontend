@@ -212,7 +212,7 @@ class PinDetailViewController: UIViewController {
     var uiviewChatSpotLine: UIView!
     var uiviewChatSpotLineFirstBottom: UIView!
     var lblPeopleCount: UILabel!
-    var imgCurUserAvatar: UIImageView!
+    var imgCurUserAvatar = UIImage()
     var boolKeyboardShowed = false
     var boolStickerShowed = false
     var directReplyFromUser = false // if true, animates cell right above input tool bar, or to top

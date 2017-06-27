@@ -53,6 +53,10 @@ class PinsTableViewCell: UITableViewCell {
     var uiviewSwipedBtnsView: UIView!
     var uiviewStoryImages: UIView!
     
+    var imgChatRoom: FaeImageView!
+    var lblChatTitle: UILabel!
+    var lblChatDesc: UILabel!
+    
     weak var delegate: PinTableViewCellDelegate?
     
     internal var imageContraint = [NSLayoutConstraint]() {
@@ -82,27 +86,6 @@ class PinsTableViewCell: UITableViewCell {
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         recognizer.delegate = self
         uiviewPinView.addGestureRecognizer(recognizer)
-    }
-    
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let translation = panGestureRecognizer.translation(in: superview!)
-            if fabs(translation.x) > fabs(translation.y) {
-                return true
-            }
-            return false
-        }
-        return false
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-    
-    // Interface - Initialize the position of swiped buttons
-    func verticalCenterButtons() {
-        
     }
     
     func setUpUI() {
@@ -169,7 +152,7 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: lblCommentCount)
         
         imgComment = UIImageView()
-        imgComment.image = #imageLiteral(resourceName: "comment")
+        imgComment.image = #imageLiteral(resourceName: "pinDetailShowCommentsHollow")
         uiviewPinView.addSubview(imgComment)
         uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-13-|", options: [], views: imgComment)
         uiviewPinView.addConstraintsWithFormat("V:[v0(15)]-12-|", options: [], views: imgComment)
@@ -180,12 +163,105 @@ class PinsTableViewCell: UITableViewCell {
         uiviewPinView.addConstraintsWithFormat("V:[v0(11)]-14-|", options: [], views: imgPinTab)
         
         imgHot = UIImageView()
-        imgHot.image = #imageLiteral(resourceName: "hot")
+        imgHot.image = #imageLiteral(resourceName: "pinDetailHotPin")
         uiviewPinView.addSubview(imgHot)
         imgHot.isHidden = true
         uiviewPinView.addConstraintsWithFormat("H:[v0(18)]-134-|", options: [], views: imgHot)
         uiviewPinView.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: imgHot)
         
+        loadStoryItems()
+        loadChatItems()
+    }
+    
+    fileprivate func loadChatItems() {
+        imgChatRoom = FaeImageView(frame: CGRect.zero)
+        imgChatRoom.layer.cornerRadius = 31
+        imgChatRoom.clipsToBounds = true
+        imgChatRoom.backgroundColor = .red
+        uiviewPinView.addSubview(imgChatRoom)
+        uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(62)]", options: [], views: imgChatRoom)
+        
+        lblChatTitle = UILabel()
+        lblChatTitle.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        lblChatTitle.textAlignment = .left
+        lblChatTitle.numberOfLines = 1
+        lblChatTitle.backgroundColor = .red
+        lblChatTitle.textColor = UIColor.faeAppTimeTextBlackColor()
+        uiviewPinView.addSubview(lblChatTitle)
+        uiviewPinView.addConstraintsWithFormat("H:|-96-[v0]-40-|", options: [], views: lblChatTitle)
+        uiviewPinView.addConstraintsWithFormat("V:|-44-[v0(25)]", options: [], views: lblChatTitle)
+        
+        lblChatDesc = UILabel()
+        lblChatDesc.font = UIFont(name: "AvenirNext-Regular", size: 13)
+        lblChatDesc.textAlignment = .left
+        lblChatDesc.backgroundColor = .red
+        lblChatDesc.textColor = UIColor(r: 115, g: 115, b: 115, alpha: 100)
+        uiviewPinView.addSubview(lblChatDesc)
+        lblChatDesc.numberOfLines = 2
+        uiviewPinView.addConstraintsWithFormat("H:|-96-[v0]-40-|", options: [], views: lblChatDesc)
+        uiviewPinView.addConstraintsWithFormat("V:|-70-[v0(36)]", options: [], views: lblChatDesc)
+    }
+    
+    func setImageConstraint() {
+        if strPinType == "comment" {
+            imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: lblContent)
+        } else if strPinType == "media" {
+            imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: lblContent, uiviewStoryImages)
+        } else if strPinType == "chat_room" {
+            imageContraint = returnConstraintsWithFormat("V:|-44-[v0(62)]-39-|", options: [], views: imgChatRoom)
+        }
+    }
+    
+    // call this fuction when reuse cell, set value to the cell and rebuild the layout
+    func setValueForCell(_ pin: MapPinCollections) {
+        boolIsHot = false
+        strPinType = pin.type
+        intPinId = pin.pinId
+        lblDate.text = pin.date.formatFaeDate()
+        lblLikeCount.text = "\(pin.likeCount)"
+        lblCommentCount.text = "\(pin.commentCount)"
+        lblContent.attributedText = pin.content.convertStringWithEmoji()
+        imgLike.image = pin.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+        
+        if pin.likeCount >= 15 || pin.commentCount >= 10 {
+            boolIsHot = true
+        }
+        
+        if boolIsHot == true {
+            imgHot.isHidden = false
+        } else {
+            imgHot.isHidden = true
+        }
+        lblContent.isHidden = strPinType == "chat_room"
+        imgChatRoom.isHidden = strPinType != "chat_room"
+        lblChatTitle.isHidden = strPinType != "chat_room"
+        lblChatDesc.isHidden = strPinType != "chat_room"
+        uiviewStoryImages.isHidden = strPinType != "media"
+        imgPinTab.image = UIImage(named: "tab_\(strPinType)")
+        if strPinType == "media" {
+            if pin.fileIds.indices.contains(0) {
+                arrImages[0].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
+                arrImages[0].fileID = pin.fileIds[0]
+                arrImages[0].loadImage(id: pin.fileIds[0])
+            }
+            if pin.fileIds.indices.contains(1) {
+                arrImages[1].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
+                arrImages[1].fileID = pin.fileIds[1]
+                arrImages[1].loadImage(id: pin.fileIds[1])
+            }
+            if pin.fileIds.indices.contains(2) {
+                arrImages[2].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
+                arrImages[2].fileID = pin.fileIds[2]
+                arrImages[2].loadImage(id: pin.fileIds[2])
+            }
+        } else if strPinType == "comment" {
+            
+        } else if strPinType == "chat_room" {
+            
+        }
+    }
+    
+    fileprivate func loadStoryItems() {
         // set the "3+" label
         lblPics3Plus = UILabel()
         lblPics3Plus.text = "3+"
@@ -227,57 +303,27 @@ class PinsTableViewCell: UITableViewCell {
         uiviewStoryImages.addConstraintsWithFormat("H:|-0-[v0(95)]-10-[v1(95)]-10-[v2(95)]", options: [], views: arrImages[0], arrImages[1], arrImages[2])
     }
     
-    func setImageConstraint() {
-        if strPinType == "comment" {
-            imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-42-|", options: [], views: lblContent)
-        } else if strPinType == "media" {
-            imageContraint = returnConstraintsWithFormat("V:|-39-[v0]-12-[v1(95)]-42-|", options: [], views: lblContent, uiviewStoryImages)
+    
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = panGestureRecognizer.translation(in: superview!)
+            if fabs(translation.x) > fabs(translation.y) {
+                return true
+            }
+            return false
         }
+        return false
     }
     
-    // call this fuction when reuse cell, set value to the cell and rebuild the layout
-    func setValueForCell(_ pin: MapPinCollections) {
-        boolIsHot = false
-        strPinType = pin.type
-        intPinId = pin.pinId
-        lblDate.text = pin.date.formatFaeDate()
-        lblLikeCount.text = "\(pin.likeCount)"
-        lblCommentCount.text = "\(pin.commentCount)"
-        lblContent.attributedText = pin.content.convertStringWithEmoji()
-        imgLike.image = pin.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow")
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        // Configure the view for the selected state
+    }
+    
+    // Interface - Initialize the position of swiped buttons
+    func verticalCenterButtons() {
         
-        if pin.likeCount >= 15 || pin.commentCount >= 10 {
-            boolIsHot = true
-        }
-        
-        if boolIsHot == true {
-            imgHot.isHidden = false
-        } else {
-            imgHot.isHidden = true
-        }
-        
-        if strPinType == "media" {
-            imgPinTab.image = UIImage(named: "tab_story")
-            uiviewStoryImages.isHidden = false
-            if pin.fileIds.indices.contains(0) {
-                arrImages[0].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
-                arrImages[0].fileID = pin.fileIds[0]
-                arrImages[0].loadImage(id: pin.fileIds[0])
-            }
-            if pin.fileIds.indices.contains(1) {
-                arrImages[1].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
-                arrImages[1].fileID = pin.fileIds[1]
-                arrImages[1].loadImage(id: pin.fileIds[1])
-            }
-            if pin.fileIds.indices.contains(2) {
-                arrImages[2].backgroundColor = UIColor(r: 214, g: 214, b: 214, alpha: 60)
-                arrImages[2].fileID = pin.fileIds[2]
-                arrImages[2].loadImage(id: pin.fileIds[2])
-            }
-        } else if strPinType == "comment" {
-            imgPinTab.image = UIImage(named: "tab_comment")
-            uiviewStoryImages.isHidden = true
-        }
     }
     
     // handle function of pan gesture

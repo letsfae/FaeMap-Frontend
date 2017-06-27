@@ -74,7 +74,7 @@ extension PinDetailViewController {
         // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
         if user_id != -1 {
             General.shared.avatar(userid: user_id, completion: { (avatarImage) in
-                self.imgCurUserAvatar.image = avatarImage
+                self.imgCurUserAvatar = avatarImage
             })
         }
         
