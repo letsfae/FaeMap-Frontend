@@ -86,13 +86,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var imgCardBack: UIImageView! // Map Namecard
     var imgCardCover: UIImageView! // Map Namecard
     var imgCardLine: UIImageView! // Map Namecard
-    var imgCardGender: UIImageView! // Map Namecard
+    var uiviewCardPrivacy: FaeGenderView! // Map Namecard Gender & Age
     var lblNickName: UILabel! // Map Namecard
     var lblShortIntro: UILabel! // Map Namecard
     var labelUnreadMessages: UILabel! // Unread Messages Label
     var lblDistanceDisplay: UILabel!
     var lblFilterDist: UILabel! // Filter Slider
-    var lblCardAge: UILabel! // Map Namecard
     var mapFilterArrow: UIImageView! // Filter Button
     var mapPins = [MapPin]()
     var mapPinsMarkers = [GMSMarker]() // Map Pin Array
@@ -139,7 +138,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewCardShadow: UIView! // Map Namecard
     var uiviewDistanceRadius: UIView!
     var uiviewFilterMenu: UIView! // Filter Menu
-    var uiviewCardGender: UIView! // Map Namecard
     var prevBearing: Double = 0
     var markerFakeUser = GMSMarker()
     var intPinDistance: Int = 65

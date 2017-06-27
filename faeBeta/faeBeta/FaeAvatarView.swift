@@ -18,6 +18,8 @@ class FaeAvatarView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        // add tapRecoginizer to open the bigger image of this view
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
         self.addGestureRecognizer(tapRecognizer)
         self.isUserInteractionEnabled = true

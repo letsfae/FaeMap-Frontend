@@ -182,6 +182,7 @@
 		B82767501DF3B39400CFB912 /* PDScrollCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B8283A121F01BBF900FC3011 /* PDChatUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8283A111F01BBF900FC3011 /* PDChatUserCell.swift */; };
+		B8283A381F02DD8D00FC3011 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8283A371F02DD8C00FC3011 /* FaeGenderView.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
 		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
 		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
@@ -522,6 +523,7 @@
 		B827674F1DF3B39400CFB912 /* PDScrollCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDScrollCtrl.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B8283A111F01BBF900FC3011 /* PDChatUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDChatUserCell.swift; sourceTree = "<group>"; };
+		B8283A371F02DD8C00FC3011 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FaeGenderView.swift; path = "../../../Practicing Swift/FaeGenderView/FaeGenderView/FaeGenderView.swift"; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
 		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
@@ -1434,6 +1436,7 @@
 				B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */,
 				DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */,
 				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
+				B8283A371F02DD8C00FC3011 /* FaeGenderView.swift */,
 				B85A38651EDE39EC00241781 /* FaeImageView.swift */,
 				B81377051EB7C181002BD238 /* FaeNavBar.swift */,
 				B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */,
@@ -1849,6 +1852,7 @@
 				B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				B81563891DDBA07C00BF85A1 /* CCPLoadItems.swift in Sources */,
+				B8283A381F02DD8D00FC3011 /* FaeGenderView.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B8849EB71EEB147A00D4588D /* MBCommentsCell.swift in Sources */,
