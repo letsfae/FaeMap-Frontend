@@ -31,23 +31,10 @@ extension FaeMapViewController {
         faeMapView.animate(to: camera)
         animateNameCard()
         
-        uiviewCardPrivacy.loadGenderAge(id: user_id)
-//        let userNameCard = FaeUser()
-//        userNameCard.getSelfNamecard { (status: Int, message: Any?) in
-//            guard status / 100 == 2 else { return }
-//            guard let unwrapMessage = message else {
-//                print("[getSelfNamecard] message is nil")
-//                return
-//            }
-//            let profileInfo = JSON(unwrapMessage)
-//            let canShowGender = profileInfo["show_gender"].boolValue
-//            let gender = profileInfo["gender"].stringValue
-//            let canShowAge = profileInfo["show_age"].boolValue
-//            let age = profileInfo["age"].stringValue
-//            self.uiviewCardPrivacy.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
-//            self.lblNickName.text = profileInfo["nick_name"].stringValue
-//            self.lblShortIntro.text = profileInfo["short_intro"].stringValue
-//        }
+        uiviewCardPrivacy.loadGenderAge(id: user_id) { (nickName, shortIntro) in
+            self.lblNickName.text = nickName
+            self.lblShortIntro.text = shortIntro
+        }
     }
     
     func animateNameCard() {
@@ -254,23 +241,10 @@ extension FaeMapViewController {
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgCardAvatar.image = avatarImage
         }
-        uiviewCardPrivacy.loadGenderAge(id: withUserId)
-//        let userNameCard = FaeUser()
-//        userNameCard.getUserCard("\(withUserId)") { (status: Int, message: Any?) in
-//            guard status / 100 == 2 else { return }
-//            guard let unwrapMessage = message else {
-//                print("[getUserCard] message is nil")
-//                return
-//            }
-//            let profileInfo = JSON(unwrapMessage)
-//            let canShowGender = profileInfo["show_gender"].boolValue
-//            let gender = profileInfo["gender"].stringValue
-//            let canShowAge = profileInfo["show_age"].boolValue
-//            let age = profileInfo["age"].stringValue
-//            self.uiviewCardPrivacy.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
-//            self.lblNickName.text = profileInfo["nick_name"].stringValue
-//            self.lblShortIntro.text = profileInfo["short_intro"].stringValue
-//        }
+        uiviewCardPrivacy.loadGenderAge(id: withUserId) { (nickName, shortIntro) in
+            self.lblNickName.text = nickName
+            self.lblShortIntro.text = shortIntro
+        }
     } 
     
     func btnChatAction(_ sender: UIButton) {
