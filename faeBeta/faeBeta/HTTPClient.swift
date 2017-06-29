@@ -242,9 +242,9 @@ func getAvatar(userID: Int, type: Int, completion:@escaping (Int, String, Data?)
     }
 }
 
-func getImage(fileID: Int, type: Int, completion:@escaping (Int, String, Data?) -> Void) {
+func getImage(fileID: Int, type: Int, isChatRoom: Bool, completion:@escaping (Int, String, Data?) -> Void) {
     
-    let URL = "\(baseURL)/files/\(fileID)/data"
+    let URL = isChatRoom ? "\(baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(baseURL)/files/\(fileID)/data"
     let headers = [
         "User-Agent" : headerUserAgent,
         "Fae-Client-Version" : headerClientVersion,

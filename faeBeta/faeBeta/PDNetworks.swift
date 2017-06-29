@@ -167,22 +167,16 @@ extension PinDetailViewController {
             if anonymous {
                 self.lblPinDisplayName.text = "Someone"
                 self.isAnonymous = true
+                self.arrNonDupUserId.removeFirst()
             } else {
-                self.userNameCard(PinDetailViewController.pinUserId, -1, completion: { id, index in
-                    if id != 0 {
-                        self.userAvatarGetter(PinDetailViewController.pinUserId, index: index, isPeople: true)
-                    }
-                })
                 self.lblPinDisplayName.text = pinInfoJSON["nick_name"].stringValue
                 // Get avatar
-                if let pinUserId = pinInfoJSON["user_id"].int {
-                    let urlStringHeader = "\(baseURL)/files/users/\(pinUserId)/avatar"
-                    self.imgPinUserAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { _, _, _, _ in
-                        UIView.animate(withDuration: 0.2, animations: {
-                            self.imgPinUserAvatar.alpha = 1
-                        })
+                General.shared.avatar(userid: pinInfoJSON["user_id"].intValue, completion: { (avatarImage) in
+                    self.imgPinUserAvatar.image = avatarImage
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.imgPinUserAvatar.alpha = 1
                     })
-                }
+                })
             }
             let peopleCount = self.isAnonymous ? commentCount : commentCount + 1
             let attr_2 = NSMutableAttributedString(string: "People  ", attributes: attri_0)
@@ -285,27 +279,6 @@ extension PinDetailViewController {
     }
     
     func loadFeelingQuickView() {
-        //        uiviewFeelingQuick.removeFromSuperview()
-        //        uiviewFeelingQuick = UIView(frame: CGRect(x: 14, y: 0, width: screenWidth - 180, height: 27))
-        //        uiviewInteractBtnSub.addSubview(uiviewFeelingQuick)
-        //        uiviewFeelingQuick.layer.zPosition = 109
-        //        var count = 0
-        //        print(feelingArray)
-        //        for i in 0..<feelingArray.count {
-        //            if feelingArray[i] != 0 {
-        //                let offset = count * 30
-        //                let feeling = UIImageView(frame: CGRect(x: offset, y: 0, width: 27, height: 27))
-        //                if i+1 < 10 {
-        //                    feeling.image = UIImage(named: "pdFeeling_0\(i+1)-1")
-        //                } else {
-        //                    feeling.image = UIImage(named: "pdFeeling_\(i+1)-1")
-        //                }
-        //                uiviewFeelingQuick.addSubview(feeling)
-        //                count += 1
-        //            }
-        //        }
-        
-        // 6/20/17 Vicky
         var feelings = [Int]()
         for i in 0..<feelingArray.count {
             if feelingArray[i] != 0 {
@@ -324,7 +297,6 @@ extension PinDetailViewController {
         for i in feelingCount..<5 {
             imgFeelings[i].image = nil
         }
-        // 6/20/17 Vicky End
     }
     
     func getPinAttributeNum() {
@@ -403,23 +375,16 @@ extension PinDetailViewController {
             
             self.tblMain.reloadData()
             
-            if self.pinComments.count >= 1 {
-                for i in 0..<self.pinComments.count {
-                    if self.pinComments[i].anonymous {
-                        continue
-                    }
-                    let userid = self.pinComments[i].userId
-                    self.userNameCard(userid, i, completion: { id, index in
-                        if id != 0 {
-                            self.userAvatarGetter(userid, index: index, isPeople: true)
-                        }
-                    })
-                    self.userAvatarGetter(userid, index: i, isPeople: false)
+            guard self.pinComments.count >= 1 else { return }
+            for comment in self.pinComments {
+                if self.arrNonDupUserId.contains(comment.userId) {
+                    continue
                 }
-                if sendMessageFlag {
-                    let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
-                    self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: true)
-                }
+                self.arrNonDupUserId.append(comment.userId)
+            }
+            if sendMessageFlag {
+                let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
+                self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
         }
     }
@@ -459,66 +424,14 @@ extension PinDetailViewController {
                 let userid = lastComment.userId
                 self.userNameCard(userid, self.pinComments.count - 1, completion: { id, index in
                     if id != 0 {
-                        self.userAvatarGetter(userid, index: index, isPeople: true)
+                        
                     }
                 })
-                self.userAvatarGetter(userid, index: self.pinComments.count - 1, isPeople: false)
+                
             }
             
             let indexPath = IndexPath(row: self.pinComments.count - 1, section: 0)
             self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: true)
-        }
-    }
-    
-    fileprivate func userAvatarGetter(_ userid: Int, index: Int, isPeople: Bool) {
-        
-        // if userid == 0, it is anonymous
-        if userid == 0 {
-            return
-        }
-        
-        let indexPath = IndexPath(row: index, section: 0)
-        getAvatar(userID: userid, type: 2) { _, etag, imageRawData in
-            let realm = try! Realm()
-            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
-                // 存在User，Etag没变
-                if etag == avatarRealm.smallAvatarEtag {
-                    if isPeople {
-                        self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
-                    } else {
-                        self.pinComments[index].profileImage = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
-                        self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                    }
-                } else {
-                    if isPeople {
-                        self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
-                    } else {
-                        self.pinComments[index].profileImage = UIImage.sd_image(with: imageRawData)
-                        self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                    }
-                    try! realm.write {
-                        avatarRealm.smallAvatarEtag = etag
-                        avatarRealm.userSmallAvatar = imageRawData as NSData?
-                        avatarRealm.largeAvatarEtag = nil
-                        avatarRealm.userLargeAvatar = nil
-                    }
-                }
-            } else {
-                // 不存在User
-                if isPeople {
-                    self.pinDetailUsers[index].profileImage = UIImage.sd_image(with: imageRawData)
-                } else {
-                    self.pinComments[index].profileImage = UIImage.sd_image(with: imageRawData)
-                    self.tblMain.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-                let avatarObj = RealmUser()
-                avatarObj.userID = "\(userid)"
-                avatarObj.smallAvatarEtag = etag
-                avatarObj.userSmallAvatar = imageRawData as NSData?
-                try! realm.write {
-                    realm.add(avatarObj)
-                }
-            }
         }
     }
     

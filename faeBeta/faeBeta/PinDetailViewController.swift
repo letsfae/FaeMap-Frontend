@@ -90,7 +90,7 @@ class PinDetailViewController: UIViewController {
     static var pinStateEnum: PinState = .normal
     static var pinStatus = ""
     static var pinTypeEnum: PinType = .media
-    static var pinUserId = 0
+    static var pinUserId: Int = 0
     static var placeType = ""
     static var selectedMarkerPosition: CLLocationCoordinate2D!
     static var strPlaceCity = ""
@@ -194,6 +194,7 @@ class PinDetailViewController: UIViewController {
     var uiviewToFullDragBtnSub: UIView! // Another dragging button for UI effect: shadow
     var zoomLevel: Float = 13.8
     var anonyUserDict = [Int: Int]()
+    var arrNonDupUserId = [Int]() // UserId array with no duplicates
     
     // Load Chat
     var uiviewChatRoom: UIView!
@@ -203,7 +204,7 @@ class PinDetailViewController: UIViewController {
     var btnDropDown: UIButton!
     var chatSpotEmojiBubble: UIButton!
     var cllcviewChatMember: UICollectionView!
-    var imgChatSpot: UIImageView!
+    var imgChatSpot: FaeImageView!
     var lblChatMemberNum: UILabel!
     var lblChatDesc: UILabel!
     var mutableAttrStringMemberNum: NSMutableAttributedString!
@@ -233,6 +234,7 @@ class PinDetailViewController: UIViewController {
         PinDetailViewController.pinTypeEnum == .chat_room ? getChatRoomInfo() : getSeveralInfo()
         loadFromCollections()
         pullDownToRefresh()
+        arrNonDupUserId = [PinDetailViewController.pinUserId]
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -520,12 +520,15 @@ extension PinDetailViewController {
         uiviewChatSpotBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 227))
         uiviewChatSpotBar.backgroundColor = UIColor.white
         
-        imgChatSpot = UIImageView(frame: CGRect(x: 0, y: 15, width: 80, height: 80))
+        imgChatSpot = FaeImageView(frame: CGRect(x: 0, y: 15, width: 80, height: 80))
         imgChatSpot.center.x = screenWidth / 2
         imgChatSpot.layer.cornerRadius = 40
         imgChatSpot.clipsToBounds = true
-        imgChatSpot.backgroundColor = UIColor.faeAppRedColor()
         uiviewChatSpotBar.addSubview(imgChatSpot)
+        if let chatRoomId = Int(strPinId) {
+            imgChatSpot.fileID = chatRoomId
+            imgChatSpot.loadImage(id: chatRoomId, isChatRoom: true)
+        }
         
         lblChatRoomTitle = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
         lblChatRoomTitle.textAlignment = .center

@@ -11,10 +11,12 @@ import RealmSwift
 import IDMPhotoBrowser
 
 let faeImageCache = NSCache<AnyObject, AnyObject>()
+let faeChatRoomImageCache = NSCache<AnyObject, AnyObject>()
 
 class FaeImageView: UIImageView {
     
     var fileID = -1
+    fileprivate var isChatRoom = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,22 +29,35 @@ class FaeImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadImage(id: Int) {
+    func loadImage(id: Int, isChatRoom: Bool = false) {
+        
+        self.isChatRoom = isChatRoom
         
         self.image = nil
         
-        if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
-            self.image = imageFromCache
-            return
+        func loadNormalCache() {
+            if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
+                self.image = imageFromCache
+                return
+            }
         }
         
-        getImage(fileID: fileID, type: 2) { (status, etag, imageRawData) in
+        func loadChatRoomCache() {
+            if let imageFromCache = faeChatRoomImageCache.object(forKey: id as AnyObject) as? UIImage {
+                self.image = imageFromCache
+                return
+            }
+        }
+        
+        isChatRoom ? loadChatRoomCache() : loadNormalCache()
+        
+        getImage(fileID: fileID, type: 2, isChatRoom: isChatRoom) { (status, etag, imageRawData) in
             DispatchQueue.main.async(execute: {
                 let imageToCache = UIImage.sd_image(with: imageRawData)
                 if self.fileID == id {
                     self.image = imageToCache
                 }
-                faeImageCache.setObject(imageToCache!, forKey: id as AnyObject)
+                isChatRoom ? faeChatRoomImageCache.setObject(imageToCache!, forKey: id as AnyObject) : faeImageCache.setObject(imageToCache!, forKey: id as AnyObject)
             })
         }
     }
@@ -53,7 +68,7 @@ class FaeImageView: UIImageView {
         if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(self.fileID)'").first {
             if avatarRealm.largeAvatarEtag == nil {
                 // Get full size avatar if there is none of it, type => 0
-                getImage(fileID: self.fileID, type: 0) { (status, etag, imageRawData) in
+                getImage(fileID: self.fileID, type: 0, isChatRoom: isChatRoom) { (status, etag, imageRawData) in
                     if status / 100 == 2 {
                         print("[FaeAvatarView] largeAvatarEtag == nil")
                         // Update realm with the same object

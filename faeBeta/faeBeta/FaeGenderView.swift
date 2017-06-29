@@ -18,6 +18,9 @@ class FaeGenderView: UIView {
     var realWidth: CGFloat = 0
     var realHeight: CGFloat = 18
     
+    static var imageMale = #imageLiteral(resourceName: "userGenderMale")
+    static var imageFemale = #imageLiteral(resourceName: "userGenderFemale")
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -43,21 +46,23 @@ class FaeGenderView: UIView {
         addSubview(lblCardAge)
     }
     
-    func loadGenderAge(id: Int, _ completion: @escaping (String, String) -> Void ) {
+    func loadGenderAge(id: Int, _ completion: @escaping (String, String, String) -> Void ) {
         let userNameCard = FaeUser()
         userNameCard.getUserCard("\(id)") { (status: Int, message: Any?) in
-            guard status / 100 == 2 else { return }
-            guard let unwrapMessage = message else {
-                print("[getUserCard] message is nil")
-                return
-            }
-            let profileInfo = JSON(unwrapMessage)
-            let canShowGender = profileInfo["show_gender"].boolValue
-            let gender = profileInfo["gender"].stringValue
-            let canShowAge = profileInfo["show_age"].boolValue
-            let age = profileInfo["age"].stringValue
-            self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
-            completion(profileInfo["nick_name"].stringValue, profileInfo["short_intro"].stringValue)
+            DispatchQueue.main.async(execute: {
+                guard status / 100 == 2 else { return }
+                guard let unwrapMessage = message else {
+                    print("[getUserCard] message is nil")
+                    return
+                }
+                let profileInfo = JSON(unwrapMessage)
+                let canShowGender = profileInfo["show_gender"].boolValue
+                let gender = profileInfo["gender"].stringValue
+                let canShowAge = profileInfo["show_age"].boolValue
+                let age = profileInfo["age"].stringValue
+                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
+                completion(profileInfo["nick_name"].stringValue, profileInfo["user_name"].stringValue, profileInfo["short_intro"].stringValue)
+            })
         }
     }
     
@@ -72,10 +77,10 @@ class FaeGenderView: UIView {
         } else if showGender && showAge {
             isHidden = false
             if gender == "male" {
-                imgCardGender.image = #imageLiteral(resourceName: "userGenderMale")
+                imgCardGender.image = FaeGenderView.imageMale
                 backgroundColor = UIColor.maleBackgroundColor()
             } else if gender == "female" {
-                imgCardGender.image = #imageLiteral(resourceName: "userGenderFemale")
+                imgCardGender.image = FaeGenderView.imageFemale
                 backgroundColor = UIColor.femaleBackgroundColor()
             } else {
                 isHidden = true
@@ -95,10 +100,10 @@ class FaeGenderView: UIView {
         } else if showGender && !showAge {
             isHidden = false
             if gender == "male" {
-                imgCardGender.image = #imageLiteral(resourceName: "userGenderMale")
+                imgCardGender.image = FaeGenderView.imageMale
                 backgroundColor = UIColor.maleBackgroundColor()
             } else if gender == "female" {
-                imgCardGender.image = #imageLiteral(resourceName: "userGenderFemale")
+                imgCardGender.image = FaeGenderView.imageFemale
                 backgroundColor = UIColor.femaleBackgroundColor()
             } else {
                 imgCardGender.image = nil
@@ -108,7 +113,7 @@ class FaeGenderView: UIView {
         }
         if !boolAlignLeft {
             marginDiff = 46 * screenWidthFactor - frame.size.width
-            frame.origin.x = frame.origin.x + marginDiff
+            frame.origin.x = screenWidth - 61 + marginDiff
         }
     }
     

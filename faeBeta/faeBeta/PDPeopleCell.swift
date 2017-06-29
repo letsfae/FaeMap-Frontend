@@ -11,17 +11,16 @@ import UIKit
 class PDPeopleCell: UITableViewCell {
     
     var userId = 0
-    var imgAvatar: UIImageView!
-    var imgUserGender: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var lblDisplayName: UILabel!
     var lblUserName: UILabel!
-    var lblUserAge: UILabel!
-    var uiviewUserGender: UIView!
+    
+    var uiviewGenderAge: FaeGenderView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.separatorInset = UIEdgeInsets.zero
-        self.layoutMargins = UIEdgeInsets.zero
+        separatorInset = UIEdgeInsets.zero
+        layoutMargins = UIEdgeInsets.zero
         loadCellContent()
     }
     
@@ -29,53 +28,21 @@ class PDPeopleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updatePrivacyUI(showGender: Bool, gender: String, showAge: Bool, age: String) {
-        if !showGender && !showAge {
-            uiviewUserGender.isHidden = true
-            imgUserGender.image = nil
-        } else if showGender && showAge {
-            uiviewUserGender.isHidden = false
-            if gender == "male" {
-                imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")
-                uiviewUserGender.backgroundColor = UIColor.maleBackgroundColor()
-            } else if gender == "female" {
-                imgUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
-                uiviewUserGender.backgroundColor = UIColor.femaleBackgroundColor()
-            } else {
-                imgUserGender.image = nil
-            }
-            lblUserAge.text = age
-            lblUserAge.frame.size = lblUserAge.intrinsicContentSize
-            uiviewUserGender.frame.size.width = 32 + lblUserAge.intrinsicContentSize.width
-        } else if showAge && !showGender {
-            uiviewUserGender.isHidden = false
-            lblUserAge.text = age
-            lblUserAge.frame.size = lblUserAge.intrinsicContentSize
-            uiviewUserGender.frame.size.width = 17 + lblUserAge.intrinsicContentSize.width
-            lblUserAge.frame.origin.x = 97
-            imgUserGender.image = nil
-            uiviewUserGender.backgroundColor = UIColor.faeAppShadowGrayColor()
-        } else if showGender && !showAge {
-            uiviewUserGender.isHidden = false
-            if gender == "male" {
-                imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")
-                uiviewUserGender.backgroundColor = UIColor.maleBackgroundColor()
-            } else if gender == "female" {
-                imgUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
-                uiviewUserGender.backgroundColor = UIColor.femaleBackgroundColor()
-            } else {
-                imgUserGender.image = nil
-            }
-            uiviewUserGender.frame.size.width = 28
-            lblUserAge.text = nil
+    func updatePrivacyUI(id: Int) {
+        uiviewGenderAge.userId = id
+        uiviewGenderAge.boolAlignLeft = false
+        uiviewGenderAge.loadGenderAge(id: id) { (nikeName, userName, _) in
+            self.lblDisplayName.text = nikeName
+            self.lblUserName.text = "@"+userName
         }
-        self.uiviewUserGender.frame.origin.x = screenWidth - 15 - self.uiviewUserGender.frame.size.width
+        
+        imgAvatar.userID = id
+        imgAvatar.loadAvatar(id: id)
     }
     
     fileprivate func loadCellContent() {
         
-        imgAvatar = UIImageView()
-        imgAvatar.frame = CGRect(x: 15, y: 13, width: 50, height: 50)
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 15, y: 13, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
@@ -97,20 +64,7 @@ class PDPeopleCell: UITableViewCell {
         lblDisplayName.text = "Holly Laura"
         lblUserName.text = "@hollylaura"
         
-        uiviewUserGender = UIView(frame: CGRect(x: 0, y: 13, width: 46, height: 18))
-        uiviewUserGender.backgroundColor = UIColor.maleBackgroundColor()
-        uiviewUserGender.layer.cornerRadius = 9
-        uiviewUserGender.clipsToBounds = true
-        uiviewUserGender.isHidden = true
-        addSubview(uiviewUserGender)
-        imgUserGender = UIImageView(frame: CGRect(x: 9, y: 3, width: 10, height: 12))
-        imgUserGender.contentMode = .scaleAspectFit
-        imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")
-        uiviewUserGender.addSubview(imgUserGender)
-        lblUserAge = UILabel(frame: CGRect(x: 25, y: 1, width: 16, height: 14))
-        lblUserAge.textColor = UIColor.white
-        lblUserAge.font = UIFont(name: "AvenirNext-Demibold", size: 13)
-        uiviewUserGender.addSubview(lblUserAge)
-        lblUserAge.text = "21"
+        uiviewGenderAge = FaeGenderView(frame: CGRect(x: screenWidth - 61, y: 13, width: 46, height: 18))
+        addSubview(uiviewGenderAge)
     }
 }

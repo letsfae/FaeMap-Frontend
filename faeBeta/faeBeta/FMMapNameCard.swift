@@ -31,7 +31,7 @@ extension FaeMapViewController {
         faeMapView.animate(to: camera)
         animateNameCard()
         
-        uiviewCardPrivacy.loadGenderAge(id: user_id) { (nickName, shortIntro) in
+        uiviewCardPrivacy.loadGenderAge(id: user_id) { (nickName, _, shortIntro) in
             self.lblNickName.text = nickName
             self.lblShortIntro.text = shortIntro
         }
@@ -241,7 +241,7 @@ extension FaeMapViewController {
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgCardAvatar.image = avatarImage
         }
-        uiviewCardPrivacy.loadGenderAge(id: withUserId) { (nickName, shortIntro) in
+        uiviewCardPrivacy.loadGenderAge(id: withUserId) { (nickName, _, shortIntro) in
             self.lblNickName.text = nickName
             self.lblShortIntro.text = shortIntro
         }

@@ -43,7 +43,7 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
         } else if tableMode == .feelings {
             return 1
         } else if tableMode == .people {
-            return pinDetailUsers.count
+            return arrNonDupUserId.count
         } else {
             return 0
         }
@@ -61,31 +61,11 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.pinType = "\(PinDetailViewController.pinTypeEnum)"
             cell.userID = comment.userId
             cell.cellIndex = indexPath
-            if comment.anonymous {
-                cell.lblUsername.text = self.dictAnonymous[comment.userId]
-                if comment.userId == user_id {
-                    let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
-                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
-                    let attri_1 = [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100),
-                                   NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!]
-                    let strAnony = self.dictAnonymous[comment.userId] ?? "Anonymous"
-                    let attr_0 = NSMutableAttributedString(string: strAnony + " ", attributes: attri_0)
-                    let attr_1 = NSMutableAttributedString(string: "(me)", attributes: attri_1)
-                    let attr = NSMutableAttributedString(string:"")
-                    attr.append(attr_0)
-                    attr.append(attr_1)
-                    cell.lblUsername.attributedText = attr
-                }
-                cell.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
-            } else {
-                cell.lblUsername.text = comment.displayName
-                cell.imgAvatar.image = comment.profileImage
-            }
             cell.pinCommentID = "\(comment.commentId)"
             cell.lblTime.text = comment.date
             cell.lblVoteCount.text = "\(comment.numVoteCount)"
             cell.voteType = comment.voteType
-            
+            cell.loadUserInfo(id: comment.userId, isAnony: comment.anonymous, anonyText: dictAnonymous[comment.userId])
             switch comment.voteType {
             case "up":
                 cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
@@ -127,27 +107,9 @@ extension PinDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if tableMode == .people {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pdUserInfoCell", for: indexPath) as! PDPeopleCell
-            let userInfo = self.pinDetailUsers[indexPath.row]
-            cell.lblDisplayName.text = userInfo.displayName
-            cell.lblUserName.text = "@"+userInfo.userName
-            cell.lblUserAge.text = userInfo.age
-            cell.imgAvatar.image = userInfo.profileImage
-            cell.userId = userInfo.userId
-            cell.updatePrivacyUI(showGender: userInfo.showGender,
-                                 gender: userInfo.gender,
-                                 showAge: userInfo.showAge,
-                                 age: userInfo.age)
-            switch userInfo.gender {
-            case "male":
-                cell.imgUserGender.image = #imageLiteral(resourceName: "userGenderMale")
-                break
-            case "female":
-                cell.imgUserGender.image = #imageLiteral(resourceName: "userGenderFemale")
-                break
-            default:
-                cell.imgUserGender.image = nil
-                break
-            }
+            let userId = self.arrNonDupUserId[indexPath.row]
+            cell.userId = userId
+            cell.updatePrivacyUI(id: userId)
             return cell
         } else {
             return UITableViewCell()

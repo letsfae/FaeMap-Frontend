@@ -187,7 +187,6 @@ class PinsTableViewCell: UITableViewCell {
         imgChatRoom = FaeImageView(frame: CGRect.zero)
         imgChatRoom.layer.cornerRadius = 31
         imgChatRoom.clipsToBounds = true
-        imgChatRoom.backgroundColor = .red
         uiviewPinView.addSubview(imgChatRoom)
         uiviewPinView.addConstraintsWithFormat("H:|-20-[v0(62)]", options: [], views: imgChatRoom)
         
@@ -266,7 +265,8 @@ class PinsTableViewCell: UITableViewCell {
         } else if strPinType == "comment" {
             
         } else if strPinType == "chat_room" {
-            
+            imgChatRoom.fileID = pin.pinId
+            imgChatRoom.loadImage(id: pin.pinId, isChatRoom: true)
         }
     }
     

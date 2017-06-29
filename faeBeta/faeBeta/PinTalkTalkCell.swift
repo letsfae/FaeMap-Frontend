@@ -25,7 +25,7 @@ class PinTalkTalkCell: UITableViewCell {
     weak var delegate: PinTalkTalkCellDelegate?
     var uiviewCell: UIButton!
     var imgAvatar: FaeAvatarView!
-    var lblUsername: UILabel!
+    var lblNickName: UILabel!
     var lblTime: UILabel!
     var lblVoteCount: UILabel!
     var lblLikeCount: UILabel!
@@ -39,12 +39,18 @@ class PinTalkTalkCell: UITableViewCell {
     var pinCommentID = ""
     var userID = -1 {
         didSet {
-            if userID != -1 {
-                self.imgAvatar.userID = self.userID
-            }
+            guard userID != -1 else { return }
+            self.imgAvatar.userID = self.userID
         }
     }
     var cellIndex: IndexPath!
+    
+    static var imgUpVoteSelected = #imageLiteral(resourceName: "pinCommentUpVoteRed")
+    static var imgUpVoteUnSelected = #imageLiteral(resourceName: "pinCommentUpVoteGray")
+    static var imgDownVoteSelected = #imageLiteral(resourceName: "pinCommentDownVoteRed")
+    static var imgDownVoteUnSelected = #imageLiteral(resourceName: "pinCommentDownVoteGray")
+    
+    static var defaultAvatar = #imageLiteral(resourceName: "defaultMen")
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,6 +61,34 @@ class PinTalkTalkCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadUserInfo(id: Int, isAnony: Bool, anonyText: String?) {
+        if isAnony {
+            imgAvatar.image = PinTalkTalkCell.defaultAvatar
+            lblNickName.text = anonyText
+            if id == user_id {
+                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+                let attri_1 = [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100),
+                               NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!]
+                let strAnony = anonyText ?? "Anonymous"
+                let attr_0 = NSMutableAttributedString(string: strAnony + " ", attributes: attri_0)
+                let attr_1 = NSMutableAttributedString(string: "(me)", attributes: attri_1)
+                let attr = NSMutableAttributedString(string:"")
+                attr.append(attr_0)
+                attr.append(attr_1)
+                lblNickName.attributedText = attr
+            }
+            return
+        }
+        imgAvatar.userID = id
+        imgAvatar.loadAvatar(id: id)
+        let fakeView = FaeGenderView(frame: CGRect.zero)
+        fakeView.userId = id
+        fakeView.loadGenderAge(id: id) { (nikeName, _, _) in
+            self.lblNickName.text = nikeName
+        }
     }
     
     fileprivate func loadCellContent() {
@@ -81,12 +115,12 @@ class PinTalkTalkCell: UITableViewCell {
         lblContent.textColor = UIColor.faeAppInputTextGrayColor()
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
         
-        lblUsername = UILabel()
-        addSubview(lblUsername)
-        lblUsername.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblUsername.textColor = UIColor.faeAppInputTextGrayColor()
-        lblUsername.textAlignment = .left
-        addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblUsername)
+        lblNickName = UILabel()
+        addSubview(lblNickName)
+        lblNickName.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblNickName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblNickName.textAlignment = .left
+        addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblNickName)
         
         lblTime = UILabel()
         addSubview(lblTime)
@@ -106,14 +140,12 @@ class PinTalkTalkCell: UITableViewCell {
         
         // DownVote
         btnDownVote = UIButton()
-//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         btnDownVote.addTarget(self, action: #selector(downVoteThisComment(_:)), for: .touchUpInside)
         addSubview(btnDownVote)
         addConstraintsWithFormat("H:|-0-[v0(53)]", options: [], views: btnDownVote)
         
         // UpVote
         btnUpVote = UIButton()
-//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
         btnUpVote.addTarget(self, action: #selector(upVoteThisComment(_:)), for: .touchUpInside)
         addSubview(btnUpVote)
         addConstraintsWithFormat("H:|-91-[v0(53)]", options: [], views: btnUpVote)
@@ -126,91 +158,30 @@ class PinTalkTalkCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(56)]-0-|", options: [], views: btnReply)
         
         addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-13-[v2(22)]-16-|", options: [], views: imgAvatar, lblContent, lblVoteCount)
-        addConstraintsWithFormat("V:|-15-[v0(20)]-1-[v1(20)]", options: [], views: lblUsername, lblTime)
+        addConstraintsWithFormat("V:|-15-[v0(20)]-1-[v1(20)]", options: [], views: lblNickName, lblTime)
         addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnDownVote)
         addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnUpVote)
         addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: btnReply)
     }
     
     func directReply(_ sender: UIButton) {
-        if let username = lblUsername.text {
+        if let username = lblNickName.text {
             delegate?.directReplyFromPinCell(username, index: cellIndex)
         }
     }
     
     func showActionSheet(_ sender: UIButton) {
-        if let username = lblUsername.text {
+        if let username = lblNickName.text {
             delegate?.showActionSheetFromPinCell(username, userid: userID, index: cellIndex)
         }
     }
     
     func upVoteThisComment(_ sender: UIButton) {
         delegate?.upVoteComment(index: cellIndex)
-        
-//        if voteType == "up" || pinCommentID == "" {
-//            cancelVote()
-//            return
-//        }
-//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-//        let upVote = FaePinAction()
-//        upVote.whereKey("vote", value: "up")
-//        upVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
-//            print("[upVoteThisComment] pinID: \(self.pinCommentID)")
-//            if status / 100 == 2 {
-//                self.voteType = "up"
-//                self.updateVoteCount()
-//                print("[upVoteThisComment] Successfully upvote this pin comment")
-//            }
-//            else if status == 400 {
-//                print("[upVoteThisComment] Already upvote this pin comment")
-//            }
-//            else {
-//                if self.voteType == "down" {
-//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
-//                }
-//                else if self.voteType == "" {
-//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-//                }
-//                print("[upVoteThisComment] Fail to upvote this pin comment")
-//            }
-//        }
     }
     
     func downVoteThisComment(_ sender: UIButton) {
         delegate?.downVoteComment(index: cellIndex)
-        
-//        if voteType == "down" || pinCommentID == "" {
-//            cancelVote()
-//            return
-//        }
-//        btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-//        btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
-//        let downVote = FaePinAction()
-//        downVote.whereKey("vote", value: "down")
-//        downVote.votePinComments(pinID: "\(pinCommentID)") { (status: Int, message: Any?) in
-//            if status / 100 == 2 {
-//                self.voteType = "down"
-//                self.updateVoteCount()
-//                print("[upVoteThisComment] Successfully downvote this pin comment")
-//            }
-//            else if status == 400 {
-//                print("[upVoteThisComment] Already downvote this pin comment")
-//            }
-//            else {
-//                if self.voteType == "up" {
-//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
-//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-//                }
-//                else if self.voteType == "" {
-//                    self.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
-//                    self.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-//                }
-//                print("[upVoteThisComment] Fail to downvote this pin comment")
-//            }
-//        }
     }
 //    
 //    func cancelVote() {

@@ -40,11 +40,11 @@ class FaeAvatarView: UIImageView {
         
         getAvatar(userID: self.userID, type: 2) { (status, etag, imageRawData) in
             DispatchQueue.main.async(execute: {
-                let imageToCache = UIImage.sd_image(with: imageRawData)
+                guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
                 if self.userID == id {
                     self.image = imageToCache
                 }
-                faeImageCache.setObject(imageToCache!, forKey: id as AnyObject)
+                faeImageCache.setObject(imageToCache, forKey: id as AnyObject)
             })
         }
     }
