@@ -53,11 +53,14 @@ class FaeImageView: UIImageView {
         
         getImage(fileID: fileID, type: 2, isChatRoom: isChatRoom) { (status, etag, imageRawData) in
             DispatchQueue.main.async(execute: {
-                let imageToCache = UIImage.sd_image(with: imageRawData)
+                
+                guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
+                
                 if self.fileID == id {
                     self.image = imageToCache
                 }
-                isChatRoom ? faeChatRoomImageCache.setObject(imageToCache!, forKey: id as AnyObject) : faeImageCache.setObject(imageToCache!, forKey: id as AnyObject)
+                
+                isChatRoom ? faeChatRoomImageCache.setObject(imageToCache, forKey: id as AnyObject) : faeImageCache.setObject(imageToCache, forKey: id as AnyObject)
             })
         }
     }
