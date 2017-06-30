@@ -22,36 +22,41 @@ class General: NSObject {
         }
         
         getAvatar(userID: userid, type: 2) { (status, etag, imageRawData) in
-            let realm = try! Realm()
-            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
-                // 存在User，Etag没变
-                if etag == avatarRealm.smallAvatarEtag {
-                    image = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
-                    completion(image)
-                }
-                // 存在User，Etag改变
-                else {
-                    try! realm.write {
-                        avatarRealm.smallAvatarEtag = etag
-                        avatarRealm.userSmallAvatar = imageRawData as NSData?
-                        avatarRealm.largeAvatarEtag = nil
-                        avatarRealm.userLargeAvatar = nil
-                    }
-                    image = UIImage.sd_image(with: imageRawData)
-                    completion(image)
-                }
-            } else {
-                // 不存在User
-                let avatarObj = RealmUser()
-                avatarObj.userID = "\(userid)"
-                avatarObj.smallAvatarEtag = etag
-                avatarObj.userSmallAvatar = imageRawData as NSData?
-                try! realm.write {
-                    realm.add(avatarObj)
-                }
-                image = UIImage.sd_image(with: imageRawData)
-                completion(image)
-            }
+            guard imageRawData != nil else { return }
+            
+            image = UIImage.sd_image(with: imageRawData)
+            completion(image)
+            
+//            let realm = try! Realm()
+//            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userid)'").first {
+//                // 存在User，Etag没变
+//                if etag == avatarRealm.smallAvatarEtag {
+//                    image = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
+//                    completion(image)
+//                }
+//                // 存在User，Etag改变
+//                else {
+//                    try! realm.write {
+//                        avatarRealm.smallAvatarEtag = etag
+//                        avatarRealm.userSmallAvatar = imageRawData as NSData?
+//                        avatarRealm.largeAvatarEtag = nil
+//                        avatarRealm.userLargeAvatar = nil
+//                    }
+//                    image = UIImage.sd_image(with: imageRawData)
+//                    completion(image)
+//                }
+//            } else {
+//                // 不存在User
+//                let avatarObj = RealmUser()
+//                avatarObj.userID = "\(userid)"
+//                avatarObj.smallAvatarEtag = etag
+//                avatarObj.userSmallAvatar = imageRawData as NSData?
+//                try! realm.write {
+//                    realm.add(avatarObj)
+//                }
+//                image = UIImage.sd_image(with: imageRawData)
+//                completion(image)
+//            }
         }
     }
 }

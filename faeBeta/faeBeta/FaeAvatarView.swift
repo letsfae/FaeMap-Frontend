@@ -66,6 +66,8 @@ class FaeAvatarView: UIImageView {
                         guard let image = UIImage.sd_image(with: imageRawData) else { return }
                         let photos = IDMPhoto.photos(withImages: [image])
                         self.presentPhotoBrowser(photos: photos)
+                    } else if status / 100 == 3 {
+                        
                     } else {
                         // Otherwise use the current imageView.image
                         print("[FaeAvatarView] get large image fail")

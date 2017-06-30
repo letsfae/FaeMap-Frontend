@@ -10,6 +10,12 @@ import Foundation
 
 extension String {
     
+    func removeSpecialChars() -> String {
+        let okayChars : Set<Character> =
+            Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890".characters)
+        return String(self.characters.filter {okayChars.contains($0) })
+    }
+    
     // Trim newline in the beginning and ending of string
     func trim() -> String {
         return self.trimmingCharacters(in: CharacterSet.newlines)
