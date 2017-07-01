@@ -19,20 +19,24 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         modalPresentationStyle = .overCurrentContext
-        loadPinDetailWindow()
-        initPinBasicInfo()
-        PinDetailViewController.pinTypeEnum == .chat_room ? getChatRoomInfo() : getSeveralInfo()
-        loadFromCollections()
-        pullDownToRefresh()
+        self.loadPinDetailWindow()
+        self.initPinBasicInfo()
+        PinDetailViewController.pinTypeEnum == .chat_room ? self.getChatRoomInfo() : self.getSeveralInfo()
+        self.loadFromCollections()
+        self.pullDownToRefresh()
         arrNonDupUserId = [PinDetailViewController.pinUserId]
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if enterMode != .collections {
-            animatePinCtrlBtnsAndFeeling()
-        } else {
+        
+        switch enterMode {
+        case .collections:
             self.checkCurUserFeeling()
+            break
+        case .mainMap:
+            self.animatePinCtrlBtnsAndFeeling()
+            break
         }
         
         if boolFromMapBoard {
@@ -45,17 +49,38 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         UIApplication.shared.statusBarStyle = .default
     }
     
+    fileprivate func initPinBasicInfo() {
+        switch PinDetailViewController.pinTypeEnum {
+        case .comment:
+            uiviewNavBar.lblTitle.text = "Comment"
+            textViewOriginalHeight = 100
+            break
+        case .media:
+            uiviewNavBar.lblTitle.text = "Story"
+            textViewOriginalHeight = 0
+            break
+        case .chat_room:
+            uiviewNavBar.lblTitle.text = "Chat Spot"
+            uiviewFeelingBar.isHidden = true
+            break
+        case .place:
+            self.loadPlaceDetail()
+            break
+        }
+        self.selectPinState()
+        self.checkPinStatus() // check pin status is for social pin
+        self.addObservers() // add input toolbar keyboard observers
+    }
+    
     fileprivate func pullDownToRefresh() {
-        tblMain.addPullRefresh() { [unowned self] in
+        tblMain.addPullRefresh { [unowned self] in
             PinDetailViewController.pinTypeEnum == .chat_room ? self.getChatRoomInfo() : self.getSeveralInfo()
             self.tblMain.stopPullRefreshEver()
         }
     }
     
     fileprivate func loadFromCollections() {
-        if enterMode != .collections {
-            return
-        }
+        guard enterMode == .collections else { return }
         
         boolDetailShrinked = false
         uiviewFeelingBar.isHidden = true
@@ -70,7 +95,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnToFullPin.isHidden = true
         uiviewToFullDragBtnSub.isHidden = true
         
-        let toolbarHeight = PinDetailViewController.pinTypeEnum == .chat_room ? 0 : uiviewInputToolBarSub.frame.size.height
+        let isChatRoom = PinDetailViewController.pinTypeEnum == .chat_room
+        let toolbarHeight = isChatRoom ? 0 : uiviewInputToolBarSub.frame.size.height
         uiviewMain.frame.size.height = screenHeight - toolbarHeight
         tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
         uiviewInputToolBarSub.frame.origin.x = 0
@@ -98,9 +124,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func selectPinState() {
-        if PinDetailViewController.pinTypeEnum == .place {
-            return
-        }
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+        
         let pinState = PinDetailViewController.pinStateEnum
         let pinType = PinDetailViewController.pinTypeEnum
         
@@ -118,29 +143,6 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             imgPinIcon.image = UIImage(named: "normal\(pinType)PD")
             break
         }
-    }
-    
-    fileprivate func initPinBasicInfo() {
-        switch PinDetailViewController.pinTypeEnum {
-        case .comment:
-            uiviewNavBar.lblTitle.text = "Comment"
-            textViewOriginalHeight = 100
-            break
-        case .media:
-            uiviewNavBar.lblTitle.text = "Story"
-            textViewOriginalHeight = 0
-            break
-        case .chat_room:
-            uiviewNavBar.lblTitle.text = "Chat Spot"
-            uiviewFeelingBar.isHidden = true
-            break
-        case .place:
-            loadPlaceDetail()
-            break
-        }
-        selectPinState()
-        checkPinStatus() // check pin status is for social pin
-        addObservers() // add input toolbar keyboard observers
     }
     
     // MARK: - Loading Components
@@ -208,12 +210,12 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         
-        let feelingBarAnchor = CGPoint(x: screenWidth / 2, y: 461 * screenHeightFactor)
+        let feelingBarAnchor = CGPoint(x: 414 / 2, y: 461)
         
-        uiviewFeelingBar = UIView(frame: CGRect(x: screenWidth / 2, y: 451 * screenHeightFactor, width: 0, height: 0))
+        uiviewFeelingBar = UIView(frame: CGRect(x: 414 / 2, y: 451, w: 0, h: 0))
         view.addSubview(uiviewFeelingBar)
         uiviewFeelingBar.layer.anchorPoint = feelingBarAnchor
-        uiviewFeelingBar.layer.cornerRadius = 26
+        uiviewFeelingBar.layer.cornerRadius = 26 * screenHeightFactor
         uiviewFeelingBar.backgroundColor = UIColor.white
         
         let panGesture = UIPanGestureRecognizer()
@@ -253,7 +255,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         imgPinIcon.alpha = 0
         view.addSubview(imgPinIcon)
         
-        btnPrevPin = UIButton(frame: CGRect(x: 41 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0))
+        btnPrevPin = UIButton(frame: CGRect(x: 41, y: 503, w: 0, h: 0))
         btnPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         btnPrevPin.layer.zPosition = 60
         btnPrevPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
@@ -264,7 +266,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnPrevPin)
         
-        btnNextPin = UIButton(frame: CGRect(x: 373 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0))
+        btnNextPin = UIButton(frame: CGRect(x: 373, y: 503, w: 0, h: 0))
         btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         btnNextPin.layer.zPosition = 60
         btnNextPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
@@ -735,7 +737,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         lblPlaceStreet.text = PinDetailViewController.strPlaceStreet
         lblPlaceCity.text = PinDetailViewController.strPlaceCity
         let imageURL = PinDetailViewController.strPlaceImageURL
-        imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
+        imgPlaceQuickView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil, options: [.retryFailed, .refreshCached], completed: { _, _, _, _ in
             UIView.animate(withDuration: 0.3, animations: {
                 self.imgPlaceQuickView.alpha = 1
             })
@@ -803,8 +805,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         uiviewPlaceDetail.addConstraintsWithFormat("V:|-165-[v0(48)]", options: [], views: btnMoreOptions_Place)
         btnMoreOptions_Place.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
         
-        initPlaceBasicInfo()
-        manageYelpData()
+        self.initPlaceBasicInfo()
+        self.manageYelpData()
         
         // Pin icon size is slightly different from social pin's icon
         imgPinIcon.frame.size.width = 48
@@ -875,7 +877,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 width = 160
             }
             
-            let imageView = FaeImageView(frame: CGRect(x: CGFloat(offset*index), y: 0, width: width, height: width))
+            let imageView = FaeImageView(frame: CGRect(x: CGFloat(offset * index), y: 0, width: width, height: width))
             imageView.clipsToBounds = true
             imageView.contentMode = .scaleAspectFill
             imageView.layer.cornerRadius = 13.5
@@ -898,15 +900,15 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         if type == .large {
             width = 160
         }
-        for index in 0...imgMediaArr.count-1 {
+        for index in 0...imgMediaArr.count - 1 {
             UIView.animate(withDuration: 0.5, animations: {
-                self.imgMediaArr[index].frame.origin.x = CGFloat((width+space)*index)
+                self.imgMediaArr[index].frame.origin.x = CGFloat((width + space) * index)
                 self.imgMediaArr[index].frame.size.width = CGFloat(width)
                 self.imgMediaArr[index].frame.size.height = CGFloat(width)
                 self.scrollViewMedia.frame.size.height = CGFloat(width)
             })
         }
-        self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width+space) - space), height: CGFloat(width))
+        self.scrollViewMedia.contentSize = CGSize(width: CGFloat(fileIdArray.count * (width + space) - space), height: CGFloat(width))
     }
     
     // MARK: - More Options
@@ -914,12 +916,12 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     // Close more options button when it is open, the subview is under it
     func actionToCloseOtherViews() {
         if boolOptionsExpanded == true {
-            hidePinMoreButtonDetails()
+            self.hidePinMoreButtonDetails()
         }
     }
     // Show more options button in comment pin detail window
     func showPinMoreButtonDetails(_ sender: UIButton!) {
-        endEdit()
+        self.endEdit()
         if boolOptionsExpanded == false {
             
             btnTransparentClose = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
@@ -928,25 +930,25 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnTransparentClose.addTarget(self, action: #selector(self.actionToCloseOtherViews), for: .touchUpInside)
             
             let menuOffset: CGFloat = PinDetailViewController.pinTypeEnum == .place ? 148 : 0
-            let buttonHeight: CGFloat = 51 * screenWidthFactor
-            let buttonWidth: CGFloat = 50 * screenWidthFactor
-            let buttonY: CGFloat = (97 + menuOffset) * screenWidthFactor
-            let firstButtonX: CGFloat = 192 * screenWidthFactor
-            let secondButtonX: CGFloat = 262 * screenWidthFactor
-            let subviewHeightAfter: CGFloat = 110 * screenWidthFactor
-            let subviewWidthAfter: CGFloat = 229 * screenWidthFactor
-            let subviewXAfter: CGFloat = 171 * screenWidthFactor
-            let subviewXBefore: CGFloat = 400 * screenWidthFactor
-            let subviewYAfter: CGFloat = (57 + menuOffset) * screenWidthFactor
-            let subviewYBefore: CGFloat = (57 + menuOffset) * screenWidthFactor
-            let thirdButtonX: CGFloat = 332 * screenWidthFactor
+            let buttonHeight: CGFloat = 51
+            let buttonWidth: CGFloat = 50
+            let buttonY: CGFloat = 97 + menuOffset
+            let firstButtonX: CGFloat = 192
+            let secondButtonX: CGFloat = 262
+            let subviewHeightAfter: CGFloat = 110
+            let subviewWidthAfter: CGFloat = 229
+            let subviewXAfter: CGFloat = 171
+            let subviewXBefore: CGFloat = 400
+            let subviewYAfter: CGFloat = (57 + menuOffset)
+            let subviewYBefore: CGFloat = (57 + menuOffset)
+            let thirdButtonX: CGFloat = 332
             
-            uiviewOptionsSub = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            uiviewOptionsSub = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             uiviewOptionsSub.image = #imageLiteral(resourceName: "moreButtonDetailSubview")
             uiviewOptionsSub.layer.zPosition = 111
             view.addSubview(uiviewOptionsSub)
             
-            btnShare = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnShare = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             btnShare.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: UIControlState())
             btnShare.layer.zPosition = 111
             view.addSubview(btnShare)
@@ -954,7 +956,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnShare.alpha = 0.0
             btnShare.addTarget(self, action: #selector(self.actionShareComment(_:)), for: .touchUpInside)
             
-            btnOptionEdit = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnOptionEdit = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             btnOptionEdit.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: UIControlState())
             btnOptionEdit.layer.zPosition = 111
             view.addSubview(btnOptionEdit)
@@ -962,11 +964,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnOptionEdit.alpha = 0.0
             btnOptionEdit.addTarget(self, action: #selector(self.actionEditComment(_:)), for: .touchUpInside)
             
-            btnCollect = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnCollect = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             if isSavedByMe {
                 btnCollect.setImage(#imageLiteral(resourceName: "pinDetailUnsave"), for: .normal)
-            }
-            else {
+            } else {
                 btnCollect.setImage(#imageLiteral(resourceName: "pinDetailSave"), for: .normal)
             }
             btnCollect.layer.zPosition = 111
@@ -975,7 +976,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnCollect.alpha = 0.0
             btnCollect.addTarget(self, action: #selector(self.actionSaveThisPin(_:)), for: .touchUpInside)
             
-            btnOptionDelete = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnOptionDelete = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             btnOptionDelete.setImage(#imageLiteral(resourceName: "pinDetailDelete"), for: UIControlState())
             btnOptionDelete.layer.zPosition = 111
             view.addSubview(btnOptionDelete)
@@ -983,7 +984,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnOptionDelete.alpha = 0.0
             btnOptionDelete.addTarget(self, action: #selector(self.actionDeleteThisPin(_:)), for: .touchUpInside)
             
-            btnReport = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0))
+            btnReport = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
             btnReport.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: UIControlState())
             btnReport.layer.zPosition = 111
             view.addSubview(btnReport)
@@ -991,28 +992,25 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             btnReport.alpha = 0.0
             btnReport.addTarget(self, action: #selector(self.actionReportThisPin), for: .touchUpInside)
             
-            
             UIView.animate(withDuration: 0.25, animations: ({
-                self.uiviewOptionsSub.frame = CGRect(x: subviewXAfter, y: subviewYAfter, width: subviewWidthAfter, height: subviewHeightAfter)
-                self.btnShare.frame = CGRect(x: firstButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.btnOptionEdit.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.btnCollect.frame = CGRect(x: secondButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.btnOptionDelete.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-                self.btnReport.frame = CGRect(x: thirdButtonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+                self.uiviewOptionsSub.frame = CGRect(x: subviewXAfter, y: subviewYAfter, w: subviewWidthAfter, h: subviewHeightAfter)
+                self.btnShare.frame = CGRect(x: firstButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnOptionEdit.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnCollect.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnOptionDelete.frame = CGRect(x: thirdButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnReport.frame = CGRect(x: thirdButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
                 if self.boolMyPin == true {
                     self.btnOptionEdit.alpha = 1.0
                     self.btnOptionDelete.alpha = 1.0
-                }
-                else {
+                } else {
                     self.btnCollect.alpha = 1.0
                     self.btnReport.alpha = 1.0
                 }
                 self.btnShare.alpha = 1.0
             }))
             boolOptionsExpanded = true
-        }
-        else {
-            hidePinMoreButtonDetails()
+        } else {
+            self.hidePinMoreButtonDetails()
         }
     }
     
@@ -1023,15 +1021,15 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         if PinDetailViewController.pinTypeEnum == .place {
             menuOffset = 148
         }
-        let subviewXBefore: CGFloat = 400 * screenWidthFactor
-        let subviewYBefore: CGFloat = (57 + menuOffset) * screenWidthFactor
+        let subviewXBefore: CGFloat = 400
+        let subviewYBefore: CGFloat = (57 + menuOffset)
         UIView.animate(withDuration: 0.25, animations: ({
-            self.uiviewOptionsSub.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.btnShare.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.btnOptionEdit.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.btnCollect.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.btnOptionDelete.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
-            self.btnReport.frame = CGRect(x: subviewXBefore, y: subviewYBefore, width: 0, height: 0)
+            self.uiviewOptionsSub.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+            self.btnShare.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+            self.btnOptionEdit.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+            self.btnCollect.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+            self.btnOptionDelete.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
+            self.btnReport.frame = CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0)
             self.btnShare.alpha = 0.0
             self.btnOptionEdit.alpha = 0.0
             self.btnCollect.alpha = 0.0
@@ -1043,7 +1041,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // When clicking share button in comment pin detail window's more options button
     func actionShareComment(_ sender: UIButton) {
-        actionToCloseOtherViews()
+        self.actionToCloseOtherViews()
         print("Share Clicks!")
     }
     
@@ -1079,21 +1077,20 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         let alertController = UIAlertController(title: "Delete Pin", message: "This Pin will be deleted on the map and in mapboards. All the comments and replies will also be removed.", preferredStyle: .alert)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (result : UIAlertAction) -> Void in
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_: UIAlertAction) -> Void in
             print("Delete")
             let deleteCommentPin = FaePinAction()
-            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) {(status: Int, message: Any?) in
+            deleteCommentPin.deletePinById(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) { (status: Int, _: Any?) in
                 if status / 100 == 2 {
                     print("Successfully delete pin")
                     self.actionBackToMap(self.uiviewNavBar.leftBtn)
                     self.delegate?.backToMainMap()
-                }
-                else {
+                } else {
                     print("Fail to delete comment")
                 }
             }
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) { (_: UIAlertAction) -> Void in
             print("Cancel Deleting")
         }
         alertController.addAction(cancelAction)
@@ -1105,12 +1102,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     // When clicking save button in comment pin detail window's more options button
     func actionSaveThisPin(_ sender: UIButton) {
         if isSavedByMe {
-            unsaveThisPin()
+            self.unsaveThisPin()
+        } else {
+            self.saveThisPin()
         }
-        else {
-            saveThisPin()
-        }
-        actionToCloseOtherViews()
+        self.actionToCloseOtherViews()
     }
     
     // MARK: - Actions
@@ -1122,8 +1118,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             } else {
                 self.delegate?.goTo(nextPin: true)
             }
-            initPlaceBasicInfo()
-            manageYelpData()
+            self.initPlaceBasicInfo()
+            self.manageYelpData()
         }
     }
     
@@ -1155,7 +1151,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             // Vicky 06/22/17 End
             uiviewMain.frame.size.height = screenHeight
         }
-        endEdit()
+        self.endEdit()
         UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewRedSlidingLine.center.x = sender.center.x
         }), completion: nil)
@@ -1274,7 +1270,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             if animatingHeart != nil {
                 animatingHeart.image = nil
             }
-            unlikeThisPin()
+            self.unlikeThisPin()
             print("debug animating sender.tag 1")
             print(sender.tag)
             sender.tag = 0
@@ -1284,7 +1280,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         if sender.tag == 0 && self.strPinId != "-999" {
             btnPinLike.setImage(#imageLiteral(resourceName: "pinDetailLikeHeartFull"), for: UIControlState())
             self.animateHeart()
-            likeThisPin()
+            self.likeThisPin()
             print("debug animating sender.tag 0")
             print(sender.tag)
             sender.tag = 1
@@ -1337,12 +1333,12 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         self.delegate?.backToMainMap()
         if PinDetailViewController.pinTypeEnum != .place {
             UIView.animate(withDuration: 0.2) {
-                self.uiviewFeelingBar.frame = CGRect(x: screenWidth / 2, y: 451 * screenHeightFactor, width: 0, height: 0)
+                self.uiviewFeelingBar.frame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0)
                 for btn in self.btnFeelingArray {
                     btn.frame = CGRect.zero
                 }
-                self.btnPrevPin.frame = CGRect(x: 41 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0)
-                self.btnNextPin.frame = CGRect(x: 373 * screenHeightFactor, y: 503 * screenHeightFactor, width: 0, height: 0)
+                self.btnPrevPin.frame = CGRect(x: 41, y: 503, w: 0, h: 0)
+                self.btnNextPin.frame = CGRect(x: 373, y: 503, w: 0, h: 0)
             }
         }
         UIView.animate(withDuration: 0.5, animations: ({
@@ -1390,7 +1386,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             })
             // deal with diff UI according to pinType
             if PinDetailViewController.pinTypeEnum == .media {
-                zoomMedia(.small)
+                self.zoomMedia(.small)
                 UIView.animate(withDuration: 0.5, animations: ({
                     self.scrollViewMedia.frame.origin.y = 80
                     self.textviewPinDetail.alpha = 0
@@ -1420,11 +1416,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             textViewInput.becomeFirstResponder()
             return
         }
-        readThisPin()
+        self.readThisPin()
         textviewPinDetail.isScrollEnabled = false
         tblMain.isScrollEnabled = true
         if PinDetailViewController.pinTypeEnum == .media {
-            zoomMedia(.large)
+            self.zoomMedia(.large)
             UIView.animate(withDuration: 0.5, animations: ({
                 self.textviewPinDetail.alpha = 1
                 self.scrollViewMedia.frame.origin.y += textViewHeight
@@ -1470,9 +1466,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         if location.y < 0 || location.y > 52 {
             if btnSelectedFeeling != nil {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                    let yAxis = 11 * screenHeightFactor
-                    let width = 32 * screenHeightFactor
-                    self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
+                    let yAxis: CGFloat = 11
+                    let width: CGFloat = 32
+                    self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, w: width, h: width)
                 }, completion: nil)
             }
             return
@@ -1482,9 +1478,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         
         if index > 4 || index < 0 {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                let yAxis = 11 * screenHeightFactor
-                let width = 32 * screenHeightFactor
-                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
+                let yAxis: CGFloat = 11
+                let width: CGFloat = 32
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, w: width, h: width)
             }, completion: nil)
             return
         }
@@ -1493,9 +1489,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         
         if btnSelectedFeeling != button {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                let yAxis = 11 * screenHeightFactor
-                let width = 32 * screenHeightFactor
-                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, width: width, height: width)
+                let yAxis: CGFloat = 11
+                let width: CGFloat = 32
+                self.btnSelectedFeeling?.frame = CGRect(x: CGFloat(20 + 52 * self.previousIndex), y: yAxis, w: width, h: width)
             }, completion: nil)
         }
         
@@ -1505,21 +1501,21 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         uiviewFeelingBar.bringSubview(toFront: button)
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            let yAxis = -19 * screenHeightFactor
-            let width = 46 * screenHeightFactor
-            button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, width: width, height: width)
+            let yAxis: CGFloat = -19
+            let width: CGFloat = 46
+            button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, w: width, h: width)
         }, completion: nil)
         
         if gesture.state == .ended {
             if index == intChosenFeeling {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                    let yAxis = 3 * screenHeightFactor
-                    let width = 46 * screenHeightFactor
-                    button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, width: width, height: width)
+                    let yAxis: CGFloat = 3
+                    let width: CGFloat = 46
+                    button.frame = CGRect(x: CGFloat(13 + 52 * index), y: yAxis, w: width, h: width)
                 }, completion: nil)
                 return
             }
-            postFeeling(button)
+            self.postFeeling(button)
         }
     }
     
@@ -1532,6 +1528,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func getChatRoomInfo() {
+        
+        
+        
         guard strPinId != "-1" else { return }
         
         let getChat = FaeMap()
@@ -1585,7 +1584,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         // Cache the current user's profile pic and use it when current user post a feeling
         // The small size (20x20) of it will be displayed at the right bottom corner of the feeling table
         if user_id != -1 {
-            General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+            General.shared.avatar(userid: user_id, completion: { avatarImage in
                 self.imgCurUserAvatar = avatarImage
             })
         }
@@ -1683,7 +1682,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             } else {
                 self.lblPinDisplayName.text = pinInfoJSON["nick_name"].stringValue
                 // Get avatar
-                General.shared.avatar(userid: pinInfoJSON["user_id"].intValue, completion: { (avatarImage) in
+                General.shared.avatar(userid: pinInfoJSON["user_id"].intValue, completion: { avatarImage in
                     self.imgPinUserAvatar.image = avatarImage
                     UIView.animate(withDuration: 0.2, animations: {
                         self.imgPinUserAvatar.alpha = 1
@@ -1714,14 +1713,14 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 return
             }
             UIView.animate(withDuration: 0.2, animations: {
-                let yAxis = 11 * screenHeightFactor
-                let width = 32 * screenHeightFactor
+                let yAxis: CGFloat = 11
+                let width: CGFloat = 32
                 for i in 0..<self.btnFeelingArray.count {
-                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20 + 52 * i), y: yAxis, width: width, height: width)
+                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20 + 52 * i), y: yAxis, w: width, h: width)
                 }
                 if sender.tag < 5 {
-                    let xOffset = Int(sender.tag * 52 + 13)
-                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, width: 46, height: 46)
+                    let xOffset = CGFloat(sender.tag * 52 + 13)
+                    self.btnFeelingArray[sender.tag].frame = CGRect(x: xOffset, y: 3, w: 46, h: 46)
                 }
             })
             
@@ -1761,11 +1760,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     func deleteFeeling() {
         UIView.animate(withDuration: 0.2, animations: {
-            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, width: 32, height: 32)
-            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, width: 32, height: 32)
+            self.btnFeelingBar_01.frame = CGRect(x: 20, y: 11, w: 32, h: 32)
+            self.btnFeelingBar_02.frame = CGRect(x: 72, y: 11, w: 32, h: 32)
+            self.btnFeelingBar_03.frame = CGRect(x: 124, y: 11, w: 32, h: 32)
+            self.btnFeelingBar_04.frame = CGRect(x: 176, y: 11, w: 32, h: 32)
+            self.btnFeelingBar_05.frame = CGRect(x: 228, y: 11, w: 32, h: 32)
         })
         let deleteFeeling = FaePinAction()
         deleteFeeling.deleteFeeling("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { status, message in
@@ -1934,7 +1933,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             
             if !lastComment.anonymous {
                 let userid = lastComment.userId
-                self.userNameCard(userid, self.pinComments.count - 1, completion: { id, index in
+                self.userNameCard(userid, self.pinComments.count - 1, completion: { id, _ in
                     if id != 0 {
                         
                     }
@@ -1947,7 +1946,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }
     }
     
-    fileprivate func userNameCard(_ userid: Int, _ index: Int, completion: @escaping (Int, Int) -> ()) {
+    fileprivate func userNameCard(_ userid: Int, _ index: Int, completion: @escaping (Int, Int) -> Void) {
         let getUser = FaeUser()
         getUser.getUserCard("\(userid)", completion: { status, message in
             if status / 100 != 2 {
@@ -1992,9 +1991,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func checkPinStatus() {
-        if PinDetailViewController.pinTypeEnum == .place {
-            return
-        }
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
         if PinDetailViewController.pinStatus == "new" {
             let realm = try! Realm()
             if realm.objects(NewFaePin.self).filter("pinId == \(self.strPinId) AND pinType == '\(PinDetailViewController.pinTypeEnum)'").first != nil {
@@ -2055,7 +2052,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         guard self.strPinId != "-1" else { return }
         let saveThisPin = FaePinAction()
         saveThisPin.whereKey("", value: "")
-        saveThisPin.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status: Int, message: Any?) in
+        saveThisPin.saveThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully save this pin!")
                 self.getPinSavedState()
@@ -2242,7 +2239,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                     if !cell.imgArray[i].avatar.isHidden {
                         UIView.animate(withDuration: 0.2, animations: {
                             cell.imgArray[i].avatar.frame = CGRect(x: 40.5, y: 37.5, width: 0, height: 0)
-                        }, completion: {(finished) in
+                        }, completion: { _ in
                             cell.imgArray[i].avatar.isHidden = true
                         })
                     }
@@ -2341,11 +2338,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     // PinFeelingCellDelegate
     func deleteFeelingFromFeelingCell() {
-        deleteFeeling()
+        self.deleteFeeling()
     }
     
     // SendStickerDelegate
-    func sendStickerWithImageName(_ name : String) {
+    func sendStickerWithImageName(_ name: String) {
         print("[sendStickerWithImageName] name: \(name)")
         let stickerMessage = "<faeSticker>\(name)</faeSticker>"
         sendMessage(stickerMessage)
@@ -2360,7 +2357,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     func appendEmojiWithImageName(_ name: String) {
         self.textViewInput.insertText("[\(name)]")
         let strLength: Int = self.textViewInput.text.characters.count
-        self.textViewInput.scrollRangeToVisible(NSMakeRange(strLength-1, 0))
+        self.textViewInput.scrollRangeToVisible(NSMakeRange(strLength - 1, 0))
     }
     func deleteEmoji() {
         self.textViewInput.text = self.textViewInput.text.stringByDeletingLastEmoji()
@@ -2370,7 +2367,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     // EditPinViewControllerDelegate
     func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
         if self.strPinId != "-1" {
-            getSeveralInfo()
+            self.getSeveralInfo()
             tblMain.contentOffset.y = 0
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
@@ -2397,14 +2394,14 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         PinDetailViewController.strPlaceStreet = OpenedPlaces.openedPlaces[index].street
         PinDetailViewController.strPlaceCity = OpenedPlaces.openedPlaces[index].city
         PinDetailViewController.strPlaceImageURL = OpenedPlaces.openedPlaces[index].imageURL
-        initPlaceBasicInfo()
-        manageYelpData()
+        self.initPlaceBasicInfo()
+        self.manageYelpData()
         
         self.delegate?.animateToCamera(coordinate, pinID: "ddd")
         UIApplication.shared.statusBarStyle = .lightContent
     }
     func directlyReturnToMap() {
-        actionBackToMap(UIButton())
+        self.actionBackToMap(UIButton())
     }
     
     // OpenedPinListViewControllerDelegate
@@ -2416,7 +2413,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     func directReplyFromPinCell(_ username: String, index: IndexPath) {
         self.strReplyTo = "<a>@\(username)</a> "
         self.lblTxtPlaceholder.isHidden = true
-        appendReplyDisplayName(displayName: "@\(username)  ")
+        self.appendReplyDisplayName(displayName: "@\(username)  ")
         textViewInput.becomeFirstResponder()
         directReplyFromUser = true
         boolKeyboardShowed = true
@@ -2426,7 +2423,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath) {
         textViewInput.resignFirstResponder()
         if !boolKeyboardShowed && !boolStickerShowed {
-            showActionSheet(name: username, userid: userid, index: index)
+            self.showActionSheet(name: username, userid: userid, index: index)
         }
         boolKeyboardShowed = false
     }
@@ -2434,7 +2431,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     func showActionSheet(name: String, userid: Int, index: IndexPath) {
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor.faeAppRedColor()
-        let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (alert: UIAlertAction) in
+        let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (_: UIAlertAction) in
             self.strReplyTo = "<a>@\(name)</a> "
             self.lblTxtPlaceholder.isHidden = true
             self.appendReplyDisplayName(displayName: "@\(name)  ")
@@ -2443,27 +2440,27 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             self.boolKeyboardShowed = true
             self.tblMain.scrollToRow(at: index, at: .bottom, animated: true)
         }
-        let report = UIAlertAction(title: "Report", style: .default) { (alert: UIAlertAction) in
+        let report = UIAlertAction(title: "Report", style: .default) { (_: UIAlertAction) in
             self.actionReportThisPin()
         }
-        let delete = UIAlertAction(title: "Delete", style: .default) { (alert: UIAlertAction) in
+        let delete = UIAlertAction(title: "Delete", style: .default) { (_: UIAlertAction) in
             let deletePinComment = FaePinAction()
             let pinCommentID = self.pinComments[index.row].commentId
-            deletePinComment.uncommentThisPin(pinCommentID: "\(pinCommentID)", completion: { (status, message) in
+            deletePinComment.uncommentThisPin(pinCommentID: "\(pinCommentID)", completion: { status, message in
                 if status / 100 == 2 {
                     print("[Delete Pin Comment] Success")
                     // Vicky 06/21/17
                     self.getPinAttributeNum()
                     // Vicky 06/21/17 End
                 } else {
-                    print ("[Delete Pin Comment] status: \(status), message: \(message!)")
+                    print("[Delete Pin Comment] status: \(status), message: \(message!)")
                 }
             })
             self.pinComments.remove(at: index.row)
             self.tblMain.reloadData()
             
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_: UIAlertAction) in
             self.strReplyTo = ""
             self.lblTxtPlaceholder.text = "Write a Comment..."
         }
@@ -2491,22 +2488,19 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
         let upVote = FaePinAction()
         upVote.whereKey("vote", value: "up")
-        upVote.votePinComments(pinID: "\(cell.pinCommentID)") { (status: Int, message: Any?) in
+        upVote.votePinComments(pinID: "\(cell.pinCommentID)") { (status: Int, _: Any?) in
             print("[upVoteThisComment] pinCommentID: \(cell.pinCommentID)")
             if status / 100 == 2 {
                 self.pinComments[index.row].voteType = "up"
                 self.updateVoteCount(index: index)
                 print("[upVoteThisComment] Successfully upvote this pin comment")
-            }
-            else if status == 400 {
+            } else if status == 400 {
                 print("[upVoteThisComment] Already upvote this pin comment")
-            }
-            else {
+            } else {
                 if self.pinComments[index.row].voteType == "down" {
                     cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
-                }
-                else if self.pinComments[index.row].voteType == "" {
+                } else if self.pinComments[index.row].voteType == "" {
                     cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
@@ -2527,21 +2521,18 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteRed"), for: .normal)
         let downVote = FaePinAction()
         downVote.whereKey("vote", value: "down")
-        downVote.votePinComments(pinID: "\(cell.pinCommentID)") { (status: Int, message: Any?) in
+        downVote.votePinComments(pinID: "\(cell.pinCommentID)") { (status: Int, _: Any?) in
             if status / 100 == 2 {
                 self.pinComments[index.row].voteType = "down"
                 self.updateVoteCount(index: index)
                 print("[upVoteThisComment] Successfully downvote this pin comment")
-            }
-            else if status == 400 {
+            } else if status == 400 {
                 print("[upVoteThisComment] Already downvote this pin comment")
-            }
-            else {
+            } else {
                 if self.pinComments[index.row].voteType == "up" {
                     cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteRed"), for: .normal)
                     cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
-                }
-                else if self.pinComments[index.row].voteType == "" {
+                } else if self.pinComments[index.row].voteType == "" {
                     cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                     cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 }
@@ -2554,15 +2545,14 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         let cell = self.tblMain.cellForRow(at: index) as! PinTalkTalkCell
         
         let cancelVote = FaePinAction()
-        cancelVote.cancelVotePinComments(pinId: "\(cell.pinCommentID)") { (status: Int, message: Any?) in
+        cancelVote.cancelVotePinComments(pinId: "\(cell.pinCommentID)") { (status: Int, _: Any?) in
             if status / 100 == 2 {
                 self.pinComments[index.row].voteType = ""
                 cell.btnUpVote.setImage(#imageLiteral(resourceName: "pinCommentUpVoteGray"), for: .normal)
                 cell.btnDownVote.setImage(#imageLiteral(resourceName: "pinCommentDownVoteGray"), for: .normal)
                 self.updateVoteCount(index: index)
                 print("[upVoteThisComment] Successfully cancel vote this pin comment")
-            }
-            else if status == 400 {
+            } else if status == 400 {
                 print("[upVoteThisComment] Already cancel vote this pin comment")
             }
         }
@@ -2572,10 +2562,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         let cell = self.tblMain.cellForRow(at: index) as! PinTalkTalkCell
         
         let getPinCommentsDetail = FaePinAction()
-        getPinCommentsDetail.getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) {(status: Int, message: Any?) in
+        getPinCommentsDetail.getPinComments("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (_: Int, message: Any?) in
             let commentsOfCommentJSON = JSON(message!)
             if commentsOfCommentJSON.count > 0 {
-                for i in 0...(commentsOfCommentJSON.count-1) {
+                for i in 0...(commentsOfCommentJSON.count - 1) {
                     var upVote = -999
                     var downVote = -999
                     if let pin_comment_id = commentsOfCommentJSON[i]["pin_comment_id"].int {
@@ -2605,13 +2595,13 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // MARK: - Input Tool Bar Functions
     
-    func appendReplyDisplayName(displayName: String){
+    func appendReplyDisplayName(displayName: String) {
         let attributedStr = NSMutableAttributedString(string: "")
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 37))
         label.attributedText = NSAttributedString(string: displayName, attributes: [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
         label.numberOfLines = 1
         
-        //calculate the size of the image
+        // calculate the size of the image
         label.sizeToFit()
         var size = label.frame.size
         label.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
@@ -2625,10 +2615,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         label.frame = CGRect(x: 0, y: 0, width: size2.width, height: size2.height)
         size2 = label.frame.size
         
-        var image: UIImage? = nil
+        var image: UIImage?
         UIGraphicsBeginImageContext(CGSize(width: size2.width, height: size2.height))
         label.layer.render(in: UIGraphicsGetCurrentContext()!)
-        if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
+        if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
             image = screenShotImage
         }
         
@@ -2647,25 +2637,25 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         self.textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
     }
     
-    //MARK: - keyboard input bar tapped event
+    // MARK: - keyboard input bar tapped event
     func sendMessageButtonTapped() {
         self.animationRedSlidingLine(self.btnTalkTalk)
-        sendMessage(textViewInput.text)
+        self.sendMessage(textViewInput.text)
         btnCommentSend.isEnabled = false
         btnCommentSend.setImage(UIImage(named: "cannotSendMessage"), for: UIControlState())
     }
     
     // MARK: - send messages
-    func sendMessage(_ text : String?) {
+    func sendMessage(_ text: String?) {
         if let realText = text {
-            commentThisPin(text: "\(self.strReplyTo)\(realText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))")
+            self.commentThisPin(text: "\(self.strReplyTo)\(realText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))")
         }
         
         self.strReplyTo = ""
         self.textViewInput.text = ""
         self.lblTxtPlaceholder.text = "Write a Comment..."
         self.textViewDidChange(textViewInput)
-        endEdit()
+        self.endEdit()
     }
     
     // MARK: - add or remove observers
@@ -2673,23 +2663,23 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         if PinDetailViewController.pinTypeEnum == .place {
             return
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name:NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name:NSNotification.Name.UIKeyboardDidHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name:NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
-    func appWillEnterForeground(){
+    func appWillEnterForeground() {
         
     }
     
     func keyboardWillShow(_ notification: Notification) {
         
-        actionHideEmojiView()
+        self.actionHideEmojiView()
         
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         keyboardHeight = keyboardRectangle.height
         
@@ -2700,7 +2690,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 self.tblMain.frame.size.height = screenHeight - 65 - self.uiviewInputToolBarSub.frame.size.height - self.keyboardHeight
                 self.uiviewToFullDragBtnSub.frame.origin.y = screenHeight - self.uiviewInputToolBarSub.frame.size.height - self.keyboardHeight
             }
-        }, completion: {(_) in
+        }, completion: { _ in
             
         })
         if !directReplyFromUser {
@@ -2708,7 +2698,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }
     }
     
-    func keyboardDidShow(_ notification: Notification){
+    func keyboardDidShow(_ notification: Notification) {
         boolKeyboardShowed = true
     }
     
@@ -2729,7 +2719,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }, completion: nil)
     }
     
-    func keyboardDidHide(_ notification: Notification){
+    func keyboardDidHide(_ notification: Notification) {
         boolKeyboardShowed = false
     }
     
@@ -2747,9 +2737,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         let randomSize: CGFloat = (CGFloat(arc4random_uniform(40)) - 20) / 100 + 1
         
         let transform: CGAffineTransform = CGAffineTransform(translationX: btnPinLike.center.x, y: btnPinLike.center.y)
-        let path =  CGMutablePath()
-        path.move(to: CGPoint(x:0,y:0), transform: transform)
-        path.addLine(to: CGPoint(x:randomX-75, y:-randomY), transform: transform)
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: 0, y: 0), transform: transform)
+        path.addLine(to: CGPoint(x: randomX - 75, y: -randomY), transform: transform)
         
         let scaleAnimation = CAKeyframeAnimation(keyPath: "transform")
         scaleAnimation.values = [NSValue(caTransform3D: CATransform3DMakeScale(1, 1, 1)), NSValue(caTransform3D: CATransform3DMakeScale(randomSize, randomSize, 1))]
@@ -2767,7 +2757,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         orbit.path = path
         orbit.calculationMode = kCAAnimationPaced
         
-        animatingHeart.layer.add(orbit, forKey:"Move")
+        animatingHeart.layer.add(orbit, forKey: "Move")
         animatingHeart.layer.add(fadeAnimation, forKey: "Opacity")
         animatingHeart.layer.add(scaleAnimation, forKey: "Scale")
         animatingHeart.layer.position = CGPoint(x: btnPinLike.center.x, y: btnPinLike.center.y)
@@ -2791,16 +2781,16 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         })
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             if PinDetailViewController.pinTypeEnum == .comment || PinDetailViewController.pinTypeEnum == .media {
-                self.uiviewFeelingBar.frame = CGRect(x: (screenWidth-281)/2, y: 409*screenHeightFactor, width: 281*screenWidthFactor, height: 52*screenWidthFactor)
-                let yAxis = 11 * screenHeightFactor
-                let width = 32 * screenHeightFactor
+                self.uiviewFeelingBar.frame = CGRect(x: (414 - 281) / 2, y: 409, w: 281, h: 52)
+                let yAxis: CGFloat = 11
+                let width: CGFloat = 32
                 for i in 0..<self.btnFeelingArray.count {
-                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20+52*i), y: yAxis, width: width, height: width)
+                    self.btnFeelingArray[i].frame = CGRect(x: CGFloat(20 + 52 * i), y: yAxis, w: width, h: width)
                 }
             }
-            self.btnPrevPin.frame = CGRect(x: 15*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
-            self.btnNextPin.frame = CGRect(x: 347*screenHeightFactor, y: 477*screenHeightFactor, width: 52*screenHeightFactor, height: 52*screenHeightFactor)
-        }, completion: {(_) in
+            self.btnPrevPin.frame = CGRect(x: 15, y: 477 , w: 52 , h: 52)
+            self.btnNextPin.frame = CGRect(x: 347 , y: 477 , w: 52 , h: 52)
+        }, completion: { _ in
             self.checkCurUserFeeling()
         })
     }
@@ -2810,15 +2800,15 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         let getPinById = FaeMap()
-        getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) {(status: Int, message: Any?) in
+        getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) { (_: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
             // Has posted feeling or not
             if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
                 self.intChosenFeeling = chosenFeel
                 if chosenFeel < 5 && chosenFeel >= 0 {
                     UIView.animate(withDuration: 0.2, animations: {
-                        let xOffset = Int(chosenFeel * 52 + 12)
-                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, width: 48, height: 48)
+                        let xOffset = CGFloat(chosenFeel * 52 + 12)
+                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, w: 48, h: 48)
                     })
                 }
             } else {
@@ -2826,24 +2816,4 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             }
         }
     }
-}
-
-protocol PinDetailDelegate: class {
-    // Cancel marker's shadow when back to Fae Map
-    // true  -> just means user want to back to main screen
-    // false -> delete this pin from map
-    func backToMainMap()
-    // Pass location data to fae map view
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
-    // Change marker icon based on status
-    func changeIconImage()
-    // Reload map pins because of location changed
-    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker)
-    // Go to prev or next pin
-    func goTo(nextPin: Bool)
-}
-
-protocol PinDetailCollectionsDelegate: class {
-    // Go back to collections
-    func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool, feelingArray: [Int])
 }

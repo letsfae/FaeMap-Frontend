@@ -24,8 +24,7 @@ class DisconnectionViewController: UIViewController {
         self.reachability = Reachability.init()
         do {
             try self.reachability.startNotifier()
-        } catch {
-        }
+        } catch { }
         self.view.backgroundColor = UIColor.white
         let img = UIImageView(frame: CGRect(x: 0*screenWidthFactor, y: 157*screenHeightFactor, width: screenWidth, height: 498*screenHeightFactor))
         img.image = #imageLiteral(resourceName: "disconnectionPic-1")

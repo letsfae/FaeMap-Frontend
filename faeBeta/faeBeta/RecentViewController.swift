@@ -12,14 +12,14 @@ import RealmSwift
 
 public var isDraggingRecentTableViewCell = false
 
-//Bryan
-//avatarDic was [NSNumber:UIImage] before
+// Bryan
+// avatarDic was [NSNumber:UIImage] before
 public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this should be moved to else where later
-//ENDBryan
+// ENDBryan
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
     
-    //MARK: - properties
+    // MARK: - properties
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -35,29 +35,29 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
-        //downloadCurrentUserAvatar()
+        // downloadCurrentUserAvatar()
         
-        //Bryan
+        // Bryan
         let realm = try! Realm()
         self.realmRecents = realm.objects(RealmRecent.self)
         self.tableView.reloadData()
-
-        //TODO: Delete userDefaults
-//        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
-//            self.recents = JSON(recentData)
-//            print(self.recents!)
-//            self.tableView.reloadData()
-//        }
-        //ENDBryan
+        
+        // TODO: Delete userDefaults
+        //        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
+        //            self.recents = JSON(recentData)
+        //            print(self.recents!)
+        //            self.tableView.reloadData()
+        //        }
+        // ENDBryan
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        loadingRecentTimer.invalidate()
+        self.loadingRecentTimer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
-        downloadCurrentUserAvatar()
+        self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        self.downloadCurrentUserAvatar()
     }
     
     /*
@@ -69,7 +69,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
      // Pass the selected object to the new view controller.
      }
      */
-    
     
     func navigationBarSet() {
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
@@ -86,14 +85,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))
         
-        //ATTENTION: Temporary comment it here because it's not used for now
-//        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
+        // ATTENTION: Temporary comment it here because it's not used for now
+        //        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
         
-        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 86 , bottom: 0, right: 0)
+        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 86, bottom: 0, right: 0)
     }
     
-    private func addGestureRecognizer()
-    {
+    private func addGestureRecognizer() {
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(RecentViewController.closeAllCell)))
     }
     
@@ -101,17 +99,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         self.dismiss(animated: true, completion: nil)
     }
     
-    //MARK:- tableView delegate
+    // MARK: - tableView delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(cellsCurrentlyEditing.count == 0){
+        if self.cellsCurrentlyEditing.count == 0 {
             tableView.deselectRow(at: indexPath, animated: true)
-            if let recent = recents?[indexPath.row]{
-                if recent["with_user_id"].number != nil{
+            if let recent = recents?[indexPath.row] {
+                if recent["with_user_id"].number != nil {
                     performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
                 }
             }
-        }else{
-            for indexP in cellsCurrentlyEditing {
+        } else {
+            for indexP in self.cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
                 cell.closeCell()
             }
@@ -126,13 +124,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         return 76
     }
     
-    //MARK: - UItableViewDataSource
+    // MARK: - UItableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recents == nil ? 0 : recents!.count
+        return self.recents == nil ? 0 : self.recents!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,23 +138,23 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
         cell.delegate = self
         
-        //Bryan
-        //let recent = recents![indexPath.row]
-        //cell.bindData(recent)
+        // Bryan
+        // let recent = recents![indexPath.row]
+        // cell.bindData(recent)
         
         let realmRecent = realmRecents![indexPath.row]
         cell.bindData(realmRecent)
-        //ENDBryan
-
-        if (self.cellsCurrentlyEditing.contains(indexPath)) {
+        // ENDBryan
+        
+        if self.cellsCurrentlyEditing.contains(indexPath) {
             cell.openCell()
         }
         return cell
     }
-    //MARK: - helpers
+    // MARK: - helpers
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
         if segue.identifier == "recentToChatSeg" {
             let indexPath = sender as! IndexPath
             let chatVC = segue.destination as! ChatViewController
@@ -166,118 +164,88 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
-            //Bryan
+            // Bryan
             chatVC.realmWithUser = RealmUser()
             chatVC.realmWithUser!.userName = withUserName!
             chatVC.realmWithUser!.userID = withUserUserId!
-            //EndBryan
+            // EndBryan
         }
     }
     
-    @objc private func startCheckingRecent(){
-        loadRecents(false, removeIndexPaths: nil)
+    @objc private func startCheckingRecent() {
+        self.loadRecents(false, removeIndexPaths: nil)
     }
     
-    /// download current user's avatar from server
+    // download current user's avatar from server
     private func downloadCurrentUserAvatar() {
-
-        getAvatar(userID: user_id, type: 2) { (status, etag, imageRawData) in
-            let realm = try! Realm()
-            if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(user_id)'").first {
-                // 存在User，Etag没变
-                if etag == avatarRealm.smallAvatarEtag {
-                    avatarDic[user_id] = UIImage.sd_image(with: avatarRealm.userSmallAvatar as Data!)
-                }
-                // 存在User，Etag改变
-                else {
-                    avatarDic[user_id] = UIImage.sd_image(with: imageRawData)
-                    try! realm.write {
-                        avatarRealm.smallAvatarEtag = etag
-                        avatarRealm.userSmallAvatar = imageRawData as NSData?
-                        avatarRealm.largeAvatarEtag = nil
-                        avatarRealm.userLargeAvatar = nil
-                    }
-                }
-            } else {
-                // 不存在User
-                avatarDic[user_id] = UIImage.sd_image(with: imageRawData)
-                let avatarObj = RealmUser()
-                avatarObj.userID = "\(user_id)"
-                avatarObj.smallAvatarEtag = etag
-                avatarObj.userSmallAvatar = imageRawData as NSData?
-                try! realm.write {
-                    realm.add(avatarObj)
-                }
-            }
+        General.shared.avatar(userid: user_id) { (avatarImage) in
+            avatarDic[user_id] = avatarImage
         }
-        //}
     }
     
-    //MARK: load recents form server
+    // MARK: load recents form server
     
     /// load recent list from server, also used to reload the recent list after deletion
     ///
     /// - Parameters:
     ///   - animated: update the table with/without animation
     ///   - indexPathSet: the specific indexpath set needed to update, set nil if you want to update the whole recent list
-    private func loadRecents(_ animated:Bool, removeIndexPaths indexPathSet:[IndexPath]? ) {
-        getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { (status, result) in
+    private func loadRecents(_ animated: Bool, removeIndexPaths indexPathSet: [IndexPath]?) {
+        getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { _, result in
             if let cacheRecent = result as? NSArray {
-                //Bryan
-//                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
-//                    if let cacheRecent2 = result2 as? NSArray {
-//                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
-//                    }
-//                }
-                //ENDBryan
+                // Bryan
+                //                getFromURL("chat_rooms", parameter: nil, authentication: headerAuthentication()) { (status2, result2) in
+                //                    if let cacheRecent2 = result2 as? NSArray {
+                //                        cacheRecent.addingObjects(from: cacheRecent2 as! [Any])
+                //                    }
+                //                }
+                // ENDBryan
                 let json = JSON(result!)
                 print(json)
                 self.recents = json
-                    //Bryan
-                    //UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
-                    RealmChat.updateRecent(recents: cacheRecent)
-                if(animated && indexPathSet != nil){
+                // Bryan
+                // UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
+                RealmChat.updateRecent(recents: cacheRecent)
+                if animated && indexPathSet != nil {
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
-                }else{
-                    if(!isDraggingRecentTableViewCell){
+                } else {
+                    if !isDraggingRecentTableViewCell {
                         self.tableView.reloadData()
                     }
                 }
-            }else{
+            } else {
                 self.recents = JSON([])
             }
         }
     }
     
-    func closeAllCell(_ recognizer:UITapGestureRecognizer){
+    func closeAllCell(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: tableView)
         if let indexPath = tableView.indexPathForRow(at: point) {
-            self.tableView(tableView, didSelectRowAt: indexPath)
-        }else{
-            for indexP in cellsCurrentlyEditing {
+            self.tableView(self.tableView, didSelectRowAt: indexPath)
+        } else {
+            for indexP in self.cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
                 cell.closeCell()
             }
         }
     }
     
-    //MARK: - swipeable cell delegate
+    // MARK: - swipeable cell delegate
     
     func cellwillOpen(_ cell: UITableViewCell) {
-        closeAllCell(UITapGestureRecognizer())
+        self.closeAllCell(UITapGestureRecognizer())
     }
     
-    func cellDidOpen(_ cell: UITableViewCell)
-    {
+    func cellDidOpen(_ cell: UITableViewCell) {
         let currentEditingIndexPath = self.tableView.indexPath(for: cell)
-        if(currentEditingIndexPath != nil){
+        if currentEditingIndexPath != nil {
             self.cellsCurrentlyEditing.add(currentEditingIndexPath!)
         }
     }
     
-    func cellDidClose(_ cell: UITableViewCell)
-    {
-        if(self.tableView.indexPath(for: cell) != nil){
+    func cellDidClose(_ cell: UITableViewCell) {
+        if self.tableView.indexPath(for: cell) != nil {
             self.cellsCurrentlyEditing.remove(self.tableView.indexPath(for: cell)!)
         }
     }
@@ -288,9 +256,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let realmRecent = realmRecents![indexPath.row]
         RealmChat.removeRecentWith(recentItem: realmRecent)
         
-        //remove recent form the array
-        DeleteRecentItem(recent, completion: {(statusCode, result) -> Void in
-            if statusCode / 100 == 2{
+        // remove recent form the array
+        DeleteRecentItem(recent, completion: { (statusCode, _) -> Void in
+            if statusCode / 100 == 2 {
                 self.loadRecents(true, removeIndexPaths: [indexPath])
             }
         })

@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var reachaVC = DisconnectionViewController()
     private var reachability: Reachability!
     
-    // Q: Firebase? - Yue Shen
     let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
     let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
     let VERSION_NUM = "v1"

@@ -34,11 +34,17 @@ class FaeAvatarView: UIImageView {
         self.image = nil
         
         if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
+            print("[getAvatar - \(id)] already in cache")
             self.image = imageFromCache
             return
         }
         
         getAvatar(userID: self.userID, type: 2) { (status, etag, imageRawData) in
+            guard imageRawData != nil else {
+                print("[getAvatar] fail, imageRawData is nil")
+                return
+            }
+            guard status / 100 == 2 || status / 100 == 3 else { return }
             DispatchQueue.main.async(execute: {
                 guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
                 if self.userID == id {
@@ -50,45 +56,10 @@ class FaeAvatarView: UIImageView {
     }
 
     func openThisMedia(_ sender: UIGestureRecognizer) {
-        let realm = try! Realm()
-        // If previous avatar does exist in realm
-        if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(self.userID)'").first {
-            if avatarRealm.largeAvatarEtag == nil {
-                // Get full size avatar if there is none of it, type => 0
-                getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
-                    if status / 100 == 2 {
-                        print("[FaeAvatarView] largeAvatarEtag == nil")
-                        // Update realm with the same object
-                        try! realm.write {
-                            avatarRealm.largeAvatarEtag = etag
-                            avatarRealm.userLargeAvatar = imageRawData as NSData?
-                        }
-                        guard let image = UIImage.sd_image(with: imageRawData) else { return }
-                        let photos = IDMPhoto.photos(withImages: [image])
-                        self.presentPhotoBrowser(photos: photos)
-                    } else if status / 100 == 3 {
-                        
-                    } else {
-                        // Otherwise use the current imageView.image
-                        print("[FaeAvatarView] get large image fail")
-                        let imageView = sender.view as! UIImageView
-                        guard let image = imageView.image else { return }
-                        let photos = IDMPhoto.photos(withImages: [image])
-                        self.presentPhotoBrowser(photos: photos)
-                    }
-                }
-            } else {
-                // Otherwise use the large avatar stored in realm
-                print("[FaeAvatarView] large image exists")
-                guard let image = UIImage.sd_image(with: avatarRealm.userLargeAvatar as Data!) else { return }
-                let photos = IDMPhoto.photos(withImages: [image])
-                self.presentPhotoBrowser(photos: photos)
-            }
-        } else {
-            // If no RealmUser obj found with userID
-            print("[FaeAvatarView] get large image fail")
-            let imageView = sender.view as! UIImageView
-            guard let image = imageView.image else { return }
+        getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
+            guard imageRawData != nil else { return }
+            guard status / 100 == 2 || status / 100 == 3 else { return }
+            guard let image = UIImage.sd_image(with: imageRawData) else { return }
             let photos = IDMPhoto.photos(withImages: [image])
             self.presentPhotoBrowser(photos: photos)
         }
