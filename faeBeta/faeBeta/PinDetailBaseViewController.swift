@@ -64,10 +64,10 @@ class PinDetailBaseViewController: UIViewController {
     
     // MARK: - Variables
     
-    var textViewOriginalHeight: CGFloat = 0 {
+    var txtViewInitHeight: CGFloat = 0 {
         didSet {
             if textviewPinDetail != nil {
-                textviewPinDetail.frame.size.height = textViewOriginalHeight
+                textviewPinDetail.frame.size.height = txtViewInitHeight
             }
         }
     }

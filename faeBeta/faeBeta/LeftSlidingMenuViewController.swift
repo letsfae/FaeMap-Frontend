@@ -144,6 +144,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         tableLeftSlideWindow.center.x -= 290
         tableLeftSlideWindow.backgroundColor = UIColor.clear
         tableLeftSlideWindow.delaysContentTouches = false
+        tableLeftSlideWindow.showsVerticalScrollIndicator = false
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

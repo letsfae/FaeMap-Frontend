@@ -19,12 +19,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         modalPresentationStyle = .overCurrentContext
-        self.loadPinDetailWindow()
-        self.initPinBasicInfo()
-        PinDetailViewController.pinTypeEnum == .chat_room ? self.getChatRoomInfo() : self.getSeveralInfo()
-        self.loadFromCollections()
-        self.pullDownToRefresh()
-        arrNonDupUserId = [PinDetailViewController.pinUserId]
+        loadPinDetailWindow()
+        loadFromCollections()
+        initPinBasicInfo()
+        getSeveralInfo()
+        pullDownToRefresh()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -50,14 +49,16 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func initPinBasicInfo() {
+        arrNonDupUserId = [PinDetailViewController.pinUserId]
+        
         switch PinDetailViewController.pinTypeEnum {
         case .comment:
             uiviewNavBar.lblTitle.text = "Comment"
-            textViewOriginalHeight = 100
+            txtViewInitHeight = 100
             break
         case .media:
             uiviewNavBar.lblTitle.text = "Story"
-            textViewOriginalHeight = 0
+            txtViewInitHeight = 0
             break
         case .chat_room:
             uiviewNavBar.lblTitle.text = "Chat Spot"
@@ -67,6 +68,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             self.loadPlaceDetail()
             break
         }
+        
         self.selectPinState()
         self.checkPinStatus() // check pin status is for social pin
         self.addObservers() // add input toolbar keyboard observers
@@ -74,7 +76,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     fileprivate func pullDownToRefresh() {
         tblMain.addPullRefresh { [unowned self] in
-            PinDetailViewController.pinTypeEnum == .chat_room ? self.getChatRoomInfo() : self.getSeveralInfo()
+            self.getSeveralInfo()
             self.tblMain.stopPullRefreshEver()
         }
     }
@@ -104,19 +106,19 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
         uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
         
-        let txtViewWidth = textviewPinDetail.frame.size.width
-        guard let font = textviewPinDetail.font else { return }
-        let textViewHeight: CGFloat = textviewPinDetail.text.height(withConstrainedWidth: txtViewWidth, font: font)
+        let txtViewWidth = txtviewPinDetail.frame.size.width
+        guard let font = txtviewPinDetail.font else { return }
+        let textViewHeight: CGFloat = txtviewPinDetail.text.height(withConstrainedWidth: txtViewWidth, font: font)
         if PinDetailViewController.pinTypeEnum == .media {
-            textviewPinDetail.alpha = 1
-            textviewPinDetail.frame.size.height = textViewHeight
+            txtviewPinDetail.alpha = 1
+            txtviewPinDetail.frame.size.height = textViewHeight
             scrollViewMedia.frame.origin.y += textViewHeight
             uiviewGrayMidBlock.center.y += 65 + textViewHeight
             uiviewInteractBtnSub.center.y += 65 + textViewHeight
             uiviewTblHeader.frame.size.height += 65 + textViewHeight
         } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
             let diffHeight: CGFloat = textViewHeight - 100
-            textviewPinDetail.frame.size.height += diffHeight
+            txtviewPinDetail.frame.size.height += diffHeight
             uiviewGrayMidBlock.center.y += diffHeight
             uiviewInteractBtnSub.center.y += diffHeight
             uiviewTblHeader.frame.size.height += diffHeight
@@ -206,9 +208,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadFeelingBar() {
-        if PinDetailViewController.pinTypeEnum == .place {
-            return
-        }
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
         
         let feelingBarAnchor = CGPoint(x: 414 / 2, y: 461)
         
@@ -338,19 +338,19 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }
         
         // Textview of pin detail
-        textviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
-        textviewPinDetail.frame.size.height = PinDetailViewController.pinTypeEnum == .media ? 0 : 100
-        textviewPinDetail.alpha = PinDetailViewController.pinTypeEnum == .media ? 0 : 1
-        textviewPinDetail.center.x = screenWidth / 2
-        textviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        textviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
-        textviewPinDetail.isEditable = false
-        textviewPinDetail.isScrollEnabled = true
-        textviewPinDetail.isUserInteractionEnabled = true
-        textviewPinDetail.attributedText = strTextViewText.convertStringWithEmoji()
-        textviewPinDetail.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        textviewPinDetail.textContainerInset = .zero
-        uiviewTblHeader.addSubview(textviewPinDetail)
+        txtviewPinDetail = UITextView(frame: CGRect(x: 27, y: 75, width: textViewWidth, height: 100))
+        txtviewPinDetail.frame.size.height = PinDetailViewController.pinTypeEnum == .media ? 0 : 100
+        txtviewPinDetail.alpha = PinDetailViewController.pinTypeEnum == .media ? 0 : 1
+        txtviewPinDetail.center.x = screenWidth / 2
+        txtviewPinDetail.font = UIFont(name: "AvenirNext-Regular", size: 18)
+        txtviewPinDetail.indicatorStyle = UIScrollViewIndicatorStyle.white
+        txtviewPinDetail.isEditable = false
+        txtviewPinDetail.isScrollEnabled = true
+        txtviewPinDetail.isUserInteractionEnabled = true
+        txtviewPinDetail.attributedText = strTextViewText.convertStringWithEmoji()
+        txtviewPinDetail.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
+        txtviewPinDetail.textContainerInset = .zero
+        uiviewTblHeader.addSubview(txtviewPinDetail)
         
         scrollViewMedia = UIScrollView(frame: CGRect(x: 0, y: 80, width: screenWidth, height: 0))
         scrollViewMedia.frame.size.height = enterMode == .collections ? 160 : 95
@@ -1370,7 +1370,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             UIView.animate(withDuration: 0.5, animations: ({
                 self.btnHalfPinToMap.alpha = 1.0 // nav bar left btn
                 self.uiviewNavBar.leftBtn.alpha = 0.0 // nav bar left btn
-                self.textviewPinDetail.frame.size.height = 100 // back to original text height
+                self.txtviewPinDetail.frame.size.height = 100 // back to original text height
                 
                 self.uiviewInteractBtnSub.frame.origin.y = 185
                 self.uiviewGrayMidBlock.frame.origin.y = 227
@@ -1380,7 +1380,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 self.uiviewMain.frame.size.height = 320
                 self.uiviewInputToolBarSub.frame.origin.y = screenHeight
             }), completion: { _ in
-                self.textviewPinDetail.isScrollEnabled = true
+                self.txtviewPinDetail.isScrollEnabled = true
                 self.tblMain.isScrollEnabled = false
                 self.tblMain.frame.size.height = 227
             })
@@ -1389,7 +1389,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 self.zoomMedia(.small)
                 UIView.animate(withDuration: 0.5, animations: ({
                     self.scrollViewMedia.frame.origin.y = 80
-                    self.textviewPinDetail.alpha = 0
+                    self.txtviewPinDetail.alpha = 0
                 }), completion: nil)
             }
             return
@@ -1407,7 +1407,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         sender.tag = 1
-        let textViewHeight: CGFloat = textviewPinDetail.contentSize.height
+        let textViewHeight: CGFloat = txtviewPinDetail.contentSize.height
         if btnToFullPin.tag == 1 && sender == btnPinComment {
             boolKeyboardShowed = true
             directReplyFromUser = false
@@ -1417,14 +1417,14 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         self.readThisPin()
-        textviewPinDetail.isScrollEnabled = false
+        txtviewPinDetail.isScrollEnabled = false
         tblMain.isScrollEnabled = true
         if PinDetailViewController.pinTypeEnum == .media {
             self.zoomMedia(.large)
             UIView.animate(withDuration: 0.5, animations: ({
-                self.textviewPinDetail.alpha = 1
+                self.txtviewPinDetail.alpha = 1
                 self.scrollViewMedia.frame.origin.y += textViewHeight
-                self.textviewPinDetail.frame.size.height = textViewHeight
+                self.txtviewPinDetail.frame.size.height = textViewHeight
                 self.uiviewGrayMidBlock.center.y += 65 + textViewHeight
                 self.uiviewInteractBtnSub.center.y += 65 + textViewHeight
                 self.uiviewTblHeader.frame.size.height += 65 + textViewHeight
@@ -1434,7 +1434,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             let diffHeight: CGFloat = textViewHeight - 100
             UIView.animate(withDuration: 0.5, animations: ({
                 self.uiviewTblHeader.frame.size.height += diffHeight
-                self.textviewPinDetail.frame.size.height += diffHeight
+                self.txtviewPinDetail.frame.size.height += diffHeight
                 self.uiviewGrayMidBlock.center.y += diffHeight
                 self.uiviewInteractBtnSub.center.y += diffHeight
             }), completion: nil)
@@ -1463,7 +1463,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     func handleFeelingPanGesture(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: uiviewFeelingBar)
         
-        if location.y < 0 || location.y > 52 {
+        if location.y < 0 || location.y > 52 * screenWidthFactor {
             if btnSelectedFeeling != nil {
                 UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                     let yAxis: CGFloat = 11
@@ -1474,7 +1474,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             return
         }
         
-        let index = Int((location.x - 20) / 52)
+        let index = Int((location.x - 20 * screenWidthFactor) / 52 * screenWidthFactor)
         
         if index > 4 || index < 0 {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -1522,14 +1522,18 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     // MARK: - API Calls
     
     func getSeveralInfo() {
-        self.getPinAttributeNum()
-        self.getPinInfo()
-        self.getPinComments(sendMessageFlag: false)
+        if PinDetailViewController.pinTypeEnum != .chat_room {
+            getPinAttributeNum()
+            getPinInfo()
+            getPinComments(sendMessageFlag: false)
+        } else {
+            getChatRoomInfo()
+        }
     }
     
     func getChatRoomInfo() {
         
-        
+        guard PinDetailViewController.pinTypeEnum == .chat_room else { return }
         
         guard strPinId != "-1" else { return }
         
@@ -1643,11 +1647,11 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 self.loadMedias()
                 self.strCurrentTxt = pinInfoJSON["description"].stringValue
                 if self.enterMode != .collections {
-                    self.textviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
+                    self.txtviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
                 }
             } else if PinDetailViewController.pinTypeEnum == .comment {
                 self.strCurrentTxt = pinInfoJSON["content"].stringValue
-                self.textviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
+                self.txtviewPinDetail.attributedText = self.strCurrentTxt.convertStringWithEmoji()
             }
             
             // Liked or not
@@ -2660,9 +2664,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // MARK: - add or remove observers
     func addObservers() {
-        if PinDetailViewController.pinTypeEnum == .place {
-            return
-        }
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
