@@ -145,7 +145,7 @@ func postToURL(_ className: String, parameter: [String: Any]?, authentication: [
 
 func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     
-    let URL = baseURL + "/" + className
+    let url = baseURL + "/" + className
     var headers = [
         "User-Agent": headerUserAgent,
         "Fae-Client-Version": headerClientVersion,
@@ -160,7 +160,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     }
     
     if parameter == nil {
-        Alamofire.request(URL, headers: headers)
+        Alamofire.request(url, method: .get, headers: headers)
             .responseJSON { response in
                 // print(response.response!.statusCode)
                 if response.response != nil {
@@ -170,7 +170,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
                 }
             }
     } else {
-        Alamofire.request(URL, parameters: parameter!, headers: headers)
+        Alamofire.request(url, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)

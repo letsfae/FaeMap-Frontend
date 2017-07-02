@@ -66,8 +66,8 @@ class PinDetailBaseViewController: UIViewController {
     
     var txtViewInitHeight: CGFloat = 0 {
         didSet {
-            if textviewPinDetail != nil {
-                textviewPinDetail.frame.size.height = txtViewInitHeight
+            if txtviewPinDetail != nil {
+                txtviewPinDetail.frame.size.height = txtViewInitHeight
             }
         }
     }
@@ -176,7 +176,7 @@ class PinDetailBaseViewController: UIViewController {
     var tableMode: TableMode = .talktalk
     var tblMain: UITableView!
     var textViewInput: UITextView! // Input tool bar
-    var textviewPinDetail: UITextView!
+    var txtviewPinDetail: UITextView!
     var uiviewAnonymous: UIView!
     var uiviewFeelingBar: UIView!
     var uiviewFeelingQuick: UIView!

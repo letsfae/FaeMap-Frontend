@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var reachaVCPresented = false
     var reachaVC = DisconnectionViewController()
     private var reachability: Reachability!
+    let navMain = UINavigationController()
     
     let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
     let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
@@ -75,7 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vcEmptyRoot = InitialPageController()
 //        let vcEmptyRoot = MBComtsStoriesViewController()
 //        vcEmptyRoot.enterMode = .comment
-        let navMain = UINavigationController()
         navMain.viewControllers = [vcEmptyRoot]
         navMain.navigationBar.isHidden = true
         
@@ -197,7 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 } else if !self.reachaVCPresented {
                     self.reachaVCPresented = true
                     self.window?.makeKeyAndVisible()
-                    self.window?.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
+                    self.navMain.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
                 }
             })
         }

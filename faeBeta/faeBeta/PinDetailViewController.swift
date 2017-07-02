@@ -92,7 +92,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnGrayBackToMap.isHidden = true
         uiviewNavBar.rightBtn.isHidden = true
         
-        textviewPinDetail.isScrollEnabled = false
+        txtviewPinDetail.isScrollEnabled = false
         tblMain.isScrollEnabled = true
         btnToFullPin.isHidden = true
         uiviewToFullDragBtnSub.isHidden = true
