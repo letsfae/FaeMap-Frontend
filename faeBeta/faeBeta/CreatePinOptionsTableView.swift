@@ -20,12 +20,14 @@ class CreatePinOptionsTableView: UITableView {
         super.init(coder: aDecoder)
         setup()
     }
+    
     private func setup()
     {
         self.rowHeight = CGFloat(20 * 2 + 29)
         self.backgroundColor = UIColor.clear
-        self.separatorColor = UIColor.clear
+        self.separatorStyle = .none
         self.isScrollEnabled = false
-        register(UINib(nibName: "CreatePinOptionsTableViewCell", bundle: nil ), forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
+        register(CreatePinOptionsTableViewCell.self, forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
+//        register(UINib(nibName: "CreatePinOptionsTableViewCell", bundle: nil ), forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
     }
 }

@@ -9,136 +9,197 @@
 import UIKit
 import CoreLocation
 
-class CreateMomentPinViewController: UIViewController {
-    
-    weak var delegate: CreatePinDelegate?
-    
-    // MARK: -- Create Media Pin
-    var uiviewCreateMediaPin: UIView!
-    var labelSelectLocationContent: UILabel!
-    var textViewForMediaPin: UITextView!
-    var lableTextViewPlaceholder: UILabel!
-    var buttonTakeMedia: UIButton!
-    var buttonSelectMedia: UIButton!
-    
-    // MARK: -- Create Pin
-    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
-    
-    // MARK: -- Geo Information Sent to Server
-    var selectedLatitude: String!
-    var selectedLongitude: String!
-    
-    // MARK: -- location manager
-    var currentLocation: CLLocation!
-    let locManager = CLLocationManager()
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
-    
-    // MARK: -- Buttons
-    var buttonMediaSubmit: UIButton!
-    
-    // MARK: -- Keyboard Tool Bar
-    var inputToolbar: CreatePinInputToolbar!
-    
-    //MARK: -- Emoji View
-    var emojiView: StickerPickView!
-    var isShowingEmoji: Bool = false
-    
-    // MARK: -- uiview containers to hold two toolbars
-    var uiviewSelectLocation: UIView!
-    var uiviewMoreOptions: UIView!
-    var uiviewAddDescription: UIView!
-    
-    var labelCreateMediaPinTitle: UILabel! // Create Media pin title
-    var labelMediaPinMoreOptions: UILabel! // Title of Media pin options when creating
-    var labelMediaPinAddDes: UILabel! // Title of Media pin options when creating
-    var buttonAnonymous: UIButton!
-    // MARK: -- MoreOption Table
-    var tableMoreOptions: CreatePinOptionsTableView!
-    enum CreatePinViewOptions {
-        case moreOptionsTable
-        case addTags
-    }
-    // MARK: -- Add Tags
-    var textAddTags: CreatePinAddTagsTextView!
-    var currentView: CreatePinViewOptions = .moreOptionsTable
-    
+class CreateMomentPinViewController: CreatePinBaseViewController {
+
+    var btnTakeMedia: UIButton!
+    var btnSelectMedia: UIButton!
     var imagePicker: UIImagePickerController!
-    var buttonBack: UIButton!
     var selectedMediaArray = [UIImage]()
     var collectionViewMedia: UICollectionView!
-    var anonymous = false
     var activityIndicator: UIActivityIndicatorView!
-    
-    var labelAddDesContent: UILabel!
-    
-    var btnDoAnony: UIButton!
-    var switchAnony: UISwitch!
-    
-    enum Direction {
-        case left
-        case right
-    }
-    var direction: Direction = .right
-    
-    var buttonAddMedia: UIButton!
+    var btnAddMedia: UIButton!
     var lastContentOffset: CGFloat = -999
-    
+
     override func viewDidLoad() {
+        pinType = .story
         super.viewDidLoad()
+    }
+    
+    override func setupBaseUI() {
+        super.setupBaseUI()
+        
+        btnSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
+        imgTitle.image = #imageLiteral(resourceName: "momentPinTitleImage")
+        lblTitle.text = "Create Story Pin"
+        switchAnony.onTintColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1)
+        
+        textviewDescrip.placeHolder = "Add Description..."
         loadCreateMediaPinView()
-        addObservers()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewCreateMediaPin.alpha = 1.0
-            }, completion: nil)
+    fileprivate func loadCreateMediaPinView() {
+        let layout = CenterCellCollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 200, height: 200)
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 49
+        
+        collectionViewMedia = UICollectionView(frame: CGRect(x: 0, y: 200, width: screenWidth, height: 200), collectionViewLayout: layout)
+        collectionViewMedia.register(CMPCollectionViewCell.self, forCellWithReuseIdentifier: "selectedMedia")
+        collectionViewMedia.delegate = self
+        collectionViewMedia.dataSource = self
+        collectionViewMedia.isPagingEnabled = false
+        collectionViewMedia.isHidden = true
+        collectionViewMedia.backgroundColor = UIColor.clear
+        collectionViewMedia.showsHorizontalScrollIndicator = false
+        collectionViewMedia.layer.zPosition = 100
+        self.view.addSubview(collectionViewMedia)
+        
+        btnTakeMedia = UIButton(frame: CGRect(x: 109, y: 268, width: 65, height: 65))
+        btnTakeMedia.setImage(UIImage(named: "momentPinTakeMoment"), for: UIControlState())
+        self.view.addSubview(btnTakeMedia)
+        self.view.addConstraintsWithFormat("H:|-109-[v0(65)]", options: [], views: btnTakeMedia)
+        self.view.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: btnTakeMedia)
+        btnTakeMedia.addTarget(self, action: #selector(self.actionTakePhoto(_:)), for: .touchUpInside)
+        
+        btnSelectMedia = UIButton(frame: CGRect(x: 241, y: 268, width: 65, height: 65))
+        btnSelectMedia.setImage(UIImage(named: "momentPinSelectMoment"), for: UIControlState())
+        self.view.addSubview(btnSelectMedia)
+        self.view.addConstraintsWithFormat("H:[v0(65)]-109-|", options: [], views: btnSelectMedia)
+        self.view.addConstraintsWithFormat("V:|-268-[v0(65)]", options: [], views: btnSelectMedia)
+        btnSelectMedia.addTarget(self, action: #selector(self.actionTakeMedia(_:)), for: .touchUpInside)
+        
+        loadAddMediaButton()
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = locManager.location
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
+    fileprivate func loadAddMediaButton() {
+        btnAddMedia = UIButton()
+        btnAddMedia.tag = 0
+        btnAddMedia.alpha = 0
+        btnAddMedia.setImage(#imageLiteral(resourceName: "momentAddMedia"), for: .normal)
+        btnAddMedia.addTarget(self, action: #selector(self.actionAddMedia(_:)), for: .touchUpInside)
+        self.view.addSubview(btnAddMedia)
+        self.view.addConstraintsWithFormat("H:[v0(88)]-0-|", options: [], views: btnAddMedia)
+        self.view.addConstraintsWithFormat("V:|-200-[v0(200)]", options: [], views: btnAddMedia)
     }
     
-    func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    func keyboardWillShow(_ notification:Notification) {
-        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        inputToolbar.alpha = 1
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+    override func switchToMoreOptions() {
+        super.switchToMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
             Void in
-            self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
-        }, completion: nil)
-    }
-    
-    func keyboardWillHide(_ notification:Notification) {
-        if(!isShowingEmoji){
-            UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-                Void in
-                self.inputToolbar.frame.origin.y = screenHeight - 100
-                self.inputToolbar.alpha = 0
-                self.view.layoutIfNeeded()
-            }, completion: nil)
+            self.tblPinOptions.alpha = 0
+            self.collectionViewMedia.alpha = 0
+            if !self.btnSelectMedia.isHidden {
+                self.btnSelectMedia.alpha = 0
+                self.btnTakeMedia.alpha = 0
+            }
+            self.btnAddMedia.alpha = 0
+            self.collectionViewMedia.alpha = 0
+            
+            self.lblTitle.text = "More Options"
+            self.tblMoreOptions.alpha = 1
+            
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
+        }) { _ in
+            self.showAlert(title: "This feature is coming soon in the next version!", message: "")
         }
     }
     
-    func randomLocation() -> CLLocationCoordinate2D {
-        let lat = currentLocation2D.latitude
-        let lon = currentLocation2D.longitude
-        let random_lat = Double.random(min: -0.01, max: 0.01)
-        let random_lon = Double.random(min: -0.01, max: 0.01)
-        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
+    override func leaveMoreOptions() {
+        super.leaveMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.tblPinOptions.alpha = 1
+            self.collectionViewMedia.alpha = 1
+            if !self.btnSelectMedia.isHidden {
+                self.btnSelectMedia.alpha = 1
+                self.btnTakeMedia.alpha = 1
+            }
+            self.btnAddMedia.alpha = 1
+            self.collectionViewMedia.alpha = 1
+            
+            self.lblTitle.text = "Create Story Pin"
+            self.tblMoreOptions.alpha = 0
+            
+            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
+        })
+    }
+    
+    override func switchToDescription() {
+        super.switchToDescription()
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.tblPinOptions.alpha = 0
+            self.lblTitle.text = "Add Description"
+            self.collectionViewMedia.alpha = 0
+            if !self.btnSelectMedia.isHidden {
+                self.btnSelectMedia.alpha = 0
+                self.btnTakeMedia.alpha = 0
+            }
+            self.btnAddMedia.alpha = 0
+            self.collectionViewMedia.alpha = 0
+            
+            self.textviewDescrip.alpha = 1
+            
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
+        }, completion:{
+            Complete in
+            self.textviewDescrip.becomeFirstResponder()
+        })
+    }
+    
+    override func leaveDescription() {
+        super.leaveDescription()
+        self.tblPinOptions.reloadData()
+        
+        self.boolBtnSubmitEnabled = selectedMediaArray.count > 0 || (textviewDescrip?.text.characters.count)! > 0
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.tblPinOptions.alpha = 1
+            self.lblTitle.text = "Create Story Pin"
+            self.collectionViewMedia.alpha = 1
+            if !self.btnSelectMedia.isHidden {
+                self.btnSelectMedia.alpha = 1
+                self.btnTakeMedia.alpha = 1
+            }
+            self.btnAddMedia.alpha = 1
+            self.collectionViewMedia.alpha = 1
+            
+            self.textviewDescrip.alpha = 0
+            
+            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
+        }, completion:{
+            Complete in
+            self.textviewDescrip.resignFirstResponder()
+        })
+    }
+    
+    override func actionSubmit() {
+        if selectedMediaArray.count == 0 {
+            self.showAlert(title: "Please add at least one image!", message: "")
+            return
+        } else if textviewDescrip.text == "" {
+            self.showAlert(title: "Please add a description for your story!", message: "")
+            return
+        }
+        //        if sender.tag == 0 {
+        //            return
+        //        }
+        //        sender.tag = 0
+        
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.layer.zPosition = 101
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor(red: 149 / 255, green: 207 / 255, blue: 246 / 255, alpha: 1.0)
+        self.view.addSubview(activityIndicator)
+        self.view.bringSubview(toFront: activityIndicator)
+        activityIndicator.startAnimating()
+        self.uploadingFile(image: selectedMediaArray[0],
+                           count: 0,
+                           total: selectedMediaArray.count,
+                           fileIDs: "")
     }
 }

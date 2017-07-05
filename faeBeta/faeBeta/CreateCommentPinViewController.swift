@@ -7,125 +7,129 @@
 //
 
 import UIKit
-import CoreLocation
 
-protocol CreatePinDelegate: class {
-    func sendGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
-    func backFromPinCreating(back: Bool)
-    func closePinMenu(close: Bool)
-}
-
-class CreateCommentPinViewController: UIViewController {
-    
-    weak var delegate: CreatePinDelegate?
-
-    // MARK: -- Create Comment Pin
-    var uiviewCreateCommentPin: UIView!
-    var labelSelectLocationContent: UILabel!
-    var textViewForCommentPin: UITextView!
-    var lableTextViewPlaceholder: UILabel!
-    
-    // MARK: -- Create Pin
-    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
-    
-    // MARK: -- Geo Information Sent to Server
-    var selectedLatitude: String!
-    var selectedLongitude: String!
-    
-    // MARK: -- location manager
-    var currentLocation: CLLocation!
-    let locManager = CLLocationManager()
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
-    
-    // MARK: -- Buttons
-    var buttonCommentSubmit: UIButton!
-    
-    // MARK: -- Keyboard Tool Bar
-    var inputToolbar: CreatePinInputToolbar!
-    
-    //MARK: -- Emoji View
-    var emojiView: StickerPickView!
-    var isShowingEmoji: Bool = false
-    
-    // MARK: -- uiview containers to hold two toolbars
-    var uiviewSelectLocation: UIView!
-    var uiviewMoreOptions: UIView!
-    
-    var labelCreateCommentPinTitle: UILabel! // Create comment pin title
-    var labelCommentPinMoreOptions: UILabel! // Title of comment pin options when creating
-    
-    var buttonAnonymous: UIButton!
-    var anonymous = false
-    
-    var uiviewDuration: UIView!
-    var uiviewInterRadius: UIView!
-    var uiviewPinPromot: UIView!
-    
-    var buttonBack: UIButton!
-    
-    var btnDoAnony: UIButton!
-    var switchAnony: UISwitch!
-
+class CreateCommentPinViewController: CreatePinBaseViewController {
     
     override func viewDidLoad() {
+        pinType = .comment
         super.viewDidLoad()
-        loadCreateCommentPinView()
-        
-        addObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewCreateCommentPin.alpha = 1.0
+            self.view.alpha = 1.0
         }, completion: {(complete) in
-            self.textViewForCommentPin.becomeFirstResponder()
+            self.textviewDescrip.becomeFirstResponder()
         })
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = locManager.location
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
+    override func setupBaseUI() {
+        super.setupBaseUI()
+        
+        imgTitle.image = #imageLiteral(resourceName: "commentPinTitleImage")
+        lblTitle.text = "Create Comment Pin"
+        btnSubmit.backgroundColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 0.65)
+        switchAnony.onTintColor = UIColor(red: 182/255, green: 159/255, blue: 202/255, alpha: 1)
+
+        textviewDescrip.placeHolder = "Type a comment..."
+        textviewDescrip.alpha = 1
     }
     
-    func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+    override func loadTable() {
+        super.loadTable()
+        self.tblPinOptions.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
     }
-    
-    func keyboardWillShow(_ notification:Notification) {
-        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        inputToolbar.alpha = 1
-        UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
+
+    override func switchToMoreOptions() {
+        super.switchToMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
             Void in
-            self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
-        }, completion: nil)
-    }
-    
-    func keyboardWillHide(_ notification:Notification) {
-        if(!isShowingEmoji){
-            UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
-                Void in
-                self.inputToolbar.frame.origin.y = screenHeight - 100
-                self.inputToolbar.alpha = 0
-                self.view.layoutIfNeeded()
-            }, completion: nil)
+            self.textviewDescrip.alpha = 0
+            self.tblPinOptions.alpha = 0
+            self.tblMoreOptions.alpha = 1
+            self.lblTitle.text = "More Options"
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
+        }) { (_) in
+            self.showAlert(title: "This feature is coming soon in the next version!", message: "")
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
         }
     }
     
-    func randomLocation() -> CLLocationCoordinate2D {
-        let lat = currentLocation2D.latitude
-        let lon = currentLocation2D.longitude
-        let random_lat = Double.random(min: -0.01, max: 0.01)
-        let random_lon = Double.random(min: -0.01, max: 0.01)
-        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
+    override func leaveMoreOptions() {
+        super.leaveMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.textviewDescrip.alpha = 1
+            self.tblPinOptions.alpha = 1
+            self.lblTitle.text = "Create Comment Pin"
+            self.tblMoreOptions.alpha = 0
+            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
+        })
+    }
+    
+//    func textViewDidEndEditing(_ textView: UITextView) {
+//        print("textViewDidEndEditing")
+//        updateSubmitButton()
+//    }
+//    
+//    fileprivate func updateSubmitButton() {
+//        boolBtnSubmitEnabled = (textviewDescrip.text?.characters.count)! > 0
+//        setSubmitButton(withTitle: btnSubmit.currentTitle!, isEnabled: boolBtnSubmitEnabled)
+//    }
+    
+    override func actionSubmit() {
+        let postSingleComment = FaeMap()
+        
+        var submitLatitude = selectedLatitude
+        var submitLongitude = selectedLongitude
+        
+        let commentContent = textviewDescrip.text
+        
+        if strSelectedLocation == nil || strSelectedLocation == "" {
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
+        }
+        
+        if commentContent == "" {
+            return
+        }
+        
+        postSingleComment.whereKey("geo_latitude", value: submitLatitude)
+        postSingleComment.whereKey("geo_longitude", value: submitLongitude)
+        postSingleComment.whereKey("content", value: commentContent)
+        postSingleComment.whereKey("interaction_radius", value: "99999999")
+        postSingleComment.whereKey("duration", value: "180")
+        postSingleComment.whereKey("anonymous", value: "\(switchAnony.isOn)")
+        
+        postSingleComment.postPin(type: "comment") {(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
+            if let getMessage = message as? NSDictionary{
+                print("Have Post Comment")
+                if let getMessageID = getMessage["comment_id"] {
+                    let getJustPostedComment = FaeMap()
+                    getJustPostedComment.getPin(type: "comment", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
+                        print("Have got comment_id of this posted comment")
+                        let latDouble = Double(submitLatitude!)
+                        let longDouble = Double(submitLongitude!)
+                        let lat = CLLocationDegrees(latDouble!)
+                        let long = CLLocationDegrees(longDouble!)
+                        self.dismiss(animated: false, completion: {
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "comment", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
+                        })
+                    }
+                }
+                else {
+                    print("Cannot get comment_id of this posted comment")
+                }
+            }
+            else {
+                print("Post Comment Fail")
+            }
+        }
+        print("sfasd")
     }
 }

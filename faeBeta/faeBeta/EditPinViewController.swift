@@ -18,10 +18,6 @@ class EditPinViewController: UIViewController {
     
     weak var delegate: EditPinViewControllerDelegate?
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let colorPlaceHolder = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
-    
     //Base View
     var buttonCancel: UIButton!
     var buttonSave: UIButton!
@@ -123,7 +119,7 @@ class EditPinViewController: UIViewController {
         inputToolbar.alpha = 1
         UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
             Void in
-            self.inputToolbar.frame.origin.y = self.screenHeight - keyboardHeight - 100
+            self.inputToolbar.frame.origin.y = screenHeight - keyboardHeight - 100
         }, completion: nil)
     }
     
@@ -131,7 +127,7 @@ class EditPinViewController: UIViewController {
         if(!isShowingEmoji){
             UIView.animate(withDuration: 0.3,delay: 0, options: .curveLinear, animations:{
                 Void in
-                self.inputToolbar.frame.origin.y = self.screenHeight - 100
+                self.inputToolbar.frame.origin.y = screenHeight - 100
                 self.inputToolbar.alpha = 0
                 self.view.layoutIfNeeded()
             }, completion: nil)
@@ -141,8 +137,8 @@ class EditPinViewController: UIViewController {
     func showEmojiViewAnimated(animated: Bool) {
         if(animated){
             UIView.animate(withDuration: 0.3, animations: {
-                self.inputToolbar.frame.origin.y = self.screenHeight - 271 - 100
-                self.emojiView.frame.origin.y = self.screenHeight - 271
+                self.inputToolbar.frame.origin.y = screenHeight - 271 - 100
+                self.emojiView.frame.origin.y = screenHeight - 271
             }, completion: { (Completed) in
                 self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "keyboardIconFilledRed"), for: UIControlState())
             })
@@ -156,9 +152,9 @@ class EditPinViewController: UIViewController {
     func hideEmojiViewAnimated(animated: Bool) {
         if(animated){
             UIView.animate(withDuration: 0.3, animations: {
-                self.inputToolbar.frame.origin.y = self.screenHeight - 100
+                self.inputToolbar.frame.origin.y = screenHeight - 100
                 self.inputToolbar.alpha = 0
-                self.emojiView.frame.origin.y = self.screenHeight
+                self.emojiView.frame.origin.y = screenHeight
             }, completion: { (Completed) in
                 self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
             })

@@ -22,7 +22,7 @@ class FAEAlertController: UIAlertController {
         //set background color to white
         let subview = self.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
-        alertContentView.backgroundColor = UIColor.white
+        alertContentView.backgroundColor = .white
         alertContentView.layer.cornerRadius = 15
         
         //update the title font

@@ -9,11 +9,9 @@
 import UIKit
 import IDMPhotoBrowser
 
-extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionViewDataSource, CMPCellDelegate,
-                                         UIScrollViewDelegate {
+extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionViewDataSource, CMPCellDelegate {
     
     override func viewDidLayoutSubviews() {
-        print("[viewDidLayoutSubviews]")
         super.viewDidLayoutSubviews()
         var insets = self.collectionViewMedia.contentInset
         insets.left = (screenWidth - 200) / 2
@@ -53,7 +51,7 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
     func deleteCell(cell: CMPCollectionViewCell) {
         if let indexPath = collectionViewMedia.indexPath(for: cell) {
             if selectedMediaArray.count <= 6 && indexPath.row >= selectedMediaArray.count - 2 {
-                buttonAddMedia.alpha = 1
+                btnAddMedia.alpha = 1
             }
             selectedMediaArray.remove(at: indexPath.row)
             collectionViewMedia.deleteItems(at: [indexPath])
@@ -62,14 +60,13 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
             return
         }
         if selectedMediaArray.count == 0 {
-            buttonTakeMedia.alpha = 1
-            buttonSelectMedia.alpha = 1
-            buttonAddMedia.alpha = 0
+            btnTakeMedia.alpha = 1
+            btnSelectMedia.alpha = 1
+            btnAddMedia.alpha = 0
             collectionViewMedia.isHidden = true
-            buttonMediaSubmit.isEnabled = false
-            buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 0.65)
-            buttonMediaSubmit.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0.65), for: UIControlState())
-            buttonMediaSubmit.setTitleColor(UIColor.lightGray, for: .highlighted)
+            boolBtnSubmitEnabled = false
+            setSubmitButton(withTitle: btnSubmit.currentTitle!, isEnabled: false)
+            btnSubmit.setTitleColor(UIColor.lightGray, for: .highlighted)
         }
     }
     
@@ -93,13 +90,13 @@ extension CreateMomentPinViewController: UICollectionViewDelegate, UICollectionV
             if index == selectedMediaArray.count - 1 {
                 UIView.animate(withDuration: 0.4) {
                     if self.selectedMediaArray.count != 6 {
-                        self.buttonAddMedia.alpha = 1
+                        self.btnAddMedia.alpha = 1
                     }
                 }
             }
             else {
                 UIView.animate(withDuration: 0.1) {
-                    self.buttonAddMedia.alpha = 0
+                    self.btnAddMedia.alpha = 0
                 }
             }
         }

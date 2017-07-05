@@ -47,7 +47,9 @@ extension EditMoreOptionsViewController {
         selectLocationVC.currentLocation2D = pinGeoLocation
         if pinType == "media"{
             selectLocationVC.pinType = "moment"
-        }else {
+        } else if pinType == "chat_room"{
+            selectLocationVC.pinType = "chat"
+        } else {
             selectLocationVC.pinType = pinType
         }
         self.present(selectLocationVC, animated: false, completion: nil)

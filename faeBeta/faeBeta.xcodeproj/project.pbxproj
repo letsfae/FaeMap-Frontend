@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
+		18FCF3061F05907500467423 /* CreatePinBaseTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */; };
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
@@ -319,7 +320,7 @@
 		DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C941DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift */; };
 		DCEB8C971DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCEB8C951DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib */; };
 		DCEB8C9A1DEE65CA00B516E9 /* CreatePinOptionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */; };
-		DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */; };
+		DCEB8C9C1DEE66F100B516E9 /* CreateChatPinTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9B1DEE66F100B516E9 /* CreateChatPinTableView.swift */; };
 		DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
@@ -327,6 +328,7 @@
 
 /* Begin PBXFileReference section */
 		189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesCell.swift; sourceTree = "<group>"; };
+		18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinBaseTableCtrl.swift; sourceTree = "<group>"; };
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
@@ -666,7 +668,7 @@
 		DCEB8C941DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		DCEB8C951DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreatePinOptionsTableViewCell.xib; sourceTree = "<group>"; };
 		DCEB8C991DEE65CA00B516E9 /* CreatePinOptionsTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinOptionsTableView.swift; sourceTree = "<group>"; };
-		DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CreateChatPinViewController+TableViewDelegate.swift"; sourceTree = "<group>"; };
+		DCEB8C9B1DEE66F100B516E9 /* CreateChatPinTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChatPinTableView.swift; sourceTree = "<group>"; };
 		DCEB8C9E1DEEB28700B516E9 /* CreatePinTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinTextView.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
@@ -1532,7 +1534,7 @@
 			isa = PBXGroup;
 			children = (
 				DCEB8C8E1DED7B7700B516E9 /* CreateChatPinViewController.swift */,
-				DCEB8C9B1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift */,
+				DCEB8C9B1DEE66F100B516E9 /* CreateChatPinTableView.swift */,
 			);
 			name = CreateChatPin;
 			sourceTree = "<group>";
@@ -1550,6 +1552,7 @@
 			isa = PBXGroup;
 			children = (
 				DCEB8C8C1DED633500B516E9 /* CreatePinBaseViewController.swift */,
+				18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */,
 				DC79E1551DF7C6D300DA20E0 /* CreatePinInputToolbar */,
 				DCEB8C9D1DEEB26E00B516E9 /* CreatePinTextView */,
 				DCEB8C911DEE3BE600B516E9 /* CreatePinOptionsTableView */,
@@ -1811,7 +1814,8 @@
 				853F27801E26C3CF00DD80DF /* CMPHandleDelegate.swift in Sources */,
 				B85FFE931EA84CEB0079D1A7 /* CollectionsBoardViewController.swift in Sources */,
 				853F277E1E26B12B00DD80DF /* CCPToolBarDelegate.swift in Sources */,
-				DCEB8C9C1DEE66F100B516E9 /* CreateChatPinViewController+TableViewDelegate.swift in Sources */,
+				18FCF3061F05907500467423 /* CreatePinBaseTableCtrl.swift in Sources */,
+				DCEB8C9C1DEE66F100B516E9 /* CreateChatPinTableView.swift in Sources */,
 				B85FE6D01DB8786C00BB8F6A /* CCPSelectLocation.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,

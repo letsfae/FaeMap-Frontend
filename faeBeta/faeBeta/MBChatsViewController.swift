@@ -7,14 +7,19 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var uiviewNavBar: UIView!
     var uiviewAllCom: UIView!
-    var tableChats: UITableView!
+    var tblChats: UITableView!
     var btnChatSpots: UIButton!
     var btnBubbles: UIButton!
     var uiviewRedUnderLine: UIView!
+    var mbChat = [MBSocialStruct]()
+    
+    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
+    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
     
     enum TableMode: Int {
         case chatSpots = 0
@@ -28,6 +33,8 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         loadNavBar()
         loadViewContent()
         loadTable()
+        
+        getMBSocialInfo(time: DispatchTime.now(), completion: nil)
     }
     
     fileprivate func loadNavBar() {
@@ -95,7 +102,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.uiviewRedUnderLine.center.x = targetCenter
         }), completion: { _ in
         })
-        tableChats.reloadData()
+        tblChats.reloadData()
     }
     
     fileprivate func loadViewContent() {
@@ -121,20 +128,19 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     fileprivate func loadTable() {
-        tableChats = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
-        tableChats.backgroundColor = .white
-        tableChats.register(MBChatSpotsCell.self, forCellReuseIdentifier: "mbChatSpotsCell")
-        tableChats.register(MBChatBubblesCell.self, forCellReuseIdentifier: "mbChatBubblesCell")
-        tableChats.delegate = self
-        tableChats.dataSource = self
+        tblChats = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: UITableViewStyle.plain)
+        tblChats.backgroundColor = .white
+        tblChats.register(MBChatSpotsCell.self, forCellReuseIdentifier: "mbChatSpotsCell")
+        tblChats.register(MBChatBubblesCell.self, forCellReuseIdentifier: "mbChatBubblesCell")
+        tblChats.delegate = self
+        tblChats.dataSource = self
         
-        tableChats.separatorStyle = .none
+        tblChats.separatorStyle = .none
 
-        self.view.addSubview(tableChats)
+        self.view.addSubview(tblChats)
     }
     
     func backToMapBoard(_ sender: UIButton) {
-//        self.dismiss(animated: false, completion: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -149,9 +155,8 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         return 1
     }
     
-    let imgChatAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar"]
-    let lblChatTitleTxt: Array = ["University of SoCal Beach Chat", "University of SoCal Beach Chat", "University of SoCal Beach Chat"]
-    let lblChatContTxt: Array = ["Once upon a time, there was a mountain top bxagagfa", "Once upon a time, there was a mountain top bxagagfa", "Once upon a time, there was a mountain top bxagagfa"]
+//    let lblChatTitleTxt: Array = ["University of SoCal Beach Chat", "University of SoCal Beach Chat", "University of SoCal Beach Chat"]
+//    let lblChatContTxt: Array = ["Once upon a time, there was a mountain top bxagagfa", "Once upon a time, there was a mountain top bxagagfa", "Once upon a time, there was a mountain top bxagagfa"]
     
     let imgBubbleAvatarArr: Array = ["default_Avatar", "default_Avatar", "default_Avatar", "default_Avatar"]
     let lblBubbleTitleTxt: Array = ["Anyone seen my dog?", "Anyone seen my dog?", "Anyone seen my dog?", "Anyone seen my dog?"]
@@ -159,7 +164,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableMode == .chatSpots {
-            return lblChatTitleTxt.count
+            return mbChat.count
         }
         return lblBubbleTitleTxt.count
     }
@@ -167,17 +172,83 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableMode == .chatSpots {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbChatSpotsCell", for: indexPath) as! MBChatSpotsCell
-            cell.imgAvatar.image = UIImage(named: imgChatAvatarArr[indexPath.row])
-            cell.lblChatTitle?.text = lblChatTitleTxt[indexPath.row]
-            cell.lblChatCont?.text = lblChatContTxt[indexPath.row]
+            let chat = mbChat[indexPath.row]
+            cell.imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
+            cell.lblChatTitle?.text = chat.chatTitle
+            cell.lblChatCont?.text = chat.chatLastMesg
             return cell
         } else if tableMode == .bubbles {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbChatBubblesCell", for: indexPath) as! MBChatBubblesCell
-            cell.imgAvatar.image = UIImage(named: imgBubbleAvatarArr[indexPath.row])
+            cell.imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
             cell.lblBubbleTitle?.text = lblBubbleTitleTxt[indexPath.row]
             cell.lblBubbleTime?.text = lblBubbleTimeTxt[indexPath.row]
             return cell
         }
         return UITableViewCell()
+    }
+    
+    func getMBSocialInfo(time: DispatchTime, completion: ((Double) -> ())?) {
+        let mbChatList = FaeMap()
+        mbChatList.whereKey("geo_latitude", value: "\(currentLatitude)")
+        mbChatList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        mbChatList.whereKey("radius", value: "9999999")
+        mbChatList.whereKey("type", value: "chat_room")
+        mbChatList.whereKey("in_duration", value: "false")
+        mbChatList.whereKey("max_count", value: "100")
+        mbChatList.getMapInformation { (status: Int, message: Any?) in
+            
+            if status / 100 != 2 || message == nil {
+                print("[loadMBChatInfo] status/100 != 2")
+                
+                return
+            }
+            let chatInfoJSON = JSON(message!)
+            guard let chatInfoJsonArray = chatInfoJSON.array else {
+                print("[loadMBChatInfo] fail to parse mapboard chat info")
+                return
+            }
+            if chatInfoJsonArray.count <= 0 {
+                
+                print("[loadMBChatInfo] array is nil")
+                return
+            }
+            
+            self.processMBInfo(results: chatInfoJsonArray)
+            self.mbChat.sort { $0.pinId > $1.pinId }
+            
+            print(self.mbChat)
+            
+            self.tblChats.reloadData()
+            let timeDiff = DispatchTime.now().uptimeNanoseconds - time.uptimeNanoseconds
+            completion?(Double(timeDiff))
+        }
+    }
+    
+    fileprivate func processMBInfo(results: [JSON]) {
+        for result in results {
+            let mbChatData = MBSocialStruct(json: result)
+            if mbChat.contains(mbChatData) {
+//                if let idx = self.mbChat.index(of: mbChatData) {
+//                    if mbChat[idx].likeCount != mbChatData.likeCount {
+//                        mbChat[idx].likeCount = mbChatData.likeCount
+//                    }
+//                    if mbChat[idx].commentCount != mbChatData.commentCount {
+//                        mbChat[idx].commentCount = mbChatData.commentCount
+//                    }
+//                    if mbChat[idx].feelingArray != mbChatData.feelingArray {
+//                        mbChat[idx].feelingArray = mbChatData.feelingArray
+//                    }
+//                    if mbChat[idx].attributedText != mbChatData.attributedText {
+//                        mbChat[idx].attributedText = mbChatData.attributedText
+//                    }
+//                    if mbChat[idx].fileIdArray != mbChatData.fileIdArray {
+//                        mbChat[idx].fileIdArray = mbChatData.fileIdArray
+//                    }
+//                }
+                continue
+            } else {
+                mbChat.append(mbChatData)
+            }
+        }
     }
 }
