@@ -25,7 +25,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     weak var delegate: LeftSlidingMenuDelegate?
     
     var uiViewLeftWindow: UIView!
-    var buttonBackground: UIButton!
+    var btnBackground: UIButton!
     var imageLeftSlideWindowUp: UIImageView!
     var imageLeftSlideWindowMiddle: UIImageView!
     var imageAvatar: UIImageView!
@@ -70,19 +70,19 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.3, animations: {
-            self.buttonBackground.alpha = 1
-            self.tableLeftSlideWindow.center.x += 290
-            self.backgroundColorViewTop.center.x += 290
-            self.backgroundColorViewDown.center.x += 290
+            self.btnBackground.alpha = 1
+            self.tableLeftSlideWindow.frame.origin.x = 0
+            self.backgroundColorViewTop.frame.origin.x = 0
+            self.backgroundColorViewDown.frame.origin.x = 0
         }, completion: nil)
     }
     
     func loadLeftWindow() {
-        buttonBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        buttonBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.7)
-        buttonBackground.addTarget(self, action: #selector(actionCloseMenu(_:)), for: .touchUpInside)
-        view.addSubview(buttonBackground)
-        buttonBackground.alpha = 0
+        btnBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        btnBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.7)
+        btnBackground.addTarget(self, action: #selector(actionCloseMenu(_:)), for: .touchUpInside)
+        view.addSubview(btnBackground)
+        btnBackground.alpha = 0
         
         backgroundColorViewTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight / 2))
         backgroundColorViewTop.backgroundColor = UIColor.faeAppRedColor()
@@ -177,28 +177,28 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         if indexPath.row == 0 {
             tableSelections = .mapBoard
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
-            actionCloseMenu(buttonBackground)
+            actionCloseMenu(btnBackground)
         } else if indexPath.row == 1 {
             tableSelections = .goInvisible
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
             invisibleSwitch(cell.switchRight)
         } else if indexPath.row == 3 {
             tableSelections = .collections
-            actionCloseMenu(buttonBackground)
+            actionCloseMenu(btnBackground)
         } else if indexPath.row == 5 {
             tableSelections = .moodAvatar
-            actionCloseMenu(buttonBackground)
+            actionCloseMenu(btnBackground)
         } else if indexPath.row == 6 {
             let logOut = FaeUser()
             logOut.logOut { (status: Int?, _: Any?) in
                 if status! / 100 == 2 {
                     print("[LeftMenu-LogOut] Success")
                     self.tableSelections = .logOut
-                    self.actionCloseMenu(self.buttonBackground)
+                    self.actionCloseMenu(self.btnBackground)
                 } else {
                     print("[LeftMenu-LogOut] Failure")
                     self.tableSelections = .logOut
-                    self.actionCloseMenu(self.buttonBackground)
+                    self.actionCloseMenu(self.btnBackground)
                 }
             }
         }
@@ -229,7 +229,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.tableLeftSlideWindow.frame.origin.x = self.sizeTo
                     self.backgroundColorViewTop.frame.origin.x = self.sizeTo
                     self.backgroundColorViewDown.frame.origin.x = self.sizeTo
-                    self.buttonBackground.alpha = 0
+                    self.btnBackground.alpha = 0
                 }, completion: { (_: Bool) in
                     self.dismiss(animated: false, completion: {
                         self.delegate?.reloadSelfPosition()
@@ -240,7 +240,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.tableLeftSlideWindow.frame.origin.x = self.sizeFrom
                     self.backgroundColorViewTop.frame.origin.x = self.sizeFrom
                     self.backgroundColorViewDown.frame.origin.x = self.sizeFrom
-                    self.buttonBackground.alpha = 1
+                    self.btnBackground.alpha = 1
                 })
             }
         } else {
@@ -249,7 +249,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 tableLeftSlideWindow.frame.origin.x = location.x - (290 + space)
                 backgroundColorViewTop.frame.origin.x = location.x - (290 + space)
                 backgroundColorViewDown.frame.origin.x = location.x - (290 + space)
-                buttonBackground.alpha = (location.x - space) / 290
+                btnBackground.alpha = (location.x - space) / 290
                 percent = Double((end - location.x) / 290)
             }
             
@@ -278,7 +278,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func actionCloseMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.buttonBackground.alpha = 0
+            self.btnBackground.alpha = 0
             self.tableLeftSlideWindow.center.x -= 290
             self.backgroundColorViewTop.center.x -= 290
             self.backgroundColorViewDown.center.x -= 290
@@ -327,12 +327,12 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func actionJumpToMainPage(_ sender: UIButton) {
         tableSelections = .myFaeMainPage
-        actionCloseMenu(buttonBackground)
+        actionCloseMenu(btnBackground)
     }
     
     func mapBoardSwitch(_ sender: UISwitch) {
         tableSelections = .mapBoard
-        actionCloseMenu(buttonBackground)
+        actionCloseMenu(btnBackground)
     }
     func invisibleSwitch(_ sender: UISwitch) {
         let switchToInvisible = FaeUser()
@@ -346,7 +346,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to invisible")
-                    self.actionCloseMenu(self.buttonBackground)
+                    self.actionCloseMenu(self.btnBackground)
                 } else {
                     print("Fail to switch to invisible")
                 }

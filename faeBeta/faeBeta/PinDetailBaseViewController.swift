@@ -222,7 +222,7 @@ class PinDetailBaseViewController: UIViewController {
     var directReplyFromUser = false // if true, animates cell right above input tool bar, or to top
     var btnSelectedFeeling: UIButton?
     var previousIndex: Int = -1
-    var boolDetailShrinked = true
+    var boolFullPinView = false
     var strTextViewText = ""
     var dictAnonymous = [Int: String]()
     var lblChatRoomTitle: UILabel!

@@ -29,6 +29,7 @@ extension FaeMapViewController {
             faeUserPins[i]?.valid = false
             faeUserPins[i] = nil
         }
+        faeUserPins.removeAll(keepingCapacity: false)
         boolCanUpdateUserPin = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)

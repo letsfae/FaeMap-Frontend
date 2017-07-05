@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class FaeUserPin: NSObject {
     
-    static var arrAntiColliCoor = [CLLocationCoordinate2D](repeating: CLLocationCoordinate2DMake(0, 0), count: 5)
+//    static var arrAntiColliCoor = [CLLocationCoordinate2D](repeating: CLLocationCoordinate2DMake(0, 0), count: 5)
     
     var userIndex = -1
     
@@ -26,6 +26,18 @@ class FaeUserPin: NSObject {
     var iconImage = UIImage() // user's map avatar icon image
     var mapView: GMSMapView! // mapView assgined to user pin. marker.map, can be set to nil
     var index = 0 // index of five random coordinates of user pin
+    
+    var position = CLLocationCoordinate2DMake(0, 0) {
+        didSet {
+//            guard self.marker != nil else { return }
+//            if self.mapView.projection.contains(self.position) {
+//                self.marker?.position = self.position
+//            } else {
+//
+//            }
+        }
+    }
+    
     var pause = false {
         didSet {
             // invalidate the timer when need to stop updating the random locations of user pin
@@ -37,7 +49,10 @@ class FaeUserPin: NSObject {
             } else {
                 // timer interval is between 5s to 20s
                 let time = Double.random(min: 5, max: 20)
-                self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+//                self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+                DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+                    self.updatePositionAndTimer()
+                })
             }
         }
     }
@@ -45,7 +60,10 @@ class FaeUserPin: NSObject {
         didSet {
             if valid {
                 let time = Double.random(min: 5, max: 20)
-                self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+//                self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+                DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+                    self.updatePositionAndTimer()
+                })
             } else {
                 self.marker?.map = nil
                 if self.timer != nil {
@@ -79,10 +97,14 @@ class FaeUserPin: NSObject {
         }
         
         // user's map avatar, index starts from 1
-        if let image = UIImage(named: "mapAvatar_\(miniAvatar + 1)") {
-            self.iconImage = image
+//        if let image = UIImage(named: "mapAvatar_\(miniAvatar + 1)") {
+//            self.iconImage = image
+//        }
+        guard Mood.avatars[miniAvatar] != nil else {
+            print("[init] map avatar image is nil")
+            return
         }
-        self.icon.image = iconImage
+        self.icon.image = Mood.avatars[miniAvatar]
         self.icon.contentMode = .scaleAspectFit
         
         self.marker = GMSMarker()
@@ -94,9 +116,9 @@ class FaeUserPin: NSObject {
     func firstLoading() {
         self.marker?.userData = [1: self] // warning: if dealloc is not done properly, circular reference will occur. right way: using "weak"
         
-        self.marker?.position = self.positions[self.index]
+        self.position = self.positions[self.index]
         self.marker?.map = self.mapView
-        
+        self.marker?.position = self.position
         self.icon.alpha = 0
         self.marker?.iconView = icon
         
@@ -106,13 +128,20 @@ class FaeUserPin: NSObject {
         UIView.animate(withDuration: 1, delay: delay, animations: {
             self.icon.alpha = 1
         }, completion: { _ in
+            guard Mood.avatars[self.miniAvatar] != nil else {
+                print("[firstLoading] map avatar image is nil")
+                return
+            }
             self.marker?.iconView = nil
-            self.marker?.icon = self.iconImage
+            self.marker?.icon = Mood.avatars[self.miniAvatar]
             self.marker?.tracksViewChanges = false
         })
         
         let time = Double.random(min: 5, max: 20)
-        self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+//                self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+            self.updatePositionAndTimer()
+        })
         
         self.index += 1
     }
@@ -130,23 +159,33 @@ class FaeUserPin: NSObject {
         UIView.animate(withDuration: 0.3, delay: 0, animations: {
             self.icon.alpha = 0
         }, completion: { _ in
-            self.marker?.tracksViewChanges = false
-            
             if self.index >= self.positions.count {
                 return
             }
             self.marker?.map = nil
             self.marker = nil
-            self.marker = GMSMarker(position: self.positions[self.index])
+            self.marker = GMSMarker()
+            self.position = self.positions[self.index]
+            self.marker?.position = self.position
             self.marker?.userData = [1: self]
             self.marker?.iconView = self.icon
             if self.valid {
+                guard self.mapView != nil else { return }
+                guard self.mapView.projection.contains(self.position) else {
+                    print("[updatePositionAndTimer] user: \(self.userId) not in camera")
+                    return
+                }
                 self.marker?.map = self.mapView
                 UIView.animate(withDuration: 1, delay: 0.1, animations: {
                     self.icon.alpha = 1
                 }, completion: { _ in
+                    self.marker?.tracksViewChanges = false
                     self.marker?.iconView = nil
-                    self.marker?.icon = self.iconImage
+                    guard Mood.avatars[self.miniAvatar] != nil else {
+                        print("[firstLoading] map avatar image is nil")
+                        return
+                    }
+                    self.marker?.icon = Mood.avatars[self.miniAvatar]
                 })
             } else {
                 if self.timer != nil {
@@ -160,15 +199,10 @@ class FaeUserPin: NSObject {
         
         if !pause || valid {
             let time = Double.random(min: 5, max: 20)
-            self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+                self.updatePositionAndTimer()
+            })
+//            self.timer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(self.updatePositionAndTimer), userInfo: nil, repeats: false)
         }
-    }
-    
-    func antiCollisionTest() -> Bool {
-        for _ in self.positions {
-            
-        }
-        
-        return false
     }
 }

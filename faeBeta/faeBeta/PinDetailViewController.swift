@@ -12,18 +12,23 @@ import CoreLocation
 import RealmSwift
 import GoogleMaps
 
+/*
+ To see the variables defined for this class, check its super class: PinDetailBaseViewController.swift
+ */
 class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, OpenedPinListViewControllerDelegate, PinTalkTalkCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.clear
+        view.backgroundColor = .clear
+        
+        // modalPresentationStyle defines that this view controller is over the FaeMapViewController,
+        // so that user can see the main map via half pin detail view
         modalPresentationStyle = .overCurrentContext
+        
         loadPinDetailWindow()
-        loadFromCollections()
         initPinBasicInfo()
         getSeveralInfo()
-        pullDownToRefresh()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -31,10 +36,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         
         switch enterMode {
         case .collections:
-            self.checkCurUserFeeling()
+            checkCurrentUserChosenFeeling()
             break
         case .mainMap:
-            self.animatePinCtrlBtnsAndFeeling()
+            animatePinCtrlBtnsAndFeeling()
             break
         }
         
@@ -48,7 +53,9 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         UIApplication.shared.statusBarStyle = .default
     }
     
+    // init some basics of a specific pin, like title text, pin icon, etc
     fileprivate func initPinBasicInfo() {
+        // add the user id of the owner of this pin to this array for display tab "People"
         arrNonDupUserId = [PinDetailViewController.pinUserId]
         
         switch PinDetailViewController.pinTypeEnum {
@@ -65,67 +72,28 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             uiviewFeelingBar.isHidden = true
             break
         case .place:
-            self.loadPlaceDetail()
             break
         }
         
-        self.selectPinState()
-        self.checkPinStatus() // check pin status is for social pin
-        self.addObservers() // add input toolbar keyboard observers
+        selectPinIcon()
+        checkPinStatus() // check pin status is for social pin
+        addObservers() // add input toolbar keyboard observers
     }
     
-    fileprivate func pullDownToRefresh() {
+    // add pull down refresh feature for tblMain (tableView type)
+    fileprivate func addPullDownToRefresh() {
         tblMain.addPullRefresh { [unowned self] in
             self.getSeveralInfo()
+            
+            // unfinished here
+            // following line should be called after get pin info
             self.tblMain.stopPullRefreshEver()
         }
     }
     
-    fileprivate func loadFromCollections() {
-        guard enterMode == .collections else { return }
-        
-        boolDetailShrinked = false
-        uiviewFeelingBar.isHidden = true
-        btnNextPin.isHidden = true
-        btnPrevPin.isHidden = true
-        imgPinIcon.isHidden = true
-        btnGrayBackToMap.isHidden = true
-        uiviewNavBar.rightBtn.isHidden = true
-        
-        txtviewPinDetail.isScrollEnabled = false
-        tblMain.isScrollEnabled = true
-        btnToFullPin.isHidden = true
-        uiviewToFullDragBtnSub.isHidden = true
-        
-        let isChatRoom = PinDetailViewController.pinTypeEnum == .chat_room
-        let toolbarHeight = isChatRoom ? 0 : uiviewInputToolBarSub.frame.size.height
-        uiviewMain.frame.size.height = screenHeight - toolbarHeight
-        tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
-        uiviewInputToolBarSub.frame.origin.x = 0
-        uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
-        uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
-        uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
-        
-        let txtViewWidth = txtviewPinDetail.frame.size.width
-        guard let font = txtviewPinDetail.font else { return }
-        let textViewHeight: CGFloat = txtviewPinDetail.text.height(withConstrainedWidth: txtViewWidth, font: font)
-        if PinDetailViewController.pinTypeEnum == .media {
-            txtviewPinDetail.alpha = 1
-            txtviewPinDetail.frame.size.height = textViewHeight
-            scrollViewMedia.frame.origin.y += textViewHeight
-            uiviewGrayMidBlock.center.y += 65 + textViewHeight
-            uiviewInteractBtnSub.center.y += 65 + textViewHeight
-            uiviewTblHeader.frame.size.height += 65 + textViewHeight
-        } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
-            let diffHeight: CGFloat = textViewHeight - 100
-            txtviewPinDetail.frame.size.height += diffHeight
-            uiviewGrayMidBlock.center.y += diffHeight
-            uiviewInteractBtnSub.center.y += diffHeight
-            uiviewTblHeader.frame.size.height += diffHeight
-        }
-    }
-    
-    func selectPinState() {
+    // select pin icon display in the very middle of the screen
+    // pinState: hot, read, hotRead, normal
+    fileprivate func selectPinIcon() {
         guard PinDetailViewController.pinTypeEnum != .place else { return }
         
         let pinState = PinDetailViewController.pinStateEnum
@@ -148,29 +116,91 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     // MARK: - Loading Components
-    func loadPinDetailWindow() {
+    
+    // load all the basic components of pin detail view (comment, media, chat_room, place)
+    fileprivate func loadPinDetailWindow() {
         
-        self.loadTransparentButtonBackToMap()
-        self.loadFeelingBar()
+        loadTransparentBtnBackToMap()
+        loadFeelingBar()
         
+        // uiviewMain is a transparent view to hold the main table
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 320))
         uiviewMain.layer.zPosition = 101
         uiviewMain.clipsToBounds = true
-        self.view.addSubview(uiviewMain)
+        view.addSubview(uiviewMain)
         uiviewMain.frame.origin.y = enterMode == .collections ? 0 : -screenHeight
         
-        self.loadNavigationBar()
-        self.loadPinCtrlButton()
-        self.loadingOtherParts()
-        self.loadTableHeader()
-        self.loadToolBar()
-        self.loadInputToolBar()
-        self.loadChatView()
+        loadNavigationBar()
+        loadPinCtrlButton()
+        loadingOtherParts()
+        loadTableHeader()
+        loadToolBar()
+        loadInputToolBar()
+        loadChatView()
         
         tblMain.tableHeaderView = PinDetailViewController.pinTypeEnum == .chat_room ? uiviewChatRoom : uiviewTblHeader
+        
+        loadFromCollections()
+        addPullDownToRefresh()
     }
     
-    fileprivate func loadTransparentButtonBackToMap() {
+    // setup all components to full pin view mode
+    fileprivate func loadFromCollections() {
+        guard enterMode == .collections else { return }
+        
+        boolFullPinView = true
+        btnGrayBackToMap.isHidden = true
+        btnNextPin.isHidden = true
+        btnPrevPin.isHidden = true
+        btnToFullPin.isHidden = true
+        imgPinIcon.isHidden = true
+        tblMain.isScrollEnabled = true
+        txtviewPinDetail.isScrollEnabled = false
+        uiviewFeelingBar.isHidden = true
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewToFullDragBtnSub.isHidden = true
+        
+        // hide input tool bar below the very bottom of the entire screen
+        let isChatRoom = PinDetailViewController.pinTypeEnum == .chat_room
+        let toolbarHeight = isChatRoom ? 0 : uiviewInputToolBarSub.frame.size.height
+        uiviewMain.frame.size.height = screenHeight - toolbarHeight
+        tblMain.frame.size.height = screenHeight - 65 - toolbarHeight
+        uiviewInputToolBarSub.frame.origin.x = 0
+        uiviewInputToolBarSub.frame.origin.y = screenHeight - uiviewInputToolBarSub.frame.size.height
+        uiviewTableSub.frame.size.height = screenHeight - 65 - toolbarHeight
+        uiviewToFullDragBtnSub.frame.origin.y = screenHeight - toolbarHeight
+        
+        // calculate the height of txtviewPinDetail based on the current width of it
+        // width is assigned according to the device
+        let txtViewWidth = txtviewPinDetail.frame.size.width
+        guard let font = txtviewPinDetail.font else { return }
+        let textViewHeight: CGFloat = txtviewPinDetail.text.height(withConstrainedWidth: txtViewWidth, font: font)
+        
+        // in media mode,
+        // txtviewPinDetail is hidden by setting its height to zero
+        // so, add the full height to all components associated with txtviewPinDetail
+        //
+        // in comment mode,
+        // txtviewPinDetail is with height of 100,
+        // add the difference of it
+        if PinDetailViewController.pinTypeEnum == .media {
+            txtviewPinDetail.alpha = 1
+            txtviewPinDetail.frame.size.height = textViewHeight
+            scrollViewMedia.frame.origin.y += textViewHeight
+            uiviewGrayMidBlock.center.y += 65 + textViewHeight
+            uiviewInteractBtnSub.center.y += 65 + textViewHeight
+            uiviewTblHeader.frame.size.height += 65 + textViewHeight
+        } else if PinDetailViewController.pinTypeEnum == .comment && textViewHeight > 100.0 {
+            let diffHeight: CGFloat = textViewHeight - 100
+            txtviewPinDetail.frame.size.height += diffHeight
+            uiviewGrayMidBlock.center.y += diffHeight
+            uiviewInteractBtnSub.center.y += diffHeight
+            uiviewTblHeader.frame.size.height += diffHeight
+        }
+    }
+    
+    // This button is located the very back of all view
+    fileprivate func loadTransparentBtnBackToMap() {
         btnGrayBackToMap = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         btnGrayBackToMap.backgroundColor = UIColor(red: 115 / 255, green: 115 / 255, blue: 115 / 255, alpha: 0.5)
         btnGrayBackToMap.alpha = 0
@@ -745,6 +775,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func loadPlaceDetail() {
+        guard PinDetailViewController.pinTypeEnum == .place else { return }
+        
         uiviewPlaceDetail = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 320))
         uiviewPlaceDetail.backgroundColor = UIColor.white
         uiviewMain.addSubview(uiviewPlaceDetail)
@@ -1358,7 +1390,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         // Back to half pin view
         if sender.tag == 1 && sender != btnPinComment {
             self.endEdit()
-            boolDetailShrinked = true
+            boolFullPinView = false
             btnPinComment.tag = 0
             btnToFullPin.tag = 0
             lblTxtPlaceholder.text = "Write a Comment..."
@@ -1397,7 +1429,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         /*
          -------------------- Below is to Full Pin View --------------------
          */
-        self.boolDetailShrinked = false
+        boolFullPinView = true
         if sender.tag == 1 && sender == btnPinComment {
             self.boolKeyboardShowed = true
             self.directReplyFromUser = false
@@ -1521,7 +1553,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // MARK: - API Calls
     
-    func getSeveralInfo() {
+    // get info of social pin, this func is not for place pin
+    fileprivate func getSeveralInfo() {
         if PinDetailViewController.pinTypeEnum != .chat_room {
             getPinAttributeNum()
             getPinInfo()
@@ -1752,7 +1785,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 attr.append(attr_1)
                 self.lblFeelings.attributedText = attr
                 
-                if self.tableMode == .feelings && !self.boolDetailShrinked {
+                if self.tableMode == .feelings && self.boolFullPinView {
                     self.tblMain.reloadData()
                     let indexPath = IndexPath(row: 0, section: 0)
                     self.tblMain.scrollToRow(at: indexPath, at: .bottom, animated: false)
@@ -1850,7 +1883,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                     PinDetailViewController.pinStatus = "hot"
                     PinDetailViewController.pinStateEnum = .hot
                 }
-                self.selectPinState()
+                self.selectPinIcon()
                 self.delegate?.changeIconImage()
             } else {
                 self.imgHotPin.isHidden = true
@@ -2117,7 +2150,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                     PinDetailViewController.pinStatus = "read"
                     PinDetailViewController.pinStateEnum = .read
                 }
-                self.selectPinState()
+                self.selectPinIcon()
                 self.delegate?.changeIconImage()
             } else {
                 print("Fail to read this pin!")
@@ -2794,28 +2827,28 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             self.btnPrevPin.frame = CGRect(x: 15, y: 477 , w: 52 , h: 52)
             self.btnNextPin.frame = CGRect(x: 347 , y: 477 , w: 52 , h: 52)
         }, completion: { _ in
-            self.checkCurUserFeeling()
+            self.checkCurrentUserChosenFeeling()
         })
     }
     
-    func checkCurUserFeeling() {
-        if PinDetailViewController.pinTypeEnum != .comment && PinDetailViewController.pinTypeEnum != .media {
-            return
-        }
+    func checkCurrentUserChosenFeeling() {
+        guard PinDetailViewController.pinTypeEnum == .comment
+           || PinDetailViewController.pinTypeEnum == .media else { return }
+        
         let getPinById = FaeMap()
         getPinById.getPin(type: "\(PinDetailViewController.pinTypeEnum)", pinId: self.strPinId) { (_: Int, message: Any?) in
             let pinInfoJSON = JSON(message!)
             // Has posted feeling or not
-            if let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int {
-                self.intChosenFeeling = chosenFeel
-                if chosenFeel < 5 && chosenFeel >= 0 {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        let xOffset = CGFloat(chosenFeel * 52 + 12)
-                        self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, w: 48, h: 48)
-                    })
-                }
-            } else {
+            guard let chosenFeel = pinInfoJSON["user_pin_operations"]["feeling"].int else {
                 self.intChosenFeeling = -1
+                return
+            }
+            self.intChosenFeeling = chosenFeel
+            if chosenFeel < 5 && chosenFeel >= 0 {
+                UIView.animate(withDuration: 0.2, animations: {
+                    let xOffset = CGFloat(chosenFeel * 52 + 12)
+                    self.btnFeelingArray[chosenFeel].frame = CGRect(x: xOffset, y: 3, w: 48, h: 48)
+                })
             }
         }
     }
