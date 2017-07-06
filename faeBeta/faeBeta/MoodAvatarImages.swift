@@ -14,6 +14,7 @@ struct Mood {
         for i in 1...36 {
             let image = UIImage(named: "mapAvatar_\(i)")
             array.append(image)
+            
         }
         return array
     }()
