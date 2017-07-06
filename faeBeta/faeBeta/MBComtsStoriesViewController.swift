@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-// import PullToRefreshSwift
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate, UIScrollViewDelegate {
     

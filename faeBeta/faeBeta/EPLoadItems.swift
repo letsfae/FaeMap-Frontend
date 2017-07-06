@@ -72,7 +72,7 @@ extension EditPinViewController {
         
         labelTextViewPlaceholder = UILabel(frame: CGRect(x: 2, y: 0, width: 171, height: 27))
         labelTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        labelTextViewPlaceholder.textColor = colorPlaceHolder
+        labelTextViewPlaceholder.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         labelTextViewPlaceholder.text = "Type a comment..."
         textViewUpdateComment.addSubview(labelTextViewPlaceholder)
         

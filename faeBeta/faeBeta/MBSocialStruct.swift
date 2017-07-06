@@ -5,8 +5,6 @@
 //  Created by vicky on 2017/5/18.
 //  Copyright © 2017年 Yue. All rights reserved.
 //
-
-import Foundation
 import SwiftyJSON
 import CoreLocation
 
@@ -33,6 +31,8 @@ struct MBSocialStruct {
     var fileIdArray = [Int]()
     var isLiked: Bool
     var feelingArray = [Int]()
+    var chatTitle: String
+    var chatLastMesg: String
     
     init(json: JSON) {
         self.pinId = json["pin_id"].intValue
@@ -74,6 +74,14 @@ struct MBSocialStruct {
         self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
                                                longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
         self.address = ""
+        
+        self.chatTitle = ""
+        self.chatLastMesg = ""
+        if self.type == "chat_room" {
+            self.chatTitle = json["pin_object"]["title"].stringValue
+            self.chatLastMesg = json["pin_object"]["last_message"].stringValue
+        }
+        
         self.isLiked = json["pin_object"]["user_pin_operations"]["is_liked"].boolValue
         self.status = "normal"
         if commentCount >= 10 || likeCount >= 15 {

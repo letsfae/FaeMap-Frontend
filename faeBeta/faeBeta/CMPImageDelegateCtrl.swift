@@ -17,7 +17,7 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
         newMedia.contentMode = .scaleAspectFill
         newMedia.center.x = screenWidth / 2
         newMedia.layer.cornerRadius = 20
-        uiviewCreateMediaPin.addSubview(newMedia)
+        self.view.addSubview(newMedia)
     }
     
     func sendImages(_ images: [UIImage]) {
@@ -26,23 +26,22 @@ extension CreateMomentPinViewController: SendMutipleImagesDelegate {
         }
         collectionViewMedia.isHidden = false
         collectionViewMedia.frame.origin.x = 0
-        buttonTakeMedia.alpha = 0
-        buttonSelectMedia.alpha = 0
-        buttonAddMedia.alpha = 1
-        buttonAddMedia.tag = 0
-        buttonAddMedia.transform = CGAffineTransform(rotationAngle: 0)
+        btnTakeMedia.alpha = 0
+        btnSelectMedia.alpha = 0
+        btnAddMedia.alpha = 1
+        btnAddMedia.tag = 0
+        btnAddMedia.transform = CGAffineTransform(rotationAngle: 0)
         collectionViewMedia.reloadData()
         collectionViewMedia.scrollToItem(at: IndexPath(row: selectedMediaArray.count-1, section: 0),
                                           at: .right,
                                           animated: false)
         if !selectedMediaArray.isEmpty {
             collectionViewMedia.isScrollEnabled = true
-            buttonMediaSubmit.isEnabled = true
-            buttonMediaSubmit.backgroundColor = UIColor(red: 149/255, green: 207/255, blue: 246/255, alpha: 1.0)
-            buttonMediaSubmit.setTitleColor(UIColor.white, for: UIControlState())
+            self.boolBtnSubmitEnabled = true
+            setSubmitButton(withTitle: btnSubmit.currentTitle!, isEnabled: true)
         }
         if selectedMediaArray.count == 6 {
-            buttonAddMedia.alpha = 0
+            btnAddMedia.alpha = 0
         }
         UIApplication.shared.statusBarStyle = .lightContent
     }

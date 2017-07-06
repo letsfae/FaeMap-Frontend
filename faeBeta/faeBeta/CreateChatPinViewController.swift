@@ -7,437 +7,314 @@
 //
 
 import UIKit
+import Photos
 
-class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationViewControllerDelegate, SendMutipleImagesDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    //MARK: - properties
-    private var createChatPinMainView: UIView!// this view contains the switch button, the round "add cover image" imageView, and the pin name textField
-    private var switchButtonContentView: UIView!
-    private var switchButtonBackgroundImageView: UIImageView!
-    private var switchButtonLeft: UIButton!
-    private var switchButtonRight: UIButton!
-    private var createChatPinImageImageView: UIImageView!
-    private var createChatPinImageButton: UIButton!
-    private var createChatPinTextField: UITextField!
-    private var createChatPinOptionsTableView: CreatePinOptionsTableView!
-    private var bubbleTextView: CreatePinTextView!
-    var descriptionTextView: CreatePinTextView!
-    var addTagsTextView: CreatePinAddTagsTextView!
-    private var moreOptionsTableView: CreatePinOptionsTableView!
-    var labelSelectLocationContent: String!
-    private var submitButtonEnabled: Bool = false
-    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
+class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImagesDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    enum OptionViewMode{
-        case pin
-        case bubble
-        case more
-    }
-    
-    var optionViewMode: OptionViewMode = .pin
-    
-    //MARK: - life cycle
+    private var uiviewSwitchButtonCont: UIView!
+    private var imgSwitchButtonBg: UIImageView!
+    private var btnSwitchLeft: UIButton!
+    private var btnSwitchRight: UIButton!
+    private var imgCreateChatPinImage: UIImageView!
+    private var textChatPinName: UITextField!
+    private var textviewBubble: CreatePinTextView!
+
     override func viewDidLoad() {
+        pinType = .chat
         super.viewDidLoad()
-        setupBasicUI()
-        setupCreateChatPinMainView()
-        setupcreateChatPinOptionsTableView()
-        self.view.alpha = 0.0
-        // Do any additional setup after loading the view.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.view.alpha = 1.0
-        }, completion: nil)
-    }
+    }  
     
     //MARK: - setup
-    private func setupBasicUI()
+    override func setupBaseUI()
     {
-        self.titleImageView.image = #imageLiteral(resourceName: "chatPinTitleImage")
-        self.titleLabel.text = ""
-        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : false)
+        super.setupBaseUI()
+        imgTitle.image = #imageLiteral(resourceName: "chatPinTitleImage")
+        btnSubmit.backgroundColor = UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65)
+        switchAnony.onTintColor = UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1)
+        
+//        self.lblTitle.text = ""
+        textviewDescrip.placeHolder = "Add Description..."
+        setupMainView()
     }
 
-    private func setupCreateChatPinMainView() {
+    fileprivate func setupMainView() {
         func createMainView() {
-            createChatPinMainView = UIView(frame: CGRect(x: 0, y: 148, width: screenWidth, height: 225))
-            self.view.addSubview(createChatPinMainView)
-            self.view.addConstraintsWithFormat("V:[v0]-20-[v1(225)]", options: [], views: titleImageView, createChatPinMainView)
-            self.view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: createChatPinMainView)
+            uiviewMain = UIView(frame: CGRect(x: 0, y: 150, width: screenWidth, height: 214))
+            self.view.addSubview(uiviewMain)
         }
         
         func createSwitchButton() {
-            switchButtonContentView = UIView(frame: CGRect(x: 0, y: 0, width: 158, height: 29))
-            createChatPinMainView.addSubview(switchButtonContentView)
-            createChatPinMainView.addConstraintsWithFormat("V:|-0-[v0(29)]", options: [], views: switchButtonContentView)
-            createChatPinMainView.addConstraintsWithFormat("H:[v0(158)]", options: [], views: switchButtonContentView)
-            NSLayoutConstraint(item: switchButtonContentView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+            uiviewSwitchButtonCont = UIView(frame: CGRect(x: (screenWidth - 158) / 2, y: 0, width: 158, height: 29))
+            uiviewMain.addSubview(uiviewSwitchButtonCont)
             
+            imgSwitchButtonBg = UIImageView(frame: CGRect(x: 0, y: 0, width: 158, height: 29))
+            imgSwitchButtonBg.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
+            uiviewSwitchButtonCont.addSubview(imgSwitchButtonBg)
             
-            switchButtonBackgroundImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 158, height: 29))
-            switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
-            switchButtonContentView.addSubview(switchButtonBackgroundImageView)
-            switchButtonContentView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: switchButtonBackgroundImageView)
-            switchButtonContentView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: switchButtonBackgroundImageView)
+            btnSwitchLeft = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 29))
+            btnSwitchLeft.tag = 0
+            btnSwitchLeft.addTarget(self, action: #selector(self.switchButtonTapped(_:)), for: .touchUpInside)
+            uiviewSwitchButtonCont.addSubview(btnSwitchLeft)
             
-            switchButtonLeft = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 29))
-            switchButtonLeft.addTarget(self, action: #selector(self.switchButtonLeftTapped(_:)), for: .touchUpInside)
-            switchButtonContentView.addSubview(switchButtonLeft)
-            switchButtonContentView.bringSubview(toFront: switchButtonLeft)
-            
-            switchButtonRight = UIButton(frame: CGRect(x: 79, y: 0, width: 79, height: 29))
-            switchButtonRight.addTarget(self, action: #selector(self.switchButtonRightTapped(_:)), for: .touchUpInside)
-            switchButtonContentView.addSubview(switchButtonRight)
-            switchButtonContentView.bringSubview(toFront: switchButtonRight)
-            
-            switchButtonContentView.addConstraintsWithFormat("H:|-0-[v0(79)]-0-[v1(79)]-0-|", options: [], views: switchButtonLeft, switchButtonRight)
-            
-            switchButtonContentView.addConstraintsWithFormat("V:|-0-[v0(29)]-0-|", options: [], views: switchButtonLeft)
-            switchButtonContentView.addConstraintsWithFormat("V:|-0-[v0(29)]-0-|", options: [], views: switchButtonRight)
+            btnSwitchRight = UIButton(frame: CGRect(x: 79, y: 0, width: 79, height: 29))
+            btnSwitchRight.tag = 1
+            btnSwitchRight.addTarget(self, action: #selector(self.switchButtonTapped(_:)), for: .touchUpInside)
+            uiviewSwitchButtonCont.addSubview(btnSwitchRight)
         }
         
-        func createImagePlaceHolder() {
-            
-            createChatPinImageImageView = UIImageView(image: #imageLiteral(resourceName: "createChatPinImagePlaceHolder"))
-            createChatPinImageImageView.layer.cornerRadius = 50
-            createChatPinImageImageView.contentMode = .scaleAspectFill
-            createChatPinMainView.addSubview(createChatPinImageImageView)
-            createChatPinImageImageView.frame = CGRect(x: (screenWidth - 100) / 2, y: 60, width: 100, height: 100)
-//            createChatPinMainView.addConstraintsWithFormat("V:[v0]-30-[v1(100)]", options: [], views: switchButtonContentView, createChatPinImageImageView)
-//            createChatPinMainView.addConstraintsWithFormat("H:[v0(100)]", options: [], views: createChatPinMainView)
-//            NSLayoutConstraint(item: createChatPinImageImageView, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-            
-            createChatPinImageButton = UIButton()
-            createChatPinMainView.addSubview(createChatPinImageButton)
-            createChatPinImageButton.addTarget(self, action: #selector(self.createChatPinImageButtonTapped(_:)), for: .touchUpInside)
-            createChatPinMainView.addConstraintsWithFormat("V:[v0]-30-[v1(100)]", options: [], views: switchButtonContentView, createChatPinImageButton)
-            createChatPinMainView.addConstraintsWithFormat("H:[v0(100)]", options: [], views: createChatPinImageButton)
-            NSLayoutConstraint(item: createChatPinImageButton, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        func createChatPinImage() {
+            imgCreateChatPinImage = UIImageView(frame: CGRect(x: (screenWidth - 100) / 2, y: 55, width: 100, height: 100))
+            imgCreateChatPinImage.image = #imageLiteral(resourceName: "createChatPinImagePlaceHolder")
+            imgCreateChatPinImage.layer.cornerRadius = 50
+            imgCreateChatPinImage.contentMode = .scaleAspectFill
+            uiviewMain.addSubview(imgCreateChatPinImage)
+
+            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.selectImage(_:)))
+            imgCreateChatPinImage.addGestureRecognizer(tapRecognizer)
+            imgCreateChatPinImage.isUserInteractionEnabled = true
         }
         
         func createInputTextField() {
-            createChatPinTextField = UITextField()
-            createChatPinTextField.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
+            textChatPinName = UITextField(frame: CGRect(x: (screenWidth - 300) / 2, y: 180, width: 300, height: 27))
+            textChatPinName.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
 
-            createChatPinTextField.backgroundColor = UIColor.clear
-            createChatPinTextField.textColor = UIColor.white
-            createChatPinTextField.font = UIFont(name: "AvenirNext-Regular", size: 20)
-            createChatPinTextField.textAlignment = .center
+            textChatPinName.backgroundColor = .clear
+            textChatPinName.textColor = .white
+            textChatPinName.font = UIFont(name: "AvenirNext-Regular", size: 20)
+            textChatPinName.textAlignment = .center
             
-            
-            createChatPinMainView.addSubview(createChatPinTextField)
-            createChatPinMainView.addConstraintsWithFormat("V:[v0]-30-[v1(27)]", options: [], views: createChatPinImageButton, createChatPinTextField)
-            createChatPinMainView.addConstraintsWithFormat("H:[v0(300)]", options: [], views: createChatPinTextField)
-            NSLayoutConstraint(item: createChatPinTextField, attribute: .centerX, relatedBy: .equal, toItem: createChatPinMainView, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-            createChatPinTextField.delegate = self
+            uiviewMain.addSubview(textChatPinName)
+            textChatPinName.delegate = self
         }
         
         func createInputTextView() {
-            bubbleTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
-            bubbleTextView.placeHolder = "Say Something…"
-            createChatPinMainView.addSubview(bubbleTextView)
-            bubbleTextView.alpha = 0
-            bubbleTextView.observerDelegate = self
+            textviewBubble = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 50, width: 290, height: 35), textContainer:nil)
+            textviewBubble.placeHolder = "Say Something…"
+            uiviewMain.addSubview(textviewBubble)
+            textviewBubble.isHidden = true
+            textviewBubble.observerDelegate = self
         }
         
         createMainView()
         createSwitchButton()
-        createImagePlaceHolder()
+        createChatPinImage()
         createInputTextField()
         createInputTextView()
     }
     
-    private func setupcreateChatPinOptionsTableView() {
-        createChatPinOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3))
-        
-        self.view.addSubview(createChatPinOptionsTableView)
-        createChatPinOptionsTableView.delegate = self
-        createChatPinOptionsTableView.dataSource = self
-    }
-    
-    //MARK: - button actions
-    override func submitButtonTapped(_ sender: UIButton) {
-        if optionViewMode == .more {
-            switch currentViewingContent! {
-            case .description:
-                leaveDescription()
-                break
-            case .moreOptionsTable:
-                leaveMoreOptions()
-                break
-            case .addTags:
-                leaveAddTags()
-                break
-            }
-        }
-        // create a pin
-        else if optionViewMode == .pin {
-            createChatPin()
-        }
-    }
-    
-    @objc private func switchButtonLeftTapped(_ sender: UIButton) {
+    func switchButtonTapped(_ sender: UIButton) {
         self.view.endEditing(true)
-        self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
-        optionViewMode = .pin
+        if isShowingEmoji {
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: true)
+        }
         
-        self.createChatPinImageImageView.alpha = 1
-        self.createChatPinImageButton.alpha = 1
-        self.createChatPinTextField.alpha = 1
-        self.createChatPinOptionsTableView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
-        self.createChatPinOptionsTableView.reloadData()
-        self.bubbleTextView.alpha = 0
+        if sender.tag == 0 {
+            self.imgSwitchButtonBg.image = #imageLiteral(resourceName: "createChatPinSwitch_pin")
+            optionViewMode = .pin
+            self.tblPinOptions.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 3 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 3)
+            self.tblPinOptions.reloadData()
+            
+            self.imgCreateChatPinImage.isHidden = false
+            self.textChatPinName.isHidden = false
+            self.textviewBubble.isHidden = true
+        } else {
+            self.imgSwitchButtonBg.image = #imageLiteral(resourceName: "createChatPinSwitch_bubble")
+            optionViewMode = .bubble
+            
+            self.tblPinOptions.reloadData()
+            self.tblPinOptions.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
+            
+            self.imgCreateChatPinImage.isHidden = true
+            self.textChatPinName.isHidden = true
+            self.textviewBubble.isHidden = false
+        }
     }
     
-    @objc private func switchButtonRightTapped(_ sender: UIButton) {
+    func selectImage(_ sender: UITapGestureRecognizer) {
+//        let alertC = FAEAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
         self.view.endEditing(true)
-        self.switchButtonBackgroundImageView.image = #imageLiteral(resourceName: "createChatPinSwitch_bubble")
-        optionViewMode = .bubble
-
-        self.createChatPinImageImageView.alpha = 0
-        self.createChatPinImageButton.alpha = 0
-        self.createChatPinTextField.alpha = 0
-        self.createChatPinOptionsTableView.reloadData()
-        self.createChatPinOptionsTableView.frame = CGRect(x: 0, y: screenHeight - CreatePinOptionsTableView.cellHeight * 2 - CGFloat(120), width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 2)
-        self.bubbleTextView.alpha = 1
+        if isShowingEmoji {
+            isShowingEmoji = false
+            hideEmojiViewAnimated(animated: true)
+        }
+        
+        let alertMenu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
+        alertMenu.view.tintColor = UIColor.faeAppRedColor()
+        let showCamera = UIAlertAction(title: "Camera", style: .destructive) { (_: UIAlertAction) in
+            self.checkCameraAccessStatus()
+        }
+        let showLibrary = UIAlertAction(title: "Albums", style: .destructive) { (_: UIAlertAction) in
+            self.checkLibraryAccessStatus()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        alertMenu.addAction(showCamera)
+        alertMenu.addAction(showLibrary)
+        alertMenu.addAction(cancel)
+        
+        self.present(alertMenu, animated: true, completion: nil)
     }
     
-    @objc private func createChatPinImageButtonTapped(_ sender: UIButton) {
-        let alertC = FAEAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
-        var action = UIAlertAction(title: "Camera", style: .default, handler: {
-            Action in
-                self.showCamera()
+    override func switchToDescription() {
+        super.switchToDescription()
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.uiviewMain.alpha = 0
+            self.tblPinOptions.alpha = 0
+            self.textviewDescrip.alpha = 1
+            self.lblTitle.text = "Add Description"
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
+        }, completion:{
+            Complete in
+            self.textviewDescrip.becomeFirstResponder()
+        })
+    }
+    
+    override func leaveDescription() {
+        super.leaveDescription()
+        if self.textviewDescrip != nil {
+            self.textviewDescrip.resignFirstResponder()
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            Void in
+            self.uiviewMain.alpha = 1
+            self.tblPinOptions.alpha = 1
+            self.tblPinOptions.reloadData()
+            if self.textviewDescrip != nil {
+                self.textviewDescrip.alpha = 0
             }
-        )
-        alertC.addAction(action)
-
-        action = UIAlertAction(title: "Albums", style: .default, handler: {
-            Action in
-                self.actionSelectMedia()
-            }
-        )
-        alertC.addAction(action)
-
-        action = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            Action in
+            self.lblTitle.text = ""
+            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
+        }, completion:{
+            Complete in
+            self.textviewDescrip.resignFirstResponder()
+        })
+    }
+    
+    override func switchToMoreOptions() {
+        super.switchToMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.uiviewMain.alpha = 0
+            self.tblPinOptions.alpha = 0
+            self.tblMoreOptions.alpha = 1
+            self.lblTitle.text = "More Options"
+            self.setSubmitButton(withTitle: "Back", isEnabled: true)
+        })
+    }
+    
+    override func leaveMoreOptions() {
+        super.leaveMoreOptions()
+        UIView.animate(withDuration: 0.4, animations: {
+            Void in
+            self.uiviewMain.alpha = 1
+            self.tblPinOptions.alpha = 1
+            self.tblMoreOptions.alpha = 0
             
-            }
-        )
-        alertC.addAction(action)
-        
-        self.present(alertC, animated: true, completion: nil)
-    }
-    
-    func actionSelectLocation() {
-        let selectLocationVC = SelectLocationViewController()
-        selectLocationVC.modalPresentationStyle = .overCurrentContext
-        selectLocationVC.delegate = self
-        selectLocationVC.pinType = "chat"
-        selectLocationVC.currentLocation2D = self.currentLocation2D
-        selectLocationVC.zoomLevel = self.zoomLevel
-        self.present(selectLocationVC, animated: false, completion: nil)
-    }
-    
-    func actionSelectMedia() {
-        let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-        let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-        imagePicker.imageDelegate = self
-        imagePicker.maximumSelectedPhotoNum = 1
-        self.present(nav, animated: true, completion: nil)
-    }
-    
-    func showCamera() {
-        view.endEditing(true)
-        let camera = Camera(delegate_: self)
-        camera.presentPhotoCamera(self, canEdit: false)
-    }
-    
-    // MARK: - helper
-    
-    func randomLocation() -> CLLocationCoordinate2D {
-        let lat = currentLocation2D.latitude
-        let lon = currentLocation2D.longitude
-        let random_lat = Double.random(min: -0.01, max: 0.01)
-        let random_lon = Double.random(min: -0.01, max: 0.01)
-        return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)
-    }
-    
-    func switchToDescription() {
-        self.currentViewingContent = .description
-        if descriptionTextView == nil {
-            descriptionTextView = CreatePinTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
-            descriptionTextView.placeHolder = "Add Description..."
-            descriptionTextView.observerDelegate = self
-            self.view.addSubview(descriptionTextView)
-        }
-        descriptionTextView.alpha = 0
-        optionViewMode = .more
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.createChatPinMainView.alpha = 0
-            self.createChatPinOptionsTableView.alpha = 0
-            self.descriptionTextView.alpha = 1
-            self.titleLabel.text = "Add Description"
-            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: true)
-        }, completion:{
-            Complete in
-            self.descriptionTextView.becomeFirstResponder()
-        })
-    }
-    
-    func leaveDescription() {
-        optionViewMode = .pin
-
-        if self.descriptionTextView != nil {
-            self.descriptionTextView.resignFirstResponder()
-        }
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.createChatPinMainView.alpha = 1
-            self.createChatPinOptionsTableView.alpha = 1
-            self.createChatPinOptionsTableView.reloadData()
-            if self.descriptionTextView != nil {
-                self.descriptionTextView.alpha = 0
-            }
-            self.titleLabel.text = ""
-            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: self.submitButtonEnabled)
+            self.lblTitle.text = ""
+            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
         }, completion:{
             Complete in
         })
     }
     
-    func switchToMoreOptions() {
-        self.currentViewingContent = .moreOptionsTable
-        optionViewMode = .more
-        if moreOptionsTableView == nil {
-            moreOptionsTableView = CreatePinOptionsTableView(frame: CGRect(x: 0, y: 195, width: screenWidth, height: CreatePinOptionsTableView.cellHeight * 5))
-            moreOptionsTableView.delegate = self
-            moreOptionsTableView.dataSource = self
-            self.view.addSubview(moreOptionsTableView)
+    override func switchToAddTags() {
+        super.switchToAddTags()
+        if (textviewAddTags == nil) {
+            textviewAddTags = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
+            textviewAddTags.placeHolder = "Add Tags to promote your pin in searches..."
+            textviewAddTags.observerDelegate = self
+            self.view.addSubview(textviewAddTags)
         }
-        moreOptionsTableView.alpha = 0
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.createChatPinMainView.alpha = 0
-            self.createChatPinOptionsTableView.alpha = 0
-            self.moreOptionsTableView.alpha = 1
-            self.titleLabel.text = "More Options"
-            self.setSubmitButton(withTitle: "Back", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: true)
-        }, completion:{
-            Complete in
-        })
-    }
-    
-    func leaveMoreOptions() {
-        optionViewMode = .pin
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.createChatPinMainView.alpha = 1
-            self.createChatPinOptionsTableView.alpha = 1
-            self.createChatPinOptionsTableView.reloadData()
-
-            if self.moreOptionsTableView != nil{
-                self.moreOptionsTableView.alpha = 0
-            }
-            
-            self.titleLabel.text = ""
-            self.setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled: self.submitButtonEnabled)
-        }, completion:{
-            Complete in
-        })
-    }
-    
-    func swtichToAddTags() {
-        self.currentViewingContent = .addTags
-        if (addTagsTextView == nil) {
-            addTagsTextView = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
-            addTagsTextView.placeHolder = "Add Tags to promote your pin in searches..."
-            addTagsTextView.observerDelegate = self
-            self.view.addSubview(addTagsTextView)
-        }
-        addTagsTextView.alpha = 0
+        textviewAddTags.alpha = 0
         inputToolbar.mode = .tag
         UIView.animate(withDuration: 0.3, animations: {
             Void in
-            self.moreOptionsTableView.alpha = 0
-            self.titleLabel.text = "Add Tags"
-            self.addTagsTextView.alpha = 1
+            self.tblMoreOptions.alpha = 0
+            self.lblTitle.text = "Add Tags"
+            self.textviewAddTags.alpha = 1
         }, completion:{
             Complete in
         })
     }
     
-    func leaveAddTags() {
-        self.currentViewingContent = .moreOptionsTable
-        if addTagsTextView != nil {
-            addTagsTextView.resignFirstResponder()
+    override func leaveAddTags() {
+        super.leaveAddTags()
+        strTags = "Add Tags"
+        if(textviewAddTags != nil && textviewAddTags.tagNames.count != 0){
+            strTags = ""
+            for tag in textviewAddTags.tagNames{
+                strTags.append("\(tag), ")
+            }
+            strTags = strTags.substring(to: strTags.characters.index(strTags.endIndex, offsetBy: -2))
+            
+            textviewAddTags.resignFirstResponder()
         }
-        self.moreOptionsTableView.reloadData()
+//        if textviewAddTags != nil {
+//            textviewAddTags.resignFirstResponder()
+//        }
+        self.tblMoreOptions.reloadData()
         UIView.animate(withDuration: 0.3, animations: {
             Void in
-            self.moreOptionsTableView.alpha = 1
-            self.titleLabel.text = "More Options"
-            self.addTagsTextView.alpha = 0
+            self.tblMoreOptions.alpha = 1
+            self.lblTitle.text = "More Options"
+            self.textviewAddTags.alpha = 0
         }, completion:{
             Complete in
             self.inputToolbar.mode = .emoji
         })
     }
     
-    /// This is a method to set the image for createChatPinImageImageView
+    /// This is a method to set the image for imgCreateChatPinImage
     ///
-    /// - Parameter image: the image for createChatPinImageImageView, if nil, then use default image(the placeholder)
+    /// - Parameter image: the image for imgCreateChatPinImage, if nil, then use default image(the placeholder)
     private func setPinImageView(withImage image:UIImage?) {
         if let image = image {
-            createChatPinImageImageView.image = image
-            createChatPinImageImageView.layer.borderWidth = 3
-            createChatPinImageImageView.layer.borderColor = UIColor.white.cgColor
-            createChatPinImageImageView.layer.masksToBounds = true
+            imgCreateChatPinImage.image = image
+            imgCreateChatPinImage.layer.borderWidth = 3
+            imgCreateChatPinImage.layer.borderColor = UIColor.white.cgColor
+            imgCreateChatPinImage.layer.masksToBounds = true
         }
         else{
-            createChatPinImageImageView.image = #imageLiteral(resourceName: "createChatPinImagePlaceHolder")
-            createChatPinImageImageView.layer.borderWidth = 0
-            createChatPinImageImageView.layer.masksToBounds = false
+            imgCreateChatPinImage.image = #imageLiteral(resourceName: "createChatPinImagePlaceHolder")
+            imgCreateChatPinImage.layer.borderWidth = 0
+            imgCreateChatPinImage.layer.masksToBounds = false
         }
         updateSubmitButton()
     }
     
-    func updateSubmitButton() {
-        submitButtonEnabled = createChatPinImageImageView.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (createChatPinTextField.text?.characters.count)! > 0
-        setSubmitButton(withTitle: "Submit!", backgroundColor: UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1), isEnabled : submitButtonEnabled)
+    fileprivate func updateSubmitButton() {
+        boolBtnSubmitEnabled = imgCreateChatPinImage.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (textChatPinName.text?.characters.count)! > 0
+        setSubmitButton(withTitle: "Submit!", isEnabled : boolBtnSubmitEnabled)
     }
     
-    func createChatPin() {
+    override func actionSubmit() {
         UIScreenService.showActivityIndicator()
         let postSingleChatPin = FaeMap()
         
         var submitLatitude = selectedLatitude
         var submitLongitude = selectedLongitude
         
-        if labelSelectLocationContent == nil || labelSelectLocationContent == "" {
-            submitLatitude = "\(currentLocation.coordinate.latitude)"
-            submitLongitude = "\(currentLocation.coordinate.longitude)"
+        if strSelectedLocation == nil || strSelectedLocation == "" {
+            let defaultLoc = randomLocation()
+            submitLatitude = "\(defaultLoc.latitude)"
+            submitLongitude = "\(defaultLoc.longitude)"
         }
         
         postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
         postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
         
-        if descriptionTextView != nil && descriptionTextView.text! != ""{
-            let des = descriptionTextView.text
+        if textviewDescrip != nil && textviewDescrip.text! != ""{
+            let des = textviewDescrip.text
             postSingleChatPin.whereKey("description", value: des)
         }
         postSingleChatPin.whereKey("interaction_radius", value: "99999999")
         postSingleChatPin.whereKey("duration", value: "1440")
-        postSingleChatPin.whereKey("title", value: createChatPinTextField.text!)
+        postSingleChatPin.whereKey("title", value: textChatPinName.text!)
         
-        TagCreator.uploadTags(addTagsTextView != nil ? addTagsTextView.tagNames : [], completion: { (tagNames) in
+        TagCreator.uploadTags(textviewAddTags != nil ? textviewAddTags.tagNames : [], completion: { (tagNames) in
             var tagIdString = ""
             for tag in tagNames{
                 tagIdString = tagIdString == "" ? tag.stringValue : "\(tagIdString);\(tag.stringValue)"
@@ -453,7 +330,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
                         getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
                             
                             //upload cover image
-                            self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.createChatPinImageImageView.image!)
+                            self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
                             
                             let latDouble = Double(submitLatitude!)
                             let longDouble = Double(submitLongitude!)
@@ -483,19 +360,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
         })
     }
     
-    //MARK: - SelectLocationViewControllerDelegate
-    func sendAddress(_ value: String) {
-        labelSelectLocationContent = value
-        createChatPinOptionsTableView.reloadData()
-    }
-    
-    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
-        selectedLatitude = latitude
-        selectedLongitude = longitude
-        createChatPinOptionsTableView.reloadData()
-        zoomLevelCallBack = zoom
-    }
-    
     //MARK: - SendMutipleImagesDelegate
     func sendImages(_ images: [UIImage]) {
         assert(images.count == 1, "The number of image in the array should be exactly one!")
@@ -516,24 +380,111 @@ class CreateChatPinViewController: CreatePinBaseViewController, SelectLocationVi
     //MARK: - text field delegate
     override func textFieldDidBeginEditing(_ textField: UITextField) {
         super.textFieldDidBeginEditing(textField)
-        if textField == createChatPinTextField {
+        if textField == textChatPinName {
             inputToolbar.countCharsLabelHidden = true
         }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == createChatPinTextField {
+        if textField == textChatPinName {
             updateSubmitButton()
         }
     }
     
     //MARK: - add tags related
     override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
-        if !(previousFirstResponder is CreatePinAddTagsTextView){
+        if !(prevFirstResponder is CreatePinAddTagsTextView){
             super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
         }else{
-            addTagsTextView.addLastInputTag()
+            textviewAddTags.addLastInputTag()
         }
     }
     
+    
+    // MARK: - select photos from camera / library as image
+    fileprivate func checkLibraryAccessStatus() {
+        let photoStatus = PHPhotoLibrary.authorizationStatus()
+        switch photoStatus {
+        case .authorized:
+            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            imagePicker.imageDelegate = self
+            imagePicker.isSelectAvatar = true
+            imagePicker._maximumSelectedPhotoNum = 1
+            self.present(nav, animated: true, completion: {
+                UIApplication.shared.statusBarStyle = .default
+            })
+        case .denied:
+            self.alertToEncourageAccess("library")
+            return
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({ _ in
+                self.checkLibraryAccessStatus()
+            })
+            return
+        case .restricted:
+            self.showAlert(title: "Photo library not allowed", message: "You're not allowed to access photo library")
+            return
+        }
+    }
+    
+    fileprivate func checkCameraAccessStatus() {
+        let cameraStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        switch cameraStatus {
+        case .authorized:
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .camera
+            self.present(imagePicker, animated: true, completion: nil)
+        case .denied:
+            self.alertToEncourageAccess("camera")
+            return
+        case .notDetermined:
+            if AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo).count > 0 {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { _ in
+                    DispatchQueue.main.async() {
+                        self.checkCameraAccessStatus()
+                    }
+                }
+            }
+            return
+        case .restricted:
+            self.showAlert(title: "Camera not allowed", message: "You're not allowed to capture camera devices")
+            return
+        }
+    }
+    
+    // MARK: - CAMERA & GALLERY NOT ALLOWING ACCESS - ALERT
+    fileprivate func alertToEncourageAccess(_ accessType: String) {
+        // Camera or photo library not available - Alert
+        var title: String!
+        var message: String!
+        if accessType == "camera" {
+            title = "Cannot access camera"
+            message = "Open System Settings -> Fae Map to turn on the camera access"
+        } else {
+            title = "Cannot access photo library"
+            message = "Open System Settings -> Fae Map to turn on the photo library access"
+        }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let settingsAction = UIAlertAction(title: "Settings", style: .destructive) { (_) -> Void in
+            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+            if let url = settingsUrl {
+                if accessType == "camera" {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.openURL(url as URL)
+                    }
+                } else {
+                    UIApplication.shared.openURL(url as URL)
+                    // UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+                }
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
 }

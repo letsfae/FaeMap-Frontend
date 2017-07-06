@@ -47,6 +47,7 @@ class CreatePinAddTagsTextView: CreatePinTextView, NSLayoutManagerDelegate {
         let remain = self.attributedText.attributedSubstring(from: NSMakeRange(0, tagNames.count))
         self.attributedText = remain
         
+        print("[AddTag] \(str)")
         if str.characters.count > 0{
             appendNewTags(tagName: str)
         }

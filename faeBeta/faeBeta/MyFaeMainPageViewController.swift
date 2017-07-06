@@ -35,7 +35,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
+        self.view.backgroundColor = .white
         
         loadScrollView()
         loadNavBar()
@@ -43,6 +43,14 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         loadName()
         loadContent()
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        UIApplication.shared.statusBarStyle = .lightContent
+//    }
+//    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        UIApplication.shared.statusBarStyle = .default
+//    }
     
     func loadScrollView() {
         scroll = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
@@ -179,7 +187,6 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     }
     
     func showPhotoSelected(_ sender: UIGestureRecognizer) {
-        print("showPhotoSelected")
         let alertMenu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         alertMenu.view.tintColor = UIColor.faeAppRedColor()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { (_: UIAlertAction) in
@@ -237,7 +244,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     func jumpToFeedback() {
         let reportCommentPinVC = ReportCommentPinViewController()
         reportCommentPinVC.reportType = 1
-        present(reportCommentPinVC, animated: true, completion: nil)
+        self.present(reportCommentPinVC, animated: true, completion: nil)
     }
 
     func sendImages(_ images: [UIImage]) {
@@ -340,8 +347,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     }
     
     fileprivate func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
     }

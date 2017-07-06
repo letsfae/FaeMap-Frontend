@@ -97,7 +97,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         NSLayoutConstraint(item: textViewReportContent, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        lableTextViewPlaceholder.textColor = colorPlaceHolder
+        lableTextViewPlaceholder.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         if reportType == 0 {
             lableTextViewPlaceholder.text = "Describe to us the case..."
             imageDescription.image = UIImage(named: "reportViewDescription")

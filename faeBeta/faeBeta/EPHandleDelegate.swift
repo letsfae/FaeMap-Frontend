@@ -84,7 +84,7 @@ extension EditPinViewController: UITextViewDelegate, CreatePinInputToolbarDelega
         if isShowingEmoji == true {
             isShowingEmoji = false
             UIView.animate(withDuration: 0.3, animations: {
-                self.emojiView.frame.origin.y = self.screenHeight
+                self.emojiView.frame.origin.y = screenHeight
             }, completion: { (Completed) in
                 self.inputToolbar.buttonOpenFaceGesPanel.setImage(#imageLiteral(resourceName: "faeGestureFilledRed"), for: UIControlState())
             })

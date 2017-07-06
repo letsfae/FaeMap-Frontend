@@ -56,9 +56,9 @@ extension PinMenuViewController {
         
         
         // initial position of labels for cool animation
-        let labelCenterX_1: CGFloat = 31/414 * screenWidth
-        let labelCenterX_2: CGFloat = 160/414 * screenWidth
-        let labelCenterX_3: CGFloat = 289/414 * screenWidth
+        let labelCenterX_1: CGFloat = 23/414 * screenWidth
+        let labelCenterX_2: CGFloat = 154/414 * screenWidth
+        let labelCenterX_3: CGFloat = 285/414 * screenWidth
         
         let labelCenterY_1: CGFloat = 224/736 * screenHeight
         /*
@@ -68,7 +68,8 @@ extension PinMenuViewController {
         
         labelMenuMedia   = createMenuLabel(labelCenterX_1, y: labelCenterY_1, title: "Stories")
         labelMenuChats   = createMenuLabel(labelCenterX_2, y: labelCenterY_1, title: "Chats")
-        labelMenuComment = createMenuLabel(labelCenterX_3, y: labelCenterY_1, title: "Comment")
+        labelMenuComment = createMenuLabel(labelCenterX_3, y: labelCenterY_1, title: "Comments")
+        
         /*
          labelMenuEvent   = createMenuLabel(labelCenterX_1, y: labelCenterY_2, title: "Event")
          labelMenuFaevor  = createMenuLabel(labelCenterX_2, y: labelCenterY_2, title: "Faevor")
@@ -115,9 +116,10 @@ extension PinMenuViewController {
     }
     
     private func createMenuLabel(_ x: CGFloat, y: CGFloat, title: String) -> UILabel {
-        let width: CGFloat = 95/414 * screenWidth
+        let width: CGFloat = 110/414 * screenWidth
         let height: CGFloat = 27/414 * screenWidth
         let fontSize: CGFloat = 20/414 * screenWidth
+        
         let label = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
         label.text = title
         label.font = UIFont(name: "AvenirNext-DemiBold", size: fontSize)
