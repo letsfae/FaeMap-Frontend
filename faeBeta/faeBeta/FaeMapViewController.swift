@@ -11,6 +11,7 @@ import GoogleMaps
 import CoreLocation
 import SwiftyJSON
 
+
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
     let floatFilterHeight = 542 * screenHeightFactor // Map Filter height

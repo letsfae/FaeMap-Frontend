@@ -175,7 +175,6 @@
 		B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */; };
 		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
 		B8158C5D1EFF977200218890 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8158C5C1EFF977200218890 /* CGRectExtension.swift */; };
-		B81775701E69516D001FC073 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B817756F1E69516D001FC073 /* PlacePin.swift */; };
 		B81A19731DEA67EA005498E5 /* CMPCVDelegateCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */; };
 		B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */; };
 		B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */; };
@@ -244,8 +243,8 @@
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
-		B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */; };
 		B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */; };
+		B89A17791F16996300BD7AA5 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89A17781F16996200BD7AA5 /* PlacePin.swift */; };
 		B89A8A4C1EB41AE000AE626F /* FaeUserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */; };
 		B89AB3F31E3D775F00C5116D /* FMLoadingMapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */; };
 		B89AB3F51E3D77A200C5116D /* FMMapFilterAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */; };
@@ -503,7 +502,6 @@
 		B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLSearchBarMethods.swift; sourceTree = "<group>"; };
 		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
 		B8158C5C1EFF977200218890 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
-		B817756F1E69516D001FC073 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		B81A19721DEA67EA005498E5 /* CMPCVDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCVDelegateCtrl.swift; sourceTree = "<group>"; };
 		B81A19741DEA6843005498E5 /* CMPCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPCollectionViewCell.swift; sourceTree = "<group>"; };
 		B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAvatarView.swift; sourceTree = "<group>"; };
@@ -573,8 +571,8 @@
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
-		B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScreenFactor.swift; path = support/ScreenFactor.swift; sourceTree = "<group>"; };
 		B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDEmptyCell.swift; sourceTree = "<group>"; };
+		B89A17781F16996200BD7AA5 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlacePin.swift; path = "../../../Practicing Swift/MapKitTest/MapKitTest/Support/PlacePin.swift"; sourceTree = "<group>"; };
 		B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUserPin.swift; sourceTree = "<group>"; };
 		B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLoadingMapFilter.swift; sourceTree = "<group>"; };
 		B89AB3F41E3D77A200C5116D /* FMMapFilterAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterAnimation.swift; sourceTree = "<group>"; };
@@ -594,6 +592,7 @@
 		B8CAA03C1DDD931D00DEC329 /* FMSelfPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMSelfPosition.swift; sourceTree = "<group>"; };
 		B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDelegateCtrl.swift; sourceTree = "<group>"; };
 		B8CAA0401DDD948400DEC329 /* FMActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMActions.swift; sourceTree = "<group>"; };
+		B8D152A21F16C16F00C9FC16 /* ScreenFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		B8D20A131F05A47300E8F7BA /* PinDetailBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailBaseViewController.swift; sourceTree = "<group>"; };
 		B8D5EEC51DB8422600C62628 /* PinMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinMenuViewController.swift; sourceTree = "<group>"; };
 		B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPlaces.swift; sourceTree = "<group>"; };
@@ -1375,7 +1374,7 @@
 			children = (
 				B88905711E36094B00E68D58 /* Reachability.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
-				B88A3E2F1DC86B1200351A2A /* ScreenFactor.swift */,
+				B8D152A21F16C16F00C9FC16 /* ScreenFactor.swift */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
@@ -1402,7 +1401,7 @@
 				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
-				B817756F1E69516D001FC073 /* PlacePin.swift */,
+				B89A17781F16996200BD7AA5 /* PlacePin.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1795,6 +1794,7 @@
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				B84C90C91DE7DD83005B6F38 /* CMPTextViewCtrl.swift in Sources */,
 				853F27861E26FE5200DD80DF /* EPActions.swift in Sources */,
+				B89A17791F16996300BD7AA5 /* PlacePin.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
@@ -1836,7 +1836,6 @@
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
-				B81775701E69516D001FC073 /* PlacePin.swift in Sources */,
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */,
@@ -1898,7 +1897,6 @@
 				B8849EBF1EEB147A00D4588D /* MBTalkFeedCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
 				853F27821E26FDB900DD80DF /* EPLoadItems.swift in Sources */,
-				B88A3E301DC86B1200351A2A /* ScreenFactor.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,

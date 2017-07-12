@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import CoreLocation
 
 extension PlacePin: Equatable {
     static func ==(lhs: PlacePin, rhs: PlacePin) -> Bool {

@@ -19,6 +19,7 @@ target 'faeBeta' do
 	pod 'RealmSwift'
     pod 'TTRangeSlider'
     pod 'Gifu'
+    pod 'CCHMapClusterController'
 end
 
 post_install do |installer|
