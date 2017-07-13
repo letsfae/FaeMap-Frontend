@@ -10,207 +10,96 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 import RealmSwift
+import CCHMapClusterController
 
-extension FaeMapViewController: GMSMapViewDelegate {
+extension FaeMapViewController: MKMapViewDelegate {
     
     func clearMap(type: String, animated: Bool) {
-        if type == "all" || type == "pin" {
-            if !animated {
-                for marker in mapPinsMarkers {
-                    marker.map = nil
-                }
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        for anView in views {
+            if anView.annotation is MKUserLocation {
+                anView.superview?.bringSubview(toFront: anView)
             } else {
-                for marker in mapPinsMarkers {
-                    let delay: Double = Double(arc4random_uniform(100)) / 100
-                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 51))
-                    icon.image = marker.icon
-                    icon.contentMode = .scaleAspectFit
-                    icon.alpha = 1
-                    marker.iconView = icon
-                    marker.icon = nil
-                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                        icon.alpha = 0
-                    }, completion: {(done: Bool) in
-                        marker.map = nil
-                    })
-                }
-            }
-        }
-        if type == "all" || type == "user" {
-            if !animated {
-                for marker in mapUserPinsDic {
-                    marker.map = nil
-                }
-            } else {
-                for marker in mapUserPinsDic {
-                    let delay: Double = Double(arc4random_uniform(100)) / 100
-                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-                    icon.image = marker.icon
-                    icon.contentMode = .scaleAspectFit
-                    icon.alpha = 1
-                    marker.iconView = icon
-                    marker.icon = nil
-                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                        icon.alpha = 0
-                    }, completion: {(done: Bool) in
-                        marker.map = nil
-                    })
-                }
-            }
-        }
-        if type == "all" || type == "place" {
-            if !animated {
-                for marker in placeMarkers {
-                    marker.map = nil
-                }
-            } else {
-                for marker in placeMarkers {
-                    let delay: Double = Double(arc4random_uniform(100)) / 100
-                    let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
-                    icon.image = marker.icon
-                    icon.contentMode = .scaleAspectFit
-                    icon.alpha = 1
-                    marker.iconView = icon
-                    marker.icon = nil
-                    UIView.animate(withDuration: 0.3, delay: delay, animations: {
-                        icon.alpha = 0
-                    }, completion: {(done: Bool) in
-                        marker.map = nil
-                    })
-                }
+                anView.superview?.sendSubview(toBack: anView)
             }
         }
     }
     
-    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        // Change ToNorth button direction according to the bearing of map
-        let directionMap = position.bearing
-        if directionMap != prevBearing {
-            let direction: CGFloat = CGFloat(directionMap)
-            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
-            btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
-            prevBearing = position.bearing
+        if annotation is MKUserLocation {
+            let identifier = "self"
+            var anView: SelfAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
+            return anView
         }
         
+        guard annotation is CCHMapClusterAnnotation else {
+            return nil
+        }
+        
+        let clusterAnn = annotation as! CCHMapClusterAnnotation
+        let firstAnn = clusterAnn.annotations.first as! FaePinAnnotation
+        
+        if firstAnn.type == "place" {
+            let identifier = "place"
+            var anView: PlacePinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(firstAnn.image)
+            
+            anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
+            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+            }, completion: nil)
+            return anView
+        } else if firstAnn.type == "user" {
+            let identifier = "user"
+            var anView: UserPinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(firstAnn.avatar)
+            return anView
+        }
+        return nil
+    }
+    
+    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
+        print("[didChange]")
+        // Change ToNorth button direction according to the bearing of map
+        //        let directionMap = position.bearing
+        //        if directionMap != prevBearing {
+        //            let direction: CGFloat = CGFloat(directionMap)
+        //            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
+        //            btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
+        //            prevBearing = position.bearing
+        //        }
+        
         // Map Filter Distance Change
-        let points = self.faeMapView.projection.point(for: curLoc2D)
+        let points = mapView.convert(curLoc2D, toPointTo: nil)
         self.uiviewDistanceRadius.center = points
         
         if !boolIsFirstLoad && self.subviewSelfMarker != nil {
-            self.subviewSelfMarker.center = points
+//            self.subviewSelfMarker.center = points
         }
-        
-        // Places Marker anti-collision
-        if placeMarkers.count == 0 {
-            return
-        }
-        
-        let currentZoom = mapView.camera.zoom
-        let coord_1 = mapView.projection.coordinate(for: CGPoint.zero)                      // (x = 0, y = 0)
-        let coord_2 = mapView.projection.coordinate(for: CGPoint(x: 0, y: intPinDistance))  // (x = 0, y = 65)
-        let absDistance = GMSGeometryDistance(coord_1, coord_2)
-        
-        if currentZoom == previousZoom {
-            return
-        } else if currentZoom > previousZoom {
-            for i in 0..<placeMarkers.count {
-                if placeMarkers[i].map != nil {
-                    continue
-                }
-                var conflict = false
-                for j in 0..<placeMarkers.count {
-                    if j == i {
-                        continue
-                    }
-                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
-                    if distance <= absDistance && placeMarkers[j].map != nil {
-                        conflict = true
-                        break
-                    }
-                }
-                if !conflict {
-                    placePinAnimation(marker: placeMarkers[i], animated: true)
-                }
-            }
-        } else {
-            for i in 0..<placeMarkers.count {
-                if placeMarkers[i].map == nil {
-                    continue
-                }
-                for j in i+1..<placeMarkers.count {
-                    if placeMarkers[j].map == nil {
-                        continue
-                    }
-                    
-                    // markerFakeUser is a fake marker standing for current user avatar
-                    // should not be set to nil forever
-                    if placeMarkers[j] == markerFakeUser {
-                        continue
-                    }
-                    
-                    let distance = GMSGeometryDistance(placeMarkers[i].position, placeMarkers[j].position)
-                    
-                    // Collision occurs
-                    if distance <= absDistance {
-                        placeMarkers[j].map = nil
-                    }
-                }
-            }
-        }
-        previousZoom = mapView.camera.zoom
-    }
-    
-    fileprivate func regionContainsMarker(marker: GMSMarker) {
-        let region = GMSCoordinateBounds(region: faeMapView.projection.visibleRegion())
-        if region.contains(marker.position) && marker.map == nil {
-            animateMarkerIn(marker: marker)
-        } else if region.contains(marker.position) && marker.map != nil {
-            
-        } else if !region.contains(marker.position) && marker.map != nil {
-            animateMarkerOut(marker: marker)
-        }
-    }
-    
-    fileprivate func animateMarkerIn(marker: GMSMarker) {
-        guard let userData = marker.userData as? [Int: AnyObject] else {
-            return
-        }
-        guard let placePin = userData.values.first as? PlacePin else {
-            return
-        }
-        marker.map = faeMapView
-        let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
-        let iconImage = placePin.markerAvatar
-        icon.image = iconImage
-        marker.iconView = icon
-        icon.alpha = 0
-        UIView.animate(withDuration: 0.3, animations: {
-            icon.alpha = 1
-        }, completion: {(done: Bool) in
-            marker.iconView = nil
-            marker.icon = iconImage
-        })
-    }
-    
-    fileprivate func animateMarkerOut(marker: GMSMarker) {
-        guard let userData = marker.userData as? [Int: AnyObject] else {
-            return
-        }
-        guard let placePin = userData.values.first as? PlacePin else {
-            return
-        }
-        let icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 54))
-        icon.image = placePin.markerAvatar
-        icon.contentMode = .scaleAspectFit
-        icon.alpha = 1
-        marker.iconView = icon
-        marker.icon = nil
-        UIView.animate(withDuration: 0.3, animations: {
-            icon.alpha = 0
-        }, completion: {(done: Bool) in
-            marker.map = nil
-        })
     }
     
     func openMapPin(marker: GMSMarker, mapPin: MapPin, animated: Bool) {
@@ -285,18 +174,14 @@ extension FaeMapViewController: GMSMapViewDelegate {
             offset = 534*screenHeightFactor - screenHeight/2
         }
         
-        var curPoint = faeMapView.projection.point(for: marker.position)
+        var curPoint = faeMapView.convert(marker.position, toPointTo: nil)
         curPoint.y -= offset
-        let newCoor = faeMapView.projection.coordinate(for: curPoint)
-        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: faeMapView.camera.zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
-        
-        if animated {
-            faeMapView.animate(to: camera)
-        } else {
-            faeMapView.camera = camera
-        }
+        let newCoor = faeMapView.convert(curPoint, toCoordinateFrom: nil)
+        let camera = faeMapView.camera
+        camera.centerCoordinate = newCoor
+        faeMapView.setCamera(camera, animated: animated)
     }
-    
+    /*
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if marker.userData == nil {
@@ -379,17 +264,18 @@ extension FaeMapViewController: GMSMapViewDelegate {
         }
         return true
     }
+    */
     
     func pauseAllUserPinTimers() {
-        for user in faeUserPins {
-            user?.pause = true
-        }
+//        for user in faeUserPins {
+//            user?.pause = true
+//        }
     }
     
     func resumeAllUserPinTimers() {
-        for user in faeUserPins {
-            user?.pause = false
-        }
+//        for user in faeUserPins {
+//            user?.pause = false
+//        }
     }
     
     fileprivate func selectPinState(pinState: String) -> PinDetailViewController.PinState {

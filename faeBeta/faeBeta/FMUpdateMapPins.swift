@@ -56,7 +56,7 @@ extension FaeMapViewController {
         
         // Get screen center's coordinate
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+        let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         
         // Get social pins data from Fae Back-End
         let loadPinsByZoomLevel = FaeMap()
@@ -121,7 +121,7 @@ extension FaeMapViewController {
             pinMap.userData = [0: mapPin]
             pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
             pinMap.zIndex = 1
-            pinMap.map = self.faeMapView
+//            pinMap.map = self.faeMapView
             self.mapPinsMarkers.append(pinMap)
             let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
@@ -189,7 +189,7 @@ extension FaeMapViewController {
             pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
             pinMap.zIndex = 1
             pinMap.appearAnimation = GMSMarkerAnimation.none
-            pinMap.map = self.faeMapView
+//            pinMap.map = self.faeMapView
             self.mapPinsMarkers.append(pinMap)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                 self.tempMarker.removeFromSuperview()
@@ -198,11 +198,12 @@ extension FaeMapViewController {
     }
     
     func cameraDiagonalDistance() -> Int {
-        let region = faeMapView.projection.visibleRegion()
-        let farLeft = region.farLeft
-        let nearLeft = region.nearRight
-        let distance = GMSGeometryDistance(farLeft, nearLeft)
-        return Int(distance * 4)
+//        let region = faeMapView.projection.visibleRegion()
+//        let farLeft = region.farLeft
+//        let nearLeft = region.nearRight
+//        let distance = GMSGeometryDistance(farLeft, nearLeft)
+//        return Int(distance * 4)
+        return 20000
     }
     
     func pinIconSelector(type: String, status: String) -> UIImage {

@@ -39,7 +39,7 @@ extension EditPinViewController {
         updateComment.updatePin(pinType, pinId: pinID) {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("Success -> Update \(self.pinType)")
-                self.delegate?.reloadPinContent(self.pinGeoLocation, zoom: self.zoomLevelCallBack)
+                self.delegate?.reloadPinContent(self.pinGeoLocation, zoom: Float(self.zoomLevelCallBack))
                 self.textViewUpdateComment.endEditing(true)
                 self.dismiss(animated: true, completion: nil)
             }

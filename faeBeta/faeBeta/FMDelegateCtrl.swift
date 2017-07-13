@@ -16,8 +16,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: faeMapView.camera.zoom)
-        self.faeMapView.animate(to: camera)
+        let camera = faeMapView.camera
+        camera.centerCoordinate = coordinate
+        faeMapView.setCamera(camera, animated: true)
         updateTimerForUserPin()
         timerSetup()
         filterCircleAnimation()
@@ -36,10 +37,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         resumeAllUserPinTimers()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude + offset,
-                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
-        faeMapView.camera = camera
+//        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
+//        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude + offset,
+//                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
+//        faeMapView.camera = camera
     }
     func changeIconImage() {
         let marker = PinDetailViewController.pinMarker
@@ -60,17 +61,18 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         
         marker.map = nil
         marker.position = coordinate
-        marker.map = faeMapView
+//        marker.map = faeMapView
         
         let offset = 530 * screenHeightFactor - screenHeight / 2
-        var curPoint = faeMapView.projection.point(for: coordinate)
+        var curPoint = faeMapView.convert(coordinate, toPointTo: nil)
         curPoint.y -= offset
-        let newCoor = faeMapView.projection.coordinate(for: curPoint)
-        let camera = GMSCameraPosition.camera(withTarget: newCoor, zoom: zoom, bearing: faeMapView.camera.bearing, viewingAngle: faeMapView.camera.viewingAngle)
-        
-        faeMapView.camera = camera
+        let newCoor = faeMapView.convert(curPoint, toCoordinateFrom: nil)
+        let camera = faeMapView.camera
+        camera.centerCoordinate = newCoor
+        faeMapView.setCamera(camera, animated: false)
     }
     func goTo(nextPin: Bool) {
+        /*
         var tmpMarkers = [GMSMarker]()
         for marker in placeMarkers {
             if marker.map != nil {
@@ -104,12 +106,15 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             }
             openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
         }
+        */
     }
     
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
-        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: zoom)
-        faeMapView.camera = camera
+        let camera = faeMapView.camera
+        camera.centerCoordinate.latitude = latitude
+        camera.centerCoordinate.longitude = longitude
+        faeMapView.setCamera(camera, animated: false)
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()
         renewSelfLocation()
@@ -128,7 +133,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
-            self.faeMapView.isMyLocationEnabled = false
+            self.faeMapView.showsUserLocation = false
             self.renewSelfLocation()
             reloadSelfPosAnimation()
             self.subviewSelfMarker.isHidden = false
@@ -136,7 +141,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
         if userStatus == 5 {
             self.invisibleMode()
-            self.faeMapView.isMyLocationEnabled = true
+            self.faeMapView.showsUserLocation = true
             self.subviewSelfMarker.isHidden = true
         }
     }

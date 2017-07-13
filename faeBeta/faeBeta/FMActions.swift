@@ -29,29 +29,33 @@ extension FaeMapViewController {
     
     func actionTrueNorth(_ sender: UIButton) {
         hideNameCard(btnCardClose)
-        self.faeMapView.animate(toBearing: 0)
+        let camera = faeMapView.camera
+        camera.heading = 0
+        faeMapView.setCamera(camera, animated: true)
     }
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton) {
         hideNameCard(btnCardClose)
         let mapCenter_point = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenter_coor = faeMapView.projection.coordinate(for: mapCenter_point)
+        let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
         pinMenuVC.currentLatitude = self.curLat
         pinMenuVC.currentLongitude = self.curLon
         pinMenuVC.currentLocation = mapCenter_coor
-        pinMenuVC.zoomLevel = faeMapView.camera.zoom
+        pinMenuVC.zoomLevel = faeMapView.camera.altitude
         pinMenuVC.delegate = self
         self.present(pinMenuVC, animated: false, completion: nil)
     }
     
     func actionSelfPosition(_ sender: UIButton) {
         hideNameCard(btnCardClose)
-        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: faeMapView.camera.zoom)
-        faeMapView.camera = camera
+        let camera = faeMapView.camera
+        camera.centerCoordinate = curLoc2D
+//        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: faeMapView.camera.zoom)
+        faeMapView.setCamera(camera, animated: true)
     }
     
     func actionMainScreenSearch(_ sender: UIButton) {

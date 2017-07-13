@@ -2408,7 +2408,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             tblMain.contentOffset.y = 0
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
-        zoomLevel = zoom
+        zoomLevel = Double(zoom)
         self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.strPinId, marker: PinDetailViewController.pinMarker)
     }
     

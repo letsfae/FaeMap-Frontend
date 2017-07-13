@@ -37,8 +37,8 @@ class EditMoreOptionsViewController: UIViewController {
     // Google Map
     var geoCode: CLGeocoder!
     var currentLocation: CLLocation!
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
+    var zoomLevel: Double = 13.8
+    var zoomLevelCallBack: Double = 13.8
     
     //Data Structure
     var optionImageArray: [Int] = []

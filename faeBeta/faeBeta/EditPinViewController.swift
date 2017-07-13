@@ -50,8 +50,8 @@ class EditPinViewController: UIViewController {
     var emojiView: StickerPickView!
     var isShowingEmoji: Bool = false
     
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
+    var zoomLevel: Double = 13.8
+    var zoomLevelCallBack: Double = 13.8
     
     
     //New Added ID array

@@ -25,15 +25,18 @@ extension FaeMapViewController {
             return
         }
         let coorDistance = cameraDiagonalDistance()
-        for i in 0..<faeUserPins.count {
-            faeUserPins[i]?.valid = false
-            faeUserPins[i] = nil
+        for _ in 0..<faeUserPins.count {
+//            faeUserPins[i]?.valid = false
+//            faeUserPins[i] = nil
+        }
+        if faeUserPins.count > 0 {
+            mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
         }
         faeUserPins.removeAll(keepingCapacity: false)
         boolCanUpdateUserPin = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-        let mapCenterCoordinate = faeMapView.projection.coordinate(for: mapCenter)
+        let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         let getMapUserInfo = FaeMap()
         getMapUserInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
@@ -57,25 +60,13 @@ extension FaeMapViewController {
                 self.boolCanUpdateUserPin = true
                 return
             }
-            self.faeUserPins = mapUserJsonArray.map { FaeUserPin(json: $0) }
+            self.faeUserPins = mapUserJsonArray.map { FaePinAnnotation(type: "user", json: $0) }
             if mapUserJSON.count <= 0 {
                 self.boolCanUpdateUserPin = true
                 return
             }
             var count = 0
-            for faeUserPin in self.faeUserPins {
-                if count > 5 {
-                    break
-                } else {
-                    if faeUserPin?.userId == user_id {
-                        continue
-                    }
-                }
-                faeUserPin?.userIndex = count
-                count += 1
-                faeUserPin?.mapView = self.faeMapView
-                faeUserPin?.firstLoading()
-            }
+            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.boolCanUpdateUserPin = true
         }
     }

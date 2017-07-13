@@ -12,7 +12,7 @@ import GoogleMaps
 extension SelectLocationViewController {
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLocation2D.latitude, longitude: currentLocation2D.longitude, zoom: zoomLevel)
+        let camera = GMSCameraPosition.camera(withLatitude: currentLocation2D.latitude, longitude: currentLocation2D.longitude, zoom: Float(zoomLevel))
         self.mapSelectLocation = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapSelectLocation.isMyLocationEnabled = true
         mapSelectLocation.delegate = self

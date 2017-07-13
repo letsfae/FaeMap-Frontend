@@ -10,7 +10,24 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import SwiftyJSON
+import MapKit
+import CCHMapClusterController
 
+var screenWidth: CGFloat {
+    return UIScreen.main.bounds.width
+}
+
+var screenHeight: CGFloat {
+    return UIScreen.main.bounds.height
+}
+
+var screenWidthFactor: CGFloat {
+    return UIScreen.main.bounds.width / 414
+}
+
+var screenHeightFactor: CGFloat {
+    return UIScreen.main.bounds.height / 736
+}
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
@@ -73,8 +90,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var boolIsFirstLoad = false // location manage
     var btnEditNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
-    var faeMapView: GMSMapView!
-    var faeUserPins = [FaeUserPin?]()
+    var faeMapView: MKMapView!
+    var faeUserPins = [FaePinAnnotation]()
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
@@ -111,7 +128,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
     var placeDessert = #imageLiteral(resourceName: "placePinDesert")
     var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
-    var placeMarkers = [GMSMarker]()
     var placeNames = [Double]()
     var placePins = [PlacePin]()
     var placePizza = #imageLiteral(resourceName: "placePinPizza")
@@ -140,8 +156,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewDistanceRadius: UIView!
     var uiviewFilterMenu: UIView! // Filter Menu
     var prevBearing: Double = 0
-    var markerFakeUser = GMSMarker()
     var intPinDistance: Int = 65
+    
+    var mapClusterManager: CCHMapClusterController!
     
     // System Functions
     override func viewDidLoad() {
@@ -161,8 +178,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
         boolIsFirstLoad = true
-        markerFakeUser.map = faeMapView
-        markerFakeUser.icon = UIImage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -309,7 +324,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             getSelfAccountInfo()
         } else {
             subviewSelfMarker.isHidden = true
-            faeMapView.isMyLocationEnabled = true
+            faeMapView.showsUserLocation = true
         }
     }
     
@@ -362,8 +377,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             curLat = curLoc.coordinate.latitude
             curLon = curLoc.coordinate.longitude
             curLoc2D = CLLocationCoordinate2DMake(curLat, curLon)
-            let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: 13.8)
-            faeMapView.camera = camera
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(curLoc2D, 3000, 3000)
+            faeMapView.setRegion(coordinateRegion, animated: false)
             reloadSelfPosAnimation()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
                 self.refreshMap(pins: true, users: true, places: true)
@@ -371,14 +386,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
         
         if let location = locations.last {
-            let points = faeMapView.projection.point(for: location.coordinate)
+            let points = faeMapView.convert(location.coordinate, toPointTo: nil)
             subviewSelfMarker.center = points
             uiviewDistanceRadius.center = points
             curLoc = location
             curLoc2D = location.coordinate
             curLat = location.coordinate.latitude
             curLon = location.coordinate.longitude
-            markerFakeUser.position = location.coordinate
         }
     }
 }

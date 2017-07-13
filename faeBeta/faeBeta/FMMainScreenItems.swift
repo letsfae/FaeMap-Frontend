@@ -9,37 +9,26 @@
 import UIKit
 import GoogleMaps
 import SwiftyJSON
+import MapKit
+import CCHMapClusterController
 
 extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: 13.8)
-        self.faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        self.faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
-        
-        faeMapView.preferredFrameRate = GMSFrameRate.maximum
-        faeMapView.isIndoorEnabled = false
-//        faeMapView.isBuildingsEnabled = false
-//        faeMapView.settings.tiltGestures = false
-        faeMapView.setMinZoom(9, maxZoom: 21)
-
-        self.view = faeMapView
-        
-        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
-        do {
-            // Set the map style by passing a valid JSON string.
-            faeMapView.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
-        } catch {
-            NSLog("The style definition could not be loaded: \(error)")
-        }
+        view.addSubview(faeMapView)
+        faeMapView.showsPointsOfInterest = false
+        faeMapView.showsCompass = false
+        faeMapView.delegate = self
+        mapClusterManager = CCHMapClusterController(mapView: faeMapView)
+        //        mapClusterManager.isDebuggingEnabled = true
+        mapClusterManager.cellSize = 80
 
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
-        
-        // Default is true, if true, panGesture could not be detected
-        self.faeMapView.settings.consumesGesturesInView = false
     }
     
     // MARK: -- Load Map Main Screen Buttons

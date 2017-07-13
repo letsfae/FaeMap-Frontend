@@ -24,11 +24,11 @@ extension FaeMapViewController {
         } else {
             return
         }
-        let zoomLv = faeMapView.camera.zoom
-        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
-        let camera = GMSCameraPosition.camera(withLatitude: curLat + offset,
-                                              longitude: curLon, zoom: zoomLv)
-        faeMapView.animate(to: camera)
+//        let zoomLv = faeMapView.camera.zoom
+//        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+//        let camera = GMSCameraPosition.camera(withLatitude: curLat + offset,
+//                                              longitude: curLon, zoom: zoomLv)
+//        faeMapView.animate(to: camera)
         animateNameCard()
         
         uiviewCardPrivacy.loadGenderAge(id: user_id) { (nickName, _, shortIntro) in

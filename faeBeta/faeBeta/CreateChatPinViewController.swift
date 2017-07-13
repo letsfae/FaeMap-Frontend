@@ -338,7 +338,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
                             let long = CLLocationDegrees(longDouble!)
                             UIScreenService.hideActivityIndicator()
                             self.dismiss(animated: false, completion: {
-                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
+                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: Float(self.zoomLevelCallBack))
                             })
                         }
                     }

@@ -195,7 +195,7 @@ class PinDetailBaseViewController: UIViewController {
     var uiviewTblHeader: UIView!
     var uiviewMain: UIView!
     var uiviewToFullDragBtnSub: UIView! // Another dragging button for UI effect: shadow
-    var zoomLevel: Float = 13.8
+    var zoomLevel: Double = 13.8
     var anonyUserDict = [Int: Int]()
     var arrNonDupUserId = [Int]() // UserId array with no duplicates
     

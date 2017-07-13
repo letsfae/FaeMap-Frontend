@@ -58,8 +58,8 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Float = 13.8
-    var zoomLevelCallBack: Float = 13.8
+    var zoomLevel: Double = 13.8
+    var zoomLevelCallBack: Double = 13.8
     
     enum PinType: String {
         case comment = "comment"
@@ -524,7 +524,7 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         self.selectedLatitude = latitude
         self.selectedLongitude = longitude
         self.tblPinOptions.reloadData()
-        zoomLevelCallBack = zoom
+        zoomLevelCallBack = Double(zoom)
     }
     // SelectLocationViewControllerDelegate End
     
